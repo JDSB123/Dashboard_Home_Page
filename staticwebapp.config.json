@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json.schemastore.org/staticwebapp.config.json",
+  "routes": [
+    {
+      "route": "/",
+      "rewrite": "/index.html"
+    },
+    {
+      "route": "/assets/*",
+      "headers": {
+        "Cache-Control": "public, max-age=86400"
+      }
+    },
+    {
+      "route": "/dashboard/*",
+      "headers": {
+        "Cache-Control": "public, max-age=86400"
+      }
+    }
+  ],
+  "navigationFallback": {
+    "rewrite": "/index.html",
+    "exclude": ["/assets/*", "/dashboard/*", "*.{css,js,png,jpg,svg,ico,json}"]
+  },
+  "responseOverrides": {
+    "404": {
+      "rewrite": "/index.html",
+      "statusCode": 200
+    }
+  },
+  "globalHeaders": {
+    "X-Frame-Options": "SAMEORIGIN",
+    "X-Content-Type-Options": "nosniff",
+    "X-XSS-Protection": "1; mode=block",
+    "Referrer-Policy": "strict-origin-when-cross-origin"
+  },
+  "mimeTypes": {
+    ".json": "application/json",
+    ".css": "text/css",
+    ".js": "application/javascript"
+  },
+  "platform": {
+    "apiRuntime": "node:18"
+  }
+}
