@@ -1,327 +1,164 @@
+/* ==========================================================================
+   GREEN BIER SPORT VENTURES - DESIGN TOKENS
+   ==========================================================================
+   Professional Vegas Sportsbook Dashboard
+   Clean, elegant, data-focused design system
+   ========================================================================== */
+
 :root {
-    /* ===== FONT SYSTEM ===== */
-    --font-display: 'Cormorant Garamond', Georgia, serif;
-    --font-heading: 'Cormorant Garamond', Georgia, serif;
-    --font-body: 'Cormorant Garamond', Georgia, serif;
-    --font-mono: 'Roboto Mono', 'SF Mono', monospace; /* Fixed: was incorrectly set to serif */
-    --font-ui: 'Inter', 'Montserrat', 'Segoe UI', system-ui, -apple-system, sans-serif; /* Sans-serif UI font for controls */
+    /* ===== TYPOGRAPHY SYSTEM - STREAMLINED ===== */
+    /* Primary: Clean sans-serif for data/UI */
+    --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    /* Display: Bold condensed for headers */
+    --font-display: 'Oswald', 'Bebas Neue', sans-serif;
+    /* Mono: Numbers and data */
+    --font-mono: 'Roboto Mono', 'SF Mono', monospace;
 
-    /* ===== SPORTSBOOK DROPDOWN TYPOGRAPHY ===== */
-    --sportsbook-heading-font: var(--font-heading, 'Cormorant Garamond', 'Playfair Display', Georgia, serif);
-    --sportsbook-body-font: 'Exo 2', 'Inter', sans-serif;
-    --sportsbook-mono-font: 'Roboto Mono', 'SF Mono', monospace;
-    --sportsbook-title-size: 0.65rem;       /* ~10.4px - sportsbook names */
-    --sportsbook-label-size: 0.5625rem;     /* ~9px - labels, inputs, buttons */
-    --sportsbook-caption-size: 0.5rem;      /* ~8px - sync time, fetch icons */
-    --sportsbook-letter-wide: 0.05em;
+    /* Legacy aliases */
+    --font-body: var(--font-primary);
+    --font-heading: var(--font-display);
+    --font-ui: var(--font-primary);
 
-    /* ===== LAYOUT TOKENS ===== */
-    --layout-gutter: clamp(24px, 4vw, 60px);
-
-    /* ===== TYPOGRAPHY SCALE - 13px Baseline for Better Readability ===== */
+    /* ===== TYPOGRAPHY SCALE ===== */
+    --text-2xs: 0.625rem;   /* 10px - micro labels */
     --text-xs: 0.6875rem;   /* 11px - small labels */
     --text-sm: 0.75rem;     /* 12px - secondary text */
-    --text-base: 0.8125rem; /* 13px - BASELINE - body text */
+    --text-base: 0.8125rem; /* 13px - body text */
     --text-md: 0.875rem;    /* 14px - emphasis */
-    --text-lg: 0.9375rem;   /* 15px - large body */
-    --text-xl: 1.0625rem;   /* 17px - headings */
+    --text-lg: 1rem;        /* 16px - large body */
+    --text-xl: 1.125rem;    /* 18px - headings */
+    --text-2xl: 1.5rem;     /* 24px - large headings */
+    --text-3xl: 2rem;       /* 32px - hero text */
 
     /* ===== FONT WEIGHTS ===== */
-    --weight-light: 300;
     --weight-regular: 400;
     --weight-medium: 500;
     --weight-semibold: 600;
     --weight-bold: 700;
 
     /* ===== LINE HEIGHTS ===== */
-    --leading-tight: 1.25;
-    --leading-normal: 1.3;
+    --leading-tight: 1.2;
+    --leading-normal: 1.4;
     --leading-relaxed: 1.6;
 
     /* ===== LETTER SPACING ===== */
-    --tracking-tight: 0.02em;
-    --tracking-normal: 0.04em;
-    --tracking-wide: 0.08em;
-    --tracking-wider: 0.2em;
+    --tracking-tight: -0.01em;
+    --tracking-normal: 0;
+    --tracking-wide: 0.02em;
+    --tracking-wider: 0.05em;
+    --tracking-widest: 0.1em;
 
-    /* ===== PRIMARY COLOR SYSTEM - METALLIC FOREST & NAVY ===== */
-    /* Forest Green Metallic (darker, less neon) - Theme from nav links */
-    --color-primary: #008f58;          /* Dark forest green from nav links */
-    --color-primary-bright: #00d689;   /* Bright emerald highlight */
-    --color-primary-dark: #006b3f;     /* Darker shade */
-    --color-primary-rgb: 0, 143, 88;
-    --color-primary-bright-rgb: 0, 214, 137;  /* RGB version of --color-primary-bright for rgba() */
+    /* ===== COLOR SYSTEM - VEGAS SPORTSBOOK ===== */
+    /* Primary - Emerald/Green (wins, positive) */
+    --color-primary: #00c853;
+    --color-primary-dim: #00a846;
+    --color-primary-bright: #4ade80;
+    --color-primary-rgb: 0, 200, 83;
+    --color-primary-bright-rgb: 74, 222, 128;
 
-    /* Metallic Navy */
-    --color-secondary: #1a237e; /* Deep Metallic Navy */
-    --color-secondary-bright: #3949ab;
-    --color-secondary-rgb: 26, 35, 126;
-
-    /* Accents - Cool Metallic Cyan (Not Gold) */
+    /* Secondary - Cyan/Blue (neutral accent) */
     --color-accent: #00bcd4;
-    --color-accent-bright: #80deea;
+    --color-accent-bright: #67e8f9;
     --color-accent-rgb: 0, 188, 212;
 
-    /* Semantics */
-    --color-warning: #ff6f00; /* Amber */
-    --color-warning-bright: #ffb300;
-    --color-warning-rgb: 255, 111, 0;
-    --color-loss: #c62828; /* Crimson */
-    --color-loss-bright: #ef5350;
-    --color-loss-rgb: 198, 40, 40;
+    /* Semantic Colors */
+    --color-win: #22c55e;
+    --color-loss: #ef4444;
+    --color-push: #f59e0b;
+    --color-live: #3b82f6;
+    --color-pending: #6b7280;
 
-    /* Backgrounds - Deep Navy Metallic */
-    --color-bg-deep: #030b16; /* Almost black navy */
-    --color-bg-base: #081121; /* Deep navy */
-    --color-bg-navy: #0d1b33; /* Rich navy */
-    --color-bg-navy-light: #162545;
-    --color-bg-panel: rgba(8, 17, 33, 0.95);
-    --color-bg-panel-light: rgba(22, 37, 69, 0.95);
+    /* Background Palette - Deep Navy */
+    --color-bg-deepest: #030810;
+    --color-bg-deep: #050d14;
+    --color-bg-base: #0a1628;
+    --color-bg-elevated: #0f1f35;
+    --color-bg-surface: #162742;
+    --color-bg-hover: rgba(0, 200, 83, 0.08);
 
-    /* Text */
-    --color-text-primary: #e8f0f2; /* Ice White */
-    --color-text-secondary: #90a4ae; /* Metallic Blue-Grey */
-    --color-text-muted: #546e7a;
-    --color-text-dark: #263238;
+    /* Text Colors */
+    --color-text-primary: #f1f5f9;
+    --color-text-secondary: #94a3b8;
+    --color-text-muted: #64748b;
+    --color-text-dim: #475569;
 
-    /* Status (canonical) */
-    --status-confirmed: var(--color-primary);
-    --status-active: var(--color-primary);
-    --status-interactive: var(--color-secondary);
-    --status-hover: var(--color-secondary);
-    --status-warning: var(--color-warning);
-    --status-at-risk: var(--color-warning);
-    --status-pending: #888C95;
-    --status-loss: #FF4F5E;
-    --status-error: #FF4F5E;
-    --status-win: #00FFAA;
-    --status-in-progress: #FF6B35;
-    --status-on-track: #00BFFF;
+    /* Border Colors */
+    --color-border: rgba(255, 255, 255, 0.08);
+    --color-border-accent: rgba(0, 200, 83, 0.25);
+    --color-border-hover: rgba(0, 200, 83, 0.4);
 
-    /* ===== CONSOLIDATED ALIASES =====
-       Use the canonical --color-* and --status-* variables above.
-       These aliases exist only for backward compatibility with older CSS.
-       New code should use: --color-primary, --color-bg-navy, --color-text-primary, etc.
-    */
+    /* ===== LAYOUT TOKENS ===== */
+    --layout-gutter: clamp(16px, 3vw, 48px);
+    --dashboard-topline-height: 72px;
+    --nav-height: 48px;
 
-    /* Short aliases (commonly used) */
-    --emerald: var(--color-primary);
-    --navy: var(--color-bg-navy);
-    --text: var(--color-text-primary);
-    --muted: var(--color-text-muted);
+    /* ===== SPACING SCALE ===== */
+    --space-1: 0.25rem;   /* 4px */
+    --space-2: 0.5rem;    /* 8px */
+    --space-3: 0.75rem;   /* 12px */
+    --space-4: 1rem;      /* 16px */
+    --space-5: 1.25rem;   /* 20px */
+    --space-6: 1.5rem;    /* 24px */
+    --space-8: 2rem;      /* 32px */
 
-    /* Glows & Shadows - Metallic Sheen */
-    --glow-emerald-strong: 0 0 20px rgba(0, 143, 88, 0.5);
-    --glow-emerald-medium: 0 0 12px rgba(0, 143, 88, 0.3);
-    --glow-emerald-soft: 0 0 8px rgba(0, 143, 88, 0.2);
-    --glow-emerald-subtle: 0 0 4px rgba(0, 143, 88, 0.1);
-    
-    /* Cool Cyan Glows */
-    --glow-cyan-strong: 0 0 20px rgba(0, 188, 212, 0.5);
-    --glow-cyan-medium: 0 0 12px rgba(0, 188, 212, 0.3);
-    --glow-cyan-soft: 0 0 8px rgba(0, 188, 212, 0.2);
-    --glow-cyan-subtle: 0 0 4px rgba(0, 188, 212, 0.1);
-    
-    --text-glow-emerald: 0 0 10px rgba(0, 214, 137, 0.4);
-    --text-glow-cyan: 0 0 10px rgba(0, 229, 255, 0.4);
-    --text-glow-amber: 0 0 10px rgba(255, 111, 0, 0.4);
-    --text-shadow-soft: 0 2px 4px rgba(0, 0, 0, 0.6);
+    /* ===== BORDER RADIUS ===== */
+    --radius-sm: 4px;
+    --radius-md: 6px;
+    --radius-lg: 8px;
+    --radius-xl: 12px;
+    --radius-full: 9999px;
 
-    /* Dashboard.css compatibility */
-    --emerald-glow: var(--glow-emerald-medium);
-    --cyan-glow: var(--glow-cyan-medium);
-    --inner-glow: inset 0 0 10px rgba(var(--color-primary-rgb), 0.2);
+    /* ===== SHADOWS ===== */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+    --shadow-glow: 0 0 20px rgba(0, 200, 83, 0.15);
 
-    /* Borders */
-    --border-emerald: 1px solid rgba(var(--color-primary-rgb), 0.3);
-    --border-cyan: 1px solid rgba(var(--color-accent-rgb), 0.3);
-    --border-amber: 1px solid rgba(var(--color-warning-rgb), 0.3);
-    --border-subtle: 1px solid rgba(255, 255, 255, 0.08);
+    /* ===== Z-INDEX SCALE ===== */
+    --z-base: 1;
+    --z-dropdown: 100;
+    --z-sticky: 200;
+    --z-modal: 1000;
+    --z-tooltip: 2000;
 
-    /* ===== VEGAS ELEGANT ZEBRA STRIPES - REFINED ===== */
-    /* Enhanced contrast for better readability */
-    --zebra-odd: rgba(8, 18, 32, 0.95);           /* Deep navy - higher opacity */
-    --zebra-even: rgba(12, 26, 46, 0.98);         /* Lifted navy - better contrast */
-    --zebra-border: rgba(0, 214, 137, 0.12);      /* Subtle emerald separator */
-    --zebra-hover: rgba(0, 143, 88, 0.18);        /* Enhanced emerald hover */
+    /* ===== TRANSITIONS ===== */
+    --transition-fast: 150ms ease;
+    --transition-base: 200ms ease;
+    --transition-slow: 300ms ease;
 
-    /* Parlay-specific zebra (distinct emerald tint) */
-    --zebra-parlay-odd: rgba(6, 22, 18, 0.95);    /* Deep forest-navy blend */
-    --zebra-parlay-even: rgba(10, 31, 27, 0.98);  /* Lifted forest-navy blend */
-    --zebra-parlay-border: rgba(0, 143, 88, 0.25);
-    
-    /* Row heights - Consistent Fixed Height */
-    --row-height: 52px;             /* Compact height matching parlay legs */
-    --row-height-parlay-leg: 52px;  /* Compact for nested sub-legs */
+    /* ===== TABLE TOKENS ===== */
+    --row-height: 48px;
+    --zebra-odd: rgba(10, 22, 40, 0.6);
+    --zebra-even: rgba(15, 31, 53, 0.6);
+    --zebra-hover: rgba(0, 200, 83, 0.06);
 
-    /* ===== Z-INDEX SCALE - REFINEMENT: Predictable stacking system ===== */
-    --z-base: 10;
-    --z-table: 100;
-    --z-sticky-header: 500;
-    --z-dropdown: 1000;
-    --z-modal: 5000;
-    --z-tooltip: 10000;
+    /* ===== COMPONENT TOKENS ===== */
+    /* KPI Tiles */
+    --kpi-bg: linear-gradient(145deg, rgba(15, 31, 53, 0.9), rgba(10, 22, 40, 0.9));
+    --kpi-border: rgba(0, 200, 83, 0.2);
 
-    /* Gradients */
-    --emerald-gradient: linear-gradient(135deg, var(--color-primary), var(--color-primary-bright));
-    --navy-gradient: linear-gradient(135deg, var(--color-bg-navy), var(--color-bg-navy-light));
-    --metallic-reflect: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
-    --bg-metallic-navy: linear-gradient(140deg, rgba(7, 13, 24, 0.9), rgba(13, 22, 38, 0.88));
+    /* Status badges */
+    --status-win-bg: rgba(34, 197, 94, 0.15);
+    --status-loss-bg: rgba(239, 68, 68, 0.15);
+    --status-live-bg: rgba(59, 130, 246, 0.15);
+    --status-pending-bg: rgba(107, 114, 128, 0.15);
 
-    /* ===== SPACING SCALE - 4px BASE ===== */
-    /* Base units */
-    --space-1: 0.25rem;  /* 4px */
-    --space-2: 0.5rem;   /* 8px */
-    --space-3: 0.75rem;  /* 12px */
-    --space-4: 1rem;     /* 16px */
-    --space-5: 1.25rem;  /* 20px */
-    --space-6: 1.5rem;   /* 24px */
-    --space-8: 2rem;     /* 32px */
-    --space-10: 2.5rem;  /* 40px */
-    --space-12: 3rem;    /* 48px */
-
-    /* Component-specific spacing */
-    --gap-cell: var(--space-1);       /* 4px - within cells */
-    --gap-component: var(--space-2);  /* 8px - between elements */
-    --gap-section: var(--space-4);    /* 16px - between sections */
-    --gap-topline: 10px;              /* Shared spacing for brand/KPI/toggles */
-    --hero-safe-top: 370px; /* Keeps hero image visible - moved down 120px */
-
-    /* Padding presets */
-    --pad-cell: 2px 4px;        /* 2px 4px - table cells (reduced for tighter spacing) */
-    --pad-compact: var(--space-2) var(--space-3);     /* 8px 12px - compact buttons */
-    --pad-comfortable: var(--space-3) var(--space-4); /* 12px 16px - standard buttons */
-    --pad-spacious: var(--space-4) var(--space-6);    /* 16px 24px - large sections */
-
-    /* Legacy spacing (backward compatibility) */
-    --spacing-page: 3vw;
-    --spacing-page-px: 48px;
-    --spacing-section: var(--space-4);
-    --spacing-component: var(--space-3);
-    --spacing-element: var(--space-3);
-    --spacing-tight: var(--space-2);
-    --spacing-minimal: var(--space-1);
-
-    /* Component-specific typography tokens */
-    /* These provide semantic sizing for specific UI elements */
-    --text-kpi-heading: 0.75rem; --weight-kpi-heading: 500;
-    --text-kpi-value: 0.875rem; --weight-kpi-value: 500;
-    --text-kpi-subtext: 0.625rem; --weight-kpi-subtext: 400;
-    --text-table-header: 0.625rem; --weight-table-header: 500;
-    --text-table-body: 0.75rem; --weight-table-body: 400;
-    --text-numeric: 0.75rem; --weight-numeric: 400;
-    --text-filter: 0.6875rem; --weight-filter: 500;
-    --text-caption: 0.625rem; --weight-caption: 400;
-    --text-hero-title: 2.25rem; --weight-hero-title: 700;
-    --text-hero-subtitle: 0.875rem; --weight-hero-subtitle: 400;
-
-    /* ===== FILTER DROPDOWN TYPOGRAPHY - REFINED ELEGANCE ===== */
-    /* Font families for premium readability */
-    --filter-font-display: var(--font-heading);
-    --filter-font-body: var(--font-body);
-    --filter-font-ui: var(--font-ui);
-    --filter-font-mono: var(--font-mono);
-
-    /* Type scale for filter components */
-    --filter-text-xs: 0.625rem;       /* 10px - micro labels */
-    --filter-text-sm: 0.75rem;        /* 12px - body text, options */
-    --filter-text-base: 0.8125rem;    /* 13px - emphasized text */
-    --filter-text-md: 0.875rem;       /* 14px - titles */
-
-    /* Weights for hierarchy */
-    --filter-weight-light: 300;
-    --filter-weight-regular: 400;
-    --filter-weight-medium: 500;
-    --filter-weight-semibold: 600;
-    --filter-weight-bold: 700;
-
-    /* Line heights for readability */
-    --filter-leading-tight: 1.3;
-    --filter-leading-normal: 1.5;
-    --filter-leading-relaxed: 1.6;
-
-    /* Letter spacing for elegance */
-    --filter-tracking-tight: 0.01em;
-    --filter-tracking-normal: 0.02em;
-    --filter-tracking-wide: 0.05em;
-    --filter-tracking-wider: 0.12em;
-
-    /* ===== FILTER COMPONENT STYLES ===== */
-    /* Filter panel backgrounds */
-    --filter-panel-bg: rgba(8, 17, 33, 0.98);
-    --filter-panel-border: rgba(0, 143, 88, 0.22);
-    --filter-panel-shadow: 0 16px 48px rgba(0, 0, 0, 0.65),
-        0 0 1px rgba(0, 143, 88, 0.3) inset;
-
-    /* Filter card styles */
-    --filter-card-bg: rgba(0, 0, 0, 0.35);
-    --filter-card-border: rgba(255, 255, 255, 0.08);
-    --filter-card-hover-bg: rgba(0, 143, 88, 0.12);
-
-    /* Filter pills */
-    --filter-pill-bg: rgba(255, 255, 255, 0.06);
-    --filter-pill-border: rgba(255, 255, 255, 0.1);
-    --filter-pill-hover-bg: rgba(0, 143, 88, 0.15);
-    --filter-pill-active-bg: rgba(0, 143, 88, 0.22);
-    --filter-pill-active-border: rgba(0, 214, 137, 0.6);
-
-    /* Filter inputs */
-    --filter-input-bg: rgba(0, 0, 0, 0.45);
-    --filter-input-border: rgba(255, 255, 255, 0.12);
-    --filter-input-focus-border: rgba(0, 214, 137, 0.6);
-    --filter-input-focus-shadow: 0 0 0 3px rgba(0, 143, 88, 0.15);
-
-    /* Filter text colors */
-    --filter-text-primary: rgba(232, 240, 242, 0.95);
-    --filter-text-secondary: rgba(144, 164, 174, 0.9);
-    --filter-text-muted: rgba(144, 164, 174, 0.7);
-    --filter-text-accent: rgba(0, 214, 137, 1);
-    --filter-text-hint: rgba(140, 160, 175, 0.7);
-
-    /* Transitions */
-    --transition-smooth: all 0.25s ease-in-out;
-    --transition-fast: all 0.2s ease-in-out;
-    --transition-fast-duration: 0.2s ease-in-out;
-    --transition-micro: all 0.15s ease-in-out;
-    --transition-slide: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-metallic: all 0.45s ease-in-out;
-
-    /* Effects */
-    --blur-glass: blur(12px);
-    --blur-glow: blur(20px);
-    --blur-subtle: blur(8px);
-
-    /* Sticky offsets */
-    --sticky-offset: 200px;
-    --kpi-bar-h: 76px; /* Updated for premium tile height */
-    --sticky-total: calc(var(--sticky-offset) + var(--kpi-bar-h));
+    /* Legacy compatibility */
+    --emerald-400: var(--color-primary);
+    --neutral-400: var(--color-text-secondary);
+    --hero-safe-top: 60px;
 }
 
+/* ===== RESPONSIVE ADJUSTMENTS ===== */
 @media (max-width: 1200px) {
     :root {
-        --kpi-bar-h: 72px;
-        --sticky-total: calc(var(--sticky-offset) + var(--kpi-bar-h));
-    }
-}
-
-@media (max-width: 992px) {
-    :root {
-        --hero-safe-top: 320px; /* +120px */
+        --dashboard-topline-height: 68px;
     }
 }
 
 @media (max-width: 768px) {
     :root {
-        --gap-topline: 6px;
-        --hero-safe-top: 260px; /* +120px */
-        --kpi-bar-h: 66px;
-        --sticky-total: calc(var(--sticky-offset) + var(--kpi-bar-h));
+        --dashboard-topline-height: 60px;
+        --layout-gutter: 16px;
     }
 }
-
-@media (max-width: 480px) {
-    :root {
-        --hero-safe-top: 230px; /* +120px */
-    }
-}
-
