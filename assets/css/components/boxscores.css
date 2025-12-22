@@ -1,0 +1,428 @@
+/* ==========================================================================
+   Boxscores Component - UNIFIED STYLING (READABLE UPDATE)
+   --------------------------------------------------------------------------
+   Single source of truth for ALL box score displays across the dashboard.
+   Applies to: main boxscore grids, parlay leg snippets, multi-game summaries
+   
+   UPDATED for improved readability:
+   - Boxscore team logos: 18px
+   - Score text: 13px
+   - Header text: 11px
+   - Team abbreviations: 12px
+   - Game time status: 11px
+   ========================================================================== */
+
+/* ===== BOXSCORE GRID - FULL SCOREBOARD (Sportsbook Card Style) ===== */
+.boxscore-grid {
+    display: grid;
+    /* Default layout for halves (NCAAB): Team | 1H | 2H | T */
+    grid-template-columns: minmax(100px, 1fr) 42px 42px 48px;
+    width: 100%;
+    max-width: 240px;
+    background: linear-gradient(
+        180deg,
+        rgba(8, 18, 32, 0.95) 0%,
+        rgba(4, 12, 24, 0.98) 100%
+    );
+    border: 1px solid rgba(0, 214, 137, 0.18);
+    border-radius: 8px;
+    gap: 0;
+    overflow: hidden;
+    font-family: var(--font-body);
+    box-shadow:
+        0 4px 16px rgba(0, 0, 0, 0.35),
+        0 0 0 1px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+}
+
+/* Quarters layout (NBA/NFL): Team | Q1 | Q2 | Q3 | Q4 | T */
+.boxscore-grid.boxscore-quarters {
+    grid-template-columns: minmax(90px, 1fr) 36px 36px 36px 36px 44px;
+    max-width: 320px;
+}
+
+/* Rows use display: contents so cells participate in parent grid */
+.boxscore-row {
+    display: contents;
+}
+
+.boxscore-row.header {
+    background: transparent;
+}
+
+/* ===== HEADER CELLS ===== */
+.boxscore-cell.header-cell {
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: var(--weight-semibold);
+    color: rgba(0, 214, 137, 0.8); /* Emerald accent for headers */
+    padding: 6px 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(180deg, rgba(0, 214, 137, 0.08) 0%, rgba(0, 214, 137, 0.03) 100%);
+    border-bottom: 1px solid rgba(0, 214, 137, 0.15);
+    line-height: 1.2;
+}
+
+.boxscore-cell.header-cell:last-child {
+    color: rgba(0, 214, 137, 0.95); /* Brighter emerald for total header */
+    background: linear-gradient(180deg, rgba(0, 214, 137, 0.12) 0%, rgba(0, 214, 137, 0.05) 100%);
+    font-weight: var(--weight-bold);
+}
+
+.boxscore-cell.header-cell.game-time-cell {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 4px;
+    flex-wrap: nowrap;
+    padding: 6px 8px;
+    text-align: left;
+}
+
+/* ===== GAME TIME STATUS - CONSISTENT ACROSS ALL COMPONENTS ===== */
+.game-time-status {
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: var(--weight-semibold);
+    color: rgba(160, 175, 190, 0.9); /* Subtle grey for pending/default */
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    line-height: 1.2;
+}
+
+.game-time-status.final {
+    color: rgba(0, 214, 137, 0.95); /* Emerald for final */
+    font-weight: var(--weight-bold);
+    text-shadow: 0 0 6px rgba(0, 214, 137, 0.3);
+}
+
+.game-time-status.countdown {
+    color: rgba(100, 180, 255, 0.95); /* Cool blue for pending */
+    font-weight: var(--weight-semibold);
+}
+
+/* Live game time status */
+.live-game .game-time-status,
+tr[data-status="on-track"] .game-time-status,
+tr[data-status="at-risk"] .game-time-status,
+tr[data-status="live"] .game-time-status {
+    color: rgba(100, 180, 255, 0.95); /* Light blue for live games */
+}
+
+/* ===== LIVE INDICATOR - UNIVERSAL ===== */
+.live-indicator {
+    font-family: var(--font-body);
+    color: #ff5252;
+    font-weight: var(--weight-bold);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    background: rgba(255, 82, 82, 0.15);
+    border-radius: 4px;
+    border: 1px solid rgba(255, 82, 82, 0.3);
+    text-shadow: 0 0 6px rgba(255, 82, 82, 0.5);
+    white-space: nowrap;
+    line-height: 1.1;
+}
+
+/* Cable-style blink only for the primary boxscore header cell */
+.boxscore-grid .boxscore-cell.header-cell.game-time-cell .live-indicator {
+    animation: cable-live-blink 1.6s steps(2, jump-none) infinite;
+}
+
+@keyframes cable-live-blink {
+    0%,
+    60% {
+        opacity: 1;
+        text-shadow: 0 0 8px rgba(255, 0, 0, 0.9);
+    }
+    61%,
+    100% {
+        opacity: 0.25;
+        text-shadow: 0 0 2px rgba(255, 0, 0, 0.5);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .boxscore-grid .boxscore-cell.header-cell.game-time-cell .live-indicator {
+        animation: none;
+    }
+}
+
+/* ===== SCORE CELLS ===== */
+.boxscore-cell {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: var(--weight-medium);
+    padding: 8px 4px;
+    color: rgba(200, 215, 225, 0.95); /* Soft white for scores */
+    text-align: center;
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 28px;
+    line-height: 1.2;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+    transition: background 0.15s ease;
+}
+
+.boxscore-cell:last-child {
+    border-right: none;
+}
+
+.boxscore-cell.total {
+    font-size: 14px;
+    font-weight: var(--weight-bold);
+    color: rgba(255, 255, 255, 0.98); /* Bright white for totals */
+    background: linear-gradient(180deg, rgba(0, 214, 137, 0.1) 0%, rgba(0, 214, 137, 0.04) 100%);
+    border-left: 1px solid rgba(0, 214, 137, 0.18);
+}
+
+/* ===== TEAM CELLS ===== */
+.boxscore-cell.team-cell {
+    text-align: left;
+    padding: 8px 8px;
+    border-right: 1px solid rgba(0, 214, 137, 0.1);
+    justify-content: flex-start;
+    background: rgba(0, 0, 0, 0.15);
+}
+
+.boxscore-team {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    width: 100%;
+    text-align: left;
+}
+
+/* ===== TEAM LOGOS - LARGER 20px FOR READABLE BOXSCORES ===== */
+.boxscore-team-logo {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    background: transparent;
+    padding: 0;
+    border: none;
+    box-shadow: none;
+    image-rendering: auto;
+    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.4));
+    transition: transform 0.2s ease, filter 0.2s ease;
+    flex-shrink: 0;
+}
+
+.boxscore-team-logo:hover {
+    transform: scale(1.1);
+    filter: drop-shadow(0 2px 4px rgba(0, 214, 137, 0.3));
+}
+
+/* ===== TEAM ABBREVIATIONS - READABLE SIZING ===== */
+.boxscore-team-abbr {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: var(--weight-bold);
+    color: rgba(230, 240, 250, 0.98);
+    white-space: nowrap;
+    letter-spacing: 0.02em;
+}
+
+/* ===== TEAM RECORDS - READABLE SIZING ===== */
+.boxscore-team-record {
+    font-family: var(--font-body);
+    font-size: 10px;
+    font-weight: var(--weight-medium);
+    color: rgba(0, 214, 137, 0.6); /* Subtle emerald for records */
+    white-space: nowrap;
+    letter-spacing: 0.02em;
+}
+
+/* ===== WIN/LOSS ROW STATES ===== */
+.boxscore-row.winning .boxscore-cell {
+    background: linear-gradient(90deg, rgba(0, 214, 137, 0.08) 0%, rgba(0, 214, 137, 0.03) 100%);
+}
+
+.boxscore-row.winning .boxscore-cell.team-cell {
+    background: linear-gradient(90deg, rgba(0, 214, 137, 0.12) 0%, rgba(0, 214, 137, 0.05) 100%);
+    border-left: 2px solid rgba(0, 214, 137, 0.5);
+}
+
+.boxscore-row.winning .boxscore-cell.total {
+    color: rgba(0, 214, 137, 0.95); /* Emerald for winning total */
+    font-weight: var(--weight-bold);
+    background: linear-gradient(180deg, rgba(0, 214, 137, 0.15) 0%, rgba(0, 214, 137, 0.08) 100%);
+    text-shadow: 0 0 8px rgba(0, 214, 137, 0.3);
+}
+
+.boxscore-row.winning .boxscore-team-abbr {
+    color: rgba(0, 214, 137, 0.95);
+    font-weight: var(--weight-bold);
+}
+
+.boxscore-row.winning .boxscore-team-logo {
+    opacity: 1;
+    filter: drop-shadow(0 1px 4px rgba(0, 214, 137, 0.35));
+}
+
+.boxscore-row.losing .boxscore-cell {
+    opacity: 0.65;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.boxscore-row.losing .boxscore-cell.team-cell {
+    border-left: 2px solid transparent;
+}
+
+.boxscore-row.losing .boxscore-cell.total {
+    color: rgba(180, 190, 200, 0.7);
+}
+
+.boxscore-row.losing .boxscore-team-abbr {
+    opacity: 0.7;
+    color: rgba(180, 190, 200, 0.8);
+}
+
+.boxscore-row.losing .boxscore-team-logo {
+    opacity: 0.6;
+    filter: grayscale(30%);
+}
+
+.boxscore-row:last-child .boxscore-cell {
+    border-bottom: none;
+}
+
+.boxscore-row.header .boxscore-cell {
+    border-bottom: none;
+}
+
+/* ===== SMALL TEAM LOGOS - FOR PARLAY SNIPPETS & COMPACT DISPLAYS ===== */
+.team-logo-small,
+.score-display .team-logo-small,
+.multi-game-summary .team-logo-small,
+.leg-snippet .team-logo-small {
+    width: 12px;
+    height: 12px;
+    object-fit: contain;
+    flex-shrink: 0;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.35));
+}
+
+/* ===== SCORE DISPLAY - USED IN PARLAY LEG SNIPPETS ===== */
+.score-display {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    line-height: 1.2;
+    font-family: var(--font-body);
+    font-size: 10px;
+    font-weight: var(--weight-semibold);
+    color: rgba(200, 215, 225, 0.95);
+    font-variant-numeric: tabular-nums;
+    padding: 1px 0;
+}
+
+/* ===== TIME REMAINING - CONSISTENT IN ALL BOXSCORE CONTEXTS ===== */
+.time-remaining {
+    font-family: var(--font-body);
+    font-size: 9px;
+    font-weight: var(--weight-medium);
+    color: rgba(140, 160, 180, 0.8);
+    white-space: nowrap;
+    line-height: 1.2;
+}
+
+/* ===== PARLAY LEG BOXSCORES - CONSISTENT WITH MAIN BOXSCORES ===== */
+/* Ensure box scores in parlay legs match the same typography and colors */
+.compact-leg-table .boxscore-grid {
+    max-width: 280px;
+    border-radius: 6px;
+}
+
+.compact-leg-table .game-time-status {
+    color: rgba(140, 160, 180, 0.8);
+}
+
+.compact-leg-table .game-time-status.final {
+    color: rgba(0, 214, 137, 0.9);
+}
+
+.compact-leg-table .game-time-status.countdown {
+    color: rgba(100, 180, 255, 0.85);
+}
+
+/* Live game time status in parlay legs */
+.compact-leg-table .live-game .game-time-status,
+.compact-leg-table tr[data-status="on-track"] .game-time-status,
+.compact-leg-table tr[data-status="at-risk"] .game-time-status,
+.compact-leg-table tr[data-status="live"] .game-time-status {
+    color: rgba(100, 180, 255, 0.95);
+}
+
+.compact-leg-table .boxscore-cell {
+    color: rgba(200, 215, 225, 0.9);
+}
+
+.compact-leg-table .boxscore-cell.total {
+    color: rgba(255, 255, 255, 0.95);
+}
+
+.compact-leg-table .boxscore-team-abbr {
+    color: rgba(200, 215, 225, 0.95);
+}
+
+.compact-leg-table .boxscore-team-record {
+    color: rgba(0, 214, 137, 0.45);
+}
+
+/* ===== RESPONSIVE - MOBILE ===== */
+@media (max-width: 768px) {
+    /* Halves layout (NCAAB) - 4 columns */
+    .boxscore-grid {
+        grid-template-columns: minmax(85px, 1fr) 38px 38px 42px;
+        max-width: 100%;
+    }
+    
+    /* Quarters layout (NBA/NFL) - 6 columns */
+    .boxscore-grid.boxscore-quarters {
+        grid-template-columns: minmax(80px, 1fr) repeat(4, 30px) 38px;
+    }
+
+    .boxscore-cell,
+    .boxscore-cell.header-cell {
+        padding: 1px 2px;
+    }
+
+    .boxscore-cell {
+        font-size: 9px;
+        min-height: 14px;
+    }
+
+    .boxscore-cell.total {
+        font-size: 9px;
+    }
+
+    .boxscore-team-logo {
+        width: 12px;
+        height: 12px;
+    }
+
+    .boxscore-team-abbr {
+        font-size: 9px;
+    }
+
+    .team-logo-small {
+        width: 12px;
+        height: 12px;
+    }
+}

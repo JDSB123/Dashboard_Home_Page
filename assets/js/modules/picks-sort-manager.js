@@ -1,0 +1,301 @@
+/**
+ * Picks Sort Manager Module
+ * Handles table sorting logic for all columns
+ */
+(function() {
+    'use strict';
+
+    const SortManager = {
+        /**
+         * Get date sort value from date text
+         */
+        getDateSortValue(dateText) {
+            if (!dateText) return 0;
+
+            // Remove weekday prefix if present
+            const cleanDate = dateText.replace(/^(mon|tue|wed|thu|fri|sat|sun)\s+/i, '');
+
+            // Parse date string (MM/DD format)
+            const parts = cleanDate.split('/');
+            if (parts.length === 2) {
+                const month = parseInt(parts[0], 10) || 0;
+                const day = parseInt(parts[1], 10) || 0;
+                const currentYear = new Date().getFullYear();
+                return new Date(currentYear, month - 1, day).getTime();
+            }
+
+            return 0;
+        },
+
+        /**
+         * Get time sort value from time text
+         */
+        getTimeSortValue(timeText) {
+            if (!timeText) return 0;
+
+            // Extract time and convert to 24hr format for sorting
+            const match = timeText.match(/(\d{1,2}):(\d{2})\s*(am|pm)?/i);
+            if (match) {
+                let hours = parseInt(match[1], 10);
+                const minutes = parseInt(match[2], 10);
+                const period = match[3] ? match[3].toLowerCase() : '';
+
+                if (period === 'pm' && hours !== 12) {
+                    hours += 12;
+                } else if (period === 'am' && hours === 12) {
+                    hours = 0;
+                }
+
+                return hours * 60 + minutes;
+            }
+
+            return 0;
+        },
+
+        /**
+         * Get sort value for a specific column
+         */
+        getSortValue(row, column) {
+            switch(column) {
+                case 'date': {
+                    const dateCell = row.querySelector('td:first-child');
+                    if (!dateCell) return 0;
+
+                    const dateEl = dateCell.querySelector('.cell-date');
+                    const timeEl = dateCell.querySelector('.cell-time');
+
+                    const dateValue = this.getDateSortValue(dateEl ? dateEl.textContent : '');
+                    const timeValue = this.getTimeSortValue(timeEl ? timeEl.textContent : '');
+
+                    // Combine date and time for full sorting
+                    return dateValue + timeValue / (24 * 60);
+                }
+
+                case 'matchup': {
+                    const cell = row.querySelector('td:nth-child(2)');
+                    return cell ? cell.textContent.trim().toLowerCase() : '';
+                }
+
+                case 'pick': {
+                    const cell = row.querySelector('td:nth-child(3)');
+                    return cell ? cell.textContent.trim().toLowerCase() : '';
+                }
+
+                case 'segment': {
+                    const cell = row.querySelector('td:nth-child(4)');
+                    return cell ? cell.textContent.trim().toLowerCase() : '';
+                }
+
+                case 'risk': {
+                    const cell = row.querySelector('td:nth-child(5)');
+                    if (!cell) return 0;
+                    const amountEl = cell.querySelector('.risk-amount');
+                    if (!amountEl) return 0;
+                    const text = amountEl.textContent.replace(/[$,]/g, '').trim();
+                    return parseFloat(text) || 0;
+                }
+
+                case 'win': {
+                    const cell = row.querySelector('td:nth-child(5)');
+                    if (!cell) return 0;
+                    const amountEl = cell.querySelector('.win-amount');
+                    if (!amountEl) return 0;
+                    const text = amountEl.textContent.replace(/[$,]/g, '').trim();
+                    return parseFloat(text) || 0;
+                }
+
+                case 'status': {
+                    const cell = row.querySelector('td:last-child');
+                    if (!cell) return '';
+
+                    const badge = cell.querySelector('.status-badge');
+                    if (badge) {
+                        const status = badge.getAttribute('data-status') ||
+                                      badge.className.match(/status-(\w+)/)?.[1] ||
+                                      badge.textContent.trim();
+                        return this.getStatusSortPriority(status);
+                    }
+
+                    return cell.textContent.trim().toLowerCase();
+                }
+
+                default:
+                    return '';
+            }
+        },
+
+        /**
+         * Get status sort priority (for consistent ordering)
+         */
+        getStatusSortPriority(status) {
+            const priorities = {
+                'live': 1,
+                'in-progress': 1,
+                'active': 1,
+                'pending': 2,
+                'open': 2,
+                'win': 3,
+                'won': 3,
+                'loss': 4,
+                'lost': 4,
+                'push': 5,
+                'tie': 5,
+                'void': 6,
+                'voided': 6,
+                'cancelled': 6
+            };
+
+            const normalized = status.toString().toLowerCase();
+            return priorities[normalized] || 99;
+        },
+
+        /**
+         * Apply sorting to table rows
+         */
+        applySorting(rows) {
+            const state = window.PicksStateManager ?
+                window.PicksStateManager.getSortState() :
+                window.tableState.sort;
+
+            if (!state.column) {
+                return rows;
+            }
+
+            const sorted = [...rows].sort((a, b) => {
+                const aValue = this.getSortValue(a, state.column);
+                const bValue = this.getSortValue(b, state.column);
+
+                // Handle numeric vs string comparison
+                if (typeof aValue === 'number' && typeof bValue === 'number') {
+                    return state.direction === 'asc' ?
+                        aValue - bValue :
+                        bValue - aValue;
+                }
+
+                // String comparison
+                const aStr = aValue.toString();
+                const bStr = bValue.toString();
+
+                if (state.direction === 'asc') {
+                    return aStr.localeCompare(bStr);
+                } else {
+                    return bStr.localeCompare(aStr);
+                }
+            });
+
+            return sorted;
+        },
+
+        /**
+         * Handle header click for sorting
+         */
+        handleHeaderClick(column) {
+            const state = window.PicksStateManager ?
+                window.PicksStateManager.getSortState() :
+                window.tableState.sort;
+
+            // Toggle direction if same column, otherwise default to asc
+            if (state.column === column) {
+                const newDirection = state.direction === 'asc' ? 'desc' : 'asc';
+                this.updateSort(column, newDirection);
+            } else {
+                this.updateSort(column, 'asc');
+            }
+
+            // Update table display
+            if (window.PicksTableRenderer) {
+                window.PicksTableRenderer.updateTable();
+            }
+
+            // Update header indicators
+            this.updateSortIndicators();
+        },
+
+        /**
+         * Update sort state
+         */
+        updateSort(column, direction) {
+            if (window.PicksStateManager) {
+                window.PicksStateManager.updateSort(column, direction);
+            } else {
+                window.tableState.sort = { column, direction };
+            }
+        },
+
+        /**
+         * Reset sorting
+         */
+        resetSorting() {
+            if (window.PicksStateManager) {
+                window.PicksStateManager.resetSort();
+            } else {
+                window.tableState.sort = { column: null, direction: 'asc' };
+            }
+
+            this.updateSortIndicators();
+
+            if (window.PicksTableRenderer) {
+                window.PicksTableRenderer.updateTable();
+            }
+        },
+
+        /**
+         * Update sort indicators in headers
+         * NOTE: Sort indicators removed - filter icons are sufficient
+         */
+        updateSortIndicators() {
+            // No-op: Sort indicators removed per design
+        },
+
+        /**
+         * Initialize sort functionality
+         */
+        initSorting() {
+            // Add click handlers to sortable headers
+            const headers = document.querySelectorAll('th[data-sort]');
+
+            headers.forEach(header => {
+                const column = header.getAttribute('data-sort');
+                
+                // Make header clickable
+                header.style.cursor = 'pointer';
+                header.setAttribute('role', 'button');
+                header.setAttribute('aria-label', `Sort by ${column}`);
+
+                // Remove existing listeners to prevent duplicates
+                // Note: This cloning approach removes ALL listeners, including filter dropdown toggles if they are on the TH
+                // But filter buttons are usually children of TH.
+                // However, if the click listener is on the TH itself, it might conflict with filter button clicks.
+                // The original code did this, so I'll stick to it but be careful.
+                // Actually, the filter button has stopPropagation in active-picks-modular.js, so it should be fine.
+                
+                // Add click listener to the sort button if it exists, otherwise the header
+                const sortBtn = header.querySelector('.th-sort-btn');
+                const target = sortBtn || header;
+
+                target.addEventListener('click', (e) => {
+                    // Don't trigger sort if clicking filter button
+                    if (e.target.closest('.th-filter-btn') || e.target.closest('.th-filter-dropdown')) {
+                        return;
+                    }
+                    this.handleHeaderClick(column);
+                });
+
+                // Add keyboard support
+                target.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        this.handleHeaderClick(column);
+                    }
+                });
+            });
+
+            // Initialize indicators
+            this.updateSortIndicators();
+        }
+    };
+
+    // Export to global scope
+    window.PicksSortManager = SortManager;
+
+})();

@@ -1,0 +1,3122 @@
+/* ==========================================================================
+   Page Layout - Active Picks Dashboard
+   --------------------------------------------------------------------------
+   Handles page-level layout, backgrounds, and main container styling
+   ========================================================================== */
+
+:root {
+    --layout-gutter: clamp(24px, 4vw, 60px);
+    --hero-band-height: clamp(220px, 32vh, 320px);
+    --hero-bear-image: url("../../JB_Bearish_Market_FULL_page.png");
+}
+
+/* ===== PAGE GLOW EFFECT ===== */
+body.page-glow {
+    /* Subtle ambient glow emanating from edges */
+}
+
+body.page-glow::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: -3;
+    background:
+        /* Top edge glow - enhanced forest green */
+        radial-gradient(ellipse 120% 30% at 50% 0%, rgba(var(--color-primary-bright-rgb), 0.12) 0%, rgba(0, 143, 88, 0.05) 40%, transparent 70%),
+        /* Bottom edge glow - deeper forest green */
+        radial-gradient(ellipse 120% 25% at 50% 100%, rgba(0, 143, 88, 0.10) 0%, rgba(34, 100, 70, 0.04) 35%, transparent 70%),
+        /* Left edge glow - metallic green-cyan blend */
+        radial-gradient(ellipse 25% 80% at 0% 50%, rgba(0, 188, 212, 0.08) 0%, rgba(0, 143, 88, 0.04) 40%, transparent 70%),
+        /* Right edge glow - bright emerald */
+        radial-gradient(ellipse 25% 80% at 100% 50%, rgba(var(--color-primary-bright-rgb), 0.09) 0%, rgba(60, 255, 181, 0.03) 40%, transparent 70%);
+    opacity: 1;
+    animation: pageGlowPulse 8s ease-in-out infinite, glowShimmer 12s ease-in-out infinite;
+    /* REFINEMENT: GPU acceleration for better performance */
+    will-change: opacity;
+    transform: translateZ(0);
+}
+
+/* ===== GLOW SHIMMER ANIMATION ===== */
+@keyframes glowShimmer {
+    0%, 100% {
+        filter: brightness(1) saturate(1);
+    }
+    33% {
+        filter: brightness(1.15) saturate(1.2);
+    }
+    66% {
+        filter: brightness(0.95) saturate(0.9);
+    }
+}
+
+@keyframes pageGlowPulse {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+}
+
+/* ===== METALLIC SHIMMER ANIMATION ===== */
+@keyframes metallicShimmer {
+    0%, 100% {
+        filter: brightness(1) saturate(1);
+        opacity: 0.92;
+    }
+    33% {
+        filter: brightness(1.12) saturate(1.15);
+        opacity: 0.96;
+    }
+    66% {
+        filter: brightness(0.95) saturate(0.9);
+        opacity: 0.88;
+    }
+}
+
+/* ===== RIPPLE EFFECT ANIMATION ===== */
+@keyframes rippleEffect {
+    0%, 100% {
+        transform: scale(1);
+        filter: blur(0px) brightness(1);
+    }
+    25% {
+        transform: scale(1.015);
+        filter: blur(1px) brightness(1.05);
+    }
+    50% {
+        transform: scale(1);
+        filter: blur(0px) brightness(1);
+    }
+    75% {
+        transform: scale(1.015);
+        filter: blur(1px) brightness(1.05);
+    }
+}
+
+/* ===== FULL-PAGE BACKGROUND ===== */
+body.page-active-picks {
+    background-color: var(--color-bg-deep, #030b16);
+    background-image: var(--hero-bear-image);
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+body.page-active-picks::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    /* Metallic Forest Green Overlay with In-Place Shimmer */
+    background-image:
+        /* Metallic forest green accent spots - these will pulse in place */
+        radial-gradient(ellipse at 28% 12%, rgba(0, 143, 88, 0.18) 0%, transparent 52%),
+        radial-gradient(ellipse at 76% 32%, rgba(var(--color-primary-bright-rgb), 0.14) 4%, transparent 60%),
+        radial-gradient(ellipse at 15% 10%, rgba(34, 100, 70, 0.16) 0%, transparent 52%),
+        radial-gradient(ellipse at 85% 20%, rgba(0, 120, 80, 0.12) 0%, transparent 48%),
+        radial-gradient(ellipse at 50% 50%, rgba(60, 255, 181, 0.08) 0%, transparent 65%),
+        /* Base metallic overlay */
+        linear-gradient(185deg, rgba(6, 12, 20, 0.30) 0%, rgba(5, 15, 18, 0.45) 36%, rgba(3, 8, 14, 0.60) 100%);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-color: transparent;
+    background-blend-mode: screen, screen, screen, screen, screen, normal;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.92;
+    animation: metallicShimmer 8s ease-in-out infinite, rippleEffect 6s ease-in-out infinite;
+    /* REFINEMENT: GPU acceleration for better performance */
+    will-change: opacity, transform;
+    transform: translateZ(0);
+}
+
+/* ===== PAGE-SPECIFIC STACKING CONTEXTS ===== */
+
+body.page-active-picks .brand-nav {
+    top: 12px;
+    margin-top: 0;
+    padding-top: 0;
+}
+
+/* REFINEMENT: Ensure background layers don't block interactions */
+body.page-glow::after,
+body.page-active-picks::before,
+.main-container::before {
+    pointer-events: none !important;
+}
+
+/* Ensure sticky table headers sit above background & content bands */
+/* Using z-index scale from variables.css but allow dropdowns to escape */
+body.page-active-picks .picks-table thead {
+    z-index: var(--z-sticky-header);
+}
+
+body.page-active-picks .picks-table thead th {
+    /* No z-index here - prevents creating stacking context that traps dropdowns */
+    position: relative; /* Needed for dropdown absolute positioning fallback */
+}
+
+/* ===== MAIN CONTAINER ===== */
+.main-container {
+    width: 100%;
+    margin: 0;
+    padding: var(--hero-safe-top) var(--layout-gutter) 20px; /* Lift content off hero art */
+    position: relative;
+    z-index: 10;
+    /* Allow page to scroll with full dashboard height */
+    overflow: visible;
+    min-height: calc(100vh - 40px); /* Account for top/bottom padding */
+    pointer-events: auto; /* CRITICAL FIX: Ensure main content accepts clicks */
+}
+
+/* ===== METALLIC FOREST GREEN ACCENT LAYER WITH RIPPLE ===== */
+.main-container::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: -1;
+    /* Rippling metallic forest green gradient overlay */
+    background:
+        radial-gradient(circle at 20% 30%, rgba(0, 143, 88, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(var(--color-primary-bright-rgb), 0.06) 0%, transparent 45%),
+        radial-gradient(circle at 50% 50%, rgba(34, 100, 70, 0.05) 0%, transparent 50%);
+    opacity: 0.6;
+    animation: metallicPulse 10s ease-in-out infinite, rippleWave 4s ease-in-out infinite;
+}
+
+/* ===== RIPPLE WAVE ANIMATION ===== */
+@keyframes rippleWave {
+    0%, 100% {
+        transform: scale(1) translateZ(0);
+        filter: blur(0px);
+    }
+    50% {
+        transform: scale(1.02) translateZ(0);
+        filter: blur(2px);
+    }
+}
+
+/* ===== METALLIC PULSE ANIMATION ===== */
+@keyframes metallicPulse {
+    0%, 100% {
+        opacity: 0.6;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.8;
+        transform: scale(1.02);
+    }
+}
+
+/* Background overlay consolidated into body::before for seamless full-viewport coverage */
+
+/* ===== LAYOUT CONTAINERS ===== */
+.main-dashboard-layout {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(9px, 1.5vw, 16px);
+    margin: 0 auto;
+    width: min(100%, 1900px); /* Full width within gutter for precise centering */
+    position: relative;
+    z-index: 10;
+}
+
+.dashboard-topline {
+    --dashboard-topline-height: 76px;
+    display: flex;
+    flex-direction: row;
+    align-items: center; /* REFINEMENT: Changed from flex-end - better vertical balance */
+    justify-content: flex-start; /* Pack elements to the left */
+    gap: 12px; /* REFINEMENT: Increased from 8px - better breathing room */
+    width: 100%;
+    margin-bottom: 4px; /* REFINEMENT: Decreased from 12px - floating effect */
+    position: relative;
+    z-index: 200;
+}
+
+/* Ensure brand header is visible and properly sized */
+.dashboard-topline .brand-header-inline {
+    flex: 0 0 auto; /* Don't grow, don't shrink, use natural size */
+}
+
+.dashboard-topline .kpi-tiles {
+    flex: 0 0 auto; /* Don't grow, don't shrink, use natural size */
+}
+
+.dashboard-topline .date-toggles-container {
+    flex: 0 0 auto; /* Don't grow, don't shrink, use natural size */
+}
+
+.brand-stack {
+    display: flex;
+    align-items: flex-start;
+    gap: clamp(18px, 3vw, 32px);
+    flex: 1 1 340px;
+    min-width: 300px;
+}
+
+.brand-logo {
+    width: clamp(100px, 12vw, 140px);
+    height: auto;
+    filter: drop-shadow(0 14px 32px rgba(0, 0, 0, 0.5));
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.brand-logo:hover {
+    transform: translateY(-2px) scale(1.02);
+    filter: drop-shadow(0 16px 36px rgba(var(--color-primary-bright-rgb), 0.35));
+}
+
+.brand-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 4px;
+}
+
+.brand-title {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(1.625rem, 2.8vw, 2.45rem);
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(236, 248, 255, 0.92);
+    text-shadow: 0 14px 32px rgba(0, 0, 0, 0.55);
+}
+
+.brand-tagline {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(0.72rem, 1.2vw, 0.9rem);
+    letter-spacing: 0.46em;
+    text-transform: uppercase;
+    color: rgba(214, 236, 242, 0.62);
+}
+
+.brand-updated {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(0.7rem, 1vw, 0.82rem);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(214, 236, 242, 0.54);
+}
+
+#last-updated-timestamp {
+    color: rgba(224, 255, 246, 0.9);
+}
+
+/* KPI tiles are now directly in dashboard-topline, no separate container needed */
+.kpi-and-filters {
+    display: none; /* Hide old container */
+}
+
+.topline-utilities {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: clamp(16px, 3vw, 28px);
+    flex: 1;
+    position: relative;
+    z-index: 190;
+}
+
+/* Note: .date-toggles-container base styling is in date-toggles.css
+   Grid positioning is handled by .dashboard-topline .date-toggles-container above */
+
+/* Ensure stacking context for other shared elements */
+header,
+main,
+.main-dashboard-layout,
+.table-container,
+nav {
+    position: relative;
+    z-index: 10;
+}
+
+/* ===== RESPONSIVE LAYOUT ===== */
+@media (max-width: 1400px) {
+    .main-dashboard-layout {
+        width: 100%;
+    }
+
+    .kpi-and-filters {
+        min-width: 0;
+    }
+}
+
+@media (max-width: 1200px) {
+    .main-container {
+        padding: var(--hero-safe-top) var(--layout-gutter) 15px; /* Preserve hero offset */
+    }
+
+    .dashboard-topline {
+        --dashboard-topline-height: 72px;
+        flex-wrap: wrap;
+        margin-bottom: 8px;
+    }
+    
+    .main-dashboard-layout {
+        width: 100%;
+    }
+}
+
+@media (max-width: 992px) {
+    .main-dashboard-layout {
+        gap: clamp(12px, 3vw, 20px);
+    }
+
+    .dashboard-topline {
+        flex-wrap: wrap;
+    }
+
+    .brand-stack {
+        min-width: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-dashboard-layout {
+        gap: clamp(11px, 3vw, 16px);
+    }
+
+    .main-container {
+        padding: var(--hero-safe-top) var(--layout-gutter) 15px;
+    }
+
+    .dashboard-topline {
+        --dashboard-topline-height: 66px;
+        margin-bottom: 6px; /* Tight spacing above the table */
+    }
+
+    .topline-utilities {
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+    }
+
+    .dashboard-topline .date-toggles-container {
+        align-self: stretch;
+        justify-self: stretch;
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-dashboard-layout {
+        gap: 12px;
+    }
+
+    .main-container {
+        padding: var(--hero-safe-top) var(--layout-gutter) 12px;
+    }
+
+    .dashboard-topline {
+        margin-bottom: 6px; /* Tight spacing above the table */
+    }
+}
+
+/* ===== SCROLL PROGRESS BAR ===== */
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 3px;
+    background: linear-gradient(
+        90deg,
+        rgba(var(--color-primary-bright-rgb), 0.85) 0%,
+        rgba(var(--color-accent-rgb), 0.9) 50%,
+        rgba(0, 255, 170, 0.98) 100%
+    );
+    z-index: 9999998;
+    box-shadow: 0 0 10px rgba(var(--color-primary-bright-rgb), 0.6), 0 0 20px rgba(var(--color-primary-bright-rgb), 0.3);
+    transition: width 0.1s ease-out;
+}
+
+/* ===== BACK TO TOP BUTTON ===== */
+.back-to-top {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 40px;
+    height: 40px;
+    background: rgba(8, 12, 22, 0.85);
+    border: 1px solid rgba(var(--color-primary-bright-rgb), 0.25);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease, border-color 0.2s ease;
+    z-index: 9999;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+}
+
+.back-to-top::before {
+    content: '↑';
+    font-size: 16px;
+    font-weight: 600;
+    color: rgba(var(--color-primary-bright-rgb), 0.8);
+    line-height: 1;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+}
+
+.back-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.back-to-top:hover {
+    background: rgba(8, 12, 22, 0.95);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.5);
+    box-shadow: 0 4px 12px rgba(var(--color-primary-bright-rgb), 0.2);
+}
+
+.back-to-top:hover::before {
+    color: rgba(var(--color-primary-bright-rgb), 1);
+}
+
+.back-to-top:active {
+    transform: translateY(1px);
+}
+
+@media (max-width: 768px) {
+    .back-to-top {
+        bottom: 20px;
+        right: 20px;
+        width: 36px;
+        height: 36px;
+    }
+
+    .back-to-top::before {
+        font-size: 14px;
+    }
+}
+
+
+/* ==========================================================================
+   UNIFIED FILTER SYSTEM v2.1 - Integrated Design System
+   --------------------------------------------------------------------------
+   Uses tokens from variables.css for consistency across dashboard
+   ========================================================================== */
+
+/* ===== FILTER-SPECIFIC TOKENS (extend variables.css) ===== */
+:root {
+    /* Panel - uses bg tokens from variables.css */
+    --filter-panel-bg: var(--color-bg-panel, rgba(8, 17, 33, 0.98));
+    --filter-panel-border: rgba(var(--color-primary-rgb), 0.22);
+    --filter-panel-shadow:
+        0 16px 48px rgba(0, 0, 0, 0.65),
+        0 0 1px rgba(var(--color-primary-rgb), 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+
+    /* Cards */
+    --filter-card-bg: rgba(0, 0, 0, 0.35);
+    --filter-card-border: var(--border-subtle, 1px solid rgba(255, 255, 255, 0.08));
+    --filter-card-hover-bg: rgba(var(--color-primary-rgb), 0.12);
+
+    /* Pills */
+    --filter-pill-bg: rgba(255, 255, 255, 0.06);
+    --filter-pill-border: rgba(255, 255, 255, 0.1);
+    --filter-pill-hover-bg: rgba(var(--color-primary-rgb), 0.15);
+    --filter-pill-active-bg: rgba(var(--color-primary-rgb), 0.22);
+    --filter-pill-active-border: rgba(var(--color-primary-rgb), 0.6);
+
+    /* Inputs */
+    --filter-input-bg: rgba(0, 0, 0, 0.45);
+    --filter-input-border: rgba(255, 255, 255, 0.12);
+    --filter-input-focus-border: rgba(var(--color-primary-rgb), 0.6);
+    --filter-input-focus-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.15);
+
+    /* Typography - inherit from variables.css */
+    --filter-text-primary: var(--color-text-primary);
+    --filter-text-secondary: var(--color-text-secondary);
+    --filter-text-muted: var(--color-text-muted);
+    --filter-text-accent: var(--color-primary-bright);
+    --filter-text-hint: rgba(140, 160, 175, 0.7);
+}
+
+/* ==========================================================================
+   FILTER TRIGGER BUTTON - Compact Sleek Design
+   ========================================================================== */
+
+.th-header-shell .th-filter-btn {
+    flex: 0 0 auto;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 3px;
+    background: transparent;
+    color: rgba(var(--color-primary-bright-rgb), 0.45);
+    cursor: pointer;
+    opacity: 0.5;
+    transition: all 0.15s ease;
+    padding: 0;
+    outline: none;
+    font-size: 0;
+}
+
+/* Compact 3-dot icon */
+.th-header-shell .th-filter-btn::before {
+    content: "";
+    width: 3px;
+    height: 11px;
+    background-image: radial-gradient(circle, currentColor 1.2px, transparent 1.2px);
+    background-size: 3px 4px;
+    background-repeat: repeat-y;
+    background-position: center;
+    transition: transform 0.12s ease, color 0.12s ease;
+}
+
+.th-header-shell:hover .th-filter-btn {
+    opacity: 1;
+    color: rgba(var(--color-primary-bright-rgb), 0.75);
+}
+
+.th-header-shell .th-filter-btn:hover {
+    opacity: 1;
+    color: #00ffaa;
+    background: rgba(var(--color-primary-bright-rgb), 0.1);
+}
+
+.th-header-shell .th-filter-btn[aria-expanded="true"] {
+    opacity: 1;
+    color: #00ffaa;
+    background: rgba(var(--color-primary-bright-rgb), 0.15);
+}
+
+.th-header-shell .th-filter-btn[aria-expanded="true"]::before {
+    content: "×";
+    width: auto;
+    height: auto;
+    background-image: none;
+    font-family: var(--filter-font-ui);
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 1;
+}
+
+/* Active filter indicator - subtle dot badge */
+.picks-table thead th.has-active-filter .th-filter-btn {
+    opacity: 1;
+    color: #00ffaa;
+}
+
+.picks-table thead th.has-active-filter .th-filter-btn::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 6px;
+    height: 6px;
+    background: #00ffaa;
+    border-radius: 50%;
+    box-shadow: 0 0 6px rgba(0, 255, 170, 0.8);
+    animation: filterActivePulse 2s ease-in-out infinite;
+}
+
+@keyframes filterActivePulse {
+    0%, 100% { box-shadow: 0 0 4px rgba(0, 255, 170, 0.6); transform: scale(1); }
+    50% { box-shadow: 0 0 8px rgba(0, 255, 170, 0.9); transform: scale(1.1); }
+}
+
+
+/* ==========================================================================
+   UNIFIED FILTER PANEL BASE - Clean Card Design
+   ========================================================================== */
+
+/* Ensure parent containers allow northward overflow */
+.picks-table {
+    position: relative;
+}
+
+.picks-table thead {
+    overflow: visible !important;
+    position: relative;
+}
+
+.picks-table thead th {
+    overflow: visible !important;
+    position: relative;
+}
+
+.th-header-shell {
+    position: relative;
+    overflow: visible !important;
+}
+
+.th-filter-dropdown,
+.th-filter-dropdown.nav-panel-dropdown {
+    /* Positioning - above header (northward) */
+    position: absolute;
+    bottom: calc(100% + 8px);
+    right: 0;
+    left: auto;
+    z-index: var(--z-dropdown);
+    transform-origin: bottom center;
+
+    /* Default sizing */
+    width: 240px;
+    min-width: 240px;
+    max-width: 240px;
+    max-height: 380px;
+
+    /* Vegas sportsbook dark panel using design variables */
+    background: var(--color-bg-panel);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(var(--color-primary-rgb), 0.2);
+    border-radius: 4px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+
+    /* Typography using design system variables */
+    font-family: var(--filter-font-body);
+    font-size: var(--filter-text-sm);
+    font-weight: var(--filter-weight-regular);
+    line-height: var(--filter-leading-tight);
+    letter-spacing: var(--filter-tracking-normal);
+    color: var(--filter-text-primary);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+
+    /* Compact layout */
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 0;
+
+    transform-origin: top right;
+    pointer-events: auto;
+}
+
+.th-filter-dropdown[hidden] {
+    display: none !important;
+}
+
+.th-filter-dropdown.open {
+    display: flex !important;
+    animation: filterReveal 0.15s ease-out;
+}
+
+/* Centered dropdowns need different animation to preserve translateX */
+.picks-table thead th:nth-child(3) .th-filter-dropdown.open,
+.picks-table thead th:nth-child(4) .th-filter-dropdown.open,
+.picks-table thead th:nth-child(5) .th-filter-dropdown.open {
+    animation: filterReveal 0.15s ease-out;
+}
+
+@keyframes filterReveal {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes filterRevealCenter {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+/* Top accent line - subtle */
+.th-filter-dropdown::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(var(--color-primary-bright-rgb), 0.2) 30%,
+        rgba(var(--color-primary-bright-rgb), 0.3) 50%,
+        rgba(var(--color-primary-bright-rgb), 0.2) 70%,
+        transparent 100%
+    );
+    border-radius: 6px 6px 0 0;
+}
+
+
+/* ==========================================================================
+   FILTER HEADER TOOLBAR - Elegant Minimal Design
+   ========================================================================== */
+
+.filter-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 8px 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid rgba(var(--color-primary-rgb), 0.15);
+}
+
+.filter-toolbar-title {
+    font-family: var(--filter-font-display);
+    font-size: var(--filter-text-xs);
+    font-weight: var(--filter-weight-semibold);
+    letter-spacing: var(--filter-tracking-wider);
+    text-transform: uppercase;
+    color: var(--filter-text-accent);
+    line-height: 1;
+}
+
+.filter-toolbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+
+/* ==========================================================================
+   FILTER CONTENT BODY - Refined Scrollable Area
+   ========================================================================== */
+
+.filter-body {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(var(--color-primary-bright-rgb), 0.3) transparent;
+    background: transparent;
+}
+
+.filter-body::-webkit-scrollbar {
+    width: 4px;
+}
+
+.filter-body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.filter-body::-webkit-scrollbar-thumb {
+    background: rgba(var(--color-primary-bright-rgb), 0.35);
+    border-radius: 2px;
+}
+
+.filter-body::-webkit-scrollbar-thumb:hover {
+    background: rgba(var(--color-primary-bright-rgb), 0.5);
+}
+
+.filter-body--compact {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.filter-body--with-divider {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+
+/* ==========================================================================
+   FILTER SECTION - Minimal Inline Style
+   ========================================================================== */
+
+.filter-section {
+    margin-bottom: 0;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    transition: none;
+    position: relative;
+}
+
+.filter-section:last-child {
+    margin-bottom: 0;
+}
+
+.filter-section--flush {
+    margin-bottom: 0;
+}
+
+.filter-section + .filter-section {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.filter-section-label {
+    display: none; /* Hide labels - options are self-explanatory */
+}
+
+
+/* ==========================================================================
+   FILTER PILLS - Enhanced Visibility
+   ========================================================================== */
+
+.filter-pills {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+}
+
+.filter-pill {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 10px;
+    min-height: 32px;
+
+    /* Typography using design variables */
+    font-family: var(--filter-font-body);
+    font-size: var(--filter-text-sm);
+    font-weight: var(--filter-weight-medium);
+    line-height: var(--filter-leading-tight);
+    letter-spacing: var(--filter-tracking-normal);
+    text-transform: none;
+    color: var(--filter-text-secondary);
+
+    /* Clean button styling */
+    background: var(--filter-pill-bg);
+    border: 1px solid var(--filter-pill-border);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: var(--transition-micro);
+}
+
+.filter-pill input {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.filter-pill:hover {
+    color: var(--filter-text-primary);
+    background: var(--filter-pill-hover-bg);
+    border-color: rgba(var(--color-primary-rgb), 0.3);
+}
+
+.filter-pill:has(input:checked) {
+    color: var(--filter-text-accent);
+    background: var(--filter-pill-active-bg);
+    border-color: var(--filter-pill-active-border);
+    box-shadow: 0 0 8px rgba(var(--color-primary-rgb), 0.2);
+    font-weight: var(--filter-weight-semibold);
+}
+
+
+/* ==========================================================================
+   FILTER OPTIONS LIST - Enhanced Readability
+   ========================================================================== */
+
+.filter-options {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    max-height: 180px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(var(--color-primary-bright-rgb), 0.3) transparent;
+}
+
+.filter-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 12px;
+    min-height: 34px;
+
+    /* Typography using design variables */
+    font-family: var(--filter-font-body);
+    font-size: var(--filter-text-sm);
+    font-weight: var(--filter-weight-regular);
+    line-height: var(--filter-leading-normal);
+    letter-spacing: var(--filter-tracking-tight);
+    color: var(--filter-text-secondary);
+
+    /* Clean row styling */
+    background: rgba(0, 0, 0, 0.1);
+    border: 1px solid transparent;
+    border-radius: 4px;
+    margin-bottom: 2px;
+    cursor: pointer;
+    transition: var(--transition-micro);
+}
+
+.filter-option:hover {
+    background: rgba(0, 143, 88, 0.1);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.2);
+    color: rgba(232, 240, 242, 0.95);
+}
+
+.filter-option:has(input:checked) {
+    color: rgba(var(--color-primary-bright-rgb), 1);
+    background: rgba(0, 143, 88, 0.16);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.35);
+    box-shadow: 0 0 6px rgba(var(--color-primary-bright-rgb), 0.12);
+    font-weight: var(--filter-weight-medium);
+}
+
+.filter-option input[type="checkbox"],
+.filter-option input[type="radio"] {
+    width: 15px;
+    height: 15px;
+    accent-color: #00d689;
+    cursor: pointer;
+    flex-shrink: 0;
+    margin: 0;
+}
+
+.filter-option span {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.3;
+}
+
+
+/* ==========================================================================
+   FILTER SELECT DROPDOWN - Clean Compact
+   ========================================================================== */
+
+.filter-select,
+.compact-select {
+    width: 100%;
+    padding: 6px 26px 6px 10px;
+    min-height: 30px;
+
+    /* Typography - Sleek sportsbook style */
+    font-family: var(--filter-font-body);
+    font-size: var(--sportsbook-label-size);
+    font-weight: var(--filter-weight-regular);
+    line-height: 1.35;
+    letter-spacing: 0.02em;
+    color: var(--filter-text-primary);
+
+    /* Styling */
+    background-color: rgba(0, 0, 0, 0.4);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 24 24' fill='none' stroke='%2300d689' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    appearance: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.filter-select--auto {
+    width: auto;
+    min-width: 100px;
+}
+
+.filter-select:hover,
+.compact-select:hover {
+    border-color: rgba(var(--color-primary-bright-rgb), 0.25);
+    background-color: rgba(0, 0, 0, 0.45);
+}
+
+.filter-select:focus,
+.compact-select:focus {
+    outline: none;
+    border-color: rgba(var(--color-primary-bright-rgb), 0.5);
+    box-shadow: 0 0 0 2px rgba(0, 143, 88, 0.12);
+}
+
+
+/* ==========================================================================
+   FILTER SEARCH INPUT - Minimal Style
+   ========================================================================== */
+
+.filter-search {
+    width: 100%;
+    padding: 6px 10px;
+    min-height: 30px;
+
+    /* Typography - Sleek sportsbook style */
+    font-family: var(--filter-font-body);
+    font-size: var(--sportsbook-label-size);
+    font-weight: var(--filter-weight-regular);
+    line-height: 1.35;
+    letter-spacing: 0.02em;
+    color: var(--filter-text-primary);
+
+    /* Styling */
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    transition: all 0.15s ease;
+}
+
+.filter-search::placeholder {
+    color: rgba(140, 160, 175, 0.65);
+    font-style: normal;
+}
+
+.filter-search:hover {
+    border-color: rgba(var(--color-primary-bright-rgb), 0.2);
+    background: rgba(0, 0, 0, 0.45);
+}
+
+.filter-search:focus {
+    outline: none;
+    border-color: rgba(var(--color-primary-bright-rgb), 0.5);
+    background: rgba(0, 0, 0, 0.45);
+    box-shadow: 0 0 0 2px rgba(0, 143, 88, 0.12);
+}
+
+
+/* ==========================================================================
+   FILTER ACTION BUTTONS - Minimal (Auto-apply, no Apply button needed)
+   ========================================================================== */
+
+.filter-actions {
+    display: none; /* Hide footer - filters auto-apply on click */
+}
+
+/* Clear/Reset button - compact style */
+.filter-btn-reset,
+.th-filter-reset {
+    padding: 3px 6px;
+    min-height: 20px;
+
+    /* Compact typography */
+    font-family: var(--filter-font-body);
+    font-size: 9px;
+    font-weight: var(--filter-weight-semibold);
+    line-height: 1.2;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(144, 164, 174, 0.8);
+
+    /* Sleek styling */
+    background: rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.12s ease;
+}
+
+.filter-btn-reset:hover,
+.th-filter-reset:hover {
+    color: rgba(232, 240, 242, 0.95);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.18);
+}
+
+/* Apply button - HIDDEN (filters auto-apply) */
+.filter-btn-apply,
+.th-filter-apply {
+    display: none !important;
+}
+
+/* Inline toolbar actions */
+.filter-toolbar-actions .th-filter-reset {
+    padding: 4px 8px;
+    font-size: var(--sportsbook-caption-size);
+    min-height: 24px;
+}
+
+
+/* ==========================================================================
+   SELECT ALL TOGGLE - Minimal
+   ========================================================================== */
+
+.filter-select-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px;
+
+    /* Typography - Cormorant Garamond for consistency */
+    font-family: var(--filter-font-body);
+    font-size: var(--filter-text-xs);
+    font-weight: var(--filter-weight-semibold);
+    letter-spacing: var(--filter-tracking-wide);
+    text-transform: uppercase;
+    color: var(--filter-text-muted);
+
+    /* Styling */
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--filter-card-border);
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.12s ease;
+}
+
+.filter-select-all:hover {
+    background: var(--filter-card-hover-bg);
+    color: var(--filter-text-primary);
+}
+
+.filter-select-all input[type="checkbox"] {
+    width: 10px;
+    height: 10px;
+    accent-color: #00d689;
+    margin: 0;
+    cursor: pointer;
+}
+
+
+/* ==========================================================================
+   FILTER GRID - Clean Multi-column
+   ========================================================================== */
+
+.filter-grid {
+    display: grid;
+    gap: 10px;
+}
+
+.filter-grid--2col {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.filter-grid--3col {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.filter-grid-column {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 10px 12px;
+    background: var(--filter-card-bg);
+    border: 1px solid var(--filter-card-border);
+    border-radius: 8px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.filter-grid-column:hover {
+    border-color: rgba(var(--color-primary-bright-rgb), 0.2);
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.filter-grid-column-title {
+    font-family: var(--filter-font-display);
+    font-size: var(--filter-text-xs);
+    font-weight: var(--filter-weight-bold);
+    letter-spacing: var(--filter-tracking-wider);
+    text-transform: uppercase;
+    color: var(--filter-text-accent);
+    padding-bottom: 6px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid rgba(var(--color-primary-bright-rgb), 0.15);
+}
+
+.filter-grid-options {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    max-height: 160px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(var(--color-primary-bright-rgb), 0.3) transparent;
+}
+
+/* Compact option for grid columns */
+.filter-grid-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 8px;
+
+    /* Typography - Cormorant Garamond for consistency */
+    font-family: var(--filter-font-body);
+    font-size: var(--filter-text-sm);
+    font-weight: var(--filter-weight-medium);
+    letter-spacing: var(--filter-tracking-tight);
+    color: var(--filter-text-secondary);
+
+    /* Styling */
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid transparent;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.12s ease;
+}
+
+.filter-grid-option:hover {
+    background: var(--filter-pill-hover-bg);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.2);
+    color: var(--filter-text-primary);
+}
+
+.filter-grid-option:has(input:checked) {
+    background: var(--filter-pill-active-bg);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.4);
+    color: var(--filter-text-accent);
+}
+
+.filter-grid-option input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    accent-color: #00d689;
+    margin: 0;
+    cursor: pointer;
+}
+
+
+/* ==========================================================================
+   EMPTY STATE - Clean Minimal
+   ========================================================================== */
+
+.filter-empty {
+    padding: 12px;
+    text-align: center;
+
+    /* Typography - Cormorant Garamond for consistency */
+    font-family: var(--filter-font-body);
+    font-size: var(--filter-text-sm);
+    font-weight: var(--filter-weight-medium);
+    color: var(--filter-text-hint);
+
+    /* Styling */
+    background: rgba(0, 0, 0, 0.1);
+    border: 1px dashed rgba(255, 255, 255, 0.06);
+    border-radius: 4px;
+}
+
+
+/* ==========================================================================
+   DATE FILTER - Compact 3-Column Design
+   ========================================================================== */
+
+#filter-date {
+    width: 320px;
+    min-width: 320px;
+    max-width: 320px;
+    max-height: none; /* No scrolling needed */
+}
+
+/* Integrated header with inline controls - NO SEPARATE ALL/CLEAR ROW */
+.filter-header-integrated {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid rgba(var(--color-primary-rgb), 0.15);
+}
+
+.filter-header-integrated .filter-title {
+    font-family: var(--filter-font-display);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(var(--color-primary-bright-rgb), 0.9);
+}
+
+.filter-quick-actions {
+    display: flex;
+    gap: 6px;
+}
+
+.filter-action-btn {
+    padding: 4px 8px;
+    font-size: 9px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 3px;
+    color: rgba(144, 164, 174, 0.8);
+    cursor: pointer;
+    transition: var(--transition-micro);
+}
+
+.filter-action-btn:hover {
+    background: rgba(0, 143, 88, 0.15);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.3);
+    color: rgba(232, 240, 242, 0.95);
+}
+
+.date-filter-select-all-compact {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+
+    /* Typography - Cormorant Garamond for consistency */
+    font-family: var(--filter-font-body);
+    font-size: var(--filter-text-sm);
+    font-weight: var(--filter-weight-semibold);
+    letter-spacing: var(--filter-tracking-wide);
+    text-transform: uppercase;
+    color: var(--filter-text-muted);
+
+    /* Styling */
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid var(--filter-card-border);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.date-filter-select-all-compact:hover {
+    background: var(--filter-card-hover-bg);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.25);
+    color: var(--filter-text-primary);
+}
+
+.date-filter-select-all-compact input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    accent-color: #00d689;
+    margin: 0;
+}
+
+.date-filter-toolbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.date-filter-toolbar-actions .th-filter-reset,
+.date-filter-toolbar-actions .th-filter-apply {
+    padding: 3px 8px;
+    font-size: var(--filter-text-xxs);
+}
+
+
+.date-filter-categories {
+    padding: 10px;
+    overflow: hidden; /* NO SCROLLING */
+    max-height: none;
+    background: transparent;
+}
+
+/* Efficient tab-based date selection */
+.date-filter-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Quick date range selector */
+.date-range-selector {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+    margin-bottom: 8px;
+}
+
+.date-range-btn {
+    padding: 6px 8px;
+    font-size: 10px;
+    font-weight: 500;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 3px;
+    color: var(--filter-text-secondary);
+    cursor: pointer;
+    transition: var(--transition-micro);
+}
+
+.date-range-btn:hover {
+    background: rgba(0, 143, 88, 0.12);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.25);
+    color: var(--filter-text-primary);
+}
+
+.date-range-btn.active {
+    background: rgba(0, 143, 88, 0.2);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.4);
+    color: var(--filter-text-accent);
+}
+
+/* Compact time slots */
+.time-slots {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+}
+
+.time-slot {
+    padding: 5px;
+    font-size: 9px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 2px;
+    color: var(--filter-text-secondary);
+    cursor: pointer;
+    transition: var(--transition-micro);
+}
+
+.time-slot:hover {
+    background: rgba(0, 143, 88, 0.1);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.2);
+}
+
+.time-slot.active {
+    background: rgba(0, 143, 88, 0.18);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.35);
+    color: var(--filter-text-accent);
+}
+
+.date-filter-grid--sleek .date-filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 10px 12px;
+    background: var(--filter-card-bg);
+    border: 1px solid var(--filter-card-border);
+    border-radius: 8px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.date-filter-grid--sleek .date-filter-group:hover {
+    background: rgba(0, 0, 0, 0.4);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.2);
+}
+
+.date-filter-grid--sleek .date-filter-group-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--filter-font-display);
+    font-size: var(--filter-text-xs);
+    font-weight: var(--filter-weight-bold);
+    letter-spacing: var(--filter-tracking-wider);
+    text-transform: uppercase;
+    color: var(--filter-text-accent);
+    padding-bottom: 6px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid rgba(var(--color-primary-bright-rgb), 0.15);
+}
+
+.date-filter-count-badge {
+    font-size: var(--filter-text-xxs);
+    font-weight: var(--filter-weight-medium);
+    color: var(--filter-text-hint);
+    margin-left: 6px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 2px 6px;
+    border-radius: 10px;
+}
+
+.date-filter-grid--sleek .date-filter-options {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    max-height: none;
+    overflow-y: visible;
+}
+
+.date-filter-grid--sleek .date-filter-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 8px;
+
+    /* Typography - Cormorant Garamond for consistency */
+    font-family: var(--filter-font-body);
+    font-size: var(--filter-text-sm);
+    font-weight: var(--filter-weight-medium);
+    letter-spacing: var(--filter-tracking-tight);
+    color: var(--filter-text-secondary);
+    line-height: 1.3;
+
+    /* Styling */
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid transparent;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.12s ease;
+}
+
+.date-filter-grid--sleek .date-filter-option:hover {
+    background: var(--filter-pill-hover-bg);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.2);
+    color: var(--filter-text-primary);
+}
+
+.date-filter-grid--sleek .date-filter-option:has(input:checked) {
+    background: var(--filter-pill-active-bg);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.4);
+    color: var(--filter-text-accent);
+}
+
+.date-filter-grid--sleek .date-filter-option input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    accent-color: #00d689;
+    margin: 0;
+    flex-shrink: 0;
+}
+
+.date-filter-grid--sleek .date-filter-option span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.date-filter-empty {
+    padding: 10px;
+    text-align: center;
+    font-family: var(--filter-font-body);
+    font-size: var(--filter-text-sm);
+    color: var(--filter-text-hint);
+    background: rgba(0, 0, 0, 0.1);
+    border: 1px dashed rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+
+
+/* ==========================================================================
+   MATCHUP FILTER - Compact Design
+   ========================================================================== */
+
+#filter-matchup {
+    min-width: 260px;
+    max-width: 340px;
+}
+
+/* Teams section */
+.filter-card--teams {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    padding: 0 10px;
+    transition: all 0.2s ease;
+    border: none;
+    background: transparent;
+}
+
+.filter-card--teams[data-visible="true"] {
+    max-height: 240px;
+    opacity: 1;
+    padding: 12px 14px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, rgba(0, 0, 0, 0.26) 100%);
+    border: 1px solid var(--filter-card-border);
+    border-radius: 12px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    margin: 0;
+}
+
+.teams-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+.teams-league-badge {
+    padding: 3px 8px;
+
+    /* Typography - Cormorant Garamond for consistency */
+    font-family: var(--filter-font-body);
+    font-size: var(--filter-text-xs);
+    font-weight: var(--filter-weight-bold);
+    letter-spacing: var(--filter-tracking-wide);
+    text-transform: uppercase;
+    color: var(--filter-text-accent);
+
+    /* Styling */
+    background: rgba(var(--color-primary-bright-rgb), 0.12);
+    border: 1px solid rgba(var(--color-primary-bright-rgb), 0.25);
+    border-radius: 10px;
+}
+
+.matchup-teams-list {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    max-height: 180px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(var(--color-primary-bright-rgb), 0.25) transparent;
+}
+
+.team-filter-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 8px;
+
+    /* Typography - Cormorant Garamond for consistency */
+    font-family: var(--filter-font-body);
+    font-size: var(--filter-text-sm);
+    font-weight: var(--filter-weight-medium);
+    letter-spacing: var(--filter-tracking-tight);
+    color: var(--filter-text-secondary);
+
+    /* Styling */
+    background: rgba(0, 0, 0, 0.15);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.1s ease;
+}
+
+.team-filter-option:hover {
+    background: var(--filter-pill-hover-bg);
+    color: var(--filter-text-primary);
+}
+
+.team-filter-option:has(input:checked) {
+    background: var(--filter-pill-active-bg);
+    color: var(--filter-text-primary);
+}
+
+.team-filter-option input[type="checkbox"] {
+    width: 10px;
+    height: 10px;
+    accent-color: #00d689;
+    margin: 0;
+}
+
+
+/* ==========================================================================
+   PICK FILTER - Compact
+   ========================================================================== */
+
+#filter-pick {
+    min-width: 220px;
+    max-width: 280px;
+}
+
+
+/* ==========================================================================
+   SEGMENT FILTER - Compact
+   ========================================================================== */
+
+#filter-segment {
+    min-width: 200px;
+    max-width: 260px;
+}
+
+
+/* ==========================================================================
+   RISK/WIN FILTER - Compact 2-Column
+   ========================================================================== */
+
+#filter-risk {
+    min-width: 280px;
+    max-width: 360px;
+}
+
+
+/* ==========================================================================
+   STATUS FILTER - Compact 2-Column
+   ========================================================================== */
+
+#filter-status {
+    min-width: 240px;
+    max-width: 300px;
+}
+
+
+/* ==========================================================================
+   FILTER CHIPS - Compact Active Filters Display
+   ========================================================================== */
+
+.table-filter-chips {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    margin: 0 0 8px;
+
+    /* Styling */
+    background: rgba(var(--color-primary-bright-rgb), 0.08);
+    border: 1px solid rgba(var(--color-primary-bright-rgb), 0.2);
+    border-radius: 8px;
+}
+
+.table-filter-chips[data-has-chips="false"] {
+    display: none;
+}
+
+.filter-chip-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+
+    /* Typography - Cormorant Garamond for consistency */
+    font-family: var(--filter-font-body);
+    font-size: var(--filter-text-base);
+    font-weight: var(--filter-weight-semibold);
+    letter-spacing: var(--filter-tracking-tight);
+    color: var(--filter-text-primary);
+
+    /* Styling */
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(var(--color-primary-bright-rgb), 0.45);
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.filter-chip-btn::after {
+    content: '×';
+    font-size: 14px;
+    font-weight: 400;
+    opacity: 0.6;
+    color: var(--filter-text-accent);
+    margin-left: 2px;
+}
+
+.filter-chip-btn:hover {
+    background: rgba(var(--color-primary-bright-rgb), 0.15);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.6);
+    box-shadow: 0 0 10px rgba(var(--color-primary-bright-rgb), 0.2);
+}
+
+.filter-chip-btn:hover::after {
+    opacity: 1;
+}
+
+
+/* ==========================================================================
+   LEGACY CLASS SUPPORT
+   ========================================================================== */
+
+/* Ticket type pills */
+.ticket-type-copy {
+    margin-bottom: 10px;
+}
+
+.ticket-type-eyebrow {
+    display: block;
+    font-family: var(--filter-font-display);
+    font-size: var(--filter-text-xs);
+    font-weight: var(--filter-weight-bold);
+    letter-spacing: var(--filter-tracking-wider);
+    text-transform: uppercase;
+    color: var(--filter-text-accent);
+    margin-bottom: 4px;
+}
+
+.ticket-type-hint {
+    display: block;
+    font-family: var(--filter-font-body);
+    font-size: var(--filter-text-xs);
+    font-weight: var(--filter-weight-normal);
+    letter-spacing: var(--filter-tracking-normal);
+    color: var(--filter-text-muted);
+}
+
+.ticket-type-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.ticket-type-pill {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+
+    /* Typography - Cormorant Garamond for consistency */
+    font-family: var(--filter-font-body);
+    font-size: var(--filter-text-sm);
+    font-weight: var(--filter-weight-semibold);
+    letter-spacing: var(--filter-tracking-wide);
+    text-transform: uppercase;
+    color: var(--filter-text-secondary);
+
+    /* Styling */
+    background: var(--filter-pill-bg);
+    border: 1px solid var(--filter-pill-border);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.ticket-type-pill input {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.ticket-type-pill:hover {
+    color: var(--filter-text-primary);
+    background: rgba(0, 143, 88, 0.15);
+    border-color: rgba(0, 143, 88, 0.4);
+}
+
+.ticket-type-pill:has(input:checked) {
+    color: var(--filter-text-primary);
+    background: var(--filter-pill-active-bg);
+    border-color: var(--filter-pill-active-border);
+}
+
+.ticket-type-pill--disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    border-style: dashed;
+}
+
+/* Filter card legacy styles */
+.filter-card {
+    padding: 12px 14px;
+    margin: 0;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: none;
+}
+
+.filter-card:last-of-type,
+.filter-card--actions {
+    border-bottom: none;
+}
+
+.filter-card--actions {
+    padding: 10px 14px;
+    background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.15) 100%);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.filter-card--actions .th-filter-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 0;
+    margin: 0;
+    border: none;
+}
+
+/* Hide old meta strips */
+.filter-meta-strip {
+    display: none !important;
+}
+
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 1200px) {
+    .th-header-shell .th-filter-btn {
+        right: 5px;
+        padding: 2px;
+    }
+    
+    .th-header-shell .th-filter-btn::before {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 768px) {
+    .th-header-shell .th-filter-btn {
+        right: 4px;
+        padding: 1px;
+        opacity: 0.8;
+        width: 26px;
+        height: 26px;
+    }
+    
+    .th-header-shell .th-filter-btn::before {
+        font-size: 15px;
+    }
+    
+    .th-filter-dropdown {
+        min-width: 240px;
+        max-width: 320px;
+    }
+    
+    #filter-date {
+        min-width: 340px;
+        max-width: 400px;
+    }
+    
+    .date-filter-grid--sleek {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .th-filter-dropdown,
+    .th-filter-dropdown.nav-panel-dropdown {
+        position: fixed !important;
+        top: auto !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        max-height: 65vh;
+        border-radius: 16px 16px 0 0 !important;
+        transform: none;
+    }
+    
+    .th-filter-dropdown::before {
+        display: none;
+    }
+    
+    .th-filter-dropdown.open {
+        animation: filterSlideUp 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    
+    @keyframes filterSlideUp {
+        from {
+            opacity: 0;
+            transform: translateY(100%);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    /* Mobile drag handle */
+    .th-filter-dropdown::after {
+        content: '';
+        position: absolute;
+        top: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 32px;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 2px;
+    }
+    
+    .date-filter-grid--sleek {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .filter-grid--2col {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    /* Larger touch targets on mobile */
+    .filter-pill {
+        padding: 10px 14px;
+        font-size: var(--filter-text-sm);
+        min-height: 40px;
+    }
+    
+    .filter-option {
+        padding: 10px 12px;
+        min-height: 44px;
+    }
+    
+    .filter-option input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .filter-body {
+        padding: 12px 16px;
+        max-height: calc(65vh - 120px);
+    }
+    
+    .filter-toolbar {
+        padding: 12px 16px;
+    }
+    
+    .filter-toolbar-title {
+        font-size: var(--filter-text-sm);
+    }
+    
+    .filter-actions,
+    .filter-card--actions .th-filter-actions {
+        padding: 12px 16px;
+    }
+    
+    .th-filter-apply,
+    .th-filter-reset {
+        padding: 12px 20px;
+        font-size: var(--filter-text-sm);
+        min-height: 44px;
+    }
+    
+    /* Date filter mobile adjustments */
+    .date-filter-toolbar {
+        padding: 12px 16px;
+    }
+    
+    .date-filter-select-all-compact {
+        padding: 8px 12px;
+        font-size: var(--filter-text-sm);
+    }
+    
+    .date-filter-categories {
+        padding: 12px 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .th-header-shell .th-filter-btn {
+        right: 2px;
+        padding: 1px;
+    }
+    
+    .th-header-shell .th-filter-btn::before {
+        font-size: 14px;
+    }
+}
+
+
+/* ==========================================================================
+   ACCESSIBILITY
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    .th-filter-dropdown,
+    .th-filter-dropdown.open,
+    .th-header-shell .th-filter-btn,
+    .filter-chip-btn,
+    .filter-pill,
+    .filter-option {
+        transition: none;
+        animation: none;
+    }
+}
+
+@media (prefers-contrast: high) {
+    .th-filter-dropdown {
+        border-width: 2px;
+        border-color: rgba(var(--color-primary-bright-rgb), 0.6);
+    }
+    
+    .filter-pill:has(input:checked),
+    .filter-option:has(input:checked) {
+        border-width: 2px;
+    }
+}
+
+
+/* ==========================================================================
+   HIDE LEGACY ELEMENTS
+   ========================================================================== */
+
+.filters-section {
+    display: none;
+}
+
+/* ==========================================================================
+   INTEGRATED DATE FILTER - ENHANCED READABILITY
+   ========================================================================== */
+
+/* Remove all scrolling from date filter */
+.date-filter-integrated {
+    width: 340px !important;
+    min-width: 340px !important;
+    max-width: 340px !important;
+    overflow: hidden !important;
+    max-height: none !important;
+    background: linear-gradient(180deg,
+        rgba(8, 17, 33, 0.98) 0%,
+        rgba(8, 17, 33, 0.95) 100%);
+}
+
+.date-filter-integrated > * {
+    overflow: visible !important;
+}
+
+/* Integrated header with inline controls */
+.filter-header-integrated {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    background: linear-gradient(90deg,
+        rgba(0, 143, 88, 0.08) 0%,
+        rgba(0, 0, 0, 0.2) 100%);
+    border-bottom: 1px solid rgba(var(--color-primary-bright-rgb), 0.2);
+}
+
+.filter-title {
+    font-family: var(--filter-font-display);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba(var(--color-primary-bright-rgb), 1);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.filter-quick-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.filter-action-btn {
+    padding: 5px 10px;
+    font-family: var(--filter-font-body);
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 4px;
+    color: rgba(168, 188, 198, 0.9);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.filter-action-btn:hover {
+    background: rgba(0, 143, 88, 0.18);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.4);
+    color: rgba(232, 240, 242, 1);
+    transform: translateY(-1px);
+}
+
+/* Date Range Selector - Enhanced Grid */
+.date-range-selector {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    padding: 12px 14px;
+    background: rgba(0, 0, 0, 0.2);
+    border-bottom: 2px solid rgba(var(--color-primary-bright-rgb), 0.08);
+    position: relative;
+}
+
+/* Add section label for dates */
+.date-range-selector::before {
+    content: 'DATE RANGE';
+    position: absolute;
+    top: -8px;
+    left: 14px;
+    font-family: var(--filter-font-body);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: rgba(var(--color-primary-bright-rgb), 0.6);
+    background: rgba(8, 17, 33, 1);
+    padding: 0 6px;
+}
+
+.date-range-btn {
+    padding: 8px 6px;
+    font-family: var(--filter-font-body);
+    font-size: 10px;
+    font-weight: 600;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    color: rgba(168, 188, 198, 0.9);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-transform: capitalize;
+}
+
+.date-range-btn:hover {
+    background: rgba(0, 143, 88, 0.12);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.25);
+    color: rgba(232, 240, 242, 1);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.date-range-btn.active {
+    background: linear-gradient(135deg,
+        rgba(0, 143, 88, 0.25) 0%,
+        rgba(0, 143, 88, 0.18) 100%);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.5);
+    color: rgba(var(--color-primary-bright-rgb), 1);
+    font-weight: 700;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Compact Filter Sections with better spacing */
+.filter-section-compact {
+    padding: 12px 14px 10px;
+    background: rgba(0, 0, 0, 0.15);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    position: relative;
+}
+
+.filter-section-compact:last-child {
+    border-bottom: none;
+    padding-bottom: 12px;
+}
+
+/* Section label with better hierarchy */
+.section-label {
+    font-family: var(--filter-font-body);
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba(var(--color-primary-bright-rgb), 0.5);
+    margin-bottom: 10px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgba(var(--color-primary-bright-rgb), 0.1);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.section-label::before {
+    content: '▸';
+    color: rgba(var(--color-primary-bright-rgb), 0.3);
+    font-size: 10px;
+}
+
+/* Time Slots Grid - Enhanced Layout */
+.time-slots {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+
+/* Group time slots in pairs for better readability */
+.time-slot {
+    padding: 10px 8px;
+    font-family: var(--filter-font-body);
+    font-size: 11px;
+    font-weight: 600;
+    text-align: center;
+    background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.05) 0%,
+        rgba(255, 255, 255, 0.03) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    color: rgba(188, 208, 218, 0.9);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    line-height: 1.2;
+}
+
+/* Style for time ranges */
+.time-slot small {
+    font-size: 8px !important;
+    opacity: 0.6;
+    font-weight: 400;
+    color: rgba(144, 164, 174, 0.8);
+}
+
+/* Remove icons for cleaner look with time ranges */
+.time-slot::before {
+    display: none;
+}
+
+.time-slot:hover {
+    background: linear-gradient(135deg,
+        rgba(0, 143, 88, 0.15) 0%,
+        rgba(0, 143, 88, 0.1) 100%);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.3);
+    color: rgba(232, 240, 242, 1);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.time-slot.active {
+    background: linear-gradient(135deg,
+        rgba(0, 143, 88, 0.22) 0%,
+        rgba(0, 143, 88, 0.16) 100%);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.45);
+    color: rgba(var(--color-primary-bright-rgb), 1);
+    font-weight: 700;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.time-slot.active::before {
+    opacity: 1;
+}
+
+.time-slot.live-indicator {
+    background: linear-gradient(135deg,
+        rgba(255, 0, 0, 0.2) 0%,
+        rgba(255, 0, 0, 0.1) 100%);
+    border-color: rgba(255, 0, 0, 0.4);
+    color: #ff5555;
+    font-weight: 700;
+    animation: pulse-live 2s infinite;
+    grid-column: span 2;
+    font-size: 12px;
+}
+
+.time-slot.live-indicator small {
+    display: none;
+}
+
+@keyframes pulse-live {
+    0%, 100% {
+        opacity: 1;
+        box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.4);
+    }
+    50% {
+        opacity: 0.8;
+        box-shadow: 0 0 0 4px rgba(255, 0, 0, 0);
+    }
+}
+
+/* Sportsbook Chips - Enhanced Design with full names */
+.sportsbook-chips {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+
+.book-chip {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 8px;
+    font-family: var(--filter-font-body);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.05) 0%,
+        rgba(255, 255, 255, 0.03) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    color: rgba(188, 208, 218, 0.9);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-transform: capitalize;
+}
+
+.book-chip input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.book-chip:hover {
+    background: linear-gradient(135deg,
+        rgba(0, 143, 88, 0.15) 0%,
+        rgba(0, 143, 88, 0.1) 100%);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.3);
+    color: rgba(232, 240, 242, 1);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.book-chip.active {
+    background: linear-gradient(135deg,
+        rgba(0, 143, 88, 0.22) 0%,
+        rgba(0, 143, 88, 0.16) 100%);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.45);
+    color: rgba(var(--color-primary-bright-rgb), 1);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Add subtle glow to active chips */
+.book-chip.active::after {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    right: -1px;
+    bottom: -1px;
+    border-radius: 5px;
+    background: linear-gradient(135deg,
+        rgba(var(--color-primary-bright-rgb), 0.2) 0%,
+        transparent 100%);
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+/* ==========================================================================
+   INTEGRATED FILTER STYLES FOR ALL DROPDOWNS
+   ========================================================================== */
+
+/* Apply integrated styles to all filter dropdowns */
+.filter-integrated {
+    width: 280px !important;
+    min-width: 280px !important;
+    max-width: 280px !important;
+    overflow: hidden !important;
+    max-height: none !important;
+    background: linear-gradient(180deg,
+        rgba(8, 17, 33, 0.98) 0%,
+        rgba(8, 17, 33, 0.95) 100%);
+}
+
+/* League Pills */
+.league-pills {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+}
+
+.league-pill {
+    padding: 8px 4px;
+    font-family: var(--filter-font-body);
+    font-size: 10px;
+    font-weight: 600;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    color: rgba(168, 188, 198, 0.9);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-transform: uppercase;
+}
+
+.league-pill:hover {
+    background: rgba(0, 143, 88, 0.12);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.25);
+    color: rgba(232, 240, 242, 1);
+    transform: translateY(-1px);
+}
+
+.league-pill.active {
+    background: linear-gradient(135deg,
+        rgba(0, 143, 88, 0.25) 0%,
+        rgba(0, 143, 88, 0.18) 100%);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.5);
+    color: rgba(var(--color-primary-bright-rgb), 1);
+    font-weight: 700;
+}
+
+/* Ticket Pills */
+.ticket-pills {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+}
+
+.ticket-pill {
+    padding: 8px 4px;
+    font-family: var(--filter-font-body);
+    font-size: 10px;
+    font-weight: 600;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    color: rgba(168, 188, 198, 0.9);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.ticket-pill:hover {
+    background: rgba(0, 143, 88, 0.12);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.25);
+    color: rgba(232, 240, 242, 1);
+    transform: translateY(-1px);
+}
+
+.ticket-pill.active {
+    background: linear-gradient(135deg,
+        rgba(0, 143, 88, 0.25) 0%,
+        rgba(0, 143, 88, 0.18) 100%);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.5);
+    color: rgba(var(--color-primary-bright-rgb), 1);
+}
+
+/* Teams Search Box */
+.teams-search-box {
+    margin-bottom: 8px;
+}
+
+.team-search {
+    width: 100%;
+    padding: 8px 10px;
+    font-family: var(--filter-font-body);
+    font-size: 11px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    color: rgba(232, 240, 242, 0.95);
+    transition: all 0.15s ease;
+}
+
+.team-search::placeholder {
+    color: rgba(144, 164, 174, 0.6);
+}
+
+.team-search:focus {
+    outline: none;
+    border-color: rgba(var(--color-primary-bright-rgb), 0.4);
+    background: rgba(0, 0, 0, 0.5);
+}
+
+/* Teams Grid */
+.teams-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 4px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+
+/* Custom scrollbar for teams grid */
+.teams-grid::-webkit-scrollbar {
+    width: 6px;
+}
+
+.teams-grid::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+}
+
+.teams-grid::-webkit-scrollbar-thumb {
+    background: rgba(var(--color-primary-bright-rgb), 0.3);
+    border-radius: 3px;
+}
+
+.teams-grid::-webkit-scrollbar-thumb:hover {
+    background: rgba(var(--color-primary-bright-rgb), 0.5);
+}
+
+.team-chip {
+    padding: 6px 8px;
+    font-family: var(--filter-font-body);
+    font-size: 10px;
+    font-weight: 500;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 3px;
+    color: rgba(168, 188, 198, 0.9);
+    cursor: pointer;
+    transition: all 0.12s ease;
+}
+
+.team-chip:hover {
+    background: rgba(0, 143, 88, 0.1);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.2);
+    color: rgba(232, 240, 242, 1);
+}
+
+.team-chip.active {
+    background: rgba(0, 143, 88, 0.18);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.35);
+    color: rgba(var(--color-primary-bright-rgb), 1);
+}
+
+/* Market Pills */
+.market-pills {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+}
+
+.market-pill {
+    padding: 8px 6px;
+    font-family: var(--filter-font-body);
+    font-size: 10px;
+    font-weight: 600;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    color: rgba(168, 188, 198, 0.9);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.market-pill:hover {
+    background: rgba(0, 143, 88, 0.12);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.25);
+    color: rgba(232, 240, 242, 1);
+    transform: translateY(-1px);
+}
+
+.market-pill.active {
+    background: linear-gradient(135deg,
+        rgba(0, 143, 88, 0.25) 0%,
+        rgba(0, 143, 88, 0.18) 100%);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.5);
+    color: rgba(var(--color-primary-bright-rgb), 1);
+}
+
+/* Segment Pills */
+.segment-pills {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+}
+
+.segment-pill {
+    padding: 8px 4px;
+    font-family: var(--filter-font-body);
+    font-size: 10px;
+    font-weight: 600;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    color: rgba(168, 188, 198, 0.9);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.segment-pill:hover {
+    background: rgba(0, 143, 88, 0.12);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.25);
+    color: rgba(232, 240, 242, 1);
+    transform: translateY(-1px);
+}
+
+.segment-pill.active {
+    background: linear-gradient(135deg,
+        rgba(0, 143, 88, 0.25) 0%,
+        rgba(0, 143, 88, 0.18) 100%);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.5);
+    color: rgba(var(--color-primary-bright-rgb), 1);
+}
+
+/* ==========================================================================
+   COMPACT COLLAPSIBLE FILTERS
+   ========================================================================== */
+
+/* Compact date filter with collapsible sections */
+.filter-compact {
+    width: 240px !important;
+    min-width: 240px !important;
+    max-width: 240px !important;
+}
+
+/* Compact date range buttons */
+.date-range-compact {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+    padding: 8px 10px;
+    background: rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.date-btn {
+    padding: 6px 4px;
+    font-family: var(--filter-font-body);
+    font-size: 9px;
+    font-weight: 600;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 3px;
+    color: rgba(168, 188, 198, 0.9);
+    cursor: pointer;
+    transition: all 0.12s ease;
+}
+
+.date-btn:hover {
+    background: rgba(0, 143, 88, 0.1);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.2);
+    color: rgba(232, 240, 242, 1);
+}
+
+.date-btn.active {
+    background: rgba(0, 143, 88, 0.18);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.35);
+    color: rgba(var(--color-primary-bright-rgb), 1);
+}
+
+/* Collapsible sections */
+.filter-collapsible {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.collapse-toggle {
+    width: 100%;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: transparent;
+    border: none;
+    color: rgba(188, 208, 218, 0.9);
+    font-family: var(--filter-font-body);
+    font-size: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.collapse-toggle:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.collapse-icon {
+    font-size: 8px;
+    transition: transform 0.2s ease;
+}
+
+.filter-collapsible:not(.collapsed) .collapse-icon {
+    transform: rotate(90deg);
+}
+
+.selection-badge {
+    margin-left: auto;
+    padding: 2px 6px;
+    background: rgba(0, 143, 88, 0.15);
+    border: 1px solid rgba(var(--color-primary-bright-rgb), 0.2);
+    border-radius: 3px;
+    font-size: 8px;
+    color: rgba(var(--color-primary-bright-rgb), 0.8);
+}
+
+.collapse-content {
+    padding: 8px 10px;
+    display: none;
+}
+
+.filter-collapsible:not(.collapsed) .collapse-content {
+    display: block;
+}
+
+/* Extended dates and compact time */
+.extended-dates {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+    margin-bottom: 8px;
+}
+
+.time-compact {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+}
+
+.time-btn {
+    padding: 6px 4px;
+    font-family: var(--filter-font-body);
+    font-size: 9px;
+    font-weight: 600;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 3px;
+    color: rgba(168, 188, 198, 0.9);
+    cursor: pointer;
+    transition: all 0.12s ease;
+}
+
+.time-btn:hover {
+    background: rgba(0, 143, 88, 0.1);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.2);
+    color: rgba(232, 240, 242, 1);
+}
+
+.time-btn.active {
+    background: rgba(0, 143, 88, 0.18);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.35);
+    color: rgba(var(--color-primary-bright-rgb), 1);
+}
+
+.time-btn.live-pulse {
+    background: rgba(255, 0, 0, 0.15);
+    border-color: rgba(255, 0, 0, 0.3);
+    color: #ff4444;
+    animation: pulse-compact 2s infinite;
+}
+
+@keyframes pulse-compact {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+
+/* Compact sportsbooks */
+.books-compact {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+}
+
+.book-check {
+    padding: 6px 8px;
+    font-family: var(--filter-font-body);
+    font-size: 10px;
+    font-weight: 500;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 3px;
+    color: rgba(168, 188, 198, 0.9);
+    cursor: pointer;
+    transition: all 0.12s ease;
+    position: relative;
+}
+
+.book-check input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.book-check:hover {
+    background: rgba(0, 143, 88, 0.1);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.2);
+}
+
+.book-check.active {
+    background: rgba(0, 143, 88, 0.18);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.35);
+    color: rgba(var(--color-primary-bright-rgb), 1);
+}
+
+/* Risk and Win pills */
+.risk-pills,
+.win-pills,
+.status-pills {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+    gap: 4px;
+}
+
+.risk-pill,
+.win-pill,
+.status-pill {
+    padding: 6px 4px;
+    font-family: var(--filter-font-body);
+    font-size: 9px;
+    font-weight: 600;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 3px;
+    color: rgba(168, 188, 198, 0.9);
+    cursor: pointer;
+    transition: all 0.12s ease;
+    white-space: nowrap;
+}
+
+.risk-pill:hover,
+.win-pill:hover,
+.status-pill:hover {
+    background: rgba(0, 143, 88, 0.1);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.2);
+    color: rgba(232, 240, 242, 1);
+}
+
+.risk-pill.active,
+.win-pill.active,
+.status-pill.active {
+    background: rgba(0, 143, 88, 0.18);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.35);
+    color: rgba(var(--color-primary-bright-rgb), 1);
+}
+
+/* ==========================================================================
+   REDESIGNED DATE FILTER STYLES
+   ========================================================================== */
+
+/* Integrated header with inline controls */
+.filter-header-integrated {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid rgba(var(--color-primary-bright-rgb), 0.15);
+}
+
+.filter-title {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(var(--color-primary-bright-rgb), 0.9);
+}
+
+.filter-quick-actions {
+    display: flex;
+    gap: 6px;
+}
+
+.filter-action-btn {
+    padding: 4px 8px;
+    font-size: 9px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 3px;
+    color: rgba(144, 164, 174, 0.8);
+    cursor: pointer;
+    transition: all 0.12s ease;
+}
+
+.filter-action-btn:hover {
+    background: rgba(0, 143, 88, 0.15);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.3);
+    color: rgba(232, 240, 242, 0.95);
+}
+
+/* Compact section layout */
+.filter-section-compact {
+    padding: 8px 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.section-label {
+    font-size: 9px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(144, 164, 174, 0.7);
+    margin-bottom: 6px;
+}
+
+/* Sportsbook chips - ultra compact */
+.sportsbook-chips {
+    display: flex;
+    gap: 6px;
+}
+
+.book-chip {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 10px;
+    min-width: 45px;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 3px;
+    color: rgba(144, 164, 174, 0.8);
+    cursor: pointer;
+    transition: all 0.12s ease;
+}
+
+.book-chip input {
+    position: absolute;
+    opacity: 0;
+}
+
+.book-chip:hover {
+    background: rgba(0, 143, 88, 0.1);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.2);
+}
+
+.book-chip.active {
+    background: rgba(0, 143, 88, 0.18);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.35);
+    color: rgba(var(--color-primary-bright-rgb), 1);
+}
+
+/* Remove all scrolling */
+.date-filter-compact {
+    overflow: hidden !important;
+    max-height: none !important;
+}
+
+.date-filter-compact > * {
+    overflow: visible !important;
+}
+
+/* Date Range Selector */
+.date-range-selector {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+    padding: 8px 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.date-range-btn {
+    padding: 8px 10px;
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 3px;
+    color: rgba(144, 164, 174, 0.8);
+    cursor: pointer;
+    transition: all 0.12s ease;
+    text-align: center;
+}
+
+.date-range-btn:hover {
+    background: rgba(0, 143, 88, 0.1);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.2);
+    color: rgba(232, 240, 242, 0.95);
+}
+
+.date-range-btn.active {
+    background: rgba(0, 143, 88, 0.18);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.35);
+    color: rgba(var(--color-primary-bright-rgb), 1);
+    font-weight: 600;
+}
+
+/* Time Slots Grid */
+.time-slots {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+}
+
+.time-slot {
+    padding: 6px 8px;
+    font-size: 9px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 3px;
+    color: rgba(144, 164, 174, 0.8);
+    cursor: pointer;
+    transition: all 0.12s ease;
+    text-align: center;
+}
+
+.time-slot:hover {
+    background: rgba(0, 143, 88, 0.1);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.2);
+    color: rgba(232, 240, 242, 0.95);
+}
+
+.time-slot.active {
+    background: rgba(0, 143, 88, 0.18);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.35);
+    color: rgba(var(--color-primary-bright-rgb), 1);
+    font-weight: 600;
+}

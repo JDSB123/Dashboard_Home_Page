@@ -1,0 +1,148 @@
+/**
+ * Light Theme Variables
+ * Color palette and design tokens for light mode
+ */
+
+[data-theme="light"] {
+    /* ===== PRIMARY COLORS ===== */
+    --color-primary: #1a472a;
+    --color-primary-dark: #0f2919;
+    --color-primary-light: #2d5f43;
+    --color-accent: #d4af37;
+    --color-accent-hover: #c29d2f;
+
+    /* ===== BACKGROUND COLORS ===== */
+    --color-bg-primary: #ffffff;
+    --color-bg-secondary: #f5f5f5;
+    --color-bg-tertiary: #e8e8e8;
+    --color-bg-elevated: #ffffff;
+    --color-bg-overlay: rgba(255, 255, 255, 0.95);
+
+    /* ===== TEXT COLORS ===== */
+    --color-text-primary: #1a1a1a;
+    --color-text-secondary: #4a4a4a;
+    --color-text-tertiary: #6a6a6a;
+    --color-text-muted: #8a8a8a;
+    --color-text-inverse: #ffffff;
+
+    /* ===== BORDER COLORS ===== */
+    --color-border: #d0d0d0;
+    --color-border-light: #e0e0e0;
+    --color-border-dark: #a0a0a0;
+
+    /* ===== STATUS COLORS ===== */
+    --color-win: #22c55e;
+    --color-win-bg: #f0fdf4;
+    --color-loss: #ef4444;
+    --color-loss-bg: #fef2f2;
+    --color-push: #f59e0b;
+    --color-push-bg: #fffbeb;
+    --color-void: #6b7280;
+    --color-void-bg: #f9fafb;
+    --color-pending: #3b82f6;
+    --color-pending-bg: #eff6ff;
+    --color-live: #8b5cf6;
+    --color-live-bg: #f5f3ff;
+
+    /* ===== INTERACTIVE COLORS ===== */
+    --color-hover: #f0f0f0;
+    --color-active: #e0e0e0;
+    --color-focus: #3b82f6;
+    --color-focus-ring: rgba(59, 130, 246, 0.3);
+
+    /* ===== SHADOWS ===== */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.12);
+
+    /* ===== GLASSMORPHISM (lighter for light mode) ===== */
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(0, 0, 0, 0.1);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+/* ===== LIGHT THEME SPECIFIC ADJUSTMENTS ===== */
+[data-theme="light"] {
+    /* Navigation */
+    --nav-bg: var(--color-bg-elevated);
+    --nav-border: var(--color-border);
+
+    /* Cards */
+    --card-bg: var(--color-bg-elevated);
+    --card-border: var(--color-border-light);
+
+    /* Table */
+    --table-header-bg: var(--color-bg-tertiary);
+    --table-row-hover: var(--color-hover);
+    --table-row-even: var(--color-bg-secondary);
+
+    /* KPI Tiles */
+    --kpi-bg: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+    --kpi-border: var(--color-border);
+
+    /* Status badges get slightly darker backgrounds in light mode */
+    --badge-win-bg: #dcfce7;
+    --badge-loss-bg: #fee2e2;
+    --badge-push-bg: #fef3c7;
+    --badge-void-bg: #f3f4f6;
+    --badge-pending-bg: #dbeafe;
+    --badge-live-bg: #ede9fe;
+}
+
+/* ===== COMPONENT-SPECIFIC LIGHT THEME OVERRIDES ===== */
+
+[data-theme="light"] .status-badge {
+    border: 1px solid;
+}
+
+[data-theme="light"] .status-badge.win {
+    border-color: var(--color-win);
+}
+
+[data-theme="light"] .status-badge.loss {
+    border-color: var(--color-loss);
+}
+
+[data-theme="light"] .status-badge.push {
+    border-color: var(--color-push);
+}
+
+[data-theme="light"] .kpi-tile {
+    box-shadow: var(--shadow-md);
+}
+
+[data-theme="light"] .picks-table tbody tr:hover {
+    background: var(--color-hover);
+}
+
+[data-theme="light"] input,
+[data-theme="light"] select,
+[data-theme="light"] textarea {
+    background: var(--color-bg-primary);
+    border-color: var(--color-border);
+    color: var(--color-text-primary);
+}
+
+[data-theme="light"] button:not(.status-badge) {
+    border: 1px solid var(--color-border);
+}
+
+[data-theme="light"] button:not(.status-badge):hover {
+    background: var(--color-hover);
+    border-color: var(--color-border-dark);
+}
+
+/* Ensure text remains readable */
+[data-theme="light"] .brand-line-1,
+[data-theme="light"] .brand-line-2 {
+    color: var(--color-primary);
+}
+
+[data-theme="light"] .kpi-label {
+    color: var(--color-text-secondary);
+}
+
+[data-theme="light"] .kpi-value {
+    color: var(--color-text-primary);
+}

@@ -1,0 +1,442 @@
+/* ==========================================================================
+   Status Badges Component
+   --------------------------------------------------------------------------
+   Pill badges for row status. Color-coded via data-status attributes.
+   Tooltips show additional info (data-blurb + data-status-info) on hover.
+   ========================================================================== */
+
+:root {
+  --status-pending-border: rgba(136, 140, 149, 0.35);
+  --status-pending-color: #c7ccd6;
+  --status-pending-bg: rgba(136, 140, 149, 0.12);
+  --status-pending-tooltip-border: rgba(184, 197, 208, 0.38);
+  --status-pending-tooltip-text: #d4d9e0;
+  --status-pending-tooltip-highlight: #e1e5eb;
+
+  --status-live-border: rgba(74, 182, 255, 0.5);
+  --status-live-color: #4ab6ff;
+  --status-live-bg: rgba(74, 182, 255, 0.12);
+  --status-live-tooltip-border: rgba(74, 182, 255, 0.45);
+  --status-live-tooltip-text: #6bc5ff;
+  --status-live-tooltip-highlight: #8dd4ff;
+
+  --status-on-track-border: rgba(0, 191, 255, 0.5);
+  --status-on-track-color: #00bfff;
+  --status-on-track-bg: rgba(0, 191, 255, 0.12);
+  --status-on-track-tooltip-border: rgba(0, 191, 255, 0.45);
+  --status-on-track-tooltip-text: #1ad1ff;
+  --status-on-track-tooltip-highlight: #4ddbff;
+
+  --status-at-risk-border: rgba(251, 140, 0, 0.5);
+  --status-at-risk-color: #fb8c00;
+  --status-at-risk-bg: rgba(251, 140, 0, 0.12);
+  --status-at-risk-tooltip-border: rgba(251, 140, 0, 0.45);
+  --status-at-risk-tooltip-text: #ffa64d;
+  --status-at-risk-tooltip-highlight: #ffb866;
+
+  --status-hit-border: rgba(0, 255, 170, 0.5);
+  --status-hit-color: #00ffaa;
+  --status-hit-bg: rgba(0, 255, 170, 0.12);
+  --status-hit-tooltip-border: rgba(0, 255, 170, 0.45);
+  --status-hit-tooltip-text: #1affbb;
+  --status-hit-tooltip-highlight: #4dffcc;
+
+  --status-miss-border: rgba(229, 57, 53, 0.5);
+  --status-miss-color: #ff5f6d;
+  --status-miss-bg: rgba(229, 57, 53, 0.12);
+  --status-miss-tooltip-border: rgba(229, 57, 53, 0.45);
+  --status-miss-tooltip-text: #ff6b7a;
+  --status-miss-tooltip-highlight: #ff8a95;
+
+  --status-push-border: rgba(184, 197, 208, 0.4);
+  --status-push-color: rgba(184, 197, 208, 0.95);
+  --status-push-bg: rgba(184, 197, 208, 0.12);
+  --status-push-tooltip-border: rgba(184, 197, 208, 0.38);
+  --status-push-tooltip-text: #d4d9e0;
+  --status-push-tooltip-highlight: #e1e5eb;
+}
+
+.status-badge {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    padding: 6px 14px 7px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(11, 20, 35, 0.78);
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    font-weight: var(--weight-semibold);
+    font-size: var(--text-md);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.25;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+.status-badge,
+.status-badge--mini {
+    cursor: pointer;
+    text-align: center;
+    user-select: none;
+    transition: box-shadow 0.1s ease-out, border-color 0.1s ease-out;
+}
+
+/* Hover/focus states */
+.status-badge:hover,
+.status-badge:focus-visible,
+.status-badge--mini:hover,
+.status-badge--mini:focus-visible {
+    border-color: rgba(255, 255, 255, 0.32);
+    box-shadow:
+        0 0 0 1px rgba(var(--color-primary-bright-rgb), 0.15),
+        0 0 6px rgba(var(--color-primary-bright-rgb), 0.12);
+}
+
+/* Tooltip positioning */
+.status-badge {
+    position: relative;
+    overflow: visible;
+}
+
+.picks-table td,
+.picks-table th,
+.picks-table td.center {
+    overflow: visible;
+}
+
+.picks-table td.center {
+    position: relative;
+}
+
+/* Tooltip element */
+.status-tooltip {
+    position: fixed;
+    background: rgba(10, 18, 30, 0.95);
+    color: rgba(240, 245, 248, 0.98);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-family: var(--font-body);
+    font-weight: var(--weight-medium);
+    font-size: var(--text-md);
+    text-transform: none;
+    letter-spacing: var(--tracking-tight);
+    min-width: 140px;
+    max-width: 300px;
+    white-space: normal;
+    word-wrap: break-word;
+    text-align: center;
+    box-shadow:
+        0 12px 28px rgba(0, 0, 0, 0.45),
+        0 0 10px rgba(7, 24, 42, 0.28);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 10000;
+    transition: opacity 0.08s ease-out;
+    line-height: 1.45;
+    display: none;
+    --tooltip-text-color: rgba(240, 245, 248, 0.98);
+    --tooltip-highlight-color: rgba(255, 255, 255, 0.98);
+}
+
+/* Tooltip content */
+.status-tooltip .tooltip-content {
+    display: block;
+    line-height: 1.5;
+    color: var(--tooltip-text-color, rgba(240, 245, 248, 0.98));
+}
+
+.status-tooltip .tooltip-highlight {
+    font-weight: var(--weight-semibold);
+    color: var(--tooltip-highlight-color);
+    opacity: 1;
+}
+
+/* Tooltip arrow */
+.status-tooltip::before {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    border: 5px solid transparent;
+}
+
+/* Arrow positioning */
+.status-tooltip[data-placement="top"]::before {
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-top-color: rgba(10, 18, 30, 0.95);
+    border-bottom: none;
+}
+
+.status-tooltip[data-placement="bottom"]::before {
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-bottom-color: rgba(10, 18, 30, 0.95);
+    border-top: none;
+}
+
+.status-tooltip[data-placement="left"]::before {
+    right: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-left-color: rgba(10, 18, 30, 0.95);
+    border-right: none;
+}
+
+.status-tooltip[data-placement="right"]::before {
+    left: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-right-color: rgba(10, 18, 30, 0.95);
+    border-left: none;
+}
+
+/* Status-specific tooltip colors */
+.status-tooltip.tooltip-live {
+    border-color: var(--status-live-tooltip-border);
+    --tooltip-text-color: var(--status-live-tooltip-text);
+    --tooltip-highlight-color: var(--status-live-tooltip-highlight);
+}
+
+.status-tooltip.tooltip-on-track {
+    border-color: var(--status-on-track-tooltip-border);
+    --tooltip-text-color: var(--status-on-track-tooltip-text);
+    --tooltip-highlight-color: var(--status-on-track-tooltip-highlight);
+}
+
+.status-tooltip.tooltip-at-risk {
+    border-color: var(--status-at-risk-tooltip-border);
+    --tooltip-text-color: var(--status-at-risk-tooltip-text);
+    --tooltip-highlight-color: var(--status-at-risk-tooltip-highlight);
+}
+
+.status-tooltip.tooltip-hit,
+.status-tooltip.tooltip-win {
+    border-color: var(--status-hit-tooltip-border);
+    --tooltip-text-color: var(--status-hit-tooltip-text);
+    --tooltip-highlight-color: var(--status-hit-tooltip-highlight);
+}
+
+.status-tooltip.tooltip-miss,
+.status-tooltip.tooltip-loss {
+    border-color: var(--status-miss-tooltip-border);
+    --tooltip-text-color: var(--status-miss-tooltip-text);
+    --tooltip-highlight-color: var(--status-miss-tooltip-highlight);
+}
+
+.status-tooltip.tooltip-pending,
+.status-tooltip.tooltip-push {
+    border-color: var(--status-pending-tooltip-border);
+    --tooltip-text-color: var(--status-pending-tooltip-text);
+    --tooltip-highlight-color: var(--status-pending-tooltip-highlight);
+}
+
+/* Status colors - Main badges */
+.status-badge[data-status="pending"] {
+    border-color: var(--status-pending-border);
+    color: var(--status-pending-color);
+    background: var(--status-pending-bg);
+}
+
+.status-badge[data-status="live"] {
+    border-color: var(--status-live-border);
+    color: var(--status-live-color);
+    background: var(--status-live-bg);
+}
+
+.status-badge[data-status="on-track"] {
+    border-color: var(--status-on-track-border);
+    color: var(--status-on-track-color);
+    background: var(--status-on-track-bg);
+}
+
+.status-badge[data-status="at-risk"] {
+    border-color: var(--status-at-risk-border);
+    color: var(--status-at-risk-color);
+    background: var(--status-at-risk-bg);
+}
+
+.status-badge[data-status="hit"],
+.status-badge[data-status="final"],
+.status-badge[data-status="win"] {
+    border-color: var(--status-hit-border);
+    color: var(--status-hit-color);
+    background: var(--status-hit-bg);
+}
+
+.status-badge[data-status="miss"],
+.status-badge[data-status="loss"] {
+    border-color: var(--status-miss-border);
+    color: var(--status-miss-color);
+    background: var(--status-miss-bg);
+}
+
+.status-badge[data-status="push"],
+.status-badge[data-status="void"] {
+    border-color: var(--status-push-border);
+    color: var(--status-push-color);
+    background: var(--status-push-bg);
+}
+
+/* Live indicator dot */
+.status-badge[data-status="live"]::before {
+    content: "";
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #ff3333;
+}
+
+/* ==========================================================================
+   Mini Status Badge
+   --------------------------------------------------------------------------
+   Compact badge for parlay leg snippets. Uses same color system.
+   ========================================================================== */
+
+.status-badge--mini {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    padding: 2px 6px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(11, 20, 35, 0.75);
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    font-weight: var(--weight-semibold);
+    font-size: var(--text-base); /* Consistent with main status badge */
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+    line-height: 1.3;
+    flex-shrink: 0;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+/* Mini badge status colors - using same vars */
+.status-badge--mini[data-status="pending"] {
+    border-color: var(--status-pending-border);
+    color: var(--status-pending-color);
+    background: var(--status-pending-bg);
+}
+
+.status-badge--mini[data-status="live"] {
+    border-color: var(--status-live-border);
+    color: var(--status-live-color);
+    background: var(--status-live-bg);
+}
+
+.status-badge--mini[data-status="on-track"] {
+    border-color: var(--status-on-track-border);
+    color: var(--status-on-track-color);
+    background: var(--status-on-track-bg);
+}
+
+.status-badge--mini[data-status="at-risk"] {
+    border-color: var(--status-at-risk-border);
+    color: var(--status-at-risk-color);
+    background: var(--status-at-risk-bg);
+}
+
+.status-badge--mini[data-status="hit"],
+.status-badge--mini[data-status="final"],
+.status-badge--mini[data-status="win"] {
+    border-color: var(--status-hit-border);
+    color: var(--status-hit-color);
+    background: var(--status-hit-bg);
+}
+
+.status-badge--mini[data-status="miss"],
+.status-badge--mini[data-status="loss"] {
+    border-color: var(--status-miss-border);
+    color: var(--status-miss-color);
+    background: var(--status-miss-bg);
+}
+
+.status-badge--mini[data-status="push"],
+.status-badge--mini[data-status="void"] {
+    border-color: var(--status-push-border);
+    color: var(--status-push-color);
+    background: var(--status-push-bg);
+}
+
+/* Mini live indicator dot */
+.status-badge--mini[data-status="live"]::before {
+    content: "";
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #ff3333;
+}
+
+/* ==========================================================================
+   Live Count Indicator
+   --------------------------------------------------------------------------
+   Badge showing how many legs are live in a parlay.
+   Used in parlay row headers.
+   ========================================================================== */
+
+.live-count {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #4ab6ff;
+    background: rgba(74, 182, 255, 0.15);
+    border: 1px solid rgba(74, 182, 255, 0.4);
+    white-space: nowrap;
+    line-height: 1.3;
+}
+
+/* Live indicator dot before text */
+.live-count::before {
+    content: "";
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #ff4444;
+    animation: pulsatingGlow 1s ease-in-out infinite;
+}
+
+/* Pulsating live count */
+.live-count.pulsating {
+    animation: livePulse 2s ease-in-out infinite;
+}
+
+@keyframes livePulse {
+    0%, 100% {
+        opacity: 1;
+        box-shadow: 0 0 0 0 transparent;
+    }
+    50% {
+        opacity: 0.92;
+        box-shadow: 0 0 3px 1px currentColor;
+    }
+}
+
+@keyframes pulsatingGlow {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.7;
+        transform: scale(1.02);
+    }
+}

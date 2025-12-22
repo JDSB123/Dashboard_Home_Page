@@ -1,0 +1,150 @@
+/**
+ * Theme Toggle Styles
+ * Styling for the theme switcher button
+ */
+
+.theme-toggle {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all var(--transition-normal);
+    overflow: hidden;
+}
+
+.theme-toggle:hover {
+    background: var(--color-bg-tertiary);
+    border-color: var(--color-accent);
+    transform: translateY(-1px);
+}
+
+.theme-toggle:active {
+    transform: scale(0.98);
+}
+
+.theme-toggle .theme-icon {
+    font-size: 18px;
+    transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.theme-toggle:hover .theme-icon {
+    transform: rotate(180deg);
+}
+
+.theme-toggle .theme-label {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .theme-toggle .theme-label {
+        display: inline;
+        font-weight: 500;
+        color: var(--color-text-secondary);
+    }
+}
+
+/**
+ * Export/Import Controls
+ */
+
+.export-import-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    background: var(--color-bg-secondary);
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+}
+
+.export-import-controls button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    transition: all var(--transition-normal);
+    white-space: nowrap;
+}
+
+.export-import-controls button:hover {
+    background: var(--color-accent);
+    color: var(--color-text-inverse);
+    border-color: var(--color-accent);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.export-import-controls button:active {
+    transform: scale(0.95);
+}
+
+.export-import-controls .icon {
+    font-size: 16px;
+}
+
+.export-import-controls .label {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .export-import-controls .label {
+        display: inline;
+    }
+}
+
+@media (max-width: 480px) {
+    .export-import-controls {
+        gap: 4px;
+        padding: 4px;
+    }
+    
+    .export-import-controls button {
+        padding: 6px 8px;
+        font-size: 12px;
+    }
+}
+
+/* Toolbar integration */
+.filters-toolbar,
+.dashboard-toolbar,
+.main-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 12px;
+    background: var(--color-bg-secondary);
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.toolbar-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Integration with nav-actions */
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.nav-actions .theme-toggle {
+    margin-right: 8px;
+}

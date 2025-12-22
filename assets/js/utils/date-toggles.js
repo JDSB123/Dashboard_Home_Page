@@ -1,0 +1,497 @@
+/* =========================================================
+   DATE TOGGLES FUNCTIONALITY
+   Quick date range filtering for dashboard picks
+   ========================================================= */
+
+(function() {
+    'use strict';
+
+    // Date range state
+    let currentDateRange = 'all'; // Default to show all
+    let customStartDate = null;
+    let customEndDate = null;
+
+    /**
+     * Initialize date toggles on page load
+     */
+    function initializeDateToggles() {
+        const dateButtons = document.querySelectorAll('.date-toggle-btn');
+        const customRangeSection = document.querySelector('.custom-date-range');
+        const applyButton = document.querySelector('.date-apply-btn');
+        const clearButton = document.querySelector('.date-clear-btn');
+        const startDateInput = document.getElementById('date-range-start');
+        const endDateInput = document.getElementById('date-range-end');
+
+        // Set default active state
+        const allTimeButton = document.querySelector('.date-toggle-btn[data-range="all"]');
+        if (allTimeButton) {
+            allTimeButton.classList.add('active');
+        }
+
+        // Add click handlers to date toggle buttons
+        dateButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const range = this.getAttribute('data-range');
+                handleDateRangeSelection(range, this);
+            });
+        });
+
+        // Handle custom range button - toggle popup
+        const customButton = document.querySelector('.date-toggle-btn[data-range="custom"]');
+        if (customButton) {
+            customButton.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (customRangeSection) {
+                    const isActive = customRangeSection.classList.contains('active');
+                    customRangeSection.classList.toggle('active');
+                    
+                    // If opening, focus on start date
+                    if (!isActive && startDateInput) {
+                        setTimeout(() => startDateInput.focus(), 100);
+                    }
+                }
+            });
+        }
+
+        // Initialize custom metallic calendar (replaces native grey picker)
+        initializeCustomCalendar({
+            container: customRangeSection,
+            startInput: startDateInput,
+            endInput: endDateInput
+        });
+
+        // Apply custom date range
+        if (applyButton) {
+            applyButton.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const startDate = startDateInput?.value;
+                const endDate = endDateInput?.value;
+
+                if (startDate && endDate) {
+                    customStartDate = new Date(startDate);
+                    customEndDate = new Date(endDate);
+                    
+                    // Set end date to end of day
+                    customEndDate.setHours(23, 59, 59, 999);
+
+                    // Mark custom button as active
+                    if (customButton) {
+                        const allButtons = document.querySelectorAll('.date-toggle-btn');
+                        allButtons.forEach(btn => btn.classList.remove('active'));
+                        customButton.classList.add('active');
+                    }
+
+                    applyDateFilter('custom');
+                    
+                    // Hide custom range section after applying
+                    if (customRangeSection) {
+                        customRangeSection.classList.remove('active');
+                    }
+                } else {
+                    // Highlight missing fields
+                    if (!startDate && startDateInput) {
+                        startDateInput.style.borderColor = '#FF4757';
+                        setTimeout(() => startDateInput.style.borderColor = '', 2000);
+                    }
+                    if (!endDate && endDateInput) {
+                        endDateInput.style.borderColor = '#FF4757';
+                        setTimeout(() => endDateInput.style.borderColor = '', 2000);
+                    }
+                }
+            });
+        }
+
+        // Clear time filters and return to standard view (show all)
+        if (clearButton) {
+            clearButton.addEventListener('click', function(e) {
+                e.stopPropagation();
+                resetDateFilter();
+            });
+        }
+
+        // Close custom range popup when clicking outside
+        document.addEventListener('click', function(e) {
+            if (customRangeSection && customRangeSection.classList.contains('active')) {
+                const isClickInside = customRangeSection.contains(e.target) || 
+                                     customButton?.contains(e.target);
+                
+                if (!isClickInside) {
+                    customRangeSection.classList.remove('active');
+                }
+            }
+        });
+
+        // Handle escape key to close popup
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && customRangeSection?.classList.contains('active')) {
+                customRangeSection.classList.remove('active');
+                customButton?.focus();
+            }
+        });
+    }
+
+    // Calendar UI state (for custom metallic popup)
+    let calendarActiveTarget = 'start'; // 'start' or 'end'
+    let calendarMonthCursor = new Date(); // first day of visible month
+    calendarMonthCursor.setDate(1);
+
+    function formatISODate(date) {
+        const y = date.getFullYear();
+        const m = String(date.getMonth() + 1).padStart(2, '0');
+        const d = String(date.getDate()).padStart(2, '0');
+        return `${y}-${m}-${d}`;
+    }
+
+    function formatDisplayDate(date) {
+        return date.toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+        });
+    }
+
+    /**
+     * Initialize custom metallic calendar UI inside the popup
+     */
+    function initializeCustomCalendar(config) {
+        const container = config.container;
+        const startInput = config.startInput;
+        const endInput = config.endInput;
+
+        if (!container || !startInput || !endInput) return;
+
+        const monthLabel = container.querySelector('#custom-calendar-month');
+        const daysContainer = container.querySelector('#custom-calendar-days');
+        const prevBtn = container.querySelector('.calendar-nav.prev');
+        const nextBtn = container.querySelector('.calendar-nav.next');
+        const targetButtons = container.querySelectorAll('.date-target-btn');
+        const startDisplay = container.querySelector('#date-range-start-display');
+        const endDisplay = container.querySelector('#date-range-end-display');
+
+        if (!monthLabel || !daysContainer || !prevBtn || !nextBtn || !startDisplay || !endDisplay) {
+            return;
+        }
+
+        function setActiveTarget(target) {
+            calendarActiveTarget = target === 'end' ? 'end' : 'start';
+            targetButtons.forEach(btn => {
+                const isActive = btn.dataset.target === calendarActiveTarget;
+                btn.classList.toggle('active', isActive);
+                btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+            });
+        }
+
+        function updateDisplayFromInputs() {
+            if (startInput.value) {
+                const d = new Date(startInput.value);
+                const isValid = !isNaN(d.getTime());
+                startDisplay.textContent = isValid ? formatDisplayDate(d) : '—';
+                startDisplay.classList.toggle('is-placeholder', !isValid);
+            } else {
+                startDisplay.textContent = '—';
+                startDisplay.classList.add('is-placeholder');
+            }
+
+            if (endInput.value) {
+                const d = new Date(endInput.value);
+                const isValid = !isNaN(d.getTime());
+                endDisplay.textContent = isValid ? formatDisplayDate(d) : '—';
+                endDisplay.classList.toggle('is-placeholder', !isValid);
+            } else {
+                endDisplay.textContent = '—';
+                endDisplay.classList.add('is-placeholder');
+            }
+        }
+
+        function renderCalendar() {
+            const year = calendarMonthCursor.getFullYear();
+            const month = calendarMonthCursor.getMonth();
+
+            // Header label
+            monthLabel.textContent = calendarMonthCursor.toLocaleDateString('en-US', {
+                month: 'long',
+                year: 'numeric'
+            });
+
+            // Clear days grid
+            daysContainer.innerHTML = '';
+
+            const firstDay = new Date(year, month, 1);
+            const startWeekDay = firstDay.getDay(); // 0-6
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            // Existing selected range for highlighting
+            const startVal = startInput.value ? new Date(startInput.value) : null;
+            const endVal = endInput.value ? new Date(endInput.value) : null;
+
+            // Fill leading blanks
+            for (let i = 0; i < startWeekDay; i++) {
+                const emptyCell = document.createElement('button');
+                emptyCell.className = 'calendar-day empty';
+                emptyCell.tabIndex = -1;
+                emptyCell.setAttribute('aria-hidden', 'true');
+                daysContainer.appendChild(emptyCell);
+            }
+
+            // Fill actual days
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateObj = new Date(year, month, day);
+                const iso = formatISODate(dateObj);
+
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'calendar-day';
+                btn.textContent = String(day);
+                btn.setAttribute('data-date', iso);
+                btn.setAttribute('aria-label', formatDisplayDate(dateObj));
+
+                const time = dateObj.getTime();
+                const startTime = startVal ? startVal.getTime() : null;
+                const endTime = endVal ? endVal.getTime() : null;
+
+                if (startTime && time === startTime) {
+                    btn.classList.add('selected', 'selected-start');
+                }
+                if (endTime && time === endTime) {
+                    btn.classList.add('selected', 'selected-end');
+                }
+                if (startTime && endTime && time > startTime && time < endTime) {
+                    btn.classList.add('in-range');
+                }
+
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    handleDaySelection(dateObj);
+                });
+
+                daysContainer.appendChild(btn);
+            }
+
+            updateDisplayFromInputs();
+        }
+
+        function handleDaySelection(dateObj) {
+            const iso = formatISODate(dateObj);
+
+            const currentStart = startInput.value ? new Date(startInput.value) : null;
+            const currentEnd = endInput.value ? new Date(endInput.value) : null;
+
+            if (calendarActiveTarget === 'start') {
+                startInput.value = iso;
+
+                // If start goes after end, shift end to match start
+                if (currentEnd && dateObj.getTime() > currentEnd.getTime()) {
+                    endInput.value = iso;
+                }
+            } else {
+                endInput.value = iso;
+
+                // If end goes before start, shift start to match end
+                if (currentStart && dateObj.getTime() < currentStart.getTime()) {
+                    startInput.value = iso;
+                }
+            }
+
+            renderCalendar();
+        }
+
+        // Target toggle buttons
+        targetButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const target = btn.dataset.target === 'end' ? 'end' : 'start';
+                setActiveTarget(target);
+            });
+        });
+
+        // Month navigation
+        prevBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            calendarMonthCursor.setMonth(calendarMonthCursor.getMonth() - 1);
+            renderCalendar();
+        });
+
+        nextBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            calendarMonthCursor.setMonth(calendarMonthCursor.getMonth() + 1);
+            renderCalendar();
+        });
+
+        // Initialize active target and month to today's month
+        setActiveTarget('start');
+        calendarMonthCursor = new Date();
+        calendarMonthCursor.setDate(1);
+        // Initialize placeholder states
+        updateDisplayFromInputs();
+        renderCalendar();
+    }
+
+    /**
+     * Handle date range selection
+     */
+    function handleDateRangeSelection(range, button) {
+        // Don't filter if clicking custom (it opens popup instead)
+        if (range === 'custom') {
+            return;
+        }
+
+        // Update active state
+        const allButtons = document.querySelectorAll('.date-toggle-btn');
+        allButtons.forEach(btn => btn.classList.remove('active'));
+        
+        button.classList.add('active');
+        currentDateRange = range;
+        applyDateFilter(range);
+        
+        // Close custom popup if open
+        const customRangeSection = document.querySelector('.custom-date-range');
+        if (customRangeSection) {
+            customRangeSection.classList.remove('active');
+        }
+    }
+
+    /**
+     * Apply date filter to table rows
+     */
+    function applyDateFilter(range) {
+        const now = new Date();
+        let startDate, endDate;
+
+        // Calculate date range
+        switch(range) {
+            case 'today':
+                startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                endDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+                break;
+
+            case 'week':
+                // Current week (Sunday to Saturday)
+                const dayOfWeek = now.getDay();
+                startDate = new Date(now);
+                startDate.setDate(now.getDate() - dayOfWeek);
+                startDate.setHours(0, 0, 0, 0);
+                endDate = new Date(startDate);
+                endDate.setDate(startDate.getDate() + 6);
+                endDate.setHours(23, 59, 59, 999);
+                break;
+
+            case '7days':
+                startDate = new Date(now);
+                startDate.setDate(now.getDate() - 7);
+                startDate.setHours(0, 0, 0, 0);
+                endDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+                break;
+
+            case 'month':
+                startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+                endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+                break;
+
+            case '30days':
+                startDate = new Date(now);
+                startDate.setDate(now.getDate() - 30);
+                startDate.setHours(0, 0, 0, 0);
+                endDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+                break;
+
+            case 'custom':
+                startDate = customStartDate;
+                endDate = customEndDate;
+                break;
+
+            case 'all':
+            default:
+                // Clear date filter
+                if (window.tableState && window.tableState.filters) {
+                    window.tableState.filters.date = { start: null, end: null };
+                    if (window.updateTableWithFilters) {
+                        window.updateTableWithFilters();
+                    }
+                }
+                updateKPIs();
+                return;
+        }
+
+        // Update the filter state in active-picks.js
+        if (window.tableState && window.tableState.filters) {
+            window.tableState.filters.date.start = startDate;
+            window.tableState.filters.date.end = endDate;
+            if (window.updateTableWithFilters) {
+                window.updateTableWithFilters();
+            }
+        }
+
+        // Update KPIs based on filtered data
+        updateKPIs();
+    }
+
+    /**
+     * Update KPIs based on currently visible rows
+     */
+    function updateKPIs() {
+        // This function would update the KPI tiles based on visible rows
+        // Integrate with existing kpi-calculator.js if needed
+        
+        // Check if there's a global KPI update function
+        if (typeof window.updateKPIValues === 'function') {
+            window.updateKPIValues();
+        } else if (typeof window.recalculateKPIs === 'function') {
+            window.recalculateKPIs();
+        }
+    }
+
+    /**
+     * Get current date range (for external access)
+     */
+    function getCurrentDateRange() {
+        return {
+            range: currentDateRange,
+            customStart: customStartDate,
+            customEnd: customEndDate
+        };
+    }
+
+    /**
+     * Reset date filter to show all
+     */
+    function resetDateFilter() {
+        currentDateRange = 'all';
+        customStartDate = null;
+        customEndDate = null;
+
+        // Reset active states
+        const allButtons = document.querySelectorAll('.date-toggle-btn');
+        allButtons.forEach(btn => btn.classList.remove('active'));
+
+        const allTimeButton = document.querySelector('.date-toggle-btn[data-range="all"]');
+        if (allTimeButton) {
+            allTimeButton.classList.add('active');
+        }
+
+        // Hide custom range section
+        const customRangeSection = document.querySelector('.custom-date-range');
+        if (customRangeSection) {
+            customRangeSection.classList.remove('active');
+        }
+
+        // Show all rows
+        applyDateFilter('all');
+    }
+
+    // Initialize on DOM ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initializeDateToggles);
+    } else {
+        initializeDateToggles();
+    }
+
+    // Export functions for external access
+    window.DateToggles = {
+        getCurrentDateRange,
+        resetDateFilter,
+        applyDateFilter
+    };
+
+})();
+

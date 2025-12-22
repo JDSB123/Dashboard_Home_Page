@@ -1,0 +1,2047 @@
+/* ==========================================================================
+   PICKS TABLE COMPONENT - TABLE OF CONTENTS
+   ==========================================================================
+   This file handles all picks table styling. Navigate to sections by searching
+   for the section headers listed below.
+
+   SECTIONS:
+   Line ~15   - TEAM LOGOS - Unified sizing for logos
+   Line ~60   - TABLE CONTAINER - Main wrapper with glass effect
+   Line ~90   - SCROLLBARS - Custom Vegas-style scrollbars
+   Line ~165  - PICKS TABLE BASE - Core table element styling
+   Line ~195  - TABLE HEADER - Header row design
+   Line ~305  - HEADER SHELL - Clean container for header content
+   Line ~320  - SORT BUTTONS - Clickable sort headers
+   Line ~445  - FILTER DROPDOWN - Filter button triggers
+   Line ~450  - BOXSCORE TOGGLE - Collapse/expand toggle
+   Line ~520  - TABLE BODY - Body and row base styles
+   Line ~595  - STATUS ACCENTS - Status-based row styling
+   Line ~680  - TABLE CELLS - Cell padding and alignment
+   Line ~730  - CELL TYPES - Datetime, matchup, pick, currency cells
+   Line ~1050 - COLLAPSED MODE - Compact row view styling
+   Line ~1420 - RESPONSIVE - Mobile breakpoints
+
+   TABLE ROW HTML STRUCTURE (rendered by picks-table-renderer.js):
+   --------------------------------------------------------------------------
+   <tr data-league="nfl" data-epoch="..." data-book="..." data-status="...">
+     <td>
+       <div class="datetime-cell">
+         <span class="date-value">MM/DD/YYYY</span>
+         <span class="time-value">H:MM am/pm</span>
+         <span class="sportsbook-value">Sportsbook Name</span>
+       </div>
+     </td>
+     <td>
+       <div class="matchup-cell">
+         <div class="team-line">
+           <img class="team-logo" src="..." alt="...">
+           <div class="team-name-wrapper">
+             <span class="team-name-full">Team Name</span>
+             <span class="team-record">(W-L)</span>
+           </div>
+         </div>
+         <div class="vs-divider">vs</div>
+         <div class="team-line">...</div>
+       </div>
+     </td>
+     <td>
+       <div class="pick-cell">
+         <div class="pick-team-info">
+           <img class="pick-team-logo" src="..." alt="...">
+           <span class="pick-team-abbr">ABBR</span>
+         </div>
+         <div class="pick-details">
+           <span class="pick-line">-X.X</span>
+           <span class="pick-odds">(-110)</span>
+         </div>
+       </div>
+     </td>
+     <td class="center"><span class="game-segment">Full Game</span></td>
+     <td class="center">
+       <span class="currency-combined">
+         <span class="currency-line">
+           <span class="risk-label">$ At Risk</span>
+           <span class="risk-amount">$XXX.XX</span>
+         </span>
+         <span class="currency-line">
+           <span class="win-label">To Win</span>
+           <span class="win-amount">$XXX.XX</span>
+         </span>
+       </span>
+     </td>
+     <td class="center"><div class="compact-boxscore">...</div></td>
+     <td class="center">
+       <span class="status-badge" data-status="pending|win|loss|...">Status</span>
+     </td>
+   </tr>
+
+   PARLAY ROW STRUCTURE:
+   <tr class="parlay-row" data-action="toggle-parlay" ...>...</tr>
+   <tr class="parlay-legs" data-parent-id="...">
+     <td colspan="7"><div class="parlay-legs-container">...</div></td>
+   </tr>
+   ========================================================================== */
+
+/* ==========================================================================
+   TEAM LOGOS - UNIFIED SIZING
+   --------------------------------------------------------------------------
+   Standard logo sizes across all table components:
+   - Main matchup logos: 22px
+   - Pick cell logos: 20px
+   - Boxscore logos: 20px (defined in boxscores.css)
+   - Parlay snippet logos: 18px (defined in boxscores.css)
+   ========================================================================== */
+
+.team-logo,
+.pick-team-logo {
+    aspect-ratio: 1;
+    object-fit: contain;
+    background: transparent;
+    padding: 0;
+    border: none;
+    box-shadow: none;
+    image-rendering: auto;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.25));
+    -webkit-font-smoothing: antialiased;
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+}
+
+/* Main matchup logos - 22px standard */
+.team-logo {
+    width: 22px;
+    height: 22px;
+}
+
+/* Pick cell logos - 20px standard */
+.pick-team-logo {
+    width: 20px;
+    height: 20px;
+}
+
+.team-logo:hover,
+.pick-team-logo:hover {
+    transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+    .team-logo {
+        width: 20px;
+        height: 20px;
+    }
+
+    .pick-team-logo {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+/* ==========================================================================
+   Picks Table Component
+   --------------------------------------------------------------------------
+   Main data table styling including headers, cells, rows, and sorting
+   ==========================================================================*/
+
+/* ===== TABLE CONTAINER ===== */
+.table-container {
+    background: transparent;
+    border-radius: 8px;
+    border: 1px solid rgba(var(--color-primary-bright-rgb), 0.08);
+    box-shadow:
+        0 4px 24px rgba(0, 0, 0, 0.3),
+        0 0 40px rgba(var(--color-primary-bright-rgb), 0.04);
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0;
+    overflow-x: auto; /* Allow horizontal scroll on smaller screens */
+    overflow-y: visible;
+    position: relative;
+    z-index: var(--z-table); /* REFINEMENT: Using z-index scale */
+    display: flex;
+    flex-direction: column;
+    min-height: auto; /* Allow table to shrink when empty, grow when picks are added */
+    /* CRITICAL FIX: Ensure container doesn't block clicks */
+    pointer-events: auto;
+}
+
+/* Apply backdrop-filter blur only when table has picks (controlled by JS) */
+.table-container.has-picks {
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+}
+
+/* ===== COLUMN FILTER OUTPUT CHIPS ===== */
+/* Styles defined in filters.css */
+
+/* ===== CUSTOM VEGAS-STYLE SCROLLBARS ===== */
+
+/* Table Container Scrollbar */
+.table-container::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+.table-container::-webkit-scrollbar-track {
+    background: linear-gradient(
+        180deg,
+        rgba(8, 16, 28, 0.6) 0%,
+        rgba(2, 6, 23, 0.8) 50%,
+        rgba(8, 16, 28, 0.6) 100%
+    );
+    border-radius: 10px;
+    border: 1px solid rgba(var(--color-primary-bright-rgb), 0.08);
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+/* REFINEMENT: Scrollbar track hover state */
+.table-container::-webkit-scrollbar-track:hover {
+    background: linear-gradient(
+        180deg,
+        rgba(8, 16, 28, 0.7) 0%,
+        rgba(2, 6, 23, 0.9) 50%,
+        rgba(8, 16, 28, 0.7) 100%
+    );
+}
+
+.table-container::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+        180deg,
+        rgba(var(--color-primary-bright-rgb), 0.5) 0%,
+        rgba(0, 178, 114, 0.6) 50%,
+        rgba(var(--color-primary-bright-rgb), 0.5) 100%
+    );
+    border-radius: 10px;
+    border: 1px solid rgba(0, 255, 170, 0.3);
+    box-shadow: 
+        0 0 10px rgba(var(--color-primary-bright-rgb), 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(
+        180deg,
+        rgba(var(--color-primary-bright-rgb), 0.7) 0%,
+        rgba(0, 255, 170, 0.8) 50%,
+        rgba(var(--color-primary-bright-rgb), 0.7) 100%
+    );
+    border-color: rgba(0, 255, 170, 0.5);
+    box-shadow: 
+        0 0 15px rgba(var(--color-primary-bright-rgb), 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.table-container::-webkit-scrollbar-thumb:active {
+    background: linear-gradient(
+        180deg,
+        rgba(0, 255, 170, 0.8) 0%,
+        rgba(var(--color-primary-bright-rgb), 0.9) 50%,
+        rgba(0, 255, 170, 0.8) 100%
+    );
+    box-shadow: 
+        0 0 20px rgba(var(--color-primary-bright-rgb), 0.6),
+        inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Scrollbar corner */
+.table-container::-webkit-scrollbar-corner {
+    background: rgba(8, 16, 28, 0.8);
+    border-radius: 10px;
+}
+
+/* Firefox Scrollbar Support */
+@supports (scrollbar-width: thin) {
+    .table-container {
+        scrollbar-width: thin;
+        scrollbar-color: rgba(var(--color-primary-bright-rgb), 0.5) rgba(8, 16, 28, 0.6);
+    }
+}
+
+/* ===== PICKS TABLE BASE ===== */
+.picks-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0; /* Seamless zebra striping */
+    table-layout: auto; /* Let browser calculate column widths based on content */
+    position: relative;
+    flex: 1;
+    min-height: inherit;
+    border-radius: 8px;
+    overflow: visible; /* Allow filter dropdowns to render outside the header */
+    pointer-events: auto; /* CRITICAL FIX: Ensure table accepts clicks */
+}
+
+/* First row top corners */
+.picks-table tbody tr:first-child td:first-child {
+    border-top-left-radius: 0;
+}
+
+.picks-table tbody tr:first-child td:last-child {
+    border-top-right-radius: 0;
+}
+
+/* Last row bottom corners */
+.picks-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 8px;
+}
+
+.picks-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 8px;
+}
+
+/* ===== TABLE HEADER - Clean Minimal Design ===== */
+.picks-table thead {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-sticky-header); /* REFINEMENT: Using z-index scale */
+    background: transparent;
+    pointer-events: auto; /* CRITICAL FIX: Ensure header accepts clicks */
+}
+
+.picks-table thead th {
+    padding: 14px 18px;
+    text-align: center;
+    font-family: var(--font-body);
+    font-weight: var(--weight-bold);
+    font-size: var(--text-lg);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #ffffff;
+    border-bottom: 1px solid rgba(var(--color-primary-rgb), 0.25);
+    white-space: nowrap;
+    position: relative;
+    background: linear-gradient(180deg, rgba(0, 30, 45, 0.7) 0%, rgba(0, 20, 35, 0.8) 100%);
+    transition: all 0.25s ease;
+    line-height: var(--leading-tight);
+    vertical-align: middle;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.picks-table thead th:first-child {
+    border-top-left-radius: 8px;
+}
+
+.picks-table thead th:last-child {
+    border-top-right-radius: 8px;
+}
+
+/* Center aligned headers - all headers are now centered by default */
+.picks-table th.center,
+.picks-table td.center {
+    text-align: center;
+}
+
+.picks-table th.center .th-header-shell {
+    justify-content: center;
+}
+
+.picks-table th.center .th-sort-btn {
+    align-items: center;
+    text-align: center;
+}
+
+.picks-table th.center .header-main-text {
+    justify-content: center;
+}
+
+.picks-table th.center .header-subtext {
+    text-align: center;
+}
+
+/* ==========================================================================
+   COLUMN WIDTHS - 8 Column Layout (using min-width for auto table-layout)
+   1: Date/Time  2: League  3: Matchup  4: Pick  5: Segment  6: Risk/Win  7: Boxscore  8: Status
+   ========================================================================== */
+
+/* Column 1: Date/Time/Book */
+.picks-table thead th:nth-child(1),
+.picks-table tbody td:nth-child(1) {
+    min-width: 95px;
+    text-align: center;
+}
+
+/* Column 2: League */
+.picks-table thead th:nth-child(2),
+.picks-table tbody td:nth-child(2) {
+    min-width: 60px;
+    text-align: center;
+}
+
+/* Column 3: Matchup */
+.picks-table thead th:nth-child(3),
+.picks-table tbody td:nth-child(3) {
+    min-width: 150px;
+    text-align: left;
+}
+
+/* Column 4: Pick */
+.picks-table thead th:nth-child(4),
+.picks-table tbody td:nth-child(4) {
+    min-width: 130px;
+    text-align: center;
+}
+
+/* Column 5: Segment */
+.picks-table thead th:nth-child(5),
+.picks-table tbody td:nth-child(5) {
+    min-width: 70px;
+    text-align: center;
+}
+
+/* Column 6: Risk/Win */
+.picks-table thead th:nth-child(6),
+.picks-table tbody td:nth-child(6) {
+    min-width: 100px;
+    text-align: center;
+}
+
+/* Column 7: Boxscore */
+.picks-table thead th:nth-child(7),
+.picks-table tbody td:nth-child(7) {
+    min-width: 150px;
+    text-align: center;
+}
+
+/* Column 8: Status */
+.picks-table thead th:nth-child(8),
+.picks-table tbody td:nth-child(8) {
+    min-width: 80px;
+    text-align: center;
+}
+
+/* ===== TABLE HEADER SHELL - Compact Flexbox Container ===== */
+.th-header-shell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 2px;
+    text-align: center;
+    padding: 0 2px;
+}
+
+/* Toggle variant - centered content */
+.th-header-shell--toggle {
+    justify-content: center;
+}
+
+/* ===== SORT BUTTONS - Compact Clickable Headers ===== */
+.th-sort-btn {
+    background: none;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    padding: 2px 4px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    text-align: center;
+    text-transform: inherit;
+    letter-spacing: inherit;
+    min-height: 34px;
+    transition: color 0.12s ease;
+    flex: 1 1 auto;
+    min-width: 0;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    caret-color: transparent;
+}
+
+.th-sort-btn:hover {
+    color: rgba(0, 235, 156, 0.95);
+}
+
+.th-sort-btn:focus,
+.th-sort-btn:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.th-sort-btn:active {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Header main text wrapper */
+.header-main-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    font-family: var(--font-body);
+    font-size: var(--text-md);
+    font-weight: var(--weight-bold);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #ffffff;
+    line-height: 1.3;
+    white-space: nowrap;
+    text-align: center;
+}
+
+/* Stacked header text variant (e.g., "$ AT RISK /" over "TO WIN $") */
+.header-main-text--stacked {
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    line-height: 1.05;
+}
+
+.header-main-text--stacked .header-line {
+    display: block;
+    font-size: var(--text-base);
+    letter-spacing: 0.08em;
+}
+
+/* Slight tonal accents for Risk/Win header */
+.risk-win-header .header-line--risk {
+    color: rgba(200, 140, 150, 0.95);
+}
+
+.risk-win-header .header-line--win {
+    color: rgba(140, 235, 190, 0.98);
+}
+
+/* Sort icon - completely removed, no longer used */
+.sort-icon {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+}
+
+.th-sort-btn:hover .sort-icon {
+    color: var(--color-primary);
+}
+
+/* Active sort states */
+.picks-table th.sorted-asc .sort-icon,
+.picks-table th.sorted-desc .sort-icon,
+th[data-sort].sorted .sort-icon {
+    color: var(--color-primary);
+    opacity: 1;
+}
+
+th[data-sort].sorted-desc .sort-icon {
+    transform: rotate(180deg);
+}
+
+/* Header subtexts */
+.header-subtext {
+    display: block;
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    font-weight: var(--weight-medium);
+    font-style: normal;
+    color: #00d4eb;
+    letter-spacing: 0.03em;
+    margin-top: 2px;
+    line-height: 1.3;
+    text-transform: none;
+    white-space: nowrap;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+/* ===== FILTER DROPDOWN TRIGGER ===== */
+/* Styles defined in filters.css */
+
+/* ===== BOXSCORE TOGGLE BUTTON ===== */
+.th-boxscore-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: rgba(var(--color-primary-bright-rgb), 0.08);
+    border: 1px solid rgba(var(--color-primary-bright-rgb), 0.25);
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-family: var(--font-display);
+    font-size: var(--text-md);
+    font-weight: var(--weight-semibold);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    min-height: 36px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    outline: none;
+    caret-color: transparent;
+}
+
+.th-boxscore-toggle:hover {
+    background: rgba(var(--color-primary-bright-rgb), 0.12);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.4);
+    color: var(--color-primary-bright);
+}
+
+.th-boxscore-toggle:focus {
+    outline: none;
+}
+
+.th-boxscore-toggle:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.th-boxscore-toggle[aria-pressed="true"] {
+    background: rgba(var(--color-primary-bright-rgb), 0.18);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.5);
+    color: var(--color-primary);
+}
+
+/* Boxscore label text */
+.th-boxscore-toggle .boxscore-label,
+.th-boxscore-toggle .header-main-text {
+    font-size: var(--text-md);
+    font-weight: var(--weight-semibold);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+/* Boxscore toggle icon */
+.boxscore-toggle-icon {
+    font-size: var(--text-base);
+    transition: transform 0.2s ease;
+    opacity: 0.8;
+}
+
+.th-boxscore-toggle[aria-pressed="true"] .boxscore-toggle-icon {
+    transform: rotate(180deg);
+}
+
+/* Header hover effects */
+.picks-table th.sorted {
+    color: var(--color-primary);
+}
+
+/* ===== TABLE BODY ===== */
+.picks-table tbody {
+    position: relative;
+    z-index: 10;
+    background: rgba(8, 12, 22, 0.75);
+    pointer-events: auto; /* CRITICAL FIX: Ensure tbody accepts clicks */
+}
+
+/* Apply backdrop-filter blur only when table has picks (controlled by JS) */
+.table-container.has-picks .picks-table tbody {
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+}
+
+.picks-table tbody tr {
+    background: transparent;
+    transition: background-color 0.25s ease, border-color 0.25s ease;
+    position: relative;
+    /* REFINEMENT: Removed fixed height - prevents content clipping */
+    min-height: var(--row-height);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   VEGAS ELEGANT ZEBRA STRIPING
+   NOTE: CSS :nth-child cannot properly alternate when parlay-legs rows exist
+   (it counts ALL siblings, so excluding some breaks the pattern)
+   Base background provides fallback; JS applies proper .zebra-odd/.zebra-even
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* CSS Fallback - base background for all rows before JS runs */
+.picks-table tbody tr:not(.parlay-legs) {
+    background: var(--zebra-odd);
+}
+
+/* JS-applied zebra classes (proper alternating pattern) */
+.picks-table tbody tr.zebra-row {
+    border-bottom: 1px solid var(--zebra-border);
+    /* Height inherited from .picks-table tbody tr */
+}
+
+.picks-table tbody tr.zebra-odd {
+    background: var(--zebra-odd);
+}
+
+.picks-table tbody tr.zebra-even {
+    background: var(--zebra-even);
+}
+
+/* Vegas Sportsbook Hover - Subtle emerald lift */
+.picks-table tbody tr:hover {
+    background: var(--zebra-hover) !important;
+}
+
+.picks-table tbody tr:hover td {
+    color: rgba(255, 255, 255, 0.98);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   LIVE GAME STYLING - Subtle blue accent, not overwhelming
+   ═══════════════════════════════════════════════════════════════════════════ */
+.picks-table tbody tr.live-game {
+    border-left: 4px solid rgba(74, 182, 255, 0.75); /* REFINEMENT: More prominent */
+    box-shadow: inset 4px 0 12px rgba(74, 182, 255, 0.15); /* REFINEMENT: Inner glow */
+    /* Height inherited from .picks-table tbody tr */
+}
+
+/* Remove inconsistent background overrides - rely on standard zebra + border */
+.picks-table tbody tr.live-game.zebra-odd {
+    background: var(--zebra-odd) !important;
+}
+
+.picks-table tbody tr.live-game.zebra-even {
+    background: var(--zebra-even) !important;
+}
+
+.picks-table tbody tr.live-game:hover {
+    background: var(--zebra-hover) !important;
+}
+
+/* ===== STATUS ACCENTS ===== */
+tr[data-status="pending"] .game-time-status,
+tr[data-status="pending"] .time-remaining,
+.parlay-row[data-status="pending"] .time-remaining,
+.boxscore-simple-time[data-status="pending"] {
+    color: #d0d5e0;
+}
+
+tr[data-status="on-track"] .game-time-status,
+tr[data-status="on-track"] .time-remaining,
+.parlay-row[data-status="on-track"] .time-remaining,
+.boxscore-simple-time[data-status="on-track"] {
+    color: #4ab6ff;
+}
+
+tr[data-status="at-risk"] .game-time-status,
+tr[data-status="at-risk"] .time-remaining,
+.parlay-row[data-status="at-risk"] .time-remaining,
+.boxscore-simple-time[data-status="at-risk"] {
+    color: #ff8a3c;
+}
+
+tr[data-status="loss"] .game-time-status,
+tr[data-status="loss"] .time-remaining,
+tr[data-status="lost"] .game-time-status,
+tr[data-status="lost"] .time-remaining,
+.parlay-row[data-status="loss"] .time-remaining,
+.parlay-row[data-status="lost"] .time-remaining,
+.boxscore-simple-time[data-status="loss"],
+.boxscore-simple-time[data-status="lost"] {
+    color: #ff5f6d;
+}
+
+tr[data-status="win"] .game-time-status,
+tr[data-status="win"] .time-remaining,
+tr[data-status="final"] .game-time-status,
+tr[data-status="final"] .time-remaining,
+.parlay-row[data-status="win"] .time-remaining,
+.parlay-row[data-status="final"] .time-remaining,
+.boxscore-simple-time[data-status="win"],
+.boxscore-simple-time[data-status="final"] {
+    color: #4cffa8;
+}
+
+tr[data-status="live"] .game-time-status,
+tr[data-status="live"] .time-remaining,
+tr[data-status="in-progress"] .game-time-status,
+tr[data-status="in-progress"] .time-remaining {
+    color: #4ab6ff;
+}
+
+/* Group visual separation */
+.picks-table tbody tr.group-start {
+    border-top: 1px solid rgba(var(--color-primary-bright-rgb), 0.2);
+}
+
+.picks-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PARLAY ROWS - Emerald accent on navy base (on-brand)
+   Forest green left border distinguishes multi-leg bets
+   ═══════════════════════════════════════════════════════════════════════════ */
+.picks-table tbody tr.parlay-row {
+    /* Height inherited from .picks-table tbody tr */
+}
+
+.picks-table tbody tr.parlay-row.zebra-odd {
+    background: var(--zebra-parlay-odd);
+    border-bottom: 1px solid var(--zebra-parlay-border);
+    border-left: 3px solid rgba(0, 143, 88, 0.5);
+}
+
+.picks-table tbody tr.parlay-row.zebra-even {
+    background: var(--zebra-parlay-even);
+    border-bottom: 1px solid var(--zebra-parlay-border);
+    border-left: 3px solid rgba(0, 143, 88, 0.5);
+}
+
+.picks-table tbody tr.parlay-row:hover {
+    background: rgba(0, 143, 88, 0.15) !important;
+}
+
+/* ===== TABLE CELLS ===== */
+/* REFINEMENT: Cells now flex to content - no clipping */
+.picks-table td {
+    padding: 10px 12px;
+    vertical-align: middle;
+    text-align: center;
+    font-family: var(--font-body);
+    font-size: var(--text-md);
+    font-weight: var(--weight-medium);
+    color: rgba(232, 240, 242, 0.98);
+    letter-spacing: var(--tracking-tight);
+    line-height: var(--leading-normal);
+    height: auto;
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    white-space: nowrap;
+}
+
+.picks-table td:last-child {
+    border-right: none;
+}
+
+/* Matchup column - allow stacked layout */
+.picks-table td:nth-child(3) {
+    white-space: normal;
+}
+
+/* Pick column - single line, no wrapping */
+.picks-table td:nth-child(4) {
+    white-space: nowrap;
+}
+
+/* REFINEMENT: Allow parlay row clicks to bubble up from cells to row */
+.picks-table tbody tr.parlay-row {
+    cursor: pointer;
+}
+
+.picks-table tbody tr.parlay-row td {
+    pointer-events: none; /* Let clicks pass through to row */
+}
+
+.picks-table tbody tr.parlay-row td * {
+    pointer-events: auto; /* But keep content interactive/selectable */
+}
+
+/* Ensure all child elements are centered */
+.picks-table td * {
+    text-align: center;
+}
+
+.picks-table td:first-child {
+    padding-left: 8px;
+}
+
+.picks-table td:last-child {
+    padding-right: 8px;
+}
+
+.picks-table .status-badge {
+    padding: var(--space-1) var(--space-2);
+    border-radius: 4px;
+}
+
+/* Center-align Status column header and cells */
+.picks-table thead th.status-header {
+	text-align: center;
+}
+.picks-table thead th.status-header .th-header-shell {
+	justify-content: center;
+}
+/* Status column alignment - handled in column widths above */
+
+/* ===== SPECIFIC CELL TYPES ===== */
+
+/* Date/Time Cell */
+.datetime-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    align-items: center;
+    justify-content: center;
+    min-width: 90px;
+    text-align: center;
+    padding: 6px 4px;
+}
+
+.cell-date {
+    font-weight: 700;
+    color: #ffffff;
+    font-size: 0.95rem;
+    line-height: 1.2;
+    font-family: var(--font-body);
+    white-space: nowrap;
+}
+
+.cell-time {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: rgba(220, 235, 250, 0.8);
+    font-family: var(--font-body);
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+.sportsbook-value {
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    color: #00d4eb;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    line-height: 1.1;
+    margin-top: 4px;
+    display: block;
+    white-space: nowrap; /* Prevent wrapping for names like Prime Time Action */
+    max-width: none;
+    text-align: center;
+    text-shadow: 0 0 10px rgba(0, 212, 235, 0.2);
+}
+
+/* Parlay rows get special left border accent */
+tr[data-is-parlay="true"] {
+    border-left: 3px solid rgba(212, 175, 55, 0.6) !important;
+}
+
+/* League Cell - Clean logo + text */
+.league-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 6px 0;
+}
+
+.league-logo {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+}
+
+.league-text {
+    font-family: var(--font-accent);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-bold);
+    color: #ffffff;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+/* League Header */
+.league-header {
+    width: 75px;
+    min-width: 70px;
+}
+
+.league-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 8px 0;
+}
+
+.league-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 10px;
+    border-radius: 4px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+}
+
+.league-chip.active {
+    background: rgba(0,212,137,0.2);
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+}
+
+.league-chip input {
+    display: none;
+}
+
+/* Parlay parent rows */
+.parlay-row {
+    background: linear-gradient(135deg, rgba(0, 212, 137, 0.08), rgba(0, 83, 255, 0.03));
+    border-left: 3px solid rgba(0, 212, 137, 0.6);
+    cursor: pointer;
+}
+
+.parlay-row:hover {
+    background: linear-gradient(135deg, rgba(0, 212, 137, 0.14), rgba(0, 83, 255, 0.06));
+}
+
+.parlay-row.expanded {
+    background: linear-gradient(135deg, rgba(0, 212, 137, 0.16), rgba(0, 83, 255, 0.10));
+    border-left-color: rgba(0, 255, 170, 0.9);
+}
+
+/* Parlay matchup cell with expand arrow */
+.parlay-matchup {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 12px !important;
+    padding-left: 8px;
+}
+
+.parlay-expand-arrow {
+    color: var(--color-primary, #00d689);
+    font-size: 0.7rem;
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+}
+
+.parlay-row.expanded .parlay-expand-arrow,
+.parlay-row.expanded .parlay-toggle-icon {
+    transform: rotate(90deg);
+    color: var(--color-primary-bright, #00d689);
+}
+
+.parlay-leg-count {
+    font-size: var(--text-sm);
+    color: rgba(180, 200, 220, 0.85);
+    font-weight: var(--weight-medium);
+}
+
+/* Parlay child leg rows */
+.parlay-leg {
+    background: rgba(0, 20, 35, 0.5);
+    border-left: 3px solid rgba(0, 212, 137, 0.3);
+}
+
+.parlay-leg-hidden {
+    display: none !important;
+}
+
+.parlay-leg td:first-child {
+    padding-left: 24px;
+}
+
+/* Matchup Cell - Stacked layout (away, vs, home) */
+.matchup-cell {
+    display: grid;
+    grid-template-rows: repeat(3, auto);
+    row-gap: 1px;
+    align-items: center;
+    justify-items: center;
+    justify-content: center;
+    min-width: 180px;
+    text-align: center;
+    line-height: 1.2;
+    padding: 2px 0;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+.matchup-cell .team-line {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    gap: 4px;
+    font-size: var(--text-lg);
+    flex-wrap: nowrap;
+    white-space: nowrap;
+}
+
+/* Matchup cell logos inherit from main .team-logo (22px) */
+.matchup-cell .team-logo {
+    display: inline-block;
+}
+
+.team-name-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+}
+
+.matchup-cell .team-name-wrapper {
+    width: auto;
+    justify-content: center;
+    text-align: center;
+}
+
+.team-name-full {
+    font-family: var(--font-body);
+    font-weight: var(--weight-semibold);
+    font-size: var(--text-lg);
+    letter-spacing: 0.01em;
+    text-transform: none;
+    color: #ffffff;
+    line-height: 1.35;
+    white-space: nowrap;
+}
+
+.team-record {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    color: rgba(170, 190, 210, 0.9);
+    white-space: nowrap;
+    line-height: 1.35;
+    letter-spacing: 0.02em;
+    margin-left: 4px;
+    display: inline-block !important;
+    visibility: visible !important;
+}
+
+.team-ranking {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    color: #F5D76E; /* Vegas-style metallic gold */
+    margin-right: 4px;
+    white-space: nowrap;
+    letter-spacing: 0.1em; /* Wide, elegant spacing */
+    text-transform: uppercase;
+    text-shadow: 
+        0 1px 2px rgba(0, 0, 0, 0.6),
+        0 0 8px rgba(245, 215, 110, 0.3); /* Subtle gold glow */
+    opacity: 0.95;
+}
+
+.vs-divider {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    letter-spacing: 0.05em;
+    text-transform: lowercase;
+    color: rgba(160, 180, 200, 0.9);
+    text-align: center;
+    margin: 0;
+    width: 100%;
+    line-height: var(--leading-normal);
+    white-space: nowrap;
+}
+
+/* Pick Cell - Single horizontal row: [Logo] [ABBR] [Line] [(Odds)] */
+.pick-cell {
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+}
+
+.pick-team-info {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.pick-team-logo {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+.pick-team-abbr {
+    font-family: var(--font-body);
+    font-weight: var(--weight-bold);
+    font-size: var(--text-lg);
+    letter-spacing: 0.04em;
+    color: #ffffff;
+    white-space: nowrap;
+}
+
+.pick-details {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+    flex-shrink: 0;
+}
+
+.pick-type {
+    font-family: var(--font-body);
+    font-size: var(--text-lg);
+    text-transform: uppercase;
+    color: rgba(144, 164, 174, 0.88);
+    font-weight: var(--weight-medium);
+}
+
+.pick-line {
+    font-family: var(--font-mono);
+    font-weight: var(--weight-bold);
+    font-size: var(--text-lg);
+    color: #ffffff;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+}
+
+.pick-odds {
+    font-family: var(--font-mono);
+    font-size: var(--text-base);
+    color: rgba(180, 195, 210, 0.9);
+    font-weight: var(--weight-medium);
+    white-space: nowrap;
+}
+
+.risk-win-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-1);
+}
+
+/* One-line layout for totals without logo (e.g., "Total Over 51 (-110)") */
+.pick-details-only {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 4px;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+}
+
+/* Segment Cell */
+.game-segment {
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: none;
+    letter-spacing: 0.02em;
+    color: #ffffff;
+    padding: 4px 0;
+    border-radius: 0;
+    background: transparent;
+    border: none;
+    display: inline-block;
+    line-height: 1.5;
+    white-space: nowrap;
+    color: rgba(220, 230, 240, 0.95);
+}
+
+/* Risk/Win Cell - Stacked like header with separator */
+.currency-combined {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    font-family: var(--font-body);
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.4;
+    padding: 4px 6px;
+    text-align: center;
+}
+
+.currency-line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-align: center;
+    line-height: 1.4;
+}
+
+/* Show labels */
+.risk-label,
+.win-label {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(200, 210, 220, 0.85);
+    text-transform: none;
+}
+
+.risk-amount {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 15px;
+    color: #ff9999;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.01em;
+}
+
+.win-amount {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 15px;
+    color: #66ffbb;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.01em;
+}
+
+/* Compact boxscore alignment */
+.compact-boxscore {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    padding: 0;
+}
+
+.compact-boxscore .boxscore-grid {
+    width: auto !important;
+    margin: 0 auto !important;
+    max-width: 100% !important;
+}
+
+.boxscore-container {
+    position: relative;
+    width: 100%;
+    min-height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.boxscore-container::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1;
+    transition: opacity 0.2s ease;
+}
+
+.boxscore-container[data-live-ready="false"]::after {
+    opacity: 0.3;
+}
+
+.boxscore-container[data-live-ready="false"] .boxscore-grid {
+    opacity: 0.8;
+    filter: grayscale(0.2);
+}
+
+.boxscore-container .compact-boxscore {
+    width: 100%;
+}
+
+/* ===== COLLAPSED TABLE MODE ===== */
+body.boxscores-collapsed .picks-table {
+    border-spacing: 0 1px;
+}
+
+/* Collapsed view container helpers */
+.picks-table td .expanded-view {
+    display: block;
+    width: 100%;
+}
+
+.picks-table td .collapsed-view {
+    display: none;
+    width: 100%;
+}
+
+.picks-table tbody tr.row-collapsed .expanded-view {
+    display: none !important;
+}
+
+.picks-table tbody tr.row-collapsed .collapsed-view {
+    display: block;
+}
+
+body.boxscores-collapsed .picks-table thead th {
+    padding: 10px 14px;
+}
+
+body.boxscores-collapsed .picks-table tbody tr.row-collapsed {
+    min-height: 36px;
+    height: 36px; /* Compact collapsed row height */
+    line-height: 1.2;
+    border-bottom: 1px solid rgba(var(--color-primary-bright-rgb), 0.1);
+    border-left: 2px solid transparent;
+    transition: border-left-color 0.15s ease, background-color 0.15s ease;
+}
+
+body.boxscores-collapsed .picks-table tbody tr.row-collapsed td {
+    padding: 5px 10px;
+    font-size: var(--text-md);
+    line-height: 1.25;
+    white-space: nowrap;
+    vertical-align: middle;
+    border-right: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+body.boxscores-collapsed .picks-table tbody tr.row-collapsed td:last-child {
+    border-right: none;
+}
+
+/* Force matchup cell to not use grid in collapsed mode */
+body.boxscores-collapsed .picks-table tbody tr.row-collapsed .matchup-cell {
+    display: inline-flex !important;
+    grid-template-rows: unset !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    height: auto !important;
+    min-height: 0 !important;
+}
+
+body.boxscores-collapsed .picks-table tbody tr.row-collapsed td:not(.center) {
+    text-align: left;
+}
+
+/* DateTime Column - Collapsed */
+body.boxscores-collapsed .datetime-cell--collapsed {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+    justify-content: flex-start;
+    min-width: 130px;
+}
+
+body.boxscores-collapsed .datetime-cell--collapsed .date-value {
+    font-size: var(--text-md);
+    font-weight: var(--weight-bold);
+    color: rgba(0, 229, 255, 0.95);
+    letter-spacing: 0.02em;
+}
+
+body.boxscores-collapsed .datetime-cell--collapsed .time-value {
+    font-size: var(--text-base);
+    font-weight: var(--weight-medium);
+    color: rgba(180, 195, 210, 0.9);
+    letter-spacing: 0.02em;
+    padding-left: 6px;
+    border-left: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+body.boxscores-collapsed .datetime-cell--collapsed .parlay-toggle-icon {
+    position: absolute;
+    left: 0;
+}
+
+/* Matchup Column - Collapsed */
+body.boxscores-collapsed .matchup-cell--collapsed {
+    display: inline-flex !important;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 4px;
+    width: 100%;
+    min-width: 0;
+    text-align: left;
+    white-space: nowrap;
+    grid-template-rows: none;
+}
+
+body.boxscores-collapsed .matchup-cell--collapsed .team-line {
+    display: inline-flex;
+    width: auto;
+    justify-content: flex-start;
+    gap: 4px;
+    flex-shrink: 0;
+    align-items: center;
+}
+
+body.boxscores-collapsed .matchup-cell--collapsed .team-logo {
+    width: 16px;
+    height: 16px;
+}
+
+body.boxscores-collapsed .matchup-cell--collapsed .team-name-wrapper {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+    justify-content: flex-start;
+    text-align: left;
+}
+
+body.boxscores-collapsed .matchup-cell--collapsed .team-name-full {
+    font-size: var(--text-md);
+    font-weight: var(--weight-semibold);
+    color: rgba(232, 240, 242, 0.98);
+}
+
+body.boxscores-collapsed .matchup-cell--collapsed .team-record {
+    font-size: var(--text-sm);
+    color: rgba(170, 188, 204, 0.75);
+    margin-left: 3px;
+}
+
+body.boxscores-collapsed .matchup-cell--collapsed .team-ranking {
+    font-size: var(--text-sm);
+    color: #D4AF37;
+}
+
+body.boxscores-collapsed .matchup-cell--collapsed .vs-divider {
+    display: inline;
+    width: auto;
+    margin: 0 6px;
+    flex-shrink: 0;
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    color: rgba(144, 164, 174, 0.5);
+    text-transform: uppercase;
+}
+
+
+/* Pick Column - Collapsed */
+body.boxscores-collapsed .pick-cell--collapsed {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: left;
+    gap: 5px;
+}
+
+body.boxscores-collapsed .pick-cell--collapsed .pick-team-logo {
+    width: 14px;
+    height: 14px;
+}
+
+body.boxscores-collapsed .pick-cell--collapsed .pick-team-abbr {
+    font-size: var(--text-md);
+    font-weight: var(--weight-semibold);
+    color: rgba(232, 240, 242, 0.98);
+}
+
+body.boxscores-collapsed .pick-cell--collapsed .pick-line {
+    font-size: var(--text-md);
+    font-weight: var(--weight-bold);
+    color: rgba(232, 240, 242, 0.98);
+}
+
+body.boxscores-collapsed .pick-cell--collapsed .pick-odds {
+    font-size: var(--text-base);
+    font-weight: var(--weight-medium);
+    color: rgba(180, 195, 210, 0.85);
+}
+
+/* Currency/Risk Column - Collapsed */
+body.boxscores-collapsed .currency-combined {
+    display: inline-flex;
+    flex-direction: row;
+    gap: 0;
+    align-items: center;
+}
+
+body.boxscores-collapsed .currency-line {
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+}
+
+body.boxscores-collapsed .currency-line:first-child::after {
+    content: '→';
+    font-size: var(--text-sm);
+    color: rgba(160, 180, 195, 0.5);
+    margin: 0 5px;
+}
+
+body.boxscores-collapsed .currency-line:first-child .risk-amount::after {
+    content: none;
+}
+
+body.boxscores-collapsed .risk-amount {
+    font-size: var(--text-md);
+    font-weight: var(--weight-semibold);
+    color: rgba(255, 140, 140, 0.95);
+}
+
+body.boxscores-collapsed .win-amount {
+    font-size: var(--text-md);
+    font-weight: var(--weight-bold);
+    color: rgba(76, 255, 168, 0.98);
+}
+
+/* Boxscore Info Column - Collapsed */
+.boxscore-info-collapsed {
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    padding: 4px 8px;
+    background: rgba(0, 0, 0, 0.35);
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.boxscore-simple-time {
+    font-size: var(--text-base);
+    font-weight: var(--weight-bold);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding-right: 8px;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    margin-right: 8px;
+}
+
+.boxscore-simple-score {
+    font-size: var(--text-md);
+    font-weight: var(--weight-bold);
+    color: rgba(226, 235, 245, 0.98);
+    letter-spacing: 0.02em;
+}
+
+/* Time status colors in collapsed mode */
+.boxscore-simple-time[data-status="pending"] {
+    color: rgba(180, 195, 210, 0.88);
+}
+
+.boxscore-simple-time[data-status="on-track"],
+.boxscore-simple-time[data-status="live"] {
+    color: #4ab6ff;
+}
+
+.boxscore-simple-time[data-status="at-risk"] {
+    color: #ff8a3c;
+}
+
+.boxscore-simple-time[data-status="win"],
+.boxscore-simple-time[data-status="final"] {
+    color: #4cffa8;
+}
+
+.boxscore-simple-time[data-status="loss"],
+.boxscore-simple-time[data-status="lost"] {
+    color: #ff5f6d;
+}
+
+/* Segment Column - Collapsed */
+body.boxscores-collapsed .game-segment--collapsed {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--text-sm);
+    font-weight: var(--weight-bold);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: rgba(200, 210, 220, 0.9);
+    padding: 0;
+    background: transparent;
+    border-radius: 0;
+    border: none;
+}
+
+/* Status Badge - Collapsed (ensure prominence) */
+body.boxscores-collapsed .status-badge {
+    font-size: var(--text-md); /* Increased from 0.75rem for better readability */
+    padding: 5px 12px;
+    font-weight: var(--weight-bold);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   COLLAPSED MODE ZEBRA STRIPES - Same elegant system
+   ═══════════════════════════════════════════════════════════════════════════ */
+body.boxscores-collapsed .picks-table tbody tr.row-collapsed.zebra-odd,
+body.boxscores-collapsed .picks-table tbody tr.row-collapsed.zebra-odd.live-game {
+    background: var(--zebra-odd) !important;
+}
+
+body.boxscores-collapsed .picks-table tbody tr.row-collapsed.zebra-even,
+body.boxscores-collapsed .picks-table tbody tr.row-collapsed.zebra-even.live-game {
+    background: var(--zebra-even) !important;
+}
+
+body.boxscores-collapsed .picks-table tbody tr.row-collapsed:hover {
+    background: var(--zebra-hover) !important;
+    border-left-color: rgba(80, 100, 130, 0.6);
+}
+
+/* Parlay rows in collapsed mode - emerald accent on left */
+body.boxscores-collapsed .picks-table tbody tr.row-collapsed.parlay-row {
+    border-left: 3px solid rgba(0, 143, 88, 0.5) !important;
+}
+
+body.boxscores-collapsed .picks-table tbody tr.row-collapsed.parlay-row.zebra-odd {
+    background: var(--zebra-parlay-odd) !important;
+}
+
+body.boxscores-collapsed .picks-table tbody tr.row-collapsed.parlay-row.zebra-even {
+    background: var(--zebra-parlay-even) !important;
+}
+
+body.boxscores-collapsed .picks-table tbody tr.row-collapsed.parlay-row:hover {
+    background: rgba(0, 143, 88, 0.15) !important;
+}
+
+/* Collapsed content styles (legacy support) */
+.collapsed-datetime {
+    font-family: var(--font-body);
+    font-size: var(--text-md);
+    font-weight: var(--weight-semibold);
+    color: var(--color-text-primary);
+}
+
+.collapsed-teams {
+    font-family: var(--font-body);
+    font-size: var(--text-md);
+    font-weight: var(--weight-semibold);
+}
+
+.collapsed-pick {
+    font-family: var(--font-body);
+    font-size: var(--text-md);
+    font-weight: var(--weight-semibold);
+    color: var(--color-primary);
+}
+
+.collapsed-money {
+    font-family: var(--font-body);
+    font-size: var(--text-md);
+    font-weight: var(--weight-medium);
+}
+
+/* ===== RESPONSIVE TABLE ===== */
+@media (max-width: 1200px) {
+    .picks-table th,
+    .picks-table td {
+        padding: 10px 8px;
+        font-size: var(--text-lg);
+    }
+
+    .picks-table thead th {
+        font-size: var(--text-md);
+        letter-spacing: var(--tracking-normal);
+        padding: 12px 20px;
+    }
+    
+    .th-sort-btn {
+        min-height: 44px;
+    }
+    
+    .header-main-text {
+        font-size: var(--text-md);
+        letter-spacing: 0.08em;
+    }
+    
+    .header-subtext {
+        font-size: var(--text-sm);
+        letter-spacing: 0.03em;
+    }
+    
+    .sort-icon {
+        font-size: var(--text-sm);
+    }
+    
+    .th-boxscore-toggle {
+        padding: 6px 12px;
+        font-size: var(--text-base);
+        min-height: 32px;
+    }
+    
+    .th-boxscore-toggle .header-main-text,
+    .th-boxscore-toggle .boxscore-label {
+        font-size: var(--text-base);
+    }
+    
+    .boxscore-toggle-icon {
+        font-size: var(--text-sm);
+    }
+    
+    .team-logo {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .pick-team-logo {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+@media (max-width: 768px) {
+    .table-container {
+        border-radius: 8px;
+        margin: 0 12px;
+    }
+
+    .picks-table thead th {
+        padding: 10px 16px;
+        font-size: var(--text-base);
+        letter-spacing: var(--tracking-normal);
+    }
+    
+    .th-sort-btn {
+        min-height: 40px;
+        padding: 4px 10px;
+        gap: 1px;
+    }
+    
+    .header-main-text {
+        font-size: var(--text-base);
+        letter-spacing: 0.06em;
+    }
+    
+    .header-subtext {
+        font-size: var(--text-xs);
+        margin-top: 1px;
+        letter-spacing: 0.02em;
+    }
+    
+    .sort-icon {
+        font-size: var(--text-xs);
+        margin-left: 4px;
+    }
+    
+    .th-boxscore-toggle {
+        padding: 5px 10px;
+        font-size: var(--text-sm);
+        min-height: 28px;
+        gap: 4px;
+        border-radius: 5px;
+    }
+    
+    .th-boxscore-toggle .header-main-text,
+    .th-boxscore-toggle .boxscore-label {
+        font-size: var(--text-sm);
+    }
+    
+    .boxscore-toggle-icon {
+        font-size: var(--text-xs);
+    }
+    
+    .picks-table td {
+        padding: 10px 8px;
+        font-size: var(--text-base);
+        line-height: 1.4;
+    }
+    
+    .team-name-full {
+        font-size: var(--text-lg);
+        line-height: 1.4;
+    }
+    
+    .team-record,
+    .team-ranking {
+        /* Removed display: none; to always show records */
+    }
+    
+    .matchup-cell {
+        min-width: 150px;
+        row-gap: 3px;
+    }
+    
+    .datetime-cell {
+        min-width: 80px;
+        gap: 3px;
+    }
+    
+    .date-value {
+        font-size: var(--text-lg);
+    }
+    
+    .time-value {
+        font-size: var(--text-base);
+    }
+    
+    .game-segment {
+        font-size: var(--text-sm);
+        padding: 0;
+    }
+    
+    .pick-line {
+        font-size: var(--text-lg);
+    }
+    
+    .risk-amount,
+    .win-amount {
+        font-size: var(--text-lg);
+    }
+    
+    .sportsbook-value {
+        font-size: var(--text-xs);
+    }
+}
+
+@media (max-width: 640px) {
+    /* Ensure table has minimum width for horizontal scroll */
+    .picks-table {
+        min-width: 600px;
+    }
+    
+    .table-container {
+        margin: 0 8px;
+        -webkit-overflow-scrolling: touch; /* Smooth scroll on iOS */
+    }
+    
+    .picks-table thead th {
+        padding: 8px 10px;
+        font-size: var(--text-sm);
+    }
+    
+    .picks-table td {
+        padding: 8px 6px;
+        font-size: var(--text-sm);
+    }
+    
+    /* Compact matchup cell */
+    .matchup-cell {
+        min-width: 120px;
+    }
+    
+    .team-name-full {
+        font-size: var(--text-base);
+    }
+    
+    /* Hide team records on smaller screens */
+    .team-record,
+    .team-ranking {
+        /* Removed display: none; to always show records */
+    }
+}
+
+@media (max-width: 480px) {
+    .table-container {
+        margin: 0 4px;
+        min-height: 300px;
+        border-radius: 6px;
+    }
+    
+    /* Tighter table for very small screens */
+    .picks-table {
+        min-width: 520px;
+    }
+
+    .picks-table thead th {
+        padding: 6px 8px;
+        font-size: var(--text-xs);
+        letter-spacing: var(--tracking-normal);
+    }
+    
+    .th-sort-btn {
+        min-height: 32px;
+        padding: 4px 6px;
+        gap: 1px;
+    }
+    
+    .header-main-text {
+        font-size: var(--text-xs);
+        letter-spacing: 0.04em;
+    }
+    
+    .header-subtext {
+        font-size: 0.5625rem;
+        letter-spacing: 0.02em;
+    }
+    
+    .sort-icon {
+        font-size: 0.5625rem;
+        margin-left: 2px;
+    }
+    
+    .th-boxscore-toggle {
+        padding: 3px 6px;
+        font-size: 0.5625rem;
+        min-height: 22px;
+        gap: 2px;
+    }
+    
+    .th-boxscore-toggle .header-main-text,
+    .th-boxscore-toggle .boxscore-label {
+        font-size: 0.5625rem;
+    }
+    
+    .boxscore-toggle-icon {
+        font-size: 0.5625rem;
+    }
+    
+    .picks-table td {
+        padding: 6px 4px;
+        font-size: var(--text-xs);
+        line-height: 1.35;
+    }
+    
+    .team-name-full {
+        font-size: var(--text-sm);
+    }
+    
+    .date-value {
+        font-size: var(--text-sm);
+    }
+    
+    .time-value {
+        font-size: var(--text-xs);
+    }
+    
+    .pick-line {
+        font-size: var(--text-sm);
+    }
+    
+    .risk-amount,
+    .win-amount {
+        font-size: var(--text-sm);
+    }
+    
+    /* Hide less important columns on mobile */
+    .segment-header,
+    .game-segment,
+    .boxscore-header,
+    .compact-boxscore {
+        display: none;
+    }
+}
+
+/* ===== WEEKLY LINEUP SPECIFIC STYLES ===== */
+
+/* Weekly Lineup Table - Enhanced Layout for League Logos and Team Records */
+.weekly-lineup-table tbody td:nth-child(2) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-align: center;
+}
+
+.weekly-lineup-table tbody td:nth-child(3) {
+    text-align: center;
+}
+
+.weekly-lineup-table .matchup-cell {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1px;
+    align-items: center;
+    justify-content: center;
+    min-width: 180px;
+    text-align: center;
+    line-height: 1.2;
+    padding: 2px 0;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+.weekly-lineup-table .team-record,
+.weekly-lineup-table .team-ranking {
+    display: inline !important;
+}

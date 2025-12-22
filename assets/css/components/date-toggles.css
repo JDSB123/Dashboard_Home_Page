@@ -1,0 +1,849 @@
+/* =========================================================
+   DATE TOGGLES COMPONENT - ULTRA-MINIMAL FLOATING DESIGN
+   Sleek horizontal date range selector with floating effect
+   ========================================================= */
+
+/* Date Toggles Container */
+.date-toggles-container {
+    display: flex;
+    flex-direction: column;       /* Stack label above the time pills */
+    justify-content: flex-end;    /* Align to bottom edge (match KPI tile bottoms) */
+    align-items: flex-start;      /* Left-align label and chips as a stack */
+    gap: 1px;                     /* Ultra-tight vertical spacing between label and chips */
+    position: relative;
+    z-index: 200;
+    height: var(--dashboard-topline-height, 76px);             /* Ensures baseline aligns with KPI tiles */
+    margin: 0;
+    padding-left: 0;
+}
+
+/* Date Range Label - Ultra-minimal elegant */
+.date-toggle-label {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 600;
+    font-size: 0.5rem;
+    color: rgba(0, 255, 170, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    line-height: 1;
+    margin-bottom: 0;
+    margin-left: 4px;
+    text-rendering: optimizeLegibility;
+    text-shadow: 0 0 6px rgba(0, 214, 137, 0.25), 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+/* Date Toggles Group - individual floating chips (no outer pill/bin) */
+.date-toggles {
+    display: flex;
+    flex-direction: row;
+    gap: 4px;                     /* Ultra-tight spacing between date toggle buttons */
+    background: transparent;      /* No outer bin */
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative; /* For popup positioning */
+    box-shadow: none;             /* Let the chips themselves glow, not a container */
+}
+
+/* Clear button for time filters */
+.date-clear-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 4px;
+    padding: 2px 6px;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 255, 170, 0.25);
+    background: rgba(7, 13, 21, 0.4);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 600;
+    font-size: 0.45rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(240, 255, 255, 0.8);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    outline: none;
+    caret-color: transparent;
+}
+
+.date-clear-btn:hover {
+    border-color: rgba(0, 255, 170, 0.6);
+    background: rgba(0, 214, 137, 0.2);
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 
+        0 4px 8px rgba(0, 0, 0, 0.3),
+        0 0 16px rgba(0, 255, 170, 0.2);
+}
+
+.date-clear-btn:active {
+    transform: translateY(0);
+}
+
+.date-clear-btn:focus {
+    outline: none;
+}
+
+.date-clear-btn:focus-visible {
+    outline: 1px solid rgba(0, 214, 137, 0.7);
+    outline-offset: 2px;
+}
+
+/* No special hover treatment on the whole group – only the individual chips respond */
+.date-toggles:hover {
+    background: transparent;
+    box-shadow: none;
+    transform: none;
+}
+
+/* Date Toggle Buttons - Ultra-minimal sleek design */
+.date-toggle-btn {
+    /* Typography */
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 600;
+    font-size: 0.5rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+    text-rendering: optimizeLegibility;
+    line-height: 1;
+    opacity: 0.85;
+
+    /* Visual styling - ultra-minimal and clean */
+    background: transparent;
+    border: none;
+    padding: 2px 5px; /* Ultra-tight padding */
+    border-radius: 12px; /* Sleeker rounded corners */
+
+    /* Behavior */
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+    text-align: center;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    outline: none;
+    caret-color: transparent;
+}
+
+.date-toggle-btn:hover {
+    color: rgba(0, 255, 170, 1); /* Brighter emerald */
+    text-shadow: 0 0 16px rgba(0, 255, 170, 0.6); /* Enhanced glow */
+    background: rgba(0, 214, 137, 0.12);
+    transform: scale(1.02); /* Subtle scale instead of translateY */
+}
+
+.date-toggle-btn:active {
+    transform: scale(0.98);
+}
+
+.date-toggle-btn.active {
+    background: linear-gradient(135deg, rgba(0, 255, 170, 0.18) 0%, rgba(0, 229, 255, 0.15) 100%);
+    color: #00ffaa; /* Bright emerald */
+    font-weight: 600;
+    box-shadow: 
+        inset 0 1px 2px rgba(0, 255, 170, 0.15),
+        0 0 0 1px rgba(0, 255, 170, 0.25),
+        0 0 8px rgba(0, 255, 170, 0.12); /* More subtle glow */
+    text-shadow: 0 0 8px rgba(0, 255, 170, 0.4);
+}
+
+/* Focus state for accessibility - minimal */
+.date-toggle-btn:focus {
+    outline: none;
+}
+
+.date-toggle-btn:focus-visible {
+    outline: 1px solid rgba(0, 214, 137, 0.5);
+    outline-offset: 2px;
+}
+
+/* Custom Date Range - Ultra-floating minimal popup */
+.custom-date-range {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 6px; /* Tighter margin */
+    /* Metallic Emerald Elite card treatment */
+    background: var(--bg-metallic-navy, linear-gradient(140deg, rgba(3, 16, 12, 0.96), rgba(8, 30, 22, 0.94)));
+    border-radius: 14px; /* Sleeker radius */
+    padding: 10px 10px 9px;
+    border: var(--border-emerald, 1px solid rgba(0, 214, 137, 0.25));
+    -webkit-backdrop-filter: var(--blur-glass, blur(20px));
+    backdrop-filter: var(--blur-glass, blur(20px));
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.7),
+        var(--glow-emerald-subtle, 0 0 8px rgba(0, 214, 137, 0.25));
+    z-index: 1000;
+    min-width: 220px; /* Slightly wider for card feel */
+    overflow: hidden;
+}
+
+.custom-date-range::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: var(--metallic-reflect, linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.09) 50%, transparent 70%));
+    opacity: 0.35;
+    mix-blend-mode: screen;
+    transform: translateY(-8%);
+}
+
+/* Custom date range header / target toggle */
+.custom-date-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 3px;
+    padding-bottom: 2px;
+    border-bottom: 1px solid rgba(0, 188, 212, 0.12);
+}
+
+.date-target-toggle {
+    display: inline-flex;
+    gap: 1px;
+    padding: 1px;
+    border-radius: 999px;
+    background: rgba(3, 16, 12, 0.9);
+    border: 1px solid rgba(0, 188, 212, 0.15);
+}
+
+.date-target-btn {
+    position: relative;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0;
+    padding: 1px 4px;
+    border-radius: 999px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: var(--transition-fast, all 0.2s ease-in-out);
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    outline: none;
+    caret-color: transparent;
+}
+
+.date-target-btn .date-target-label {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 0.38rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 500;
+    line-height: 1;
+    color: rgba(0, 188, 212, 0.7); /* Blue from header-subtext, reduced opacity for inactive */
+    display: block;
+    font-style: italic;
+}
+
+.date-target-btn .date-target-value {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 0.45rem;
+    font-weight: 500;
+    line-height: 1.1;
+    color: rgba(0, 188, 212, 0.75); /* Blue from header-subtext, reduced opacity for inactive */
+    display: block;
+    white-space: nowrap;
+    font-style: italic;
+}
+
+.date-target-btn:not(.active) .date-target-value.is-placeholder {
+    opacity: 0.4;
+    color: rgba(0, 188, 212, 0.4);
+}
+
+.date-target-btn:not(.active) .date-target-value:not(.is-placeholder) {
+    color: rgba(0, 188, 212, 0.7);
+}
+
+.date-target-btn:hover {
+    background: rgba(0, 188, 212, 0.06);
+}
+
+.date-target-btn:hover .date-target-label {
+    color: rgba(0, 188, 212, 0.9);
+}
+
+.date-target-btn:hover .date-target-value {
+    color: rgba(0, 188, 212, 0.85);
+}
+
+.date-target-btn.active {
+    background: linear-gradient(135deg, rgba(0, 214, 137, 0.36), rgba(18, 194, 255, 0.18));
+    box-shadow: var(--inner-glow, inset 0 0 10px rgba(0, 214, 137, 0.35));
+}
+
+.date-target-btn.active .date-target-label {
+    color: rgba(5, 12, 10, 1);
+    font-weight: 600;
+    opacity: 1;
+}
+
+.date-target-btn.active .date-target-value {
+    color: rgba(5, 12, 10, 1);
+    font-weight: 600;
+    opacity: 1;
+}
+
+.date-target-btn.active .date-target-value.is-placeholder {
+    color: rgba(5, 12, 10, 0.5);
+    opacity: 0.6;
+}
+
+.date-target-btn:focus {
+    outline: none;
+}
+
+.date-target-btn:focus-visible {
+    outline: 1px solid rgba(0, 214, 137, 0.8);
+    outline-offset: 2px;
+}
+
+/* Metallic Emerald calendar */
+.custom-calendar {
+    margin-top: 4px;
+    padding: 6px 6px 4px;
+    border-radius: 10px;
+    background: radial-gradient(circle at 0% 0%, rgba(0, 214, 137, 0.3), transparent 55%),
+                radial-gradient(circle at 100% 100%, rgba(18, 194, 255, 0.22), transparent 55%),
+                rgba(2, 12, 10, 0.94);
+    box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.06),
+        0 0 12px rgba(0, 0, 0, 0.65);
+}
+
+.custom-calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+    color: var(--color-text-primary, #E8F0F2);
+}
+
+.calendar-month-label {
+    font-family: var(--font-body);
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.9;
+}
+
+.calendar-nav {
+    width: 20px;
+    height: 20px;
+    border-radius: 999px;
+    border: 1px solid rgba(0, 214, 137, 0.4);
+    background: radial-gradient(circle at 30% 0%, rgba(255, 255, 255, 0.15), transparent 65%),
+                rgba(0, 0, 0, 0.6);
+    color: rgba(232, 240, 242, 0.9);
+    font-size: 0.6rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition-micro, all 0.15s ease-in-out);
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    outline: none;
+    caret-color: transparent;
+}
+
+.calendar-nav:hover {
+    border-color: rgba(0, 214, 137, 0.8);
+    box-shadow: 0 0 6px rgba(0, 214, 137, 0.5);
+    transform: translateY(-0.5px);
+}
+
+.calendar-nav:active {
+    transform: translateY(0);
+}
+
+.calendar-nav:focus {
+    outline: none;
+}
+
+.calendar-nav:focus-visible {
+    outline: 1px solid rgba(0, 214, 137, 0.9);
+    outline-offset: 2px;
+}
+
+.custom-calendar-grid {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: 2px;
+}
+
+.calendar-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+    font-family: var(--font-body);
+    font-size: 0.46rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: rgba(184, 197, 208, 0.8);
+    opacity: 0.8;
+}
+
+.calendar-weekdays span {
+    text-align: center;
+}
+
+.calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+}
+
+.calendar-day {
+    width: 24px;
+    height: 22px;
+    border-radius: 6px;
+    border: none;
+    background: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.08), transparent 60%),
+                rgba(3, 18, 15, 0.95);
+    color: rgba(232, 240, 242, 0.85);
+    font-family: var(--font-body);
+    font-size: 0.55rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition-micro, all 0.15s ease-in-out);
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    outline: none;
+    caret-color: transparent;
+}
+
+.calendar-day.empty {
+    background: transparent;
+    cursor: default;
+}
+
+.calendar-day:not(.empty):hover {
+    background: linear-gradient(135deg, rgba(0, 214, 137, 0.32), rgba(18, 194, 255, 0.24));
+    color: rgba(5, 12, 10, 0.98);
+    box-shadow: 0 0 8px rgba(0, 214, 137, 0.45);
+}
+
+.calendar-day.selected {
+    background: linear-gradient(135deg, rgba(0, 214, 137, 0.9), rgba(18, 194, 255, 0.7));
+    color: rgba(5, 12, 10, 0.98);
+    box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.7),
+        0 0 10px rgba(0, 214, 137, 0.7);
+    font-weight: 600;
+}
+
+.calendar-day.in-range {
+    background: linear-gradient(135deg, rgba(0, 214, 137, 0.18), rgba(18, 194, 255, 0.16));
+    color: rgba(232, 240, 242, 0.96);
+}
+
+.calendar-day.selected-start::before,
+.calendar-day.selected-end::before {
+    content: "";
+    position: absolute;
+}
+
+/* Slightly tighter on very small screens */
+@media (max-width: 480px) {
+    .custom-date-range {
+        min-width: 190px;
+    }
+
+    .calendar-day {
+        width: 22px;
+        height: 20px;
+    }
+}
+
+.custom-date-range.active {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    animation: slideDownFloat 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideDownFloat {
+    from {
+        opacity: 0;
+        transform: translateY(-12px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.date-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.date-input-label {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 0.45rem; /* Ultra-tight: 7.2px */
+    color: rgba(0, 214, 137, 0.5); /* Subtler color */
+    text-transform: uppercase;
+    letter-spacing: 0.18em; /* More elegant spacing */
+    font-weight: 600;
+    text-rendering: optimizeLegibility;
+    line-height: 1.1; /* Tighter line height */
+    opacity: 0.7; /* Slight transparency */
+}
+
+.date-input {
+    background: rgba(15, 30, 45, 0.5);
+    border: 1px solid rgba(0, 214, 137, 0.15);
+    color: var(--color-text-primary);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 0.5625rem; /* 9px - tighter */
+    font-weight: 500;
+    padding: 5px 7px;
+    border-radius: 6px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 100%;
+}
+
+.date-input:hover {
+    border-color: rgba(0, 214, 137, 0.3);
+    background: rgba(15, 30, 45, 0.7);
+}
+
+.date-input:focus {
+    outline: none;
+    border-color: rgba(0, 214, 137, 0.5);
+    box-shadow: 0 0 0 2px rgba(0, 214, 137, 0.1);
+    background: rgba(15, 30, 45, 0.85);
+}
+
+/* Apply Button for Custom Range - ultra-minimal sleek style */
+.date-apply-btn {
+    background: linear-gradient(135deg, rgba(0, 214, 137, 0.08) 0%, rgba(0, 229, 255, 0.06) 100%); /* More subtle gradient */
+    border: 1px solid rgba(0, 214, 137, 0.2); /* Subtler border */
+    color: rgba(0, 214, 137, 0.9); /* Less intense color */
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 600;
+    font-size: 0.5rem; /* Ultra-tight: 8px */
+    text-transform: uppercase;
+    letter-spacing: 0.18em; /* More elegant spacing */
+    text-rendering: optimizeLegibility;
+    padding: 4px 8px; /* Tighter padding */
+    border-radius: 8px; /* Sleeker radius */
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-top: 3px; /* Tighter margin */
+    text-shadow: 0 0 4px rgba(0, 214, 137, 0.2); /* Subtler glow */
+    opacity: 0.8; /* Slight transparency for minimalism */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    outline: none;
+    caret-color: transparent;
+}
+
+.date-apply-btn:hover {
+    background: linear-gradient(135deg, rgba(0, 214, 137, 0.15) 0%, rgba(0, 229, 255, 0.12) 100%); /* Subtle enhancement */
+    border-color: rgba(0, 214, 137, 0.3); /* Less intense border */
+    box-shadow: 0 1px 4px rgba(0, 214, 137, 0.15); /* Minimal shadow */
+    transform: scale(1.01); /* Minimal scale */
+    text-shadow: 0 0 6px rgba(0, 214, 137, 0.3); /* Subtle glow */
+    opacity: 1; /* Full opacity on hover */
+}
+
+.date-apply-btn:focus {
+    outline: none;
+}
+
+.date-apply-btn:active {
+    transform: scale(0.98);
+}
+
+/* More Options Dropdown (for less common filters) */
+.date-more-toggle {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 0.5625rem;
+    padding: 4px 8px;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    outline: none;
+    caret-color: transparent;
+}
+
+.date-more-toggle:hover {
+    background: rgba(0, 214, 137, 0.08);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.date-more-toggle-icon {
+    font-size: 0.5rem;
+    transition: transform 0.2s ease;
+}
+
+.date-more-toggle.active .date-more-toggle-icon {
+    transform: rotate(180deg);
+}
+
+.date-more-options {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 4px;
+    background: rgba(11, 20, 35, 0.95);
+    border: 1px solid rgba(0, 214, 137, 0.3);
+    border-radius: 8px;
+    padding: 4px;
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 120px;
+}
+
+.date-more-options.active {
+    display: flex;
+    animation: slideDown 0.2s ease-out;
+}
+
+/* Responsive Design - Ultra-minimal aesthetics maintained */
+@media (max-width: 992px) {
+    .date-toggles {
+        padding: 0;
+    }
+
+    .date-toggle-btn {
+        padding: 3px 5px; /* Ultra-tight padding */
+        font-size: clamp(0.4rem, 0.38rem + 0.1vw, 0.46rem); /* Smaller, sleeker */
+        letter-spacing: 0.16em; /* Maintained elegance */
+    }
+
+    .date-toggle-label {
+        font-size: 0.5rem; /* Proportionally smaller but readable */
+        letter-spacing: 0.1em;
+        opacity: 0.8;
+    }
+}
+
+@media (max-width: 768px) {
+    .date-toggles-container {
+        width: 100%;
+        align-items: flex-start;  /* Left-align label + pill on mobile */
+        height: var(--dashboard-topline-height, 76px);         /* Keep baseline aligned with reduced KPI tile height */
+    }
+
+    .date-toggle-label {
+        text-align: center;
+        font-size: 0.52rem;
+        opacity: 0.85;
+        letter-spacing: 0.1em;
+    }
+
+    .date-toggles {
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        max-width: 100%;
+        padding: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .date-toggle-btn {
+        flex: 0 1 auto;
+        min-width: 50px; /* Narrower for mobile */
+        padding: 2.5px 5px; /* Ultra-tight */
+        font-size: clamp(0.39rem, 0.37rem + 0.1vw, 0.45rem); /* Smaller, sleeker */
+        letter-spacing: 0.15em; /* Maintained elegance */
+    }
+
+    .custom-date-range {
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%);
+        min-width: 150px; /* Slightly narrower */
+        padding: 6px; /* Tighter padding */
+        background: rgba(11, 20, 35, 0.92); /* More transparent */
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25),
+                    0 4px 16px rgba(0, 214, 137, 0.03); /* Subtle floating */
+    }
+
+    /* Ensure From/To buttons maintain contrast on tablets */
+    .date-target-btn .date-target-label {
+        color: rgba(0, 214, 137, 0.85); /* Maintain high contrast */
+    }
+}
+
+@media (max-width: 480px) {
+    .date-toggles {
+        padding: 0;
+        background: transparent;
+    }
+
+    .date-toggle-btn {
+        padding: 2px 4px; /* Ultra-minimal padding */
+        font-size: clamp(0.37rem, 0.35rem + 0.08vw, 0.42rem); /* Smallest, sleekest */
+        letter-spacing: 0.14em; /* Elegant spacing maintained */
+        opacity: 0.75; /* More subtle on tiny screens */
+    }
+
+    .date-toggle-label {
+        font-size: 0.48rem; /* Smallest readable size */
+        opacity: 0.8;
+        letter-spacing: 0.1em;
+    }
+
+    .custom-date-range {
+        min-width: 130px; /* Narrowest possible */
+        padding: 5px; /* Tightest padding */
+        background: rgba(11, 20, 35, 0.9); /* More transparent */
+        border-radius: 8px; /* Sleeker on small screens */
+    }
+
+    /* Ensure From/To buttons maintain contrast on mobile */
+    .date-target-btn .date-target-label {
+        color: rgba(0, 214, 137, 0.85); /* Maintain high contrast */
+        text-shadow: 0 0 3px rgba(0, 214, 137, 0.4); /* Slightly stronger glow for visibility */
+    }
+}
+
+    .date-input {
+        font-size: 0.48rem; /* Tighter font */
+        padding: 3px 5px; /* Minimal padding */
+        border-radius: 6px; /* Sleeker radius */
+    }
+
+    .date-input-label {
+        font-size: 0.42rem; /* Smaller label */
+        opacity: 0.6; /* More subtle */
+    }
+
+    .date-apply-btn {
+        font-size: 0.48rem; /* Tighter button text */
+        padding: 3px 6px; /* Minimal button padding */
+        margin-top: 2px; /* Tighter margin */
+    }
+}
+
+/* =========================================================
+   ULTRA-MINIMALISTIC CALENDAR PICKER STYLING
+   Sleek, floating calendar tiles for date inputs
+   ========================================================= */
+
+/* Enhanced calendar picker indicator - ultra-minimal */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: brightness(0) saturate(100%) invert(54%) sepia(98%) saturate(450%) hue-rotate(130deg) brightness(95%) contrast(101%);
+    cursor: pointer;
+    opacity: 0.6; /* Subtle opacity for minimalism */
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: scale(0.85); /* Smaller, sleeker icon */
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 0.9; /* Enhanced on hover */
+    transform: scale(0.9); /* Subtle scale effect */
+    filter: brightness(0) saturate(100%) invert(54%) sepia(98%) saturate(450%) hue-rotate(130deg) brightness(110%) contrast(105%);
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:active {
+    transform: scale(0.8); /* Tighter press effect */
+}
+
+/* Enhanced date input styling for calendar tiles */
+.date-input {
+    background: rgba(15, 30, 45, 0.4); /* More transparent for floating effect */
+    border: 1px solid rgba(0, 214, 137, 0.08); /* Ultra-subtle border */
+    color: var(--color-text-primary, rgba(255, 255, 255, 0.9));
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 0.55rem; /* Tighter font size */
+    font-weight: 500;
+    padding: 4px 6px; /* Tighter padding */
+    border-radius: 8px; /* Sleeker radius */
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 100%;
+    cursor: pointer;
+    -webkit-backdrop-filter: blur(8px); /* Subtle blur for floating effect */
+    backdrop-filter: blur(8px);
+}
+
+.date-input:hover {
+    border-color: rgba(0, 214, 137, 0.2); /* Subtle emerald tint */
+    background: rgba(15, 30, 45, 0.6); /* Slightly more opaque on hover */
+    box-shadow: 0 0 8px rgba(0, 214, 137, 0.08); /* Ultra-subtle glow */
+}
+
+.date-input:focus {
+    outline: none;
+    border-color: rgba(0, 214, 137, 0.3); /* Enhanced emerald border */
+    box-shadow: 0 0 0 1px rgba(0, 214, 137, 0.1),
+                0 0 12px rgba(0, 214, 137, 0.06); /* Subtle focus ring */
+    background: rgba(15, 30, 45, 0.7); /* More opaque when focused */
+}
+
+/* Force dark theme for calendar popup - ultra-minimal tiles */
+input[type="date"] {
+    color-scheme: dark;
+}
+
+/* Enhanced calendar popup styling for Chromium browsers - sleeker tiles */
+input[type="date"]::-webkit-datetime-edit {
+    color: var(--color-text-primary, rgba(255, 255, 255, 0.9));
+    font-weight: 500;
+    letter-spacing: 0.02em; /* Tighter letter spacing */
+}
+
+input[type="date"]::-webkit-datetime-edit-fields-wrapper {
+    background: transparent;
+    padding: 1px 0; /* Minimal padding */
+}
+
+/* Calendar tile hover states - ultra-subtle */
+input[type="date"]:hover::-webkit-calendar-picker-indicator {
+    opacity: 0.8;
+    transform: scale(0.88);
+}
+
+/* Focus state for accessibility - minimal ring */
+input[type="date"]:focus::-webkit-calendar-picker-indicator {
+    opacity: 1;
+    transform: scale(0.92);
+}
+

@@ -1,0 +1,120 @@
+/**
+ * Segment Color Coding - Refined Vegas Edition
+ * Elegant, muted tones that complement the metallic navy/forest brand
+ * Professional sportsbook aesthetic with subtle differentiation
+ */
+
+/* Base segment styling - Refined typography */
+.game-segment {
+    font-family: var(--font-body, 'Cormorant Garamond', Georgia, serif);
+    font-size: var(--text-base, 0.6875rem);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    white-space: nowrap;
+    display: inline-block;
+    line-height: 1.3;
+    background: transparent;
+    border: none;
+    padding: 0;
+    transition: opacity 0.2s ease;
+}
+
+/* ═══════════════════════════════════════════════════════
+   FULL GAME - Muted Silver/Platinum
+   Clean, neutral tone - the default professional look
+   ═══════════════════════════════════════════════════════ */
+.game-segment,
+[data-segment*="full-game"] .game-segment,
+.segment-full-game {
+    color: #a8b4bc;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* ═══════════════════════════════════════════════════════
+   1ST HALF - Cool Steel Blue
+   Subtle blue-grey, slightly cooler than full game
+   ═══════════════════════════════════════════════════════ */
+[data-segment*="1st-half"] .game-segment,
+[data-segment*="1h"] .game-segment,
+.segment-1st-half {
+    color: #8fa4b8;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* ═══════════════════════════════════════════════════════
+   2ND HALF - Warm Steel
+   Slightly warmer undertone to distinguish from 1H
+   ═══════════════════════════════════════════════════════ */
+[data-segment*="2nd-half"] .game-segment,
+[data-segment*="2h"] .game-segment,
+.segment-2nd-half {
+    color: #9ca8a8;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* ═══════════════════════════════════════════════════════
+   QUARTERS - Progressive Slate Tones
+   Subtle variations that don't compete for attention
+   ═══════════════════════════════════════════════════════ */
+[data-segment*="1q"] .game-segment,
+.segment-1st-quarter {
+    color: #889098;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+[data-segment*="2q"] .game-segment,
+.segment-2nd-quarter {
+    color: #8c949c;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+[data-segment*="3q"] .game-segment,
+.segment-3rd-quarter {
+    color: #9098a0;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+[data-segment*="4q"] .game-segment,
+.segment-4th-quarter {
+    color: #949ca4;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* ═══════════════════════════════════════════════════════
+   MULTI / PARLAY - Brand Emerald (muted)
+   Uses the brand's forest green to distinguish parlays
+   Professional accent that ties to the brand identity
+   ═══════════════════════════════════════════════════════ */
+.picks-table [data-segment*="multi"] .game-segment,
+.picks-table .segment-multi,
+.picks-table .parlay-row .game-segment,
+.picks-table tr[data-pick-type="parlay"] .game-segment,
+[data-segment*="multi"] .game-segment,
+.segment-multi,
+.parlay-row .game-segment,
+tr[data-pick-type="parlay"] .game-segment {
+    color: #5a9e7c;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* ═══════════════════════════════════════════════════════
+   HOVER STATE - Subtle brightness lift
+   ═══════════════════════════════════════════════════════ */
+.game-segment:hover {
+    opacity: 0.85;
+}
+
+/* ═══════════════════════════════════════════════════════
+   CSS CUSTOM PROPERTIES - For external use
+   ═══════════════════════════════════════════════════════ */
+:root {
+    --segment-full-game: #a8b4bc;
+    --segment-1st-half: #8fa4b8;
+    --segment-2nd-half: #9ca8a8;
+    --segment-1q: #889098;
+    --segment-2q: #8c949c;
+    --segment-3q: #9098a0;
+    --segment-4q: #949ca4;
+    --segment-multi: #5a9e7c;
+}
