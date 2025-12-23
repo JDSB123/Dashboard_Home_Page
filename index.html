@@ -1,35 +1,23 @@
 <!DOCTYPE html>
 <!--
-  ╔═══════════════════════════════════════════════════════════════════════════╗
-  ║  GREEN BIER SPORT VENTURES - DASHBOARD HOME PAGE                          ║
-  ╠═══════════════════════════════════════════════════════════════════════════╣
-  ║  Version:     4.2.0                                                       ║
-  ║  Repository:  github.com/JDSB123/Dashboard_Home_Page                      ║
-  ║  Azure RG:    Dashboard_Home_Page (eastus)                                ║
-  ║  Owner:       jb@greenbiercapital.com                                     ║
-  ║  Updated:     2024-12-22                                                  ║
-  ╚═══════════════════════════════════════════════════════════════════════════╝
+  GREEN BIER DASHBOARD v4.1
+  Main dashboard landing page - Predictive Analytics
 -->
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Green Bier Sport Ventures — Dashboard Home</title>
-
-    <!-- Project Metadata -->
-    <meta name="application-name" content="Dashboard_Home_Page">
-    <meta name="author" content="jb@greenbiercapital.com">
-    <meta name="description" content="Green Bier Sport Ventures Predictive Analytics Dashboard">
-
+    <title>Green Bier Sport Ventures — Dashboard v4.1</title>
+    
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="assets/Logo%208.5.png">
-
+    
     <!-- Google Fonts: Athletic Prestige Design -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&amp;family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Oswald:wght@500;600;700&amp;family=Bebas+Neue&amp;family=Inter:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;family=Exo+2:wght@400;500;600&amp;family=Roboto+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
     <!-- CSS Architecture: Direct Modular Imports (No Orchestrator) -->
-    <!-- Cache version: 20251222 - Dashboard_Home_Page standalone deployment -->
+    <!-- Cache version: 20251218 - Full layout with modular CSS paths -->
 
     <!-- 1. Design Tokens (colors, typography, spacing) -->
     <link rel="stylesheet" href="assets/css/base/variables.css?v=20251218">
@@ -56,27 +44,12 @@
 
     <!-- 7. Utility & Color Systems -->
     <link rel="stylesheet" href="assets/css/components/segment-colors.css?v=20251218">
-    <link rel="stylesheet" href="assets/css/components/toolbar.css?v=20251220">
-    <link rel="stylesheet" href="assets/css/components/notifications-enhanced.css?v=20251220">
 
-    <!-- 8. Animations & Transitions -->
-    <link rel="stylesheet" href="assets/css/components/animations.css?v=20251220">
-    
-    <!-- 9. Mobile Responsiveness -->
-    <link rel="stylesheet" href="assets/css/components/mobile-responsive.css?v=20251220">
-
-    <!-- 10. Theme Support (Light Mode) -->
-    <link rel="stylesheet" href="assets/css/base/theme-light.css?v=20251220">
-
-    <!-- 11. Dashboard-specific styles (self-contained) -->
-    <link rel="stylesheet" href="dashboard/css/dashboard.css?v=20251219">
+    <!-- 8. Dashboard-specific styles (self-contained) -->
+    <link rel="stylesheet" href="assets/css/pages/dashboard.css?v=20251223">
 
     <!-- Runtime config -->
     <script src="config.production.js" defer></script>
-    
-    <!-- Theme Manager (loads early to prevent flash) -->
-    <script src="assets/js/features/theme-manager.js?v=20251220"></script>
-    
     <script src="assets/js/utils/shared-utils.js?v=20251218" defer></script>
     <script src="assets/js/utils/notifications.js?v=20251218" defer></script>
 
@@ -89,16 +62,16 @@
 <nav class="brand-nav" role="navigation" aria-label="Main navigation">
     <ul class="nav-links" aria-label="Primary">
         <li>
-            <a href="index.html" class="nav-link active" aria-current="page">Dashboard Home</a>
+            <a href="index.html" class="nav-link active" aria-current="page">Dashboard</a>
         </li>
         <li>
-            <span class="nav-link disabled" title="Available in main app">Daily Slate</span>
+            <a href="daily-slate.html" class="nav-link">Daily Slate</a>
         </li>
         <li>
-            <span class="nav-link disabled" title="Available in main app">Weekly Lineup</span>
+            <a href="weekly-lineup.html" class="nav-link">Weekly Lineup</a>
         </li>
         <li>
-            <span class="nav-link disabled" title="Available in main app">Odds Market</span>
+            <a href="odds-market.html" class="nav-link">Odds Market</a>
         </li>
         <li class="nav-dropdown">
             <button class="nav-link nav-dropdown-trigger" id="sportsbooks-trigger" aria-expanded="false" aria-haspopup="true" aria-controls="sportsbooks-menu">Sports Books</button>
@@ -191,13 +164,6 @@
             </div>
         </li>
     </ul>
-    <div class="nav-actions">
-        <div class="last-refresh">Last refreshed: 10:42 AM</div>
-        <button class="refresh-btn" aria-label="Refresh data">↻</button>
-        <div class="user-profile">
-            <div class="user-avatar">JB</div>
-        </div>
-    </div>
 </nav>
 
     <main class="main-container">
@@ -205,55 +171,72 @@
         <!-- ===== Topline Header ===== -->
         <header class="dashboard-topline">
             <div class="brand-header-inline">
-                <div class="brand-logo-small">
-                    <span class="brand-initials">GB</span>
-                </div>
-                <div class="brand-text-group">
-                    <h1 class="brand-line-1">Green Bier</h1>
-                    <h2 class="brand-line-2">Sport Ventures</h2>
+                <img class="brand-logo-inline" src="assets/Logo%208.5.png" alt="Green Bier Sport Ventures Logo">
+                <div class="brand-content-inline">
+                    <div class="brand-text-stacked">
+                        <span class="brand-line-1">Green Bier</span>
+                        <span class="brand-line-2"><span class="brand-word">Sport</span> <span class="brand-word">Ventures</span></span>
+                    </div>
                 </div>
             </div>
             
             <div class="kpi-tiles">
                 <!-- KPI Tile 1: Projected PnL -->
-                <div class="kpi-tile" data-action="flip-tile" role="button" tabindex="0" aria-label="Projected PnL KPI, click to flip">
+                <div class="kpi-tile" data-tile-id="1" data-action="flip-tile" role="button" tabindex="0" aria-label="Projected PnL KPI, click to flip">
                     <div class="kpi-tile-layer active">
                         <div class="kpi-label">Projected PnL</div>
-                        <div class="kpi-value positive">+$12,450</div>
-                        <div class="kpi-subtext">Daily Projection</div>
+                        <div class="kpi-value positive">+$0</div>
+                        <div class="kpi-subtext">0 Active Picks</div>
                     </div>
                     <div class="kpi-tile-layer">
-                        <div class="kpi-label">Weekly PnL</div>
-                        <div class="kpi-value positive">+$45,200</div>
-                        <div class="kpi-subtext">This Week</div>
-                    </div>
-                </div>
-
-                <!-- KPI Tile 2: Win Rate -->
-                <div class="kpi-tile" data-action="flip-tile" role="button" tabindex="0" aria-label="Win Rate KPI, click to flip">
-                    <div class="kpi-tile-layer active">
-                        <div class="kpi-label">Win Rate</div>
-                        <div class="kpi-value">68%</div>
-                        <div class="kpi-subtext">Last 50 Picks</div>
-                    </div>
-                    <div class="kpi-tile-layer">
-                        <div class="kpi-label">ROI</div>
-                        <div class="kpi-value positive">14.2%</div>
+                        <div class="kpi-label">Net Profit</div>
+                        <div class="kpi-value">$0</div>
                         <div class="kpi-subtext">Season to Date</div>
                     </div>
                 </div>
 
+                <!-- KPI Tile 2: Win Rate -->
+                <div class="kpi-tile" data-tile-id="2" data-action="flip-tile" role="button" tabindex="0" aria-label="Win Rate KPI, click to flip">
+                    <div class="kpi-tile-layer active">
+                        <div class="kpi-label">Win Rate</div>
+                        <div class="kpi-value">0%</div>
+                        <div class="kpi-subtext">0-0-0 Record</div>
+                    </div>
+                    <div class="kpi-tile-layer">
+                        <div class="kpi-label">ROI</div>
+                        <div class="kpi-value">0%</div>
+                        <div class="kpi-subtext">Return on Investment</div>
+                    </div>
+                </div>
+
                 <!-- KPI Tile 3: Active Volume -->
-                <div class="kpi-tile" data-action="flip-tile" role="button" tabindex="0" aria-label="Active Volume KPI, click to flip">
+                <div class="kpi-tile" data-tile-id="3" data-action="flip-tile" role="button" tabindex="0" aria-label="Active Volume KPI, click to flip">
                     <div class="kpi-tile-layer active">
                         <div class="kpi-label">Active Volume</div>
-                        <div class="kpi-value">$84,500</div>
+                        <div class="kpi-value">$0</div>
                         <div class="kpi-subtext">Total Risk</div>
                     </div>
                     <div class="kpi-tile-layer">
-                        <div class="kpi-label">Pending Picks</div>
-                        <div class="kpi-value">12</div>
-                        <div class="kpi-subtext">Open Action</div>
+                        <div class="kpi-label">To Win</div>
+                        <div class="kpi-value">$0</div>
+                        <div class="kpi-subtext">Potential Payout</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== Date Toggles ===== -->
+            <div class="date-toggles-container">
+                <div class="date-toggles" role="group" aria-label="Date selection">
+                    <button class="date-toggle-btn active" data-range="today" aria-pressed="true">Today</button>
+                    <button class="date-toggle-btn" data-range="tomorrow" aria-pressed="false">Tomorrow</button>
+                    <button class="date-toggle-btn" data-range="7days" aria-pressed="false">Upcoming</button>
+                    <button class="date-toggle-btn" data-range="all" aria-pressed="false">All Active</button>
+                </div>
+                <div class="date-toggles-actions">
+                    <button class="date-clear-btn" aria-label="Clear date filter" title="Clear filter">Clear</button>
+                    <div class="date-toggles-refresh">
+                        <span class="refresh-label">Last refreshed:</span>
+                        <span class="refresh-time" id="last-updated-timestamp">--:--</span>
                     </div>
                 </div>
             </div>
@@ -261,27 +244,10 @@
 
         <!-- ===== Main Dashboard Layout ===== -->
         <div class="main-dashboard-layout">
-            
-            <!-- ===== Date Toggles ===== -->
-            <div class="date-toggles-container">
-                <div class="date-toggles" role="group" aria-label="Date selection">
-                    <button class="date-toggle active" aria-pressed="true">Today</button>
-                    <button class="date-toggle" aria-pressed="false">Tomorrow</button>
-                    <button class="date-toggle" aria-pressed="false">Upcoming</button>
-                    <button class="date-toggle" aria-pressed="false">All Active</button>
-                </div>
-                <div class="toggle-actions">
-                    <button class="action-btn" id="collapse-boxscores-btn" data-action="toggle-boxscores" aria-pressed="false">
-                        <span class="icon">◫</span>
-                        <span class="label">Collapse Box Scores</span>
-                    </button>
-                </div>
-            </div>
 
             <!-- ===== Active Picks Table ===== -->
             <div class="table-container">
                 <div class="table-header-controls">
-                    <h3 class="table-title">Active Picks</h3>
                     <div class="filter-chips" id="filter-chips-container">
                         <!-- Active filters appear here -->
                     </div>
@@ -291,9 +257,12 @@
                     <thead>
                         <tr>
                             <th class="sortable" data-sort="date">
-                                <div class="th-content">
-                                    Date & Time
-                                    <button class="th-filter-btn" aria-label="Filter by date" aria-controls="filter-date" data-filter="date">▼</button>
+                                <div class="th-header-shell">
+                                    <button class="th-sort-btn" aria-label="Sort by date">
+                                        <span class="header-main-text">Date & Time</span>
+                                        <span class="sort-icon" aria-hidden="true">▲</span>
+                                    </button>
+                                    <button class="th-filter-btn" aria-label="Filter by date" aria-controls="filter-date" data-filter="date" type="button"></button>
                                 </div>
                                 <!-- Date Filter Dropdown -->
                                 <div class="th-filter-dropdown" id="filter-date" hidden>
@@ -308,9 +277,12 @@
                                 </div>
                             </th>
                             <th class="sortable" data-sort="matchup">
-                                <div class="th-content">
-                                    Matchup
-                                    <button class="th-filter-btn" aria-label="Filter by matchup" aria-controls="filter-matchup" data-filter="matchup">▼</button>
+                                <div class="th-header-shell">
+                                    <button class="th-sort-btn" aria-label="Sort by matchup">
+                                        <span class="header-main-text">Matchup</span>
+                                        <span class="sort-icon" aria-hidden="true">▲</span>
+                                    </button>
+                                    <button class="th-filter-btn" aria-label="Filter by matchup" aria-controls="filter-matchup" data-filter="matchup" type="button"></button>
                                 </div>
                                 <!-- Matchup Filter Dropdown -->
                                 <div class="th-filter-dropdown" id="filter-matchup" hidden>
@@ -366,9 +338,12 @@
                                 </div>
                             </th>
                             <th class="sortable" data-sort="pick">
-                                <div class="th-content">
-                                    Pick
-                                    <button class="th-filter-btn" aria-label="Filter by pick type" aria-controls="filter-pick" data-filter="pick">▼</button>
+                                <div class="th-header-shell">
+                                    <button class="th-sort-btn" aria-label="Sort by pick">
+                                        <span class="header-main-text">Pick</span>
+                                        <span class="sort-icon" aria-hidden="true">▲</span>
+                                    </button>
+                                    <button class="th-filter-btn" aria-label="Filter by pick type" aria-controls="filter-pick" data-filter="pick" type="button"></button>
                                 </div>
                                 <!-- Pick Filter Dropdown -->
                                 <div class="th-filter-dropdown" id="filter-pick" hidden>
@@ -424,15 +399,20 @@
                                 </div>
                             </th>
                             <th class="center sortable" data-sort="segment">
-                                <div class="th-content">
-                                    Segment
-                                    <!-- Segment filter merged into Pick filter for cleaner UI, but kept here if needed separately -->
+                                <div class="th-header-shell">
+                                    <button class="th-sort-btn" aria-label="Sort by segment">
+                                        <span class="header-main-text">Segment</span>
+                                        <span class="sort-icon" aria-hidden="true">▲</span>
+                                    </button>
                                 </div>
                             </th>
                             <th class="center sortable" data-sort="risk">
-                                <div class="th-content">
-                                    Risk / Win
-                                    <button class="th-filter-btn" aria-label="Filter by risk amount" aria-controls="filter-risk" data-filter="risk">▼</button>
+                                <div class="th-header-shell">
+                                    <button class="th-sort-btn" aria-label="Sort by risk">
+                                        <span class="header-main-text">Risk / Win</span>
+                                        <span class="sort-icon" aria-hidden="true">▲</span>
+                                    </button>
+                                    <button class="th-filter-btn" aria-label="Filter by risk amount" aria-controls="filter-risk" data-filter="risk" type="button"></button>
                                 </div>
                                 <!-- Risk Filter Dropdown -->
                                 <div class="th-filter-dropdown" id="filter-risk" hidden>
@@ -461,11 +441,18 @@
                                     </div>
                                 </div>
                             </th>
-                            <th class="center">Box Score</th>
+                            <th class="center">
+                                <div class="th-header-shell">
+                                    <span class="header-main-text">Box Score</span>
+                                </div>
+                            </th>
                             <th class="center sortable" data-sort="status">
-                                <div class="th-content">
-                                    Status
-                                    <button class="th-filter-btn" aria-label="Filter by status" aria-controls="filter-status" data-filter="status">▼</button>
+                                <div class="th-header-shell">
+                                    <button class="th-sort-btn" aria-label="Sort by status">
+                                        <span class="header-main-text">Status</span>
+                                        <span class="sort-icon" aria-hidden="true">▲</span>
+                                    </button>
+                                    <button class="th-filter-btn" aria-label="Filter by status" aria-controls="filter-status" data-filter="status" type="button"></button>
                                 </div>
                                 <!-- Status Filter Dropdown -->
                                 <div class="th-filter-dropdown" id="filter-status" hidden>
@@ -602,15 +589,12 @@
     <script src="assets/js/features/auto-game-fetcher.js?v=20251218" defer></script>
     <script src="assets/js/features/pick-standardizer.js?v=20251218"></script>
     <script src="assets/js/features/import-options.js?v=20251218" defer></script>
-    
-    <!-- Enhanced notifications -->
-    <script src="assets/js/features/notifications-enhanced.js?v=20251220" defer></script>
-    
-    <!-- Export/Import functionality -->
-    <script src="assets/js/features/export-import.js?v=20251220" defer></script>
 
     <!-- Dashboard-specific: Picks Manager for local development -->
     <script src="dashboard/js/local-picks-manager.js?v=20251219"></script>
+
+    <!-- Dashboard Initialization (KPI tiles, flip, refresh) -->
+    <script src="dashboard/js/dashboard-init.js?v=20251223" defer></script>
 
     <!-- Date Toggles Functionality -->
     <script src="assets/js/utils/date-toggles.js?v=20251218" defer></script>
