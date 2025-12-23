@@ -1,131 +1,121 @@
 /* ==========================================================================
-   KPI TILES - Professional Vegas Sportsbook Style
-   ==========================================================================
-   Clean, data-focused metric cards with subtle polish
+   KPI Tiles Component - Clean & Modern Edition
    ========================================================================== */
 
+/* KPI Tiles Container */
 .kpi-tiles {
     display: flex;
-    gap: var(--space-3);
+    gap: 8px;
     align-items: stretch;
-    height: var(--dashboard-topline-height);
-    flex: 1;
-    justify-content: flex-end;
+    height: var(--dashboard-topline-height, 76px);
+    margin: 0;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
 }
 
+/* KPI Tile - Clean Card Style */
 .kpi-tile {
-    min-width: 120px;
-    max-width: 160px;
-    height: 100%;
-    background: var(--kpi-bg);
-    border: 1px solid var(--kpi-border);
-    border-radius: var(--radius-lg);
-    padding: var(--space-3);
+    width: 100px;
+    height: 76px;
+    box-sizing: border-box;
+    /* Clean, deep background without noise */
+    background: linear-gradient(145deg,
+        rgba(15, 30, 56, 0.7) 0%,
+        rgba(10, 21, 40, 0.7) 100%);
+    border: 1px solid rgba(0, 214, 137, 0.3);
+    border-radius: 6px;
+    padding: 6px 8px;
     position: relative;
     cursor: pointer;
-    transition: all var(--transition-fast);
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     overflow: hidden;
+    user-select: none;
 }
 
 .kpi-tile:hover {
-    border-color: var(--color-border-hover);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md), var(--shadow-glow);
+    background: linear-gradient(145deg, 
+        rgba(20, 38, 72, 0.8) 0%, 
+        rgba(15, 26, 48, 0.8) 100%);
+    border-color: var(--emerald-400);
+    box-shadow: 0 4px 12px rgba(0, 214, 137, 0.15);
+    transform: translateY(-1px);
 }
 
-/* Tile Content Layers */
+.kpi-tile-content {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
 .kpi-tile-layer {
-    display: flex;
+    display: none;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 2px;
     width: 100%;
     height: 100%;
-    position: absolute;
-    inset: 0;
-    padding: var(--space-3);
-    opacity: 0;
-    transform: translateY(8px);
-    transition: opacity var(--transition-base), transform var(--transition-base);
-    pointer-events: none;
+    text-align: center;
+    padding: 0;
 }
 
 .kpi-tile-layer.active {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
+    display: flex;
 }
 
-/* Typography */
+/* Typography - Clean, readable hierarchy */
 .kpi-label {
-    font-family: var(--font-primary);
-    font-size: var(--text-2xs);
-    font-weight: var(--weight-semibold);
-    color: var(--color-text-secondary);
+    font-family: var(--font-body, 'Cormorant Garamond', Georgia, serif);
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: rgba(214, 232, 236, 0.8);
     text-transform: uppercase;
-    letter-spacing: var(--tracking-wider);
+    letter-spacing: 0.05em;
     text-align: center;
-    line-height: 1;
+    line-height: 1.1;
+    white-space: nowrap;
 }
 
 .kpi-value {
-    font-family: var(--font-display);
-    font-size: var(--text-xl);
-    font-weight: var(--weight-bold);
-    color: var(--color-text-primary);
+    font-family: var(--font-display, 'Cormorant Garamond', Georgia, serif);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #f0f8fa;
     line-height: 1;
+    letter-spacing: 0.01em;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
     text-align: center;
-}
-
-.kpi-value.positive {
-    color: var(--color-win);
-}
-
-.kpi-value.negative {
-    color: var(--color-loss);
+    white-space: nowrap;
 }
 
 .kpi-subtext {
-    font-family: var(--font-primary);
-    font-size: var(--text-2xs);
-    font-weight: var(--weight-medium);
-    color: var(--color-text-muted);
+    font-family: var(--font-body, 'Cormorant Garamond', Georgia, serif);
+    font-size: 0.6rem;
+    font-weight: 500;
+    color: var(--emerald-400);
+    opacity: 0.9;
+    letter-spacing: 0.02em;
     text-align: center;
-    line-height: 1;
+    white-space: normal;
+    word-wrap: break-word;
+    max-width: 100%;
+    line-height: 1.15;
 }
 
-/* ===== RESPONSIVE ===== */
-@media (max-width: 1200px) {
-    .kpi-tile {
-        min-width: 100px;
-        max-width: 140px;
-    }
+/* Status Colors */
+.kpi-value.positive { color: var(--emerald-400); }
+.kpi-value.negative { color: #ff5a6e; }
 
-    .kpi-value {
-        font-size: var(--text-lg);
-    }
+/* Responsive - maintain fixed tile size */
+@media (max-width: 1200px) {
+    .kpi-tile { width: 100px; height: 76px; }
+    .kpi-value { font-size: 1.2rem; }
+    .kpi-label { font-size: 0.6rem; }
 }
 
 @media (max-width: 768px) {
-    .kpi-tiles {
-        gap: var(--space-2);
-        justify-content: flex-start;
-        flex-wrap: wrap;
-    }
-
-    .kpi-tile {
-        min-width: 90px;
-        max-width: 120px;
-        flex: 1;
-    }
-
-    .kpi-value {
-        font-size: var(--text-md);
-    }
-
-    .kpi-label,
-    .kpi-subtext {
-        font-size: 9px;
-    }
+    .kpi-tiles { gap: 6px; }
+    .kpi-tile { width: 100px; height: 76px; }
+    .kpi-value { font-size: 1.15rem; }
 }

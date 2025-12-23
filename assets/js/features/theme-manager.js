@@ -6,7 +6,7 @@
 (function() {
     'use strict';
 
-    const THEME_KEY = 'green-bier-theme';
+    const THEME_KEY = 'bears-bulls-theme';
     const THEMES = {
         DARK: 'dark',
         LIGHT: 'light'

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<!--
+  ODDS MARKET PAGE (v3.0)
+  Vegas-style elite odds comparison - multiple sportsbooks side-by-side
+  Consistent with main dashboard styling
+-->
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <title>Green Bier Sport Ventures — Market Odds</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/Logo%208.5.png">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&amp;family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Oswald:wght@500;600;700&amp;family=Bebas+Neue&amp;family=Inter:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;family=Exo+2:wght@400;500;600&amp;family=Roboto+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+
+    <!-- CSS: Bundled for performance -->
+    <link rel="stylesheet" href="dist/bundle.min.css?v=20251222">
+
+    <script src="config.production.js" defer></script>
+    <script src="assets/js/core/debug-config.js?v=20251216" defer></script>
+</head>
+<body class="page-glow page-odds-market">
+
+<nav class="brand-nav" role="navigation" aria-label="Main navigation">
+    <ul class="nav-links" aria-label="Primary">
+        <li>
+            <a href="index.html" class="nav-link">Dashboard</a>
+        </li>
+        <li>
+            <a href="daily-slate.html" class="nav-link">Daily Slate</a>
+        </li>
+        <li>
+            <a href="/bears%26bulls_todays_picks" class="nav-link">Weekly Lineup</a>
+        </li>
+        <li>
+            <a href="odds-market.html" class="nav-link active" aria-current="page">Odds Market</a>
+        </li>
+        <li class="nav-dropdown">
+            <button class="nav-link nav-dropdown-trigger" id="sportsbooks-trigger" aria-expanded="false" aria-haspopup="true" aria-controls="sportsbooks-menu">Sports Books</button>
+            <!-- Sportsbook Dropdown Menu -->
+            <div class="nav-dropdown-menu" id="sportsbooks-menu" aria-labelledby="sportsbooks-trigger" role="region" aria-label="Connected sportsbooks" hidden>
+                <!-- Hulk Wager -->
+                <section class="sportsbook-card" data-book="hulkwager" aria-labelledby="sportsbook-hulkwager-name">
+                    <div class="sportsbook-card-header">
+                        <div class="sportsbook-name-group" id="sportsbook-hulkwager-name">
+                            <span class="connection-status connected"></span>
+                            <span class="sportsbook-name">Hulk Wager</span>
+                        </div>
+                        <div class="sportsbook-meta-compact">
+                            <span class="sportsbook-last-sync">Last: <span class="sync-time">5m ago</span></span>
+                            <button type="button" class="sportsbook-fetch-compact" data-book="hulkwager" aria-label="Fetch picks from Hulk Wager">
+                                <span class="fetch-icon">↻</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="sportsbook-actions-row">
+                        <div class="sportsbook-credentials-group">
+                            <input type="text" id="hulk-username" class="credential-input-compact" placeholder="Username" name="hulkwager-login" autocomplete="off" spellcheck="false" data-form-type="other" inputmode="text" aria-label="Hulk Wager username">
+                            <input type="password" id="hulk-password" class="credential-input-compact" placeholder="Password" name="hulkwager-secret" autocomplete="new-password" spellcheck="false" data-form-type="other" inputmode="text" aria-label="Hulk Wager password">
+                        </div>
+                    </div>
+                </section>
+                <!-- Bombay 711 -->
+                <section class="sportsbook-card" data-book="bombay711" aria-labelledby="sportsbook-bombay711-name">
+                    <div class="sportsbook-card-header">
+                        <div class="sportsbook-name-group" id="sportsbook-bombay711-name">
+                            <span class="connection-status connected"></span>
+                            <span class="sportsbook-name">Bombay 711</span>
+                        </div>
+                        <div class="sportsbook-meta-compact">
+                            <span class="sportsbook-last-sync">Last: <span class="sync-time">12m ago</span></span>
+                            <button type="button" class="sportsbook-fetch-compact" data-book="bombay711" aria-label="Fetch picks from Bombay 711">
+                                <span class="fetch-icon">↻</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="sportsbook-actions-row">
+                        <div class="sportsbook-credentials-group">
+                            <input type="text" id="bombay-username" class="credential-input-compact" placeholder="Username" name="bombay711-login" autocomplete="off" spellcheck="false" data-form-type="other" inputmode="text" aria-label="Bombay 711 username">
+                            <input type="password" id="bombay-password" class="credential-input-compact" placeholder="Password" name="bombay711-secret" autocomplete="new-password" spellcheck="false" data-form-type="other" inputmode="text" aria-label="Bombay 711 password">
+                        </div>
+                    </div>
+                </section>
+                <!-- King of Sports -->
+                <section class="sportsbook-card" data-book="kingofsports" aria-labelledby="sportsbook-kingofsports-name">
+                    <div class="sportsbook-card-header">
+                        <div class="sportsbook-name-group" id="sportsbook-kingofsports-name">
+                            <span class="connection-status connected"></span>
+                            <span class="sportsbook-name">King of Sports</span>
+                        </div>
+                        <div class="sportsbook-meta-compact">
+                            <span class="sportsbook-last-sync">Last: <span class="sync-time">2m ago</span></span>
+                            <button type="button" class="sportsbook-fetch-compact" data-book="kingofsports" aria-label="Fetch picks from King of Sports">
+                                <span class="fetch-icon">↻</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="sportsbook-actions-row">
+                        <div class="sportsbook-credentials-group">
+                            <input type="text" id="kingofsports-username" class="credential-input-compact" placeholder="Username" name="kingofsports-login" autocomplete="off" spellcheck="false" data-form-type="other" inputmode="text" aria-label="King of Sports username">
+                            <input type="password" id="kingofsports-password" class="credential-input-compact" placeholder="Password" name="kingofsports-secret" autocomplete="new-password" spellcheck="false" data-form-type="other" inputmode="text" aria-label="King of Sports password">
+                        </div>
+                    </div>
+                </section>
+                <!-- Prime Time Action -->
+                <section class="sportsbook-card" data-book="primetimeaction" aria-labelledby="sportsbook-primetimeaction-name">
+                    <div class="sportsbook-card-header">
+                        <div class="sportsbook-name-group" id="sportsbook-primetimeaction-name">
+                            <span class="connection-status disconnected"></span>
+                            <span class="sportsbook-name">Prime Time Action</span>
+                        </div>
+                        <div class="sportsbook-meta-compact">
+                            <span class="sportsbook-last-sync">Last: <span class="sync-time">3h ago</span></span>
+                            <button type="button" class="sportsbook-fetch-compact" data-book="primetimeaction" aria-label="Fetch picks from Prime Time Action">
+                                <span class="fetch-icon">↻</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="sportsbook-actions-row">
+                        <div class="sportsbook-credentials-group">
+                            <input type="text" id="primetimeaction-username" class="credential-input-compact" placeholder="Username" name="primetimeaction-login" autocomplete="off" spellcheck="false" data-form-type="other" inputmode="text" aria-label="Prime Time Action username">
+                            <input type="password" id="primetimeaction-password" class="credential-input-compact" placeholder="Password" name="primetimeaction-secret" autocomplete="new-password" spellcheck="false" data-form-type="other" inputmode="text" aria-label="Prime Time Action password">
+                        </div>
+                    </div>
+                </section>
+                <!-- Add Book & Import -->
+                <div class="sportsbook-actions-compact" id="action-buttons" role="group" aria-label="Sportsbook actions">
+                    <button class="action-btn-compact add-book-btn-compact" type="button" aria-label="Add new sportsbook">+ Add Book</button>
+                    <button class="action-btn-compact import-picks-btn" type="button">Upload Picks</button>
+                </div>
+                <!-- Import Options - Replaces buttons when active -->
+                <div class="import-options-popup" id="import-options" hidden>
+                    <div class="import-header">
+                        <span class="import-title">UPLOAD PICKS</span>
+                        <button type="button" class="import-back-btn">✕</button>
+                    </div>
+                    <label for="file-upload" class="import-option-item import-file-zone" id="drop-zone">
+                        <span class="import-option-label">📁 Upload Files</span>
+                        <span class="import-option-desc">PDFs, images (JPG/PNG), HTML, or text files</span>
+                        <input type="file" id="file-upload" name="picks-file" accept=".pdf,.jpg,.jpeg,.png,.html,.htm,.txt,.csv" multiple class="file-input-hidden">
+                    </label>
+                    <div id="file-list" style="margin: 0.5rem 0; display: none;"></div>
+                    <button type="button" id="upload-files-btn" class="paste-action-btn paste-process-btn" style="width: 100%; margin-bottom: 1rem; display: none;">Upload Selected Files</button>
+                    <div class="import-paste-container">
+                        <label for="paste-area" class="import-paste-label">📋 Paste HTML or Text</label>
+                        <textarea id="paste-area" class="import-paste-textarea" placeholder="Paste HTML from sportsbook or text picks data..." rows="4"></textarea>
+                        <div class="import-paste-actions">
+                            <button type="button" class="paste-action-btn paste-process-btn" id="upload-paste-btn">Upload Pasted Content</button>
+                            <button type="button" class="paste-action-btn paste-clear-btn">Clear</button>
+                        </div>
+                    </div>
+                    <div id="upload-status" style="margin-top: 1rem; padding: 0.75rem; border-radius: 6px; display: none;"></div>
+                </div>
+            </div>
+        </li>
+    </ul>
+</nav>
+
+<main class="main-container">
+    <div id="dashboard" class="main-dashboard-layout">
+        
+        <!-- Dashboard Topline -->
+        <div class="dashboard-topline">
+            <!-- Brand Header -->
+            <div class="brand-header-inline" role="banner">
+                <img src="assets/Logo%208.5.png?v=20251216" alt="Green Bier Sport Ventures" class="brand-logo-inline" loading="eager">
+                <div class="brand-content-inline">
+                    <div class="brand-text-stacked">
+                        <span class="brand-line-1">BEARISH</span>
+                        <span class="brand-line-2"><span class="brand-word brand-word-sport">MARKET</span></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KPI Tiles -->
+            <div class="kpi-tiles">
+                <div class="kpi-tile" data-tile-id="1" role="button" tabindex="0">
+                    <div class="kpi-tile-content">
+                        <div class="kpi-tile-layer kpi-tile-front active">
+                            <div class="kpi-label">Games Today</div>
+                            <div class="kpi-value" id="kpi-games">0</div>
+                            <div class="kpi-subtext">Active Markets</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="kpi-tile" data-tile-id="2" role="button" tabindex="0">
+                    <div class="kpi-tile-content">
+                        <div class="kpi-tile-layer kpi-tile-front active">
+                            <div class="kpi-label">Value Plays</div>
+                            <div class="kpi-value" id="kpi-value">0</div>
+                            <div class="kpi-subtext">Best Lines</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="kpi-tile" data-tile-id="3" role="button" tabindex="0">
+                    <div class="kpi-tile-content">
+                        <div class="kpi-tile-layer kpi-tile-front active">
+                            <div class="kpi-label">Bet Slip</div>
+                            <div class="kpi-value" id="kpi-slip">0</div>
+                            <div class="kpi-subtext">Selections</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sport/Market Filters -->
+            <div class="date-toggles-container">
+                <div class="date-toggle-label">Sport</div>
+                <div class="date-toggles" id="sport-tabs">
+                    <button class="date-toggle-btn active" data-sport="all">All</button>
+                    <button class="date-toggle-btn" data-sport="nfl">NFL</button>
+                    <button class="date-toggle-btn" data-sport="nba">NBA</button>
+                    <button class="date-toggle-btn" data-sport="ncaaf">NCAAF</button>
+                    <button class="date-toggle-btn" data-sport="ncaab">NCAAB</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Odds Comparison Board -->
+        <div class="odds-board">
+            
+            <!-- Market Type Selector -->
+            <div class="market-selector">
+                <button class="market-btn active" data-market="spread">Spread</button>
+                <button class="market-btn" data-market="moneyline">Moneyline</button>
+                <button class="market-btn" data-market="total">Total</button>
+                <div class="market-selector-right">
+                    <div class="live-filter">
+                        <input type="checkbox" id="live-only" class="live-checkbox">
+                        <label for="live-only" class="live-label">
+                            <span class="live-dot"></span>
+                            Live Only
+                        </label>
+                    </div>
+                    <button class="refresh-btn" id="refresh-btn" type="button">
+                        <span class="refresh-icon">↻</span>
+                        <span class="refresh-time" id="refresh-time">--:--</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Sportsbook Headers -->
+            <div class="books-header">
+                <div class="books-header-game">Matchup</div>
+                <div class="books-header-books" id="books-header-row">
+                    <!-- Book columns rendered by JS -->
+                </div>
+            </div>
+
+            <!-- Games List -->
+            <div class="games-list" id="games-list">
+                <!-- Game rows rendered by JS -->
+            </div>
+
+            <!-- Empty State -->
+            <div class="odds-empty" id="odds-empty" hidden>
+                <span class="empty-icon">📊</span>
+                <span class="empty-text">No games match current filters</span>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<!-- Bet Slip Panel (slides in from right) -->
+<aside class="bet-slip" id="bet-slip" aria-label="Bet Slip">
+    <div class="bet-slip-header">
+        <h2 class="bet-slip-title">Bet Slip</h2>
+        <span class="bet-slip-count" id="slip-count">0</span>
+        <button class="bet-slip-toggle" id="slip-toggle" aria-label="Toggle bet slip">
+            <span class="toggle-icon">◀</span>
+        </button>
+    </div>
+    <div class="bet-slip-body" id="slip-body">
+        <div class="bet-slip-empty" id="slip-empty">
+            <span class="slip-empty-icon">🎯</span>
+            <span class="slip-empty-text">Click any odds to add to slip</span>
+        </div>
+        <div class="bet-slip-picks" id="slip-picks">
+            <!-- Selections rendered by JS -->
+        </div>
+    </div>
+    <div class="bet-slip-footer" id="slip-footer" hidden>
+        <div class="slip-summary">
+            <div class="slip-row">
+                <span class="slip-label">Total Risk</span>
+                <span class="slip-value" id="slip-risk">$0</span>
+            </div>
+            <div class="slip-row">
+                <span class="slip-label">To Win</span>
+                <span class="slip-value slip-win" id="slip-win">$0</span>
+            </div>
+        </div>
+        <button class="slip-clear-btn" id="slip-clear">Clear All</button>
+    </div>
+</aside>
+
+<!-- Scripts -->
+<script src="assets/js/utils/shared-utils.js?v=20251222" defer></script>
+<script src="assets/js/core/navigation.js?v=20251222" defer></script>
+<script src="assets/js/features/import-options.js?v=20251222" defer></script>
+<script src="assets/js/features/odds-market.js?v=20251222" defer></script>
+
+</body>
+</html>

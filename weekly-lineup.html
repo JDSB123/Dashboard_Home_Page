@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<!--
+  WEEKLY LINEUP PAGE (v3.0)
+  - Table headers with sort and filter functionality
+-->
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bears & Bulls — Today's Picks</title>
+    <link rel="icon" type="image/png" href="assets/Logo%208.5.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&amp;family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Oswald:wght@500;600;700&amp;family=Bebas+Neue&amp;family=Inter:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;family=Exo+2:wght@400;500;600&amp;family=Roboto+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+    <!-- CSS: Bundled for performance -->
+    <link rel="stylesheet" href="dist/bundle.min.css?v=20251222">
+    <script src="config.production.js" defer></script>
+    <script src="assets/js/features/auto-game-fetcher.js?v=20251213" defer></script>
+    <script src="assets/js/core/debug-config.js?v=20251128g" defer></script>
+</head>
+<body class="page-glow page-weekly-lineup">
+<noscript>
+    <div class="noscript-warning" role="alert">
+        <strong>JavaScript Required:</strong> This dashboard requires JavaScript.
+    </div>
+</noscript>
+
+<nav class="brand-nav" role="navigation" aria-label="Main navigation">
+    <ul class="nav-links" aria-label="Primary">
+        <li><a href="index.html" class="nav-link">Dashboard</a></li>
+        <li><a href="daily-slate.html" class="nav-link">Daily Slate</a></li>
+        <li><a href="weekly-lineup.html" class="nav-link active" aria-current="page">Weekly Lineup</a></li>
+        <li><a href="odds-market.html" class="nav-link">Odds Market</a></li>
+        <li class="nav-dropdown">
+            <button class="nav-link nav-dropdown-trigger" id="sportsbooks-trigger" aria-expanded="false" aria-haspopup="true" aria-controls="sportsbooks-menu">Sports Books</button>
+            <div class="nav-dropdown-menu" id="sportsbooks-menu" aria-labelledby="sportsbooks-trigger" role="region" aria-label="Connected sportsbooks" hidden>
+                <section class="sportsbook-card" data-book="hulkwager"><div class="sportsbook-card-header"><div class="sportsbook-name-group"><span class="connection-status connected"></span><span class="sportsbook-name">Hulk Wager</span></div><div class="sportsbook-meta-compact"><span class="sportsbook-last-sync">Last: <span class="sync-time">5m ago</span></span><button type="button" class="sportsbook-fetch-compact" data-book="hulkwager"><span class="fetch-icon">↻</span></button></div></div><div class="sportsbook-actions-row"><div class="sportsbook-credentials-group"><input type="text" id="hulk-username" class="credential-input-compact" placeholder="Username"><input type="password" id="hulk-password" class="credential-input-compact" placeholder="Password"></div></div></section>
+                <section class="sportsbook-card" data-book="bombay711"><div class="sportsbook-card-header"><div class="sportsbook-name-group"><span class="connection-status connected"></span><span class="sportsbook-name">Bombay 711</span></div><div class="sportsbook-meta-compact"><span class="sportsbook-last-sync">Last: <span class="sync-time">12m ago</span></span><button type="button" class="sportsbook-fetch-compact" data-book="bombay711"><span class="fetch-icon">↻</span></button></div></div><div class="sportsbook-actions-row"><div class="sportsbook-credentials-group"><input type="text" id="bombay-username" class="credential-input-compact" placeholder="Username"><input type="password" id="bombay-password" class="credential-input-compact" placeholder="Password"></div></div></section>
+                <section class="sportsbook-card" data-book="kingofsports"><div class="sportsbook-card-header"><div class="sportsbook-name-group"><span class="connection-status connected"></span><span class="sportsbook-name">King of Sports</span></div><div class="sportsbook-meta-compact"><span class="sportsbook-last-sync">Last: <span class="sync-time">2m ago</span></span><button type="button" class="sportsbook-fetch-compact" data-book="kingofsports"><span class="fetch-icon">↻</span></button></div></div><div class="sportsbook-actions-row"><div class="sportsbook-credentials-group"><input type="text" id="kingofsports-username" class="credential-input-compact" placeholder="Username"><input type="password" id="kingofsports-password" class="credential-input-compact" placeholder="Password"></div></div></section>
+                <section class="sportsbook-card" data-book="primetimeaction"><div class="sportsbook-card-header"><div class="sportsbook-name-group"><span class="connection-status disconnected"></span><span class="sportsbook-name">Prime Time Action</span></div><div class="sportsbook-meta-compact"><span class="sportsbook-last-sync">Last: <span class="sync-time">3h ago</span></span><button type="button" class="sportsbook-fetch-compact" data-book="primetimeaction"><span class="fetch-icon">↻</span></button></div></div><div class="sportsbook-actions-row"><div class="sportsbook-credentials-group"><input type="text" id="primetimeaction-username" class="credential-input-compact" placeholder="Username"><input type="password" id="primetimeaction-password" class="credential-input-compact" placeholder="Password"></div></div></section>
+                <div class="sportsbook-actions-compact" id="action-buttons"><button class="action-btn-compact add-book-btn-compact" type="button">+ Add Book</button><button class="action-btn-compact import-picks-btn" type="button">Upload Picks</button></div>
+                <div class="import-options-popup" id="import-options" hidden><div class="import-header"><span class="import-title">UPLOAD PICKS</span><button type="button" class="import-back-btn">✕</button></div><label for="file-upload" class="import-option-item import-file-zone" id="drop-zone"><span class="import-option-label">📁 Upload Files</span><span class="import-option-desc">PDFs, images, HTML, or text files</span><input type="file" id="file-upload" name="picks-file" accept=".pdf,.jpg,.jpeg,.png,.html,.htm,.txt,.csv" multiple class="file-input-hidden"></label><div id="file-list"></div><button type="button" id="upload-files-btn" class="paste-action-btn paste-process-btn">Upload Selected Files</button><div class="import-paste-container"><label for="paste-area" class="import-paste-label">📋 Paste HTML or Text</label><textarea id="paste-area" class="import-paste-textarea" placeholder="Paste HTML..." rows="4"></textarea><div class="import-paste-actions"><button type="button" class="paste-action-btn paste-process-btn" id="upload-paste-btn">Upload Pasted Content</button><button type="button" class="paste-action-btn paste-clear-btn">Clear</button></div></div><div id="upload-status"></div></div>
+            </div>
+        </li>
+    </ul>
+</nav>
+
+<main class="main-container">
+    <div id="dashboard" class="main-dashboard-layout">
+        <div class="dashboard-topline">
+            <div class="brand-header-inline" role="banner">
+                <img src="assets/Logo%208.5.png?v=20251126" alt="Bears & Bulls" class="brand-logo-inline" loading="eager">
+                <div class="brand-content-inline">
+                    <div class="brand-text-stacked">
+                        <span class="brand-line-1">Bears & Bulls</span>
+                        <span class="brand-line-2"><span class="brand-word">WEEKLY LINEUP</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="parsed-picks-container" id="parsed-picks-container" hidden>
+            <div class="parsed-picks-header"><h2 class="parsed-picks-title">Parsed Picks <span class="parsed-count" id="parsed-picks-count">(0)</span></h2><div class="parsed-picks-actions"><button type="button" class="select-all-btn" id="select-all-picks">Select All</button><button type="button" class="clear-selection-btn" id="clear-selection">Clear Selection</button></div></div>
+            <div class="parsed-picks-list" id="parsed-picks-list"></div>
+            <div class="parsed-picks-footer"><div class="selected-summary"><span id="selected-count">0</span> picks selected</div><button type="button" class="add-bets-btn" id="add-bets-btn" disabled>Add Bets & Send to Dashboard</button></div>
+        </div>
+
+        <div class="bet-modal-overlay" id="bet-modal-overlay" hidden>
+            <div class="bet-modal" id="bet-modal"><div class="bet-modal-header"><h2>Enter Bet Amounts</h2><button type="button" class="bet-modal-close" id="close-bet-modal">✕</button></div><div class="bet-modal-content"><div class="bet-unit-config"><label>Unit Value: $</label><input type="number" id="unit-value" value="1000" min="1" step="100"><span class="unit-hint">(e.g., $1 input = $1,000 actual)</span></div><div class="bet-input-mode"><label class="mode-option"><input type="radio" name="bet-mode" value="risk" checked><span>Enter $ At Risk</span></label><label class="mode-option"><input type="radio" name="bet-mode" value="win"><span>Enter To Win</span></label></div><div class="selected-picks-bet-list" id="selected-picks-bet-list"></div></div><div class="bet-modal-footer"><button type="button" class="bet-modal-btn cancel" id="cancel-bets">Cancel</button><button type="button" class="bet-modal-btn confirm" id="confirm-bets">Add to Dashboard</button></div></div>
+        </div>
+
+        <div class="table-container weekly-lineup-table-wrapper">
+            <!-- Filter Toolbar -->
+            <div class="filter-toolbar" id="filter-toolbar">
+                <div class="ft-left">
+                    <!-- League pills -->
+                    <button class="ft-pill ft-league" data-league="nba">NBA</button>
+                    <button class="ft-pill ft-league" data-league="ncaab">NCAAM</button>
+                    <button class="ft-pill ft-league" data-league="nfl">NFL</button>
+                    <button class="ft-pill ft-league" data-league="ncaaf">NCAAF</button>
+                    <button class="ft-pill ft-league" data-league="nhl">NHL</button>
+                    <!-- Edge dropdown -->
+                    <div class="ft-dropdown">
+                        <button class="ft-dropdown-btn ft-edge-btn" id="edge-dropdown-btn"><svg class="edge-svg" viewBox="0 0 16 16" fill="currentColor"><path d="M4 14V9h2v5H4zm3 0V6h2v8H7zm3 0V2h2v12h-2z"/></svg>Edge ▾</button>
+                        <div class="ft-dropdown-menu" id="edge-dropdown-menu">
+                            <button class="ft-dropdown-item edge-item edge-high" data-f="edge" data-v="high">Best (5%+)</button>
+                            <button class="ft-dropdown-item edge-item edge-medium" data-f="edge" data-v="medium">Good (2-5%)</button>
+                            <button class="ft-dropdown-item edge-item edge-low" data-f="edge" data-v="low">Low (&lt;2%)</button>
+                        </div>
+                    </div>
+                    <!-- Fire dropdown - Original emoji version -->
+                    <div class="ft-dropdown">
+                        <button class="ft-dropdown-btn" id="fire-dropdown-btn">🔥 Fire ▾</button>
+                        <div class="ft-dropdown-menu" id="fire-dropdown-menu">
+                            <button class="ft-dropdown-item" data-f="fire" data-v="5">🔥🔥🔥🔥🔥 Max</button>
+                            <button class="ft-dropdown-item" data-f="fire" data-v="4">🔥🔥🔥🔥 Hot</button>
+                            <button class="ft-dropdown-item" data-f="fire" data-v="3">🔥🔥🔥 Warm</button>
+                            <button class="ft-dropdown-item" data-f="fire" data-v="2">🔥🔥</button>
+                            <button class="ft-dropdown-item" data-f="fire" data-v="1">🔥</button>
+                        </div>
+                    </div>
+                    <button class="ft-clear" id="ft-clear">✕ Clear</button>
+                </div>
+                <div class="ft-right">
+                    <!-- Fetch dropdown with league logos -->
+                    <div class="ft-dropdown">
+                        <button class="ft-dropdown-btn ft-fetch-btn" id="fetch-dropdown-btn"><svg class="fetch-svg" viewBox="0 0 16 16" fill="currentColor"><path d="M8 12l-4-4h2.5V3h3v5H12L8 12z"/><path d="M2 14v-2h12v2H2z"/></svg>Fetch Picks ▾</button>
+                        <div class="ft-dropdown-menu ft-fetch-menu" id="fetch-dropdown-menu">
+                            <button class="ft-dropdown-item fetch-all-item" data-fetch="all">Fetch All Leagues</button>
+                            <div class="ft-menu-divider"></div>
+                            <button class="ft-dropdown-item league-fetch-item" data-fetch="nba"><img src="https://a.espncdn.com/i/teamlogos/leagues/500/nba.png" class="league-logo-sm" alt=""> NBA</button>
+                            <button class="ft-dropdown-item league-fetch-item" data-fetch="ncaab"><img src="assets/logo_ncaam_bball.png" class="league-logo-sm" alt="NCAAM"> NCAAM</button>
+                            <button class="ft-dropdown-item league-fetch-item" data-fetch="nfl"><img src="https://a.espncdn.com/i/teamlogos/leagues/500/nfl.png" class="league-logo-sm" alt="NFL"> NFL</button>
+                            <button class="ft-dropdown-item league-fetch-item" data-fetch="ncaaf"><img src="assets/logo_ncaaf.png" class="league-logo-sm" alt="NCAAF"> NCAAF</button>
+                            <button class="ft-dropdown-item league-fetch-item" data-fetch="nhl"><img src="https://a.espncdn.com/i/teamlogos/leagues/500/nhl.png" class="league-logo-sm" alt=""> NHL</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-filter-chips-wrapper">
+                <div class="table-filter-chips filter-chips" id="table-filter-chips" aria-live="polite" data-has-chips="false"></div>
+            </div>
+            <table class="picks-table weekly-lineup-table" aria-label="Today's picks - sorted by edge">
+                <thead>
+                    <tr>
+                        <th scope="col" data-sort="date" class="col-datetime">
+                            <div class="th-header-shell">
+                                <button class="th-sort-btn" aria-label="Sort by date and time (CST)">
+                                    <span class="header-main-text">Date & Time</span>
+                                    <span class="header-subtext">(CST)</span>
+                                    <span class="sort-icon" aria-hidden="true">▲</span>
+                                </button>
+                                <button class="th-filter-btn" data-filter="datetime" aria-label="Filter by date and time" aria-expanded="false" aria-controls="filter-datetime" type="button"></button>
+                            </div>
+                            <div class="th-filter-dropdown nav-panel-dropdown date-filter-compact" id="filter-datetime" role="dialog" hidden>
+                                <div class="filter-header-integrated"><span class="filter-title">Date & Time</span><div class="filter-quick-actions"><button class="filter-action-btn" data-action="select-all">All</button><button class="filter-action-btn" data-action="clear">Clear</button></div></div>
+                                <div class="date-range-selector"><button class="date-range-btn active" data-range="today">Today</button><button class="date-range-btn" data-range="tomorrow">Tomorrow</button><button class="date-range-btn" data-range="week">This Week</button></div>
+                                <div class="filter-section-compact"><div class="section-label">Time Slots</div><div class="time-slots"><button class="time-slot active" data-time="morning">Morning</button><button class="time-slot active" data-time="afternoon">Afternoon</button><button class="time-slot active" data-time="evening">Evening</button><button class="time-slot active" data-time="primetime">Primetime</button><button class="time-slot active" data-time="late">Late Night</button></div></div>
+                            </div>
+                        </th>
+                        <th scope="col" data-sort="league" class="center col-league">
+                            <div class="th-header-shell">
+                                <button class="th-sort-btn" aria-label="Sort by league"><span class="header-main-text">League</span><span class="sort-icon" aria-hidden="true">▲</span></button>
+                                <button class="th-filter-btn" data-filter="league" aria-label="Filter by league" aria-expanded="false" aria-controls="filter-league" type="button"></button>
+                            </div>
+                            <div class="th-filter-dropdown nav-panel-dropdown filter-integrated" id="filter-league" role="dialog" hidden>
+                                <div class="filter-header-integrated"><span class="filter-title">League</span><div class="filter-quick-actions"><button class="filter-action-btn" data-action="select-all">All</button><button class="filter-action-btn" data-action="clear">Clear</button></div></div>
+                                <div class="filter-section-compact"><div class="league-pills"><button class="league-pill active" data-league="all">All</button><button class="league-pill" data-league="nba">NBA</button><button class="league-pill" data-league="nfl">NFL</button><button class="league-pill" data-league="ncaab">NCAAB</button><button class="league-pill" data-league="ncaaf">NCAAF</button><button class="league-pill" data-league="nhl">NHL</button><button class="league-pill" data-league="mlb">MLB</button></div></div>
+                            </div>
+                        </th>
+                        <th scope="col" data-sort="matchup" class="col-matchup">
+                            <div class="th-header-shell">
+                                <button class="th-sort-btn" aria-label="Sort by Matchup"><span class="header-main-text">Matchup</span><span class="header-subtext">(Away vs. Home)</span><span class="sort-icon" aria-hidden="true">▲</span></button>
+                                <button class="th-filter-btn" data-filter="matchup" aria-label="Filter by matchup" aria-expanded="false" aria-controls="filter-matchup" type="button"></button>
+                            </div>
+                            <div class="th-filter-dropdown nav-panel-dropdown filter-integrated" id="filter-matchup" role="dialog" hidden>
+                                <div class="filter-header-integrated"><span class="filter-title">Matchup</span><div class="filter-quick-actions"><button class="filter-action-btn" data-action="select-all">All</button><button class="filter-action-btn" data-action="clear">Clear</button></div></div>
+                                <div class="filter-section-compact"><div class="teams-search-box"><input type="text" class="team-search" placeholder="Search teams..." aria-label="Search teams"></div><div class="teams-grid" data-team-filter-groups></div></div>
+                            </div>
+                        </th>
+                        <th scope="col" data-sort="segment" class="center col-segment">
+                            <div class="th-header-shell">
+                                <button class="th-sort-btn" aria-label="Sort by segment"><span class="header-main-text">Segment</span><span class="sort-icon" aria-hidden="true">▲</span></button>
+                                <button class="th-filter-btn" data-filter="segment" aria-label="Filter by segment" aria-expanded="false" aria-controls="filter-segment" type="button"></button>
+                            </div>
+                            <div class="th-filter-dropdown nav-panel-dropdown filter-integrated" id="filter-segment" role="dialog" hidden>
+                                <div class="filter-header-integrated"><span class="filter-title">Segment</span><div class="filter-quick-actions"><button class="filter-action-btn" data-action="select-all">All</button><button class="filter-action-btn" data-action="clear">Clear</button></div></div>
+                                <div class="filter-section-compact"><div class="segment-pills"><button class="segment-pill active" data-segment="all">All</button><button class="segment-pill" data-segment="full">Full Game</button><button class="segment-pill" data-segment="1h">1st Half</button><button class="segment-pill" data-segment="2h">2nd Half</button></div></div>
+                            </div>
+                        </th>
+                        <th scope="col" data-sort="pick" class="col-pick">
+                            <div class="th-header-shell">
+                                <button class="th-sort-btn" aria-label="Sort by pick"><span class="header-main-text">Pick</span><span class="sort-icon" aria-hidden="true">▲</span></button>
+                                <button class="th-filter-btn" data-filter="pick" aria-label="Filter by pick type" aria-expanded="false" aria-controls="filter-pick" type="button"></button>
+                            </div>
+                            <div class="th-filter-dropdown nav-panel-dropdown filter-integrated" id="filter-pick" role="dialog" hidden>
+                                <div class="filter-header-integrated"><span class="filter-title">Pick Type</span><div class="filter-quick-actions"><button class="filter-action-btn" data-action="select-all">All</button><button class="filter-action-btn" data-action="clear">Clear</button></div></div>
+                                <div class="filter-section-compact"><div class="pick-type-pills"><button class="pick-pill active" data-pick="all">All</button><button class="pick-pill" data-pick="spread">Spread</button><button class="pick-pill" data-pick="ml">Moneyline</button><button class="pick-pill" data-pick="total">Total</button><button class="pick-pill" data-pick="tt">Team Total</button></div></div>
+                            </div>
+                        </th>
+                        <th scope="col" data-sort="edge" class="center col-edge sort-desc" aria-sort="descending">
+                            <div class="th-header-shell">
+                                <button class="th-sort-btn" aria-label="Sort by edge"><span class="header-main-text">Edge</span><span class="sort-icon" aria-hidden="true">▼</span></button>
+                                <button class="th-filter-btn" data-filter="edge" aria-label="Filter by edge" aria-expanded="false" aria-controls="filter-edge" type="button"></button>
+                            </div>
+                            <div class="th-filter-dropdown nav-panel-dropdown filter-integrated" id="filter-edge" role="dialog" hidden>
+                                <div class="filter-header-integrated"><span class="filter-title">Edge</span><div class="filter-quick-actions"><button class="filter-action-btn" data-action="select-all">All</button><button class="filter-action-btn" data-action="clear">Clear</button></div></div>
+                                <div class="filter-section-compact"><div class="edge-pills"><button class="edge-pill active" data-edge="all">All</button><button class="edge-pill" data-edge="high">High (5%+)</button><button class="edge-pill" data-edge="medium">Medium (2-5%)</button><button class="edge-pill" data-edge="low">Low (&lt;2%)</button></div></div>
+                            </div>
+                        </th>
+                        <th scope="col" data-sort="fire" class="center col-fire">
+                            <div class="th-header-shell">
+                                <button class="th-sort-btn" aria-label="Sort by fire rating"><span class="header-main-text">Fire</span><span class="sort-icon" aria-hidden="true">▲</span></button>
+                                <button class="th-filter-btn" data-filter="fire" aria-label="Filter by fire rating" aria-expanded="false" aria-controls="filter-fire" type="button"></button>
+                            </div>
+                            <div class="th-filter-dropdown nav-panel-dropdown filter-integrated" id="filter-fire" role="dialog" hidden>
+                                <div class="filter-header-integrated"><span class="filter-title">Fire Rating</span><div class="filter-quick-actions"><button class="filter-action-btn" data-action="select-all">All</button><button class="filter-action-btn" data-action="clear">Clear</button></div></div>
+                                <div class="filter-section-compact"><div class="fire-pills"><button class="fire-pill active" data-fire="all">All</button><button class="fire-pill" data-fire="5">🔥🔥🔥🔥🔥</button><button class="fire-pill" data-fire="4">🔥🔥🔥🔥</button><button class="fire-pill" data-fire="3">🔥🔥🔥</button><button class="fire-pill" data-fire="2">🔥🔥</button><button class="fire-pill" data-fire="1">🔥</button></div></div>
+                            </div>
+                        </th>
+                        <th scope="col" class="tracker-column center col-track">
+                            <div class="th-header-shell"><span class="header-main-text">Track</span></div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="picks-tbody">
+                    <tr class="loading-row" aria-busy="true">
+                        <td colspan="8" class="loading-cell"><span class="loading-spinner" aria-label="Loading picks...">Loading picks...</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<script src="assets/js/utils/shared-utils.js?v=20251222" defer></script>
+<script src="assets/js/core/navigation.js?v=20251222" defer></script>
+<script src="assets/js/modules/picks-dom-utils.js?v=20251222" defer></script>
+<script src="assets/js/utils/logo-cache.js?v=20251222" defer></script>
+<script src="assets/js/features/live-scores.js?v=20251222" defer></script>
+<script src="assets/js/features/weekly-lineup.js?v=20251222" defer></script>
+<script src="assets/js/modules/picks-state-manager.js?v=20251222" defer></script>
+<script src="assets/js/modules/picks-table-renderer.js?v=20251222" defer></script>
+<script src="assets/js/modules/picks-filter-manager.js?v=20251222" defer></script>
+
+</body>
+</html>

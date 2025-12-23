@@ -365,6 +365,11 @@
                 endDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
                 break;
 
+            case 'tomorrow':
+                startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+                endDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 23, 59, 59, 999);
+                break;
+
             case 'week':
                 // Current week (Sunday to Saturday)
                 const dayOfWeek = now.getDay();
@@ -377,10 +382,9 @@
                 break;
 
             case '7days':
-                startDate = new Date(now);
-                startDate.setDate(now.getDate() - 7);
-                startDate.setHours(0, 0, 0, 0);
-                endDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+                // Next 7 days (upcoming)
+                startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                endDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 7, 23, 59, 59, 999);
                 break;
 
             case 'month':

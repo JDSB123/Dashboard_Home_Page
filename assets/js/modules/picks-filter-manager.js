@@ -446,25 +446,76 @@
          * Check if row passes all filters
          */
         passesAllFilters(row) {
-            if (!this.passesDateFilter(row)) return false;
-            if (!this.passesMatchupFilter(row)) return false;
-            if (!this.passesPickFilter(row)) return false;
-            if (!this.passesRiskFilter(row)) return false;
-            if (!this.passesStatusFilter(row)) return false;
+            const filters = window.tableState?.filters;
+            if (!filters) return true;
+
+            // 1. Search Filter
+            if (filters.search) {
+                const rowText = row.textContent.toLowerCase();
+                if (!rowText.includes(filters.search)) return false;
+            }
+
+            // 2. Date Filter
+            if (filters.date) {
+                const { start, end } = filters.date;
+                if (start && end) {
+                    const rowEpoch = parseInt(row.getAttribute('data-epoch'), 10);
+                    if (isNaN(rowEpoch)) return false; 
+                    
+                    const rowDate = new Date(rowEpoch * 1000);
+                    // Set times to ensure inclusive comparison
+                    const startDate = new Date(start); startDate.setHours(0,0,0,0);
+                    const endDate = new Date(end); endDate.setHours(23,59,59,999);
+                    
+                    if (rowDate < startDate || rowDate > endDate) return false;
+                }
+            }
+
+            // 3. League Filter
+            if (filters.matchup?.league) {
+                const rowLeague = (row.getAttribute('data-league') || '').toLowerCase();
+                if (rowLeague !== filters.matchup.league.toLowerCase()) return false;
+            }
+
+            // 4. Segment Filter
+            if (filters.pick?.segment) {
+                const rowSegment = (row.getAttribute('data-segment') || '').toLowerCase();
+                let normalizedRowSegment = rowSegment;
+                if (rowSegment === 'full game') normalizedRowSegment = 'full';
+                
+                if (normalizedRowSegment !== filters.pick.segment.toLowerCase()) return false;
+            }
 
             return true;
         },
 
         /**
-         * Apply filters to table
+         * Apply filters to table (debounced for performance)
          */
-        applyFilters() {
-            if (window.PicksTableRenderer) {
-                window.PicksTableRenderer.updateTable();
-            } else {
-                console.warn('PicksTableRenderer not loaded');
-            }
-        },
+        applyFilters: (function() {
+            // Create debounced version of the actual filter application
+            let debouncedApply = null;
+
+            return function() {
+                // Lazy-init debounced function (SharedUtils may not be loaded yet)
+                if (!debouncedApply && window.SharedUtils?.debounce) {
+                    debouncedApply = window.SharedUtils.debounce(function() {
+                        if (window.PicksTableRenderer) {
+                            window.PicksTableRenderer.updateTable();
+                        }
+                    }, 150);
+                }
+
+                // Use debounced version if available, otherwise apply immediately
+                if (debouncedApply) {
+                    debouncedApply();
+                } else if (window.PicksTableRenderer) {
+                    window.PicksTableRenderer.updateTable();
+                } else {
+                    console.warn('PicksTableRenderer not loaded');
+                }
+            };
+        })(),
 
         /**
          * Apply specific filter type

@@ -1,93 +1,321 @@
 /* ==========================================================================
-   BRAND HEADER - Professional Vegas Sportsbook Style
-   ==========================================================================
-   Clean, bold typography with subtle metallic accent
+   Brand Header - Bold Professional Design
+   Green Bier Sport Ventures Dashboard
    ========================================================================== */
 
 .brand-header-inline {
     display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    height: var(--dashboard-topline-height);
+    align-items: flex-end; /* Align to bottom edge to match KPI tiles and date toggles */
+    gap: 8px;
+    flex: 0 0 auto;
+    min-width: 220px;
+    position: relative;
+    z-index: 200;
+    height: var(--dashboard-topline-height, 76px);
+    margin-right: 0;
+    padding: 0 8px;
+}
+
+/* Bear Shield Logo - Sharp edges with subtle glow, matches KPI tile height */
+.brand-logo-inline {
+    display: block;
+    height: var(--dashboard-topline-height, 76px); /* Match KPI tile height exactly */
+    width: auto;
+    min-width: var(--dashboard-topline-height, 76px);
+    object-fit: contain;
+    /* Subtle definition without pixelation */
+    filter: 
+        contrast(1.05) 
+        brightness(1.02)
+        drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8))
+        drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6))
+        drop-shadow(0 0 8px rgba(0, 143, 88, 0.4))
+        drop-shadow(0 0 12px rgba(var(--color-primary-bright-rgb), 0.3));
     flex-shrink: 0;
+    /* Subtle static glow pulse (no movement) */
+    animation: logo-static-glow 4s ease-in-out infinite;
 }
 
-/* Logo Container */
-.brand-logo-small {
-    width: 48px;
-    height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, var(--color-bg-elevated), var(--color-bg-surface));
-    border: 1px solid var(--color-border-accent);
-    border-radius: var(--radius-lg);
-    flex-shrink: 0;
+@keyframes logo-static-glow {
+    0%, 100% {
+        filter: 
+            contrast(1.05) 
+            brightness(1.02)
+            drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8))
+            drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6))
+            drop-shadow(0 0 8px rgba(0, 143, 88, 0.4))
+            drop-shadow(0 0 12px rgba(var(--color-primary-bright-rgb), 0.3));
+    }
+    50% {
+        filter: 
+            contrast(1.08) 
+            brightness(1.04)
+            drop-shadow(0 1px 3px rgba(0, 0, 0, 0.85))
+            drop-shadow(0 2px 5px rgba(0, 0, 0, 0.65))
+            drop-shadow(0 0 10px rgba(0, 143, 88, 0.5))
+            drop-shadow(0 0 14px rgba(var(--color-primary-bright-rgb), 0.4));
+    }
 }
 
-.brand-initials {
-    font-family: var(--font-display);
-    font-size: var(--text-xl);
-    font-weight: var(--weight-bold);
-    color: var(--color-primary);
-    letter-spacing: var(--tracking-tight);
-}
-
-/* Brand Text */
-.brand-text-group {
+/* Brand Content Container - Fill entire height to align with logo and tiles */
+.brand-content-inline {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    justify-content: flex-end; /* Align content to bottom edge */
+    align-items: flex-start;
+    height: 100%;
+    flex: 1;
+    min-height: var(--dashboard-topline-height, 76px); /* Ensure it fills the full height */
 }
 
+/* Brand text fills container - sleek elegant stack with tight spacing */
+/* GREEN BIER on top, SPORT VENTURES below - aligned to top and bottom edges */
+.brand-text-stacked {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Push GREEN BIER to top, SPORT VENTURES to bottom */
+    gap: 0; /* No gap - space-between handles spacing */
+    align-items: flex-start;
+    min-width: clamp(200px, 12vw, 320px);
+    width: 100%; /* Allow full width so SPORT VENTURES can extend */
+    height: 100%; /* Fill full height to align with container */
+    padding: 0;
+}
+
+/* Primary Brand Name - Blockier Geometric Typography */
+/* LINE 1: GREEN BIER - Stacked on top of SPORT VENTURES */
 .brand-line-1 {
-    font-family: var(--font-display);
-    font-size: var(--text-2xl);
-    font-weight: var(--weight-bold);
-    color: var(--color-text-primary);
-    letter-spacing: var(--tracking-wide);
+    font-family: 'Cormorant Garamond', Georgia, serif; /* Maintain Garamond font */
+    font-weight: 900; /* Bold for emphasis */
+    font-size: calc(var(--dashboard-topline-height, 76px) * 0.62); /* Larger to fill more vertical space */
+    letter-spacing: 0.02em; /* Closer letter spacing */
     text-transform: uppercase;
-    line-height: var(--leading-tight);
+    text-align: left;
     margin: 0;
+    padding: 0;
+    display: block;
+    order: 1; /* Explicitly ensure GREEN BIER is first (on top) */
+    width: fit-content; /* Only take up needed width so SPORT VENTURES can extend past */
+    max-width: 100%;
+    /* Metallic Emerald Gradient with moving shimmer highlight */
+    background: 
+        linear-gradient(
+            110deg,
+            transparent 0%,
+            transparent 25%,
+            rgba(200, 255, 230, 0.5) 35%,
+            rgba(240, 255, 250, 0.7) 40%,
+            rgba(200, 255, 230, 0.5) 45%,
+            transparent 55%,
+            transparent 100%
+        ),
+        linear-gradient(
+            135deg, 
+            #007a4d 0%, 
+            #00b06c 20%,
+            #00d689 35%,
+            #007a4d 50%, 
+            #00b06c 65%,
+            #008f58 80%,
+            #005a38 100%
+        );
+    background-size: 400% 100%, 100% 100%;
+    background-position: -200% 0, 0 0;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    /* Enhanced shadows for better readability - stronger presence */
+    filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.85))
+            drop-shadow(0 4px 12px rgba(0, 0, 0, 0.6))
+            drop-shadow(0 0 16px rgba(0, 143, 88, 0.5))
+            drop-shadow(0 0 24px rgba(var(--color-primary-bright-rgb), 0.35));
+    line-height: 1;
+    /* Slow moving metallic shimmer */
+    animation: text-metallic-shimmer 18s linear infinite;
 }
 
+@keyframes text-metallic-shimmer {
+    0% {
+        background-position: -200% 0, 0 0;
+    }
+    100% {
+        background-position: 200% 0, 0 0;
+    }
+}
+
+/* Secondary Brand Text - Refined Subtitle */
+/* LINE 2: SPORT VENTURES - Stacked below GREEN BIER, extends past GREEN BIER */
 .brand-line-2 {
-    font-family: var(--font-primary);
-    font-size: var(--text-sm);
-    font-weight: var(--weight-medium);
-    color: var(--color-primary);
-    letter-spacing: var(--tracking-widest);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 500; /* Reduced from 600 to make GREEN BIER more dominant */
+    font-size: calc(var(--dashboard-topline-height, 76px) * 0.40); /* Increased to reduce gap with GREEN BIER */
+    letter-spacing: 0.35em; /* Increased spacing to extend past GREEN BIER */
     text-transform: uppercase;
-    line-height: var(--leading-tight);
-    margin: 0;
+    text-align: left;
+    order: 2; /* Explicitly ensure SPORT VENTURES is second (below GREEN BIER) */
+    width: 100%; /* Take full width to extend past GREEN BIER */
+    min-width: 100%; /* Ensure it extends */
+    align-self: stretch; /* Stretch to full width of container */
+    /* Metallic silver-blue gradient with moving shimmer */
+    background: 
+        linear-gradient(
+            110deg,
+            transparent 0%,
+            transparent 25%,
+            rgba(230, 245, 255, 0.6) 35%,
+            rgba(255, 255, 255, 0.8) 40%,
+            rgba(230, 245, 255, 0.6) 45%,
+            transparent 55%,
+            transparent 100%
+        ),
+        linear-gradient(
+            135deg,
+            rgba(190, 205, 215, 0.95) 0%,
+            rgba(210, 225, 240, 0.95) 30%,
+            rgba(220, 235, 250, 1) 50%,
+            rgba(210, 225, 240, 0.95) 70%,
+            rgba(190, 205, 215, 0.95) 100%
+        );
+    background-size: 400% 100%, 100% 100%;
+    background-position: -200% 0, 0 0;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    /* Enhanced text shadows for better readability - stronger presence */
+    filter: drop-shadow(0 1px 5px rgba(0, 0, 0, 0.85))
+            drop-shadow(0 2px 10px rgba(0, 0, 0, 0.6))
+            drop-shadow(0 0 16px rgba(0, 188, 212, 0.3))
+            drop-shadow(0 0 24px rgba(var(--color-primary-bright-rgb), 0.25));
+    line-height: 1;
+    display: inline-flex;
+    align-items: flex-end;
+    column-gap: clamp(0.35em, 0.45em, 0.55em);
+    margin: 0; /* No margin needed - parent handles bottom alignment */
+    padding: 0;
+    white-space: nowrap;
+    /* Slow moving metallic shimmer - synchronized with line 1 */
+    animation: text-metallic-shimmer 18s linear infinite;
+    animation-delay: 0.5s; /* Slight offset for visual interest */
 }
 
-/* ===== RESPONSIVE ===== */
+.brand-line-2 .brand-word {
+    letter-spacing: inherit;
+    display: inline-flex;
+}
+
+/* Alternative color variants */
+.brand-line-2.brand-green {
+    background: 
+        linear-gradient(
+            110deg,
+            transparent 0%,
+            transparent 25%,
+            rgba(180, 255, 220, 0.5) 35%,
+            rgba(220, 255, 240, 0.7) 40%,
+            rgba(180, 255, 220, 0.5) 45%,
+            transparent 55%,
+            transparent 100%
+        ),
+        linear-gradient(
+            135deg,
+            rgba(0, 143, 88, 0.9) 0%,
+            rgba(var(--color-primary-bright-rgb), 0.9) 50%,
+            rgba(0, 143, 88, 0.9) 100%
+        );
+    background-size: 400% 100%, 100% 100%;
+    background-position: -200% 0, 0 0;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: text-metallic-shimmer 18s linear infinite;
+    animation-delay: 0.5s;
+}
+
+.brand-line-2.brand-dark {
+    background: 
+        linear-gradient(
+            110deg,
+            transparent 0%,
+            transparent 25%,
+            rgba(200, 210, 220, 0.5) 35%,
+            rgba(220, 230, 240, 0.7) 40%,
+            rgba(200, 210, 220, 0.5) 45%,
+            transparent 55%,
+            transparent 100%
+        ),
+        linear-gradient(
+            135deg,
+            rgba(200, 210, 220, 0.7) 0%,
+            rgba(180, 190, 200, 0.7) 50%,
+            rgba(200, 210, 220, 0.7) 100%
+        );
+    background-size: 400% 100%, 100% 100%;
+    background-position: -200% 0, 0 0;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: text-metallic-shimmer 18s linear infinite;
+    animation-delay: 0.5s;
+}
+
+/* ===== Responsive adjustments ===== */
+@media (max-width: 1400px) {
+    .brand-header-inline {
+        min-width: 240px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .brand-header-inline {
+        min-width: 220px;
+    }
+    
+    .brand-line-1 {
+        font-size: calc(var(--dashboard-topline-height, 76px) * 0.58);
+        letter-spacing: 0.02em; /* Maintain blocky spacing */
+    }
+    
+    .brand-line-2 {
+        font-size: calc(var(--dashboard-topline-height, 76px) * 0.26);
+        letter-spacing: 0.40em; /* Extended spacing to go past GREEN BIER */
+        column-gap: 0.40em;
+    }
+}
+
+@media (max-width: 992px) {
+    .brand-header-inline {
+        min-width: 200px;
+        --brand-line1-scale: 0.35;
+        --brand-line2-scale: 0.18;
+    }
+    
+    .brand-line-1 {
+        font-size: calc(var(--dashboard-topline-height, 76px) * 0.52);
+        letter-spacing: 0.02em; /* Maintain blocky spacing */
+    }
+    
+    .brand-line-2 {
+        font-size: calc(var(--dashboard-topline-height, 76px) * 0.22);
+        letter-spacing: 0.35em; /* Extended spacing to go past GREEN BIER */
+        column-gap: 0.35em;
+    }
+}
+
 @media (max-width: 768px) {
     .brand-header-inline {
-        gap: var(--space-2);
+        min-width: 180px;
+        --brand-line1-scale: 0.34;
+        --brand-line2-scale: 0.16;
     }
-
-    .brand-logo-small {
-        width: 40px;
-        height: 40px;
-    }
-
-    .brand-initials {
-        font-size: var(--text-lg);
-    }
-
+    
     .brand-line-1 {
-        font-size: var(--text-xl);
+        font-size: calc(var(--dashboard-topline-height, 76px) * 0.50);
+        letter-spacing: 0.02em; /* Maintain blocky spacing */
     }
-
+    
     .brand-line-2 {
-        font-size: var(--text-xs);
-    }
-}
-
-@media (max-width: 480px) {
-    .brand-text-group {
-        display: none;
+        font-size: calc(var(--dashboard-topline-height, 76px) * 0.20);
+        letter-spacing: 0.30em; /* Extended spacing to go past GREEN BIER */
+        column-gap: 0.30em;
     }
 }

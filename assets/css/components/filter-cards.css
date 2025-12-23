@@ -1,0 +1,229 @@
+/* Filter Cards Section */
+.filter-cards-wrapper {
+    width: calc(100% - 1in);
+    max-width: 1240px;
+    margin: 0 auto 1.5rem;
+    padding: 0 1rem;
+    box-sizing: border-box;
+}
+
+.filter-cards-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 1rem;
+    margin-bottom: 0;
+    align-items: stretch;
+}
+
+.filter-card {
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 120px;
+    box-shadow: 0 18px 30px rgba(2, 10, 18, 0.45);
+    backdrop-filter: blur(6px);
+}
+
+.filter-card-header {
+    background: var(--surface-header);
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--border-subtle);
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-secondary);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.filter-card-subtext {
+    font-size: 0.65rem;
+    text-transform: none;
+    letter-spacing: 0.02em;
+    color: rgba(247, 247, 255, 0.7);
+}
+
+.filter-card-body {
+    padding: 0.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    flex: 1;
+    min-height: 70px;
+}
+
+.date-card .date-primary-group,
+.date-card .date-secondary-group {
+    display: flex;
+    gap: 0.75rem;
+    width: 100%;
+    justify-content: stretch;
+}
+
+.date-card .date-tertiary-group {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin-top: 0.25rem;
+    color: rgba(226, 238, 255, 0.75);
+    font-size: 0.75rem;
+}
+
+.date-time-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+}
+
+.filter-pill.primary {
+    flex: 1;
+    font-weight: 600;
+    border-radius: 0.75rem;
+    padding: 0.35rem 1rem;
+}
+
+.filter-pill.secondary {
+    flex: 1;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    padding: 0.25rem;
+    color: rgba(233, 241, 255, 0.85);
+    border-color: transparent;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.filter-pill.secondary.active {
+    background: var(--accent-primary);
+    color: #101517;
+    border-color: var(--accent-primary);
+}
+
+/* Filter Pills (Text Buttons) */
+.filter-btn-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.filter-pill {
+    background: var(--surface-2);
+    border: 1px solid var(--border-default);
+    color: var(--text-primary);
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex: 1;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.filter-pill:hover {
+    background: var(--surface-hover);
+    border-color: var(--border-hover);
+}
+
+.filter-pill.active {
+    background: var(--accent-primary);
+    color: white;
+    border-color: var(--accent-primary);
+}
+
+/* Icon Buttons (Leagues) */
+.filter-icon-group {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    gap: 0.25rem;
+}
+
+.filter-icon-btn {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding: 0.25rem;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+}
+
+.filter-icon-btn img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+.filter-icon-btn:hover {
+    background: var(--surface-hover);
+    opacity: 1;
+}
+
+.filter-icon-btn.active {
+    background: var(--surface-selected);
+    border-color: var(--accent-primary);
+    opacity: 1;
+}
+
+/* Search Input */
+.search-input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.search-input-wrapper input {
+    width: 100%;
+    padding: 0.575rem 2rem 0.575rem 0.75rem;
+    border: 1px solid var(--border-default);
+    border-radius: 4px;
+    background: var(--surface-input);
+    color: var(--text-primary);
+    font-size: 0.9rem;
+}
+
+.search-input-wrapper .search-icon {
+    position: absolute;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .filter-cards-wrapper {
+        width: 100%;
+        padding: 0 0.75rem;
+    }
+
+    .filter-cards-section {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    
+    .search-card {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 480px) {
+    .filter-cards-wrapper {
+        padding: 0 0.5rem;
+    }
+
+    .filter-cards-section {
+        grid-template-columns: 1fr;
+    }
+}

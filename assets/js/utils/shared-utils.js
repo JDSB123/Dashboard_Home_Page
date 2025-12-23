@@ -204,6 +204,69 @@
     }
 
     /**
+     * Debounce function - delays execution until after wait ms have elapsed
+     * since the last time the debounced function was invoked
+     * @param {Function} func - Function to debounce
+     * @param {number} wait - Milliseconds to wait (default: 150)
+     * @param {boolean} immediate - Execute on leading edge instead of trailing
+     * @returns {Function} Debounced function with cancel() method
+     */
+    function debounce(func, wait = 150, immediate = false) {
+        let timeout;
+
+        function debounced(...args) {
+            const context = this;
+            const later = function() {
+                timeout = null;
+                if (!immediate) func.apply(context, args);
+            };
+            const callNow = immediate && !timeout;
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+            if (callNow) func.apply(context, args);
+        }
+
+        debounced.cancel = function() {
+            clearTimeout(timeout);
+            timeout = null;
+        };
+
+        return debounced;
+    }
+
+    /**
+     * Throttle function - ensures function is called at most once per wait period
+     * @param {Function} func - Function to throttle
+     * @param {number} wait - Minimum ms between calls (default: 100)
+     * @returns {Function} Throttled function
+     */
+    function throttle(func, wait = 100) {
+        let lastCall = 0;
+        let timeout = null;
+
+        return function throttled(...args) {
+            const context = this;
+            const now = Date.now();
+            const remaining = wait - (now - lastCall);
+
+            if (remaining <= 0 || remaining > wait) {
+                if (timeout) {
+                    clearTimeout(timeout);
+                    timeout = null;
+                }
+                lastCall = now;
+                func.apply(context, args);
+            } else if (!timeout) {
+                timeout = setTimeout(function() {
+                    lastCall = Date.now();
+                    timeout = null;
+                    func.apply(context, args);
+                }, remaining);
+            }
+        };
+    }
+
+    /**
      * Format date for display
      * @param {string|Date} date - Date to format
      * @returns {string} Formatted date (MM/DD/YYYY)
@@ -242,7 +305,9 @@
         escapeHtml,
         formatFileSize,
         formatDate,
-        formatTime
+        formatTime,
+        debounce,
+        throttle
     };
 
 })();

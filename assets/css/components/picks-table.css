@@ -510,29 +510,34 @@
     color: rgba(140, 235, 190, 0.98);
 }
 
-/* Sort icon - completely removed, no longer used */
+/* Sort icon - green triangle indicator */
 .sort-icon {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    width: 0 !important;
-    height: 0 !important;
-    overflow: hidden !important;
+    display: inline-block;
+    font-size: 8px;
+    color: #22c55e;
+    opacity: 0.6;
+    margin-left: 4px;
+    vertical-align: middle;
+    transition: opacity 0.2s, color 0.2s, transform 0.2s;
 }
 
 .th-sort-btn:hover .sort-icon {
-    color: var(--color-primary);
+    opacity: 1;
+    color: #4ade80;
 }
 
 /* Active sort states */
 .picks-table th.sorted-asc .sort-icon,
 .picks-table th.sorted-desc .sort-icon,
-th[data-sort].sorted .sort-icon {
-    color: var(--color-primary);
+th[data-sort].sorted .sort-icon,
+th[data-sort].sort-asc .sort-icon,
+th[data-sort].sort-desc .sort-icon {
+    color: #22c55e;
     opacity: 1;
 }
 
-th[data-sort].sorted-desc .sort-icon {
+th[data-sort].sorted-desc .sort-icon,
+th[data-sort].sort-desc .sort-icon {
     transform: rotate(180deg);
 }
 

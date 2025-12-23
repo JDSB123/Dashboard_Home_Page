@@ -43,7 +43,7 @@
             ...rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
         ].join('\n');
 
-        downloadFile(csvContent, `green-bier-picks-${getDateString()}.csv`, 'text/csv');
+        downloadFile(csvContent, `bears-bulls-picks-${getDateString()}.csv`, 'text/csv');
         showNotification(`${picks.length} picks exported to CSV`, 'success');
     }
 
@@ -86,7 +86,7 @@
             ...rows.map(row => row.map(cell => String(cell).replace(/\t/g, ' ')).join('\t'))
         ].join('\n');
 
-        downloadFile(tsvContent, `green-bier-picks-${getDateString()}.xls`, 'application/vnd.ms-excel');
+        downloadFile(tsvContent, `bears-bulls-picks-${getDateString()}.xls`, 'application/vnd.ms-excel');
         showNotification(`${picks.length} picks exported to Excel`, 'success');
     }
 
@@ -100,7 +100,7 @@
         }
 
         const jsonContent = JSON.stringify(picks, null, 2);
-        downloadFile(jsonContent, `green-bier-picks-${getDateString()}.json`, 'application/json');
+        downloadFile(jsonContent, `bears-bulls-picks-${getDateString()}.json`, 'application/json');
         showNotification(`${picks.length} picks exported to JSON`, 'success');
     }
 
