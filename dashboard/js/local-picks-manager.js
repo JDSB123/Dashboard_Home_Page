@@ -452,62 +452,9 @@
                 const group = parlayLookup.get(entry.parlayId);
                 if (!group) return;
                 
-                // 1. Create Parent Row
+                // Create Parent Row (parlay legs table removed)
                 const parentRow = createParlayParentRow(group, entryIdx);
                 tbody.appendChild(parentRow);
-                
-                // 2. Create Legs Container Row
-                const legsRow = document.createElement('tr');
-                legsRow.className = 'parlay-legs';
-                legsRow.setAttribute('data-parent-id', group.parlayId);
-                legsRow.style.display = 'none'; // Hidden by default
-                
-                const legsCell = document.createElement('td');
-                legsCell.colSpan = 7; // Spans full width
-                legsCell.style.padding = '0'; // Ensure no padding on container cell
-                
-                const containerDiv = document.createElement('div');
-                containerDiv.className = 'parlay-legs-container';
-                
-                const headerDiv = document.createElement('div');
-                headerDiv.className = 'parlay-legs-header';
-                headerDiv.innerHTML = `
-                    <div class="parlay-legs-title">
-                        <span class="parlay-legs-heading">Parlay Details</span>
-                    </div>
-                `;
-                containerDiv.appendChild(headerDiv);
-
-                const legsTable = document.createElement('table');
-                legsTable.className = 'picks-table compact-leg-table';
-                legsTable.style.width = '100%';
-                legsTable.style.margin = '0';
-
-                const legsThead = document.createElement('thead');
-                legsThead.innerHTML = `
-                    <tr>
-                        <th>Date</th>
-                        <th>Matchup</th>
-                        <th>Pick</th>
-                        <th>Segment</th>
-                        <th>Status</th>
-                    </tr>
-                `;
-                legsTable.appendChild(legsThead);
-                
-                const legsTbody = document.createElement('tbody');
-                
-                group.legs.forEach((leg, legIdx) => {
-                    const legRow = createParlayLegRow(leg);
-                    legsTbody.appendChild(legRow);
-                });
-                
-                legsTable.appendChild(legsTbody);
-                containerDiv.appendChild(legsTable);
-                legsCell.appendChild(containerDiv);
-                legsRow.appendChild(legsCell);
-                
-                tbody.appendChild(legsRow);
             }
         });
 
@@ -523,94 +470,6 @@
     }
 
     // ========== CREATE ROW (FULL TEMPLATE) ==========
-
-    function createParlayLegRow(pick) {
-        const row = document.createElement('tr');
-        row.classList.add('parlay-leg-item');
-
-        const pickTeamInfo = getTeamInfo(pick.pickTeam);
-        const awayTeam = pick.awayTeam || pick.pickTeam || 'TBD';
-        const homeTeam = pick.homeTeam || 'TBD';
-        const awayInfo = getTeamInfo(awayTeam);
-        const homeInfo = getTeamInfo(homeTeam);
-        
-        let selection = '';
-        let market = '';
-        if (pick.pickType === 'spread') {
-            const line = pick.line || '';
-            selection = line.startsWith('+') || line.startsWith('-') ? line : `+${line}`;
-            market = 'Spread';
-        } else if (pick.pickType === 'moneyline') {
-            selection = 'ML';
-            market = 'Moneyline';
-        } else if (pick.pickType === 'total' || pick.pickType === 'team-total') {
-            selection = `${pick.pickDirection || 'Over'} ${pick.line || ''}`;
-            market = 'Total';
-        }
-
-        const status = pick.status || 'pending';
-        
-        const isSingleTeamBet = !pick.homeTeam || homeTeam === 'TBD';
-        
-        const awayLogoHtml = awayInfo.logo 
-            ? `<img src="${awayInfo.logo}" class="team-logo" loading="lazy" alt="${awayInfo.abbr}" onerror="this.style.display='none'">`
-            : '';
-        const homeLogoHtml = homeInfo.logo 
-            ? `<img src="${homeInfo.logo}" class="team-logo" loading="lazy" alt="${homeInfo.abbr}" onerror="this.style.display='none'">`
-            : '';
-        const pickLogoHtml = pickTeamInfo.logo
-            ? `<img src="${pickTeamInfo.logo}" class="pick-team-logo" loading="lazy" alt="${pickTeamInfo.abbr}" onerror="this.style.display='none'">`
-            : '';
-
-        const matchupHtml = isSingleTeamBet 
-            ? `<div class="matchup-cell-parlay-leg">
-                    <div class="team-line">
-                        ${awayLogoHtml}
-                        <span class="team-name-full">${awayTeam}</span>
-                    </div>
-                </div>`
-            : `<div class="matchup-cell-parlay-leg">
-                    <div class="team-line">
-                        ${awayLogoHtml}
-                        <span class="team-name-full">${awayTeam}</span>
-                    </div>
-                    <div class="vs-divider">vs</div>
-                    <div class="team-line">
-                        ${homeLogoHtml}
-                        <span class="team-name-full">${homeTeam}</span>
-                    </div>
-                </div>`;
-
-        row.innerHTML = `
-            <td data-label="Date & Time">
-                <div class="cell-date">${formatDateValue(pick.gameDate)}</div>
-                <div class="cell-time">${pick.gameTime || 'TBD'}</div>
-            </td>
-            <td>
-                ${matchupHtml}
-            </td>
-            <td>
-                <div class="pick-cell">
-                    <div class="pick-team-info">
-                        ${pickLogoHtml}
-                        <span class="pick-team-abbr">${pickTeamInfo.abbr}</span>
-                    </div>
-                    <div class="pick-details">
-                        <span class="pick-market">${market}</span>
-                        <span class="pick-selection">${selection}</span>
-                        <span class="pick-odds">(${pick.odds || '-110'})</span>
-                    </div>
-                </div>
-            </td>
-            <td class="center">
-                <span class="game-segment">${pick.segment || 'Full Game'}</span>
-            </td>
-            <td class="center">
-                <span class="status-badge" data-status="${status}">${status.charAt(0).toUpperCase() + status.slice(1)}</span>
-            </td>
-        `;
-        return row;
-    }
 
     function createPickRow(pick, idx, options = {}) {
         const row = document.createElement('tr');
@@ -827,14 +686,26 @@
                 </div>
             </div>`;
 
+        // Calculate hit/miss and won/lost values
+        const hitMissValue = status === 'win' ? '✓' : status === 'loss' ? '✗' : status === 'push' ? '—' : '';
+        const wonLostValue = status === 'win' ? formatCurrencyValue(pick.win) :
+                            status === 'loss' ? `-${formatCurrencyValue(pick.risk)}` :
+                            status === 'push' ? '$0.00' : '';
+
         row.innerHTML = `
             <td data-label="Date & Time">
                 <div class="cell-date">${formatDateValue(pick.gameDate)}</div>
                 <div class="cell-time">${pick.gameTime || 'TBD'}</div>
                 <div class="sportsbook-value">${sportsbook}</div>
             </td>
+            <td class="center">
+                ${renderLeagueCell(sport)}
+            </td>
             <td>
                 ${matchupHtml}
+            </td>
+            <td class="center">
+                <span class="game-segment" data-segment="${segmentKey}">${segmentLabel}</span>
             </td>
             <td>
                 <div class="pick-cell">
@@ -847,9 +718,6 @@
                         <span class="pick-odds">(${pick.odds || '-110'})</span>
                     </div>
                 </div>
-            </td>
-            <td class="center">
-                <span class="game-segment" data-segment="${segmentKey}">${segmentLabel}</span>
             </td>
             <td class="center">
                 <span class="currency-combined">
@@ -869,6 +737,12 @@
             <td class="center">
                 <span class="status-badge" data-status="${status}" data-blurb="">${status.charAt(0).toUpperCase() + status.slice(1)}</span>
             </td>
+            <td class="center">
+                <span class="hit-miss-value" data-status="${status}">${hitMissValue}</span>
+            </td>
+            <td class="center">
+                <span class="won-lost-value" data-status="${status}">${wonLostValue}</span>
+            </td>
         `;
 
         return row;
@@ -884,11 +758,20 @@
         const status = (summary.status || 'pending').toLowerCase();
         const legCount = summary.legs || group.legs.length;
 
+        // Calculate hit/miss and won/lost values for parlay
+        const hitMissValue = status === 'win' ? '✓' : status === 'loss' ? '✗' : status === 'push' ? '—' : '';
+        const wonLostValue = status === 'win' ? formatCurrencyValue(summary.win) :
+                            status === 'loss' ? `-${formatCurrencyValue(summary.risk)}` :
+                            status === 'push' ? '$0.00' : '';
+
         row.innerHTML = `
             <td data-label="Date & Time">
                 <div class="cell-date">${summary.date || 'Today'}</div>
                 <div class="cell-time">${summary.time || 'TBD'}</div>
                 <div class="sportsbook-value">${summary.sportsbook || ''}</div>
+            </td>
+            <td class="center">
+                ${renderLeagueCell(summary.league || 'MULTI')}
             </td>
             <td>
                 <div class="matchup-cell parlay-matchup">
@@ -897,13 +780,13 @@
                     <span class="parlay-leg-count">(${legCount} legs)</span>
                 </div>
             </td>
+            <td class="center">
+                <span class="game-segment" data-segment="parlay">Parlay</span>
+            </td>
             <td>
                 <div class="pick-cell">
                     <span class="pick-team-abbr">${summary.type || 'Parlay'}</span>
                 </div>
-            </td>
-            <td class="center">
-                <span class="game-segment" data-segment="parlay">Parlay</span>
             </td>
             <td class="center">
                 <span class="currency-combined">
@@ -922,6 +805,12 @@
             </td>
             <td class="center">
                 <span class="status-badge" data-status="${status}">${status.charAt(0).toUpperCase() + status.slice(1)}</span>
+            </td>
+            <td class="center">
+                <span class="hit-miss-value" data-status="${status}">${hitMissValue}</span>
+            </td>
+            <td class="center">
+                <span class="won-lost-value" data-status="${status}">${wonLostValue}</span>
             </td>
         `;
 

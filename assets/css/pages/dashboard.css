@@ -18,6 +18,12 @@ body.page-active-picks {
     background-color: rgba(3, 11, 22, 0.18);
 }
 
+/* Override main-container padding for consistent 0.75in left/right margins */
+body.page-active-picks .main-container {
+    padding-left: 0.75in;
+    padding-right: 0.75in;
+}
+
 /* Override the heavy dark overlay from page-layout.css */
 body.page-active-picks::before {
     background: linear-gradient(180deg,
@@ -167,13 +173,17 @@ body.page-active-picks .kpi-subtext {
 /* ===== TABLE CONTAINER - SEMI-TRANSPARENT (matches weekly lineup) ===== */
 body.page-active-picks .table-container {
     margin-top: 0;
-    margin-left: 0.5in;
-    margin-right: 0.5in;
-    width: calc(100% - 1in);
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
     box-sizing: border-box;
     position: relative;
     z-index: 1;
-    overflow: visible !important;
+    /* CRITICAL FIX: Override flex to block - flex interferes with table column sizing */
+    display: block !important;
+    /* No horizontal scroll - table uses fixed layout */
+    overflow-x: hidden;
+    overflow-y: visible;
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
@@ -183,128 +193,94 @@ body.page-active-picks .table-container {
 }
 
 body.page-active-picks .picks-table {
-    width: 100%;
-    table-layout: fixed;
-    border-collapse: separate;
-    border-spacing: 0;
-    overflow: visible !important;
+    width: 100% !important;
+    table-layout: fixed !important;
+    border-collapse: collapse;
+    /* Table itself doesn't need overflow - container handles scrolling */
+    overflow: visible;
     /* Ensure all nested table components (team names, pick lines, etc.) inherit Garamond */
     --table-font: var(--font-body);
+    /* CRITICAL: Ensure proper table display */
+    display: table !important;
 }
 
-/* Prevent table cell overflow - add ellipsis for long content */
+/* Table cell base styling - proper overflow handling */
 body.page-active-picks .picks-table td {
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    word-wrap: break-word !important;
-    white-space: nowrap !important;
-    max-width: 0 !important;
-    padding: 0.5rem 0.75rem !important;
-    box-sizing: border-box;
+    /* Default: clip overflowing content with ellipsis */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    white-space: nowrap;
+    /* Padding handled by TABLE CELL ALIGNMENT FIX section */
+    box-sizing: border-box !important;
 }
 
-/* Ensure League column fits content */
-body.page-active-picks .picks-table td:nth-child(2) {
-    padding: 0.4rem 0.5rem !important;
-    white-space: nowrap !important;
-}
-
-/* Ensure Segment column fits content */
-body.page-active-picks .picks-table td:nth-child(4) {
-    padding: 0.4rem 0.5rem !important;
-    white-space: nowrap !important;
-}
-
-/* Allow Matchup cell to wrap (Dashboard is 10 columns: Date, League, Matchup, Segment, Pick, ...) */
+/* Allow Matchup cell to wrap for stacked team names */
 body.page-active-picks .picks-table td:nth-child(3),
 body.page-active-picks .picks-table td[data-label="Matchup"] {
     white-space: normal !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    word-wrap: break-word !important;
-    max-width: 0 !important;
+    overflow: visible !important;
+    max-width: none !important;
 }
 
-/* Allow Pick cell to wrap */
+/* Allow Pick cell to wrap for stacked pick info */
 body.page-active-picks .picks-table td:nth-child(5),
 body.page-active-picks .picks-table td[data-label="Pick"] {
     white-space: normal !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    word-wrap: break-word !important;
-    max-width: 0 !important;
+    overflow: visible !important;
+    max-width: none !important;
 }
 
 /* Column widths for dashboard - 10 columns (total: 100%)
-   Override base component min-widths and apply fixed widths to both th and td */
+   Explicit width + min-width + max-width ensures header/body alignment */
 body.page-active-picks .picks-table thead th:nth-child(1),
-body.page-active-picks .picks-table tbody td:nth-child(1) { 
-    width: 10% !important; 
-    min-width: 110px !important; 
-    max-width: 10% !important;
-}   /* Date & Time (CST) */
+body.page-active-picks .picks-table tbody td:nth-child(1) {
+    width: 10% !important; min-width: 100px !important; max-width: 10% !important;
+}  /* Date/Time */
 body.page-active-picks .picks-table thead th:nth-child(2),
-body.page-active-picks .picks-table tbody td:nth-child(2) { 
-    width: 6% !important; 
-    min-width: 65px !important; 
-    max-width: 6% !important;
+body.page-active-picks .picks-table tbody td:nth-child(2) {
+    width: 6% !important; min-width: 60px !important; max-width: 6% !important;
 }   /* League */
 body.page-active-picks .picks-table thead th:nth-child(3),
-body.page-active-picks .picks-table tbody td:nth-child(3) { 
-    width: 16% !important; 
-    min-width: 180px !important; 
-    max-width: 16% !important;
+body.page-active-picks .picks-table tbody td:nth-child(3) {
+    width: 16% !important; min-width: 160px !important; max-width: 16% !important;
 }  /* Matchup */
 body.page-active-picks .picks-table thead th:nth-child(4),
-body.page-active-picks .picks-table tbody td:nth-child(4) { 
-    width: 7% !important; 
-    min-width: 75px !important; 
-    max-width: 7% !important;
+body.page-active-picks .picks-table tbody td:nth-child(4) {
+    width: 7% !important; min-width: 70px !important; max-width: 7% !important;
 }   /* Segment */
 body.page-active-picks .picks-table thead th:nth-child(5),
-body.page-active-picks .picks-table tbody td:nth-child(5) { 
-    width: 13% !important; 
-    min-width: 140px !important; 
-    max-width: 13% !important;
+body.page-active-picks .picks-table tbody td:nth-child(5) {
+    width: 13% !important; min-width: 120px !important; max-width: 13% !important;
 }  /* Pick */
 body.page-active-picks .picks-table thead th:nth-child(6),
-body.page-active-picks .picks-table tbody td:nth-child(6) { 
-    width: 10% !important; 
-    min-width: 110px !important; 
-    max-width: 10% !important;
-}  /* Risk / Win */
+body.page-active-picks .picks-table tbody td:nth-child(6) {
+    width: 10% !important; min-width: 100px !important; max-width: 10% !important;
+}  /* Risk/Win */
 body.page-active-picks .picks-table thead th:nth-child(7),
-body.page-active-picks .picks-table tbody td:nth-child(7) { 
-    width: 18% !important; 
-    min-width: 200px !important; 
-    max-width: 18% !important;
+body.page-active-picks .picks-table tbody td:nth-child(7) {
+    width: 18% !important; min-width: 180px !important; max-width: 18% !important;
 }  /* Box Score */
 body.page-active-picks .picks-table thead th:nth-child(8),
-body.page-active-picks .picks-table tbody td:nth-child(8) { 
-    width: 8% !important; 
-    min-width: 85px !important; 
-    max-width: 8% !important;
+body.page-active-picks .picks-table tbody td:nth-child(8) {
+    width: 8% !important; min-width: 80px !important; max-width: 8% !important;
 }   /* Status */
 body.page-active-picks .picks-table thead th:nth-child(9),
-body.page-active-picks .picks-table tbody td:nth-child(9) { 
-    width: 6% !important; 
-    min-width: 70px !important; 
-    max-width: 6% !important;
-}   /* Hit / Miss */
+body.page-active-picks .picks-table tbody td:nth-child(9) {
+    width: 6% !important; min-width: 65px !important; max-width: 6% !important;
+}   /* Hit/Miss */
 body.page-active-picks .picks-table thead th:nth-child(10),
-body.page-active-picks .picks-table tbody td:nth-child(10) { 
-    width: 6% !important; 
-    min-width: 75px !important; 
-    max-width: 6% !important;
-}  /* $ Won / $ Lost */
+body.page-active-picks .picks-table tbody td:nth-child(10) {
+    width: 6% !important; min-width: 70px !important; max-width: 6% !important;
+}  /* $ Won/Lost */
 
-/* Hit/Miss + Profit cells - ensure they fit content */
-body.page-active-picks .picks-table td:nth-child(9),
-body.page-active-picks .picks-table td:nth-child(10) {
+/* Hit/Miss + Profit columns - allow badges to display fully */
+body.page-active-picks .picks-table thead th:nth-child(9),
+body.page-active-picks .picks-table tbody td:nth-child(9),
+body.page-active-picks .picks-table thead th:nth-child(10),
+body.page-active-picks .picks-table tbody td:nth-child(10) {
     white-space: nowrap !important;
     overflow: visible !important;
-    text-overflow: clip !important;
-    padding: 0.4rem 0.5rem !important;
 }
 
 body.page-active-picks .hitmiss-badge {
@@ -367,24 +343,30 @@ body.page-active-picks .profit-amount.profit-neutral { color: rgba(184, 197, 208
 
 /* ===== TABLE HEADERS - VERY TRANSPARENT GREEN GRADIENT (matches weekly lineup) ===== */
 body.page-active-picks .picks-table thead th {
+    /* CRITICAL: Override base picks-table.css opaque background with transparent green */
     background: linear-gradient(180deg,
         rgba(0, 214, 137, 0.06) 0%,
         rgba(0, 214, 137, 0.03) 45%,
-        rgba(8, 12, 22, 0.18) 100%);
-    background-color: rgba(8, 12, 22, 0.15);
-    border-bottom: 1px solid rgba(0, 214, 137, 0.20);
-    border-right: 1px solid rgba(0, 214, 137, 0.08);
-    padding: 0.75rem 0.75rem;
+        rgba(8, 12, 22, 0.18) 100%) !important;
+    background-color: rgba(8, 12, 22, 0.15) !important;
+    border-bottom: 1px solid rgba(0, 214, 137, 0.20) !important;
+    border-right: 1px solid rgba(0, 214, 137, 0.08) !important;
+    padding: 6px 4px;
     text-align: center;
     font-family: var(--font-display, 'Oswald', sans-serif);
     font-weight: 700;
-    font-size: 0.85rem;
-    letter-spacing: 0.05em;
+    font-size: 0.75rem;
+    letter-spacing: 0.03em;
     text-transform: uppercase;
     color: #f4fbff;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
-    line-height: 1.2;
+    line-height: 1.1;
     position: relative;
+    /* Text containment - prevent wrapping and overflow */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 0; /* Works with table-layout: fixed for ellipsis */
 }
 
 body.page-active-picks .picks-table thead th:first-child {
@@ -398,6 +380,7 @@ body.page-active-picks .picks-table thead th:last-child {
 
 /* Sticky header (matches weekly lineup) */
 body.page-active-picks .picks-table thead {
+    display: table-header-group !important; /* CRITICAL: Maintain table structure */
     position: sticky !important;
     top: 0;
     z-index: 110;
@@ -409,10 +392,14 @@ body.page-active-picks .picks-table thead {
 body.page-active-picks .picks-table thead th {
     position: relative;
     text-align: center;
-    padding: 8px 6px !important;
+    padding: 6px 4px !important;
     background-clip: padding-box;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
     vertical-align: middle;
+    /* Ensure text containment */
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
 }
 
 /* Center header labels (matches weekly lineup) */
@@ -441,9 +428,12 @@ body.page-active-picks .th-sort-btn {
 /* Header main text styling (matches weekly lineup) */
 body.page-active-picks .header-main-text {
     display: block;
-    font-size: 0.85rem;
+    font-size: 0.72rem;
     font-weight: 700;
-    line-height: 1.2;
+    line-height: 1.1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* Header subtext (matches weekly lineup) */
@@ -499,6 +489,7 @@ body.page-active-picks .picks-table thead th .th-filter-btn {
 
 /* ===== TABLE BODY - ZEBRA STRIPES (matches weekly lineup) ===== */
 body.page-active-picks .picks-table tbody {
+    display: table-row-group !important; /* CRITICAL: Maintain table structure */
     position: relative;
     z-index: 10;
     background: rgba(8, 12, 22, 0.52);
@@ -523,7 +514,7 @@ body.page-active-picks .picks-table tbody tr:hover {
 }
 
 body.page-active-picks .picks-table tbody td {
-    padding: 0.4rem 0.4rem;
+    /* padding handled by earlier rule with !important */
     color: rgba(232, 240, 242, 0.95);
     vertical-align: middle;
     font-family: var(--font-body, 'Inter', sans-serif);
@@ -531,7 +522,7 @@ body.page-active-picks .picks-table tbody td {
     font-size: 0.825rem;
     line-height: 1.2;
     letter-spacing: 0.01em;
-    white-space: nowrap;
+    /* white-space handled by earlier rule with !important */
 }
 
 /* ===== TIME CELL (matches weekly lineup) ===== */
@@ -647,7 +638,7 @@ body.page-active-picks .status-badge[data-status="push"] {
 }
 
 /* ==========================================================================
-   BACK TO TOP BUTTON
+   BACK TO TOP BUTTON - Subtle dark glass style matching page-layout.css
    ========================================================================== */
 body.page-active-picks .back-to-top {
     position: fixed;
@@ -655,26 +646,46 @@ body.page-active-picks .back-to-top {
     right: 24px;
     width: 40px;
     height: 40px;
-    border-radius: 50%;
-    background: var(--dashboard-accent-primary);
-    border: none;
-    color: #000;
+    background: rgba(8, 12, 22, 0.85);
+    border: 1px solid rgba(var(--color-primary-bright-rgb), 0.25);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
     opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.2s ease, transform 0.2s ease;
-    z-index: 1000;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease, border-color 0.2s ease;
+    z-index: 9999;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
 }
 
-body.page-active-picks .back-to-top:not([hidden]) {
+body.page-active-picks .back-to-top.visible {
     opacity: 1;
+    visibility: visible;
     transform: translateY(0);
+}
+
+body.page-active-picks .back-to-top:hover {
+    background: rgba(8, 12, 22, 0.95);
+    border-color: rgba(var(--color-primary-bright-rgb), 0.5);
+    box-shadow: 0 4px 12px rgba(var(--color-primary-bright-rgb), 0.2);
 }
 
 body.page-active-picks .back-to-top::before {
     content: '↑';
-    font-size: 1.25rem;
-    font-weight: bold;
+    font-size: 16px;
+    font-weight: 600;
+    color: rgba(var(--color-primary-bright-rgb), 0.8);
+    line-height: 1;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+}
+
+body.page-active-picks .back-to-top:hover::before {
+    color: rgba(var(--color-primary-bright-rgb), 1);
 }
 
 /* ==========================================================================
@@ -742,4 +753,150 @@ body.page-active-picks .th-filter-btn.has-filter::after {
 body.page-active-picks th.sorted-desc .sort-icon,
 body.page-active-picks th[data-sort].sort-desc .sort-icon {
     transform: rotate(180deg);
+}
+
+/* ==========================================================================
+   TABLE CELL ALIGNMENT FIX
+   --------------------------------------------------------------------------
+   The base picks-table.css defines an 8-column layout with different column
+   order. Dashboard uses 10 columns. These overrides ensure all cells are
+   properly centered regardless of the base styles.
+
+   CRITICAL: With table-layout: fixed, column widths are determined by:
+   1. <colgroup>/<col> elements (preferred)
+   2. First row cell widths
+   Both thead th and tbody td MUST have identical box-sizing and padding.
+   ========================================================================== */
+
+/* Force proper table structure on all rows */
+body.page-active-picks .picks-table thead tr,
+body.page-active-picks .picks-table tbody tr {
+    display: table-row !important;
+}
+
+/* Force all cells to be proper table-cells with centered content */
+body.page-active-picks .picks-table thead th,
+body.page-active-picks .picks-table tbody td {
+    display: table-cell !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+    box-sizing: border-box !important;
+    /* CRITICAL: Identical padding for alignment */
+    padding: 8px 6px !important;
+}
+
+/* Override any nth-child text-align rules from picks-table.css */
+body.page-active-picks .picks-table thead th:nth-child(n),
+body.page-active-picks .picks-table tbody td:nth-child(n) {
+    text-align: center !important;
+}
+
+/* Header shell - simple flex centering */
+body.page-active-picks .picks-table thead th .th-header-shell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    position: relative;
+}
+
+/* Sort button - inline layout */
+body.page-active-picks .picks-table thead th .th-sort-btn {
+    padding: 4px 20px 4px 4px;
+    margin: 0;
+    background: none;
+    border: none;
+}
+
+/* Sort icon - positioned inline */
+body.page-active-picks .picks-table thead th .sort-icon {
+    position: absolute;
+    right: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: 4px;
+    font-size: 10px;
+}
+
+/* Filter dropdown - absolute positioning to not affect column width */
+body.page-active-picks .picks-table thead th .th-filter-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+}
+
+/* League cell - centered column layout */
+body.page-active-picks .picks-table tbody td .league-cell {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+/* DateTime cell - centered column layout */
+body.page-active-picks .picks-table tbody td .datetime-cell {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+}
+
+/* League logo sizing */
+body.page-active-picks .picks-table tbody td .league-logo {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+}
+
+/* Matchup cell - stacked centered layout */
+body.page-active-picks .picks-table tbody td .matchup-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1px;
+    text-align: center;
+}
+
+/* Pick cell - centered layout */
+body.page-active-picks .picks-table tbody td .pick-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    text-align: center;
+}
+
+/* Currency combined - centered stacked layout */
+body.page-active-picks .picks-table tbody td .currency-combined {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+}
+
+/* Boxscore cell - centered */
+body.page-active-picks .picks-table tbody td .compact-boxscore,
+body.page-active-picks .picks-table tbody td .boxscore-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+/* Status badge - centered */
+body.page-active-picks .picks-table tbody td .status-badge {
+    display: inline-block;
+    text-align: center;
+}
+
+/* Segment cell - centered */
+body.page-active-picks .picks-table tbody td .game-segment {
+    display: inline-block;
+    text-align: center;
 }

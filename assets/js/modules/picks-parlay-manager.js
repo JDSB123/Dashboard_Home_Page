@@ -47,7 +47,7 @@
             return idx ? row.querySelector(`td:nth-child(${idx})`) : null;
         },
 
-        getColumnCount(row, fallback = 7) {
+        getColumnCount(row, fallback = 10) {
             const table = row?.closest?.('table');
             const ths = table ? table.querySelectorAll('thead th') : null;
             return ths && ths.length ? ths.length : fallback;
@@ -799,7 +799,7 @@
 
                 // Create cell spanning all columns
                 const td = document.createElement('td');
-                td.setAttribute('colspan', String(this.getColumnCount(parentRow, 7)));
+                td.setAttribute('colspan', String(this.getColumnCount(parentRow, 10)));
                 td.innerHTML = '<div class="parlay-legs-container"></div>';
                 legsRow.appendChild(td);
 

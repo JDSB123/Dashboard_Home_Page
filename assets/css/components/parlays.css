@@ -742,22 +742,72 @@ tr.parlay-leg td:first-child {
    COMPACT PARLAY LEGS - Smaller, tighter styling for expanded leg rows
    ========================================================================== */
 
-/* Make the container more compact */
+/* Make the container more compact - remove all dead space */
 .parlay-legs-container {
-    padding: 4px 8px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
     margin: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    border-left: 3px solid var(--color-primary, #008f58) !important;
+    display: block !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+}
+
+/* Hide the "Parlay Details" header - takes up unnecessary space */
+.parlay-legs-header {
+    display: none !important;
+}
+
+/* Remove connector pseudo-element */
+.parlay-legs-container::before {
+    display: none !important;
 }
 
 /* ULTRA-COMPACT leg table styling */
 .compact-leg-table {
-    border-collapse: separate !important;
-    border-spacing: 0 2px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100% !important;
+    border-collapse: collapse !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    table-layout: fixed !important;
+    border: none !important;
+    white-space: normal !important;
+}
+
+/* Compact thead - minimal padding */
+.compact-leg-table thead {
+    background: rgba(0, 214, 137, 0.03) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.compact-leg-table thead th {
+    padding: 3px 4px !important;
+    font-size: 0.6rem !important;
+    letter-spacing: 0.03em !important;
+    margin: 0 !important;
+    border: none !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+.compact-leg-table tbody {
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 .compact-leg-table tr {
     background: rgba(255, 255, 255, 0.025) !important;
     border: none !important;
     box-shadow: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 .compact-leg-table tr:hover {
@@ -765,9 +815,14 @@ tr.parlay-leg td:first-child {
 }
 
 .compact-leg-table td {
-    padding: 4px 6px !important;
+    padding: 3px 4px !important;
     border: none !important;
     vertical-align: middle !important;
+    margin: 0 !important;
+    white-space: normal !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 0 !important;
 }
 
 .compact-leg-table td:first-child {
