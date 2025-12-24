@@ -161,21 +161,80 @@ body.page-active-picks .kpi-subtext {
 }
 
 /* ==========================================================================
-   TABLE REFINEMENTS (Dashboard only) - Mirror Weekly Lineup Typography
+   TABLE STYLES (Dashboard) - Cloned from Weekly Lineup
    ========================================================================== */
 
-/* Mirror weekly lineup table container */
+/* ===== TABLE CONTAINER - SEMI-TRANSPARENT (matches weekly lineup) ===== */
 body.page-active-picks .table-container {
-    background: rgba(5, 12, 22, 0.40) !important;
+    margin-top: 0;
+    margin-left: 0.5in;
+    margin-right: 0.5in;
+    width: calc(100% - 1in);
+    box-sizing: border-box;
+    position: relative;
+    z-index: 1;
+    overflow: visible !important;
+    background: transparent !important;
     border: none !important;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3) !important;
-    border-radius: 8px !important;
-    margin-top: 0 !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    padding: 0;
+    contain: none !important;
 }
 
-/* Mirror header typography */
+body.page-active-picks .picks-table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0;
+    overflow: visible !important;
+}
+
+/* Prevent table cell overflow - add ellipsis for long content */
+body.page-active-picks .picks-table td {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    word-wrap: break-word !important;
+    white-space: nowrap !important;
+    max-width: 0 !important;
+    padding: 0.5rem 0.75rem !important;
+}
+
+/* Allow Matchup cell to wrap */
+body.page-active-picks .picks-table td:nth-child(2),
+body.page-active-picks .picks-table td[data-label="Matchup"] {
+    white-space: normal !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    word-wrap: break-word !important;
+    max-width: 0 !important;
+}
+
+/* Allow Pick cell to wrap */
+body.page-active-picks .picks-table td:nth-child(3),
+body.page-active-picks .picks-table td[data-label="Pick"] {
+    white-space: normal !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    word-wrap: break-word !important;
+    max-width: 0 !important;
+}
+
+/* Column widths for dashboard - 7 columns */
+body.page-active-picks .picks-table thead th:nth-child(1) { width: 10%; }  /* Date & Time */
+body.page-active-picks .picks-table thead th:nth-child(2) { width: 20%; }  /* Matchup */
+body.page-active-picks .picks-table thead th:nth-child(3) { width: 18%; }  /* Pick */
+body.page-active-picks .picks-table thead th:nth-child(4) { width: 8%; }   /* Segment */
+body.page-active-picks .picks-table thead th:nth-child(5) { width: 14%; }  /* Risk / Win */
+body.page-active-picks .picks-table thead th:nth-child(6) { width: 18%; }  /* Box Score */
+body.page-active-picks .picks-table thead th:nth-child(7) { width: 12%; }  /* Status */
+
+/* ===== TABLE HEADERS - VERY TRANSPARENT GREEN GRADIENT (matches weekly lineup) ===== */
 body.page-active-picks .picks-table thead th {
-    background: linear-gradient(180deg, rgba(0, 214, 137, 0.06) 0%, rgba(0, 214, 137, 0.03) 45%, rgba(8, 12, 22, 0.18) 100%);
+    background: linear-gradient(180deg,
+        rgba(0, 214, 137, 0.06) 0%,
+        rgba(0, 214, 137, 0.03) 45%,
+        rgba(8, 12, 22, 0.18) 100%);
     background-color: rgba(8, 12, 22, 0.15);
     border-bottom: 1px solid rgba(0, 214, 137, 0.20);
     border-right: 1px solid rgba(0, 214, 137, 0.08);
@@ -192,59 +251,129 @@ body.page-active-picks .picks-table thead th {
     position: relative;
 }
 
-/* Mirror body typography */
-body.page-active-picks .picks-table tbody td {
-    padding: 0.4rem 0.4rem;
-    color: rgba(232, 240, 242, 0.95);
+body.page-active-picks .picks-table thead th:first-child {
+    border-top-left-radius: 8px;
+}
+
+body.page-active-picks .picks-table thead th:last-child {
+    border-top-right-radius: 8px;
+    border-right: none;
+}
+
+/* Sticky header (matches weekly lineup) */
+body.page-active-picks .picks-table thead {
+    position: sticky !important;
+    top: 0;
+    z-index: 110;
+    background: transparent !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+body.page-active-picks .picks-table thead th {
+    position: relative;
+    text-align: center;
+    padding: 8px 6px !important;
+    background-clip: padding-box;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
     vertical-align: middle;
-    font-family: var(--font-body, 'Inter', sans-serif);
-    font-weight: 500;
-    font-size: 0.825rem;
-    line-height: 1.2;
-    letter-spacing: 0.01em;
-    white-space: nowrap;
 }
 
-/* Mirror specific cell typography */
-body.page-active-picks .pick-team-abbr {
-    font-family: var(--font-display, 'Oswald', sans-serif);
-    font-weight: 700;
-    font-size: 0.9rem;
-    color: var(--emerald-400);
-    letter-spacing: 0.02em;
-    text-transform: uppercase;
+/* Center header labels (matches weekly lineup) */
+body.page-active-picks .th-header-shell {
+    position: static;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 0;
 }
 
-body.page-active-picks .pick-line {
-    font-family: var(--font-display, 'Oswald', sans-serif);
-    font-weight: 600;
-    font-size: 0.9rem;
-    color: var(--neutral-100);
-    letter-spacing: 0.01em;
+body.page-active-picks .th-sort-btn {
+    flex: 1 1 auto;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 4px 20px 4px 4px !important;
+    gap: 0;
+    min-height: unset;
+    position: relative;
 }
 
-body.page-active-picks .pick-odds {
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: var(--neutral-400);
-    letter-spacing: 0.01em;
-}
-
-body.page-active-picks .team-name-full {
-    font-family: var(--font-display, 'Oswald', sans-serif);
-    font-weight: 600;
+/* Header main text styling (matches weekly lineup) */
+body.page-active-picks .header-main-text {
+    display: block;
     font-size: 0.85rem;
-    color: var(--neutral-100);
-    letter-spacing: 0.02em;
+    font-weight: 700;
+    line-height: 1.2;
 }
 
-body.page-active-picks .team-record {
-    font-size: 0.75rem;
+/* Header subtext (matches weekly lineup) */
+body.page-active-picks .header-subtext {
+    display: block;
+    font-size: 0.65rem;
     font-weight: 500;
-    color: var(--neutral-400);
+    color: rgba(200, 215, 225, 0.7);
+    text-transform: none;
+    letter-spacing: 0.02em;
+    margin-top: 2px;
+    line-height: 1;
 }
 
-/* Mirror zebra stripes */
+/* Sort icon (matches weekly lineup) */
+body.page-active-picks .sort-icon {
+    position: absolute !important;
+    right: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    line-height: 1;
+    margin: 0;
+    opacity: 0.7;
+    font-weight: bold;
+}
+
+body.page-active-picks .picks-table th:hover .sort-icon,
+body.page-active-picks .picks-table th.sorted-asc .sort-icon,
+body.page-active-picks .picks-table th.sorted-desc .sort-icon,
+body.page-active-picks .picks-table th[data-sort].sort-asc .sort-icon,
+body.page-active-picks .picks-table th[data-sort].sort-desc .sort-icon {
+    opacity: 1;
+}
+
+/* Filter button positioning (matches weekly lineup) */
+body.page-active-picks .picks-table thead th .th-filter-btn {
+    position: absolute !important;
+    right: 2px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    z-index: 102 !important;
+    pointer-events: auto !important;
+    width: 22px !important;
+    height: 22px !important;
+    min-width: 22px !important;
+    min-height: 22px !important;
+    cursor: pointer !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+}
+
+/* ===== TABLE BODY - ZEBRA STRIPES (matches weekly lineup) ===== */
+body.page-active-picks .picks-table tbody {
+    position: relative;
+    z-index: 10;
+    background: rgba(8, 12, 22, 0.52);
+}
+
+body.page-active-picks .picks-table tbody tr {
+    border-bottom: 1px solid rgba(80, 100, 130, 0.12);
+    transition: background-color 0.2s ease;
+    background: transparent;
+}
+
 body.page-active-picks .picks-table tbody tr:nth-child(odd) {
     background: rgba(4, 12, 24, 0.42);
 }
@@ -257,38 +386,200 @@ body.page-active-picks .picks-table tbody tr:hover {
     background: rgba(40, 60, 90, 0.48);
 }
 
+body.page-active-picks .picks-table tbody td {
+    padding: 0.4rem 0.4rem;
+    color: rgba(232, 240, 242, 0.95);
+    vertical-align: middle;
+    font-family: var(--font-body, 'Inter', sans-serif);
+    font-weight: 500;
+    font-size: 0.825rem;
+    line-height: 1.2;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+}
+
+/* ===== TIME CELL (matches weekly lineup) ===== */
+body.page-active-picks .cell-time {
+    font-family: var(--font-display, 'Oswald', sans-serif);
+    font-weight: 500;
+    font-size: 0.8rem;
+    color: var(--neutral-300);
+    letter-spacing: 0.02em;
+}
+
+body.page-active-picks .cell-date {
+    font-weight: 600;
+    color: var(--neutral-100);
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+}
+
+/* ===== MATCHUP CELL (matches weekly lineup) ===== */
+body.page-active-picks .matchup-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    white-space: nowrap;
+}
+
+body.page-active-picks .matchup-cell .team-logo {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+body.page-active-picks .team-name-full {
+    font-family: var(--font-display, 'Oswald', sans-serif);
+    font-weight: 600;
+    font-size: 0.825rem;
+    color: var(--neutral-100);
+    letter-spacing: 0.02em;
+}
+
+body.page-active-picks .team-record {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--neutral-400);
+}
+
+body.page-active-picks .vs-divider {
+    color: var(--neutral-500);
+    font-size: 0.65rem;
+    font-weight: 400;
+    margin: 0 0.1rem;
+}
+
+/* ===== PICK CELL (matches weekly lineup) ===== */
+body.page-active-picks .pick-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+}
+
+body.page-active-picks .pick-cell .pick-team-logo {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+body.page-active-picks .pick-team-abbr {
+    font-family: var(--font-display, 'Oswald', sans-serif);
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--emerald-400);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+
+body.page-active-picks .pick-line {
+    font-family: var(--font-display, 'Oswald', sans-serif);
+    font-weight: 600;
+    font-size: 0.825rem;
+    color: var(--neutral-100);
+}
+
+body.page-active-picks .pick-odds {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--neutral-400);
+    letter-spacing: 0.01em;
+}
+
+/* ===== SEGMENT CELL (matches weekly lineup) ===== */
+body.page-active-picks .game-segment {
+    font-family: var(--font-display, 'Oswald', sans-serif);
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: var(--neutral-200);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+/* ===== RISK/WIN CELL (matches weekly lineup) ===== */
+body.page-active-picks .currency-combined {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+body.page-active-picks .currency-line {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+body.page-active-picks .risk-label,
+body.page-active-picks .win-label {
+    font-size: 0.65rem;
+    font-weight: 500;
+    color: var(--neutral-500);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+body.page-active-picks .risk-amount,
+body.page-active-picks .win-amount {
+    font-family: var(--font-display, 'Oswald', sans-serif);
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--neutral-100);
+}
+
 /* ==========================================================================
-   STATUS BADGES (Dashboard) - Mirror Weekly Lineup Formatting
+   STATUS BADGES (Dashboard) - Keep Intact
    ========================================================================== */
 body.page-active-picks .status-badge {
     font-family: var(--font-display, 'Oswald', sans-serif);
     font-weight: 700;
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    padding: 0.3rem 0.6rem;
+    padding: 0.25rem 0.5rem;
     border-radius: 4px;
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06);
+    display: inline-block;
+    min-width: 60px;
+    text-align: center;
 }
 
-body.page-active-picks .status-badge.status-win {
+body.page-active-picks .status-badge.status-win,
+body.page-active-picks .status-badge[data-status="win"] {
     background: linear-gradient(135deg, rgba(34, 197, 94, 0.16), rgba(16, 185, 129, 0.28));
     color: #d2fbe5;
+    border: 1px solid rgba(34, 197, 94, 0.3);
 }
 
-body.page-active-picks .status-badge.status-loss {
+body.page-active-picks .status-badge.status-loss,
+body.page-active-picks .status-badge[data-status="loss"] {
     background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(248, 113, 113, 0.16));
     color: #ffe1e1;
+    border: 1px solid rgba(239, 68, 68, 0.3);
 }
 
-body.page-active-picks .status-badge.status-live {
+body.page-active-picks .status-badge.status-live,
+body.page-active-picks .status-badge[data-status="live"] {
     background: linear-gradient(135deg, rgba(14, 165, 233, 0.18), rgba(59, 130, 246, 0.16));
     color: #d9ecff;
+    border: 1px solid rgba(14, 165, 233, 0.3);
 }
 
-body.page-active-picks .status-badge.status-pending {
+body.page-active-picks .status-badge.status-pending,
+body.page-active-picks .status-badge[data-status="pending"] {
     background: linear-gradient(135deg, rgba(251, 191, 36, 0.18), rgba(245, 158, 11, 0.16));
     color: #fff3d6;
+    border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+body.page-active-picks .status-badge.status-push,
+body.page-active-picks .status-badge[data-status="push"] {
+    background: linear-gradient(135deg, rgba(100, 116, 139, 0.18), rgba(148, 163, 184, 0.16));
+    color: #e2e8f0;
+    border: 1px solid rgba(100, 116, 139, 0.3);
 }
 
 /* ==========================================================================
@@ -323,42 +614,23 @@ body.page-active-picks .back-to-top::before {
 }
 
 /* ==========================================================================
-   FILTER BUTTON - Clean Emerald Theme (matching weekly-lineup style)
+   FILTER BUTTON - Clean Emerald Theme
    ========================================================================== */
-body.page-active-picks .th-filter-btn {
-    width: 22px !important;
-    height: 22px !important;
-    padding: 0 !important;
-    background: transparent !important;
-    border: none !important;
-    cursor: pointer !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    transition: all 0.15s ease !important;
-    z-index: 102 !important;
-    pointer-events: auto !important;
-    opacity: 0.7;
-}
-
-/* Hover state - subtle emerald background + glow */
 body.page-active-picks .th-filter-btn:hover {
     opacity: 1;
     background: rgba(0, 214, 137, 0.1) !important;
     border-radius: 4px !important;
 }
 
-/* Active/pressed state */
 body.page-active-picks .th-filter-btn:active {
     opacity: 0.8;
 }
 
-/* Expanded state (dropdown open) */
 body.page-active-picks .th-filter-btn[aria-expanded="true"] {
     opacity: 1;
 }
 
-/* Filter icon styling - Clean Emerald/White Theme */
+/* Filter icon styling */
 body.page-active-picks .th-filter-icon {
     font-size: 1.1rem;
     line-height: 1;
@@ -382,13 +654,13 @@ body.page-active-picks .th-filter-btn[aria-expanded="true"] .th-filter-icon {
     text-shadow: 0 0 12px rgba(0, 214, 137, 0.5);
 }
 
-/* Hide any filter button pseudo-element icons */
+/* Hide filter button pseudo-element icons */
 body.page-active-picks .th-filter-btn::before {
     content: none !important;
     display: none !important;
 }
 
-/* Active filter indicator dot - Emerald */
+/* Active filter indicator dot */
 body.page-active-picks .th-filter-btn.has-filter::after {
     content: '';
     position: absolute;
@@ -402,96 +674,7 @@ body.page-active-picks .th-filter-btn.has-filter::after {
     pointer-events: none;
 }
 
-/* ==========================================================================
-   TABLE HEADER REFINEMENTS - Sort icons at bottom-right of cell
-   ========================================================================== */
-
-/* Table header cells - relative positioning for sort icon placement */
-body.page-active-picks .picks-table th {
-    position: relative;
-    padding: 8px 8px 8px 8px;
-    vertical-align: middle;
-}
-
-/* Header shell - centered flex container (NO position to allow sort-icon to escape) */
-body.page-active-picks .th-header-shell {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    gap: 4px;
-    text-align: center;
-}
-
-/* Sort button - clean centered layout (NO position:relative!) */
-body.page-active-picks .th-sort-btn {
-    background: none;
-    border: none;
-    outline: none;
-    padding: 4px 6px;
-    margin: 0;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0;
-    font: inherit;
-    color: inherit;
-    cursor: pointer;
-    text-align: center;
-    transition: color 0.15s ease;
-    flex: 0 1 auto;
-    /* NO position:relative - allows sort-icon to position relative to th */
-}
-
-body.page-active-picks .th-sort-btn:hover {
-    color: var(--dashboard-accent-primary);
-}
-
-body.page-active-picks .th-sort-btn:focus,
-body.page-active-picks .th-sort-btn:focus-visible {
-    outline: none !important;
-}
-
-/* Header main text styling */
-body.page-active-picks .header-main-text {
-    font-family: var(--font-body);
-    font-size: 0.8rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: rgba(244, 251, 255, 0.95);
-    white-space: nowrap;
-}
-
-/* Sort icon - Positioned at BOTTOM-RIGHT of the th cell (10x8 sizing) */
-body.page-active-picks .sort-icon {
-    position: absolute;
-    bottom: 3px;
-    right: 4px;
-    font-size: 10px;
-    width: 10px;
-    height: 8px;
-    overflow: hidden;
-    color: var(--dashboard-accent-primary);
-    opacity: 0.7;
-    transition: opacity 0.2s, color 0.2s, transform 0.2s;
-    line-height: 8px;
-}
-
-body.page-active-picks .th-sort-btn:hover .sort-icon,
-body.page-active-picks th:hover .sort-icon {
-    opacity: 1;
-    color: #00ffaa;
-}
-
-body.page-active-picks th.sorted-asc .sort-icon,
-body.page-active-picks th.sorted-desc .sort-icon,
-body.page-active-picks th[data-sort].sort-asc .sort-icon,
-body.page-active-picks th[data-sort].sort-desc .sort-icon {
-    color: #00ffaa;
-    opacity: 1;
-}
-
+/* Sort icon descending state */
 body.page-active-picks th.sorted-desc .sort-icon,
 body.page-active-picks th[data-sort].sort-desc .sort-icon {
     transform: rotate(180deg);
