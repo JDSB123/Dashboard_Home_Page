@@ -56,6 +56,37 @@
                     </div>
                 </div>
             </div>
+
+            <!-- KPI Tiles -->
+            <div class="kpi-tiles">
+                <div class="kpi-tile" data-tile-id="1" role="button" tabindex="0">
+                    <div class="kpi-tile-content">
+                        <div class="kpi-tile-layer kpi-tile-front active">
+                            <div class="kpi-label">Games Today</div>
+                            <div class="kpi-value" id="kpi-games">0</div>
+                            <div class="kpi-subtext">Active Markets</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="kpi-tile" data-tile-id="2" role="button" tabindex="0">
+                    <div class="kpi-tile-content">
+                        <div class="kpi-tile-layer kpi-tile-front active">
+                            <div class="kpi-label">Value Plays</div>
+                            <div class="kpi-value" id="kpi-value">0</div>
+                            <div class="kpi-subtext">Best Lines</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="kpi-tile" data-tile-id="3" role="button" tabindex="0">
+                    <div class="kpi-tile-content">
+                        <div class="kpi-tile-layer kpi-tile-front active">
+                            <div class="kpi-label">Bet Slip</div>
+                            <div class="kpi-value" id="kpi-slip">0</div>
+                            <div class="kpi-subtext">Selections</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="parsed-picks-container" id="parsed-picks-container" hidden>
@@ -68,7 +99,7 @@
             <div class="bet-modal" id="bet-modal"><div class="bet-modal-header"><h2>Enter Bet Amounts</h2><button type="button" class="bet-modal-close" id="close-bet-modal">✕</button></div><div class="bet-modal-content"><div class="bet-unit-config"><label>Unit Value: $</label><input type="number" id="unit-value" value="1000" min="1" step="100"><span class="unit-hint">(e.g., $1 input = $1,000 actual)</span></div><div class="bet-input-mode"><label class="mode-option"><input type="radio" name="bet-mode" value="risk" checked><span>Enter $ At Risk</span></label><label class="mode-option"><input type="radio" name="bet-mode" value="win"><span>Enter To Win</span></label></div><div class="selected-picks-bet-list" id="selected-picks-bet-list"></div></div><div class="bet-modal-footer"><button type="button" class="bet-modal-btn cancel" id="cancel-bets">Cancel</button><button type="button" class="bet-modal-btn confirm" id="confirm-bets">Add to Dashboard</button></div></div>
         </div>
 
-        <div class="table-container weekly-lineup-table-wrapper">
+        <div class="table-container weekly-lineup-table-wrapper odds-board">
             <!-- Filter Toolbar -->
             <div class="filter-toolbar" id="filter-toolbar">
                 <div class="ft-left">
