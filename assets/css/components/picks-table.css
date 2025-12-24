@@ -885,14 +885,14 @@ tr[data-status="in-progress"] .time-remaining {
 .cell-date {
     font-weight: 700;
     color: #ffffff;
-    font-size: 0.95rem;
+    font-size: var(--text-lg);
     line-height: 1.2;
     font-family: var(--font-body);
     white-space: nowrap;
 }
 
 .cell-time {
-    font-size: 0.85rem;
+    font-size: var(--text-md);
     font-weight: 500;
     color: rgba(220, 235, 250, 0.8);
     font-family: var(--font-body);
@@ -902,7 +902,7 @@ tr[data-status="in-progress"] .time-remaining {
 
 .sportsbook-value {
     font-family: var(--font-display);
-    font-size: 0.75rem;
+    font-size: var(--text-sm);
     color: #00d4eb;
     font-weight: 600;
     text-transform: uppercase;
@@ -1199,7 +1199,7 @@ tr[data-is-parlay="true"] {
 }
 
 .pick-line {
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     font-weight: var(--weight-bold);
     font-size: var(--text-lg);
     color: #ffffff;
@@ -1208,7 +1208,7 @@ tr[data-is-parlay="true"] {
 }
 
 .pick-odds {
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     font-size: var(--text-base);
     color: rgba(180, 195, 210, 0.9);
     font-weight: var(--weight-medium);
@@ -1235,7 +1235,7 @@ tr[data-is-parlay="true"] {
 /* Segment Cell */
 .game-segment {
     font-family: var(--font-body);
-    font-size: 16px;
+    font-size: var(--text-lg);
     font-weight: 700;
     text-transform: none;
     letter-spacing: 0.02em;
@@ -1278,7 +1278,7 @@ tr[data-is-parlay="true"] {
 .risk-label,
 .win-label {
     font-family: var(--font-body);
-    font-size: 13px;
+    font-size: var(--text-base);
     font-weight: 500;
     color: rgba(200, 210, 220, 0.85);
     text-transform: none;
@@ -1287,7 +1287,7 @@ tr[data-is-parlay="true"] {
 .risk-amount {
     font-family: var(--font-body);
     font-weight: 600;
-    font-size: 15px;
+    font-size: var(--text-lg);
     color: #ff9999;
     font-variant-numeric: tabular-nums;
     letter-spacing: 0.01em;
@@ -1296,7 +1296,7 @@ tr[data-is-parlay="true"] {
 .win-amount {
     font-family: var(--font-body);
     font-weight: 600;
-    font-size: 15px;
+    font-size: var(--text-lg);
     color: #66ffbb;
     font-variant-numeric: tabular-nums;
     letter-spacing: 0.01em;

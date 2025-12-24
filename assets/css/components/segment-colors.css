@@ -7,8 +7,8 @@
 /* Base segment styling - Refined typography */
 .game-segment {
     font-family: var(--font-body, 'Cormorant Garamond', Georgia, serif);
-    font-size: var(--text-base, 0.6875rem);
-    font-weight: 500;
+    font-size: var(--text-lg);
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.15em;
     white-space: nowrap;

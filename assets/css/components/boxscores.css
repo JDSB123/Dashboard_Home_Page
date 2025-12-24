@@ -55,7 +55,7 @@
 /* ===== HEADER CELLS ===== */
 .boxscore-cell.header-cell {
     font-family: var(--font-body);
-    font-size: 11px;
+    font-size: var(--text-xs);
     font-weight: var(--weight-semibold);
     color: rgba(0, 214, 137, 0.8); /* Emerald accent for headers */
     padding: 6px 4px;
@@ -89,7 +89,7 @@
 /* ===== GAME TIME STATUS - CONSISTENT ACROSS ALL COMPONENTS ===== */
 .game-time-status {
     font-family: var(--font-body);
-    font-size: 11px;
+    font-size: var(--text-xs);
     font-weight: var(--weight-semibold);
     color: rgba(160, 175, 190, 0.9); /* Subtle grey for pending/default */
     text-transform: uppercase;
