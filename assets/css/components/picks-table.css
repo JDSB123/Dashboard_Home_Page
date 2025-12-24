@@ -1147,24 +1147,26 @@ tr[data-is-parlay="true"] {
     white-space: nowrap;
 }
 
-/* Pick Cell - Single horizontal row: [Logo] [ABBR] [Line] [(Odds)] */
+/* Pick Cell - Stacked Layout for Elegance */
 .pick-cell {
-    display: inline-flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 6px;
+    justify-content: center;
+    gap: 2px;
     white-space: nowrap;
-    font-family: var(--font-body);
+    font-family: 'Cormorant Garamond', serif !important;
     font-size: var(--text-base);
+    line-height: 1.2;
 }
 
 .pick-team-info {
-    display: inline-flex;
+    display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 4px;
-    flex-shrink: 0;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
 }
 
 .pick-team-logo {
@@ -1174,7 +1176,7 @@ tr[data-is-parlay="true"] {
 }
 
 .pick-team-abbr {
-    font-family: var(--font-body);
+    font-family: 'Cormorant Garamond', serif !important;
     font-weight: var(--weight-bold);
     font-size: var(--text-lg);
     letter-spacing: 0.04em;
@@ -1183,23 +1185,24 @@ tr[data-is-parlay="true"] {
 }
 
 .pick-details {
-    display: inline-flex;
+    display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 5px;
-    flex-shrink: 0;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
 }
 
 .pick-type {
-    font-family: var(--font-body);
+    font-family: 'Cormorant Garamond', serif !important;
     font-size: var(--text-lg);
-    text-transform: uppercase;
+    text-transform: capitalize;
     color: rgba(144, 164, 174, 0.88);
     font-weight: var(--weight-medium);
 }
 
 .pick-line {
-    font-family: var(--font-body);
+    font-family: 'Cormorant Garamond', serif !important;
     font-weight: var(--weight-bold);
     font-size: var(--text-lg);
     color: #ffffff;
@@ -1208,9 +1211,9 @@ tr[data-is-parlay="true"] {
 }
 
 .pick-odds {
-    font-family: var(--font-body);
-    font-size: var(--text-base);
-    color: rgba(180, 195, 210, 0.9);
+    font-family: 'Cormorant Garamond', serif !important;
+    font-size: var(--text-md);
+    color: rgba(180, 195, 210, 0.8);
     font-weight: var(--weight-medium);
     white-space: nowrap;
 }
@@ -1234,7 +1237,7 @@ tr[data-is-parlay="true"] {
 
 /* Segment Cell */
 .game-segment {
-    font-family: var(--font-body);
+    font-family: 'Cormorant Garamond', serif !important;
     font-size: var(--text-lg);
     font-weight: 700;
     text-transform: none;

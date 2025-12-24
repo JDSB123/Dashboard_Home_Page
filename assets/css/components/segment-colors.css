@@ -6,11 +6,11 @@
 
 /* Base segment styling - Refined typography */
 .game-segment {
-    font-family: var(--font-body, 'Cormorant Garamond', Georgia, serif);
+    font-family: 'Cormorant Garamond', serif !important;
     font-size: var(--text-lg);
     font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
+    text-transform: capitalize !important; /* Force Title Case */
+    letter-spacing: 0.05em; /* Reduced spacing for elegance */
     white-space: nowrap;
     display: inline-block;
     line-height: 1.3;
