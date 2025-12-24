@@ -1,10 +1,11 @@
 :root {
-    /* ===== FONT SYSTEM ===== */
+    /* ===== FONT SYSTEM - CONSISTENT CORMORANT GARAMOND ===== */
     --font-display: 'Cormorant Garamond', Georgia, serif;
     --font-heading: 'Cormorant Garamond', Georgia, serif;
     --font-body: 'Cormorant Garamond', Georgia, serif;
-    --font-mono: 'Roboto Mono', 'SF Mono', monospace; /* Fixed: was incorrectly set to serif */
-    --font-ui: 'Inter', 'Montserrat', 'Segoe UI', system-ui, -apple-system, sans-serif; /* Sans-serif UI font for controls */
+    --font-accent: 'Cormorant Garamond', Georgia, serif;
+    --font-mono: 'Cormorant Garamond', Georgia, serif;
+    --font-ui: 'Cormorant Garamond', Georgia, serif;
 
     /* ===== SPORTSBOOK DROPDOWN TYPOGRAPHY ===== */
     --sportsbook-heading-font: var(--font-heading, 'Cormorant Garamond', 'Playfair Display', Georgia, serif);
