@@ -1607,7 +1607,7 @@ function buildPickRow(pick, index) {
     else if (league === 'nfl') leagueLogoUrl = 'https://a.espncdn.com/i/teamlogos/leagues/500/nfl.png';
     else if (league === 'mlb') leagueLogoUrl = 'https://a.espncdn.com/i/teamlogos/leagues/500/mlb.png';
     else if (league === 'nhl') leagueLogoUrl = 'https://a.espncdn.com/i/teamlogos/leagues/500/nhl.png';
-    else if (league.includes('college') || league.includes('ncaa')) leagueLogoUrl = 'assets/logo_ncaaf.png';
+    else if (league.includes('college') || league.includes('ncaa')) leagueLogoUrl = 'assets/logo_ncaa_football.png';
 
     row.innerHTML = `
         <td>

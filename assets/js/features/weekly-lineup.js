@@ -181,7 +181,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
     const LEAGUE_LOGOS = {
         'NCAAB': 'assets/logo_ncaam_bball.png',
         'NCAAM': 'assets/logo_ncaam_bball.png',
-        'NCAAF': 'assets/logo_ncaaf.png',
+        'NCAAF': 'assets/logo_ncaa_football.png',
         'NBA': 'https://a.espncdn.com/i/teamlogos/leagues/500/nba.png',
         'NFL': 'https://a.espncdn.com/i/teamlogos/leagues/500/nfl.png'
     };
