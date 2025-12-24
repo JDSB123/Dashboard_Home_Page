@@ -260,6 +260,18 @@
 
 /* ===== PICKS TABLE BASE ===== */
 .picks-table {
+    --table-font: 'Inter', 'Exo 2', sans-serif;
+    --table-heading-size: var(--text-md);
+    --table-heading-weight: var(--weight-semibold);
+    --table-heading-letter: 0.05em;
+    --table-heading-line: 1.25;
+    --table-cell-size: var(--text-base);
+    --table-cell-weight: var(--weight-medium);
+    --table-cell-letter: 0.01em;
+    --table-cell-line: 1.35;
+    --table-strong: #f5f7fa;
+    --table-muted: rgba(210, 222, 230, 0.82);
+
     width: 100%;
     border-collapse: separate;
     border-spacing: 0; /* Seamless zebra striping */
@@ -302,18 +314,18 @@
 .picks-table thead th {
     padding: 14px 18px;
     text-align: center;
-    font-family: var(--font-body);
-    font-weight: var(--weight-bold);
-    font-size: var(--text-lg);
+    font-family: var(--table-font);
+    font-weight: var(--table-heading-weight);
+    font-size: var(--table-heading-size);
     text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: #ffffff;
+    letter-spacing: var(--table-heading-letter);
+    color: var(--table-strong);
     border-bottom: 1px solid rgba(var(--color-primary-rgb), 0.25);
     white-space: nowrap;
     position: relative;
     background: linear-gradient(180deg, rgba(0, 30, 45, 0.7) 0%, rgba(0, 20, 35, 0.8) 100%);
     transition: all 0.25s ease;
-    line-height: var(--leading-tight);
+    line-height: var(--table-heading-line);
     vertical-align: middle;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
@@ -476,13 +488,13 @@
     align-items: center;
     justify-content: center;
     gap: 0;
-    font-family: var(--font-body);
-    font-size: var(--text-md);
-    font-weight: var(--weight-bold);
-    letter-spacing: 0.06em;
+    font-family: var(--table-font);
+    font-size: var(--table-heading-size);
+    font-weight: var(--table-heading-weight);
+    letter-spacing: var(--table-heading-letter);
     text-transform: uppercase;
-    color: #ffffff;
-    line-height: 1.3;
+    color: var(--table-strong);
+    line-height: var(--table-heading-line);
     white-space: nowrap;
     text-align: center;
 }
@@ -544,14 +556,14 @@ th[data-sort].sort-desc .sort-icon {
 /* Header subtexts */
 .header-subtext {
     display: block;
-    font-family: var(--font-body);
-    font-size: var(--text-base);
-    font-weight: var(--weight-medium);
+    font-family: var(--table-font);
+    font-size: var(--table-cell-size);
+    font-weight: var(--table-cell-weight);
     font-style: normal;
-    color: #00d4eb;
-    letter-spacing: 0.03em;
+    color: var(--table-muted);
+    letter-spacing: var(--table-cell-letter);
     margin-top: 2px;
-    line-height: 1.3;
+    line-height: var(--table-cell-line);
     text-transform: none;
     white-space: nowrap;
     text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
@@ -803,12 +815,12 @@ tr[data-status="in-progress"] .time-remaining {
     padding: 10px 12px;
     vertical-align: middle;
     text-align: center;
-    font-family: var(--font-body);
-    font-size: var(--text-md);
-    font-weight: var(--weight-medium);
-    color: rgba(232, 240, 242, 0.98);
-    letter-spacing: var(--tracking-tight);
-    line-height: var(--leading-normal);
+    font-family: var(--table-font);
+    font-size: var(--table-cell-size);
+    font-weight: var(--table-cell-weight);
+    color: var(--table-strong);
+    letter-spacing: var(--table-cell-letter);
+    line-height: var(--table-cell-line);
     height: auto;
     border-right: 1px solid rgba(255, 255, 255, 0.08);
     white-space: nowrap;
@@ -883,28 +895,28 @@ tr[data-status="in-progress"] .time-remaining {
 }
 
 .cell-date {
-    font-weight: 700;
-    color: #ffffff;
+    font-family: var(--table-font);
+    font-weight: var(--weight-semibold);
+    color: var(--table-strong);
     font-size: var(--text-lg);
     line-height: 1.2;
-    font-family: var(--font-body);
     white-space: nowrap;
 }
 
 .cell-time {
+    font-family: var(--table-font);
     font-size: var(--text-md);
-    font-weight: 500;
+    font-weight: var(--weight-medium);
     color: rgba(220, 235, 250, 0.8);
-    font-family: var(--font-body);
     line-height: 1.2;
     white-space: nowrap;
 }
 
 .sportsbook-value {
-    font-family: var(--font-display);
+    font-family: var(--table-font);
     font-size: var(--text-sm);
     color: #00d4eb;
-    font-weight: 600;
+    font-weight: var(--weight-semibold);
     text-transform: uppercase;
     letter-spacing: 0.05em;
     line-height: 1.1;
@@ -1095,10 +1107,10 @@ tr[data-is-parlay="true"] {
 }
 
 .team-name-full {
-    font-family: var(--font-body);
+    font-family: var(--table-font);
     font-weight: var(--weight-semibold);
     font-size: var(--text-lg);
-    letter-spacing: 0.01em;
+    letter-spacing: var(--table-cell-letter);
     text-transform: none;
     color: #ffffff;
     line-height: 1.35;
@@ -1106,7 +1118,7 @@ tr[data-is-parlay="true"] {
 }
 
 .team-record {
-    font-family: var(--font-body);
+    font-family: var(--table-font);
     font-size: var(--text-sm);
     font-weight: var(--weight-medium);
     color: rgba(170, 190, 210, 0.9);
@@ -1119,7 +1131,7 @@ tr[data-is-parlay="true"] {
 }
 
 .team-ranking {
-    font-family: var(--font-body);
+    font-family: var(--table-font);
     font-size: var(--text-sm);
     font-weight: var(--weight-semibold);
     color: #F5D76E; /* Vegas-style metallic gold */
@@ -1134,7 +1146,7 @@ tr[data-is-parlay="true"] {
 }
 
 .vs-divider {
-    font-family: var(--font-body);
+    font-family: var(--table-font);
     font-size: var(--text-sm);
     font-weight: var(--weight-medium);
     letter-spacing: 0.05em;
@@ -1155,9 +1167,9 @@ tr[data-is-parlay="true"] {
     justify-content: center;
     gap: 2px;
     white-space: nowrap;
-    font-family: 'Cormorant Garamond', serif !important;
-    font-size: var(--text-base);
-    line-height: 1.2;
+    font-family: var(--table-font);
+    font-size: var(--table-cell-size);
+    line-height: var(--table-cell-line);
 }
 
 .pick-team-info {
@@ -1176,10 +1188,10 @@ tr[data-is-parlay="true"] {
 }
 
 .pick-team-abbr {
-    font-family: 'Cormorant Garamond', serif !important;
+    font-family: var(--table-font);
     font-weight: var(--weight-bold);
     font-size: var(--text-lg);
-    letter-spacing: 0.04em;
+    letter-spacing: var(--table-heading-letter);
     color: #ffffff;
     white-space: nowrap;
 }
@@ -1194,7 +1206,7 @@ tr[data-is-parlay="true"] {
 }
 
 .pick-type {
-    font-family: 'Cormorant Garamond', serif !important;
+    font-family: var(--table-font);
     font-size: var(--text-lg);
     text-transform: capitalize;
     color: rgba(144, 164, 174, 0.88);
@@ -1202,16 +1214,16 @@ tr[data-is-parlay="true"] {
 }
 
 .pick-line {
-    font-family: 'Cormorant Garamond', serif !important;
+    font-family: var(--table-font);
     font-weight: var(--weight-bold);
     font-size: var(--text-lg);
     color: #ffffff;
-    letter-spacing: 0.02em;
+    letter-spacing: var(--table-cell-letter);
     white-space: nowrap;
 }
 
 .pick-odds {
-    font-family: 'Cormorant Garamond', serif !important;
+    font-family: var(--table-font);
     font-size: var(--text-md);
     color: rgba(180, 195, 210, 0.8);
     font-weight: var(--weight-medium);
@@ -1237,7 +1249,7 @@ tr[data-is-parlay="true"] {
 
 /* Segment Cell */
 .game-segment {
-    font-family: 'Cormorant Garamond', serif !important;
+    font-family: var(--table-font);
     font-size: var(--text-lg);
     font-weight: 700;
     text-transform: none;
@@ -1260,7 +1272,7 @@ tr[data-is-parlay="true"] {
     align-items: center;
     justify-content: center;
     gap: 4px;
-    font-family: var(--font-body);
+    font-family: var(--table-font);
     white-space: nowrap;
     font-variant-numeric: tabular-nums;
     line-height: 1.4;
@@ -1280,7 +1292,7 @@ tr[data-is-parlay="true"] {
 /* Show labels */
 .risk-label,
 .win-label {
-    font-family: var(--font-body);
+    font-family: var(--table-font);
     font-size: var(--text-base);
     font-weight: 500;
     color: rgba(200, 210, 220, 0.85);
@@ -1288,7 +1300,7 @@ tr[data-is-parlay="true"] {
 }
 
 .risk-amount {
-    font-family: var(--font-body);
+    font-family: var(--table-font);
     font-weight: 600;
     font-size: var(--text-lg);
     color: #ff9999;
@@ -1297,7 +1309,7 @@ tr[data-is-parlay="true"] {
 }
 
 .win-amount {
-    font-family: var(--font-body);
+    font-family: var(--table-font);
     font-weight: 600;
     font-size: var(--text-lg);
     color: #66ffbb;

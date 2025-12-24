@@ -396,7 +396,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         const logo = LEAGUE_LOGOS[sport] || '';
         return `
             <div class="league-cell">
-                ${logo ? `<img src="${logo}" class="league-logo" loading="lazy" alt="${sport}" onerror="this.style.display='none'">` : ''}
+                ${logo ? `<img src="${logo}" class="league-logo" loading="eager" alt="${sport}" onerror="this.style.display='none'">` : ''}
                 <span class="league-text">${sport}</span>
             </div>
         `;
@@ -472,13 +472,13 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
         // Create logo HTML
         const awayLogoHtml = awayInfo.logo
-            ? `<img src="${awayInfo.logo}" class="team-logo" loading="lazy" alt="${awayInfo.abbr}" onerror="this.style.display='none'">`
+            ? `<img src="${awayInfo.logo}" class="team-logo" loading="eager" alt="${awayInfo.abbr}" onerror="this.style.display='none'">`
             : '';
         const homeLogoHtml = homeInfo.logo
-            ? `<img src="${homeInfo.logo}" class="team-logo" loading="lazy" alt="${homeInfo.abbr}" onerror="this.style.display='none'">`
+            ? `<img src="${homeInfo.logo}" class="team-logo" loading="eager" alt="${homeInfo.abbr}" onerror="this.style.display='none'">`
             : '';
         const pickLogoHtml = pickInfo.logo
-            ? `<img src="${pickInfo.logo}" class="pick-team-logo" loading="lazy" alt="${pickInfo.abbr}" onerror="this.style.display='none'">`
+            ? `<img src="${pickInfo.logo}" class="pick-team-logo" loading="eager" alt="${pickInfo.abbr}" onerror="this.style.display='none'">`
             : '';
 
         // Matchup HTML with logos
@@ -529,7 +529,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             const modelSpread = pick.modelSpread || pick.predictedSpread || pickLabel || '';
             const teamAbbrev = isTeamPick ? pickInfo.abbr : pickTeamName;
             const logoHtml = isTeamPick && pickInfo.logo
-                ? `<img src="${pickInfo.logo}" class="prediction-logo" loading="lazy" alt="${teamAbbrev}" onerror="this.style.display='none'">`
+                ? `<img src="${pickInfo.logo}" class="prediction-logo" loading="eager" alt="${teamAbbrev}" onerror="this.style.display='none'">`
                 : '';
 
             if (pick.pickType === 'moneyline') {
@@ -551,7 +551,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         const getMarketHtml = () => {
             const teamAbbrev = isTeamPick ? pickInfo.abbr : pickTeamName;
             const logoHtml = isTeamPick && pickInfo.logo
-                ? `<img src="${pickInfo.logo}" class="prediction-logo" loading="lazy" alt="${teamAbbrev}" onerror="this.style.display='none'">`
+                ? `<img src="${pickInfo.logo}" class="prediction-logo" loading="eager" alt="${teamAbbrev}" onerror="this.style.display='none'">`
                 : '';
 
             if (pick.pickType === 'moneyline') {
@@ -626,7 +626,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         const leagueLogo = LEAGUE_LOGOS[sport] || '';
         const leagueCellHtml = `
             <div class="league-cell">
-                ${leagueLogo ? `<img src="${leagueLogo}" class="league-logo" loading="lazy" alt="${sport}" onerror="this.style.display='none'">` : ''}
+                ${leagueLogo ? `<img src="${leagueLogo}" class="league-logo" loading="eager" alt="${sport}" onerror="this.style.display='none'">` : ''}
                 <span class="league-abbr">${sport}</span>
             </div>`;
 

@@ -161,38 +161,113 @@ body.page-active-picks .kpi-subtext {
 }
 
 /* ==========================================================================
-   TABLE REFINEMENTS (Dashboard only)
+   TABLE REFINEMENTS (Dashboard only) - Mirror Weekly Lineup Typography
    ========================================================================== */
+
+/* Mirror weekly lineup table container */
 body.page-active-picks .table-container {
-    background: rgba(5, 12, 22, 0.78);
-    border: 1px solid rgba(0, 214, 137, 0.18);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+    background: rgba(5, 12, 22, 0.40) !important;
+    border: none !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3) !important;
+    border-radius: 8px !important;
+    margin-top: 0 !important;
 }
 
+/* Mirror header typography */
 body.page-active-picks .picks-table thead th {
-    background: linear-gradient(180deg, rgba(0, 214, 137, 0.12) 0%, rgba(0, 214, 137, 0.04) 100%);
-    border-bottom: 1px solid rgba(0, 214, 137, 0.35);
+    background: linear-gradient(180deg, rgba(0, 214, 137, 0.06) 0%, rgba(0, 214, 137, 0.03) 45%, rgba(8, 12, 22, 0.18) 100%);
+    background-color: rgba(8, 12, 22, 0.15);
+    border-bottom: 1px solid rgba(0, 214, 137, 0.20);
+    border-right: 1px solid rgba(0, 214, 137, 0.08);
+    padding: 0.75rem 0.75rem;
+    text-align: center;
+    font-family: var(--font-display, 'Oswald', sans-serif);
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
     color: #f4fbff;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+    line-height: 1.2;
+    position: relative;
 }
 
-body.page-active-picks .picks-table tbody tr {
-    border-bottom: 1px solid rgba(0, 214, 137, 0.08);
+/* Mirror body typography */
+body.page-active-picks .picks-table tbody td {
+    padding: 0.4rem 0.4rem;
+    color: rgba(232, 240, 242, 0.95);
+    vertical-align: middle;
+    font-family: var(--font-body, 'Inter', sans-serif);
+    font-weight: 500;
+    font-size: 0.825rem;
+    line-height: 1.2;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
 }
 
+/* Mirror specific cell typography */
+body.page-active-picks .pick-team-abbr {
+    font-family: var(--font-display, 'Oswald', sans-serif);
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--emerald-400);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+
+body.page-active-picks .pick-line {
+    font-family: var(--font-display, 'Oswald', sans-serif);
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--neutral-100);
+    letter-spacing: 0.01em;
+}
+
+body.page-active-picks .pick-odds {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--neutral-400);
+    letter-spacing: 0.01em;
+}
+
+body.page-active-picks .team-name-full {
+    font-family: var(--font-display, 'Oswald', sans-serif);
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--neutral-100);
+    letter-spacing: 0.02em;
+}
+
+body.page-active-picks .team-record {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--neutral-400);
+}
+
+/* Mirror zebra stripes */
 body.page-active-picks .picks-table tbody tr:nth-child(odd) {
-    background: rgba(255, 255, 255, 0.01);
+    background: rgba(4, 12, 24, 0.42);
+}
+
+body.page-active-picks .picks-table tbody tr:nth-child(even) {
+    background: rgba(30, 55, 85, 0.28);
 }
 
 body.page-active-picks .picks-table tbody tr:hover {
-    background: rgba(0, 214, 137, 0.07);
+    background: rgba(40, 60, 90, 0.48);
 }
 
 /* ==========================================================================
-   STATUS BADGES (Dashboard)
+   STATUS BADGES (Dashboard) - Mirror Weekly Lineup Formatting
    ========================================================================== */
 body.page-active-picks .status-badge {
-    letter-spacing: 0.03em;
+    font-family: var(--font-display, 'Oswald', sans-serif);
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
     box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06);
 }
 

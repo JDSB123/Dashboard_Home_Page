@@ -33,10 +33,6 @@
             border-radius: 8px !important;
             margin-top: 0 !important;
         }
-        /* Move content up by 100px */
-        body.page-weekly-lineup .main-container {
-            margin-top: -19px !important; /* Reduced from 56px by another 75px */
-        }
         /* Remove black fill from filter toolbar */
         body.page-weekly-lineup .filter-toolbar {
             background: transparent !important;
@@ -47,6 +43,75 @@
         body.page-weekly-lineup .toolbar-container {
             background: transparent !important;
             margin-bottom: 0 !important;
+        }
+        /* Align Nav and Branding Tops at ~12px (1/8 inch) */
+        body.page-weekly-lineup .brand-nav {
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            margin-top: 12px !important;
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+            padding-left: 0.75in !important;
+            padding-right: 0.75in !important;
+            z-index: 1000 !important;
+        }
+        body.page-weekly-lineup .nav-links {
+            margin-top: 0 !important;
+        }
+        body.page-weekly-lineup .main-container {
+            margin-top: 12px !important;
+        }
+        /* Override forced transparency to match Odds Market semi-transparency */
+        body.page-weekly-lineup .weekly-lineup-table-wrapper {
+            background: rgba(5, 12, 22, 0.40) !important;
+            border: none !important;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3) !important;
+            border-radius: 8px !important;
+            margin-top: 0 !important;
+            margin-left: 0.75in !important;
+            margin-right: 0.75in !important;
+            width: calc(100% - 1.5in) !important;
+        }
+        /* Align branding logo with left edge */
+        body.page-weekly-lineup .dashboard-topline {
+            padding-left: 0.75in !important;
+            padding-right: 0.75in !important;
+        }
+        body.page-weekly-lineup .brand-header-inline {
+            padding-left: 0 !important; /* Remove internal padding to align perfectly */
+        }
+        /* Sleek Nav Links with Metallic Emerald and Navy Theme */
+        body.page-weekly-lineup .nav-link {
+            color: #e6f2f6 !important; /* Soft emerald-tinted white for readability */
+            font-family: 'Cormorant Garamond', serif !important;
+            font-weight: 600 !important; /* Sleek medium weight */
+            font-size: 0.75rem !important; /* Smaller font for lower profile */
+            text-transform: uppercase !important;
+            letter-spacing: 0.1em !important;
+            text-shadow: 
+                0 1px 2px rgba(0, 31, 63, 0.9), /* Navy shadow for depth and contrast */
+                0 0 4px rgba(0, 214, 137, 0.3) !important; /* Emerald metallic glow */
+            opacity: 1 !important;
+            padding: 4px 8px !important; /* Reduced padding for sleek look */
+            -webkit-font-smoothing: antialiased;
+            transition: color 0.3s ease, text-shadow 0.3s ease, background 0.3s ease;
+        }
+        body.page-weekly-lineup .nav-link:hover {
+            color: #00e6a3 !important; /* Brighter emerald on hover */
+            text-shadow: 
+                0 0 8px rgba(0, 214, 137, 0.5),
+                0 1px 2px rgba(0, 31, 63, 0.9) !important; /* Enhanced glow with navy depth */
+            background: linear-gradient(135deg, rgba(0, 214, 137, 0.1), rgba(0, 31, 63, 0.1)) !important; /* Subtle gradient */
+        }
+        body.page-weekly-lineup .nav-link.active {
+            color: #00e6a3 !important; /* Emerald for active */
+            text-shadow: 
+                0 0 6px rgba(0, 214, 137, 0.4),
+                0 1px 2px rgba(0, 31, 63, 0.9) !important; /* Active glow */
+            border-bottom: none !important; /* No underline */
+            background: linear-gradient(135deg, rgba(0, 214, 137, 0.15), rgba(0, 31, 63, 0.15)) !important; /* Subtle active background */
         }
     </style>
 </head>
@@ -101,7 +166,7 @@
         </div>
 
         <!-- Filter Toolbar (Moved outside wrapper to avoid background film) -->
-        <div class="toolbar-container" style="margin-left: 0.5in; margin-right: 0.5in; width: calc(100% - 1in);">
+        <div class="toolbar-container" style="margin-left: 0.75in; margin-right: 0.75in; width: calc(100% - 1.5in);">
             <div class="filter-toolbar" id="filter-toolbar">
                 <div class="ft-left">
                     <!-- League pills -->
@@ -151,7 +216,7 @@
         </div>
 
         <!-- Filter Chips (Moved outside wrapper to avoid background film) -->
-        <div class="chips-container" style="margin-left: 0.5in; margin-right: 0.5in; width: calc(100% - 1in);">
+        <div class="chips-container" style="margin-left: 0.75in; margin-right: 0.75in; width: calc(100% - 1.5in);">
             <div class="table-filter-chips-wrapper">
                 <div class="table-filter-chips filter-chips" id="table-filter-chips" aria-live="polite" data-has-chips="false"></div>
             </div>
@@ -216,9 +281,9 @@
                                 <div class="filter-section-compact"><div class="pick-type-pills"><button class="pick-pill active" data-pick="all">All</button><button class="pick-pill" data-pick="spread">Spread</button><button class="pick-pill" data-pick="ml">Moneyline</button><button class="pick-pill" data-pick="total">Total</button><button class="pick-pill" data-pick="tt">Team Total</button></div></div>
                             </div>
                         </th>
-                        <th scope="col" data-sort="edge" class="center col-edge sort-desc" aria-sort="descending">
+                        <th scope="col" data-sort="edge" class="center col-edge">
                             <div class="th-header-shell">
-                                <button class="th-sort-btn" aria-label="Sort by edge"><span class="header-main-text">Edge</span><span class="sort-icon" aria-hidden="true">▼</span></button>
+                                <button class="th-sort-btn" aria-label="Sort by edge"><span class="header-main-text">Edge</span><span class="sort-icon" aria-hidden="true">▲</span></button>
                                 <button class="th-filter-btn" data-filter="edge" aria-label="Filter by edge" aria-expanded="false" aria-controls="filter-edge" type="button"></button>
                             </div>
                             <div class="th-filter-dropdown nav-panel-dropdown filter-integrated" id="filter-edge" role="dialog" hidden>
