@@ -3120,3 +3120,22 @@ nav {
     color: rgba(var(--color-primary-bright-rgb), 1);
     font-weight: 600;
 }
+
+
+/* Weekly Lineup: Darker bear background */
+body.page-weekly-lineup::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+  z-index: 0;
+}
+
+body.page-weekly-lineup > * {
+  position: relative;
+  z-index: 1;
+}
