@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<!--
+  GREEN BIER DASHBOARD v4.1
+  Main dashboard landing page - Predictive Analytics
+-->
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Green Bier Sport Ventures — Dashboard v4.1</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/Logo%208.5.png">
+    
+    <!-- Google Fonts: Athletic Prestige Design -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&amp;family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Oswald:wght@500;600;700&amp;family=Bebas+Neue&amp;family=Inter:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;family=Exo+2:wght@400;500;600&amp;family=Roboto+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+    <!-- CSS Architecture: Direct Modular Imports (No Orchestrator) -->
+    <!-- Cache version: 20251218 - Full layout with modular CSS paths -->
+
+    <!-- 1. Design Tokens (colors, typography, spacing) -->
+    <link rel="stylesheet" href="assets/css/base/variables.css?v=20251224-3">
+
+    <!-- 2. Global Resets & Utilities -->
+    <link rel="stylesheet" href="assets/css/base/reset.css?v=20251224-3">
+
+    <!-- 3. Page Layout Structure (includes unified filter system - sportsbook card style) -->
+    <link rel="stylesheet" href="assets/css/layout/page-layout.css?v=20251224-3">
+
+    <!-- 4. Navigation & Header Components -->
+    <link rel="stylesheet" href="assets/css/components/navigation.css?v=20251224-3">
+    <link rel="stylesheet" href="assets/css/components/brand-header.css?v=20251224-3">
+
+    <!-- 5. Interactive Components -->
+    <link rel="stylesheet" href="assets/css/components/kpi-tiles.css?v=20251224-3">
+    <link rel="stylesheet" href="assets/css/components/date-toggles.css?v=20251224-3">
+
+    <!-- 6. Table System Components -->
+    <link rel="stylesheet" href="assets/css/components/picks-table.css?v=20251224-4">
+    <link rel="stylesheet" href="assets/css/components/parlays.css?v=20251224-3">
+    <link rel="stylesheet" href="assets/css/components/boxscores.css?v=20251224-3">
+    <link rel="stylesheet" href="assets/css/components/status-badges.css?v=20251224-3">
+
+    <!-- 7. Utility & Color Systems -->
+    <link rel="stylesheet" href="assets/css/components/segment-colors.css?v=20251224-3">
+
+    <!-- 8. Dashboard-specific styles (self-contained) -->
+    <link rel="stylesheet" href="assets/css/pages/dashboard.css?v=20251224-7">
+
+    <!-- Runtime config -->
+    <script src="config.production.js" defer></script>
+    <script src="assets/js/utils/shared-utils.js?v=20251224-3" defer></script>
+    <script src="assets/js/utils/notifications.js?v=20251224-3" defer></script>
+
+    <!-- Core dashboard interactions: KPI tiles, sorting, filters -->
+    <script src="assets/js/core/debug-config.js?v=20251224-3" defer></script>
+    <!-- Legacy dashboard.js removed and archived -->
+</head>
+<body class="page-glow page-active-picks">
+
+<nav class="brand-nav" role="navigation" aria-label="Main navigation">
+    <ul class="nav-links" aria-label="Primary">
+        <li>
+            <a href="dashboard.html" class="nav-link active" aria-current="page">Dashboard</a>
+        </li>
+        <li>
+            <a href="weekly-lineup.html" class="nav-link">Weekly Lineup</a>
+        </li>
+        <li>
+            <a href="odds-market.html" class="nav-link">Odds Market</a>
+        </li>
+        <li class="nav-dropdown">
+            <button class="nav-link nav-dropdown-trigger" id="sportsbooks-trigger" aria-expanded="false" aria-haspopup="true" aria-controls="sportsbooks-menu">Sports Books</button>
+            <!-- Sportsbook Dropdown Menu -->
+            <div class="nav-dropdown-menu" id="sportsbooks-menu" aria-labelledby="sportsbooks-trigger" role="region" aria-label="Connected sportsbooks" hidden>
+                <!-- Hulk Wager -->
+                <section class="sportsbook-card" data-book="hulkwager" aria-labelledby="sportsbook-hulkwager-name">
+                    <div class="sportsbook-card-header">
+                        <div class="sportsbook-name-group" id="sportsbook-hulkwager-name">
+                            <span class="connection-status connected"></span>
+                            <span class="sportsbook-name">Hulk Wager</span>
+                        </div>
+                        <div class="sportsbook-meta-compact">
+                            <span class="sportsbook-last-sync">Last: <span class="sync-time">5m ago</span></span>
+                            <button type="button" class="sportsbook-fetch-compact" data-book="hulkwager" aria-label="Fetch picks from Hulk Wager">
+                                <span class="fetch-icon">↻</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="sportsbook-actions-row">
+                        <div class="sportsbook-credentials-group">
+                            <input type="text" id="hulk-username" class="credential-input-compact" placeholder="Username" name="hulkwager-login" autocomplete="off" spellcheck="false" data-form-type="other" inputmode="text" aria-label="Hulk Wager username">
+                            <input type="password" id="hulk-password" class="credential-input-compact" placeholder="Password" name="hulkwager-secret" autocomplete="new-password" spellcheck="false" data-form-type="other" inputmode="text" aria-label="Hulk Wager password">
+                        </div>
+                    </div>
+                </section>
+                <!-- Bombay 711 -->
+                <section class="sportsbook-card" data-book="bombay711" aria-labelledby="sportsbook-bombay711-name">
+                    <div class="sportsbook-card-header">
+                        <div class="sportsbook-name-group" id="sportsbook-bombay711-name">
+                            <span class="connection-status connected"></span>
+                            <span class="sportsbook-name">Bombay 711</span>
+                        </div>
+                        <div class="sportsbook-meta-compact">
+                            <span class="sportsbook-last-sync">Last: <span class="sync-time">12m ago</span></span>
+                            <button type="button" class="sportsbook-fetch-compact" data-book="bombay711" aria-label="Fetch picks from Bombay 711">
+                                <span class="fetch-icon">↻</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="sportsbook-actions-row">
+                        <div class="sportsbook-credentials-group">
+                            <input type="text" id="bombay-username" class="credential-input-compact" placeholder="Username" name="bombay711-login" autocomplete="off" spellcheck="false" data-form-type="other" inputmode="text" aria-label="Bombay 711 username">
+                            <input type="password" id="bombay-password" class="credential-input-compact" placeholder="Password" name="bombay711-secret" autocomplete="new-password" spellcheck="false" data-form-type="other" inputmode="text" aria-label="Bombay 711 password">
+                        </div>
+                    </div>
+                </section>
+                <!-- King of Sports -->
+                <section class="sportsbook-card" data-book="kingofsports" aria-labelledby="sportsbook-kingofsports-name">
+                    <div class="sportsbook-card-header">
+                        <div class="sportsbook-name-group" id="sportsbook-kingofsports-name">
+                            <span class="connection-status connected"></span>
+                            <span class="sportsbook-name">King of Sports</span>
+                        </div>
+                        <div class="sportsbook-meta-compact">
+                            <span class="sportsbook-last-sync">Last: <span class="sync-time">2m ago</span></span>
+                            <button type="button" class="sportsbook-fetch-compact" data-book="kingofsports" aria-label="Fetch picks from King of Sports">
+                                <span class="fetch-icon">↻</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="sportsbook-actions-row">
+                        <div class="sportsbook-credentials-group">
+                            <input type="text" id="kingofsports-username" class="credential-input-compact" placeholder="Username" name="kingofsports-login" autocomplete="off" spellcheck="false" data-form-type="other" inputmode="text" aria-label="King of Sports username">
+                            <input type="password" id="kingofsports-password" class="credential-input-compact" placeholder="Password" name="kingofsports-secret" autocomplete="new-password" spellcheck="false" data-form-type="other" inputmode="text" aria-label="King of Sports password">
+                        </div>
+                    </div>
+                </section>
+                <!-- Prime Time Action -->
+                <section class="sportsbook-card" data-book="primetimeaction" aria-labelledby="sportsbook-primetimeaction-name">
+                    <div class="sportsbook-card-header">
+                        <div class="sportsbook-name-group" id="sportsbook-primetimeaction-name">
+                            <span class="connection-status disconnected"></span>
+                            <span class="sportsbook-name">Prime Time Action</span>
+                        </div>
+                        <div class="sportsbook-meta-compact">
+                            <span class="sportsbook-last-sync">Last: <span class="sync-time">--</span></span>
+                            <button type="button" class="sportsbook-fetch-compact" data-book="primetimeaction" aria-label="Fetch picks from Prime Time Action">
+                                <span class="fetch-icon">↻</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="sportsbook-actions-row">
+                        <div class="sportsbook-credentials-group">
+                            <input type="text" id="primetime-username" class="credential-input-compact" placeholder="Username" name="primetimeaction-login" autocomplete="off" spellcheck="false" data-form-type="other" inputmode="text" aria-label="Prime Time Action username">
+                            <input type="password" id="primetime-password" class="credential-input-compact" placeholder="Password" name="primetimeaction-secret" autocomplete="new-password" spellcheck="false" data-form-type="other" inputmode="text" aria-label="Prime Time Action password">
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </li>
+    </ul>
+</nav>
+
+    <main class="main-container">
+        
+        <!-- ===== Topline Header ===== -->
+        <header class="dashboard-topline">
+            <div class="brand-header-inline">
+                <img class="brand-logo-inline" src="assets/Logo%208.5.png" alt="Green Bier Sport Ventures Logo">
+                <div class="brand-content-inline">
+                    <div class="brand-text-stacked">
+                        <span class="brand-line-1">Green Bier</span>
+                        <span class="brand-line-2"><span class="brand-word">Sport</span> <span class="brand-word">Ventures</span></span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="kpi-tiles">
+                <!-- KPI Tile 1: Projected PnL -->
+                <div class="kpi-tile" data-tile-id="1" data-action="flip-tile" role="button" tabindex="0" aria-label="Projected PnL KPI, click to flip">
+                    <div class="kpi-tile-layer active">
+                        <div class="kpi-label">Projected PnL</div>
+                        <div class="kpi-value positive">+$0</div>
+                        <div class="kpi-subtext">0 Active Picks</div>
+                    </div>
+                    <div class="kpi-tile-layer">
+                        <div class="kpi-label">Net Profit</div>
+                        <div class="kpi-value">$0</div>
+                        <div class="kpi-subtext">Season to Date</div>
+                    </div>
+                </div>
+
+                <!-- KPI Tile 2: Win Rate -->
+                <div class="kpi-tile" data-tile-id="2" data-action="flip-tile" role="button" tabindex="0" aria-label="Win Rate KPI, click to flip">
+                    <div class="kpi-tile-layer active">
+                        <div class="kpi-label">Win Rate</div>
+                        <div class="kpi-value">0%</div>
+                        <div class="kpi-subtext">0-0-0 Record</div>
+                    </div>
+                    <div class="kpi-tile-layer">
+                        <div class="kpi-label">ROI</div>
+                        <div class="kpi-value">0%</div>
+                        <div class="kpi-subtext">Return on Investment</div>
+                    </div>
+                </div>
+
+                <!-- KPI Tile 3: Active Volume -->
+                <div class="kpi-tile" data-tile-id="3" data-action="flip-tile" role="button" tabindex="0" aria-label="Active Volume KPI, click to flip">
+                    <div class="kpi-tile-layer active">
+                        <div class="kpi-label">Active Volume</div>
+                        <div class="kpi-value">$0</div>
+                        <div class="kpi-subtext">Total Risk</div>
+                    </div>
+                    <div class="kpi-tile-layer">
+                        <div class="kpi-label">To Win</div>
+                        <div class="kpi-value">$0</div>
+                        <div class="kpi-subtext">Potential Payout</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== Date Toggles ===== -->
+            <div class="date-toggles-container">
+                <div class="date-toggles" role="group" aria-label="Date selection">
+                    <button class="date-toggle-btn active" data-range="today" aria-pressed="true">Today</button>
+                    <button class="date-toggle-btn" data-range="tomorrow" aria-pressed="false">Tomorrow</button>
+                    <button class="date-toggle-btn" data-range="7days" aria-pressed="false">Upcoming</button>
+                    <button class="date-toggle-btn" data-range="all" aria-pressed="false">All Active</button>
+                </div>
+                <div class="date-toggles-actions">
+                    <button class="date-clear-btn" aria-label="Clear date filter" title="Clear filter">Clear</button>
+                    <div class="date-toggles-refresh">
+                        <span class="refresh-label">Last refreshed:</span>
+                        <span class="refresh-time" id="last-updated-timestamp">--:--</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- ===== Main Dashboard Layout ===== -->
+        <div class="main-dashboard-layout">
+
+            <!-- ===== Active Picks Table ===== -->
+            <div class="table-container">
+                <div class="table-header-controls">
+                    <div class="filter-chips" id="filter-chips-container">
+                        <!-- Active filters appear here -->
+                    </div>
+                </div>
+                
+                <table class="picks-table" id="picks-table">
+                    <thead>
+                        <tr>
+                            <th class="sortable" data-sort="date">
+                                <div class="th-header-shell">
+                                    <button class="th-sort-btn" aria-label="Sort by date">
+                                        <span class="header-main-text">Date / Time (CST)</span>
+                                        <span class="sort-icon" aria-hidden="true">▲</span>
+                                    </button>
+                                    <button class="th-filter-btn" aria-label="Filter by date" aria-controls="filter-date" data-filter="date" type="button"></button>
+                                </div>
+                                <!-- Date Filter Dropdown -->
+                                <div class="th-filter-dropdown" id="filter-date" hidden>
+                                    <div class="filter-header">Filter Date/Time</div>
+                                    <div class="filter-body" id="date-filter-options">
+                                        <!-- Populated by JS -->
+                                    </div>
+                                    <div class="filter-footer">
+                                        <button class="filter-action-btn reset-filter">Reset</button>
+                                        <button class="filter-action-btn apply-filter">Apply</button>
+                                    </div>
+                                </div>
+                            </th>
+                            <th class="center sortable" data-sort="league">
+                                <div class="th-header-shell">
+                                    <button class="th-sort-btn" aria-label="Sort by league">
+                                        <span class="header-main-text">League</span>
+                                        <span class="sort-icon" aria-hidden="true">▲</span>
+                                    </button>
+                                </div>
+                            </th>
+                            <th class="sortable" data-sort="matchup">
+                                <div class="th-header-shell">
+                                    <button class="th-sort-btn" aria-label="Sort by matchup">
+                                        <span class="header-main-text">Matchup</span>
+                                        <span class="sort-icon" aria-hidden="true">▲</span>
+                                    </button>
+                                    <button class="th-filter-btn" aria-label="Filter by matchup" aria-controls="filter-matchup" data-filter="matchup" type="button"></button>
+                                </div>
+                                <!-- Matchup Filter Dropdown -->
+                                <div class="th-filter-dropdown" id="filter-matchup" hidden>
+                                    <div class="filter-header">Filter Matchup</div>
+                                    <div class="filter-body">
+                                        <div class="filter-group">
+                                            <label class="filter-label">League</label>
+                                            <select class="filter-select" id="league-select">
+                                                <option value="all">All Leagues</option>
+                                                <option value="nfl">NFL</option>
+                                                <option value="nba">NBA</option>
+                                                <option value="ncaaf">NCAAF</option>
+                                                <option value="ncaab">NCAAB</option>
+                                            </select>
+                                        </div>
+                                        <div class="filter-group">
+                                            <label class="filter-label">Teams</label>
+                                            <div class="filter-search-container">
+                                                <input type="text" class="filter-search" placeholder="Search teams..." id="team-search">
+                                            </div>
+                                            <div class="filter-list-container" id="teams-list">
+                                                <div class="filter-option select-all-option">
+                                                    <label>
+                                                        <input type="checkbox" id="teams-select-all">
+                                                        <span>Select All</span>
+                                                    </label>
+                                                </div>
+                                                <!-- Teams populated by JS -->
+                                            </div>
+                                        </div>
+                                        <div class="filter-group">
+                                            <label class="filter-label">Ticket Type</label>
+                                            <div class="filter-radio-group">
+                                                <label class="filter-radio">
+                                                    <input type="radio" name="ticket-type" value="all" checked>
+                                                    <span>All</span>
+                                                </label>
+                                                <label class="filter-radio">
+                                                    <input type="radio" name="ticket-type" value="single">
+                                                    <span>Single</span>
+                                                </label>
+                                                <label class="filter-radio">
+                                                    <input type="radio" name="ticket-type" value="parlay">
+                                                    <span>Parlay</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="filter-footer">
+                                        <button class="filter-action-btn reset-filter">Reset</button>
+                                        <button class="filter-action-btn apply-filter">Apply</button>
+                                    </div>
+                                </div>
+                            </th>
+                            <th class="center sortable" data-sort="segment">
+                                <div class="th-header-shell">
+                                    <button class="th-sort-btn" aria-label="Sort by segment">
+                                        <span class="header-main-text">Segment</span>
+                                        <span class="sort-icon" aria-hidden="true">▲</span>
+                                    </button>
+                                </div>
+                            </th>
+                            <th class="sortable" data-sort="pick">
+                                <div class="th-header-shell">
+                                    <button class="th-sort-btn" aria-label="Sort by pick">
+                                        <span class="header-main-text">Pick</span>
+                                        <span class="sort-icon" aria-hidden="true">▲</span>
+                                    </button>
+                                    <button class="th-filter-btn" aria-label="Filter by pick type" aria-controls="filter-pick" data-filter="pick" type="button"></button>
+                                </div>
+                                <!-- Pick Filter Dropdown -->
+                                <div class="th-filter-dropdown" id="filter-pick" hidden>
+                                    <div class="filter-header">Filter Pick Type</div>
+                                    <div class="filter-body">
+                                        <div class="filter-group">
+                                            <label class="filter-label">Bet Type</label>
+                                            <div class="filter-options-grid" id="bet-type-options">
+                                                <label class="filter-chip-option">
+                                                    <input type="checkbox" value="spread">
+                                                    <span>Spread</span>
+                                                </label>
+                                                <label class="filter-chip-option">
+                                                    <input type="checkbox" value="moneyline">
+                                                    <span>Moneyline</span>
+                                                </label>
+                                                <label class="filter-chip-option">
+                                                    <input type="checkbox" value="total">
+                                                    <span>Total</span>
+                                                </label>
+                                                <label class="filter-chip-option">
+                                                    <input type="checkbox" value="prop">
+                                                    <span>Prop</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="filter-group">
+                                            <label class="filter-label">Segment</label>
+                                            <div class="filter-options-grid" id="segment-options">
+                                                <label class="filter-chip-option">
+                                                    <input type="checkbox" value="full-game">
+                                                    <span>Full Game</span>
+                                                </label>
+                                                <label class="filter-chip-option">
+                                                    <input type="checkbox" value="1st-half">
+                                                    <span>1st Half</span>
+                                                </label>
+                                                <label class="filter-chip-option">
+                                                    <input type="checkbox" value="2nd-half">
+                                                    <span>2nd Half</span>
+                                                </label>
+                                                <label class="filter-chip-option">
+                                                    <input type="checkbox" value="1st-quarter">
+                                                    <span>1st Qtr</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="filter-footer">
+                                        <button class="filter-action-btn reset-filter">Reset</button>
+                                        <button class="filter-action-btn apply-filter">Apply</button>
+                                    </div>
+                                </div>
+                            </th>
+                            <th class="center sortable" data-sort="risk">
+                                <div class="th-header-shell">
+                                    <button class="th-sort-btn" aria-label="Sort by risk">
+                                        <span class="header-main-text">Risk / Win</span>
+                                        <span class="sort-icon" aria-hidden="true">▲</span>
+                                    </button>
+                                    <button class="th-filter-btn" aria-label="Filter by risk amount" aria-controls="filter-risk" data-filter="risk" type="button"></button>
+                                </div>
+                                <!-- Risk Filter Dropdown -->
+                                <div class="th-filter-dropdown" id="filter-risk" hidden>
+                                    <div class="filter-header">Filter Amount</div>
+                                    <div class="filter-body">
+                                        <div class="filter-group">
+                                            <label class="filter-label">Risk Range</label>
+                                            <div class="range-inputs">
+                                                <input type="number" placeholder="Min" id="risk-min" class="filter-input-sm">
+                                                <span>to</span>
+                                                <input type="number" placeholder="Max" id="risk-max" class="filter-input-sm">
+                                            </div>
+                                        </div>
+                                        <div class="filter-group">
+                                            <label class="filter-label">Win Range</label>
+                                            <div class="range-inputs">
+                                                <input type="number" placeholder="Min" id="win-min" class="filter-input-sm">
+                                                <span>to</span>
+                                                <input type="number" placeholder="Max" id="win-max" class="filter-input-sm">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="filter-footer">
+                                        <button class="filter-action-btn reset-filter">Reset</button>
+                                        <button class="filter-action-btn apply-filter">Apply</button>
+                                    </div>
+                                </div>
+                            </th>
+                            <th class="center">
+                                <div class="th-header-shell">
+                                    <span class="header-main-text">Box Score</span>
+                                </div>
+                            </th>
+                            <th class="center sortable" data-sort="status">
+                                <div class="th-header-shell">
+                                    <button class="th-sort-btn" aria-label="Sort by status">
+                                        <span class="header-main-text">Status</span>
+                                        <span class="sort-icon" aria-hidden="true">▲</span>
+                                    </button>
+                                    <button class="th-filter-btn" aria-label="Filter by status" aria-controls="filter-status" data-filter="status" type="button"></button>
+                                </div>
+                                <!-- Status Filter Dropdown -->
+                                <div class="th-filter-dropdown" id="filter-status" hidden>
+                                    <div class="filter-header">Filter Status</div>
+                                    <div class="filter-body">
+                                        <div class="filter-options-list" id="status-options">
+                                            <label class="filter-option">
+                                                <input type="checkbox" value="pending" checked>
+                                                <span class="status-dot status-pending"></span>
+                                                <span>Pending</span>
+                                            </label>
+                                            <label class="filter-option">
+                                                <input type="checkbox" value="live" checked>
+                                                <span class="status-dot status-live"></span>
+                                                <span>Live</span>
+                                            </label>
+                                            <label class="filter-option">
+                                                <input type="checkbox" value="win">
+                                                <span class="status-dot status-win"></span>
+                                                <span>Win</span>
+                                            </label>
+                                            <label class="filter-option">
+                                                <input type="checkbox" value="loss">
+                                                <span class="status-dot status-loss"></span>
+                                                <span>Loss</span>
+                                            </label>
+                                            <label class="filter-option">
+                                                <input type="checkbox" value="push">
+                                                <span class="status-dot status-push"></span>
+                                                <span>Push</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="filter-footer">
+                                        <button class="filter-action-btn reset-filter">Reset</button>
+                                        <button class="filter-action-btn apply-filter">Apply</button>
+                                    </div>
+                                </div>
+                            </th>
+                            <th class="center">
+                                <div class="th-header-shell">
+                                    <span class="header-main-text">Hit / Miss</span>
+                                </div>
+                            </th>
+                            <th class="center">
+                                <div class="th-header-shell">
+                                    <span class="header-main-text">$ Won / $ Lost</span>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="picks-tbody">
+                        <!-- Rows populated by JS -->
+
+                </tbody>
+            </table>
+        </div>
+        </div><!-- /.main-dashboard-layout -->
+        
+    </main>
+    
+    <!-- ===== Back to Top Button ===== -->
+    <button class="back-to-top" id="back-to-top" aria-label="Back to top"></button>
+    
+    <!-- ===== INLINE SCRIPT REMOVED ===== -->
+    <!-- All functionality moved to external JS files in assets/ -->
+    
+    
+    
+    
+    <!-- Modular JS Architecture -->
+    <script src="assets/js/modules/zebra-stripes.js?v=20251224-3" defer></script>
+
+    <!-- Unified table filters module -->
+    <script src="assets/js/modules/table-filters.js?v=20251224-3" defer></script>
+
+    <!-- Modular Active Picks Components -->
+    <script src="assets/js/modules/picks-dom-utils.js?v=20251224-3" defer></script>
+    <script src="assets/js/modules/picks-state-manager.js?v=20251224-3" defer></script>
+    <script src="assets/js/modules/picks-data-processor.js?v=20251224-3" defer></script>
+    <script src="assets/js/modules/picks-filter-manager.js?v=20251224-4" defer></script>
+    <script src="assets/js/modules/picks-sort-manager.js?v=20251224-4" defer></script>
+    <script src="assets/js/modules/picks-table-renderer.js?v=20251224-3" defer></script>
+    <script src="assets/js/modules/picks-parlay-manager.js?v=20251224-3" defer></script>
+    <script src="assets/js/features/active-picks-modular.js?v=20251224-3" defer></script>
+    <script src="dashboard/js/kpi-calculator.js?v=20251224-3" defer></script>
+    <script src="dashboard/js/smart-load-picks.js?v=20251224-4" defer></script>
+    <script src="assets/js/core/navigation.js?v=20251224-3" defer></script>
+    <script src="dashboard/js/status-logic.js?v=20251224-3" defer></script>
+    <script src="dashboard/js/status-tooltip.js?v=20251224-3" defer></script>
+
+    <!-- Upload functionality -->
+    <script src="assets/js/features/auto-game-fetcher.js?v=20251224-3" defer></script>
+    <script src="assets/js/features/pick-standardizer.js?v=20251224-3"></script>
+    <script src="assets/js/features/import-options.js?v=20251224-3" defer></script>
+
+    <!-- Dashboard-specific: Picks Manager for local development -->
+    <script src="dashboard/js/local-picks-manager.js?v=20251224-3"></script>
+
+    <!-- Dashboard Initialization (KPI tiles, flip, refresh) -->
+    <script src="dashboard/js/dashboard-init.js?v=20251224-3" defer></script>
+
+    <!-- Date Toggles Functionality -->
+    <script src="assets/js/utils/date-toggles.js?v=20251224-3" defer></script>
+
+    <!-- Logo Cache for Performance -->
+    <script src="assets/js/utils/logo-cache.js?v=20251224-3" defer></script>
+    
+    <!-- Empty datalist to prevent browser autocomplete suggestions -->
+    <datalist id="no-autocomplete"></datalist>
+    
+</body>
+</html>

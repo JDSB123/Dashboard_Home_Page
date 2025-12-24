@@ -419,9 +419,9 @@
          * Initialize risk filter
          */
         initRiskFilter() {
-            // Collect risk ranges
-            const riskRanges = window.PicksDataProcessor.collectValueRanges(4);
-            const winRanges = window.PicksDataProcessor.collectValueRanges(5);
+            // Collect risk ranges (Risk/Win is now column 6 in 10-column dashboard layout)
+            const riskRanges = window.PicksDataProcessor.collectValueRanges(6);
+            const winRanges = window.PicksDataProcessor.collectValueRanges(6);
 
             // Populate risk ranges
             const riskContainer = document.getElementById('risk-ranges');

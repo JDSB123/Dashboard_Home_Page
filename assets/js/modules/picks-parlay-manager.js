@@ -7,6 +7,52 @@
     'use strict';
 
     const ParlayManager = {
+        _columnIndexCache: new WeakMap(),
+
+        getColumnIndex(row, columnKey) {
+            try {
+                const table = row?.closest?.('table');
+                if (!table) return null;
+
+                let cacheForTable = this._columnIndexCache.get(table);
+                if (!cacheForTable) {
+                    cacheForTable = new Map();
+                    this._columnIndexCache.set(table, cacheForTable);
+                }
+
+                if (cacheForTable.has(columnKey)) {
+                    return cacheForTable.get(columnKey);
+                }
+
+                const th = table.querySelector(`thead th[data-sort="${columnKey}"]`) ||
+                           table.querySelector(`thead th[data-filter="${columnKey}"]`);
+                if (!th) {
+                    cacheForTable.set(columnKey, null);
+                    return null;
+                }
+
+                const tr = th.closest('tr');
+                const ths = tr ? Array.from(tr.children).filter(el => el.tagName === 'TH') : [];
+                const idx = ths.indexOf(th);
+                const oneBased = idx >= 0 ? idx + 1 : null;
+                cacheForTable.set(columnKey, oneBased);
+                return oneBased;
+            } catch (e) {
+                return null;
+            }
+        },
+
+        getCell(row, columnKey, fallbackIndex) {
+            const idx = this.getColumnIndex(row, columnKey) || fallbackIndex || null;
+            return idx ? row.querySelector(`td:nth-child(${idx})`) : null;
+        },
+
+        getColumnCount(row, fallback = 7) {
+            const table = row?.closest?.('table');
+            const ths = table ? table.querySelectorAll('thead th') : null;
+            return ths && ths.length ? ths.length : fallback;
+        },
+
         /**
          * Calculate parlay status from leg statuses
          */
@@ -404,7 +450,7 @@
             const parlayStatus = this.calculateParlayStatus(legsData);
 
             // Update status badge
-            const statusCell = parentRow.querySelector('td:last-child');
+            const statusCell = this.getCell(parentRow, 'status') || parentRow.querySelector('td:last-child');
             if (statusCell) {
                 const badge = statusCell.querySelector('.status-badge');
                 if (badge) {
@@ -716,7 +762,7 @@
             if (!hasToggle) {
                 // Try to add to first cell (datetime cell) or matchup cell
                 const dateCell = parentRow.querySelector('td:first-child');
-                const matchupCell = parentRow.querySelector('td:nth-child(2)');
+                const matchupCell = this.getCell(parentRow, 'matchup', 2);
                 const targetCell = dateCell || matchupCell;
                 
                 if (targetCell) {
@@ -753,7 +799,7 @@
 
                 // Create cell spanning all columns
                 const td = document.createElement('td');
-                td.setAttribute('colspan', '7');
+                td.setAttribute('colspan', String(this.getColumnCount(parentRow, 7)));
                 td.innerHTML = '<div class="parlay-legs-container"></div>';
                 legsRow.appendChild(td);
 

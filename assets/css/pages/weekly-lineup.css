@@ -13,6 +13,9 @@ body.page-weekly-lineup {
     --weekly-border: rgba(80, 100, 130, 0.25);
     --weekly-text: #e6f2f6;
     --dashboard-topline-height: 91px; /* 20% bump from 76px for logo/text */
+    
+    /* Force Garamond typography for table */
+    --table-font: var(--font-body);
 
     /* Zebra Stripe Overrides - High Contrast with More Transparency */
     --zebra-odd: rgba(4, 12, 24, 0.15);
@@ -237,6 +240,16 @@ body.page-weekly-lineup .table-container,
     white-space: nowrap !important;
     max-width: 0 !important; /* Required for ellipsis with table-layout: fixed */
     padding: 0.5rem 0.75rem !important;
+    box-sizing: border-box;
+}
+
+/* Ensure compact columns fit content */
+.weekly-lineup-table td:nth-child(2),
+.weekly-lineup-table td:nth-child(4),
+.weekly-lineup-table td:nth-child(6),
+.weekly-lineup-table td:nth-child(8) {
+    padding: 0.4rem 0.5rem !important;
+    white-space: nowrap !important;
 }
 
 /* Allow specific cells to wrap when needed (Matchup, Pick) */
@@ -258,17 +271,57 @@ body.page-weekly-lineup .table-container,
     max-width: 0 !important;
 }
 
-/* Column widths for weekly lineup - 10 columns */
-.weekly-lineup-table thead th:nth-child(1) { width: 8%; }   /* Date & Time */
-.weekly-lineup-table thead th:nth-child(2) { width: 5%; }   /* League */
-.weekly-lineup-table thead th:nth-child(3) { width: 18%; }  /* Matchup */
-.weekly-lineup-table thead th:nth-child(4) { width: 7%; }   /* Segment */
-.weekly-lineup-table thead th:nth-child(5) { width: 15%; }  /* Pick */
-.weekly-lineup-table thead th:nth-child(6) { width: 10%; }  /* Model */
-.weekly-lineup-table thead th:nth-child(7) { width: 10%; }  /* Market */
-.weekly-lineup-table thead th:nth-child(8) { width: 6%; }   /* Edge */
-.weekly-lineup-table thead th:nth-child(9) { width: 8%; }   /* Fire */
-.weekly-lineup-table thead th:nth-child(10) { width: 5%; }  /* Tracker */
+/* Column widths for weekly lineup - 8 columns (total: 100%)
+   1: Date/Time  2: League  3: Matchup  4: Segment  5: Pick  6: Edge  7: Fire  8: Track
+   Override base component min-widths and apply fixed widths to both th and td */
+.weekly-lineup-table thead th:nth-child(1),
+.weekly-lineup-table tbody td:nth-child(1) { 
+    width: 12% !important; 
+    min-width: 120px !important; 
+    max-width: 12% !important;
+}   /* Date & Time (CST) */
+.weekly-lineup-table thead th:nth-child(2),
+.weekly-lineup-table tbody td:nth-child(2) { 
+    width: 6% !important; 
+    min-width: 65px !important; 
+    max-width: 6% !important;
+}   /* League */
+.weekly-lineup-table thead th:nth-child(3),
+.weekly-lineup-table tbody td:nth-child(3) { 
+    width: 25% !important; 
+    min-width: 220px !important; 
+    max-width: 25% !important;
+}  /* Matchup */
+.weekly-lineup-table thead th:nth-child(4),
+.weekly-lineup-table tbody td:nth-child(4) { 
+    width: 8% !important; 
+    min-width: 80px !important; 
+    max-width: 8% !important;
+}   /* Segment */
+.weekly-lineup-table thead th:nth-child(5),
+.weekly-lineup-table tbody td:nth-child(5) { 
+    width: 18% !important; 
+    min-width: 160px !important; 
+    max-width: 18% !important;
+}  /* Pick */
+.weekly-lineup-table thead th:nth-child(6),
+.weekly-lineup-table tbody td:nth-child(6) { 
+    width: 8% !important; 
+    min-width: 75px !important; 
+    max-width: 8% !important;
+}  /* Edge */
+.weekly-lineup-table thead th:nth-child(7),
+.weekly-lineup-table tbody td:nth-child(7) { 
+    width: 15% !important; 
+    min-width: 130px !important; 
+    max-width: 15% !important;
+}  /* Fire */
+.weekly-lineup-table thead th:nth-child(8),
+.weekly-lineup-table tbody td:nth-child(8) { 
+    width: 8% !important; 
+    min-width: 70px !important; 
+    max-width: 8% !important;
+}   /* Track */
 
 /* Tracker column header - prevent overflow */
 .weekly-lineup-table thead th:last-child .header-main-text {

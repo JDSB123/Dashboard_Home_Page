@@ -6,6 +6,54 @@
     'use strict';
 
     const DataProcessor = {
+        _headerIndexCache: null,
+        _headerIndexCacheTable: null,
+
+        getPicksTable() {
+            return document.getElementById('picks-table');
+        },
+
+        /**
+         * Get 1-based column index by reading the table header for this page.
+         * Uses data-sort or data-filter on <th>.
+         */
+        getColumnIndex(columnKey) {
+            try {
+                const table = this.getPicksTable();
+                if (!table) return null;
+
+                if (this._headerIndexCacheTable !== table) {
+                    this._headerIndexCacheTable = table;
+                    this._headerIndexCache = new Map();
+                }
+
+                if (this._headerIndexCache.has(columnKey)) {
+                    return this._headerIndexCache.get(columnKey);
+                }
+
+                const th = table.querySelector(`thead th[data-sort="${columnKey}"]`) ||
+                           table.querySelector(`thead th[data-filter="${columnKey}"]`);
+                if (!th) {
+                    this._headerIndexCache.set(columnKey, null);
+                    return null;
+                }
+
+                const tr = th.closest('tr');
+                const ths = tr ? Array.from(tr.children).filter(el => el.tagName === 'TH') : [];
+                const idx = ths.indexOf(th);
+                const oneBased = idx >= 0 ? idx + 1 : null;
+                this._headerIndexCache.set(columnKey, oneBased);
+                return oneBased;
+            } catch (e) {
+                return null;
+            }
+        },
+
+        getCell(row, columnKey, fallbackIndex) {
+            const idx = this.getColumnIndex(columnKey) || fallbackIndex || null;
+            return idx ? row.querySelector(`td:nth-child(${idx})`) : null;
+        },
+
         /**
          * Collect all unique date/time/book values from table
          */
@@ -47,7 +95,7 @@
                 }
 
                 // Extract sportsbook
-                const bookEl = dateCell.querySelector('.cell-book, .sportsbook-name');
+                const bookEl = dateCell.querySelector('.cell-book, .sportsbook-name, .sportsbook-value');
                 if (bookEl) {
                     const bookText = bookEl.textContent.trim();
                     if (bookText) {
@@ -99,13 +147,11 @@
             const rows = tbody.querySelectorAll('tr:not(.parlay-legs)');
 
             rows.forEach(row => {
-                const matchupCell = row.querySelector('td:nth-child(2)');
-                if (matchupCell) {
-                    const league = this.detectLeagueFromCell(matchupCell);
-                    if (league) {
-                        leagues.add(league.toUpperCase());
-                    }
-                }
+                const raw = row.getAttribute('data-league') ||
+                            (this.getCell(row, 'league') ? this.getCell(row, 'league').textContent : '') ||
+                            '';
+                const league = raw.toString().trim();
+                if (league) leagues.add(league.toUpperCase());
             });
 
             return Array.from(leagues).sort();
@@ -149,14 +195,14 @@
             const rows = tbody.querySelectorAll('tr:not(.parlay-legs)');
 
             rows.forEach(row => {
-                const matchupCell = row.querySelector('td:nth-child(2)');
-                if (matchupCell) {
-                    const cellLeague = this.detectLeagueFromCell(matchupCell);
-                    if (cellLeague.toUpperCase() === league.toUpperCase()) {
-                        const extractedTeams = this.extractTeamsFromCell(matchupCell);
-                        extractedTeams.forEach(team => teams.add(team));
-                    }
-                }
+                const rowLeague = (row.getAttribute('data-league') || '').toString();
+                if (rowLeague && rowLeague.toUpperCase() !== league.toUpperCase()) return;
+
+                const matchupCell = this.getCell(row, 'matchup', 2);
+                if (!matchupCell) return;
+
+                const extractedTeams = this.extractTeamsFromCell(matchupCell);
+                extractedTeams.forEach(team => teams.add(team));
             });
 
             return Array.from(teams).sort();
@@ -232,7 +278,7 @@
             const rows = tbody.querySelectorAll('tr:not(.parlay-legs)');
 
             rows.forEach(row => {
-                const statusCell = row.querySelector('td:last-child');
+                const statusCell = this.getCell(row, 'status') || row.querySelector('td:last-child');
                 if (statusCell) {
                     const badge = statusCell.querySelector('.status-badge');
                     if (badge) {
@@ -247,6 +293,44 @@
             });
 
             return Array.from(statuses).sort();
+        },
+
+        collectRiskRanges() {
+            const tbody = document.getElementById('picks-tbody');
+            if (!tbody) return [];
+
+            const values = [];
+            const rows = tbody.querySelectorAll('tr:not(.parlay-legs)');
+
+            rows.forEach(row => {
+                const cell = this.getCell(row, 'risk', 5);
+                if (!cell) return;
+                const amountEl = cell.querySelector('.risk-amount');
+                if (!amountEl) return;
+                const value = parseFloat(amountEl.textContent.replace(/[$,]/g, '').trim());
+                if (!isNaN(value)) values.push(value);
+            });
+
+            return this.createValueRanges(values);
+        },
+
+        collectWinRanges() {
+            const tbody = document.getElementById('picks-tbody');
+            if (!tbody) return [];
+
+            const values = [];
+            const rows = tbody.querySelectorAll('tr:not(.parlay-legs)');
+
+            rows.forEach(row => {
+                const cell = this.getCell(row, 'risk', 5);
+                if (!cell) return;
+                const amountEl = cell.querySelector('.win-amount');
+                if (!amountEl) return;
+                const value = parseFloat(amountEl.textContent.replace(/[$,]/g, '').trim());
+                if (!isNaN(value)) values.push(value);
+            });
+
+            return this.createValueRanges(values);
         },
 
         /**
@@ -327,21 +411,18 @@
 
             visibleRows.forEach(row => {
                 // Get risk amount
-                const riskCell = row.querySelector('td:nth-child(4)');
-                if (riskCell) {
-                    const risk = parseFloat(riskCell.textContent.replace(/[$,]/g, '')) || 0;
+                const riskWinCell = this.getCell(row, 'risk', 5);
+                if (riskWinCell) {
+                    const riskEl = riskWinCell.querySelector('.risk-amount');
+                    const winEl = riskWinCell.querySelector('.win-amount');
+                    const risk = riskEl ? (parseFloat(riskEl.textContent.replace(/[$,]/g, '')) || 0) : 0;
+                    const win = winEl ? (parseFloat(winEl.textContent.replace(/[$,]/g, '')) || 0) : 0;
                     totalRisk += risk;
-                }
-
-                // Get win amount
-                const winCell = row.querySelector('td:nth-child(5)');
-                if (winCell) {
-                    const win = parseFloat(winCell.textContent.replace(/[$,]/g, '')) || 0;
                     totalWin += win;
                 }
 
                 // Get status
-                const statusCell = row.querySelector('td:last-child');
+                const statusCell = this.getCell(row, 'status') || row.querySelector('td:last-child');
                 if (statusCell) {
                     const badge = statusCell.querySelector('.status-badge');
                     const statusText = badge ?
@@ -413,7 +494,7 @@
 
             const rows = tbody.querySelectorAll('tr:not(.parlay-legs)');
             rows.forEach(row => {
-                const pickCell = row.querySelector('td:nth-child(3)');
+                const pickCell = this.getCell(row, 'pick', 5);
                 if (pickCell) {
                     const detected = this.detectBetTypeFromCell(pickCell);
                     if (detected.type) types.add(detected.type);

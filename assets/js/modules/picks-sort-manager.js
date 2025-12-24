@@ -6,6 +6,50 @@
     'use strict';
 
     const SortManager = {
+        _columnIndexCache: new WeakMap(),
+
+        /**
+         * Get the 1-based column index for a given column key by reading the table header.
+         * Falls back to null if not found.
+         */
+        getColumnIndex(row, columnKey) {
+            try {
+                const table = row?.closest?.('table');
+                if (!table) return null;
+
+                let cacheForTable = this._columnIndexCache.get(table);
+                if (!cacheForTable) {
+                    cacheForTable = new Map();
+                    this._columnIndexCache.set(table, cacheForTable);
+                }
+
+                if (cacheForTable.has(columnKey)) {
+                    return cacheForTable.get(columnKey);
+                }
+
+                const th = table.querySelector(`thead th[data-sort="${columnKey}"]`) ||
+                           table.querySelector(`thead th[data-filter="${columnKey}"]`);
+                if (!th) {
+                    cacheForTable.set(columnKey, null);
+                    return null;
+                }
+
+                const rowEl = th.closest('tr');
+                const ths = rowEl ? Array.from(rowEl.children).filter(el => el.tagName === 'TH') : [];
+                const idx = ths.indexOf(th);
+                const oneBased = idx >= 0 ? idx + 1 : null;
+                cacheForTable.set(columnKey, oneBased);
+                return oneBased;
+            } catch (e) {
+                return null;
+            }
+        },
+
+        getCell(row, columnKey, fallbackIndex) {
+            const idx = this.getColumnIndex(row, columnKey) || fallbackIndex || null;
+            return idx ? row.querySelector(`td:nth-child(${idx})`) : null;
+        },
+
         /**
          * Get date sort value from date text
          */
@@ -71,23 +115,28 @@
                     return dateValue + timeValue / (24 * 60);
                 }
 
+                case 'league': {
+                    const cell = this.getCell(row, 'league');
+                    return cell ? cell.textContent.trim().toLowerCase() : '';
+                }
+
                 case 'matchup': {
-                    const cell = row.querySelector('td:nth-child(2)');
+                    const cell = this.getCell(row, 'matchup', 2);
                     return cell ? cell.textContent.trim().toLowerCase() : '';
                 }
 
                 case 'pick': {
-                    const cell = row.querySelector('td:nth-child(3)');
+                    const cell = this.getCell(row, 'pick', 3);
                     return cell ? cell.textContent.trim().toLowerCase() : '';
                 }
 
                 case 'segment': {
-                    const cell = row.querySelector('td:nth-child(4)');
+                    const cell = this.getCell(row, 'segment', 4);
                     return cell ? cell.textContent.trim().toLowerCase() : '';
                 }
 
                 case 'risk': {
-                    const cell = row.querySelector('td:nth-child(5)');
+                    const cell = this.getCell(row, 'risk', 5);
                     if (!cell) return 0;
                     const amountEl = cell.querySelector('.risk-amount');
                     if (!amountEl) return 0;
@@ -96,7 +145,7 @@
                 }
 
                 case 'win': {
-                    const cell = row.querySelector('td:nth-child(5)');
+                    const cell = this.getCell(row, 'risk', 5);
                     if (!cell) return 0;
                     const amountEl = cell.querySelector('.win-amount');
                     if (!amountEl) return 0;
@@ -105,8 +154,8 @@
                 }
 
                 case 'status': {
-                    const cell = row.querySelector('td:last-child');
-                    if (!cell) return '';
+                    const cell = this.getCell(row, 'status') || row.querySelector('td:last-child');
+                    if (!cell) return 0;
 
                     const badge = cell.querySelector('.status-badge');
                     if (badge) {
@@ -116,7 +165,7 @@
                         return this.getStatusSortPriority(status);
                     }
 
-                    return cell.textContent.trim().toLowerCase();
+                    return this.getStatusSortPriority(cell.textContent.trim().toLowerCase());
                 }
 
                 default:

@@ -20,6 +20,50 @@
     'use strict';
 
     const FilterManager = {
+        _columnIndexCache: new WeakMap(),
+
+        /**
+         * Get 1-based column index by reading the table header for this table.
+         * Uses data-sort or data-filter on <th>.
+         */
+        getColumnIndex(row, columnKey) {
+            try {
+                const table = row?.closest?.('table');
+                if (!table) return null;
+
+                let cacheForTable = this._columnIndexCache.get(table);
+                if (!cacheForTable) {
+                    cacheForTable = new Map();
+                    this._columnIndexCache.set(table, cacheForTable);
+                }
+
+                if (cacheForTable.has(columnKey)) {
+                    return cacheForTable.get(columnKey);
+                }
+
+                const th = table.querySelector(`thead th[data-sort="${columnKey}"]`) ||
+                           table.querySelector(`thead th[data-filter="${columnKey}"]`);
+                if (!th) {
+                    cacheForTable.set(columnKey, null);
+                    return null;
+                }
+
+                const rowEl = th.closest('tr');
+                const ths = rowEl ? Array.from(rowEl.children).filter(el => el.tagName === 'TH') : [];
+                const idx = ths.indexOf(th);
+                const oneBased = idx >= 0 ? idx + 1 : null;
+                cacheForTable.set(columnKey, oneBased);
+                return oneBased;
+            } catch (e) {
+                return null;
+            }
+        },
+
+        getCell(row, columnKey, fallbackIndex) {
+            const idx = this.getColumnIndex(row, columnKey) || fallbackIndex || null;
+            return idx ? row.querySelector(`td:nth-child(${idx})`) : null;
+        },
+
         // Filter type configurations
         DATE_FILTER_GROUP_MAP: {
             dates: 'selectedDates',
@@ -49,7 +93,7 @@
 
             const dateEl = dateCell.querySelector('.cell-date');
             const timeEl = dateCell.querySelector('.cell-time');
-            const bookEl = dateCell.querySelector('.cell-book, .sportsbook-name');
+            const bookEl = dateCell.querySelector('.cell-book, .sportsbook-name, .sportsbook-value');
 
             let dateText = dateEl ? dateEl.textContent.trim() : '';
             let timeText = timeEl ? timeEl.textContent.trim() : '';
@@ -75,7 +119,7 @@
          * Get matchup value from row
          */
         getMatchupValue(row) {
-            const matchupCell = row.querySelector('td:nth-child(2)');
+            const matchupCell = this.getCell(row, 'matchup', 2);
             if (!matchupCell) return '';
 
             // Get full text content
@@ -99,7 +143,7 @@
          * Get pick value from row
          */
         getPickValue(row) {
-            const pickCell = row.querySelector('td:nth-child(3)');
+            const pickCell = this.getCell(row, 'pick', 3);
             if (!pickCell) return '';
 
             const pickText = pickCell.textContent || '';
@@ -127,7 +171,7 @@
          * Get risk value from row
          */
         getRiskValue(row) {
-            const cell = row.querySelector('td:nth-child(5)');
+            const cell = this.getCell(row, 'risk', 5);
             if (!cell) return null;
             const amountEl = cell.querySelector('.risk-amount');
             if (!amountEl) return null;
@@ -139,7 +183,7 @@
          * Get win value from row
          */
         getWinValue(row) {
-            const cell = row.querySelector('td:nth-child(5)');
+            const cell = this.getCell(row, 'risk', 5);
             if (!cell) return null;
             const amountEl = cell.querySelector('.win-amount');
             if (!amountEl) return null;
@@ -151,7 +195,7 @@
          * Get status value from row
          */
         getStatusValue(row) {
-            const statusCell = row.querySelector('td:last-child');
+            const statusCell = this.getCell(row, 'status') || row.querySelector('td:last-child');
             if (!statusCell) return '';
 
             const badge = statusCell.querySelector('.status-badge');
@@ -204,7 +248,7 @@
          * Detect bet type from row
          */
         detectBetType(row) {
-            const pickCell = row.querySelector('td:nth-child(3)');
+            const pickCell = this.getCell(row, 'pick', 3);
             if (!pickCell) return { type: '', subtype: '' };
 
             const pickText = (pickCell.textContent || '').toLowerCase();
@@ -262,7 +306,7 @@
          * Detect game segment from row
          */
         detectSegment(row) {
-            const segmentCell = row.querySelector('td:nth-child(4)');
+            const segmentCell = this.getCell(row, 'segment', 4);
             if (!segmentCell) return 'game';
 
             const segmentSpan = segmentCell.querySelector('.game-segment');
