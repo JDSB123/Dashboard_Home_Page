@@ -192,6 +192,51 @@ body.page-active-picks .brand-nav {
     padding-top: 0;
 }
 
+/* ===== WEEKLY LINEUP PAGE - DARKER BACKGROUND ===== */
+body.page-weekly-lineup {
+    background-color: var(--color-bg-deep, #030b16);
+    background-image:
+        /* Dark overlay to make bears darker */
+        linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)),
+        var(--hero-bear-image);
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+body.page-weekly-lineup::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    /* Darker metallic overlay */
+    background-image:
+        radial-gradient(ellipse at 28% 12%, rgba(0, 143, 88, 0.12) 0%, transparent 52%),
+        radial-gradient(ellipse at 76% 32%, rgba(var(--color-primary-bright-rgb), 0.10) 4%, transparent 60%),
+        radial-gradient(ellipse at 15% 10%, rgba(34, 100, 70, 0.12) 0%, transparent 52%),
+        radial-gradient(ellipse at 85% 20%, rgba(0, 120, 80, 0.10) 0%, transparent 48%),
+        radial-gradient(ellipse at 50% 50%, rgba(60, 255, 181, 0.06) 0%, transparent 65%),
+        linear-gradient(185deg, rgba(6, 12, 20, 0.50) 0%, rgba(5, 15, 18, 0.65) 36%, rgba(3, 8, 14, 0.75) 100%);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-color: transparent;
+    background-blend-mode: screen, screen, screen, screen, screen, normal;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.95;
+    animation: metallicShimmer 8s ease-in-out infinite, rippleEffect 6s ease-in-out infinite;
+    will-change: opacity, transform;
+    transform: translateZ(0);
+}
+
+
 /* REFINEMENT: Ensure background layers don't block interactions */
 body.page-glow::after,
 body.page-active-picks::before,
