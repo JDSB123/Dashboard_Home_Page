@@ -17,6 +17,23 @@
     <script src="config.production.js" defer></script>
     <script src="assets/js/features/auto-game-fetcher.js?v=20251213" defer></script>
     <script src="assets/js/core/debug-config.js?v=20251128g" defer></script>
+    <style>
+        /* Force background image visibility */
+        body.page-weekly-lineup {
+            background-image: url('assets/JB_Bearish_Market_FULL_page.png') !important;
+            background-size: cover !important;
+            background-position: center top !important;
+            background-attachment: fixed !important;
+        }
+        /* Override forced transparency to match Odds Market semi-transparency */
+        body.page-weekly-lineup .weekly-lineup-table-wrapper {
+            background: rgba(5, 12, 22, 0.40) !important; /* Override transparent !important */
+            border: none !important;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3) !important;
+            border-radius: 8px !important;
+            margin-top: 0 !important;
+        }
+    </style>
 </head>
 <body class="page-glow page-weekly-lineup">
 <noscript>
@@ -99,7 +116,7 @@
             <div class="bet-modal" id="bet-modal"><div class="bet-modal-header"><h2>Enter Bet Amounts</h2><button type="button" class="bet-modal-close" id="close-bet-modal">✕</button></div><div class="bet-modal-content"><div class="bet-unit-config"><label>Unit Value: $</label><input type="number" id="unit-value" value="1000" min="1" step="100"><span class="unit-hint">(e.g., $1 input = $1,000 actual)</span></div><div class="bet-input-mode"><label class="mode-option"><input type="radio" name="bet-mode" value="risk" checked><span>Enter $ At Risk</span></label><label class="mode-option"><input type="radio" name="bet-mode" value="win"><span>Enter To Win</span></label></div><div class="selected-picks-bet-list" id="selected-picks-bet-list"></div></div><div class="bet-modal-footer"><button type="button" class="bet-modal-btn cancel" id="cancel-bets">Cancel</button><button type="button" class="bet-modal-btn confirm" id="confirm-bets">Add to Dashboard</button></div></div>
         </div>
 
-        <div class="table-container weekly-lineup-table-wrapper odds-board">
+        <div class="table-container weekly-lineup-table-wrapper">
             <!-- Filter Toolbar -->
             <div class="filter-toolbar" id="filter-toolbar">
                 <div class="ft-left">
