@@ -65,7 +65,11 @@ body.page-weekly-lineup .brand-nav {
     box-shadow: none;
     padding-left: 0.5in;
     padding-right: 0.5in;
-    margin-top: 20px;
+    margin-top: 32px;
+}
+
+body.page-weekly-lineup .nav-links {
+    margin-top: 12px; /* Move links down slightly for this page only */
 }
 
 body.page-weekly-lineup .nav-link {
@@ -310,11 +314,7 @@ body.page-weekly-lineup .picks-table thead th,
     position: sticky !important;
     top: 0;
     z-index: 110;
-    background: linear-gradient(180deg,
-        rgba(0, 214, 137, 0.12) 0%,
-        rgba(0, 214, 137, 0.06) 45%,
-        rgba(8, 12, 22, 0.30) 100%);
-    background-color: rgba(8, 12, 22, 0.25);
+    background: transparent !important;
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
 }
