@@ -1024,9 +1024,9 @@ body.page-active-picks .picks-table tbody td .game-segment {
 /* ===== HEADER GRADIENTS & TRANSPARENCY ===== */
 #picks-table thead th {
     background: linear-gradient(180deg,
-        rgba(0, 214, 137, 0.08) 0%,
-        rgba(0, 214, 137, 0.04) 50%,
-        rgba(0, 214, 137, 0.02) 100%) !important;
+        rgba(0, 214, 137, 0.75) 0%,
+        rgba(0, 214, 137, 0.5) 50%,
+        rgba(0, 214, 137, 0.25) 100%) !important;
     background-color: transparent !important;
     border-bottom: 1px solid rgba(0, 214, 137, 0.25) !important;
     border-right: 1px solid rgba(0, 214, 137, 0.10) !important;
