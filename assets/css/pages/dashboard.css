@@ -1136,3 +1136,209 @@ body.page-active-picks .picks-table tbody td .game-segment {
     border: none !important;
     cursor: pointer !important;
 }
+
+/* ==========================================================================
+   FILTER TOOLBAR (ft-* namespace) - Dashboard version
+   Left-aligned filters, right-aligned actions
+   ========================================================================== */
+.filter-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2px 0 0;
+    margin: 0 0 -4px 0;
+    position: relative;
+    z-index: 10050;
+    background: transparent !important;
+    border: none !important;
+    border-bottom: none !important;
+}
+
+.ft-left, .ft-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Pills - Metallic Navy with subtle glow */
+.ft-pill {
+    padding: 5px 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    font-family: inherit;
+    color: rgba(200, 215, 230, 0.95);
+    background: linear-gradient(135deg, rgba(20, 35, 60, 0.92) 0%, rgba(15, 28, 50, 0.96) 100%);
+    border: 1px solid rgba(100, 130, 170, 0.35);
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35), 0 0 6px rgba(80, 120, 180, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.ft-pill:hover {
+    color: #fff;
+    border-color: rgba(0, 214, 137, 0.5);
+    background: linear-gradient(135deg, rgba(25, 45, 75, 0.95) 0%, rgba(20, 38, 60, 0.98) 100%);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4), 0 0 10px rgba(0, 214, 137, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.ft-pill.active {
+    color: #00e08a;
+    border-color: rgba(0, 214, 137, 0.6);
+    background: linear-gradient(135deg, rgba(0, 50, 45, 0.92) 0%, rgba(0, 42, 38, 0.96) 100%);
+    text-shadow: 0 0 8px rgba(0, 214, 137, 0.4);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35), 0 0 12px rgba(0, 214, 137, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Dropdown */
+.ft-dropdown {
+    position: relative;
+    z-index: 10060;
+}
+
+.ft-dropdown-btn {
+    padding: 5px 12px;
+    font-size: 0.72rem;
+    font-weight: 500;
+    font-family: inherit;
+    color: rgba(180, 195, 210, 0.85);
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.12s ease;
+}
+
+.ft-dropdown-btn:hover,
+.ft-dropdown-btn.open {
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+.ft-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 4px;
+    min-width: 140px;
+    background: #0c1a2e;
+    border: 1px solid rgba(0, 214, 137, 0.2);
+    border-radius: 8px;
+    padding: 4px;
+    z-index: 10070;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+}
+
+.ft-dropdown-menu.open {
+    display: block;
+}
+
+.ft-dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 9px 14px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    font-family: inherit;
+    color: rgba(215, 225, 230, 0.92);
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.14s ease, transform 0.14s ease;
+    letter-spacing: 0.02em;
+}
+
+.ft-dropdown-item:hover {
+    background: rgba(0, 214, 137, 0.1);
+    transform: translateX(2px);
+}
+
+.ft-dropdown-item.active {
+    color: #00e08a;
+    background: rgba(0, 214, 137, 0.14);
+}
+
+/* Clear button */
+.ft-clear {
+    padding: 5px 10px;
+    font-size: 0.68rem;
+    font-weight: 500;
+    font-family: inherit;
+    color: rgba(180, 180, 180, 0.6);
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.12s ease;
+}
+
+.ft-clear:hover {
+    color: #ef5050;
+    border-color: rgba(239, 68, 68, 0.4);
+    background: rgba(239, 68, 68, 0.08);
+}
+
+/* Edge SVG icon */
+.edge-svg {
+    width: 12px;
+    height: 12px;
+    margin-right: 4px;
+    vertical-align: middle;
+}
+
+/* Filter chips container */
+.table-filter-chips-wrapper {
+    min-height: 24px;
+}
+
+.table-filter-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.table-filter-chips:empty,
+.table-filter-chips[data-has-chips="false"] {
+    display: none;
+}
+
+/* Filter chip styling */
+.filter-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: rgba(200, 215, 230, 0.95);
+    background: linear-gradient(135deg, rgba(20, 35, 60, 0.92) 0%, rgba(15, 28, 50, 0.96) 100%);
+    border: 1px solid rgba(0, 214, 137, 0.3);
+    border-radius: 12px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.chip-remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    padding: 0;
+    font-size: 12px;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.6);
+    background: transparent;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.12s ease;
+}
+
+.chip-remove:hover {
+    color: #ef5050;
+    background: rgba(239, 68, 68, 0.2);
+}

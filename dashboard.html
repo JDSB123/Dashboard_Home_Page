@@ -35,6 +35,7 @@
     <!-- 5. Interactive Components -->
     <link rel="stylesheet" href="assets/css/components/kpi-tiles.css?v=20251225-2">
     <link rel="stylesheet" href="assets/css/components/date-toggles.css?v=20251225-99">
+    <link rel="stylesheet" href="assets/css/components/filter-cards.css?v=20251225-99">
 
     <!-- 6. Table System Components -->
     <link rel="stylesheet" href="assets/css/components/picks-table.css?v=20251225-99">
@@ -780,6 +781,48 @@
 
         <!-- ===== Main Dashboard Layout ===== -->
         <div class="main-dashboard-layout">
+
+            <!-- ===== Filter Toolbar ===== -->
+            <div class="toolbar-container" style="margin-bottom: 1rem;">
+                <div class="filter-toolbar" id="filter-toolbar">
+                    <div class="ft-left">
+                        <!-- League pills -->
+                        <button class="ft-pill ft-league" data-league="nba">NBA</button>
+                        <button class="ft-pill ft-league" data-league="ncaab">NCAAM</button>
+                        <button class="ft-pill ft-league" data-league="nfl">NFL</button>
+                        <button class="ft-pill ft-league" data-league="ncaaf">NCAAF</button>
+                        <button class="ft-pill ft-league" data-league="nhl">NHL</button>
+                        <!-- Edge dropdown -->
+                        <div class="ft-dropdown">
+                            <button class="ft-dropdown-btn ft-edge-btn" id="edge-dropdown-btn"><svg class="edge-svg" viewBox="0 0 16 16" fill="currentColor"><path d="M4 14V9h2v5H4zm3 0V6h2v8H7zm3 0V2h2v12h-2z"/></svg>Edge ▾</button>
+                            <div class="ft-dropdown-menu" id="edge-dropdown-menu">
+                                <button class="ft-dropdown-item edge-item edge-high" data-f="edge" data-v="high">Best (5%+)</button>
+                                <button class="ft-dropdown-item edge-item edge-medium" data-f="edge" data-v="medium">Good (2-5%)</button>
+                                <button class="ft-dropdown-item edge-item edge-low" data-f="edge" data-v="low">Low (&lt;2%)</button>
+                            </div>
+                        </div>
+                        <!-- Fire dropdown -->
+                        <div class="ft-dropdown">
+                            <button class="ft-dropdown-btn" id="fire-dropdown-btn">🔥 Fire ▾</button>
+                            <div class="ft-dropdown-menu" id="fire-dropdown-menu">
+                                <button class="ft-dropdown-item" data-f="fire" data-v="5">🔥🔥🔥🔥🔥 Max</button>
+                                <button class="ft-dropdown-item" data-f="fire" data-v="4">🔥🔥🔥🔥 Hot</button>
+                                <button class="ft-dropdown-item" data-f="fire" data-v="3">🔥🔥🔥 Warm</button>
+                                <button class="ft-dropdown-item" data-f="fire" data-v="2">🔥🔥</button>
+                                <button class="ft-dropdown-item" data-f="fire" data-v="1">🔥</button>
+                            </div>
+                        </div>
+                        <button class="ft-clear" id="ft-clear">✕ Clear</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== Filter Chips ===== -->
+            <div class="chips-container" style="margin-bottom: 0.5rem;">
+                <div class="table-filter-chips-wrapper">
+                    <div class="table-filter-chips filter-chips" id="table-filter-chips" aria-live="polite" data-has-chips="false"></div>
+                </div>
+            </div>
 
             <!-- ===== Active Picks Table ===== -->
             <div class="table-container">

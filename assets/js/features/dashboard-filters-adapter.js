@@ -240,14 +240,238 @@
 
             console.log('Applying filters:', filters);
             window.TableFilters.applyFilters();
+        },
+
+        // ===== FILTER TOOLBAR HANDLING =====
+        initToolbar() {
+            const toolbar = document.getElementById('filter-toolbar');
+            if (!toolbar) return;
+
+            console.log('Initializing filter toolbar...');
+
+            // League pill toggles
+            toolbar.querySelectorAll('.ft-pill.ft-league').forEach(pill => {
+                pill.addEventListener('click', () => {
+                    pill.classList.toggle('active');
+                    this.applyToolbarFilters();
+                });
+            });
+
+            // Dropdown toggles
+            const dropdowns = toolbar.querySelectorAll('.ft-dropdown');
+            dropdowns.forEach(dropdown => {
+                const btn = dropdown.querySelector('.ft-dropdown-btn');
+                const menu = dropdown.querySelector('.ft-dropdown-menu');
+                if (btn && menu) {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        // Close all other dropdowns
+                        dropdowns.forEach(d => {
+                            if (d !== dropdown) {
+                                d.querySelector('.ft-dropdown-menu')?.classList.remove('open');
+                                d.querySelector('.ft-dropdown-btn')?.classList.remove('open');
+                            }
+                        });
+                        menu.classList.toggle('open');
+                        btn.classList.toggle('open');
+                    });
+                }
+            });
+
+            // Close dropdowns on outside click
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.ft-dropdown')) {
+                    toolbar.querySelectorAll('.ft-dropdown-menu').forEach(m => m.classList.remove('open'));
+                    toolbar.querySelectorAll('.ft-dropdown-btn').forEach(b => b.classList.remove('open'));
+                }
+            });
+
+            // Edge dropdown items
+            toolbar.querySelectorAll('#edge-dropdown-menu .ft-dropdown-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    item.classList.toggle('active');
+                    const menu = item.closest('.ft-dropdown-menu');
+                    if (menu) {
+                        const activeCount = menu.querySelectorAll('.ft-dropdown-item.active').length;
+                        this.updateDropdownButtonText('edge-dropdown-btn', 'Edge', activeCount);
+                    }
+                    this.applyToolbarFilters();
+                });
+            });
+
+            // Fire dropdown items
+            toolbar.querySelectorAll('#fire-dropdown-menu .ft-dropdown-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    item.classList.toggle('active');
+                    const menu = item.closest('.ft-dropdown-menu');
+                    if (menu) {
+                        const activeCount = menu.querySelectorAll('.ft-dropdown-item.active').length;
+                        this.updateDropdownButtonText('fire-dropdown-btn', '🔥 Fire', activeCount);
+                    }
+                    this.applyToolbarFilters();
+                });
+            });
+
+            // Clear button
+            const clearBtn = toolbar.querySelector('#ft-clear');
+            if (clearBtn) {
+                clearBtn.addEventListener('click', () => {
+                    // Clear all pills
+                    toolbar.querySelectorAll('.ft-pill.active').forEach(p => p.classList.remove('active'));
+                    // Clear dropdown selections
+                    toolbar.querySelectorAll('#edge-dropdown-menu .ft-dropdown-item').forEach(i => i.classList.remove('active'));
+                    const edgeBtn = document.getElementById('edge-dropdown-btn');
+                    if (edgeBtn) edgeBtn.innerHTML = '<svg class="edge-svg" viewBox="0 0 16 16" fill="currentColor"><path d="M4 14V9h2v5H4zm3 0V6h2v8H7zm3 0V2h2v12h-2z"/></svg>Edge ▾';
+                    
+                    toolbar.querySelectorAll('#fire-dropdown-menu .ft-dropdown-item').forEach(i => i.classList.remove('active'));
+                    const fireBtn = document.getElementById('fire-dropdown-btn');
+                    if (fireBtn) fireBtn.textContent = '🔥 Fire ▾';
+                    
+                    this.applyToolbarFilters();
+                    this.clearFilterChips();
+                });
+            }
+        },
+
+        updateDropdownButtonText(btnId, label, count) {
+            const btn = document.getElementById(btnId);
+            if (!btn) return;
+            if (btnId === 'edge-dropdown-btn') {
+                btn.innerHTML = `<svg class="edge-svg" viewBox="0 0 16 16" fill="currentColor"><path d="M4 14V9h2v5H4zm3 0V6h2v8H7zm3 0V2h2v12h-2z"/></svg>${label}${count > 0 ? ` (${count})` : ''} ▾`;
+            } else {
+                btn.textContent = `${label}${count > 0 ? ` (${count})` : ''} ▾`;
+            }
+        },
+
+        applyToolbarFilters() {
+            const toolbar = document.getElementById('filter-toolbar');
+            if (!toolbar) return;
+
+            // Collect active leagues
+            const activeLeagues = Array.from(toolbar.querySelectorAll('.ft-pill.ft-league.active'))
+                .map(p => p.getAttribute('data-league'));
+
+            // Collect active edge values
+            const activeEdges = Array.from(toolbar.querySelectorAll('#edge-dropdown-menu .ft-dropdown-item.active'))
+                .map(i => i.getAttribute('data-v'));
+
+            // Collect active fire values
+            const activeFires = Array.from(toolbar.querySelectorAll('#fire-dropdown-menu .ft-dropdown-item.active'))
+                .map(i => i.getAttribute('data-v'));
+
+            console.log('Toolbar filters:', { activeLeagues, activeEdges, activeFires });
+
+            // Apply to table filtering
+            if (window.tableState && window.TableFilters) {
+                // Set league filter
+                if (activeLeagues.length > 0) {
+                    window.tableState.filters.matchup.league = activeLeagues;
+                } else {
+                    window.tableState.filters.matchup.league = '';
+                }
+                
+                // Edge and Fire would need to be added to tableState.filters schema
+                // For now, store them and let TableFilters handle
+                window.tableState.filters.edge = activeEdges;
+                window.tableState.filters.fire = activeFires;
+
+                window.TableFilters.applyFilters();
+            }
+
+            // Update filter chips display
+            this.updateFilterChips(activeLeagues, activeEdges, activeFires);
+        },
+
+        updateFilterChips(leagues, edges, fires) {
+            const chipsContainer = document.getElementById('table-filter-chips');
+            if (!chipsContainer) return;
+
+            chipsContainer.innerHTML = '';
+            let hasChips = false;
+
+            leagues.forEach(league => {
+                hasChips = true;
+                const chip = document.createElement('span');
+                chip.className = 'filter-chip';
+                chip.innerHTML = `${league.toUpperCase()} <button class="chip-remove" data-type="league" data-value="${league}">×</button>`;
+                chipsContainer.appendChild(chip);
+            });
+
+            edges.forEach(edge => {
+                hasChips = true;
+                const chip = document.createElement('span');
+                chip.className = 'filter-chip';
+                const label = edge === 'high' ? 'Best Edge' : edge === 'medium' ? 'Good Edge' : 'Low Edge';
+                chip.innerHTML = `${label} <button class="chip-remove" data-type="edge" data-value="${edge}">×</button>`;
+                chipsContainer.appendChild(chip);
+            });
+
+            fires.forEach(fire => {
+                hasChips = true;
+                const chip = document.createElement('span');
+                chip.className = 'filter-chip';
+                chip.innerHTML = `${'🔥'.repeat(parseInt(fire))} <button class="chip-remove" data-type="fire" data-value="${fire}">×</button>`;
+                chipsContainer.appendChild(chip);
+            });
+
+            chipsContainer.setAttribute('data-has-chips', hasChips ? 'true' : 'false');
+
+            // Add chip remove handlers
+            chipsContainer.querySelectorAll('.chip-remove').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const type = btn.getAttribute('data-type');
+                    const value = btn.getAttribute('data-value');
+                    this.removeFilter(type, value);
+                });
+            });
+        },
+
+        removeFilter(type, value) {
+            const toolbar = document.getElementById('filter-toolbar');
+            if (!toolbar) return;
+
+            if (type === 'league') {
+                const pill = toolbar.querySelector(`.ft-pill.ft-league[data-league="${value}"]`);
+                if (pill) pill.classList.remove('active');
+            } else if (type === 'edge') {
+                const item = toolbar.querySelector(`#edge-dropdown-menu .ft-dropdown-item[data-v="${value}"]`);
+                if (item) item.classList.remove('active');
+                const menu = document.getElementById('edge-dropdown-menu');
+                if (menu) {
+                    const count = menu.querySelectorAll('.ft-dropdown-item.active').length;
+                    this.updateDropdownButtonText('edge-dropdown-btn', 'Edge', count);
+                }
+            } else if (type === 'fire') {
+                const item = toolbar.querySelector(`#fire-dropdown-menu .ft-dropdown-item[data-v="${value}"]`);
+                if (item) item.classList.remove('active');
+                const menu = document.getElementById('fire-dropdown-menu');
+                if (menu) {
+                    const count = menu.querySelectorAll('.ft-dropdown-item.active').length;
+                    this.updateDropdownButtonText('fire-dropdown-btn', '🔥 Fire', count);
+                }
+            }
+
+            this.applyToolbarFilters();
+        },
+
+        clearFilterChips() {
+            const chipsContainer = document.getElementById('table-filter-chips');
+            if (chipsContainer) {
+                chipsContainer.innerHTML = '';
+                chipsContainer.setAttribute('data-has-chips', 'false');
+            }
         }
     };
 
     // Initialize when DOM is ready
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => DashboardFilters.init());
+        document.addEventListener('DOMContentLoaded', () => {
+            DashboardFilters.init();
+            DashboardFilters.initToolbar();
+        });
     } else {
         DashboardFilters.init();
+        DashboardFilters.initToolbar();
     }
 
 })();
