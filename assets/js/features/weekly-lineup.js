@@ -1008,29 +1008,15 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             const dropdownId = btn.getAttribute('aria-controls');
             console.log(`  → Button ${index}: ${btn.dataset.filter} -> ${dropdownId}`);
 
+            // Disable the header filter dropdown arrow so it no longer opens a panel
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
                 e.stopImmediatePropagation();
 
-                console.log('🖱️ [Weekly Lineup] FILTER BUTTON CLICKED:', this.dataset.filter);
-
-                const dropdown = document.getElementById(dropdownId);
-                if (!dropdown) {
-                    console.error('❌ [Weekly Lineup] No dropdown found for:', dropdownId);
-                    return;
-                }
-
-                const isCurrentlyOpen = dropdown.classList.contains('open');
-                console.log('🔄 [Weekly Lineup] Dropdown state:', isCurrentlyOpen ? 'OPEN' : 'CLOSED');
-
-                if (isCurrentlyOpen) {
-                    console.log('🔽 [Weekly Lineup] Closing dropdown');
-                    closeAllDropdowns();
-                } else {
-                    console.log('🔼 [Weekly Lineup] Opening dropdown:', dropdownId);
-                    openDropdown(dropdown, this);
-                }
+                console.log('🚫 [Weekly Lineup] Filter dropdown disabled for arrow click:', this.dataset.filter);
+                this.setAttribute('aria-expanded', 'false');
+                closeAllDropdowns();
             });
         });
 

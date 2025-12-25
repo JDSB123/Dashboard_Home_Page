@@ -395,8 +395,12 @@ body.page-weekly-lineup .picks-table thead th,
 }
 
 /* Center header labels without filter buttons offsetting alignment */
+.page-weekly-lineup .weekly-lineup-table th {
+    position: relative !important; /* position relative on th for absolute icon positioning */
+    padding-right: 0 !important; /* remove right padding to allow icon flush to edge */
+}
+
 .page-weekly-lineup .weekly-lineup-table .th-header-shell {
-    position: static; /* Let filter button position relative to th, not shell */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -405,17 +409,17 @@ body.page-weekly-lineup .picks-table thead th,
 }
 
 .page-weekly-lineup .weekly-lineup-table .th-sort-btn {
-    /* Sort button - relative positioning for sort icon */
+    /* Sort button - no relative positioning to allow icon positioning relative to shell */
     flex: 1 1 auto;
-    display: inline-flex;
+    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 4px 20px 4px 4px !important;
+    width: 100%;
+    padding: 4px 24px 4px 6px !important; /* increased right padding for icon and filter space */
     gap: 0;
     min-height: unset;
-    position: relative;
 }
 
 /* Header main text styling */
@@ -438,17 +442,19 @@ body.page-weekly-lineup .picks-table thead th,
     line-height: 1;
 }
 
-/* Sort icon positioned at end of sort button - LARGER SIZE */
+/* Sort icon positioned at bottom-right of th cell */
 .page-weekly-lineup .weekly-lineup-table .sort-icon {
     position: absolute !important;
-    right: 4px;
-    top: 50%;
-    transform: translateY(-50%);
+    right: 0 !important; /* flush to right edge */
+    bottom: 0 !important; /* flush to bottom edge */
+    top: auto;
+    transform: none;
     font-size: 14px;
     line-height: 1;
     margin: 0;
     opacity: 0.7;
     font-weight: bold;
+    pointer-events: none;
 }
 
 .page-weekly-lineup .weekly-lineup-table th:hover .sort-icon,
@@ -459,13 +465,13 @@ body.page-weekly-lineup .picks-table thead th,
     opacity: 1;
 }
 
-/* Filter button - absolutely positioned relative to th cell (not shell) */
+/* Filter button - absolutely positioned relative to th cell, shifted left for icon space */
 body.page-weekly-lineup .weekly-lineup-table thead th .th-filter-btn,
 .page-weekly-lineup .weekly-lineup-table thead th .th-filter-btn,
 body.page-weekly-lineup .picks-table.weekly-lineup-table thead th .th-filter-btn,
 .page-weekly-lineup .picks-table.weekly-lineup-table thead th .th-filter-btn {
     position: absolute !important;
-    right: 2px !important;
+    right: 18px !important; /* shifted left to avoid overlapping sort icon */
     top: 50% !important;
     transform: translateY(-50%) !important;
     z-index: 102 !important;
