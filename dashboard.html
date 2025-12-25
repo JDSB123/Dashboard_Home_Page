@@ -37,10 +37,9 @@
     <link rel="stylesheet" href="assets/css/components/date-toggles.css?v=20251224-3">
 
     <!-- 6. Table System Components -->
-    <link rel="stylesheet" href="assets/css/components/picks-table.css?v=20251224-6">
-    <link rel="stylesheet" href="assets/css/components/parlays.css?v=20251224-8">
+    <link rel="stylesheet" href="assets/css/components/picks-table.css?v=20251225-1">
     <link rel="stylesheet" href="assets/css/components/boxscores.css?v=20251225-1">
-    <link rel="stylesheet" href="assets/css/components/status-badges.css?v=20251224-3">
+    <link rel="stylesheet" href="assets/css/components/status-badges.css?v=20251225-2">
 
     <!-- 7. Utility & Color Systems -->
     <link rel="stylesheet" href="assets/css/components/segment-colors.css?v=20251224-3">
@@ -322,17 +321,6 @@
             width: 24px !important;
             height: 24px !important;
             object-fit: contain !important;
-        }
-
-        /* PARLAY LEGS ROW - No padding on the container cell, full width */
-        #picks-table tbody tr.parlay-legs td {
-            padding: 0 !important;
-            text-align: left !important;
-            vertical-align: top !important;
-            width: 100% !important;
-        }
-        #picks-table tbody tr.parlay-legs td[colspan] {
-            width: 100% !important;
         }
     </style>
 
@@ -629,23 +617,6 @@
                                                 <!-- Teams populated by JS -->
                                             </div>
                                         </div>
-                                        <div class="filter-group">
-                                            <label class="filter-label">Ticket Type</label>
-                                            <div class="filter-radio-group">
-                                                <label class="filter-radio">
-                                                    <input type="radio" name="ticket-type" value="all" checked>
-                                                    <span>All</span>
-                                                </label>
-                                                <label class="filter-radio">
-                                                    <input type="radio" name="ticket-type" value="single">
-                                                    <span>Single</span>
-                                                </label>
-                                                <label class="filter-radio">
-                                                    <input type="radio" name="ticket-type" value="parlay">
-                                                    <span>Parlay</span>
-                                                </label>
-                                            </div>
-                                        </div>
                                     </div>
                                     <div class="filter-footer">
                                         <button class="filter-action-btn reset-filter">Reset</button>
@@ -847,13 +818,12 @@
     <script src="assets/js/modules/picks-filter-manager.js?v=20251224-4" defer></script>
     <script src="assets/js/modules/picks-sort-manager.js?v=20251224-4" defer></script>
     <script src="assets/js/modules/picks-table-renderer.js?v=20251224-3" defer></script>
-    <script src="assets/js/modules/picks-parlay-manager.js?v=20251224-3" defer></script>
-    <script src="assets/js/features/active-picks-modular.js?v=20251224-3" defer></script>
+    <script src="assets/js/features/active-picks-modular.js?v=20251225-1" defer></script>
     <script src="dashboard/js/kpi-calculator.js?v=20251224-3" defer></script>
-    <script src="dashboard/js/smart-load-picks.js?v=20251225-1" defer></script>
+    <script src="dashboard/js/smart-load-picks.js?v=20251225-2" defer></script>
     <script src="assets/js/core/navigation.js?v=20251224-3" defer></script>
     <script src="dashboard/js/status-logic.js?v=20251224-3" defer></script>
-    <script src="dashboard/js/status-tooltip.js?v=20251224-3" defer></script>
+    <script src="dashboard/js/status-tooltip.js?v=20251225-2" defer></script>
 
     <!-- Upload functionality -->
     <script src="assets/js/features/auto-game-fetcher.js?v=20251224-3" defer></script>
@@ -861,7 +831,7 @@
     <script src="assets/js/features/import-options.js?v=20251224-3" defer></script>
 
     <!-- Dashboard-specific: Picks Manager for local development -->
-    <script src="dashboard/js/local-picks-manager.js?v=20251225-1"></script>
+    <script src="dashboard/js/local-picks-manager.js?v=20251225-8"></script>
 
     <!-- Dashboard Initialization (KPI tiles, flip, refresh) -->
     <script src="dashboard/js/dashboard-init.js?v=20251224-3" defer></script>

@@ -1306,6 +1306,34 @@ tr[data-is-parlay="true"] {
     letter-spacing: 0.01em;
 }
 
+/* Hit/Miss and Won/Lost column values */
+.hit-miss-value,
+.won-lost-value {
+    font-family: var(--table-font);
+    font-weight: 700;
+    font-size: var(--text-lg);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+}
+
+/* Win - green color matching win-amount */
+.hit-miss-value[data-status="win"],
+.won-lost-value[data-status="win"] {
+    color: #66ffbb;
+}
+
+/* Loss - red color matching risk-amount */
+.hit-miss-value[data-status="loss"],
+.won-lost-value[data-status="loss"] {
+    color: #ff9999;
+}
+
+/* Push - neutral gray */
+.hit-miss-value[data-status="push"],
+.won-lost-value[data-status="push"] {
+    color: rgba(180, 190, 200, 0.85);
+}
+
 /* Compact boxscore alignment */
 .compact-boxscore {
     display: flex;

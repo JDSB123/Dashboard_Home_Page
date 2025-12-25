@@ -342,11 +342,58 @@
         }
     }
 
+    // Use event delegation for dynamically created elements
+    function setupEventDelegation() {
+        // Remove any existing delegated listeners
+        document.removeEventListener('mouseenter', delegatedMouseEnter, true);
+        document.removeEventListener('mouseleave', delegatedMouseLeave, true);
+        document.removeEventListener('focusin', delegatedFocus, true);
+        document.removeEventListener('focusout', delegatedBlur, true);
+
+        // Add delegated listeners
+        document.addEventListener('mouseenter', delegatedMouseEnter, true);
+        document.addEventListener('mouseleave', delegatedMouseLeave, true);
+        document.addEventListener('focusin', delegatedFocus, true);
+        document.addEventListener('focusout', delegatedBlur, true);
+    }
+
+    function delegatedMouseEnter(e) {
+        if (!e.target || typeof e.target.closest !== 'function') return;
+        const target = e.target.closest(BADGE_SELECTOR);
+        if (!target) return;
+        handleMouseEnter({ currentTarget: target });
+    }
+
+    function delegatedMouseLeave(e) {
+        if (!e.target || typeof e.target.closest !== 'function') return;
+        const target = e.target.closest(BADGE_SELECTOR);
+        if (!target) return;
+        handleMouseLeave({ currentTarget: target });
+    }
+
+    function delegatedFocus(e) {
+        if (!e.target || typeof e.target.closest !== 'function') return;
+        const target = e.target.closest(BADGE_SELECTOR);
+        if (!target) return;
+        handleFocus({ currentTarget: target });
+    }
+
+    function delegatedBlur(e) {
+        if (!e.target || typeof e.target.closest !== 'function') return;
+        const target = e.target.closest(BADGE_SELECTOR);
+        if (!target) return;
+        handleBlur();
+    }
+
     // Initialize on DOM ready
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initializeStatusTooltips);
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeStatusTooltips();
+            setupEventDelegation();
+        });
     } else {
         initializeStatusTooltips();
+        setupEventDelegation();
     }
 
     // Re-initialize when table updates
@@ -379,6 +426,7 @@
     // Expose for external use
     window.statusTooltipSystem = {
         initialize: initializeStatusTooltips,
+        setupDelegation: setupEventDelegation,
         show: showTooltip,
         hide: hideTooltip
     };

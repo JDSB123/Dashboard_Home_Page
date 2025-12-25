@@ -24,7 +24,6 @@
             this.initializeState();
             this.initializeFilters();
             this.initializeSorting();
-            this.initializeParlays();
             this.initializeEventHandlers();
             this.initializeUI();
 
@@ -44,8 +43,7 @@
                 'PicksFilterManager',
                 'PicksSortManager',
                 'PicksDOMUtils',
-                'PicksDataProcessor',
-                'PicksParlayManager'
+                'PicksDataProcessor'
             ];
 
             const missing = required.filter(module => !window[module]);
@@ -489,13 +487,6 @@
          */
         initializeSorting() {
             window.PicksSortManager.initSorting();
-        },
-
-        /**
-         * Initialize parlays
-         */
-        initializeParlays() {
-            window.PicksParlayManager.initParlays();
         },
 
         /**

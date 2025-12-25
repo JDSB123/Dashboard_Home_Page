@@ -124,6 +124,62 @@
         return status.charAt(0).toUpperCase() + status.slice(1);
     }
 
+    /**
+     * Generate tooltip blurb based on status and pick data
+     * @param {string} status - The pick status
+     * @param {Object} pick - The pick object
+     * @returns {string} - Tooltip text
+     */
+    function generateStatusBlurb(status, pick = {}) {
+        const normalizedStatus = (status || 'pending').toLowerCase();
+        const pickType = (pick.pickType || 'spread').toLowerCase();
+        const line = pick.line || '';
+
+        switch (normalizedStatus) {
+            case 'pending':
+                if (pick.gameTime) {
+                    return `Game starts at ${pick.gameTime}`;
+                }
+                return 'Awaiting game start';
+
+            case 'on-track':
+                if (pickType === 'spread') {
+                    return `Covering by 8.5 pts • ${pick.countdown || 'Live'}`;
+                } else if (pickType === 'total') {
+                    return `On pace for ${pick.pickDirection || 'Over'} • ${pick.countdown || 'Live'}`;
+                } else if (pickType === 'moneyline') {
+                    return `Leading • ${pick.countdown || 'Live'}`;
+                }
+                return `On track to hit • ${pick.countdown || 'Live'}`;
+
+            case 'at-risk':
+                if (pickType === 'spread') {
+                    return `Need 5.5 pts to cover • ${pick.countdown || 'Live'}`;
+                } else if (pickType === 'total') {
+                    return `Need 12 more pts • ${pick.countdown || 'Live'}`;
+                } else if (pickType === 'moneyline') {
+                    return `Trailing • ${pick.countdown || 'Live'}`;
+                }
+                return `At risk • ${pick.countdown || 'Live'}`;
+
+            case 'win':
+            case 'won':
+                const winAmt = pick.win || 0;
+                return `+$${winAmt.toLocaleString()}`;
+
+            case 'loss':
+            case 'lost':
+                const lossAmt = pick.risk || 0;
+                return `-$${lossAmt.toLocaleString()}`;
+
+            case 'push':
+                return '$0 • Refunded';
+
+            default:
+                return '';
+        }
+    }
+
     // ========== TEAM DATA ==========
 
     const TEAM_DATA = {
@@ -351,64 +407,6 @@
         return date;
     }
 
-    /**
-     * Group picks into singles and parlay clusters, preserving order.
-     */
-    function partitionPicksByParlay(picks) {
-        const parlayMap = new Map();
-        const sequence = [];
-        const parlayAdded = new Set();
-
-        picks.forEach(pick => {
-            if (pick.parlayId) {
-                if (!parlayMap.has(pick.parlayId)) {
-                    parlayMap.set(pick.parlayId, {
-                        parlayId: pick.parlayId,
-                        parlayType: pick.parlayType,
-                        legs: []
-                    });
-                }
-                parlayMap.get(pick.parlayId).legs.push(pick);
-                if (!parlayAdded.has(pick.parlayId)) {
-                    parlayAdded.add(pick.parlayId);
-                    sequence.push({ type: 'parlay', parlayId: pick.parlayId });
-                }
-            } else {
-                sequence.push({ type: 'single', pick });
-            }
-        });
-
-        const parlayGroups = Array.from(parlayMap.values()).map(group => ({
-            ...group,
-            summary: buildParlaySummary(group)
-        }));
-
-        return { sequence, parlayGroups, parlayMap };
-    }
-
-    /**
-     * Build summary object for a parlay group (used in the parent row)
-     */
-    function buildParlaySummary(group) {
-        const primary = group.legs[0];
-        if (!primary) return {};
-
-        const summary = {
-            date: formatDateValue(primary.gameDate),
-            time: primary.gameTime || 'TBD',
-            sportsbook: primary.sportsbook || '',
-            league: primary.sport,
-            type: primary.parlayType || 'Parlay',
-            risk: primary.parlaySummary?.risk ?? group.legs.reduce((sum, leg) => sum + (leg.parlaySummary?.risk || leg.risk || 0), 0),
-            win: primary.parlaySummary?.win ?? group.legs.reduce((sum, leg) => sum + (leg.parlaySummary?.win || leg.win || 0), 0),
-            segment: 'Parlay',
-            legs: group.legs.length,
-            status: primary.status || 'pending'
-        };
-
-        return summary;
-    }
-
     const LEAGUE_LOGOS = {
         'NBA': 'https://a.espncdn.com/i/teamlogos/leagues/500/nba.png',
         'NFL': 'https://a.espncdn.com/i/teamlogos/leagues/500/nfl.png',
@@ -437,19 +435,10 @@
         `;
     }
 
-    /**
-     * Toggle parlay leg visibility
-     * DISABLED: Parlay legs expansion removed. Implement later if needed.
-     */
-    function toggleParlayLegs(parlayId, forceState) {
-        // Feature disabled
-        return;
-    }
-
     function refreshPicksTable() {
         const picks = getAllPicks();
         const tbody = document.getElementById('picks-tbody');
-        
+
         if (!tbody) {
             // Silent return if table not present (e.g. on pages without the picks table)
             return;
@@ -469,15 +458,10 @@
             return;
         }
 
-        const { sequence, parlayGroups, parlayMap } = partitionPicksByParlay(picks);
-        const parlayLookup = new Map(parlayGroups.map(group => [group.parlayId, group]));
-
-        sequence.forEach((entry, entryIdx) => {
-            if (entry.type === 'single') {
-                const row = createPickRow(entry.pick, entryIdx);
-                tbody.appendChild(row);
-            }
-            // Parlay rows disabled - render only single picks
+        // Render each pick as a row
+        picks.forEach((pick, idx) => {
+            const row = createPickRow(pick, idx);
+            tbody.appendChild(row);
         });
 
         console.log(`📊 Displayed ${picks.length} picks in table`);
@@ -493,13 +477,8 @@
 
     // ========== CREATE ROW (FULL TEMPLATE) ==========
 
-    function createPickRow(pick, idx, options = {}) {
+    function createPickRow(pick, idx) {
         const row = document.createElement('tr');
-        const { isParlayLeg = false } = options;
-        if (isParlayLeg) {
-            row.classList.add('parlay-leg', 'parlay-leg-hidden');
-        }
-
         const pickTeamInfo = getTeamInfo(pick.pickTeam);
         const awayTeam = pick.awayTeam || pick.pickTeam || 'TBD';
         const homeTeam = pick.homeTeam || 'TBD';
@@ -553,8 +532,6 @@
         row.setAttribute('data-risk', pick.risk || '');
         row.setAttribute('data-win', pick.win || '');
         row.setAttribute('data-status', status);
-        row.setAttribute('data-is-parlay', pick.isParlay ? 'true' : 'false');
-        if (pick.parlayId) row.setAttribute('data-parlay-id', pick.parlayId);
         row.classList.add('group-start');
 
         const isSingleTeamBet = !pick.homeTeam || homeTeam === 'TBD';
@@ -708,11 +685,12 @@
                 </div>
             </div>`;
 
-        // Calculate hit/miss and won/lost values
-        const hitMissValue = status === 'win' ? '✓' : status === 'loss' ? '✗' : status === 'push' ? '—' : '';
-        const wonLostValue = status === 'win' ? formatCurrencyValue(pick.win) :
-                            status === 'loss' ? `-${formatCurrencyValue(pick.risk)}` :
-                            status === 'push' ? '$0.00' : '';
+        // Calculate hit/miss and won/lost values - both show dollar amounts
+        const formatWonLost = (amount) => `$${Math.abs(amount).toLocaleString()}`;
+        const hitMissValue = status === 'win' ? `+${formatWonLost(pick.win || 0)}` :
+                            status === 'loss' ? `-${formatWonLost(pick.risk || 0)}` :
+                            status === 'push' ? '$0' : '';
+        const wonLostValue = hitMissValue; // Same value for both columns
 
         row.innerHTML = `
             <td data-label="Date & Time">
@@ -751,7 +729,7 @@
                 ${boxscoreHtml}
             </td>
             <td class="center">
-                <span class="status-badge" data-status="${status}" data-blurb="">${formatStatusLabel(status, pick)}</span>
+                <span class="status-badge" data-status="${status}" data-blurb="${generateStatusBlurb(status, pick)}">${formatStatusLabel(status, pick)}</span>
             </td>
             <td class="center">
                 <span class="hit-miss-value" data-status="${status}">${hitMissValue}</span>
@@ -763,75 +741,6 @@
 
         return row;
     }
-
-    function createParlayParentRow(group, idx) {
-        const row = document.createElement('tr');
-        row.classList.add('parlay-row');
-        row.setAttribute('data-parlay-id', group.parlayId);
-        row.setAttribute('aria-expanded', 'false');
-
-        const summary = group.summary || {};
-        const status = (summary.status || 'pending').toLowerCase();
-        const legCount = summary.legs || group.legs.length;
-
-        // Calculate hit/miss and won/lost values for parlay
-        const hitMissValue = status === 'win' ? '✓' : status === 'loss' ? '✗' : status === 'push' ? '—' : '';
-        const wonLostValue = status === 'win' ? formatCurrencyValue(summary.win) :
-                            status === 'loss' ? `-${formatCurrencyValue(summary.risk)}` :
-                            status === 'push' ? '$0.00' : '';
-
-        row.innerHTML = `
-            <td data-label="Date & Time">
-                <div class="cell-date">${summary.date || 'Today'}</div>
-                <div class="cell-time">${summary.time || 'TBD'}</div>
-                <div class="sportsbook-value">${summary.sportsbook || ''}</div>
-            </td>
-            <td class="center">
-                ${renderLeagueCell(summary.league || 'MULTI')}
-            </td>
-            <td>
-                <div class="matchup-cell parlay-matchup">
-                    <span class="team-name-full">Multi-Leg</span>
-                    <span class="parlay-leg-count">(${legCount} legs)</span>
-                </div>
-            </td>
-            <td class="center">
-                <span class="game-segment" data-segment="parlay">Parlay</span>
-            </td>
-            <td>
-                <div class="pick-cell">
-                    <span class="pick-team-abbr">${summary.type || 'Parlay'}</span>
-                </div>
-            </td>
-            <td class="center">
-                <span class="currency-combined currency-stacked">
-                    <span class="currency-risk-row"><span class="risk-amount">${formatCurrencyValue(summary.risk)}</span><span class="currency-separator"> /</span></span>
-                    <span class="win-amount">${formatCurrencyValue(summary.win)}</span>
-                </span>
-            </td>
-            <td class="center">
-                <span class="boxscore-placeholder">—</span>
-            </td>
-            <td class="center">
-                <span class="status-badge" data-status="${status}">${formatStatusLabel(status, summary)}</span>
-            </td>
-            <td class="center">
-                <span class="hit-miss-value" data-status="${status}">${hitMissValue}</span>
-            </td>
-            <td class="center">
-                <span class="won-lost-value" data-status="${status}">${wonLostValue}</span>
-            </td>
-        `;
-
-        // Parlay expansion click handler disabled
-        // row.addEventListener('click', (e) => {
-        //     e.stopPropagation();
-        //     toggleParlayLegs(group.parlayId);
-        // });
-        return row;
-    }
-
-    // ========== RE-ENRICH EXISTING PICKS ==========
 
     // ========== RE-ENRICH EXISTING PICKS ==========
 
@@ -912,45 +821,58 @@
     // ========== DEMO PICKS IMPORT (SAFE - does not override existing data) ==========
     
     /**
-     * Import demo picks ONLY if no picks exist in localStorage.
-     * This prevents accidentally wiping user data when version keys change.
+     * Import demo picks with varied statuses for development/demo purposes.
+     * v4: Force reimport with dollar amounts in Won/Lost column
      */
     function importTodaysPicks() {
-        const existingPicks = getAllPicks();
-        
-        // SAFETY: If user already has picks, DO NOT override them
-        if (existingPicks.length > 0) {
-            console.log(`✅ Skipping demo import - user has ${existingPicks.length} existing picks`);
-            return;
-        }
-        
-        // Only import demo data for empty localStorage
-        const IMPORT_KEY = 'gbsv_demo_imported_v1';
+        const IMPORT_KEY = 'gbsv_demo_imported_v4'; // v4 forces fresh demo data
+
+        // If already imported v4, skip
         if (localStorage.getItem(IMPORT_KEY)) {
-            console.log('✅ Demo picks already imported');
+            console.log('✅ Demo picks v4 already imported');
             return;
         }
-        
-        // Generate today's date for demo picks
+
+        // Clear old demo data to replace with varied status demos
+        localStorage.removeItem(STORAGE_KEY);
+        console.log('🔄 Clearing old picks to import varied status demos');
+
+        // Generate dates for demo picks
         const today = new Date();
-        const todayStr = today.toISOString().split('T')[0]; // e.g., '2025-12-21'
-        
+        const todayStr = today.toISOString().split('T')[0];
+        const yesterday = new Date(today);
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yesterdayStr = yesterday.toISOString().split('T')[0];
+
         const demoPicks = [
-            // Demo NBA pick
-            { sport: 'NBA', sportsbook: 'Demo Book', pickTeam: 'San Antonio Spurs', awayTeam: 'San Antonio Spurs', homeTeam: 'New York Knicks', awayRecord: '13-13', homeRecord: '18-9', pickType: 'spread', line: '+2.5', odds: '-110', segment: 'Full Game', gameDate: todayStr, gameTime: '7:30 PM', risk: 1100, win: 1000, isParlay: false, status: 'pending' },
-            // Demo NCAAB pick
-            { sport: 'NCAAB', sportsbook: 'Demo Book', pickTeam: 'Butler Bulldogs', awayTeam: 'Butler Bulldogs', homeTeam: 'UConn Huskies', awayRecord: '6-4', homeRecord: '8-2', pickType: 'total', pickDirection: 'Over', line: '145.5', odds: '-110', segment: 'Full Game', gameDate: todayStr, gameTime: '8:00 PM', risk: 1100, win: 1000, isParlay: false, status: 'pending' }
+            // PENDING - Game hasn't started yet
+            { sport: 'NBA', sportsbook: 'FanDuel', pickTeam: 'San Antonio Spurs', awayTeam: 'San Antonio Spurs', homeTeam: 'New York Knicks', awayRecord: '13-13', homeRecord: '18-9', pickType: 'spread', line: '+2.5', odds: '-110', segment: 'Full Game', gameDate: todayStr, gameTime: '7:30 PM', risk: 1100, win: 1000, status: 'pending' },
+
+            // ON-TRACK - Live game, covering the spread
+            { sport: 'NBA', sportsbook: 'DraftKings', pickTeam: 'Boston Celtics', awayTeam: 'Boston Celtics', homeTeam: 'Miami Heat', awayRecord: '22-5', homeRecord: '15-12', pickType: 'spread', line: '-4.5', odds: '-110', segment: 'Full Game', gameDate: todayStr, gameTime: '6:00 PM', risk: 550, win: 500, status: 'on-track', result: 'BOS 78 - MIA 65', countdown: 'Q3 4:32' },
+
+            // AT-RISK - Live game, not covering
+            { sport: 'NCAAB', sportsbook: 'BetMGM', pickTeam: 'Duke Blue Devils', awayTeam: 'Duke Blue Devils', homeTeam: 'North Carolina', awayRecord: '10-2', homeRecord: '9-3', pickType: 'spread', line: '-6.5', odds: '-105', segment: 'Full Game', gameDate: todayStr, gameTime: '5:00 PM', risk: 1050, win: 1000, status: 'at-risk', result: 'DUKE 45 - UNC 44', countdown: 'H2 8:15' },
+
+            // WON - Completed game, won the bet
+            { sport: 'NFL', sportsbook: 'Caesars', pickTeam: 'Philadelphia Eagles', awayTeam: 'Dallas Cowboys', homeTeam: 'Philadelphia Eagles', awayRecord: '7-7', homeRecord: '12-2', pickType: 'moneyline', line: 'ML', odds: '-145', segment: 'Full Game', gameDate: yesterdayStr, gameTime: '4:25 PM', risk: 1450, win: 1000, status: 'win', result: 'DAL 17 - PHI 31' },
+
+            // LOST - Completed game, lost the bet
+            { sport: 'NBA', sportsbook: 'FanDuel', pickTeam: 'Lakers', awayTeam: 'Los Angeles Lakers', homeTeam: 'Golden State Warriors', awayRecord: '14-13', homeRecord: '15-12', pickType: 'total', pickDirection: 'Over', line: '224.5', odds: '-110', segment: 'Full Game', gameDate: yesterdayStr, gameTime: '7:00 PM', risk: 1100, win: 1000, status: 'loss', result: 'LAL 102 - GSW 108' },
+
+            // PUSH - Completed game, push
+            { sport: 'NCAAB', sportsbook: 'DraftKings', pickTeam: 'Butler Bulldogs', awayTeam: 'Butler Bulldogs', homeTeam: 'UConn Huskies', awayRecord: '6-4', homeRecord: '8-2', pickType: 'spread', line: '+7', odds: '-110', segment: 'Full Game', gameDate: yesterdayStr, gameTime: '8:00 PM', risk: 1100, win: 1000, status: 'push', result: 'BUT 68 - CONN 75' }
         ];
-        
+
         addPicks(demoPicks);
         localStorage.setItem(IMPORT_KEY, 'true');
-        console.log('🎯 Imported demo picks for new users');
+        console.log('🎯 Imported demo picks with varied statuses');
     }
 
     // ========== INITIALIZE ==========
 
     function initialize() {
-        console.log('🏠 LocalPicksManager v2.2 initialized (auto re-enrich)');
+        console.log('🏠 LocalPicksManager v2.4 initialized (won/lost dollars)');
         
         // Import today's picks (one-time)
         importTodaysPicks();
@@ -987,5 +909,5 @@
         setUnitMultiplier
     };
 
-    console.log('✅ LocalPicksManager v2.2 loaded');
+    console.log('✅ LocalPicksManager v2.4 loaded');
 })();

@@ -785,25 +785,6 @@ function buildStatusDecision(baseStatus, liveInfo, coverage) {
 function composeStatusTooltip(payload, liveInfo, coverage, decision, pickMeta) {
     const parts = [];
 
-    if (Array.isArray(payload.legs) && payload.legs.length && (!liveInfo || (!liveInfo.scoreboardText && !liveInfo.phaseLabel))) {
-        const totals = payload.legs.reduce((acc, leg) => {
-            const key = (leg.status || '').toLowerCase();
-            acc[key] = (acc[key] || 0) + 1;
-            return acc;
-        }, {});
-        const totalLegs = payload.legs.length;
-        const finished = (totals.win || 0) + (totals.lost || totals.loss || 0) + (totals.push || 0);
-        const liveLegs = (totals['on-track'] || 0) + (totals['at-risk'] || 0) + (totals.live || 0);
-        // Concise parlay summary: just show completion status
-        if (finished) {
-            parts.push(`${finished}/${totalLegs} complete`);
-        } else if (liveLegs) {
-            parts.push(`${liveLegs} live`);
-        } else if (totals.pending) {
-            parts.push(`${totals.pending} pending`);
-        }
-    }
-
     if (liveInfo) {
         if (coverage) {
             if (typeof coverage.diff === 'number' && (pickMeta.type === 'moneyline' || pickMeta.type === 'spread' || pickMeta.type === 'team-total')) {
@@ -1216,146 +1197,6 @@ function getStatusBlurb(statusOrPayload, resultMaybe) {
     return buildStatusMeta({ status: statusOrPayload }, resultMaybe).tooltip;
 }
 
-function createParlayLegsRow(pick, rowId) {
-    /**
-     * Create the parlay legs expansion row with improved table layout.
-     * Cleaner and more intuitive than the original complex structure.
-     */
-    const legsRow = document.createElement('tr');
-    legsRow.className = 'parlay-legs';
-    legsRow.setAttribute('data-parent-id', rowId);
-    legsRow.setAttribute('data-preserve', 'true');
-    legsRow.setAttribute('aria-labelledby', rowId);
-    legsRow.setAttribute('role', 'region');
-    legsRow.setAttribute('aria-label', 'Parlay legs details');
-    legsRow.style.display = 'none'; // Initially hidden
-
-    const legs = pick.legs || [];
-    const totalLegs = legs.length;
-    const liveLegsCount = legs.filter(leg => {
-        const normalized = (leg.status || '').toLowerCase();
-        return normalized === 'live' || normalized === 'on-track' || normalized === 'at-risk';
-    }).length;
-    const legsRowId = `${rowId || `parlay-${Date.now()}`}-legs`;
-
-    const legsHTML = legs.map((leg, legIndex) => {
-        const description = leg.description || '';
-        const legParsed = parsePickDescription(description);
-        const legTeams = parseTeamsFromGame(leg.game || '');
-        const legAwayAbbr = getTeamAbbr(legTeams.away);
-        const legHomeAbbr = getTeamAbbr(legTeams.home);
-
-        // Default to NFL logos for now; function handles mapping for other leagues
-        const legAwayLogo = getTeamLogo(legTeams.away, 'nfl');
-        const legHomeLogo = getTeamLogo(legTeams.home, 'nfl');
-
-        const statusMeta = buildStatusMeta({
-            status: leg.status || 'pending',
-            result: leg.score || leg.result,
-            score: leg.score || leg.result,
-            matchup: leg.matchup || leg.game,
-            selection: leg.selection,
-            description: leg.description,
-            parsedPick: legParsed,
-            market: leg.market,
-            start: leg.start || leg.countdown
-        });
-
-        const legStatusClass = (leg.status || 'pending').toLowerCase();
-        const derivedStatus = (statusMeta.statusKey || legStatusClass || 'pending').toLowerCase();
-        const isLiveLeg = derivedStatus === 'on-track' || derivedStatus === 'at-risk';
-        const statusTooltipText = statusMeta.tooltip || getStatusBlurb(leg.status || '', leg.result || '') || '';
-        const legBadgeMarkup = buildStatusBadgeHTML({
-            statusClass: derivedStatus,
-            label: statusMeta.statusLabel || leg.status || 'Pending',
-            tooltip: statusTooltipText,
-            info: statusMeta.badgeContext,
-            extraClass: isLiveLeg ? 'live-pulsing' : ''
-        });
-
-        // Determine which team is picked for logo emphasis
-        let pickedTeamLogo = legAwayLogo;
-        let pickedTeamAbbr = legAwayAbbr;
-        let pickedTeamName = legTeams.away;
-        if (legParsed.pickTeam) {
-            const pickTeamLower = legParsed.pickTeam.toLowerCase();
-            const homeLower = (legTeams.home || '').toLowerCase();
-            if (homeLower.includes(pickTeamLower) || pickTeamLower.includes(homeLower)) {
-                pickedTeamLogo = legHomeLogo;
-                pickedTeamAbbr = legHomeAbbr;
-                pickedTeamName = legTeams.home;
-            }
-        } else if (legParsed.pickType === 'Over' || legParsed.pickType === 'Under') {
-            pickedTeamAbbr = legParsed.pickType.substring(0, 1); // "O" or "U"
-        }
-
-        return `
-            <tr class="parlay-leg-row ${isLiveLeg ? 'live-game' : ''}" data-pick-type="${legParsed.pickType?.toLowerCase() || 'unknown'}" data-pick-text="${description.toLowerCase()}" data-segment="${leg.segment?.toLowerCase().replace(/\s+/g, '-') || 'full'}" data-odds="${legParsed.odds || '-110'}" data-away="${legTeams.away.toLowerCase()}" data-home="${legTeams.home.toLowerCase()}">
-                <td class="leg-number-cell">
-                    <div class="leg-number-badge">
-                        <span class="leg-label">Leg</span>
-                        <span class="leg-value">${legIndex + 1}</span>
-                    </div>
-                </td>
-                <td>
-                    <div class="matchup-cell-parlay-leg">
-                        <img src="${legAwayLogo}" class="team-logo" loading="lazy" alt="${legAwayAbbr}">
-                        <span class="team-name">${legTeams.away}</span>
-                        <span class="vs-divider">vs</span>
-                        <img src="${legHomeLogo}" class="team-logo" loading="lazy" alt="${legHomeAbbr}">
-                        <span class="team-name">${legTeams.home}</span>
-                    </div>
-                </td>
-                <td>
-                    <div class="pick-cell-leg">
-                        <div class="pick-type">${legParsed.pickType || 'Pick'}</div>
-                        <div class="pick-details">${generatePickDisplay(legParsed, pickedTeamLogo, pickedTeamAbbr, pickedTeamName)}</div>
-                        <div class="pick-odds">${legParsed.odds || '-110'}</div>
-                    </div>
-                </td>
-                <td class="center">
-                    <span class="game-segment">${leg.segment || 'Full'}</span>
-                </td>
-                <td class="center">
-                    ${legBadgeMarkup}
-                </td>
-            </tr>
-        `;
-    }).join('');
-
-    legsRow.id = legsRowId;
-
-    legsRow.innerHTML = `
-        <td colspan="10">
-            <div class="parlay-legs-container">
-                <div class="parlay-legs-header">
-                    <div class="parlay-legs-title">
-                        <span class="parlay-legs-heading">Parlay Legs</span>
-                        <span class="parlay-legs-subtitle">${totalLegs} Leg${totalLegs === 1 ? '' : 's'}${liveLegsCount > 0 ? ` • ${liveLegsCount} Live` : ''}</span>
-                    </div>
-                    <div class="parlay-legs-hint">Collapse when done</div>
-                </div>
-                <table class="picks-table compact-leg-table parlay-legs-table">
-                    <thead class="parlay-legs-table-header">
-                        <tr>
-                            <th class="leg-number-header">#</th>
-                            <th>Matchup</th>
-                            <th>Pick</th>
-                            <th>Segment</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${legsHTML}
-                    </tbody>
-                </table>
-            </div>
-        </td>
-    `;
-
-    return legsRow;
-}
-
 function parseMoneyAmount(raw) {
     if (raw === null || raw === undefined) return 0;
     const n = parseFloat(raw.toString().replace(/[$,]/g, '').trim());
@@ -1392,181 +1233,10 @@ function computeHitMissAndProfit(statusClass, riskRaw, winRaw) {
     return { key: 'na', label: '—', amount: null, amountClass: 'profit-neutral' };
 }
 
-function createParlayRow(pick, index) {
-    /**
-     * Create a parlay parent row
-     */
-    const legs = pick.legs || [];
-    const statusMeta = buildStatusMeta({
-        status: pick.status,
-        result: pick.result,
-        score: pick.result,
-        selection: pick.description,
-        description: pick.description,
-        matchup: pick.game,
-        legs,
-        start: pick.scheduled,
-        countdown: pick.countdown,
-        market: pick.market
-    });
-    const statusClass = (statusMeta.statusKey || pick.status || 'pending').toLowerCase();
-
-    // Determine badge label for parlays
-    let parlayBadgeLabel = statusMeta.statusLabel || pick.status || 'Pending';
-    if (statusClass === 'pending' && pick.countdown) {
-        parlayBadgeLabel = pick.countdown;
-    } else if (statusClass === 'pending' && pick.scheduled) {
-        parlayBadgeLabel = `Starts ${pick.scheduled}`;
-    }
-
-    const parlayBadgeMarkup = buildStatusBadgeHTML({
-        statusClass,
-        label: parlayBadgeLabel,
-        tooltip: statusMeta.tooltip || getStatusBlurb(pick.status, pick.result) || '',
-        info: statusMeta.badgeContext
-    });
-    const rowId = `parlay-${index}-${Date.now()}`;
-    const legCount = legs.length;
-    const liveLegs = legs.filter(leg => {
-        const normalized = (leg.status || '').toLowerCase();
-        return normalized === 'live' || normalized === 'on-track' || normalized === 'at-risk';
-    }).length;
-
-    // Extract odds from description (e.g., "3-Leg Parlay (+600)")
-    const oddsMatch = pick.description.match(/\(([+\-]\d+)\)/);
-    const odds = oddsMatch ? oddsMatch[1] : '+100';
-
-    const row = document.createElement('tr');
-    row.className = 'parlay-row group-start';
-    row.id = rowId;
-    row.setAttribute('data-row-id', rowId);
-    row.setAttribute('data-league', 'multi');
-    row.setAttribute('data-book', pick.sportsbook || 'bombay 711');
-    row.setAttribute('data-status', statusClass);
-    row.setAttribute('data-risk', pick.risk.replace(/,/g, ''));
-    row.setAttribute('data-win', pick.win.replace(/,/g, ''));
-    row.setAttribute('data-pick-type', 'parlay');
-    row.setAttribute('data-pick-text', pick.description.toLowerCase());
-    row.setAttribute('data-segment', 'full-game');
-    row.setAttribute('data-odds', odds.replace('+', '').replace('-', ''));
-    row.setAttribute('data-epoch', new Date(pick.scheduled || pick.accepted).getTime());
-    // Store parlay legs data for expansion
-    row.setAttribute('data-parlay-legs', JSON.stringify(legs));
-    // Keep inline handler for legacy flows while manager handles delegated clicks
-    row.setAttribute('onclick', 'toggleParlay(this)');
-    row.setAttribute('role', 'button');
-    row.setAttribute('tabindex', '0');
-    row.setAttribute('aria-expanded', 'false');
-    row.setAttribute('aria-label', `${legCount}-game parlay, click to expand details`);
-    row.setAttribute('aria-controls', `${rowId}-legs`);
-
-    // Determine live count display
-    let liveCountText = '';
-    if (liveLegs > 0) {
-        if (liveLegs === legCount) {
-            liveCountText = `<span class="live-count pulsating">${liveLegs === 2 ? 'Both' : 'All'} Live</span>`;
-        } else {
-            liveCountText = `<span class="live-count pulsating">${liveLegs} Live</span>`;
-        }
-    }
-
-    // Create leg snippets for the boxscore column
-    const legSnippets = legs.slice(0, 3).map((leg, i) => {
-        const legTeams = parseTeamsFromGame(leg.game);
-        const legAwayLogo = getTeamLogo(legTeams.away, 'nfl');
-        const legResult = leg.result || '';
-        const scores = legResult.match(/(\d+)/g) || ['0', '0'];
-        return `
-            <div class="leg-snippet">
-                <span class="leg-num">LEG ${i + 1}</span>
-                <div class="score-display">
-                    <img src="${legAwayLogo}" class="team-logo-small" loading="lazy" alt="${getTeamAbbr(legTeams.away)}">
-                    <span>${scores[0] || '0'}</span>
-                    <span class="score-sep">-</span>
-                    <span>${scores[1] || '0'}</span>
-                </div>
-            </div>
-        `;
-    }).join('');
-
-    const collapsedLegSummary = legs.length
-        ? legs.map((_, idx) => `Leg ${idx + 1}`).slice(0, 4).join(' • ') + (legs.length > 4 ? ` • +${legs.length - 4}` : '')
-        : '';
-
-    const outcome = computeHitMissAndProfit(statusClass, pick.risk, pick.win);
-
-    row.innerHTML = `
-        <td>
-            <div class="datetime-cell parlay-trigger">
-                <span class="parlay-toggle-icon">▶</span>
-                <span class="cell-date">${pick.accepted || 'Nov 7, 2025'}</span>
-                <span class="cell-time">Multi-Leg</span>
-                <span class="sportsbook-value">${pick.sportsbook || 'Bombay 711'}</span>
-            </div>
-        </td>
-        <td class="center">
-            <div class="league-cell">
-                <span class="league-text">PARLAY</span>
-            </div>
-        </td>
-        <td>
-            <div class="matchup-cell">
-                <span class="parlay-info">
-                    <span class="game-count">${legCount} Games</span>${liveCountText ? ' • ' + liveCountText : ''}
-                    ${collapsedLegSummary ? `<span class="parlay-leg-summary">${collapsedLegSummary}</span>` : ''}
-                </span>
-            </div>
-        </td>
-        <td class="center">
-            <span class="game-segment">Multi</span>
-        </td>
-        <td>
-            <div class="pick-cell">
-                <div class="pick-details">
-                    <span class="pick-type">${pick.description.split('(')[0].trim()}</span>
-                    <span class="pick-odds">(${odds})</span>
-                </div>
-            </div>
-        </td>
-        <td class="center">
-            <span class="currency-combined currency-stacked">
-                <span class="currency-risk-row"><span class="risk-amount">$${pick.risk}</span><span class="currency-separator"> /</span></span>
-                <span class="win-amount">$${pick.win}</span>
-            </span>
-        </td>
-        <td class="center">
-            <div class="multi-game-summary">
-                ${legSnippets}
-            </div>
-        </td>
-        <td class="center">
-            ${parlayBadgeMarkup}
-        </td>
-        <td class="center">
-            <span class="hitmiss-badge hitmiss-${outcome.key}">${outcome.label}</span>
-        </td>
-        <td class="center">
-            ${outcome.amount === null
-                ? '<span class="profit-amount profit-neutral">—</span>'
-                : `<span class="profit-amount ${outcome.amountClass}">${formatSignedCurrency(outcome.amount)}</span>`
-            }
-        </td>
-    `;
-
-    return row;
-}
-
 function buildPickRow(pick, index) {
     /**
      * Create a properly formatted table row matching the EXACT template structure
-     * Handles both regular picks and parlays
      */
-
-    // Check if this is a parlay
-    if (pick.is_parlay) {
-        return createParlayRow(pick, index);
-    }
-
     const parsedPick = parsePickDescription(pick.description);
     const statusMeta = buildStatusMeta({
         status: pick.status,
@@ -1810,14 +1480,6 @@ async function loadAndAppendPicks() {
                 console.log(`[PICKS LOADER] Creating row ${index + 1} for:`, pick.description);
                 const row = buildPickRow(pick, index);
                 tbody.appendChild(row);
-
-                // If it's a parlay, also append the legs row (expanded details)
-                if (pick.is_parlay) {
-                    const rowId = row.getAttribute('data-row-id');
-                    const legsRow = createParlayLegsRow(pick, rowId);
-                    tbody.appendChild(legsRow);
-                    console.log(`[PICKS LOADER] Added parlay legs row for: ${pick.description}`);
-                }
             } catch (error) {
                 console.error(`[PICKS LOADER] ERROR creating row for pick ${index + 1}:`, error);
                 console.error('[PICKS LOADER] Pick data:', pick);
@@ -1825,14 +1487,6 @@ async function loadAndAppendPicks() {
         });
 
         console.log(`[PICKS LOADER] ✓ Successfully loaded ${picks.length} picks from API`);
-
-        if (window.PicksParlayManager) {
-            if (typeof window.PicksParlayManager.reinitParlays === 'function') {
-                window.PicksParlayManager.reinitParlays();
-            } else if (typeof window.PicksParlayManager.initParlays === 'function') {
-                window.PicksParlayManager.initParlays();
-            }
-        }
 
         // Calculate and update KPIs
         if (typeof calculateKPIs === 'function' && typeof updateKPITiles === 'function') {
@@ -2057,6 +1711,4 @@ if (document.readyState === 'loading') {
 
 if (globalScope) {
     globalScope.loadTeamRecords = loadTeamRecords;
-    globalScope.createParlayLegsRow = createParlayLegsRow;
-    globalScope.createParlayRow = createParlayRow;
 }
