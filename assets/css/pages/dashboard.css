@@ -558,12 +558,26 @@ body.page-active-picks .game-segment {
     letter-spacing: 0.02em;
 }
 
-/* ===== RISK/WIN CELL (matches weekly lineup) ===== */
+/* ===== RISK/WIN CELL (inline layout with separator) ===== */
 body.page-active-picks .currency-combined {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 2px;
+}
+
+/* New inline layout with / separator */
+body.page-active-picks .currency-combined.currency-inline {
+    flex-direction: row !important;
+    justify-content: center;
+    gap: 0.35em;
+}
+
+body.page-active-picks .currency-separator {
+    font-family: var(--font-body), 'Cormorant Garamond', Georgia, serif;
+    font-weight: 400;
+    font-size: var(--text-base, 0.8125rem);
+    color: rgba(200, 215, 230, 0.6);
 }
 
 body.page-active-picks .currency-line {
@@ -582,12 +596,18 @@ body.page-active-picks .win-label {
     letter-spacing: 0.03em;
 }
 
-body.page-active-picks .risk-amount,
+body.page-active-picks .risk-amount {
+    font-family: var(--font-body), 'Cormorant Garamond', Georgia, serif;
+    font-weight: 600;
+    font-size: var(--text-base, 0.8125rem);
+    color: #ff9999;
+}
+
 body.page-active-picks .win-amount {
     font-family: var(--font-body), 'Cormorant Garamond', Georgia, serif;
     font-weight: 600;
     font-size: var(--text-base, 0.8125rem);
-    color: var(--neutral-100);
+    color: #66ffbb;
 }
 
 /* ==========================================================================

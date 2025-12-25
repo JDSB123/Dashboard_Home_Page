@@ -700,15 +700,10 @@
                 </div>
             </td>
             <td class="center">
-                <span class="currency-combined">
-                    <span class="currency-line">
-                        <span class="risk-label">$ At Risk</span>
-                        <span class="risk-amount">${formatCurrencyValue(pick.risk)}</span>
-                    </span>
-                    <span class="currency-line">
-                        <span class="win-label">To Win</span>
-                        <span class="win-amount">${formatCurrencyValue(pick.win)}</span>
-                    </span>
+                <span class="currency-combined currency-inline">
+                    <span class="risk-amount">${formatCurrencyValue(pick.risk)}</span>
+                    <span class="currency-separator">/</span>
+                    <span class="win-amount">${formatCurrencyValue(pick.win)}</span>
                 </span>
             </td>
             <td class="center">
@@ -768,15 +763,10 @@
                 </div>
             </td>
             <td class="center">
-                <span class="currency-combined">
-                    <span class="currency-line">
-                        <span class="risk-label">$ At Risk</span>
-                        <span class="risk-amount">${formatCurrencyValue(summary.risk)}</span>
-                    </span>
-                    <span class="currency-line">
-                        <span class="win-label">To Win</span>
-                        <span class="win-amount">${formatCurrencyValue(summary.win)}</span>
-                    </span>
+                <span class="currency-combined currency-inline">
+                    <span class="risk-amount">${formatCurrencyValue(summary.risk)}</span>
+                    <span class="currency-separator">/</span>
+                    <span class="win-amount">${formatCurrencyValue(summary.win)}</span>
                 </span>
             </td>
             <td class="center">
