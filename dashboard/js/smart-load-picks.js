@@ -1519,9 +1519,8 @@ function createParlayRow(pick, index) {
             </div>
         </td>
         <td class="center">
-            <span class="currency-combined currency-inline">
-                <span class="risk-amount">$${pick.risk}</span>
-                <span class="currency-separator">/</span>
+            <span class="currency-combined currency-stacked">
+                <span class="currency-risk-row"><span class="risk-amount">$${pick.risk}</span><span class="currency-separator"> /</span></span>
                 <span class="win-amount">$${pick.win}</span>
             </span>
         </td>
@@ -1699,9 +1698,8 @@ function buildPickRow(pick, index) {
             </div>
         </td>
         <td class="center">
-            <span class="currency-combined currency-inline">
-                <span class="risk-amount">$${pick.risk}</span>
-                <span class="currency-separator">/</span>
+            <span class="currency-combined currency-stacked">
+                <span class="currency-risk-row"><span class="risk-amount">$${pick.risk}</span><span class="currency-separator"> /</span></span>
                 <span class="win-amount">$${pick.win}</span>
             </span>
         </td>

@@ -548,17 +548,17 @@ body.page-active-picks .cell-date {
    (`assets/css/components/picks-table.css`). Avoid overriding here so the stacked
    layout (Away / vs / Home) and the pick stacking stay consistent. */
 
-/* ===== SEGMENT CELL (matches weekly lineup) ===== */
+/* ===== SEGMENT CELL (matches Pick font size) ===== */
 body.page-active-picks .game-segment {
     font-family: var(--font-body), 'Cormorant Garamond', Georgia, serif;
     font-weight: 600;
-    font-size: var(--text-md, 0.875rem);
+    font-size: var(--text-lg, 0.9375rem);
     color: var(--neutral-200);
     text-transform: uppercase;
     letter-spacing: 0.02em;
 }
 
-/* ===== RISK/WIN CELL (stacked layout with separator) ===== */
+/* ===== RISK/WIN CELL (double-stacked: risk/ on line 1, win on line 2) ===== */
 body.page-active-picks .currency-combined {
     display: flex;
     flex-direction: column;
@@ -566,19 +566,25 @@ body.page-active-picks .currency-combined {
     gap: 2px;
 }
 
-/* Stacked layout with / separator */
-body.page-active-picks .currency-combined.currency-inline {
-    flex-direction: column !important;
+/* Double-stacked layout */
+body.page-active-picks .currency-combined.currency-stacked {
+    flex-direction: column;
     align-items: center;
     gap: 0;
+}
+
+/* Risk row: keeps risk amount and "/" on same line */
+body.page-active-picks .currency-risk-row {
+    display: inline-flex;
+    align-items: baseline;
+    white-space: nowrap;
 }
 
 body.page-active-picks .currency-separator {
     font-family: var(--font-body), 'Cormorant Garamond', Georgia, serif;
     font-weight: 400;
-    font-size: var(--text-sm, 0.75rem);
-    color: rgba(200, 215, 230, 0.5);
-    line-height: 1;
+    font-size: var(--text-lg, 0.9375rem);
+    color: rgba(200, 215, 230, 0.6);
 }
 
 body.page-active-picks .currency-line {
@@ -600,14 +606,14 @@ body.page-active-picks .win-label {
 body.page-active-picks .risk-amount {
     font-family: var(--font-body), 'Cormorant Garamond', Georgia, serif;
     font-weight: 600;
-    font-size: var(--text-md, 0.875rem);
+    font-size: var(--text-lg, 0.9375rem);
     color: #ff9999;
 }
 
 body.page-active-picks .win-amount {
     font-family: var(--font-body), 'Cormorant Garamond', Georgia, serif;
     font-weight: 600;
-    font-size: var(--text-md, 0.875rem);
+    font-size: var(--text-lg, 0.9375rem);
     color: #66ffbb;
 }
 
