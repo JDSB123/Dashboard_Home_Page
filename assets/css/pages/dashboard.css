@@ -401,7 +401,7 @@ body.page-active-picks .picks-table thead th {
 
 /* Center header labels (matches weekly lineup) */
 body.page-active-picks .th-header-shell {
-    position: static;
+    position: relative; /* MUST be relative for absolute filter button positioning */
     display: flex;
     align-items: center;
     justify-content: center;
