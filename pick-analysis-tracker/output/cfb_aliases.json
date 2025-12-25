@@ -1,0 +1,8114 @@
+{
+  "smu": {
+    "team_id": 1,
+    "key": "SMU",
+    "name": "Mustangs",
+    "school": "SMU",
+    "full_name": "SMU Mustangs",
+    "conference": "Atlantic Coast"
+  },
+  "mustangs": {
+    "team_id": 903,
+    "key": "WNM",
+    "name": "Mustangs",
+    "school": "Western New Mexico",
+    "full_name": "Western New Mexico Mustangs",
+    "conference": null
+  },
+  "smu mustangs": {
+    "team_id": 1,
+    "key": "SMU",
+    "name": "Mustangs",
+    "school": "SMU",
+    "full_name": "SMU Mustangs",
+    "conference": "Atlantic Coast"
+  },
+  "templ": {
+    "team_id": 2,
+    "key": "TEMPL",
+    "name": "Owls",
+    "school": "Temple",
+    "full_name": "Temple Owls",
+    "conference": "American"
+  },
+  "owls": {
+    "team_id": 146,
+    "key": "RICE",
+    "name": "Owls",
+    "school": "Rice",
+    "full_name": "Rice Owls",
+    "conference": "American"
+  },
+  "temple": {
+    "team_id": 2,
+    "key": "TEMPL",
+    "name": "Owls",
+    "school": "Temple",
+    "full_name": "Temple Owls",
+    "conference": "American"
+  },
+  "temple owls": {
+    "team_id": 2,
+    "key": "TEMPL",
+    "name": "Owls",
+    "school": "Temple",
+    "full_name": "Temple Owls",
+    "conference": "American"
+  },
+  "uconn": {
+    "team_id": 3,
+    "key": "UCONN",
+    "name": "Huskies",
+    "school": "Connecticut",
+    "full_name": "Connecticut Huskies",
+    "conference": "FBS Independents"
+  },
+  "huskies": {
+    "team_id": 293,
+    "key": "HOUBAP",
+    "name": "Huskies",
+    "school": "Houston Christian",
+    "full_name": "Houston Christian Huskies",
+    "conference": null
+  },
+  "connecticut": {
+    "team_id": 3,
+    "key": "UCONN",
+    "name": "Huskies",
+    "school": "Connecticut",
+    "full_name": "Connecticut Huskies",
+    "conference": "FBS Independents"
+  },
+  "connecticut huskies": {
+    "team_id": 3,
+    "key": "UCONN",
+    "name": "Huskies",
+    "school": "Connecticut",
+    "full_name": "Connecticut Huskies",
+    "conference": "FBS Independents"
+  },
+  "cin": {
+    "team_id": 4,
+    "key": "CIN",
+    "name": "Bearcats",
+    "school": "Cincinnati",
+    "full_name": "Cincinnati Bearcats",
+    "conference": "Big 12"
+  },
+  "bearcats": {
+    "team_id": 4,
+    "key": "CIN",
+    "name": "Bearcats",
+    "school": "Cincinnati",
+    "full_name": "Cincinnati Bearcats",
+    "conference": "Big 12"
+  },
+  "cincinnati": {
+    "team_id": 4,
+    "key": "CIN",
+    "name": "Bearcats",
+    "school": "Cincinnati",
+    "full_name": "Cincinnati Bearcats",
+    "conference": "Big 12"
+  },
+  "cincinnati bearcats": {
+    "team_id": 4,
+    "key": "CIN",
+    "name": "Bearcats",
+    "school": "Cincinnati",
+    "full_name": "Cincinnati Bearcats",
+    "conference": "Big 12"
+  },
+  "tulsa": {
+    "team_id": 5,
+    "key": "TULSA",
+    "name": "Golden Hurricane",
+    "school": "Tulsa",
+    "full_name": "Tulsa Golden Hurricane",
+    "conference": "American"
+  },
+  "golden hurricane": {
+    "team_id": 5,
+    "key": "TULSA",
+    "name": "Golden Hurricane",
+    "school": "Tulsa",
+    "full_name": "Tulsa Golden Hurricane",
+    "conference": "American"
+  },
+  "tulsa golden hurricane": {
+    "team_id": 5,
+    "key": "TULSA",
+    "name": "Golden Hurricane",
+    "school": "Tulsa",
+    "full_name": "Tulsa Golden Hurricane",
+    "conference": "American"
+  },
+  "hou": {
+    "team_id": 6,
+    "key": "HOU",
+    "name": "Cougars",
+    "school": "Houston",
+    "full_name": "Houston Cougars",
+    "conference": "Big 12"
+  },
+  "cougars": {
+    "team_id": 336,
+    "key": "BYU",
+    "name": "Cougars",
+    "school": "BYU",
+    "full_name": "BYU Cougars",
+    "conference": "Big 12"
+  },
+  "houston": {
+    "team_id": 6,
+    "key": "HOU",
+    "name": "Cougars",
+    "school": "Houston",
+    "full_name": "Houston Cougars",
+    "conference": "Big 12"
+  },
+  "houston cougars": {
+    "team_id": 6,
+    "key": "HOU",
+    "name": "Cougars",
+    "school": "Houston",
+    "full_name": "Houston Cougars",
+    "conference": "Big 12"
+  },
+  "uh": {
+    "team_id": 6,
+    "key": "HOU",
+    "name": "Cougars",
+    "school": "Houston",
+    "full_name": "Houston Cougars",
+    "conference": "Big 12"
+  },
+  "mphs": {
+    "team_id": 7,
+    "key": "MPHS",
+    "name": "Tigers",
+    "school": "Memphis",
+    "full_name": "Memphis Tigers",
+    "conference": "American"
+  },
+  "tigers": {
+    "team_id": 312,
+    "key": "GRMBST",
+    "name": "Tigers",
+    "school": "Grambling State",
+    "full_name": "Grambling State Tigers",
+    "conference": null
+  },
+  "memphis": {
+    "team_id": 7,
+    "key": "MPHS",
+    "name": "Tigers",
+    "school": "Memphis",
+    "full_name": "Memphis Tigers",
+    "conference": "American"
+  },
+  "memphis tigers": {
+    "team_id": 7,
+    "key": "MPHS",
+    "name": "Tigers",
+    "school": "Memphis",
+    "full_name": "Memphis Tigers",
+    "conference": "American"
+  },
+  "mem": {
+    "team_id": 7,
+    "key": "MPHS",
+    "name": "Tigers",
+    "school": "Memphis",
+    "full_name": "Memphis Tigers",
+    "conference": "American"
+  },
+  "ucf": {
+    "team_id": 8,
+    "key": "UCF",
+    "name": "Knights",
+    "school": "UCF",
+    "full_name": "UCF Knights",
+    "conference": "Big 12"
+  },
+  "knights": {
+    "team_id": 8,
+    "key": "UCF",
+    "name": "Knights",
+    "school": "UCF",
+    "full_name": "UCF Knights",
+    "conference": "Big 12"
+  },
+  "ucf knights": {
+    "team_id": 8,
+    "key": "UCF",
+    "name": "Knights",
+    "school": "UCF",
+    "full_name": "UCF Knights",
+    "conference": "Big 12"
+  },
+  "ecar": {
+    "team_id": 9,
+    "key": "ECAR",
+    "name": "Pirates",
+    "school": "East Carolina",
+    "full_name": "East Carolina Pirates",
+    "conference": "American"
+  },
+  "pirates": {
+    "team_id": 189,
+    "key": "HAMP",
+    "name": "Pirates",
+    "school": "Hampton",
+    "full_name": "Hampton Pirates",
+    "conference": null
+  },
+  "east carolina": {
+    "team_id": 9,
+    "key": "ECAR",
+    "name": "Pirates",
+    "school": "East Carolina",
+    "full_name": "East Carolina Pirates",
+    "conference": "American"
+  },
+  "east carolina pirates": {
+    "team_id": 9,
+    "key": "ECAR",
+    "name": "Pirates",
+    "school": "East Carolina",
+    "full_name": "East Carolina Pirates",
+    "conference": "American"
+  },
+  "ecu": {
+    "team_id": 9,
+    "key": "ECAR",
+    "name": "Pirates",
+    "school": "East Carolina",
+    "full_name": "East Carolina Pirates",
+    "conference": "American"
+  },
+  "tulane": {
+    "team_id": 10,
+    "key": "TULANE",
+    "name": "Green Wave",
+    "school": "Tulane",
+    "full_name": "Tulane Green Wave",
+    "conference": "American"
+  },
+  "green wave": {
+    "team_id": 10,
+    "key": "TULANE",
+    "name": "Green Wave",
+    "school": "Tulane",
+    "full_name": "Tulane Green Wave",
+    "conference": "American"
+  },
+  "tulane green wave": {
+    "team_id": 10,
+    "key": "TULANE",
+    "name": "Green Wave",
+    "school": "Tulane",
+    "full_name": "Tulane Green Wave",
+    "conference": "American"
+  },
+  "sfl": {
+    "team_id": 11,
+    "key": "SFL",
+    "name": "Bulls",
+    "school": "South Florida",
+    "full_name": "South Florida Bulls",
+    "conference": "American"
+  },
+  "bulls": {
+    "team_id": 179,
+    "key": "BUF",
+    "name": "Bulls",
+    "school": "Buffalo",
+    "full_name": "Buffalo Bulls",
+    "conference": "Mid-American"
+  },
+  "south florida": {
+    "team_id": 11,
+    "key": "SFL",
+    "name": "Bulls",
+    "school": "South Florida",
+    "full_name": "South Florida Bulls",
+    "conference": "American"
+  },
+  "south florida bulls": {
+    "team_id": 11,
+    "key": "SFL",
+    "name": "Bulls",
+    "school": "South Florida",
+    "full_name": "South Florida Bulls",
+    "conference": "American"
+  },
+  "usf": {
+    "team_id": 11,
+    "key": "SFL",
+    "name": "Bulls",
+    "school": "South Florida",
+    "full_name": "South Florida Bulls",
+    "conference": "American"
+  },
+  "stbr": {
+    "team_id": 12,
+    "key": "STBR",
+    "name": "Seawolves",
+    "school": "Stony Brook",
+    "full_name": "Stony Brook Seawolves",
+    "conference": null
+  },
+  "seawolves": {
+    "team_id": 12,
+    "key": "STBR",
+    "name": "Seawolves",
+    "school": "Stony Brook",
+    "full_name": "Stony Brook Seawolves",
+    "conference": null
+  },
+  "stony brook": {
+    "team_id": 12,
+    "key": "STBR",
+    "name": "Seawolves",
+    "school": "Stony Brook",
+    "full_name": "Stony Brook Seawolves",
+    "conference": null
+  },
+  "stony brook seawolves": {
+    "team_id": 12,
+    "key": "STBR",
+    "name": "Seawolves",
+    "school": "Stony Brook",
+    "full_name": "Stony Brook Seawolves",
+    "conference": null
+  },
+  "albny": {
+    "team_id": 13,
+    "key": "ALBNY",
+    "name": "Great Danes",
+    "school": "Albany",
+    "full_name": "Albany Great Danes",
+    "conference": null
+  },
+  "great danes": {
+    "team_id": 13,
+    "key": "ALBNY",
+    "name": "Great Danes",
+    "school": "Albany",
+    "full_name": "Albany Great Danes",
+    "conference": null
+  },
+  "albany": {
+    "team_id": 13,
+    "key": "ALBNY",
+    "name": "Great Danes",
+    "school": "Albany",
+    "full_name": "Albany Great Danes",
+    "conference": null
+  },
+  "albany great danes": {
+    "team_id": 13,
+    "key": "ALBNY",
+    "name": "Great Danes",
+    "school": "Albany",
+    "full_name": "Albany Great Danes",
+    "conference": null
+  },
+  "nhamp": {
+    "team_id": 14,
+    "key": "NHAMP",
+    "name": "Wildcats",
+    "school": "New Hampshire",
+    "full_name": "New Hampshire Wildcats",
+    "conference": null
+  },
+  "wildcats": {
+    "team_id": 296,
+    "key": "ABCHR",
+    "name": "Wildcats",
+    "school": "Abilene Christian",
+    "full_name": "Abilene Christian Wildcats",
+    "conference": null
+  },
+  "new hampshire": {
+    "team_id": 14,
+    "key": "NHAMP",
+    "name": "Wildcats",
+    "school": "New Hampshire",
+    "full_name": "New Hampshire Wildcats",
+    "conference": null
+  },
+  "new hampshire wildcats": {
+    "team_id": 14,
+    "key": "NHAMP",
+    "name": "Wildcats",
+    "school": "New Hampshire",
+    "full_name": "New Hampshire Wildcats",
+    "conference": null
+  },
+  "unh": {
+    "team_id": 14,
+    "key": "NHAMP",
+    "name": "Wildcats",
+    "school": "New Hampshire",
+    "full_name": "New Hampshire Wildcats",
+    "conference": null
+  },
+  "maine": {
+    "team_id": 17,
+    "key": "MAINE",
+    "name": "Black Bears",
+    "school": "Maine",
+    "full_name": "Maine Black Bears",
+    "conference": null
+  },
+  "black bears": {
+    "team_id": 17,
+    "key": "MAINE",
+    "name": "Black Bears",
+    "school": "Maine",
+    "full_name": "Maine Black Bears",
+    "conference": null
+  },
+  "maine black bears": {
+    "team_id": 17,
+    "key": "MAINE",
+    "name": "Black Bears",
+    "school": "Maine",
+    "full_name": "Maine Black Bears",
+    "conference": null
+  },
+  "ncar": {
+    "team_id": 21,
+    "key": "NCAR",
+    "name": "Tar Heels",
+    "school": "North Carolina",
+    "full_name": "North Carolina Tar Heels",
+    "conference": "Atlantic Coast"
+  },
+  "tar heels": {
+    "team_id": 21,
+    "key": "NCAR",
+    "name": "Tar Heels",
+    "school": "North Carolina",
+    "full_name": "North Carolina Tar Heels",
+    "conference": "Atlantic Coast"
+  },
+  "north carolina": {
+    "team_id": 21,
+    "key": "NCAR",
+    "name": "Tar Heels",
+    "school": "North Carolina",
+    "full_name": "North Carolina Tar Heels",
+    "conference": "Atlantic Coast"
+  },
+  "north carolina tar heels": {
+    "team_id": 21,
+    "key": "NCAR",
+    "name": "Tar Heels",
+    "school": "North Carolina",
+    "full_name": "North Carolina Tar Heels",
+    "conference": "Atlantic Coast"
+  },
+  "unc": {
+    "team_id": 21,
+    "key": "NCAR",
+    "name": "Tar Heels",
+    "school": "North Carolina",
+    "full_name": "North Carolina Tar Heels",
+    "conference": "Atlantic Coast"
+  },
+  "vir": {
+    "team_id": 22,
+    "key": "VIR",
+    "name": "Cavaliers",
+    "school": "Virginia",
+    "full_name": "Virginia Cavaliers",
+    "conference": "Atlantic Coast"
+  },
+  "cavaliers": {
+    "team_id": 22,
+    "key": "VIR",
+    "name": "Cavaliers",
+    "school": "Virginia",
+    "full_name": "Virginia Cavaliers",
+    "conference": "Atlantic Coast"
+  },
+  "virginia": {
+    "team_id": 22,
+    "key": "VIR",
+    "name": "Cavaliers",
+    "school": "Virginia",
+    "full_name": "Virginia Cavaliers",
+    "conference": "Atlantic Coast"
+  },
+  "virginia cavaliers": {
+    "team_id": 22,
+    "key": "VIR",
+    "name": "Cavaliers",
+    "school": "Virginia",
+    "full_name": "Virginia Cavaliers",
+    "conference": "Atlantic Coast"
+  },
+  "mia": {
+    "team_id": 23,
+    "key": "MIA",
+    "name": "Hurricanes",
+    "school": "Miami",
+    "full_name": "Miami Hurricanes",
+    "conference": "Atlantic Coast"
+  },
+  "hurricanes": {
+    "team_id": 23,
+    "key": "MIA",
+    "name": "Hurricanes",
+    "school": "Miami",
+    "full_name": "Miami Hurricanes",
+    "conference": "Atlantic Coast"
+  },
+  "miami": {
+    "team_id": 23,
+    "key": "MIA",
+    "name": "Hurricanes",
+    "school": "Miami",
+    "full_name": "Miami Hurricanes",
+    "conference": "Atlantic Coast"
+  },
+  "miami hurricanes": {
+    "team_id": 23,
+    "key": "MIA",
+    "name": "Hurricanes",
+    "school": "Miami",
+    "full_name": "Miami Hurricanes",
+    "conference": "Atlantic Coast"
+  },
+  "lou": {
+    "team_id": 24,
+    "key": "LOU",
+    "name": "Cardinals",
+    "school": "Louisville",
+    "full_name": "Louisville Cardinals",
+    "conference": "Atlantic Coast"
+  },
+  "cardinals": {
+    "team_id": 303,
+    "key": "LAMAR",
+    "name": "Cardinals",
+    "school": "Lamar",
+    "full_name": "Lamar Cardinals",
+    "conference": null
+  },
+  "louisville": {
+    "team_id": 24,
+    "key": "LOU",
+    "name": "Cardinals",
+    "school": "Louisville",
+    "full_name": "Louisville Cardinals",
+    "conference": "Atlantic Coast"
+  },
+  "louisville cardinals": {
+    "team_id": 24,
+    "key": "LOU",
+    "name": "Cardinals",
+    "school": "Louisville",
+    "full_name": "Louisville Cardinals",
+    "conference": "Atlantic Coast"
+  },
+  "nd": {
+    "team_id": 25,
+    "key": "ND",
+    "name": "Fighting Irish",
+    "school": "Notre Dame",
+    "full_name": "Notre Dame Fighting Irish",
+    "conference": "FBS Independents"
+  },
+  "fighting irish": {
+    "team_id": 25,
+    "key": "ND",
+    "name": "Fighting Irish",
+    "school": "Notre Dame",
+    "full_name": "Notre Dame Fighting Irish",
+    "conference": "FBS Independents"
+  },
+  "notre dame": {
+    "team_id": 25,
+    "key": "ND",
+    "name": "Fighting Irish",
+    "school": "Notre Dame",
+    "full_name": "Notre Dame Fighting Irish",
+    "conference": "FBS Independents"
+  },
+  "notre dame fighting irish": {
+    "team_id": 25,
+    "key": "ND",
+    "name": "Fighting Irish",
+    "school": "Notre Dame",
+    "full_name": "Notre Dame Fighting Irish",
+    "conference": "FBS Independents"
+  },
+  "duke": {
+    "team_id": 26,
+    "key": "DUKE",
+    "name": "Blue Devils",
+    "school": "Duke",
+    "full_name": "Duke Blue Devils",
+    "conference": "Atlantic Coast"
+  },
+  "blue devils": {
+    "team_id": 232,
+    "key": "CENCON",
+    "name": "Blue Devils",
+    "school": "Central Connecticut State",
+    "full_name": "Central Connecticut State Blue Devils",
+    "conference": null
+  },
+  "duke blue devils": {
+    "team_id": 26,
+    "key": "DUKE",
+    "name": "Blue Devils",
+    "school": "Duke",
+    "full_name": "Duke Blue Devils",
+    "conference": "Atlantic Coast"
+  },
+  "clmsn": {
+    "team_id": 27,
+    "key": "CLMSN",
+    "name": "Tigers",
+    "school": "Clemson",
+    "full_name": "Clemson Tigers",
+    "conference": "Atlantic Coast"
+  },
+  "clemson": {
+    "team_id": 27,
+    "key": "CLMSN",
+    "name": "Tigers",
+    "school": "Clemson",
+    "full_name": "Clemson Tigers",
+    "conference": "Atlantic Coast"
+  },
+  "clemson tigers": {
+    "team_id": 27,
+    "key": "CLMSN",
+    "name": "Tigers",
+    "school": "Clemson",
+    "full_name": "Clemson Tigers",
+    "conference": "Atlantic Coast"
+  },
+  "clem": {
+    "team_id": 27,
+    "key": "CLMSN",
+    "name": "Tigers",
+    "school": "Clemson",
+    "full_name": "Clemson Tigers",
+    "conference": "Atlantic Coast"
+  },
+  "pitt": {
+    "team_id": 28,
+    "key": "PITT",
+    "name": "Panthers",
+    "school": "Pittsburgh",
+    "full_name": "Pittsburgh Panthers",
+    "conference": "Atlantic Coast"
+  },
+  "panthers": {
+    "team_id": 328,
+    "key": "GAST",
+    "name": "Panthers",
+    "school": "Georgia State",
+    "full_name": "Georgia State Panthers",
+    "conference": "Sun Belt - East"
+  },
+  "pittsburgh": {
+    "team_id": 28,
+    "key": "PITT",
+    "name": "Panthers",
+    "school": "Pittsburgh",
+    "full_name": "Pittsburgh Panthers",
+    "conference": "Atlantic Coast"
+  },
+  "pittsburgh panthers": {
+    "team_id": 28,
+    "key": "PITT",
+    "name": "Panthers",
+    "school": "Pittsburgh",
+    "full_name": "Pittsburgh Panthers",
+    "conference": "Atlantic Coast"
+  },
+  "flst": {
+    "team_id": 29,
+    "key": "FLST",
+    "name": "Seminoles",
+    "school": "Florida State",
+    "full_name": "Florida State Seminoles",
+    "conference": "Atlantic Coast"
+  },
+  "seminoles": {
+    "team_id": 29,
+    "key": "FLST",
+    "name": "Seminoles",
+    "school": "Florida State",
+    "full_name": "Florida State Seminoles",
+    "conference": "Atlantic Coast"
+  },
+  "florida state": {
+    "team_id": 29,
+    "key": "FLST",
+    "name": "Seminoles",
+    "school": "Florida State",
+    "full_name": "Florida State Seminoles",
+    "conference": "Atlantic Coast"
+  },
+  "florida state seminoles": {
+    "team_id": 29,
+    "key": "FLST",
+    "name": "Seminoles",
+    "school": "Florida State",
+    "full_name": "Florida State Seminoles",
+    "conference": "Atlantic Coast"
+  },
+  "fsu": {
+    "team_id": 29,
+    "key": "FLST",
+    "name": "Seminoles",
+    "school": "Florida State",
+    "full_name": "Florida State Seminoles",
+    "conference": "Atlantic Coast"
+  },
+  "syra": {
+    "team_id": 30,
+    "key": "SYRA",
+    "name": "Orange",
+    "school": "Syracuse",
+    "full_name": "Syracuse Orange",
+    "conference": "Atlantic Coast"
+  },
+  "orange": {
+    "team_id": 30,
+    "key": "SYRA",
+    "name": "Orange",
+    "school": "Syracuse",
+    "full_name": "Syracuse Orange",
+    "conference": "Atlantic Coast"
+  },
+  "syracuse": {
+    "team_id": 30,
+    "key": "SYRA",
+    "name": "Orange",
+    "school": "Syracuse",
+    "full_name": "Syracuse Orange",
+    "conference": "Atlantic Coast"
+  },
+  "syracuse orange": {
+    "team_id": 30,
+    "key": "SYRA",
+    "name": "Orange",
+    "school": "Syracuse",
+    "full_name": "Syracuse Orange",
+    "conference": "Atlantic Coast"
+  },
+  "vtech": {
+    "team_id": 31,
+    "key": "VTECH",
+    "name": "Hokies",
+    "school": "Virginia Tech",
+    "full_name": "Virginia Tech Hokies",
+    "conference": "Atlantic Coast"
+  },
+  "hokies": {
+    "team_id": 31,
+    "key": "VTECH",
+    "name": "Hokies",
+    "school": "Virginia Tech",
+    "full_name": "Virginia Tech Hokies",
+    "conference": "Atlantic Coast"
+  },
+  "virginia tech": {
+    "team_id": 31,
+    "key": "VTECH",
+    "name": "Hokies",
+    "school": "Virginia Tech",
+    "full_name": "Virginia Tech Hokies",
+    "conference": "Atlantic Coast"
+  },
+  "virginia tech hokies": {
+    "team_id": 31,
+    "key": "VTECH",
+    "name": "Hokies",
+    "school": "Virginia Tech",
+    "full_name": "Virginia Tech Hokies",
+    "conference": "Atlantic Coast"
+  },
+  "gtech": {
+    "team_id": 32,
+    "key": "GTECH",
+    "name": "Yellow Jackets",
+    "school": "Georgia Tech",
+    "full_name": "Georgia Tech Yellow Jackets",
+    "conference": "Atlantic Coast"
+  },
+  "yellow jackets": {
+    "team_id": 32,
+    "key": "GTECH",
+    "name": "Yellow Jackets",
+    "school": "Georgia Tech",
+    "full_name": "Georgia Tech Yellow Jackets",
+    "conference": "Atlantic Coast"
+  },
+  "georgia tech": {
+    "team_id": 32,
+    "key": "GTECH",
+    "name": "Yellow Jackets",
+    "school": "Georgia Tech",
+    "full_name": "Georgia Tech Yellow Jackets",
+    "conference": "Atlantic Coast"
+  },
+  "georgia tech yellow jackets": {
+    "team_id": 32,
+    "key": "GTECH",
+    "name": "Yellow Jackets",
+    "school": "Georgia Tech",
+    "full_name": "Georgia Tech Yellow Jackets",
+    "conference": "Atlantic Coast"
+  },
+  "ncst": {
+    "team_id": 33,
+    "key": "NCST",
+    "name": "Wolfpack",
+    "school": "North Carolina State",
+    "full_name": "North Carolina State Wolfpack",
+    "conference": "Atlantic Coast"
+  },
+  "wolfpack": {
+    "team_id": 33,
+    "key": "NCST",
+    "name": "Wolfpack",
+    "school": "North Carolina State",
+    "full_name": "North Carolina State Wolfpack",
+    "conference": "Atlantic Coast"
+  },
+  "north carolina state": {
+    "team_id": 33,
+    "key": "NCST",
+    "name": "Wolfpack",
+    "school": "North Carolina State",
+    "full_name": "North Carolina State Wolfpack",
+    "conference": "Atlantic Coast"
+  },
+  "north carolina state wolfpack": {
+    "team_id": 33,
+    "key": "NCST",
+    "name": "Wolfpack",
+    "school": "North Carolina State",
+    "full_name": "North Carolina State Wolfpack",
+    "conference": "Atlantic Coast"
+  },
+  "ncsu": {
+    "team_id": 33,
+    "key": "NCST",
+    "name": "Wolfpack",
+    "school": "North Carolina State",
+    "full_name": "North Carolina State Wolfpack",
+    "conference": "Atlantic Coast"
+  },
+  "wake": {
+    "team_id": 34,
+    "key": "WAKE",
+    "name": "Demon Deacons",
+    "school": "Wake Forest",
+    "full_name": "Wake Forest Demon Deacons",
+    "conference": "Atlantic Coast"
+  },
+  "demon deacons": {
+    "team_id": 34,
+    "key": "WAKE",
+    "name": "Demon Deacons",
+    "school": "Wake Forest",
+    "full_name": "Wake Forest Demon Deacons",
+    "conference": "Atlantic Coast"
+  },
+  "wake forest": {
+    "team_id": 34,
+    "key": "WAKE",
+    "name": "Demon Deacons",
+    "school": "Wake Forest",
+    "full_name": "Wake Forest Demon Deacons",
+    "conference": "Atlantic Coast"
+  },
+  "wake forest demon deacons": {
+    "team_id": 34,
+    "key": "WAKE",
+    "name": "Demon Deacons",
+    "school": "Wake Forest",
+    "full_name": "Wake Forest Demon Deacons",
+    "conference": "Atlantic Coast"
+  },
+  "boscol": {
+    "team_id": 35,
+    "key": "BOSCOL",
+    "name": "Eagles",
+    "school": "Boston College",
+    "full_name": "Boston College Eagles",
+    "conference": "Atlantic Coast"
+  },
+  "eagles": {
+    "team_id": 825,
+    "key": "CHDE",
+    "name": "Eagles",
+    "school": "Chadron State",
+    "full_name": "Chadron State Eagles",
+    "conference": null
+  },
+  "boston college": {
+    "team_id": 35,
+    "key": "BOSCOL",
+    "name": "Eagles",
+    "school": "Boston College",
+    "full_name": "Boston College Eagles",
+    "conference": "Atlantic Coast"
+  },
+  "boston college eagles": {
+    "team_id": 35,
+    "key": "BOSCOL",
+    "name": "Eagles",
+    "school": "Boston College",
+    "full_name": "Boston College Eagles",
+    "conference": "Atlantic Coast"
+  },
+  "bc": {
+    "team_id": 35,
+    "key": "BOSCOL",
+    "name": "Eagles",
+    "school": "Boston College",
+    "full_name": "Boston College Eagles",
+    "conference": "Atlantic Coast"
+  },
+  "kenest": {
+    "team_id": 42,
+    "key": "KENEST",
+    "name": "Owls",
+    "school": "Kennesaw State",
+    "full_name": "Kennesaw State Owls",
+    "conference": "Conference USA"
+  },
+  "kennesaw state": {
+    "team_id": 42,
+    "key": "KENEST",
+    "name": "Owls",
+    "school": "Kennesaw State",
+    "full_name": "Kennesaw State Owls",
+    "conference": "Conference USA"
+  },
+  "kennesaw state owls": {
+    "team_id": 42,
+    "key": "KENEST",
+    "name": "Owls",
+    "school": "Kennesaw State",
+    "full_name": "Kennesaw State Owls",
+    "conference": "Conference USA"
+  },
+  "ri": {
+    "team_id": 50,
+    "key": "RI",
+    "name": "Rams",
+    "school": "Rhode Island",
+    "full_name": "Rhode Island Rams",
+    "conference": null
+  },
+  "rams": {
+    "team_id": 217,
+    "key": "COLST",
+    "name": "Rams",
+    "school": "Colorado State",
+    "full_name": "Colorado State Rams",
+    "conference": "Mountain West"
+  },
+  "rhode island": {
+    "team_id": 50,
+    "key": "RI",
+    "name": "Rams",
+    "school": "Rhode Island",
+    "full_name": "Rhode Island Rams",
+    "conference": null
+  },
+  "rhode island rams": {
+    "team_id": 50,
+    "key": "RI",
+    "name": "Rams",
+    "school": "Rhode Island",
+    "full_name": "Rhode Island Rams",
+    "conference": null
+  },
+  "uri": {
+    "team_id": 50,
+    "key": "RI",
+    "name": "Rams",
+    "school": "Rhode Island",
+    "full_name": "Rhode Island Rams",
+    "conference": null
+  },
+  "duq": {
+    "team_id": 51,
+    "key": "DUQ",
+    "name": "Dukes",
+    "school": "Duquesne",
+    "full_name": "Duquesne Dukes",
+    "conference": null
+  },
+  "dukes": {
+    "team_id": 126,
+    "key": "JMAD",
+    "name": "Dukes",
+    "school": "James Madison",
+    "full_name": "James Madison Dukes",
+    "conference": "Sun Belt - East"
+  },
+  "duquesne": {
+    "team_id": 51,
+    "key": "DUQ",
+    "name": "Dukes",
+    "school": "Duquesne",
+    "full_name": "Duquesne Dukes",
+    "conference": null
+  },
+  "duquesne dukes": {
+    "team_id": 51,
+    "key": "DUQ",
+    "name": "Dukes",
+    "school": "Duquesne",
+    "full_name": "Duquesne Dukes",
+    "conference": null
+  },
+  "rich": {
+    "team_id": 52,
+    "key": "RICH",
+    "name": "Spiders",
+    "school": "Richmond",
+    "full_name": "Richmond Spiders",
+    "conference": null
+  },
+  "spiders": {
+    "team_id": 52,
+    "key": "RICH",
+    "name": "Spiders",
+    "school": "Richmond",
+    "full_name": "Richmond Spiders",
+    "conference": null
+  },
+  "richmond": {
+    "team_id": 52,
+    "key": "RICH",
+    "name": "Spiders",
+    "school": "Richmond",
+    "full_name": "Richmond Spiders",
+    "conference": null
+  },
+  "richmond spiders": {
+    "team_id": 52,
+    "key": "RICH",
+    "name": "Spiders",
+    "school": "Richmond",
+    "full_name": "Richmond Spiders",
+    "conference": null
+  },
+  "fordm": {
+    "team_id": 53,
+    "key": "FORDM",
+    "name": "Rams",
+    "school": "Fordham",
+    "full_name": "Fordham Rams",
+    "conference": null
+  },
+  "fordham": {
+    "team_id": 53,
+    "key": "FORDM",
+    "name": "Rams",
+    "school": "Fordham",
+    "full_name": "Fordham Rams",
+    "conference": null
+  },
+  "fordham rams": {
+    "team_id": 53,
+    "key": "FORDM",
+    "name": "Rams",
+    "school": "Fordham",
+    "full_name": "Fordham Rams",
+    "conference": null
+  },
+  "umass": {
+    "team_id": 55,
+    "key": "UMASS",
+    "name": "Minutemen",
+    "school": "Massachusetts",
+    "full_name": "Massachusetts Minutemen",
+    "conference": "FBS Independents"
+  },
+  "minutemen": {
+    "team_id": 55,
+    "key": "UMASS",
+    "name": "Minutemen",
+    "school": "Massachusetts",
+    "full_name": "Massachusetts Minutemen",
+    "conference": "FBS Independents"
+  },
+  "massachusetts": {
+    "team_id": 55,
+    "key": "UMASS",
+    "name": "Minutemen",
+    "school": "Massachusetts",
+    "full_name": "Massachusetts Minutemen",
+    "conference": "FBS Independents"
+  },
+  "massachusetts minutemen": {
+    "team_id": 55,
+    "key": "UMASS",
+    "name": "Minutemen",
+    "school": "Massachusetts",
+    "full_name": "Massachusetts Minutemen",
+    "conference": "FBS Independents"
+  },
+  "vill": {
+    "team_id": 58,
+    "key": "VILL",
+    "name": "Wildcats",
+    "school": "Villanova",
+    "full_name": "Villanova Wildcats",
+    "conference": null
+  },
+  "villanova": {
+    "team_id": 58,
+    "key": "VILL",
+    "name": "Wildcats",
+    "school": "Villanova",
+    "full_name": "Villanova Wildcats",
+    "conference": null
+  },
+  "villanova wildcats": {
+    "team_id": 58,
+    "key": "VILL",
+    "name": "Wildcats",
+    "school": "Villanova",
+    "full_name": "Villanova Wildcats",
+    "conference": null
+  },
+  "mont": {
+    "team_id": 68,
+    "key": "MONT",
+    "name": "Grizzlies",
+    "school": "Montana",
+    "full_name": "Montana Grizzlies",
+    "conference": null
+  },
+  "grizzlies": {
+    "team_id": 68,
+    "key": "MONT",
+    "name": "Grizzlies",
+    "school": "Montana",
+    "full_name": "Montana Grizzlies",
+    "conference": null
+  },
+  "montana": {
+    "team_id": 68,
+    "key": "MONT",
+    "name": "Grizzlies",
+    "school": "Montana",
+    "full_name": "Montana Grizzlies",
+    "conference": null
+  },
+  "montana grizzlies": {
+    "team_id": 68,
+    "key": "MONT",
+    "name": "Grizzlies",
+    "school": "Montana",
+    "full_name": "Montana Grizzlies",
+    "conference": null
+  },
+  "webst": {
+    "team_id": 69,
+    "key": "WEBST",
+    "name": "Wildcats",
+    "school": "Weber State",
+    "full_name": "Weber State Wildcats",
+    "conference": null
+  },
+  "weber state": {
+    "team_id": 69,
+    "key": "WEBST",
+    "name": "Wildcats",
+    "school": "Weber State",
+    "full_name": "Weber State Wildcats",
+    "conference": null
+  },
+  "weber state wildcats": {
+    "team_id": 69,
+    "key": "WEBST",
+    "name": "Wildcats",
+    "school": "Weber State",
+    "full_name": "Weber State Wildcats",
+    "conference": null
+  },
+  "ewash": {
+    "team_id": 70,
+    "key": "EWASH",
+    "name": "Eagles",
+    "school": "Eastern Washington",
+    "full_name": "Eastern Washington Eagles",
+    "conference": null
+  },
+  "eastern washington": {
+    "team_id": 70,
+    "key": "EWASH",
+    "name": "Eagles",
+    "school": "Eastern Washington",
+    "full_name": "Eastern Washington Eagles",
+    "conference": null
+  },
+  "eastern washington eagles": {
+    "team_id": 70,
+    "key": "EWASH",
+    "name": "Eagles",
+    "school": "Eastern Washington",
+    "full_name": "Eastern Washington Eagles",
+    "conference": null
+  },
+  "ewu": {
+    "team_id": 70,
+    "key": "EWASH",
+    "name": "Eagles",
+    "school": "Eastern Washington",
+    "full_name": "Eastern Washington Eagles",
+    "conference": null
+  },
+  "ndak": {
+    "team_id": 71,
+    "key": "NDAK",
+    "name": "Fighting Hawks",
+    "school": "North Dakota",
+    "full_name": "North Dakota Fighting Hawks",
+    "conference": null
+  },
+  "fighting hawks": {
+    "team_id": 71,
+    "key": "NDAK",
+    "name": "Fighting Hawks",
+    "school": "North Dakota",
+    "full_name": "North Dakota Fighting Hawks",
+    "conference": null
+  },
+  "north dakota": {
+    "team_id": 71,
+    "key": "NDAK",
+    "name": "Fighting Hawks",
+    "school": "North Dakota",
+    "full_name": "North Dakota Fighting Hawks",
+    "conference": null
+  },
+  "north dakota fighting hawks": {
+    "team_id": 71,
+    "key": "NDAK",
+    "name": "Fighting Hawks",
+    "school": "North Dakota",
+    "full_name": "North Dakota Fighting Hawks",
+    "conference": null
+  },
+  "und": {
+    "team_id": 71,
+    "key": "NDAK",
+    "name": "Fighting Hawks",
+    "school": "North Dakota",
+    "full_name": "North Dakota Fighting Hawks",
+    "conference": null
+  },
+  "idhst": {
+    "team_id": 72,
+    "key": "IDHST",
+    "name": "Bengals",
+    "school": "Idaho State",
+    "full_name": "Idaho State Bengals",
+    "conference": null
+  },
+  "bengals": {
+    "team_id": 72,
+    "key": "IDHST",
+    "name": "Bengals",
+    "school": "Idaho State",
+    "full_name": "Idaho State Bengals",
+    "conference": null
+  },
+  "idaho state": {
+    "team_id": 72,
+    "key": "IDHST",
+    "name": "Bengals",
+    "school": "Idaho State",
+    "full_name": "Idaho State Bengals",
+    "conference": null
+  },
+  "idaho state bengals": {
+    "team_id": 72,
+    "key": "IDHST",
+    "name": "Bengals",
+    "school": "Idaho State",
+    "full_name": "Idaho State Bengals",
+    "conference": null
+  },
+  "idst": {
+    "team_id": 72,
+    "key": "IDHST",
+    "name": "Bengals",
+    "school": "Idaho State",
+    "full_name": "Idaho State Bengals",
+    "conference": null
+  },
+  "idaho": {
+    "team_id": 73,
+    "key": "IDAHO",
+    "name": "Vandals",
+    "school": "Idaho",
+    "full_name": "Idaho Vandals",
+    "conference": null
+  },
+  "vandals": {
+    "team_id": 73,
+    "key": "IDAHO",
+    "name": "Vandals",
+    "school": "Idaho",
+    "full_name": "Idaho Vandals",
+    "conference": null
+  },
+  "idaho vandals": {
+    "team_id": 73,
+    "key": "IDAHO",
+    "name": "Vandals",
+    "school": "Idaho",
+    "full_name": "Idaho Vandals",
+    "conference": null
+  },
+  "monst": {
+    "team_id": 74,
+    "key": "MONST",
+    "name": "Bobcats",
+    "school": "Montana State",
+    "full_name": "Montana State Bobcats",
+    "conference": null
+  },
+  "bobcats": {
+    "team_id": 332,
+    "key": "TXST",
+    "name": "Bobcats",
+    "school": "Texas State",
+    "full_name": "Texas State Bobcats",
+    "conference": "Sun Belt - West"
+  },
+  "montana state": {
+    "team_id": 74,
+    "key": "MONST",
+    "name": "Bobcats",
+    "school": "Montana State",
+    "full_name": "Montana State Bobcats",
+    "conference": null
+  },
+  "montana state bobcats": {
+    "team_id": 74,
+    "key": "MONST",
+    "name": "Bobcats",
+    "school": "Montana State",
+    "full_name": "Montana State Bobcats",
+    "conference": null
+  },
+  "ncol": {
+    "team_id": 75,
+    "key": "NCOL",
+    "name": "Bears",
+    "school": "Northern Colorado",
+    "full_name": "Northern Colorado Bears",
+    "conference": null
+  },
+  "bears": {
+    "team_id": 298,
+    "key": "CARK",
+    "name": "Bears",
+    "school": "Central Arkansas",
+    "full_name": "Central Arkansas Bears",
+    "conference": null
+  },
+  "northern colorado": {
+    "team_id": 75,
+    "key": "NCOL",
+    "name": "Bears",
+    "school": "Northern Colorado",
+    "full_name": "Northern Colorado Bears",
+    "conference": null
+  },
+  "northern colorado bears": {
+    "team_id": 75,
+    "key": "NCOL",
+    "name": "Bears",
+    "school": "Northern Colorado",
+    "full_name": "Northern Colorado Bears",
+    "conference": null
+  },
+  "unco": {
+    "team_id": 75,
+    "key": "NCOL",
+    "name": "Bears",
+    "school": "Northern Colorado",
+    "full_name": "Northern Colorado Bears",
+    "conference": null
+  },
+  "portst": {
+    "team_id": 76,
+    "key": "PORTST",
+    "name": "Vikings",
+    "school": "Portland State",
+    "full_name": "Portland State Vikings",
+    "conference": null
+  },
+  "vikings": {
+    "team_id": 667,
+    "key": "NOPA",
+    "name": "Vikings",
+    "school": "North Park",
+    "full_name": "North Park Vikings",
+    "conference": null
+  },
+  "portland state": {
+    "team_id": 76,
+    "key": "PORTST",
+    "name": "Vikings",
+    "school": "Portland State",
+    "full_name": "Portland State Vikings",
+    "conference": null
+  },
+  "portland state vikings": {
+    "team_id": 76,
+    "key": "PORTST",
+    "name": "Vikings",
+    "school": "Portland State",
+    "full_name": "Portland State Vikings",
+    "conference": null
+  },
+  "sacst": {
+    "team_id": 77,
+    "key": "SACST",
+    "name": "Hornets",
+    "school": "Sacramento State",
+    "full_name": "Sacramento State Hornets",
+    "conference": null
+  },
+  "hornets": {
+    "team_id": 1214,
+    "key": "LCHB",
+    "name": "Hornets",
+    "school": "Lynchburg",
+    "full_name": "Lynchburg Hornets",
+    "conference": null
+  },
+  "sacramento state": {
+    "team_id": 77,
+    "key": "SACST",
+    "name": "Hornets",
+    "school": "Sacramento State",
+    "full_name": "Sacramento State Hornets",
+    "conference": null
+  },
+  "sacramento state hornets": {
+    "team_id": 77,
+    "key": "SACST",
+    "name": "Hornets",
+    "school": "Sacramento State",
+    "full_name": "Sacramento State Hornets",
+    "conference": null
+  },
+  "sutah": {
+    "team_id": 78,
+    "key": "SUTAH",
+    "name": "Thunderbirds",
+    "school": "Southern Utah",
+    "full_name": "Southern Utah Thunderbirds",
+    "conference": null
+  },
+  "thunderbirds": {
+    "team_id": 78,
+    "key": "SUTAH",
+    "name": "Thunderbirds",
+    "school": "Southern Utah",
+    "full_name": "Southern Utah Thunderbirds",
+    "conference": null
+  },
+  "southern utah": {
+    "team_id": 78,
+    "key": "SUTAH",
+    "name": "Thunderbirds",
+    "school": "Southern Utah",
+    "full_name": "Southern Utah Thunderbirds",
+    "conference": null
+  },
+  "southern utah thunderbirds": {
+    "team_id": 78,
+    "key": "SUTAH",
+    "name": "Thunderbirds",
+    "school": "Southern Utah",
+    "full_name": "Southern Utah Thunderbirds",
+    "conference": null
+  },
+  "narz": {
+    "team_id": 79,
+    "key": "NARZ",
+    "name": "Lumberjacks",
+    "school": "Northern Arizona",
+    "full_name": "Northern Arizona Lumberjacks",
+    "conference": null
+  },
+  "lumberjacks": {
+    "team_id": 291,
+    "key": "SFAUS",
+    "name": "Lumberjacks",
+    "school": "Stephen F. Austin",
+    "full_name": "Stephen F. Austin Lumberjacks",
+    "conference": null
+  },
+  "northern arizona": {
+    "team_id": 79,
+    "key": "NARZ",
+    "name": "Lumberjacks",
+    "school": "Northern Arizona",
+    "full_name": "Northern Arizona Lumberjacks",
+    "conference": null
+  },
+  "northern arizona lumberjacks": {
+    "team_id": 79,
+    "key": "NARZ",
+    "name": "Lumberjacks",
+    "school": "Northern Arizona",
+    "full_name": "Northern Arizona Lumberjacks",
+    "conference": null
+  },
+  "coast": {
+    "team_id": 81,
+    "key": "COAST",
+    "name": "Chanticleers",
+    "school": "Coastal Carolina",
+    "full_name": "Coastal Carolina Chanticleers",
+    "conference": "Sun Belt - East"
+  },
+  "chanticleers": {
+    "team_id": 81,
+    "key": "COAST",
+    "name": "Chanticleers",
+    "school": "Coastal Carolina",
+    "full_name": "Coastal Carolina Chanticleers",
+    "conference": "Sun Belt - East"
+  },
+  "coastal carolina": {
+    "team_id": 81,
+    "key": "COAST",
+    "name": "Chanticleers",
+    "school": "Coastal Carolina",
+    "full_name": "Coastal Carolina Chanticleers",
+    "conference": "Sun Belt - East"
+  },
+  "coastal carolina chanticleers": {
+    "team_id": 81,
+    "key": "COAST",
+    "name": "Chanticleers",
+    "school": "Coastal Carolina",
+    "full_name": "Coastal Carolina Chanticleers",
+    "conference": "Sun Belt - East"
+  },
+  "gardwb": {
+    "team_id": 83,
+    "key": "GARDWB",
+    "name": "Runnin' Bulldogs",
+    "school": "Gardner-Webb",
+    "full_name": "Gardner-Webb Runnin' Bulldogs",
+    "conference": null
+  },
+  "runnin' bulldogs": {
+    "team_id": 83,
+    "key": "GARDWB",
+    "name": "Runnin' Bulldogs",
+    "school": "Gardner-Webb",
+    "full_name": "Gardner-Webb Runnin' Bulldogs",
+    "conference": null
+  },
+  "gardner-webb": {
+    "team_id": 83,
+    "key": "GARDWB",
+    "name": "Runnin' Bulldogs",
+    "school": "Gardner-Webb",
+    "full_name": "Gardner-Webb Runnin' Bulldogs",
+    "conference": null
+  },
+  "gardner-webb runnin' bulldogs": {
+    "team_id": 83,
+    "key": "GARDWB",
+    "name": "Runnin' Bulldogs",
+    "school": "Gardner-Webb",
+    "full_name": "Gardner-Webb Runnin' Bulldogs",
+    "conference": null
+  },
+  "librty": {
+    "team_id": 84,
+    "key": "LIBRTY",
+    "name": "Flames",
+    "school": "Liberty",
+    "full_name": "Liberty Flames",
+    "conference": "Conference USA"
+  },
+  "flames": {
+    "team_id": 84,
+    "key": "LIBRTY",
+    "name": "Flames",
+    "school": "Liberty",
+    "full_name": "Liberty Flames",
+    "conference": "Conference USA"
+  },
+  "liberty": {
+    "team_id": 84,
+    "key": "LIBRTY",
+    "name": "Flames",
+    "school": "Liberty",
+    "full_name": "Liberty Flames",
+    "conference": "Conference USA"
+  },
+  "liberty flames": {
+    "team_id": 84,
+    "key": "LIBRTY",
+    "name": "Flames",
+    "school": "Liberty",
+    "full_name": "Liberty Flames",
+    "conference": "Conference USA"
+  },
+  "chsou": {
+    "team_id": 88,
+    "key": "CHSOU",
+    "name": "Buccaneers",
+    "school": "Charleston Southern",
+    "full_name": "Charleston Southern Buccaneers",
+    "conference": null
+  },
+  "buccaneers": {
+    "team_id": 282,
+    "key": "ETNST",
+    "name": "Buccaneers",
+    "school": "East Tennessee State",
+    "full_name": "East Tennessee State Buccaneers",
+    "conference": null
+  },
+  "charleston southern": {
+    "team_id": 88,
+    "key": "CHSOU",
+    "name": "Buccaneers",
+    "school": "Charleston Southern",
+    "full_name": "Charleston Southern Buccaneers",
+    "conference": null
+  },
+  "charleston southern buccaneers": {
+    "team_id": 88,
+    "key": "CHSOU",
+    "name": "Buccaneers",
+    "school": "Charleston Southern",
+    "full_name": "Charleston Southern Buccaneers",
+    "conference": null
+  },
+  "presb": {
+    "team_id": 89,
+    "key": "PRESB",
+    "name": "Blue Hose",
+    "school": "Presbyterian",
+    "full_name": "Presbyterian Blue Hose",
+    "conference": null
+  },
+  "blue hose": {
+    "team_id": 89,
+    "key": "PRESB",
+    "name": "Blue Hose",
+    "school": "Presbyterian",
+    "full_name": "Presbyterian Blue Hose",
+    "conference": null
+  },
+  "presbyterian": {
+    "team_id": 89,
+    "key": "PRESB",
+    "name": "Blue Hose",
+    "school": "Presbyterian",
+    "full_name": "Presbyterian Blue Hose",
+    "conference": null
+  },
+  "presbyterian blue hose": {
+    "team_id": 89,
+    "key": "PRESB",
+    "name": "Blue Hose",
+    "school": "Presbyterian",
+    "full_name": "Presbyterian Blue Hose",
+    "conference": null
+  },
+  "camp": {
+    "team_id": 90,
+    "key": "CAMP",
+    "name": "Fighting Camels",
+    "school": "Campbell",
+    "full_name": "Campbell Fighting Camels",
+    "conference": null
+  },
+  "fighting camels": {
+    "team_id": 90,
+    "key": "CAMP",
+    "name": "Fighting Camels",
+    "school": "Campbell",
+    "full_name": "Campbell Fighting Camels",
+    "conference": null
+  },
+  "campbell": {
+    "team_id": 90,
+    "key": "CAMP",
+    "name": "Fighting Camels",
+    "school": "Campbell",
+    "full_name": "Campbell Fighting Camels",
+    "conference": null
+  },
+  "campbell fighting camels": {
+    "team_id": 90,
+    "key": "CAMP",
+    "name": "Fighting Camels",
+    "school": "Campbell",
+    "full_name": "Campbell Fighting Camels",
+    "conference": null
+  },
+  "iowa": {
+    "team_id": 91,
+    "key": "IOWA",
+    "name": "Hawkeyes",
+    "school": "Iowa",
+    "full_name": "Iowa Hawkeyes",
+    "conference": "Big Ten"
+  },
+  "hawkeyes": {
+    "team_id": 91,
+    "key": "IOWA",
+    "name": "Hawkeyes",
+    "school": "Iowa",
+    "full_name": "Iowa Hawkeyes",
+    "conference": "Big Ten"
+  },
+  "iowa hawkeyes": {
+    "team_id": 91,
+    "key": "IOWA",
+    "name": "Hawkeyes",
+    "school": "Iowa",
+    "full_name": "Iowa Hawkeyes",
+    "conference": "Big Ten"
+  },
+  "mary": {
+    "team_id": 92,
+    "key": "MARY",
+    "name": "Terrapins",
+    "school": "Maryland",
+    "full_name": "Maryland Terrapins",
+    "conference": "Big Ten"
+  },
+  "terrapins": {
+    "team_id": 92,
+    "key": "MARY",
+    "name": "Terrapins",
+    "school": "Maryland",
+    "full_name": "Maryland Terrapins",
+    "conference": "Big Ten"
+  },
+  "maryland": {
+    "team_id": 92,
+    "key": "MARY",
+    "name": "Terrapins",
+    "school": "Maryland",
+    "full_name": "Maryland Terrapins",
+    "conference": "Big Ten"
+  },
+  "maryland terrapins": {
+    "team_id": 92,
+    "key": "MARY",
+    "name": "Terrapins",
+    "school": "Maryland",
+    "full_name": "Maryland Terrapins",
+    "conference": "Big Ten"
+  },
+  "ind": {
+    "team_id": 93,
+    "key": "IND",
+    "name": "Hoosiers",
+    "school": "Indiana",
+    "full_name": "Indiana Hoosiers",
+    "conference": "Big Ten"
+  },
+  "hoosiers": {
+    "team_id": 93,
+    "key": "IND",
+    "name": "Hoosiers",
+    "school": "Indiana",
+    "full_name": "Indiana Hoosiers",
+    "conference": "Big Ten"
+  },
+  "indiana": {
+    "team_id": 93,
+    "key": "IND",
+    "name": "Hoosiers",
+    "school": "Indiana",
+    "full_name": "Indiana Hoosiers",
+    "conference": "Big Ten"
+  },
+  "indiana hoosiers": {
+    "team_id": 93,
+    "key": "IND",
+    "name": "Hoosiers",
+    "school": "Indiana",
+    "full_name": "Indiana Hoosiers",
+    "conference": "Big Ten"
+  },
+  "iu": {
+    "team_id": 93,
+    "key": "IND",
+    "name": "Hoosiers",
+    "school": "Indiana",
+    "full_name": "Indiana Hoosiers",
+    "conference": "Big Ten"
+  },
+  "pur": {
+    "team_id": 94,
+    "key": "PUR",
+    "name": "Boilermakers",
+    "school": "Purdue",
+    "full_name": "Purdue Boilermakers",
+    "conference": "Big Ten"
+  },
+  "boilermakers": {
+    "team_id": 94,
+    "key": "PUR",
+    "name": "Boilermakers",
+    "school": "Purdue",
+    "full_name": "Purdue Boilermakers",
+    "conference": "Big Ten"
+  },
+  "purdue": {
+    "team_id": 94,
+    "key": "PUR",
+    "name": "Boilermakers",
+    "school": "Purdue",
+    "full_name": "Purdue Boilermakers",
+    "conference": "Big Ten"
+  },
+  "purdue boilermakers": {
+    "team_id": 94,
+    "key": "PUR",
+    "name": "Boilermakers",
+    "school": "Purdue",
+    "full_name": "Purdue Boilermakers",
+    "conference": "Big Ten"
+  },
+  "mich": {
+    "team_id": 95,
+    "key": "MICH",
+    "name": "Wolverines",
+    "school": "Michigan",
+    "full_name": "Michigan Wolverines",
+    "conference": "Big Ten"
+  },
+  "wolverines": {
+    "team_id": 95,
+    "key": "MICH",
+    "name": "Wolverines",
+    "school": "Michigan",
+    "full_name": "Michigan Wolverines",
+    "conference": "Big Ten"
+  },
+  "michigan": {
+    "team_id": 95,
+    "key": "MICH",
+    "name": "Wolverines",
+    "school": "Michigan",
+    "full_name": "Michigan Wolverines",
+    "conference": "Big Ten"
+  },
+  "michigan wolverines": {
+    "team_id": 95,
+    "key": "MICH",
+    "name": "Wolverines",
+    "school": "Michigan",
+    "full_name": "Michigan Wolverines",
+    "conference": "Big Ten"
+  },
+  "wisc": {
+    "team_id": 96,
+    "key": "WISC",
+    "name": "Badgers",
+    "school": "Wisconsin",
+    "full_name": "Wisconsin Badgers",
+    "conference": "Big Ten"
+  },
+  "badgers": {
+    "team_id": 96,
+    "key": "WISC",
+    "name": "Badgers",
+    "school": "Wisconsin",
+    "full_name": "Wisconsin Badgers",
+    "conference": "Big Ten"
+  },
+  "wisconsin": {
+    "team_id": 96,
+    "key": "WISC",
+    "name": "Badgers",
+    "school": "Wisconsin",
+    "full_name": "Wisconsin Badgers",
+    "conference": "Big Ten"
+  },
+  "wisconsin badgers": {
+    "team_id": 96,
+    "key": "WISC",
+    "name": "Badgers",
+    "school": "Wisconsin",
+    "full_name": "Wisconsin Badgers",
+    "conference": "Big Ten"
+  },
+  "mst": {
+    "team_id": 97,
+    "key": "MST",
+    "name": "Spartans",
+    "school": "Michigan State",
+    "full_name": "Michigan State Spartans",
+    "conference": "Big Ten"
+  },
+  "spartans": {
+    "team_id": 222,
+    "key": "SJST",
+    "name": "Spartans",
+    "school": "San Jose State",
+    "full_name": "San Jose State Spartans",
+    "conference": "Mountain West"
+  },
+  "michigan state": {
+    "team_id": 97,
+    "key": "MST",
+    "name": "Spartans",
+    "school": "Michigan State",
+    "full_name": "Michigan State Spartans",
+    "conference": "Big Ten"
+  },
+  "michigan state spartans": {
+    "team_id": 97,
+    "key": "MST",
+    "name": "Spartans",
+    "school": "Michigan State",
+    "full_name": "Michigan State Spartans",
+    "conference": "Big Ten"
+  },
+  "msu": {
+    "team_id": 97,
+    "key": "MST",
+    "name": "Spartans",
+    "school": "Michigan State",
+    "full_name": "Michigan State Spartans",
+    "conference": "Big Ten"
+  },
+  "ohiost": {
+    "team_id": 98,
+    "key": "OHIOST",
+    "name": "Buckeyes",
+    "school": "Ohio State",
+    "full_name": "Ohio State Buckeyes",
+    "conference": "Big Ten"
+  },
+  "buckeyes": {
+    "team_id": 98,
+    "key": "OHIOST",
+    "name": "Buckeyes",
+    "school": "Ohio State",
+    "full_name": "Ohio State Buckeyes",
+    "conference": "Big Ten"
+  },
+  "ohio state": {
+    "team_id": 98,
+    "key": "OHIOST",
+    "name": "Buckeyes",
+    "school": "Ohio State",
+    "full_name": "Ohio State Buckeyes",
+    "conference": "Big Ten"
+  },
+  "ohio state buckeyes": {
+    "team_id": 98,
+    "key": "OHIOST",
+    "name": "Buckeyes",
+    "school": "Ohio State",
+    "full_name": "Ohio State Buckeyes",
+    "conference": "Big Ten"
+  },
+  "osu": {
+    "team_id": 98,
+    "key": "OHIOST",
+    "name": "Buckeyes",
+    "school": "Ohio State",
+    "full_name": "Ohio State Buckeyes",
+    "conference": "Big Ten"
+  },
+  "nebr": {
+    "team_id": 99,
+    "key": "NEBR",
+    "name": "Cornhuskers",
+    "school": "Nebraska",
+    "full_name": "Nebraska Cornhuskers",
+    "conference": "Big Ten"
+  },
+  "cornhuskers": {
+    "team_id": 99,
+    "key": "NEBR",
+    "name": "Cornhuskers",
+    "school": "Nebraska",
+    "full_name": "Nebraska Cornhuskers",
+    "conference": "Big Ten"
+  },
+  "nebraska": {
+    "team_id": 99,
+    "key": "NEBR",
+    "name": "Cornhuskers",
+    "school": "Nebraska",
+    "full_name": "Nebraska Cornhuskers",
+    "conference": "Big Ten"
+  },
+  "nebraska cornhuskers": {
+    "team_id": 99,
+    "key": "NEBR",
+    "name": "Cornhuskers",
+    "school": "Nebraska",
+    "full_name": "Nebraska Cornhuskers",
+    "conference": "Big Ten"
+  },
+  "neb": {
+    "team_id": 99,
+    "key": "NEBR",
+    "name": "Cornhuskers",
+    "school": "Nebraska",
+    "full_name": "Nebraska Cornhuskers",
+    "conference": "Big Ten"
+  },
+  "nw": {
+    "team_id": 100,
+    "key": "NW",
+    "name": "Wildcats",
+    "school": "Northwestern",
+    "full_name": "Northwestern Wildcats",
+    "conference": "Big Ten"
+  },
+  "northwestern": {
+    "team_id": 100,
+    "key": "NW",
+    "name": "Wildcats",
+    "school": "Northwestern",
+    "full_name": "Northwestern Wildcats",
+    "conference": "Big Ten"
+  },
+  "northwestern wildcats": {
+    "team_id": 100,
+    "key": "NW",
+    "name": "Wildcats",
+    "school": "Northwestern",
+    "full_name": "Northwestern Wildcats",
+    "conference": "Big Ten"
+  },
+  "nwu": {
+    "team_id": 100,
+    "key": "NW",
+    "name": "Wildcats",
+    "school": "Northwestern",
+    "full_name": "Northwestern Wildcats",
+    "conference": "Big Ten"
+  },
+  "pennst": {
+    "team_id": 101,
+    "key": "PENNST",
+    "name": "Nittany Lions",
+    "school": "Penn State",
+    "full_name": "Penn State Nittany Lions",
+    "conference": "Big Ten"
+  },
+  "nittany lions": {
+    "team_id": 101,
+    "key": "PENNST",
+    "name": "Nittany Lions",
+    "school": "Penn State",
+    "full_name": "Penn State Nittany Lions",
+    "conference": "Big Ten"
+  },
+  "penn state": {
+    "team_id": 101,
+    "key": "PENNST",
+    "name": "Nittany Lions",
+    "school": "Penn State",
+    "full_name": "Penn State Nittany Lions",
+    "conference": "Big Ten"
+  },
+  "penn state nittany lions": {
+    "team_id": 101,
+    "key": "PENNST",
+    "name": "Nittany Lions",
+    "school": "Penn State",
+    "full_name": "Penn State Nittany Lions",
+    "conference": "Big Ten"
+  },
+  "psu": {
+    "team_id": 101,
+    "key": "PENNST",
+    "name": "Nittany Lions",
+    "school": "Penn State",
+    "full_name": "Penn State Nittany Lions",
+    "conference": "Big Ten"
+  },
+  "ill": {
+    "team_id": 102,
+    "key": "ILL",
+    "name": "Fighting Illini",
+    "school": "Illinois",
+    "full_name": "Illinois Fighting Illini",
+    "conference": "Big Ten"
+  },
+  "fighting illini": {
+    "team_id": 102,
+    "key": "ILL",
+    "name": "Fighting Illini",
+    "school": "Illinois",
+    "full_name": "Illinois Fighting Illini",
+    "conference": "Big Ten"
+  },
+  "illinois": {
+    "team_id": 102,
+    "key": "ILL",
+    "name": "Fighting Illini",
+    "school": "Illinois",
+    "full_name": "Illinois Fighting Illini",
+    "conference": "Big Ten"
+  },
+  "illinois fighting illini": {
+    "team_id": 102,
+    "key": "ILL",
+    "name": "Fighting Illini",
+    "school": "Illinois",
+    "full_name": "Illinois Fighting Illini",
+    "conference": "Big Ten"
+  },
+  "rutger": {
+    "team_id": 103,
+    "key": "RUTGER",
+    "name": "Scarlet Knights",
+    "school": "Rutgers",
+    "full_name": "Rutgers Scarlet Knights",
+    "conference": "Big Ten"
+  },
+  "scarlet knights": {
+    "team_id": 103,
+    "key": "RUTGER",
+    "name": "Scarlet Knights",
+    "school": "Rutgers",
+    "full_name": "Rutgers Scarlet Knights",
+    "conference": "Big Ten"
+  },
+  "rutgers": {
+    "team_id": 103,
+    "key": "RUTGER",
+    "name": "Scarlet Knights",
+    "school": "Rutgers",
+    "full_name": "Rutgers Scarlet Knights",
+    "conference": "Big Ten"
+  },
+  "rutgers scarlet knights": {
+    "team_id": 103,
+    "key": "RUTGER",
+    "name": "Scarlet Knights",
+    "school": "Rutgers",
+    "full_name": "Rutgers Scarlet Knights",
+    "conference": "Big Ten"
+  },
+  "minnst": {
+    "team_id": 104,
+    "key": "MINNST",
+    "name": "Golden Gophers",
+    "school": "Minnesota",
+    "full_name": "Minnesota Golden Gophers",
+    "conference": "Big Ten"
+  },
+  "golden gophers": {
+    "team_id": 104,
+    "key": "MINNST",
+    "name": "Golden Gophers",
+    "school": "Minnesota",
+    "full_name": "Minnesota Golden Gophers",
+    "conference": "Big Ten"
+  },
+  "minnesota": {
+    "team_id": 104,
+    "key": "MINNST",
+    "name": "Golden Gophers",
+    "school": "Minnesota",
+    "full_name": "Minnesota Golden Gophers",
+    "conference": "Big Ten"
+  },
+  "minnesota golden gophers": {
+    "team_id": 104,
+    "key": "MINNST",
+    "name": "Golden Gophers",
+    "school": "Minnesota",
+    "full_name": "Minnesota Golden Gophers",
+    "conference": "Big Ten"
+  },
+  "minn": {
+    "team_id": 104,
+    "key": "MINNST",
+    "name": "Golden Gophers",
+    "school": "Minnesota",
+    "full_name": "Minnesota Golden Gophers",
+    "conference": "Big Ten"
+  },
+  "okl": {
+    "team_id": 105,
+    "key": "OKL",
+    "name": "Sooners",
+    "school": "Oklahoma",
+    "full_name": "Oklahoma Sooners",
+    "conference": "Southeastern"
+  },
+  "sooners": {
+    "team_id": 105,
+    "key": "OKL",
+    "name": "Sooners",
+    "school": "Oklahoma",
+    "full_name": "Oklahoma Sooners",
+    "conference": "Southeastern"
+  },
+  "oklahoma": {
+    "team_id": 105,
+    "key": "OKL",
+    "name": "Sooners",
+    "school": "Oklahoma",
+    "full_name": "Oklahoma Sooners",
+    "conference": "Southeastern"
+  },
+  "oklahoma sooners": {
+    "team_id": 105,
+    "key": "OKL",
+    "name": "Sooners",
+    "school": "Oklahoma",
+    "full_name": "Oklahoma Sooners",
+    "conference": "Southeastern"
+  },
+  "ou": {
+    "team_id": 105,
+    "key": "OKL",
+    "name": "Sooners",
+    "school": "Oklahoma",
+    "full_name": "Oklahoma Sooners",
+    "conference": "Southeastern"
+  },
+  "kan": {
+    "team_id": 106,
+    "key": "KAN",
+    "name": "Jayhawks",
+    "school": "Kansas",
+    "full_name": "Kansas Jayhawks",
+    "conference": "Big 12"
+  },
+  "jayhawks": {
+    "team_id": 106,
+    "key": "KAN",
+    "name": "Jayhawks",
+    "school": "Kansas",
+    "full_name": "Kansas Jayhawks",
+    "conference": "Big 12"
+  },
+  "kansas": {
+    "team_id": 106,
+    "key": "KAN",
+    "name": "Jayhawks",
+    "school": "Kansas",
+    "full_name": "Kansas Jayhawks",
+    "conference": "Big 12"
+  },
+  "kansas jayhawks": {
+    "team_id": 106,
+    "key": "KAN",
+    "name": "Jayhawks",
+    "school": "Kansas",
+    "full_name": "Kansas Jayhawks",
+    "conference": "Big 12"
+  },
+  "wvir": {
+    "team_id": 107,
+    "key": "WVIR",
+    "name": "Mountaineers",
+    "school": "West Virginia",
+    "full_name": "West Virginia Mountaineers",
+    "conference": "Big 12"
+  },
+  "mountaineers": {
+    "team_id": 331,
+    "key": "APPLST",
+    "name": "Mountaineers",
+    "school": "Appalachian State",
+    "full_name": "Appalachian State Mountaineers",
+    "conference": "Sun Belt - East"
+  },
+  "west virginia": {
+    "team_id": 107,
+    "key": "WVIR",
+    "name": "Mountaineers",
+    "school": "West Virginia",
+    "full_name": "West Virginia Mountaineers",
+    "conference": "Big 12"
+  },
+  "west virginia mountaineers": {
+    "team_id": 107,
+    "key": "WVIR",
+    "name": "Mountaineers",
+    "school": "West Virginia",
+    "full_name": "West Virginia Mountaineers",
+    "conference": "Big 12"
+  },
+  "wvu": {
+    "team_id": 107,
+    "key": "WVIR",
+    "name": "Mountaineers",
+    "school": "West Virginia",
+    "full_name": "West Virginia Mountaineers",
+    "conference": "Big 12"
+  },
+  "bayl": {
+    "team_id": 108,
+    "key": "BAYL",
+    "name": "Bears",
+    "school": "Baylor",
+    "full_name": "Baylor Bears",
+    "conference": "Big 12"
+  },
+  "baylor": {
+    "team_id": 108,
+    "key": "BAYL",
+    "name": "Bears",
+    "school": "Baylor",
+    "full_name": "Baylor Bears",
+    "conference": "Big 12"
+  },
+  "baylor bears": {
+    "team_id": 108,
+    "key": "BAYL",
+    "name": "Bears",
+    "school": "Baylor",
+    "full_name": "Baylor Bears",
+    "conference": "Big 12"
+  },
+  "tx": {
+    "team_id": 109,
+    "key": "TX",
+    "name": "Longhorns",
+    "school": "Texas",
+    "full_name": "Texas Longhorns",
+    "conference": "Southeastern"
+  },
+  "longhorns": {
+    "team_id": 109,
+    "key": "TX",
+    "name": "Longhorns",
+    "school": "Texas",
+    "full_name": "Texas Longhorns",
+    "conference": "Southeastern"
+  },
+  "texas": {
+    "team_id": 109,
+    "key": "TX",
+    "name": "Longhorns",
+    "school": "Texas",
+    "full_name": "Texas Longhorns",
+    "conference": "Southeastern"
+  },
+  "texas longhorns": {
+    "team_id": 109,
+    "key": "TX",
+    "name": "Longhorns",
+    "school": "Texas",
+    "full_name": "Texas Longhorns",
+    "conference": "Southeastern"
+  },
+  "ut": {
+    "team_id": 109,
+    "key": "TX",
+    "name": "Longhorns",
+    "school": "Texas",
+    "full_name": "Texas Longhorns",
+    "conference": "Southeastern"
+  },
+  "iowast": {
+    "team_id": 110,
+    "key": "IOWAST",
+    "name": "Cyclones",
+    "school": "Iowa State",
+    "full_name": "Iowa State Cyclones",
+    "conference": "Big 12"
+  },
+  "cyclones": {
+    "team_id": 110,
+    "key": "IOWAST",
+    "name": "Cyclones",
+    "school": "Iowa State",
+    "full_name": "Iowa State Cyclones",
+    "conference": "Big 12"
+  },
+  "iowa state": {
+    "team_id": 110,
+    "key": "IOWAST",
+    "name": "Cyclones",
+    "school": "Iowa State",
+    "full_name": "Iowa State Cyclones",
+    "conference": "Big 12"
+  },
+  "iowa state cyclones": {
+    "team_id": 110,
+    "key": "IOWAST",
+    "name": "Cyclones",
+    "school": "Iowa State",
+    "full_name": "Iowa State Cyclones",
+    "conference": "Big 12"
+  },
+  "iast": {
+    "team_id": 110,
+    "key": "IOWAST",
+    "name": "Cyclones",
+    "school": "Iowa State",
+    "full_name": "Iowa State Cyclones",
+    "conference": "Big 12"
+  },
+  "txtech": {
+    "team_id": 111,
+    "key": "TXTECH",
+    "name": "Red Raiders",
+    "school": "Texas Tech",
+    "full_name": "Texas Tech Red Raiders",
+    "conference": "Big 12"
+  },
+  "red raiders": {
+    "team_id": 111,
+    "key": "TXTECH",
+    "name": "Red Raiders",
+    "school": "Texas Tech",
+    "full_name": "Texas Tech Red Raiders",
+    "conference": "Big 12"
+  },
+  "texas tech": {
+    "team_id": 111,
+    "key": "TXTECH",
+    "name": "Red Raiders",
+    "school": "Texas Tech",
+    "full_name": "Texas Tech Red Raiders",
+    "conference": "Big 12"
+  },
+  "texas tech red raiders": {
+    "team_id": 111,
+    "key": "TXTECH",
+    "name": "Red Raiders",
+    "school": "Texas Tech",
+    "full_name": "Texas Tech Red Raiders",
+    "conference": "Big 12"
+  },
+  "ttu": {
+    "team_id": 111,
+    "key": "TXTECH",
+    "name": "Red Raiders",
+    "school": "Texas Tech",
+    "full_name": "Texas Tech Red Raiders",
+    "conference": "Big 12"
+  },
+  "kanst": {
+    "team_id": 112,
+    "key": "KANST",
+    "name": "Wildcats",
+    "school": "Kansas State",
+    "full_name": "Kansas State Wildcats",
+    "conference": "Big 12"
+  },
+  "kansas state": {
+    "team_id": 112,
+    "key": "KANST",
+    "name": "Wildcats",
+    "school": "Kansas State",
+    "full_name": "Kansas State Wildcats",
+    "conference": "Big 12"
+  },
+  "kansas state wildcats": {
+    "team_id": 112,
+    "key": "KANST",
+    "name": "Wildcats",
+    "school": "Kansas State",
+    "full_name": "Kansas State Wildcats",
+    "conference": "Big 12"
+  },
+  "ksu": {
+    "team_id": 112,
+    "key": "KANST",
+    "name": "Wildcats",
+    "school": "Kansas State",
+    "full_name": "Kansas State Wildcats",
+    "conference": "Big 12"
+  },
+  "okst": {
+    "team_id": 113,
+    "key": "OKST",
+    "name": "Cowboys",
+    "school": "Oklahoma State",
+    "full_name": "Oklahoma State Cowboys",
+    "conference": "Big 12"
+  },
+  "cowboys": {
+    "team_id": 391,
+    "key": "NMH",
+    "name": "Cowboys",
+    "school": "New Mexico Highlands",
+    "full_name": "New Mexico Highlands Cowboys",
+    "conference": null
+  },
+  "oklahoma state": {
+    "team_id": 113,
+    "key": "OKST",
+    "name": "Cowboys",
+    "school": "Oklahoma State",
+    "full_name": "Oklahoma State Cowboys",
+    "conference": "Big 12"
+  },
+  "oklahoma state cowboys": {
+    "team_id": 113,
+    "key": "OKST",
+    "name": "Cowboys",
+    "school": "Oklahoma State",
+    "full_name": "Oklahoma State Cowboys",
+    "conference": "Big 12"
+  },
+  "tcu": {
+    "team_id": 114,
+    "key": "TCU",
+    "name": "Horned Frogs",
+    "school": "TCU",
+    "full_name": "TCU Horned Frogs",
+    "conference": "Big 12"
+  },
+  "horned frogs": {
+    "team_id": 114,
+    "key": "TCU",
+    "name": "Horned Frogs",
+    "school": "TCU",
+    "full_name": "TCU Horned Frogs",
+    "conference": "Big 12"
+  },
+  "tcu horned frogs": {
+    "team_id": 114,
+    "key": "TCU",
+    "name": "Horned Frogs",
+    "school": "TCU",
+    "full_name": "TCU Horned Frogs",
+    "conference": "Big 12"
+  },
+  "hawaii": {
+    "team_id": 115,
+    "key": "HAWAII",
+    "name": "Rainbow Warriors",
+    "school": "Hawaii",
+    "full_name": "Hawaii Rainbow Warriors",
+    "conference": "Mountain West"
+  },
+  "rainbow warriors": {
+    "team_id": 115,
+    "key": "HAWAII",
+    "name": "Rainbow Warriors",
+    "school": "Hawaii",
+    "full_name": "Hawaii Rainbow Warriors",
+    "conference": "Mountain West"
+  },
+  "hawaii rainbow warriors": {
+    "team_id": 115,
+    "key": "HAWAII",
+    "name": "Rainbow Warriors",
+    "school": "Hawaii",
+    "full_name": "Hawaii Rainbow Warriors",
+    "conference": "Mountain West"
+  },
+  "ucdv": {
+    "team_id": 118,
+    "key": "UCDV",
+    "name": "Aggies",
+    "school": "UC Davis",
+    "full_name": "UC Davis Aggies",
+    "conference": null
+  },
+  "aggies": {
+    "team_id": 344,
+    "key": "NMXST",
+    "name": "Aggies",
+    "school": "New Mexico State",
+    "full_name": "New Mexico State Aggies",
+    "conference": "Conference USA"
+  },
+  "uc davis": {
+    "team_id": 118,
+    "key": "UCDV",
+    "name": "Aggies",
+    "school": "UC Davis",
+    "full_name": "UC Davis Aggies",
+    "conference": null
+  },
+  "uc davis aggies": {
+    "team_id": 118,
+    "key": "UCDV",
+    "name": "Aggies",
+    "school": "UC Davis",
+    "full_name": "UC Davis Aggies",
+    "conference": null
+  },
+  "calpol": {
+    "team_id": 122,
+    "key": "CALPOL",
+    "name": "Mustangs",
+    "school": "Cal Poly",
+    "full_name": "Cal Poly Mustangs",
+    "conference": null
+  },
+  "cal poly": {
+    "team_id": 122,
+    "key": "CALPOL",
+    "name": "Mustangs",
+    "school": "Cal Poly",
+    "full_name": "Cal Poly Mustangs",
+    "conference": null
+  },
+  "cal poly mustangs": {
+    "team_id": 122,
+    "key": "CALPOL",
+    "name": "Mustangs",
+    "school": "Cal Poly",
+    "full_name": "Cal Poly Mustangs",
+    "conference": null
+  },
+  "ncw": {
+    "team_id": 124,
+    "key": "NCW",
+    "name": "Seahawks",
+    "school": "UNCW",
+    "full_name": "UNCW Seahawks",
+    "conference": null
+  },
+  "seahawks": {
+    "team_id": 223,
+    "key": "WAG",
+    "name": "Seahawks",
+    "school": "Wagner",
+    "full_name": "Wagner Seahawks",
+    "conference": null
+  },
+  "uncw": {
+    "team_id": 124,
+    "key": "NCW",
+    "name": "Seahawks",
+    "school": "UNCW",
+    "full_name": "UNCW Seahawks",
+    "conference": null
+  },
+  "uncw seahawks": {
+    "team_id": 124,
+    "key": "NCW",
+    "name": "Seahawks",
+    "school": "UNCW",
+    "full_name": "UNCW Seahawks",
+    "conference": null
+  },
+  "wm": {
+    "team_id": 125,
+    "key": "WM",
+    "name": "Tribe",
+    "school": "William & Mary",
+    "full_name": "William & Mary Tribe",
+    "conference": null
+  },
+  "tribe": {
+    "team_id": 125,
+    "key": "WM",
+    "name": "Tribe",
+    "school": "William & Mary",
+    "full_name": "William & Mary Tribe",
+    "conference": null
+  },
+  "william & mary": {
+    "team_id": 125,
+    "key": "WM",
+    "name": "Tribe",
+    "school": "William & Mary",
+    "full_name": "William & Mary Tribe",
+    "conference": null
+  },
+  "william & mary tribe": {
+    "team_id": 125,
+    "key": "WM",
+    "name": "Tribe",
+    "school": "William & Mary",
+    "full_name": "William & Mary Tribe",
+    "conference": null
+  },
+  "jmad": {
+    "team_id": 126,
+    "key": "JMAD",
+    "name": "Dukes",
+    "school": "James Madison",
+    "full_name": "James Madison Dukes",
+    "conference": "Sun Belt - East"
+  },
+  "james madison": {
+    "team_id": 126,
+    "key": "JMAD",
+    "name": "Dukes",
+    "school": "James Madison",
+    "full_name": "James Madison Dukes",
+    "conference": "Sun Belt - East"
+  },
+  "james madison dukes": {
+    "team_id": 126,
+    "key": "JMAD",
+    "name": "Dukes",
+    "school": "James Madison",
+    "full_name": "James Madison Dukes",
+    "conference": "Sun Belt - East"
+  },
+  "tows": {
+    "team_id": 127,
+    "key": "TOWS",
+    "name": "Tigers",
+    "school": "Towson",
+    "full_name": "Towson Tigers",
+    "conference": null
+  },
+  "towson": {
+    "team_id": 127,
+    "key": "TOWS",
+    "name": "Tigers",
+    "school": "Towson",
+    "full_name": "Towson Tigers",
+    "conference": null
+  },
+  "towson tigers": {
+    "team_id": 127,
+    "key": "TOWS",
+    "name": "Tigers",
+    "school": "Towson",
+    "full_name": "Towson Tigers",
+    "conference": null
+  },
+  "hofst": {
+    "team_id": 128,
+    "key": "HOFST",
+    "name": "Pride",
+    "school": "Hofstra",
+    "full_name": "Hofstra Pride",
+    "conference": null
+  },
+  "pride": {
+    "team_id": 128,
+    "key": "HOFST",
+    "name": "Pride",
+    "school": "Hofstra",
+    "full_name": "Hofstra Pride",
+    "conference": null
+  },
+  "hofstra": {
+    "team_id": 128,
+    "key": "HOFST",
+    "name": "Pride",
+    "school": "Hofstra",
+    "full_name": "Hofstra Pride",
+    "conference": null
+  },
+  "hofstra pride": {
+    "team_id": 128,
+    "key": "HOFST",
+    "name": "Pride",
+    "school": "Hofstra",
+    "full_name": "Hofstra Pride",
+    "conference": null
+  },
+  "elon": {
+    "team_id": 130,
+    "key": "ELON",
+    "name": "Phoenix",
+    "school": "Elon",
+    "full_name": "Elon Phoenix",
+    "conference": null
+  },
+  "phoenix": {
+    "team_id": 130,
+    "key": "ELON",
+    "name": "Phoenix",
+    "school": "Elon",
+    "full_name": "Elon Phoenix",
+    "conference": null
+  },
+  "elon phoenix": {
+    "team_id": 130,
+    "key": "ELON",
+    "name": "Phoenix",
+    "school": "Elon",
+    "full_name": "Elon Phoenix",
+    "conference": null
+  },
+  "neast": {
+    "team_id": 131,
+    "key": "NEAST",
+    "name": "Huskies",
+    "school": "Northeastern",
+    "full_name": "Northeastern Huskies",
+    "conference": null
+  },
+  "northeastern": {
+    "team_id": 131,
+    "key": "NEAST",
+    "name": "Huskies",
+    "school": "Northeastern",
+    "full_name": "Northeastern Huskies",
+    "conference": null
+  },
+  "northeastern huskies": {
+    "team_id": 131,
+    "key": "NEAST",
+    "name": "Huskies",
+    "school": "Northeastern",
+    "full_name": "Northeastern Huskies",
+    "conference": null
+  },
+  "del": {
+    "team_id": 133,
+    "key": "DEL",
+    "name": "Fightin' Blue Hens",
+    "school": "Delaware",
+    "full_name": "Delaware Fightin' Blue Hens",
+    "conference": "Conference USA"
+  },
+  "fightin' blue hens": {
+    "team_id": 133,
+    "key": "DEL",
+    "name": "Fightin' Blue Hens",
+    "school": "Delaware",
+    "full_name": "Delaware Fightin' Blue Hens",
+    "conference": "Conference USA"
+  },
+  "delaware": {
+    "team_id": 133,
+    "key": "DEL",
+    "name": "Fightin' Blue Hens",
+    "school": "Delaware",
+    "full_name": "Delaware Fightin' Blue Hens",
+    "conference": "Conference USA"
+  },
+  "delaware fightin' blue hens": {
+    "team_id": 133,
+    "key": "DEL",
+    "name": "Fightin' Blue Hens",
+    "school": "Delaware",
+    "full_name": "Delaware Fightin' Blue Hens",
+    "conference": "Conference USA"
+  },
+  "uab": {
+    "team_id": 134,
+    "key": "UAB",
+    "name": "Blazers",
+    "school": "UAB",
+    "full_name": "UAB Blazers",
+    "conference": "American"
+  },
+  "blazers": {
+    "team_id": 134,
+    "key": "UAB",
+    "name": "Blazers",
+    "school": "UAB",
+    "full_name": "UAB Blazers",
+    "conference": "American"
+  },
+  "uab blazers": {
+    "team_id": 134,
+    "key": "UAB",
+    "name": "Blazers",
+    "school": "UAB",
+    "full_name": "UAB Blazers",
+    "conference": "American"
+  },
+  "mtnst": {
+    "team_id": 135,
+    "key": "MTNST",
+    "name": "Blue Raiders",
+    "school": "Middle Tennessee",
+    "full_name": "Middle Tennessee Blue Raiders",
+    "conference": "Conference USA"
+  },
+  "blue raiders": {
+    "team_id": 135,
+    "key": "MTNST",
+    "name": "Blue Raiders",
+    "school": "Middle Tennessee",
+    "full_name": "Middle Tennessee Blue Raiders",
+    "conference": "Conference USA"
+  },
+  "middle tennessee": {
+    "team_id": 135,
+    "key": "MTNST",
+    "name": "Blue Raiders",
+    "school": "Middle Tennessee",
+    "full_name": "Middle Tennessee Blue Raiders",
+    "conference": "Conference USA"
+  },
+  "middle tennessee blue raiders": {
+    "team_id": 135,
+    "key": "MTNST",
+    "name": "Blue Raiders",
+    "school": "Middle Tennessee",
+    "full_name": "Middle Tennessee Blue Raiders",
+    "conference": "Conference USA"
+  },
+  "marsh": {
+    "team_id": 136,
+    "key": "MARSH",
+    "name": "Thundering Herd",
+    "school": "Marshall",
+    "full_name": "Marshall Thundering Herd",
+    "conference": "Sun Belt - East"
+  },
+  "thundering herd": {
+    "team_id": 136,
+    "key": "MARSH",
+    "name": "Thundering Herd",
+    "school": "Marshall",
+    "full_name": "Marshall Thundering Herd",
+    "conference": "Sun Belt - East"
+  },
+  "marshall": {
+    "team_id": 136,
+    "key": "MARSH",
+    "name": "Thundering Herd",
+    "school": "Marshall",
+    "full_name": "Marshall Thundering Herd",
+    "conference": "Sun Belt - East"
+  },
+  "marshall thundering herd": {
+    "team_id": 136,
+    "key": "MARSH",
+    "name": "Thundering Herd",
+    "school": "Marshall",
+    "full_name": "Marshall Thundering Herd",
+    "conference": "Sun Belt - East"
+  },
+  "loutch": {
+    "team_id": 137,
+    "key": "LOUTCH",
+    "name": "Bulldogs",
+    "school": "Louisiana Tech",
+    "full_name": "Louisiana Tech Bulldogs",
+    "conference": "Conference USA"
+  },
+  "bulldogs": {
+    "team_id": 309,
+    "key": "ALAAM",
+    "name": "Bulldogs",
+    "school": "Alabama A&M",
+    "full_name": "Alabama A&M Bulldogs",
+    "conference": null
+  },
+  "louisiana tech": {
+    "team_id": 137,
+    "key": "LOUTCH",
+    "name": "Bulldogs",
+    "school": "Louisiana Tech",
+    "full_name": "Louisiana Tech Bulldogs",
+    "conference": "Conference USA"
+  },
+  "louisiana tech bulldogs": {
+    "team_id": 137,
+    "key": "LOUTCH",
+    "name": "Bulldogs",
+    "school": "Louisiana Tech",
+    "full_name": "Louisiana Tech Bulldogs",
+    "conference": "Conference USA"
+  },
+  "latech": {
+    "team_id": 137,
+    "key": "LOUTCH",
+    "name": "Bulldogs",
+    "school": "Louisiana Tech",
+    "full_name": "Louisiana Tech Bulldogs",
+    "conference": "Conference USA"
+  },
+  "old": {
+    "team_id": 138,
+    "key": "OLD",
+    "name": "Monarchs",
+    "school": "Old Dominion",
+    "full_name": "Old Dominion Monarchs",
+    "conference": "Sun Belt - East"
+  },
+  "monarchs": {
+    "team_id": 138,
+    "key": "OLD",
+    "name": "Monarchs",
+    "school": "Old Dominion",
+    "full_name": "Old Dominion Monarchs",
+    "conference": "Sun Belt - East"
+  },
+  "old dominion": {
+    "team_id": 138,
+    "key": "OLD",
+    "name": "Monarchs",
+    "school": "Old Dominion",
+    "full_name": "Old Dominion Monarchs",
+    "conference": "Sun Belt - East"
+  },
+  "old dominion monarchs": {
+    "team_id": 138,
+    "key": "OLD",
+    "name": "Monarchs",
+    "school": "Old Dominion",
+    "full_name": "Old Dominion Monarchs",
+    "conference": "Sun Belt - East"
+  },
+  "utep": {
+    "team_id": 139,
+    "key": "UTEP",
+    "name": "Miners",
+    "school": "UTEP",
+    "full_name": "UTEP Miners",
+    "conference": "Conference USA"
+  },
+  "miners": {
+    "team_id": 139,
+    "key": "UTEP",
+    "name": "Miners",
+    "school": "UTEP",
+    "full_name": "UTEP Miners",
+    "conference": "Conference USA"
+  },
+  "utep miners": {
+    "team_id": 139,
+    "key": "UTEP",
+    "name": "Miners",
+    "school": "UTEP",
+    "full_name": "UTEP Miners",
+    "conference": "Conference USA"
+  },
+  "flint": {
+    "team_id": 140,
+    "key": "FLINT",
+    "name": "Panthers",
+    "school": "Florida International",
+    "full_name": "Florida International Panthers",
+    "conference": "Conference USA"
+  },
+  "florida international": {
+    "team_id": 140,
+    "key": "FLINT",
+    "name": "Panthers",
+    "school": "Florida International",
+    "full_name": "Florida International Panthers",
+    "conference": "Conference USA"
+  },
+  "florida international panthers": {
+    "team_id": 140,
+    "key": "FLINT",
+    "name": "Panthers",
+    "school": "Florida International",
+    "full_name": "Florida International Panthers",
+    "conference": "Conference USA"
+  },
+  "fiu": {
+    "team_id": 140,
+    "key": "FLINT",
+    "name": "Panthers",
+    "school": "Florida International",
+    "full_name": "Florida International Panthers",
+    "conference": "Conference USA"
+  },
+  "ntx": {
+    "team_id": 141,
+    "key": "NTX",
+    "name": "Mean Green",
+    "school": "North Texas",
+    "full_name": "North Texas Mean Green",
+    "conference": "American"
+  },
+  "mean green": {
+    "team_id": 141,
+    "key": "NTX",
+    "name": "Mean Green",
+    "school": "North Texas",
+    "full_name": "North Texas Mean Green",
+    "conference": "American"
+  },
+  "north texas": {
+    "team_id": 141,
+    "key": "NTX",
+    "name": "Mean Green",
+    "school": "North Texas",
+    "full_name": "North Texas Mean Green",
+    "conference": "American"
+  },
+  "north texas mean green": {
+    "team_id": 141,
+    "key": "NTX",
+    "name": "Mean Green",
+    "school": "North Texas",
+    "full_name": "North Texas Mean Green",
+    "conference": "American"
+  },
+  "charlt": {
+    "team_id": 142,
+    "key": "CHARLT",
+    "name": "49ers",
+    "school": "Charlotte",
+    "full_name": "Charlotte 49ers",
+    "conference": "American"
+  },
+  "49ers": {
+    "team_id": 142,
+    "key": "CHARLT",
+    "name": "49ers",
+    "school": "Charlotte",
+    "full_name": "Charlotte 49ers",
+    "conference": "American"
+  },
+  "charlotte": {
+    "team_id": 142,
+    "key": "CHARLT",
+    "name": "49ers",
+    "school": "Charlotte",
+    "full_name": "Charlotte 49ers",
+    "conference": "American"
+  },
+  "charlotte 49ers": {
+    "team_id": 142,
+    "key": "CHARLT",
+    "name": "49ers",
+    "school": "Charlotte",
+    "full_name": "Charlotte 49ers",
+    "conference": "American"
+  },
+  "soumis": {
+    "team_id": 143,
+    "key": "SOUMIS",
+    "name": "Golden Eagles",
+    "school": "Southern Miss",
+    "full_name": "Southern Miss Golden Eagles",
+    "conference": "Sun Belt - West"
+  },
+  "golden eagles": {
+    "team_id": 234,
+    "key": "TENTCH",
+    "name": "Golden Eagles",
+    "school": "Tennessee Tech",
+    "full_name": "Tennessee Tech Golden Eagles",
+    "conference": null
+  },
+  "southern miss": {
+    "team_id": 143,
+    "key": "SOUMIS",
+    "name": "Golden Eagles",
+    "school": "Southern Miss",
+    "full_name": "Southern Miss Golden Eagles",
+    "conference": "Sun Belt - West"
+  },
+  "southern miss golden eagles": {
+    "team_id": 143,
+    "key": "SOUMIS",
+    "name": "Golden Eagles",
+    "school": "Southern Miss",
+    "full_name": "Southern Miss Golden Eagles",
+    "conference": "Sun Belt - West"
+  },
+  "wkent": {
+    "team_id": 144,
+    "key": "WKENT",
+    "name": "Hilltoppers",
+    "school": "Western Kentucky",
+    "full_name": "Western Kentucky Hilltoppers",
+    "conference": "Conference USA"
+  },
+  "hilltoppers": {
+    "team_id": 144,
+    "key": "WKENT",
+    "name": "Hilltoppers",
+    "school": "Western Kentucky",
+    "full_name": "Western Kentucky Hilltoppers",
+    "conference": "Conference USA"
+  },
+  "western kentucky": {
+    "team_id": 144,
+    "key": "WKENT",
+    "name": "Hilltoppers",
+    "school": "Western Kentucky",
+    "full_name": "Western Kentucky Hilltoppers",
+    "conference": "Conference USA"
+  },
+  "western kentucky hilltoppers": {
+    "team_id": 144,
+    "key": "WKENT",
+    "name": "Hilltoppers",
+    "school": "Western Kentucky",
+    "full_name": "Western Kentucky Hilltoppers",
+    "conference": "Conference USA"
+  },
+  "flatl": {
+    "team_id": 145,
+    "key": "FLATL",
+    "name": "Owls",
+    "school": "Florida Atlantic",
+    "full_name": "Florida Atlantic Owls",
+    "conference": "American"
+  },
+  "florida atlantic": {
+    "team_id": 145,
+    "key": "FLATL",
+    "name": "Owls",
+    "school": "Florida Atlantic",
+    "full_name": "Florida Atlantic Owls",
+    "conference": "American"
+  },
+  "florida atlantic owls": {
+    "team_id": 145,
+    "key": "FLATL",
+    "name": "Owls",
+    "school": "Florida Atlantic",
+    "full_name": "Florida Atlantic Owls",
+    "conference": "American"
+  },
+  "fau": {
+    "team_id": 145,
+    "key": "FLATL",
+    "name": "Owls",
+    "school": "Florida Atlantic",
+    "full_name": "Florida Atlantic Owls",
+    "conference": "American"
+  },
+  "rice": {
+    "team_id": 146,
+    "key": "RICE",
+    "name": "Owls",
+    "school": "Rice",
+    "full_name": "Rice Owls",
+    "conference": "American"
+  },
+  "rice owls": {
+    "team_id": 146,
+    "key": "RICE",
+    "name": "Owls",
+    "school": "Rice",
+    "full_name": "Rice Owls",
+    "conference": "American"
+  },
+  "utsa": {
+    "team_id": 147,
+    "key": "UTSA",
+    "name": "Roadrunners",
+    "school": "UTSA",
+    "full_name": "UTSA Roadrunners",
+    "conference": "American"
+  },
+  "roadrunners": {
+    "team_id": 147,
+    "key": "UTSA",
+    "name": "Roadrunners",
+    "school": "UTSA",
+    "full_name": "UTSA Roadrunners",
+    "conference": "American"
+  },
+  "utsa roadrunners": {
+    "team_id": 147,
+    "key": "UTSA",
+    "name": "Roadrunners",
+    "school": "UTSA",
+    "full_name": "UTSA Roadrunners",
+    "conference": "American"
+  },
+  "valp": {
+    "team_id": 148,
+    "key": "VALP",
+    "name": "Beacons",
+    "school": "Valparaiso",
+    "full_name": "Valparaiso Beacons",
+    "conference": null
+  },
+  "beacons": {
+    "team_id": 148,
+    "key": "VALP",
+    "name": "Beacons",
+    "school": "Valparaiso",
+    "full_name": "Valparaiso Beacons",
+    "conference": null
+  },
+  "valparaiso": {
+    "team_id": 148,
+    "key": "VALP",
+    "name": "Beacons",
+    "school": "Valparaiso",
+    "full_name": "Valparaiso Beacons",
+    "conference": null
+  },
+  "valparaiso beacons": {
+    "team_id": 148,
+    "key": "VALP",
+    "name": "Beacons",
+    "school": "Valparaiso",
+    "full_name": "Valparaiso Beacons",
+    "conference": null
+  },
+  "yngst": {
+    "team_id": 155,
+    "key": "YNGST",
+    "name": "Penguins",
+    "school": "Youngstown State",
+    "full_name": "Youngstown State Penguins",
+    "conference": null
+  },
+  "penguins": {
+    "team_id": 155,
+    "key": "YNGST",
+    "name": "Penguins",
+    "school": "Youngstown State",
+    "full_name": "Youngstown State Penguins",
+    "conference": null
+  },
+  "youngstown state": {
+    "team_id": 155,
+    "key": "YNGST",
+    "name": "Penguins",
+    "school": "Youngstown State",
+    "full_name": "Youngstown State Penguins",
+    "conference": null
+  },
+  "youngstown state penguins": {
+    "team_id": 155,
+    "key": "YNGST",
+    "name": "Penguins",
+    "school": "Youngstown State",
+    "full_name": "Youngstown State Penguins",
+    "conference": null
+  },
+  "yale": {
+    "team_id": 158,
+    "key": "YALE",
+    "name": "Bulldogs",
+    "school": "Yale",
+    "full_name": "Yale Bulldogs",
+    "conference": null
+  },
+  "yale bulldogs": {
+    "team_id": 158,
+    "key": "YALE",
+    "name": "Bulldogs",
+    "school": "Yale",
+    "full_name": "Yale Bulldogs",
+    "conference": null
+  },
+  "prnce": {
+    "team_id": 160,
+    "key": "PRNCE",
+    "name": "Tigers",
+    "school": "Princeton",
+    "full_name": "Princeton Tigers",
+    "conference": null
+  },
+  "princeton": {
+    "team_id": 160,
+    "key": "PRNCE",
+    "name": "Tigers",
+    "school": "Princeton",
+    "full_name": "Princeton Tigers",
+    "conference": null
+  },
+  "princeton tigers": {
+    "team_id": 160,
+    "key": "PRNCE",
+    "name": "Tigers",
+    "school": "Princeton",
+    "full_name": "Princeton Tigers",
+    "conference": null
+  },
+  "monm": {
+    "team_id": 166,
+    "key": "MONM",
+    "name": "Hawks",
+    "school": "Monmouth",
+    "full_name": "Monmouth Hawks",
+    "conference": null
+  },
+  "hawks": {
+    "team_id": 166,
+    "key": "MONM",
+    "name": "Hawks",
+    "school": "Monmouth",
+    "full_name": "Monmouth Hawks",
+    "conference": null
+  },
+  "monmouth": {
+    "team_id": 166,
+    "key": "MONM",
+    "name": "Hawks",
+    "school": "Monmouth",
+    "full_name": "Monmouth Hawks",
+    "conference": null
+  },
+  "monmouth hawks": {
+    "team_id": 166,
+    "key": "MONM",
+    "name": "Hawks",
+    "school": "Monmouth",
+    "full_name": "Monmouth Hawks",
+    "conference": null
+  },
+  "akron": {
+    "team_id": 177,
+    "key": "AKRON",
+    "name": "Zips",
+    "school": "Akron",
+    "full_name": "Akron Zips",
+    "conference": "Mid-American"
+  },
+  "zips": {
+    "team_id": 177,
+    "key": "AKRON",
+    "name": "Zips",
+    "school": "Akron",
+    "full_name": "Akron Zips",
+    "conference": "Mid-American"
+  },
+  "akron zips": {
+    "team_id": 177,
+    "key": "AKRON",
+    "name": "Zips",
+    "school": "Akron",
+    "full_name": "Akron Zips",
+    "conference": "Mid-American"
+  },
+  "kentst": {
+    "team_id": 178,
+    "key": "KENTST",
+    "name": "Golden Flashes",
+    "school": "Kent State",
+    "full_name": "Kent State Golden Flashes",
+    "conference": "Mid-American"
+  },
+  "golden flashes": {
+    "team_id": 178,
+    "key": "KENTST",
+    "name": "Golden Flashes",
+    "school": "Kent State",
+    "full_name": "Kent State Golden Flashes",
+    "conference": "Mid-American"
+  },
+  "kent state": {
+    "team_id": 178,
+    "key": "KENTST",
+    "name": "Golden Flashes",
+    "school": "Kent State",
+    "full_name": "Kent State Golden Flashes",
+    "conference": "Mid-American"
+  },
+  "kent state golden flashes": {
+    "team_id": 178,
+    "key": "KENTST",
+    "name": "Golden Flashes",
+    "school": "Kent State",
+    "full_name": "Kent State Golden Flashes",
+    "conference": "Mid-American"
+  },
+  "buf": {
+    "team_id": 179,
+    "key": "BUF",
+    "name": "Bulls",
+    "school": "Buffalo",
+    "full_name": "Buffalo Bulls",
+    "conference": "Mid-American"
+  },
+  "buffalo": {
+    "team_id": 179,
+    "key": "BUF",
+    "name": "Bulls",
+    "school": "Buffalo",
+    "full_name": "Buffalo Bulls",
+    "conference": "Mid-American"
+  },
+  "buffalo bulls": {
+    "team_id": 179,
+    "key": "BUF",
+    "name": "Bulls",
+    "school": "Buffalo",
+    "full_name": "Buffalo Bulls",
+    "conference": "Mid-American"
+  },
+  "ohio": {
+    "team_id": 180,
+    "key": "OHIO",
+    "name": "Bobcats",
+    "school": "Ohio",
+    "full_name": "Ohio Bobcats",
+    "conference": "Mid-American"
+  },
+  "ohio bobcats": {
+    "team_id": 180,
+    "key": "OHIO",
+    "name": "Bobcats",
+    "school": "Ohio",
+    "full_name": "Ohio Bobcats",
+    "conference": "Mid-American"
+  },
+  "bowlgr": {
+    "team_id": 181,
+    "key": "BOWLGR",
+    "name": "Falcons",
+    "school": "Bowling Green",
+    "full_name": "Bowling Green Falcons",
+    "conference": "Mid-American"
+  },
+  "falcons": {
+    "team_id": 921,
+    "key": "FAIRS",
+    "name": "Falcons",
+    "school": "Fairmont State",
+    "full_name": "Fairmont State Falcons",
+    "conference": null
+  },
+  "bowling green": {
+    "team_id": 181,
+    "key": "BOWLGR",
+    "name": "Falcons",
+    "school": "Bowling Green",
+    "full_name": "Bowling Green Falcons",
+    "conference": "Mid-American"
+  },
+  "bowling green falcons": {
+    "team_id": 181,
+    "key": "BOWLGR",
+    "name": "Falcons",
+    "school": "Bowling Green",
+    "full_name": "Bowling Green Falcons",
+    "conference": "Mid-American"
+  },
+  "miaoh": {
+    "team_id": 182,
+    "key": "MIAOH",
+    "name": "RedHawks",
+    "school": "Miami (OH)",
+    "full_name": "Miami (OH) RedHawks",
+    "conference": "Mid-American"
+  },
+  "redhawks": {
+    "team_id": 243,
+    "key": "SEMST",
+    "name": "Redhawks",
+    "school": "Southeast Missouri State",
+    "full_name": "Southeast Missouri State Redhawks",
+    "conference": null
+  },
+  "miami (oh)": {
+    "team_id": 182,
+    "key": "MIAOH",
+    "name": "RedHawks",
+    "school": "Miami (OH)",
+    "full_name": "Miami (OH) RedHawks",
+    "conference": "Mid-American"
+  },
+  "miami (oh) redhawks": {
+    "team_id": 182,
+    "key": "MIAOH",
+    "name": "RedHawks",
+    "school": "Miami (OH)",
+    "full_name": "Miami (OH) RedHawks",
+    "conference": "Mid-American"
+  },
+  "toledo": {
+    "team_id": 183,
+    "key": "TOLEDO",
+    "name": "Rockets",
+    "school": "Toledo",
+    "full_name": "Toledo Rockets",
+    "conference": "Mid-American"
+  },
+  "rockets": {
+    "team_id": 183,
+    "key": "TOLEDO",
+    "name": "Rockets",
+    "school": "Toledo",
+    "full_name": "Toledo Rockets",
+    "conference": "Mid-American"
+  },
+  "toledo rockets": {
+    "team_id": 183,
+    "key": "TOLEDO",
+    "name": "Rockets",
+    "school": "Toledo",
+    "full_name": "Toledo Rockets",
+    "conference": "Mid-American"
+  },
+  "ballst": {
+    "team_id": 184,
+    "key": "BALLST",
+    "name": "Cardinals",
+    "school": "Ball State",
+    "full_name": "Ball State Cardinals",
+    "conference": "Mid-American"
+  },
+  "ball state": {
+    "team_id": 184,
+    "key": "BALLST",
+    "name": "Cardinals",
+    "school": "Ball State",
+    "full_name": "Ball State Cardinals",
+    "conference": "Mid-American"
+  },
+  "ball state cardinals": {
+    "team_id": 184,
+    "key": "BALLST",
+    "name": "Cardinals",
+    "school": "Ball State",
+    "full_name": "Ball State Cardinals",
+    "conference": "Mid-American"
+  },
+  "cmich": {
+    "team_id": 185,
+    "key": "CMICH",
+    "name": "Chippewas",
+    "school": "Central Michigan",
+    "full_name": "Central Michigan Chippewas",
+    "conference": "Mid-American"
+  },
+  "chippewas": {
+    "team_id": 185,
+    "key": "CMICH",
+    "name": "Chippewas",
+    "school": "Central Michigan",
+    "full_name": "Central Michigan Chippewas",
+    "conference": "Mid-American"
+  },
+  "central michigan": {
+    "team_id": 185,
+    "key": "CMICH",
+    "name": "Chippewas",
+    "school": "Central Michigan",
+    "full_name": "Central Michigan Chippewas",
+    "conference": "Mid-American"
+  },
+  "central michigan chippewas": {
+    "team_id": 185,
+    "key": "CMICH",
+    "name": "Chippewas",
+    "school": "Central Michigan",
+    "full_name": "Central Michigan Chippewas",
+    "conference": "Mid-American"
+  },
+  "nill": {
+    "team_id": 186,
+    "key": "NILL",
+    "name": "Huskies",
+    "school": "Northern Illinois",
+    "full_name": "Northern Illinois Huskies",
+    "conference": "Mid-American"
+  },
+  "northern illinois": {
+    "team_id": 186,
+    "key": "NILL",
+    "name": "Huskies",
+    "school": "Northern Illinois",
+    "full_name": "Northern Illinois Huskies",
+    "conference": "Mid-American"
+  },
+  "northern illinois huskies": {
+    "team_id": 186,
+    "key": "NILL",
+    "name": "Huskies",
+    "school": "Northern Illinois",
+    "full_name": "Northern Illinois Huskies",
+    "conference": "Mid-American"
+  },
+  "niu": {
+    "team_id": 186,
+    "key": "NILL",
+    "name": "Huskies",
+    "school": "Northern Illinois",
+    "full_name": "Northern Illinois Huskies",
+    "conference": "Mid-American"
+  },
+  "emich": {
+    "team_id": 187,
+    "key": "EMICH",
+    "name": "Eagles",
+    "school": "Eastern Michigan",
+    "full_name": "Eastern Michigan Eagles",
+    "conference": "Mid-American"
+  },
+  "eastern michigan": {
+    "team_id": 187,
+    "key": "EMICH",
+    "name": "Eagles",
+    "school": "Eastern Michigan",
+    "full_name": "Eastern Michigan Eagles",
+    "conference": "Mid-American"
+  },
+  "eastern michigan eagles": {
+    "team_id": 187,
+    "key": "EMICH",
+    "name": "Eagles",
+    "school": "Eastern Michigan",
+    "full_name": "Eastern Michigan Eagles",
+    "conference": "Mid-American"
+  },
+  "wmich": {
+    "team_id": 188,
+    "key": "WMICH",
+    "name": "Broncos",
+    "school": "Western Michigan",
+    "full_name": "Western Michigan Broncos",
+    "conference": "Mid-American"
+  },
+  "broncos": {
+    "team_id": 215,
+    "key": "BOISE",
+    "name": "Broncos",
+    "school": "Boise State",
+    "full_name": "Boise State Broncos",
+    "conference": "Mountain West"
+  },
+  "western michigan": {
+    "team_id": 188,
+    "key": "WMICH",
+    "name": "Broncos",
+    "school": "Western Michigan",
+    "full_name": "Western Michigan Broncos",
+    "conference": "Mid-American"
+  },
+  "western michigan broncos": {
+    "team_id": 188,
+    "key": "WMICH",
+    "name": "Broncos",
+    "school": "Western Michigan",
+    "full_name": "Western Michigan Broncos",
+    "conference": "Mid-American"
+  },
+  "hamp": {
+    "team_id": 189,
+    "key": "HAMP",
+    "name": "Pirates",
+    "school": "Hampton",
+    "full_name": "Hampton Pirates",
+    "conference": null
+  },
+  "hampton": {
+    "team_id": 189,
+    "key": "HAMP",
+    "name": "Pirates",
+    "school": "Hampton",
+    "full_name": "Hampton Pirates",
+    "conference": null
+  },
+  "hampton pirates": {
+    "team_id": 189,
+    "key": "HAMP",
+    "name": "Pirates",
+    "school": "Hampton",
+    "full_name": "Hampton Pirates",
+    "conference": null
+  },
+  "scarst": {
+    "team_id": 190,
+    "key": "SCARST",
+    "name": "Bulldogs",
+    "school": "South Carolina State",
+    "full_name": "South Carolina State Bulldogs",
+    "conference": null
+  },
+  "south carolina state": {
+    "team_id": 190,
+    "key": "SCARST",
+    "name": "Bulldogs",
+    "school": "South Carolina State",
+    "full_name": "South Carolina State Bulldogs",
+    "conference": null
+  },
+  "south carolina state bulldogs": {
+    "team_id": 190,
+    "key": "SCARST",
+    "name": "Bulldogs",
+    "school": "South Carolina State",
+    "full_name": "South Carolina State Bulldogs",
+    "conference": null
+  },
+  "norfst": {
+    "team_id": 191,
+    "key": "NORFST",
+    "name": "Spartans",
+    "school": "Norfolk State",
+    "full_name": "Norfolk State Spartans",
+    "conference": null
+  },
+  "norfolk state": {
+    "team_id": 191,
+    "key": "NORFST",
+    "name": "Spartans",
+    "school": "Norfolk State",
+    "full_name": "Norfolk State Spartans",
+    "conference": null
+  },
+  "norfolk state spartans": {
+    "team_id": 191,
+    "key": "NORFST",
+    "name": "Spartans",
+    "school": "Norfolk State",
+    "full_name": "Norfolk State Spartans",
+    "conference": null
+  },
+  "bcook": {
+    "team_id": 192,
+    "key": "BCOOK",
+    "name": "Wildcats",
+    "school": "Bethune-Cookman",
+    "full_name": "Bethune-Cookman Wildcats",
+    "conference": null
+  },
+  "bethune-cookman": {
+    "team_id": 192,
+    "key": "BCOOK",
+    "name": "Wildcats",
+    "school": "Bethune-Cookman",
+    "full_name": "Bethune-Cookman Wildcats",
+    "conference": null
+  },
+  "bethune-cookman wildcats": {
+    "team_id": 192,
+    "key": "BCOOK",
+    "name": "Wildcats",
+    "school": "Bethune-Cookman",
+    "full_name": "Bethune-Cookman Wildcats",
+    "conference": null
+  },
+  "savst": {
+    "team_id": 194,
+    "key": "SAVST",
+    "name": "Tigers",
+    "school": "Savannah State",
+    "full_name": "Savannah State Tigers",
+    "conference": null
+  },
+  "savannah state": {
+    "team_id": 194,
+    "key": "SAVST",
+    "name": "Tigers",
+    "school": "Savannah State",
+    "full_name": "Savannah State Tigers",
+    "conference": null
+  },
+  "savannah state tigers": {
+    "team_id": 194,
+    "key": "SAVST",
+    "name": "Tigers",
+    "school": "Savannah State",
+    "full_name": "Savannah State Tigers",
+    "conference": null
+  },
+  "howrd": {
+    "team_id": 195,
+    "key": "HOWRD",
+    "name": "Bison",
+    "school": "Howard",
+    "full_name": "Howard Bison",
+    "conference": null
+  },
+  "bison": {
+    "team_id": 1003,
+    "key": "OBB",
+    "name": "Bison",
+    "school": "Oklahoma Baptist",
+    "full_name": "Oklahoma Baptist Bison",
+    "conference": null
+  },
+  "howard": {
+    "team_id": 195,
+    "key": "HOWRD",
+    "name": "Bison",
+    "school": "Howard",
+    "full_name": "Howard Bison",
+    "conference": null
+  },
+  "howard bison": {
+    "team_id": 195,
+    "key": "HOWRD",
+    "name": "Bison",
+    "school": "Howard",
+    "full_name": "Howard Bison",
+    "conference": null
+  },
+  "ncat": {
+    "team_id": 196,
+    "key": "NCAT",
+    "name": "Aggies",
+    "school": "North Carolina A&T",
+    "full_name": "North Carolina A&T Aggies",
+    "conference": null
+  },
+  "north carolina a&t": {
+    "team_id": 196,
+    "key": "NCAT",
+    "name": "Aggies",
+    "school": "North Carolina A&T",
+    "full_name": "North Carolina A&T Aggies",
+    "conference": null
+  },
+  "north carolina a&t aggies": {
+    "team_id": 196,
+    "key": "NCAT",
+    "name": "Aggies",
+    "school": "North Carolina A&T",
+    "full_name": "North Carolina A&T Aggies",
+    "conference": null
+  },
+  "ncc": {
+    "team_id": 197,
+    "key": "NCC",
+    "name": "Eagles",
+    "school": "North Carolina Central",
+    "full_name": "North Carolina Central Eagles",
+    "conference": null
+  },
+  "north carolina central": {
+    "team_id": 197,
+    "key": "NCC",
+    "name": "Eagles",
+    "school": "North Carolina Central",
+    "full_name": "North Carolina Central Eagles",
+    "conference": null
+  },
+  "north carolina central eagles": {
+    "team_id": 197,
+    "key": "NCC",
+    "name": "Eagles",
+    "school": "North Carolina Central",
+    "full_name": "North Carolina Central Eagles",
+    "conference": null
+  },
+  "flam": {
+    "team_id": 198,
+    "key": "FLAM",
+    "name": "Rattlers",
+    "school": "Florida A&M",
+    "full_name": "Florida A&M Rattlers",
+    "conference": null
+  },
+  "rattlers": {
+    "team_id": 198,
+    "key": "FLAM",
+    "name": "Rattlers",
+    "school": "Florida A&M",
+    "full_name": "Florida A&M Rattlers",
+    "conference": null
+  },
+  "florida a&m": {
+    "team_id": 198,
+    "key": "FLAM",
+    "name": "Rattlers",
+    "school": "Florida A&M",
+    "full_name": "Florida A&M Rattlers",
+    "conference": null
+  },
+  "florida a&m rattlers": {
+    "team_id": 198,
+    "key": "FLAM",
+    "name": "Rattlers",
+    "school": "Florida A&M",
+    "full_name": "Florida A&M Rattlers",
+    "conference": null
+  },
+  "morgst": {
+    "team_id": 199,
+    "key": "MORGST",
+    "name": "Bears",
+    "school": "Morgan State",
+    "full_name": "Morgan State Bears",
+    "conference": null
+  },
+  "morgan state": {
+    "team_id": 199,
+    "key": "MORGST",
+    "name": "Bears",
+    "school": "Morgan State",
+    "full_name": "Morgan State Bears",
+    "conference": null
+  },
+  "morgan state bears": {
+    "team_id": 199,
+    "key": "MORGST",
+    "name": "Bears",
+    "school": "Morgan State",
+    "full_name": "Morgan State Bears",
+    "conference": null
+  },
+  "delst": {
+    "team_id": 201,
+    "key": "DELST",
+    "name": "Hornets",
+    "school": "Delaware State",
+    "full_name": "Delaware State Hornets",
+    "conference": null
+  },
+  "delaware state": {
+    "team_id": 201,
+    "key": "DELST",
+    "name": "Hornets",
+    "school": "Delaware State",
+    "full_name": "Delaware State Hornets",
+    "conference": null
+  },
+  "delaware state hornets": {
+    "team_id": 201,
+    "key": "DELST",
+    "name": "Hornets",
+    "school": "Delaware State",
+    "full_name": "Delaware State Hornets",
+    "conference": null
+  },
+  "illst": {
+    "team_id": 204,
+    "key": "ILLST",
+    "name": "Redbirds",
+    "school": "Illinois State",
+    "full_name": "Illinois State Redbirds",
+    "conference": null
+  },
+  "redbirds": {
+    "team_id": 204,
+    "key": "ILLST",
+    "name": "Redbirds",
+    "school": "Illinois State",
+    "full_name": "Illinois State Redbirds",
+    "conference": null
+  },
+  "illinois state": {
+    "team_id": 204,
+    "key": "ILLST",
+    "name": "Redbirds",
+    "school": "Illinois State",
+    "full_name": "Illinois State Redbirds",
+    "conference": null
+  },
+  "illinois state redbirds": {
+    "team_id": 204,
+    "key": "ILLST",
+    "name": "Redbirds",
+    "school": "Illinois State",
+    "full_name": "Illinois State Redbirds",
+    "conference": null
+  },
+  "sill": {
+    "team_id": 205,
+    "key": "SILL",
+    "name": "Salukis",
+    "school": "Southern Illinois",
+    "full_name": "Southern Illinois Salukis",
+    "conference": null
+  },
+  "salukis": {
+    "team_id": 205,
+    "key": "SILL",
+    "name": "Salukis",
+    "school": "Southern Illinois",
+    "full_name": "Southern Illinois Salukis",
+    "conference": null
+  },
+  "southern illinois": {
+    "team_id": 205,
+    "key": "SILL",
+    "name": "Salukis",
+    "school": "Southern Illinois",
+    "full_name": "Southern Illinois Salukis",
+    "conference": null
+  },
+  "southern illinois salukis": {
+    "team_id": 205,
+    "key": "SILL",
+    "name": "Salukis",
+    "school": "Southern Illinois",
+    "full_name": "Southern Illinois Salukis",
+    "conference": null
+  },
+  "niowa": {
+    "team_id": 206,
+    "key": "NIOWA",
+    "name": "Panthers",
+    "school": "Northern Iowa",
+    "full_name": "Northern Iowa Panthers",
+    "conference": null
+  },
+  "northern iowa": {
+    "team_id": 206,
+    "key": "NIOWA",
+    "name": "Panthers",
+    "school": "Northern Iowa",
+    "full_name": "Northern Iowa Panthers",
+    "conference": null
+  },
+  "northern iowa panthers": {
+    "team_id": 206,
+    "key": "NIOWA",
+    "name": "Panthers",
+    "school": "Northern Iowa",
+    "full_name": "Northern Iowa Panthers",
+    "conference": null
+  },
+  "uni": {
+    "team_id": 206,
+    "key": "NIOWA",
+    "name": "Panthers",
+    "school": "Northern Iowa",
+    "full_name": "Northern Iowa Panthers",
+    "conference": null
+  },
+  "indst": {
+    "team_id": 207,
+    "key": "INDST",
+    "name": "Sycamores",
+    "school": "Indiana State",
+    "full_name": "Indiana State Sycamores",
+    "conference": null
+  },
+  "sycamores": {
+    "team_id": 207,
+    "key": "INDST",
+    "name": "Sycamores",
+    "school": "Indiana State",
+    "full_name": "Indiana State Sycamores",
+    "conference": null
+  },
+  "indiana state": {
+    "team_id": 207,
+    "key": "INDST",
+    "name": "Sycamores",
+    "school": "Indiana State",
+    "full_name": "Indiana State Sycamores",
+    "conference": null
+  },
+  "indiana state sycamores": {
+    "team_id": 207,
+    "key": "INDST",
+    "name": "Sycamores",
+    "school": "Indiana State",
+    "full_name": "Indiana State Sycamores",
+    "conference": null
+  },
+  "msrst": {
+    "team_id": 208,
+    "key": "MSRST",
+    "name": "Bears",
+    "school": "Missouri State",
+    "full_name": "Missouri State Bears",
+    "conference": "Conference USA"
+  },
+  "missouri state": {
+    "team_id": 208,
+    "key": "MSRST",
+    "name": "Bears",
+    "school": "Missouri State",
+    "full_name": "Missouri State Bears",
+    "conference": "Conference USA"
+  },
+  "missouri state bears": {
+    "team_id": 208,
+    "key": "MSRST",
+    "name": "Bears",
+    "school": "Missouri State",
+    "full_name": "Missouri State Bears",
+    "conference": "Conference USA"
+  },
+  "drake": {
+    "team_id": 211,
+    "key": "DRAKE",
+    "name": "Bulldogs",
+    "school": "Drake",
+    "full_name": "Drake Bulldogs",
+    "conference": null
+  },
+  "drake bulldogs": {
+    "team_id": 211,
+    "key": "DRAKE",
+    "name": "Bulldogs",
+    "school": "Drake",
+    "full_name": "Drake Bulldogs",
+    "conference": null
+  },
+  "sdst": {
+    "team_id": 212,
+    "key": "SDST",
+    "name": "Aztecs",
+    "school": "San Diego State",
+    "full_name": "San Diego State Aztecs",
+    "conference": "Mountain West"
+  },
+  "aztecs": {
+    "team_id": 212,
+    "key": "SDST",
+    "name": "Aztecs",
+    "school": "San Diego State",
+    "full_name": "San Diego State Aztecs",
+    "conference": "Mountain West"
+  },
+  "san diego state": {
+    "team_id": 212,
+    "key": "SDST",
+    "name": "Aztecs",
+    "school": "San Diego State",
+    "full_name": "San Diego State Aztecs",
+    "conference": "Mountain West"
+  },
+  "san diego state aztecs": {
+    "team_id": 212,
+    "key": "SDST",
+    "name": "Aztecs",
+    "school": "San Diego State",
+    "full_name": "San Diego State Aztecs",
+    "conference": "Mountain West"
+  },
+  "sdsu": {
+    "team_id": 212,
+    "key": "SDST",
+    "name": "Aztecs",
+    "school": "San Diego State",
+    "full_name": "San Diego State Aztecs",
+    "conference": "Mountain West"
+  },
+  "frest": {
+    "team_id": 213,
+    "key": "FREST",
+    "name": "Bulldogs",
+    "school": "Fresno State",
+    "full_name": "Fresno State Bulldogs",
+    "conference": "Mountain West"
+  },
+  "fresno state": {
+    "team_id": 213,
+    "key": "FREST",
+    "name": "Bulldogs",
+    "school": "Fresno State",
+    "full_name": "Fresno State Bulldogs",
+    "conference": "Mountain West"
+  },
+  "fresno state bulldogs": {
+    "team_id": 213,
+    "key": "FREST",
+    "name": "Bulldogs",
+    "school": "Fresno State",
+    "full_name": "Fresno State Bulldogs",
+    "conference": "Mountain West"
+  },
+  "fresno": {
+    "team_id": 213,
+    "key": "FREST",
+    "name": "Bulldogs",
+    "school": "Fresno State",
+    "full_name": "Fresno State Bulldogs",
+    "conference": "Mountain West"
+  },
+  "nmx": {
+    "team_id": 214,
+    "key": "NMX",
+    "name": "Lobos",
+    "school": "New Mexico",
+    "full_name": "New Mexico Lobos",
+    "conference": "Mountain West"
+  },
+  "lobos": {
+    "team_id": 214,
+    "key": "NMX",
+    "name": "Lobos",
+    "school": "New Mexico",
+    "full_name": "New Mexico Lobos",
+    "conference": "Mountain West"
+  },
+  "new mexico": {
+    "team_id": 214,
+    "key": "NMX",
+    "name": "Lobos",
+    "school": "New Mexico",
+    "full_name": "New Mexico Lobos",
+    "conference": "Mountain West"
+  },
+  "new mexico lobos": {
+    "team_id": 214,
+    "key": "NMX",
+    "name": "Lobos",
+    "school": "New Mexico",
+    "full_name": "New Mexico Lobos",
+    "conference": "Mountain West"
+  },
+  "unm": {
+    "team_id": 214,
+    "key": "NMX",
+    "name": "Lobos",
+    "school": "New Mexico",
+    "full_name": "New Mexico Lobos",
+    "conference": "Mountain West"
+  },
+  "boise": {
+    "team_id": 215,
+    "key": "BOISE",
+    "name": "Broncos",
+    "school": "Boise State",
+    "full_name": "Boise State Broncos",
+    "conference": "Mountain West"
+  },
+  "boise state": {
+    "team_id": 215,
+    "key": "BOISE",
+    "name": "Broncos",
+    "school": "Boise State",
+    "full_name": "Boise State Broncos",
+    "conference": "Mountain West"
+  },
+  "boise state broncos": {
+    "team_id": 215,
+    "key": "BOISE",
+    "name": "Broncos",
+    "school": "Boise State",
+    "full_name": "Boise State Broncos",
+    "conference": "Mountain West"
+  },
+  "nevada": {
+    "team_id": 216,
+    "key": "NEVADA",
+    "name": "Wolf Pack",
+    "school": "Nevada",
+    "full_name": "Nevada Wolf Pack",
+    "conference": "Mountain West"
+  },
+  "wolf pack": {
+    "team_id": 216,
+    "key": "NEVADA",
+    "name": "Wolf Pack",
+    "school": "Nevada",
+    "full_name": "Nevada Wolf Pack",
+    "conference": "Mountain West"
+  },
+  "nevada wolf pack": {
+    "team_id": 216,
+    "key": "NEVADA",
+    "name": "Wolf Pack",
+    "school": "Nevada",
+    "full_name": "Nevada Wolf Pack",
+    "conference": "Mountain West"
+  },
+  "colst": {
+    "team_id": 217,
+    "key": "COLST",
+    "name": "Rams",
+    "school": "Colorado State",
+    "full_name": "Colorado State Rams",
+    "conference": "Mountain West"
+  },
+  "colorado state": {
+    "team_id": 217,
+    "key": "COLST",
+    "name": "Rams",
+    "school": "Colorado State",
+    "full_name": "Colorado State Rams",
+    "conference": "Mountain West"
+  },
+  "colorado state rams": {
+    "team_id": 217,
+    "key": "COLST",
+    "name": "Rams",
+    "school": "Colorado State",
+    "full_name": "Colorado State Rams",
+    "conference": "Mountain West"
+  },
+  "unlv": {
+    "team_id": 218,
+    "key": "UNLV",
+    "name": "Runnin' Rebels",
+    "school": "UNLV",
+    "full_name": "UNLV Runnin' Rebels",
+    "conference": "Mountain West"
+  },
+  "runnin' rebels": {
+    "team_id": 218,
+    "key": "UNLV",
+    "name": "Runnin' Rebels",
+    "school": "UNLV",
+    "full_name": "UNLV Runnin' Rebels",
+    "conference": "Mountain West"
+  },
+  "unlv runnin' rebels": {
+    "team_id": 218,
+    "key": "UNLV",
+    "name": "Runnin' Rebels",
+    "school": "UNLV",
+    "full_name": "UNLV Runnin' Rebels",
+    "conference": "Mountain West"
+  },
+  "wyom": {
+    "team_id": 219,
+    "key": "WYOM",
+    "name": "Cowboys",
+    "school": "Wyoming",
+    "full_name": "Wyoming Cowboys",
+    "conference": "Mountain West"
+  },
+  "wyoming": {
+    "team_id": 219,
+    "key": "WYOM",
+    "name": "Cowboys",
+    "school": "Wyoming",
+    "full_name": "Wyoming Cowboys",
+    "conference": "Mountain West"
+  },
+  "wyoming cowboys": {
+    "team_id": 219,
+    "key": "WYOM",
+    "name": "Cowboys",
+    "school": "Wyoming",
+    "full_name": "Wyoming Cowboys",
+    "conference": "Mountain West"
+  },
+  "utahst": {
+    "team_id": 220,
+    "key": "UTAHST",
+    "name": "Aggies",
+    "school": "Utah State",
+    "full_name": "Utah State Aggies",
+    "conference": "Mountain West"
+  },
+  "utah state": {
+    "team_id": 220,
+    "key": "UTAHST",
+    "name": "Aggies",
+    "school": "Utah State",
+    "full_name": "Utah State Aggies",
+    "conference": "Mountain West"
+  },
+  "utah state aggies": {
+    "team_id": 220,
+    "key": "UTAHST",
+    "name": "Aggies",
+    "school": "Utah State",
+    "full_name": "Utah State Aggies",
+    "conference": "Mountain West"
+  },
+  "usu": {
+    "team_id": 220,
+    "key": "UTAHST",
+    "name": "Aggies",
+    "school": "Utah State",
+    "full_name": "Utah State Aggies",
+    "conference": "Mountain West"
+  },
+  "airf": {
+    "team_id": 221,
+    "key": "AIRF",
+    "name": "Falcons",
+    "school": "Air Force",
+    "full_name": "Air Force Falcons",
+    "conference": "Mountain West"
+  },
+  "air force": {
+    "team_id": 221,
+    "key": "AIRF",
+    "name": "Falcons",
+    "school": "Air Force",
+    "full_name": "Air Force Falcons",
+    "conference": "Mountain West"
+  },
+  "air force falcons": {
+    "team_id": 221,
+    "key": "AIRF",
+    "name": "Falcons",
+    "school": "Air Force",
+    "full_name": "Air Force Falcons",
+    "conference": "Mountain West"
+  },
+  "air": {
+    "team_id": 221,
+    "key": "AIRF",
+    "name": "Falcons",
+    "school": "Air Force",
+    "full_name": "Air Force Falcons",
+    "conference": "Mountain West"
+  },
+  "sjst": {
+    "team_id": 222,
+    "key": "SJST",
+    "name": "Spartans",
+    "school": "San Jose State",
+    "full_name": "San Jose State Spartans",
+    "conference": "Mountain West"
+  },
+  "san jose state": {
+    "team_id": 222,
+    "key": "SJST",
+    "name": "Spartans",
+    "school": "San Jose State",
+    "full_name": "San Jose State Spartans",
+    "conference": "Mountain West"
+  },
+  "san jose state spartans": {
+    "team_id": 222,
+    "key": "SJST",
+    "name": "Spartans",
+    "school": "San Jose State",
+    "full_name": "San Jose State Spartans",
+    "conference": "Mountain West"
+  },
+  "sjsu": {
+    "team_id": 222,
+    "key": "SJST",
+    "name": "Spartans",
+    "school": "San Jose State",
+    "full_name": "San Jose State Spartans",
+    "conference": "Mountain West"
+  },
+  "wag": {
+    "team_id": 223,
+    "key": "WAG",
+    "name": "Seahawks",
+    "school": "Wagner",
+    "full_name": "Wagner Seahawks",
+    "conference": null
+  },
+  "wagner": {
+    "team_id": 223,
+    "key": "WAG",
+    "name": "Seahawks",
+    "school": "Wagner",
+    "full_name": "Wagner Seahawks",
+    "conference": null
+  },
+  "wagner seahawks": {
+    "team_id": 223,
+    "key": "WAG",
+    "name": "Seahawks",
+    "school": "Wagner",
+    "full_name": "Wagner Seahawks",
+    "conference": null
+  },
+  "stfpa": {
+    "team_id": 225,
+    "key": "STFPA",
+    "name": "Red Flash",
+    "school": "St. Francis (PA)",
+    "full_name": "St. Francis (PA) Red Flash",
+    "conference": null
+  },
+  "red flash": {
+    "team_id": 225,
+    "key": "STFPA",
+    "name": "Red Flash",
+    "school": "St. Francis (PA)",
+    "full_name": "St. Francis (PA) Red Flash",
+    "conference": null
+  },
+  "st. francis (pa)": {
+    "team_id": 225,
+    "key": "STFPA",
+    "name": "Red Flash",
+    "school": "St. Francis (PA)",
+    "full_name": "St. Francis (PA) Red Flash",
+    "conference": null
+  },
+  "st. francis (pa) red flash": {
+    "team_id": 225,
+    "key": "STFPA",
+    "name": "Red Flash",
+    "school": "St. Francis (PA)",
+    "full_name": "St. Francis (PA) Red Flash",
+    "conference": null
+  },
+  "sfu": {
+    "team_id": 225,
+    "key": "STFPA",
+    "name": "Red Flash",
+    "school": "St. Francis (PA)",
+    "full_name": "St. Francis (PA) Red Flash",
+    "conference": null
+  },
+  "sacred": {
+    "team_id": 227,
+    "key": "SACRED",
+    "name": "Pioneers",
+    "school": "Sacred Heart",
+    "full_name": "Sacred Heart Pioneers",
+    "conference": null
+  },
+  "pioneers": {
+    "team_id": 1058,
+    "key": "TUSC",
+    "name": "Pioneers",
+    "school": "Tusculum",
+    "full_name": "Tusculum Pioneers",
+    "conference": null
+  },
+  "sacred heart": {
+    "team_id": 227,
+    "key": "SACRED",
+    "name": "Pioneers",
+    "school": "Sacred Heart",
+    "full_name": "Sacred Heart Pioneers",
+    "conference": null
+  },
+  "sacred heart pioneers": {
+    "team_id": 227,
+    "key": "SACRED",
+    "name": "Pioneers",
+    "school": "Sacred Heart",
+    "full_name": "Sacred Heart Pioneers",
+    "conference": null
+  },
+  "liub": {
+    "team_id": 229,
+    "key": "LIUB",
+    "name": "Sharks",
+    "school": "LIU",
+    "full_name": "LIU Sharks",
+    "conference": null
+  },
+  "sharks": {
+    "team_id": 229,
+    "key": "LIUB",
+    "name": "Sharks",
+    "school": "LIU",
+    "full_name": "LIU Sharks",
+    "conference": null
+  },
+  "liu": {
+    "team_id": 229,
+    "key": "LIUB",
+    "name": "Sharks",
+    "school": "LIU",
+    "full_name": "LIU Sharks",
+    "conference": null
+  },
+  "liu sharks": {
+    "team_id": 229,
+    "key": "LIUB",
+    "name": "Sharks",
+    "school": "LIU",
+    "full_name": "LIU Sharks",
+    "conference": null
+  },
+  "robms": {
+    "team_id": 230,
+    "key": "ROBMS",
+    "name": "Colonials",
+    "school": "Robert Morris",
+    "full_name": "Robert Morris Colonials",
+    "conference": null
+  },
+  "colonials": {
+    "team_id": 230,
+    "key": "ROBMS",
+    "name": "Colonials",
+    "school": "Robert Morris",
+    "full_name": "Robert Morris Colonials",
+    "conference": null
+  },
+  "robert morris": {
+    "team_id": 230,
+    "key": "ROBMS",
+    "name": "Colonials",
+    "school": "Robert Morris",
+    "full_name": "Robert Morris Colonials",
+    "conference": null
+  },
+  "robert morris colonials": {
+    "team_id": 230,
+    "key": "ROBMS",
+    "name": "Colonials",
+    "school": "Robert Morris",
+    "full_name": "Robert Morris Colonials",
+    "conference": null
+  },
+  "rmu": {
+    "team_id": 230,
+    "key": "ROBMS",
+    "name": "Colonials",
+    "school": "Robert Morris",
+    "full_name": "Robert Morris Colonials",
+    "conference": null
+  },
+  "bryant": {
+    "team_id": 231,
+    "key": "BRYANT",
+    "name": "Bulldogs",
+    "school": "Bryant",
+    "full_name": "Bryant Bulldogs",
+    "conference": null
+  },
+  "bryant bulldogs": {
+    "team_id": 231,
+    "key": "BRYANT",
+    "name": "Bulldogs",
+    "school": "Bryant",
+    "full_name": "Bryant Bulldogs",
+    "conference": null
+  },
+  "cencon": {
+    "team_id": 232,
+    "key": "CENCON",
+    "name": "Blue Devils",
+    "school": "Central Connecticut State",
+    "full_name": "Central Connecticut State Blue Devils",
+    "conference": null
+  },
+  "central connecticut state": {
+    "team_id": 232,
+    "key": "CENCON",
+    "name": "Blue Devils",
+    "school": "Central Connecticut State",
+    "full_name": "Central Connecticut State Blue Devils",
+    "conference": null
+  },
+  "central connecticut state blue devils": {
+    "team_id": 232,
+    "key": "CENCON",
+    "name": "Blue Devils",
+    "school": "Central Connecticut State",
+    "full_name": "Central Connecticut State Blue Devils",
+    "conference": null
+  },
+  "tentch": {
+    "team_id": 234,
+    "key": "TENTCH",
+    "name": "Golden Eagles",
+    "school": "Tennessee Tech",
+    "full_name": "Tennessee Tech Golden Eagles",
+    "conference": null
+  },
+  "tennessee tech": {
+    "team_id": 234,
+    "key": "TENTCH",
+    "name": "Golden Eagles",
+    "school": "Tennessee Tech",
+    "full_name": "Tennessee Tech Golden Eagles",
+    "conference": null
+  },
+  "tennessee tech golden eagles": {
+    "team_id": 234,
+    "key": "TENTCH",
+    "name": "Golden Eagles",
+    "school": "Tennessee Tech",
+    "full_name": "Tennessee Tech Golden Eagles",
+    "conference": null
+  },
+  "tntech": {
+    "team_id": 234,
+    "key": "TENTCH",
+    "name": "Golden Eagles",
+    "school": "Tennessee Tech",
+    "full_name": "Tennessee Tech Golden Eagles",
+    "conference": null
+  },
+  "tenst": {
+    "team_id": 235,
+    "key": "TENST",
+    "name": "Tigers",
+    "school": "Tennessee State",
+    "full_name": "Tennessee State Tigers",
+    "conference": null
+  },
+  "tennessee state": {
+    "team_id": 235,
+    "key": "TENST",
+    "name": "Tigers",
+    "school": "Tennessee State",
+    "full_name": "Tennessee State Tigers",
+    "conference": null
+  },
+  "tennessee state tigers": {
+    "team_id": 235,
+    "key": "TENST",
+    "name": "Tigers",
+    "school": "Tennessee State",
+    "full_name": "Tennessee State Tigers",
+    "conference": null
+  },
+  "tnst": {
+    "team_id": 235,
+    "key": "TENST",
+    "name": "Tigers",
+    "school": "Tennessee State",
+    "full_name": "Tennessee State Tigers",
+    "conference": null
+  },
+  "ekent": {
+    "team_id": 237,
+    "key": "EKENT",
+    "name": "Colonels",
+    "school": "Eastern Kentucky",
+    "full_name": "Eastern Kentucky Colonels",
+    "conference": null
+  },
+  "colonels": {
+    "team_id": 302,
+    "key": "NICHLS",
+    "name": "Colonels",
+    "school": "Nicholls",
+    "full_name": "Nicholls Colonels",
+    "conference": null
+  },
+  "eastern kentucky": {
+    "team_id": 237,
+    "key": "EKENT",
+    "name": "Colonels",
+    "school": "Eastern Kentucky",
+    "full_name": "Eastern Kentucky Colonels",
+    "conference": null
+  },
+  "eastern kentucky colonels": {
+    "team_id": 237,
+    "key": "EKENT",
+    "name": "Colonels",
+    "school": "Eastern Kentucky",
+    "full_name": "Eastern Kentucky Colonels",
+    "conference": null
+  },
+  "jaxst": {
+    "team_id": 238,
+    "key": "JAXST",
+    "name": "Gamecocks",
+    "school": "Jacksonville State",
+    "full_name": "Jacksonville State Gamecocks",
+    "conference": "Conference USA"
+  },
+  "gamecocks": {
+    "team_id": 267,
+    "key": "SC",
+    "name": "Gamecocks",
+    "school": "South Carolina",
+    "full_name": "South Carolina Gamecocks",
+    "conference": "Southeastern"
+  },
+  "jacksonville state": {
+    "team_id": 238,
+    "key": "JAXST",
+    "name": "Gamecocks",
+    "school": "Jacksonville State",
+    "full_name": "Jacksonville State Gamecocks",
+    "conference": "Conference USA"
+  },
+  "jacksonville state gamecocks": {
+    "team_id": 238,
+    "key": "JAXST",
+    "name": "Gamecocks",
+    "school": "Jacksonville State",
+    "full_name": "Jacksonville State Gamecocks",
+    "conference": "Conference USA"
+  },
+  "jsu": {
+    "team_id": 238,
+    "key": "JAXST",
+    "name": "Gamecocks",
+    "school": "Jacksonville State",
+    "full_name": "Jacksonville State Gamecocks",
+    "conference": "Conference USA"
+  },
+  "eill": {
+    "team_id": 239,
+    "key": "EILL",
+    "name": "Panthers",
+    "school": "Eastern Illinois",
+    "full_name": "Eastern Illinois Panthers",
+    "conference": null
+  },
+  "eastern illinois": {
+    "team_id": 239,
+    "key": "EILL",
+    "name": "Panthers",
+    "school": "Eastern Illinois",
+    "full_name": "Eastern Illinois Panthers",
+    "conference": null
+  },
+  "eastern illinois panthers": {
+    "team_id": 239,
+    "key": "EILL",
+    "name": "Panthers",
+    "school": "Eastern Illinois",
+    "full_name": "Eastern Illinois Panthers",
+    "conference": null
+  },
+  "murst": {
+    "team_id": 240,
+    "key": "MURST",
+    "name": "Racers",
+    "school": "Murray State",
+    "full_name": "Murray State Racers",
+    "conference": null
+  },
+  "racers": {
+    "team_id": 240,
+    "key": "MURST",
+    "name": "Racers",
+    "school": "Murray State",
+    "full_name": "Murray State Racers",
+    "conference": null
+  },
+  "murray state": {
+    "team_id": 240,
+    "key": "MURST",
+    "name": "Racers",
+    "school": "Murray State",
+    "full_name": "Murray State Racers",
+    "conference": null
+  },
+  "murray state racers": {
+    "team_id": 240,
+    "key": "MURST",
+    "name": "Racers",
+    "school": "Murray State",
+    "full_name": "Murray State Racers",
+    "conference": null
+  },
+  "tmrt": {
+    "team_id": 241,
+    "key": "TMRT",
+    "name": "Skyhawks",
+    "school": "UT Martin",
+    "full_name": "UT Martin Skyhawks",
+    "conference": null
+  },
+  "skyhawks": {
+    "team_id": 241,
+    "key": "TMRT",
+    "name": "Skyhawks",
+    "school": "UT Martin",
+    "full_name": "UT Martin Skyhawks",
+    "conference": null
+  },
+  "ut martin": {
+    "team_id": 241,
+    "key": "TMRT",
+    "name": "Skyhawks",
+    "school": "UT Martin",
+    "full_name": "UT Martin Skyhawks",
+    "conference": null
+  },
+  "ut martin skyhawks": {
+    "team_id": 241,
+    "key": "TMRT",
+    "name": "Skyhawks",
+    "school": "UT Martin",
+    "full_name": "UT Martin Skyhawks",
+    "conference": null
+  },
+  "ausp": {
+    "team_id": 242,
+    "key": "AUSP",
+    "name": "Governors",
+    "school": "Austin Peay",
+    "full_name": "Austin Peay Governors",
+    "conference": null
+  },
+  "governors": {
+    "team_id": 242,
+    "key": "AUSP",
+    "name": "Governors",
+    "school": "Austin Peay",
+    "full_name": "Austin Peay Governors",
+    "conference": null
+  },
+  "austin peay": {
+    "team_id": 242,
+    "key": "AUSP",
+    "name": "Governors",
+    "school": "Austin Peay",
+    "full_name": "Austin Peay Governors",
+    "conference": null
+  },
+  "austin peay governors": {
+    "team_id": 242,
+    "key": "AUSP",
+    "name": "Governors",
+    "school": "Austin Peay",
+    "full_name": "Austin Peay Governors",
+    "conference": null
+  },
+  "semst": {
+    "team_id": 243,
+    "key": "SEMST",
+    "name": "Redhawks",
+    "school": "Southeast Missouri State",
+    "full_name": "Southeast Missouri State Redhawks",
+    "conference": null
+  },
+  "southeast missouri state": {
+    "team_id": 243,
+    "key": "SEMST",
+    "name": "Redhawks",
+    "school": "Southeast Missouri State",
+    "full_name": "Southeast Missouri State Redhawks",
+    "conference": null
+  },
+  "southeast missouri state redhawks": {
+    "team_id": 243,
+    "key": "SEMST",
+    "name": "Redhawks",
+    "school": "Southeast Missouri State",
+    "full_name": "Southeast Missouri State Redhawks",
+    "conference": null
+  },
+  "ore": {
+    "team_id": 245,
+    "key": "ORE",
+    "name": "Ducks",
+    "school": "Oregon",
+    "full_name": "Oregon Ducks",
+    "conference": "Big Ten"
+  },
+  "ducks": {
+    "team_id": 245,
+    "key": "ORE",
+    "name": "Ducks",
+    "school": "Oregon",
+    "full_name": "Oregon Ducks",
+    "conference": "Big Ten"
+  },
+  "oregon": {
+    "team_id": 245,
+    "key": "ORE",
+    "name": "Ducks",
+    "school": "Oregon",
+    "full_name": "Oregon Ducks",
+    "conference": "Big Ten"
+  },
+  "oregon ducks": {
+    "team_id": 245,
+    "key": "ORE",
+    "name": "Ducks",
+    "school": "Oregon",
+    "full_name": "Oregon Ducks",
+    "conference": "Big Ten"
+  },
+  "usc": {
+    "team_id": 246,
+    "key": "USC",
+    "name": "Trojans",
+    "school": "USC",
+    "full_name": "USC Trojans",
+    "conference": "Big Ten"
+  },
+  "trojans": {
+    "team_id": 333,
+    "key": "TROY",
+    "name": "Trojans",
+    "school": "Troy",
+    "full_name": "Troy Trojans",
+    "conference": "Sun Belt - West"
+  },
+  "usc trojans": {
+    "team_id": 246,
+    "key": "USC",
+    "name": "Trojans",
+    "school": "USC",
+    "full_name": "USC Trojans",
+    "conference": "Big Ten"
+  },
+  "arz": {
+    "team_id": 247,
+    "key": "ARZ",
+    "name": "Wildcats",
+    "school": "Arizona",
+    "full_name": "Arizona Wildcats",
+    "conference": "Big 12"
+  },
+  "arizona": {
+    "team_id": 247,
+    "key": "ARZ",
+    "name": "Wildcats",
+    "school": "Arizona",
+    "full_name": "Arizona Wildcats",
+    "conference": "Big 12"
+  },
+  "arizona wildcats": {
+    "team_id": 247,
+    "key": "ARZ",
+    "name": "Wildcats",
+    "school": "Arizona",
+    "full_name": "Arizona Wildcats",
+    "conference": "Big 12"
+  },
+  "utah": {
+    "team_id": 248,
+    "key": "UTAH",
+    "name": "Utes",
+    "school": "Utah",
+    "full_name": "Utah Utes",
+    "conference": "Big 12"
+  },
+  "utes": {
+    "team_id": 248,
+    "key": "UTAH",
+    "name": "Utes",
+    "school": "Utah",
+    "full_name": "Utah Utes",
+    "conference": "Big 12"
+  },
+  "utah utes": {
+    "team_id": 248,
+    "key": "UTAH",
+    "name": "Utes",
+    "school": "Utah",
+    "full_name": "Utah Utes",
+    "conference": "Big 12"
+  },
+  "wash": {
+    "team_id": 249,
+    "key": "WASH",
+    "name": "Huskies",
+    "school": "Washington",
+    "full_name": "Washington Huskies",
+    "conference": "Big Ten"
+  },
+  "washington": {
+    "team_id": 249,
+    "key": "WASH",
+    "name": "Huskies",
+    "school": "Washington",
+    "full_name": "Washington Huskies",
+    "conference": "Big Ten"
+  },
+  "washington huskies": {
+    "team_id": 249,
+    "key": "WASH",
+    "name": "Huskies",
+    "school": "Washington",
+    "full_name": "Washington Huskies",
+    "conference": "Big Ten"
+  },
+  "col": {
+    "team_id": 250,
+    "key": "COL",
+    "name": "Buffaloes",
+    "school": "Colorado",
+    "full_name": "Colorado Buffaloes",
+    "conference": "Big 12"
+  },
+  "buffaloes": {
+    "team_id": 250,
+    "key": "COL",
+    "name": "Buffaloes",
+    "school": "Colorado",
+    "full_name": "Colorado Buffaloes",
+    "conference": "Big 12"
+  },
+  "colorado": {
+    "team_id": 250,
+    "key": "COL",
+    "name": "Buffaloes",
+    "school": "Colorado",
+    "full_name": "Colorado Buffaloes",
+    "conference": "Big 12"
+  },
+  "colorado buffaloes": {
+    "team_id": 250,
+    "key": "COL",
+    "name": "Buffaloes",
+    "school": "Colorado",
+    "full_name": "Colorado Buffaloes",
+    "conference": "Big 12"
+  },
+  "cah": {
+    "team_id": 251,
+    "key": "CAH",
+    "name": "Golden Bears",
+    "school": "California",
+    "full_name": "California Golden Bears",
+    "conference": "Atlantic Coast"
+  },
+  "golden bears": {
+    "team_id": 251,
+    "key": "CAH",
+    "name": "Golden Bears",
+    "school": "California",
+    "full_name": "California Golden Bears",
+    "conference": "Atlantic Coast"
+  },
+  "california": {
+    "team_id": 251,
+    "key": "CAH",
+    "name": "Golden Bears",
+    "school": "California",
+    "full_name": "California Golden Bears",
+    "conference": "Atlantic Coast"
+  },
+  "california golden bears": {
+    "team_id": 251,
+    "key": "CAH",
+    "name": "Golden Bears",
+    "school": "California",
+    "full_name": "California Golden Bears",
+    "conference": "Atlantic Coast"
+  },
+  "cal": {
+    "team_id": 251,
+    "key": "CAH",
+    "name": "Golden Bears",
+    "school": "California",
+    "full_name": "California Golden Bears",
+    "conference": "Atlantic Coast"
+  },
+  "oregst": {
+    "team_id": 252,
+    "key": "OREGST",
+    "name": "Beavers",
+    "school": "Oregon State",
+    "full_name": "Oregon State Beavers",
+    "conference": "Pac-12"
+  },
+  "beavers": {
+    "team_id": 252,
+    "key": "OREGST",
+    "name": "Beavers",
+    "school": "Oregon State",
+    "full_name": "Oregon State Beavers",
+    "conference": "Pac-12"
+  },
+  "oregon state": {
+    "team_id": 252,
+    "key": "OREGST",
+    "name": "Beavers",
+    "school": "Oregon State",
+    "full_name": "Oregon State Beavers",
+    "conference": "Pac-12"
+  },
+  "oregon state beavers": {
+    "team_id": 252,
+    "key": "OREGST",
+    "name": "Beavers",
+    "school": "Oregon State",
+    "full_name": "Oregon State Beavers",
+    "conference": "Pac-12"
+  },
+  "orstu": {
+    "team_id": 252,
+    "key": "OREGST",
+    "name": "Beavers",
+    "school": "Oregon State",
+    "full_name": "Oregon State Beavers",
+    "conference": "Pac-12"
+  },
+  "ucla": {
+    "team_id": 253,
+    "key": "UCLA",
+    "name": "Bruins",
+    "school": "UCLA",
+    "full_name": "UCLA Bruins",
+    "conference": "Big Ten"
+  },
+  "bruins": {
+    "team_id": 253,
+    "key": "UCLA",
+    "name": "Bruins",
+    "school": "UCLA",
+    "full_name": "UCLA Bruins",
+    "conference": "Big Ten"
+  },
+  "ucla bruins": {
+    "team_id": 253,
+    "key": "UCLA",
+    "name": "Bruins",
+    "school": "UCLA",
+    "full_name": "UCLA Bruins",
+    "conference": "Big Ten"
+  },
+  "stan": {
+    "team_id": 254,
+    "key": "STAN",
+    "name": "Cardinal",
+    "school": "Stanford",
+    "full_name": "Stanford Cardinal",
+    "conference": "Atlantic Coast"
+  },
+  "cardinal": {
+    "team_id": 254,
+    "key": "STAN",
+    "name": "Cardinal",
+    "school": "Stanford",
+    "full_name": "Stanford Cardinal",
+    "conference": "Atlantic Coast"
+  },
+  "stanford": {
+    "team_id": 254,
+    "key": "STAN",
+    "name": "Cardinal",
+    "school": "Stanford",
+    "full_name": "Stanford Cardinal",
+    "conference": "Atlantic Coast"
+  },
+  "stanford cardinal": {
+    "team_id": 254,
+    "key": "STAN",
+    "name": "Cardinal",
+    "school": "Stanford",
+    "full_name": "Stanford Cardinal",
+    "conference": "Atlantic Coast"
+  },
+  "arzst": {
+    "team_id": 255,
+    "key": "ARZST",
+    "name": "Sun Devils",
+    "school": "Arizona State",
+    "full_name": "Arizona State Sun Devils",
+    "conference": "Big 12"
+  },
+  "sun devils": {
+    "team_id": 255,
+    "key": "ARZST",
+    "name": "Sun Devils",
+    "school": "Arizona State",
+    "full_name": "Arizona State Sun Devils",
+    "conference": "Big 12"
+  },
+  "arizona state": {
+    "team_id": 255,
+    "key": "ARZST",
+    "name": "Sun Devils",
+    "school": "Arizona State",
+    "full_name": "Arizona State Sun Devils",
+    "conference": "Big 12"
+  },
+  "arizona state sun devils": {
+    "team_id": 255,
+    "key": "ARZST",
+    "name": "Sun Devils",
+    "school": "Arizona State",
+    "full_name": "Arizona State Sun Devils",
+    "conference": "Big 12"
+  },
+  "asu": {
+    "team_id": 255,
+    "key": "ARZST",
+    "name": "Sun Devils",
+    "school": "Arizona State",
+    "full_name": "Arizona State Sun Devils",
+    "conference": "Big 12"
+  },
+  "washst": {
+    "team_id": 256,
+    "key": "WASHST",
+    "name": "Cougars",
+    "school": "Washington State",
+    "full_name": "Washington State Cougars",
+    "conference": "Pac-12"
+  },
+  "washington state": {
+    "team_id": 256,
+    "key": "WASHST",
+    "name": "Cougars",
+    "school": "Washington State",
+    "full_name": "Washington State Cougars",
+    "conference": "Pac-12"
+  },
+  "washington state cougars": {
+    "team_id": 256,
+    "key": "WASHST",
+    "name": "Cougars",
+    "school": "Washington State",
+    "full_name": "Washington State Cougars",
+    "conference": "Pac-12"
+  },
+  "wsu": {
+    "team_id": 256,
+    "key": "WASHST",
+    "name": "Cougars",
+    "school": "Washington State",
+    "full_name": "Washington State Cougars",
+    "conference": "Pac-12"
+  },
+  "buck": {
+    "team_id": 257,
+    "key": "BUCK",
+    "name": "Bison",
+    "school": "Bucknell",
+    "full_name": "Bucknell Bison",
+    "conference": null
+  },
+  "bucknell": {
+    "team_id": 257,
+    "key": "BUCK",
+    "name": "Bison",
+    "school": "Bucknell",
+    "full_name": "Bucknell Bison",
+    "conference": null
+  },
+  "bucknell bison": {
+    "team_id": 257,
+    "key": "BUCK",
+    "name": "Bison",
+    "school": "Bucknell",
+    "full_name": "Bucknell Bison",
+    "conference": null
+  },
+  "navy": {
+    "team_id": 258,
+    "key": "NAVY",
+    "name": "Midshipmen",
+    "school": "Navy",
+    "full_name": "Navy Midshipmen",
+    "conference": "American"
+  },
+  "midshipmen": {
+    "team_id": 258,
+    "key": "NAVY",
+    "name": "Midshipmen",
+    "school": "Navy",
+    "full_name": "Navy Midshipmen",
+    "conference": "American"
+  },
+  "navy midshipmen": {
+    "team_id": 258,
+    "key": "NAVY",
+    "name": "Midshipmen",
+    "school": "Navy",
+    "full_name": "Navy Midshipmen",
+    "conference": "American"
+  },
+  "lehi": {
+    "team_id": 260,
+    "key": "LEHI",
+    "name": "Mountain Hawks",
+    "school": "Lehigh",
+    "full_name": "Lehigh Mountain Hawks",
+    "conference": null
+  },
+  "mountain hawks": {
+    "team_id": 260,
+    "key": "LEHI",
+    "name": "Mountain Hawks",
+    "school": "Lehigh",
+    "full_name": "Lehigh Mountain Hawks",
+    "conference": null
+  },
+  "lehigh": {
+    "team_id": 260,
+    "key": "LEHI",
+    "name": "Mountain Hawks",
+    "school": "Lehigh",
+    "full_name": "Lehigh Mountain Hawks",
+    "conference": null
+  },
+  "lehigh mountain hawks": {
+    "team_id": 260,
+    "key": "LEHI",
+    "name": "Mountain Hawks",
+    "school": "Lehigh",
+    "full_name": "Lehigh Mountain Hawks",
+    "conference": null
+  },
+  "colg": {
+    "team_id": 261,
+    "key": "COLG",
+    "name": "Raiders",
+    "school": "Colgate",
+    "full_name": "Colgate Raiders",
+    "conference": null
+  },
+  "raiders": {
+    "team_id": 261,
+    "key": "COLG",
+    "name": "Raiders",
+    "school": "Colgate",
+    "full_name": "Colgate Raiders",
+    "conference": null
+  },
+  "colgate": {
+    "team_id": 261,
+    "key": "COLG",
+    "name": "Raiders",
+    "school": "Colgate",
+    "full_name": "Colgate Raiders",
+    "conference": null
+  },
+  "colgate raiders": {
+    "team_id": 261,
+    "key": "COLG",
+    "name": "Raiders",
+    "school": "Colgate",
+    "full_name": "Colgate Raiders",
+    "conference": null
+  },
+  "army": {
+    "team_id": 263,
+    "key": "ARMY",
+    "name": "Black Knights",
+    "school": "Army",
+    "full_name": "Army Black Knights",
+    "conference": "American"
+  },
+  "black knights": {
+    "team_id": 263,
+    "key": "ARMY",
+    "name": "Black Knights",
+    "school": "Army",
+    "full_name": "Army Black Knights",
+    "conference": "American"
+  },
+  "army black knights": {
+    "team_id": 263,
+    "key": "ARMY",
+    "name": "Black Knights",
+    "school": "Army",
+    "full_name": "Army Black Knights",
+    "conference": "American"
+  },
+  "holy": {
+    "team_id": 264,
+    "key": "HOLY",
+    "name": "Crusaders",
+    "school": "Holy Cross",
+    "full_name": "Holy Cross Crusaders",
+    "conference": null
+  },
+  "crusaders": {
+    "team_id": 264,
+    "key": "HOLY",
+    "name": "Crusaders",
+    "school": "Holy Cross",
+    "full_name": "Holy Cross Crusaders",
+    "conference": null
+  },
+  "holy cross": {
+    "team_id": 264,
+    "key": "HOLY",
+    "name": "Crusaders",
+    "school": "Holy Cross",
+    "full_name": "Holy Cross Crusaders",
+    "conference": null
+  },
+  "holy cross crusaders": {
+    "team_id": 264,
+    "key": "HOLY",
+    "name": "Crusaders",
+    "school": "Holy Cross",
+    "full_name": "Holy Cross Crusaders",
+    "conference": null
+  },
+  "lafay": {
+    "team_id": 266,
+    "key": "LAFAY",
+    "name": "Leopards",
+    "school": "Lafayette",
+    "full_name": "Lafayette Leopards",
+    "conference": null
+  },
+  "leopards": {
+    "team_id": 266,
+    "key": "LAFAY",
+    "name": "Leopards",
+    "school": "Lafayette",
+    "full_name": "Lafayette Leopards",
+    "conference": null
+  },
+  "lafayette": {
+    "team_id": 266,
+    "key": "LAFAY",
+    "name": "Leopards",
+    "school": "Lafayette",
+    "full_name": "Lafayette Leopards",
+    "conference": null
+  },
+  "lafayette leopards": {
+    "team_id": 266,
+    "key": "LAFAY",
+    "name": "Leopards",
+    "school": "Lafayette",
+    "full_name": "Lafayette Leopards",
+    "conference": null
+  },
+  "sc": {
+    "team_id": 267,
+    "key": "SC",
+    "name": "Gamecocks",
+    "school": "South Carolina",
+    "full_name": "South Carolina Gamecocks",
+    "conference": "Southeastern"
+  },
+  "south carolina": {
+    "team_id": 267,
+    "key": "SC",
+    "name": "Gamecocks",
+    "school": "South Carolina",
+    "full_name": "South Carolina Gamecocks",
+    "conference": "Southeastern"
+  },
+  "south carolina gamecocks": {
+    "team_id": 267,
+    "key": "SC",
+    "name": "Gamecocks",
+    "school": "South Carolina",
+    "full_name": "South Carolina Gamecocks",
+    "conference": "Southeastern"
+  },
+  "uk": {
+    "team_id": 268,
+    "key": "UK",
+    "name": "Wildcats",
+    "school": "Kentucky",
+    "full_name": "Kentucky Wildcats",
+    "conference": "Southeastern"
+  },
+  "kentucky": {
+    "team_id": 268,
+    "key": "UK",
+    "name": "Wildcats",
+    "school": "Kentucky",
+    "full_name": "Kentucky Wildcats",
+    "conference": "Southeastern"
+  },
+  "kentucky wildcats": {
+    "team_id": 268,
+    "key": "UK",
+    "name": "Wildcats",
+    "school": "Kentucky",
+    "full_name": "Kentucky Wildcats",
+    "conference": "Southeastern"
+  },
+  "lsu": {
+    "team_id": 269,
+    "key": "LSU",
+    "name": "Tigers",
+    "school": "LSU",
+    "full_name": "LSU Tigers",
+    "conference": "Southeastern"
+  },
+  "lsu tigers": {
+    "team_id": 269,
+    "key": "LSU",
+    "name": "Tigers",
+    "school": "LSU",
+    "full_name": "LSU Tigers",
+    "conference": "Southeastern"
+  },
+  "txam": {
+    "team_id": 270,
+    "key": "TXAM",
+    "name": "Aggies",
+    "school": "Texas A&M",
+    "full_name": "Texas A&M Aggies",
+    "conference": "Southeastern"
+  },
+  "texas a&m": {
+    "team_id": 270,
+    "key": "TXAM",
+    "name": "Aggies",
+    "school": "Texas A&M",
+    "full_name": "Texas A&M Aggies",
+    "conference": "Southeastern"
+  },
+  "texas a&m aggies": {
+    "team_id": 270,
+    "key": "TXAM",
+    "name": "Aggies",
+    "school": "Texas A&M",
+    "full_name": "Texas A&M Aggies",
+    "conference": "Southeastern"
+  },
+  "fl": {
+    "team_id": 271,
+    "key": "FL",
+    "name": "Gators",
+    "school": "Florida",
+    "full_name": "Florida Gators",
+    "conference": "Southeastern"
+  },
+  "gators": {
+    "team_id": 271,
+    "key": "FL",
+    "name": "Gators",
+    "school": "Florida",
+    "full_name": "Florida Gators",
+    "conference": "Southeastern"
+  },
+  "florida": {
+    "team_id": 271,
+    "key": "FL",
+    "name": "Gators",
+    "school": "Florida",
+    "full_name": "Florida Gators",
+    "conference": "Southeastern"
+  },
+  "florida gators": {
+    "team_id": 271,
+    "key": "FL",
+    "name": "Gators",
+    "school": "Florida",
+    "full_name": "Florida Gators",
+    "conference": "Southeastern"
+  },
+  "ufl": {
+    "team_id": 271,
+    "key": "FL",
+    "name": "Gators",
+    "school": "Florida",
+    "full_name": "Florida Gators",
+    "conference": "Southeastern"
+  },
+  "ga": {
+    "team_id": 272,
+    "key": "GA",
+    "name": "Bulldogs",
+    "school": "Georgia",
+    "full_name": "Georgia Bulldogs",
+    "conference": "Southeastern"
+  },
+  "georgia": {
+    "team_id": 272,
+    "key": "GA",
+    "name": "Bulldogs",
+    "school": "Georgia",
+    "full_name": "Georgia Bulldogs",
+    "conference": "Southeastern"
+  },
+  "georgia bulldogs": {
+    "team_id": 272,
+    "key": "GA",
+    "name": "Bulldogs",
+    "school": "Georgia",
+    "full_name": "Georgia Bulldogs",
+    "conference": "Southeastern"
+  },
+  "uga": {
+    "team_id": 272,
+    "key": "GA",
+    "name": "Bulldogs",
+    "school": "Georgia",
+    "full_name": "Georgia Bulldogs",
+    "conference": "Southeastern"
+  },
+  "vand": {
+    "team_id": 273,
+    "key": "VAND",
+    "name": "Commodores",
+    "school": "Vanderbilt",
+    "full_name": "Vanderbilt Commodores",
+    "conference": "Southeastern"
+  },
+  "commodores": {
+    "team_id": 273,
+    "key": "VAND",
+    "name": "Commodores",
+    "school": "Vanderbilt",
+    "full_name": "Vanderbilt Commodores",
+    "conference": "Southeastern"
+  },
+  "vanderbilt": {
+    "team_id": 273,
+    "key": "VAND",
+    "name": "Commodores",
+    "school": "Vanderbilt",
+    "full_name": "Vanderbilt Commodores",
+    "conference": "Southeastern"
+  },
+  "vanderbilt commodores": {
+    "team_id": 273,
+    "key": "VAND",
+    "name": "Commodores",
+    "school": "Vanderbilt",
+    "full_name": "Vanderbilt Commodores",
+    "conference": "Southeastern"
+  },
+  "miss": {
+    "team_id": 274,
+    "key": "MISS",
+    "name": "Rebels",
+    "school": "Ole Miss",
+    "full_name": "Ole Miss Rebels",
+    "conference": "Southeastern"
+  },
+  "rebels": {
+    "team_id": 274,
+    "key": "MISS",
+    "name": "Rebels",
+    "school": "Ole Miss",
+    "full_name": "Ole Miss Rebels",
+    "conference": "Southeastern"
+  },
+  "ole miss": {
+    "team_id": 274,
+    "key": "MISS",
+    "name": "Rebels",
+    "school": "Ole Miss",
+    "full_name": "Ole Miss Rebels",
+    "conference": "Southeastern"
+  },
+  "ole miss rebels": {
+    "team_id": 274,
+    "key": "MISS",
+    "name": "Rebels",
+    "school": "Ole Miss",
+    "full_name": "Ole Miss Rebels",
+    "conference": "Southeastern"
+  },
+  "olemiss": {
+    "team_id": 274,
+    "key": "MISS",
+    "name": "Rebels",
+    "school": "Ole Miss",
+    "full_name": "Ole Miss Rebels",
+    "conference": "Southeastern"
+  },
+  "ala": {
+    "team_id": 275,
+    "key": "ALA",
+    "name": "Crimson Tide",
+    "school": "Alabama",
+    "full_name": "Alabama Crimson Tide",
+    "conference": "Southeastern"
+  },
+  "crimson tide": {
+    "team_id": 275,
+    "key": "ALA",
+    "name": "Crimson Tide",
+    "school": "Alabama",
+    "full_name": "Alabama Crimson Tide",
+    "conference": "Southeastern"
+  },
+  "alabama": {
+    "team_id": 275,
+    "key": "ALA",
+    "name": "Crimson Tide",
+    "school": "Alabama",
+    "full_name": "Alabama Crimson Tide",
+    "conference": "Southeastern"
+  },
+  "alabama crimson tide": {
+    "team_id": 275,
+    "key": "ALA",
+    "name": "Crimson Tide",
+    "school": "Alabama",
+    "full_name": "Alabama Crimson Tide",
+    "conference": "Southeastern"
+  },
+  "ark": {
+    "team_id": 276,
+    "key": "ARK",
+    "name": "Razorbacks",
+    "school": "Arkansas",
+    "full_name": "Arkansas Razorbacks",
+    "conference": "Southeastern"
+  },
+  "razorbacks": {
+    "team_id": 276,
+    "key": "ARK",
+    "name": "Razorbacks",
+    "school": "Arkansas",
+    "full_name": "Arkansas Razorbacks",
+    "conference": "Southeastern"
+  },
+  "arkansas": {
+    "team_id": 276,
+    "key": "ARK",
+    "name": "Razorbacks",
+    "school": "Arkansas",
+    "full_name": "Arkansas Razorbacks",
+    "conference": "Southeastern"
+  },
+  "arkansas razorbacks": {
+    "team_id": 276,
+    "key": "ARK",
+    "name": "Razorbacks",
+    "school": "Arkansas",
+    "full_name": "Arkansas Razorbacks",
+    "conference": "Southeastern"
+  },
+  "tenn": {
+    "team_id": 277,
+    "key": "TENN",
+    "name": "Volunteers",
+    "school": "Tennessee",
+    "full_name": "Tennessee Volunteers",
+    "conference": "Southeastern"
+  },
+  "volunteers": {
+    "team_id": 277,
+    "key": "TENN",
+    "name": "Volunteers",
+    "school": "Tennessee",
+    "full_name": "Tennessee Volunteers",
+    "conference": "Southeastern"
+  },
+  "tennessee": {
+    "team_id": 277,
+    "key": "TENN",
+    "name": "Volunteers",
+    "school": "Tennessee",
+    "full_name": "Tennessee Volunteers",
+    "conference": "Southeastern"
+  },
+  "tennessee volunteers": {
+    "team_id": 277,
+    "key": "TENN",
+    "name": "Volunteers",
+    "school": "Tennessee",
+    "full_name": "Tennessee Volunteers",
+    "conference": "Southeastern"
+  },
+  "mspst": {
+    "team_id": 278,
+    "key": "MSPST",
+    "name": "Bulldogs",
+    "school": "Mississippi State",
+    "full_name": "Mississippi State Bulldogs",
+    "conference": "Southeastern"
+  },
+  "mississippi state": {
+    "team_id": 278,
+    "key": "MSPST",
+    "name": "Bulldogs",
+    "school": "Mississippi State",
+    "full_name": "Mississippi State Bulldogs",
+    "conference": "Southeastern"
+  },
+  "mississippi state bulldogs": {
+    "team_id": 278,
+    "key": "MSPST",
+    "name": "Bulldogs",
+    "school": "Mississippi State",
+    "full_name": "Mississippi State Bulldogs",
+    "conference": "Southeastern"
+  },
+  "msstate": {
+    "team_id": 278,
+    "key": "MSPST",
+    "name": "Bulldogs",
+    "school": "Mississippi State",
+    "full_name": "Mississippi State Bulldogs",
+    "conference": "Southeastern"
+  },
+  "aubrn": {
+    "team_id": 279,
+    "key": "AUBRN",
+    "name": "Tigers",
+    "school": "Auburn",
+    "full_name": "Auburn Tigers",
+    "conference": "Southeastern"
+  },
+  "auburn": {
+    "team_id": 279,
+    "key": "AUBRN",
+    "name": "Tigers",
+    "school": "Auburn",
+    "full_name": "Auburn Tigers",
+    "conference": "Southeastern"
+  },
+  "auburn tigers": {
+    "team_id": 279,
+    "key": "AUBRN",
+    "name": "Tigers",
+    "school": "Auburn",
+    "full_name": "Auburn Tigers",
+    "conference": "Southeastern"
+  },
+  "missr": {
+    "team_id": 280,
+    "key": "MISSR",
+    "name": "Tigers",
+    "school": "Missouri",
+    "full_name": "Missouri Tigers",
+    "conference": "Southeastern"
+  },
+  "missouri": {
+    "team_id": 280,
+    "key": "MISSR",
+    "name": "Tigers",
+    "school": "Missouri",
+    "full_name": "Missouri Tigers",
+    "conference": "Southeastern"
+  },
+  "missouri tigers": {
+    "team_id": 280,
+    "key": "MISSR",
+    "name": "Tigers",
+    "school": "Missouri",
+    "full_name": "Missouri Tigers",
+    "conference": "Southeastern"
+  },
+  "mizz": {
+    "team_id": 280,
+    "key": "MISSR",
+    "name": "Tigers",
+    "school": "Missouri",
+    "full_name": "Missouri Tigers",
+    "conference": "Southeastern"
+  },
+  "chat": {
+    "team_id": 281,
+    "key": "CHAT",
+    "name": "Mocs",
+    "school": "Chattanooga",
+    "full_name": "Chattanooga Mocs",
+    "conference": null
+  },
+  "mocs": {
+    "team_id": 281,
+    "key": "CHAT",
+    "name": "Mocs",
+    "school": "Chattanooga",
+    "full_name": "Chattanooga Mocs",
+    "conference": null
+  },
+  "chattanooga": {
+    "team_id": 281,
+    "key": "CHAT",
+    "name": "Mocs",
+    "school": "Chattanooga",
+    "full_name": "Chattanooga Mocs",
+    "conference": null
+  },
+  "chattanooga mocs": {
+    "team_id": 281,
+    "key": "CHAT",
+    "name": "Mocs",
+    "school": "Chattanooga",
+    "full_name": "Chattanooga Mocs",
+    "conference": null
+  },
+  "etnst": {
+    "team_id": 282,
+    "key": "ETNST",
+    "name": "Buccaneers",
+    "school": "East Tennessee State",
+    "full_name": "East Tennessee State Buccaneers",
+    "conference": null
+  },
+  "east tennessee state": {
+    "team_id": 282,
+    "key": "ETNST",
+    "name": "Buccaneers",
+    "school": "East Tennessee State",
+    "full_name": "East Tennessee State Buccaneers",
+    "conference": null
+  },
+  "east tennessee state buccaneers": {
+    "team_id": 282,
+    "key": "ETNST",
+    "name": "Buccaneers",
+    "school": "East Tennessee State",
+    "full_name": "East Tennessee State Buccaneers",
+    "conference": null
+  },
+  "furman": {
+    "team_id": 283,
+    "key": "FURMAN",
+    "name": "Paladins",
+    "school": "Furman",
+    "full_name": "Furman Paladins",
+    "conference": null
+  },
+  "paladins": {
+    "team_id": 283,
+    "key": "FURMAN",
+    "name": "Paladins",
+    "school": "Furman",
+    "full_name": "Furman Paladins",
+    "conference": null
+  },
+  "furman paladins": {
+    "team_id": 283,
+    "key": "FURMAN",
+    "name": "Paladins",
+    "school": "Furman",
+    "full_name": "Furman Paladins",
+    "conference": null
+  },
+  "merc": {
+    "team_id": 284,
+    "key": "MERC",
+    "name": "Bears",
+    "school": "Mercer",
+    "full_name": "Mercer Bears",
+    "conference": null
+  },
+  "mercer": {
+    "team_id": 284,
+    "key": "MERC",
+    "name": "Bears",
+    "school": "Mercer",
+    "full_name": "Mercer Bears",
+    "conference": null
+  },
+  "mercer bears": {
+    "team_id": 284,
+    "key": "MERC",
+    "name": "Bears",
+    "school": "Mercer",
+    "full_name": "Mercer Bears",
+    "conference": null
+  },
+  "woff": {
+    "team_id": 285,
+    "key": "WOFF",
+    "name": "Terriers",
+    "school": "Wofford",
+    "full_name": "Wofford Terriers",
+    "conference": null
+  },
+  "terriers": {
+    "team_id": 285,
+    "key": "WOFF",
+    "name": "Terriers",
+    "school": "Wofford",
+    "full_name": "Wofford Terriers",
+    "conference": null
+  },
+  "wofford": {
+    "team_id": 285,
+    "key": "WOFF",
+    "name": "Terriers",
+    "school": "Wofford",
+    "full_name": "Wofford Terriers",
+    "conference": null
+  },
+  "wofford terriers": {
+    "team_id": 285,
+    "key": "WOFF",
+    "name": "Terriers",
+    "school": "Wofford",
+    "full_name": "Wofford Terriers",
+    "conference": null
+  },
+  "wcar": {
+    "team_id": 287,
+    "key": "WCAR",
+    "name": "Catamounts",
+    "school": "Western Carolina",
+    "full_name": "Western Carolina Catamounts",
+    "conference": null
+  },
+  "catamounts": {
+    "team_id": 287,
+    "key": "WCAR",
+    "name": "Catamounts",
+    "school": "Western Carolina",
+    "full_name": "Western Carolina Catamounts",
+    "conference": null
+  },
+  "western carolina": {
+    "team_id": 287,
+    "key": "WCAR",
+    "name": "Catamounts",
+    "school": "Western Carolina",
+    "full_name": "Western Carolina Catamounts",
+    "conference": null
+  },
+  "western carolina catamounts": {
+    "team_id": 287,
+    "key": "WCAR",
+    "name": "Catamounts",
+    "school": "Western Carolina",
+    "full_name": "Western Carolina Catamounts",
+    "conference": null
+  },
+  "cita": {
+    "team_id": 288,
+    "key": "CITA",
+    "name": "Bulldogs",
+    "school": "The Citadel",
+    "full_name": "The Citadel Bulldogs",
+    "conference": null
+  },
+  "the citadel": {
+    "team_id": 288,
+    "key": "CITA",
+    "name": "Bulldogs",
+    "school": "The Citadel",
+    "full_name": "The Citadel Bulldogs",
+    "conference": null
+  },
+  "the citadel bulldogs": {
+    "team_id": 288,
+    "key": "CITA",
+    "name": "Bulldogs",
+    "school": "The Citadel",
+    "full_name": "The Citadel Bulldogs",
+    "conference": null
+  },
+  "samf": {
+    "team_id": 289,
+    "key": "SAMF",
+    "name": "Bulldogs",
+    "school": "Samford",
+    "full_name": "Samford Bulldogs",
+    "conference": null
+  },
+  "samford": {
+    "team_id": 289,
+    "key": "SAMF",
+    "name": "Bulldogs",
+    "school": "Samford",
+    "full_name": "Samford Bulldogs",
+    "conference": null
+  },
+  "samford bulldogs": {
+    "team_id": 289,
+    "key": "SAMF",
+    "name": "Bulldogs",
+    "school": "Samford",
+    "full_name": "Samford Bulldogs",
+    "conference": null
+  },
+  "vamil": {
+    "team_id": 290,
+    "key": "VAMIL",
+    "name": "Keydets",
+    "school": "VMI",
+    "full_name": "VMI Keydets",
+    "conference": null
+  },
+  "keydets": {
+    "team_id": 290,
+    "key": "VAMIL",
+    "name": "Keydets",
+    "school": "VMI",
+    "full_name": "VMI Keydets",
+    "conference": null
+  },
+  "vmi": {
+    "team_id": 290,
+    "key": "VAMIL",
+    "name": "Keydets",
+    "school": "VMI",
+    "full_name": "VMI Keydets",
+    "conference": null
+  },
+  "vmi keydets": {
+    "team_id": 290,
+    "key": "VAMIL",
+    "name": "Keydets",
+    "school": "VMI",
+    "full_name": "VMI Keydets",
+    "conference": null
+  },
+  "sfaus": {
+    "team_id": 291,
+    "key": "SFAUS",
+    "name": "Lumberjacks",
+    "school": "Stephen F. Austin",
+    "full_name": "Stephen F. Austin Lumberjacks",
+    "conference": null
+  },
+  "stephen f. austin": {
+    "team_id": 291,
+    "key": "SFAUS",
+    "name": "Lumberjacks",
+    "school": "Stephen F. Austin",
+    "full_name": "Stephen F. Austin Lumberjacks",
+    "conference": null
+  },
+  "stephen f. austin lumberjacks": {
+    "team_id": 291,
+    "key": "SFAUS",
+    "name": "Lumberjacks",
+    "school": "Stephen F. Austin",
+    "full_name": "Stephen F. Austin Lumberjacks",
+    "conference": null
+  },
+  "houbap": {
+    "team_id": 293,
+    "key": "HOUBAP",
+    "name": "Huskies",
+    "school": "Houston Christian",
+    "full_name": "Houston Christian Huskies",
+    "conference": null
+  },
+  "houston christian": {
+    "team_id": 293,
+    "key": "HOUBAP",
+    "name": "Huskies",
+    "school": "Houston Christian",
+    "full_name": "Houston Christian Huskies",
+    "conference": null
+  },
+  "houston christian huskies": {
+    "team_id": 293,
+    "key": "HOUBAP",
+    "name": "Huskies",
+    "school": "Houston Christian",
+    "full_name": "Houston Christian Huskies",
+    "conference": null
+  },
+  "hcu": {
+    "team_id": 293,
+    "key": "HOUBAP",
+    "name": "Huskies",
+    "school": "Houston Christian",
+    "full_name": "Houston Christian Huskies",
+    "conference": null
+  },
+  "incar": {
+    "team_id": 294,
+    "key": "INCAR",
+    "name": "Cardinals",
+    "school": "Incarnate Word",
+    "full_name": "Incarnate Word Cardinals",
+    "conference": null
+  },
+  "incarnate word": {
+    "team_id": 294,
+    "key": "INCAR",
+    "name": "Cardinals",
+    "school": "Incarnate Word",
+    "full_name": "Incarnate Word Cardinals",
+    "conference": null
+  },
+  "incarnate word cardinals": {
+    "team_id": 294,
+    "key": "INCAR",
+    "name": "Cardinals",
+    "school": "Incarnate Word",
+    "full_name": "Incarnate Word Cardinals",
+    "conference": null
+  },
+  "smho": {
+    "team_id": 295,
+    "key": "SMHO",
+    "name": "Bearkats",
+    "school": "Sam Houston",
+    "full_name": "Sam Houston Bearkats",
+    "conference": "Conference USA"
+  },
+  "bearkats": {
+    "team_id": 295,
+    "key": "SMHO",
+    "name": "Bearkats",
+    "school": "Sam Houston",
+    "full_name": "Sam Houston Bearkats",
+    "conference": "Conference USA"
+  },
+  "sam houston": {
+    "team_id": 295,
+    "key": "SMHO",
+    "name": "Bearkats",
+    "school": "Sam Houston",
+    "full_name": "Sam Houston Bearkats",
+    "conference": "Conference USA"
+  },
+  "sam houston bearkats": {
+    "team_id": 295,
+    "key": "SMHO",
+    "name": "Bearkats",
+    "school": "Sam Houston",
+    "full_name": "Sam Houston Bearkats",
+    "conference": "Conference USA"
+  },
+  "abchr": {
+    "team_id": 296,
+    "key": "ABCHR",
+    "name": "Wildcats",
+    "school": "Abilene Christian",
+    "full_name": "Abilene Christian Wildcats",
+    "conference": null
+  },
+  "abilene christian": {
+    "team_id": 296,
+    "key": "ABCHR",
+    "name": "Wildcats",
+    "school": "Abilene Christian",
+    "full_name": "Abilene Christian Wildcats",
+    "conference": null
+  },
+  "abilene christian wildcats": {
+    "team_id": 296,
+    "key": "ABCHR",
+    "name": "Wildcats",
+    "school": "Abilene Christian",
+    "full_name": "Abilene Christian Wildcats",
+    "conference": null
+  },
+  "cark": {
+    "team_id": 298,
+    "key": "CARK",
+    "name": "Bears",
+    "school": "Central Arkansas",
+    "full_name": "Central Arkansas Bears",
+    "conference": null
+  },
+  "central arkansas": {
+    "team_id": 298,
+    "key": "CARK",
+    "name": "Bears",
+    "school": "Central Arkansas",
+    "full_name": "Central Arkansas Bears",
+    "conference": null
+  },
+  "central arkansas bears": {
+    "team_id": 298,
+    "key": "CARK",
+    "name": "Bears",
+    "school": "Central Arkansas",
+    "full_name": "Central Arkansas Bears",
+    "conference": null
+  },
+  "mcnst": {
+    "team_id": 299,
+    "key": "MCNST",
+    "name": "Cowboys",
+    "school": "McNeese State",
+    "full_name": "McNeese State Cowboys",
+    "conference": null
+  },
+  "mcneese state": {
+    "team_id": 299,
+    "key": "MCNST",
+    "name": "Cowboys",
+    "school": "McNeese State",
+    "full_name": "McNeese State Cowboys",
+    "conference": null
+  },
+  "mcneese state cowboys": {
+    "team_id": 299,
+    "key": "MCNST",
+    "name": "Cowboys",
+    "school": "McNeese State",
+    "full_name": "McNeese State Cowboys",
+    "conference": null
+  },
+  "selou": {
+    "team_id": 300,
+    "key": "SELOU",
+    "name": "Lions",
+    "school": "Southeastern Louisiana",
+    "full_name": "Southeastern Louisiana Lions",
+    "conference": null
+  },
+  "lions": {
+    "team_id": 741,
+    "key": "JAC",
+    "name": "Lions",
+    "school": "Lindenwood",
+    "full_name": "Lindenwood Lions",
+    "conference": null
+  },
+  "southeastern louisiana": {
+    "team_id": 300,
+    "key": "SELOU",
+    "name": "Lions",
+    "school": "Southeastern Louisiana",
+    "full_name": "Southeastern Louisiana Lions",
+    "conference": null
+  },
+  "southeastern louisiana lions": {
+    "team_id": 300,
+    "key": "SELOU",
+    "name": "Lions",
+    "school": "Southeastern Louisiana",
+    "full_name": "Southeastern Louisiana Lions",
+    "conference": null
+  },
+  "nwst": {
+    "team_id": 301,
+    "key": "NWST",
+    "name": "Demons",
+    "school": "Northwestern State",
+    "full_name": "Northwestern State Demons",
+    "conference": null
+  },
+  "demons": {
+    "team_id": 301,
+    "key": "NWST",
+    "name": "Demons",
+    "school": "Northwestern State",
+    "full_name": "Northwestern State Demons",
+    "conference": null
+  },
+  "northwestern state": {
+    "team_id": 301,
+    "key": "NWST",
+    "name": "Demons",
+    "school": "Northwestern State",
+    "full_name": "Northwestern State Demons",
+    "conference": null
+  },
+  "northwestern state demons": {
+    "team_id": 301,
+    "key": "NWST",
+    "name": "Demons",
+    "school": "Northwestern State",
+    "full_name": "Northwestern State Demons",
+    "conference": null
+  },
+  "nichls": {
+    "team_id": 302,
+    "key": "NICHLS",
+    "name": "Colonels",
+    "school": "Nicholls",
+    "full_name": "Nicholls Colonels",
+    "conference": null
+  },
+  "nicholls": {
+    "team_id": 302,
+    "key": "NICHLS",
+    "name": "Colonels",
+    "school": "Nicholls",
+    "full_name": "Nicholls Colonels",
+    "conference": null
+  },
+  "nicholls colonels": {
+    "team_id": 302,
+    "key": "NICHLS",
+    "name": "Colonels",
+    "school": "Nicholls",
+    "full_name": "Nicholls Colonels",
+    "conference": null
+  },
+  "lamar": {
+    "team_id": 303,
+    "key": "LAMAR",
+    "name": "Cardinals",
+    "school": "Lamar",
+    "full_name": "Lamar Cardinals",
+    "conference": null
+  },
+  "lamar cardinals": {
+    "team_id": 303,
+    "key": "LAMAR",
+    "name": "Cardinals",
+    "school": "Lamar",
+    "full_name": "Lamar Cardinals",
+    "conference": null
+  },
+  "txs": {
+    "team_id": 304,
+    "key": "TXS",
+    "name": "Tigers",
+    "school": "Texas Southern",
+    "full_name": "Texas Southern Tigers",
+    "conference": null
+  },
+  "texas southern": {
+    "team_id": 304,
+    "key": "TXS",
+    "name": "Tigers",
+    "school": "Texas Southern",
+    "full_name": "Texas Southern Tigers",
+    "conference": null
+  },
+  "texas southern tigers": {
+    "team_id": 304,
+    "key": "TXS",
+    "name": "Tigers",
+    "school": "Texas Southern",
+    "full_name": "Texas Southern Tigers",
+    "conference": null
+  },
+  "south": {
+    "team_id": 305,
+    "key": "SOUTH",
+    "name": "Jaguars",
+    "school": "Southern",
+    "full_name": "Southern Jaguars",
+    "conference": null
+  },
+  "jaguars": {
+    "team_id": 330,
+    "key": "SALA",
+    "name": "Jaguars",
+    "school": "South Alabama",
+    "full_name": "South Alabama Jaguars",
+    "conference": "Sun Belt - West"
+  },
+  "southern": {
+    "team_id": 305,
+    "key": "SOUTH",
+    "name": "Jaguars",
+    "school": "Southern",
+    "full_name": "Southern Jaguars",
+    "conference": null
+  },
+  "southern jaguars": {
+    "team_id": 305,
+    "key": "SOUTH",
+    "name": "Jaguars",
+    "school": "Southern",
+    "full_name": "Southern Jaguars",
+    "conference": null
+  },
+  "jackst": {
+    "team_id": 306,
+    "key": "JACKST",
+    "name": "Tigers",
+    "school": "Jackson State",
+    "full_name": "Jackson State Tigers",
+    "conference": null
+  },
+  "jackson state": {
+    "team_id": 306,
+    "key": "JACKST",
+    "name": "Tigers",
+    "school": "Jackson State",
+    "full_name": "Jackson State Tigers",
+    "conference": null
+  },
+  "jackson state tigers": {
+    "team_id": 306,
+    "key": "JACKST",
+    "name": "Tigers",
+    "school": "Jackson State",
+    "full_name": "Jackson State Tigers",
+    "conference": null
+  },
+  "jxst": {
+    "team_id": 306,
+    "key": "JACKST",
+    "name": "Tigers",
+    "school": "Jackson State",
+    "full_name": "Jackson State Tigers",
+    "conference": null
+  },
+  "alcst": {
+    "team_id": 307,
+    "key": "ALCST",
+    "name": "Braves",
+    "school": "Alcorn State",
+    "full_name": "Alcorn State Braves",
+    "conference": null
+  },
+  "braves": {
+    "team_id": 307,
+    "key": "ALCST",
+    "name": "Braves",
+    "school": "Alcorn State",
+    "full_name": "Alcorn State Braves",
+    "conference": null
+  },
+  "alcorn state": {
+    "team_id": 307,
+    "key": "ALCST",
+    "name": "Braves",
+    "school": "Alcorn State",
+    "full_name": "Alcorn State Braves",
+    "conference": null
+  },
+  "alcorn state braves": {
+    "team_id": 307,
+    "key": "ALCST",
+    "name": "Braves",
+    "school": "Alcorn State",
+    "full_name": "Alcorn State Braves",
+    "conference": null
+  },
+  "msvlst": {
+    "team_id": 308,
+    "key": "MSVLST",
+    "name": "Delta Devils",
+    "school": "Mississippi Valley State",
+    "full_name": "Mississippi Valley State Delta Devils",
+    "conference": null
+  },
+  "delta devils": {
+    "team_id": 308,
+    "key": "MSVLST",
+    "name": "Delta Devils",
+    "school": "Mississippi Valley State",
+    "full_name": "Mississippi Valley State Delta Devils",
+    "conference": null
+  },
+  "mississippi valley state": {
+    "team_id": 308,
+    "key": "MSVLST",
+    "name": "Delta Devils",
+    "school": "Mississippi Valley State",
+    "full_name": "Mississippi Valley State Delta Devils",
+    "conference": null
+  },
+  "mississippi valley state delta devils": {
+    "team_id": 308,
+    "key": "MSVLST",
+    "name": "Delta Devils",
+    "school": "Mississippi Valley State",
+    "full_name": "Mississippi Valley State Delta Devils",
+    "conference": null
+  },
+  "msvsu": {
+    "team_id": 308,
+    "key": "MSVLST",
+    "name": "Delta Devils",
+    "school": "Mississippi Valley State",
+    "full_name": "Mississippi Valley State Delta Devils",
+    "conference": null
+  },
+  "alaam": {
+    "team_id": 309,
+    "key": "ALAAM",
+    "name": "Bulldogs",
+    "school": "Alabama A&M",
+    "full_name": "Alabama A&M Bulldogs",
+    "conference": null
+  },
+  "alabama a&m": {
+    "team_id": 309,
+    "key": "ALAAM",
+    "name": "Bulldogs",
+    "school": "Alabama A&M",
+    "full_name": "Alabama A&M Bulldogs",
+    "conference": null
+  },
+  "alabama a&m bulldogs": {
+    "team_id": 309,
+    "key": "ALAAM",
+    "name": "Bulldogs",
+    "school": "Alabama A&M",
+    "full_name": "Alabama A&M Bulldogs",
+    "conference": null
+  },
+  "arpb": {
+    "team_id": 310,
+    "key": "ARPB",
+    "name": "Golden Lions",
+    "school": "Arkansas-Pine Bluff",
+    "full_name": "Arkansas-Pine Bluff Golden Lions",
+    "conference": null
+  },
+  "golden lions": {
+    "team_id": 310,
+    "key": "ARPB",
+    "name": "Golden Lions",
+    "school": "Arkansas-Pine Bluff",
+    "full_name": "Arkansas-Pine Bluff Golden Lions",
+    "conference": null
+  },
+  "arkansas-pine bluff": {
+    "team_id": 310,
+    "key": "ARPB",
+    "name": "Golden Lions",
+    "school": "Arkansas-Pine Bluff",
+    "full_name": "Arkansas-Pine Bluff Golden Lions",
+    "conference": null
+  },
+  "arkansas-pine bluff golden lions": {
+    "team_id": 310,
+    "key": "ARPB",
+    "name": "Golden Lions",
+    "school": "Arkansas-Pine Bluff",
+    "full_name": "Arkansas-Pine Bluff Golden Lions",
+    "conference": null
+  },
+  "alast": {
+    "team_id": 311,
+    "key": "ALAST",
+    "name": "Hornets",
+    "school": "Alabama State",
+    "full_name": "Alabama State Hornets",
+    "conference": null
+  },
+  "alabama state": {
+    "team_id": 311,
+    "key": "ALAST",
+    "name": "Hornets",
+    "school": "Alabama State",
+    "full_name": "Alabama State Hornets",
+    "conference": null
+  },
+  "alabama state hornets": {
+    "team_id": 311,
+    "key": "ALAST",
+    "name": "Hornets",
+    "school": "Alabama State",
+    "full_name": "Alabama State Hornets",
+    "conference": null
+  },
+  "alasu": {
+    "team_id": 311,
+    "key": "ALAST",
+    "name": "Hornets",
+    "school": "Alabama State",
+    "full_name": "Alabama State Hornets",
+    "conference": null
+  },
+  "grmbst": {
+    "team_id": 312,
+    "key": "GRMBST",
+    "name": "Tigers",
+    "school": "Grambling State",
+    "full_name": "Grambling State Tigers",
+    "conference": null
+  },
+  "grambling state": {
+    "team_id": 312,
+    "key": "GRMBST",
+    "name": "Tigers",
+    "school": "Grambling State",
+    "full_name": "Grambling State Tigers",
+    "conference": null
+  },
+  "grambling state tigers": {
+    "team_id": 312,
+    "key": "GRMBST",
+    "name": "Tigers",
+    "school": "Grambling State",
+    "full_name": "Grambling State Tigers",
+    "conference": null
+  },
+  "pvam": {
+    "team_id": 313,
+    "key": "PVAM",
+    "name": "Panthers",
+    "school": "Prairie View A&M",
+    "full_name": "Prairie View A&M Panthers",
+    "conference": null
+  },
+  "prairie view a&m": {
+    "team_id": 313,
+    "key": "PVAM",
+    "name": "Panthers",
+    "school": "Prairie View A&M",
+    "full_name": "Prairie View A&M Panthers",
+    "conference": null
+  },
+  "prairie view a&m panthers": {
+    "team_id": 313,
+    "key": "PVAM",
+    "name": "Panthers",
+    "school": "Prairie View A&M",
+    "full_name": "Prairie View A&M Panthers",
+    "conference": null
+  },
+  "sdkst": {
+    "team_id": 314,
+    "key": "SDKST",
+    "name": "Jackrabbits",
+    "school": "South Dakota State",
+    "full_name": "South Dakota State Jackrabbits",
+    "conference": null
+  },
+  "jackrabbits": {
+    "team_id": 314,
+    "key": "SDKST",
+    "name": "Jackrabbits",
+    "school": "South Dakota State",
+    "full_name": "South Dakota State Jackrabbits",
+    "conference": null
+  },
+  "south dakota state": {
+    "team_id": 314,
+    "key": "SDKST",
+    "name": "Jackrabbits",
+    "school": "South Dakota State",
+    "full_name": "South Dakota State Jackrabbits",
+    "conference": null
+  },
+  "south dakota state jackrabbits": {
+    "team_id": 314,
+    "key": "SDKST",
+    "name": "Jackrabbits",
+    "school": "South Dakota State",
+    "full_name": "South Dakota State Jackrabbits",
+    "conference": null
+  },
+  "ndkst": {
+    "team_id": 318,
+    "key": "NDKST",
+    "name": "Bison",
+    "school": "North Dakota State",
+    "full_name": "North Dakota State Bison",
+    "conference": null
+  },
+  "north dakota state": {
+    "team_id": 318,
+    "key": "NDKST",
+    "name": "Bison",
+    "school": "North Dakota State",
+    "full_name": "North Dakota State Bison",
+    "conference": null
+  },
+  "north dakota state bison": {
+    "team_id": 318,
+    "key": "NDKST",
+    "name": "Bison",
+    "school": "North Dakota State",
+    "full_name": "North Dakota State Bison",
+    "conference": null
+  },
+  "sdak": {
+    "team_id": 321,
+    "key": "SDAK",
+    "name": "Coyotes",
+    "school": "South Dakota",
+    "full_name": "South Dakota Coyotes",
+    "conference": null
+  },
+  "coyotes": {
+    "team_id": 321,
+    "key": "SDAK",
+    "name": "Coyotes",
+    "school": "South Dakota",
+    "full_name": "South Dakota Coyotes",
+    "conference": null
+  },
+  "south dakota": {
+    "team_id": 321,
+    "key": "SDAK",
+    "name": "Coyotes",
+    "school": "South Dakota",
+    "full_name": "South Dakota Coyotes",
+    "conference": null
+  },
+  "south dakota coyotes": {
+    "team_id": 321,
+    "key": "SDAK",
+    "name": "Coyotes",
+    "school": "South Dakota",
+    "full_name": "South Dakota Coyotes",
+    "conference": null
+  },
+  "will": {
+    "team_id": 322,
+    "key": "WILL",
+    "name": "Leathernecks",
+    "school": "Western Illinois",
+    "full_name": "Western Illinois Leathernecks",
+    "conference": null
+  },
+  "leathernecks": {
+    "team_id": 322,
+    "key": "WILL",
+    "name": "Leathernecks",
+    "school": "Western Illinois",
+    "full_name": "Western Illinois Leathernecks",
+    "conference": null
+  },
+  "western illinois": {
+    "team_id": 322,
+    "key": "WILL",
+    "name": "Leathernecks",
+    "school": "Western Illinois",
+    "full_name": "Western Illinois Leathernecks",
+    "conference": null
+  },
+  "western illinois leathernecks": {
+    "team_id": 322,
+    "key": "WILL",
+    "name": "Leathernecks",
+    "school": "Western Illinois",
+    "full_name": "Western Illinois Leathernecks",
+    "conference": null
+  },
+  "loulaf": {
+    "team_id": 324,
+    "key": "LOULAF",
+    "name": "Ragin' Cajuns",
+    "school": "Louisiana-Lafayette",
+    "full_name": "Louisiana-Lafayette Ragin' Cajuns",
+    "conference": "Sun Belt - West"
+  },
+  "ragin' cajuns": {
+    "team_id": 324,
+    "key": "LOULAF",
+    "name": "Ragin' Cajuns",
+    "school": "Louisiana-Lafayette",
+    "full_name": "Louisiana-Lafayette Ragin' Cajuns",
+    "conference": "Sun Belt - West"
+  },
+  "louisiana-lafayette": {
+    "team_id": 324,
+    "key": "LOULAF",
+    "name": "Ragin' Cajuns",
+    "school": "Louisiana-Lafayette",
+    "full_name": "Louisiana-Lafayette Ragin' Cajuns",
+    "conference": "Sun Belt - West"
+  },
+  "louisiana-lafayette ragin' cajuns": {
+    "team_id": 324,
+    "key": "LOULAF",
+    "name": "Ragin' Cajuns",
+    "school": "Louisiana-Lafayette",
+    "full_name": "Louisiana-Lafayette Ragin' Cajuns",
+    "conference": "Sun Belt - West"
+  },
+  "lamon": {
+    "team_id": 326,
+    "key": "LAMON",
+    "name": "Warhawks",
+    "school": "Louisiana-Monroe",
+    "full_name": "Louisiana-Monroe Warhawks",
+    "conference": "Sun Belt - West"
+  },
+  "warhawks": {
+    "team_id": 326,
+    "key": "LAMON",
+    "name": "Warhawks",
+    "school": "Louisiana-Monroe",
+    "full_name": "Louisiana-Monroe Warhawks",
+    "conference": "Sun Belt - West"
+  },
+  "louisiana-monroe": {
+    "team_id": 326,
+    "key": "LAMON",
+    "name": "Warhawks",
+    "school": "Louisiana-Monroe",
+    "full_name": "Louisiana-Monroe Warhawks",
+    "conference": "Sun Belt - West"
+  },
+  "louisiana-monroe warhawks": {
+    "team_id": 326,
+    "key": "LAMON",
+    "name": "Warhawks",
+    "school": "Louisiana-Monroe",
+    "full_name": "Louisiana-Monroe Warhawks",
+    "conference": "Sun Belt - West"
+  },
+  "arkst": {
+    "team_id": 327,
+    "key": "ARKST",
+    "name": "Red Wolves",
+    "school": "Arkansas State",
+    "full_name": "Arkansas State Red Wolves",
+    "conference": "Sun Belt - West"
+  },
+  "red wolves": {
+    "team_id": 327,
+    "key": "ARKST",
+    "name": "Red Wolves",
+    "school": "Arkansas State",
+    "full_name": "Arkansas State Red Wolves",
+    "conference": "Sun Belt - West"
+  },
+  "arkansas state": {
+    "team_id": 327,
+    "key": "ARKST",
+    "name": "Red Wolves",
+    "school": "Arkansas State",
+    "full_name": "Arkansas State Red Wolves",
+    "conference": "Sun Belt - West"
+  },
+  "arkansas state red wolves": {
+    "team_id": 327,
+    "key": "ARKST",
+    "name": "Red Wolves",
+    "school": "Arkansas State",
+    "full_name": "Arkansas State Red Wolves",
+    "conference": "Sun Belt - West"
+  },
+  "gast": {
+    "team_id": 328,
+    "key": "GAST",
+    "name": "Panthers",
+    "school": "Georgia State",
+    "full_name": "Georgia State Panthers",
+    "conference": "Sun Belt - East"
+  },
+  "georgia state": {
+    "team_id": 328,
+    "key": "GAST",
+    "name": "Panthers",
+    "school": "Georgia State",
+    "full_name": "Georgia State Panthers",
+    "conference": "Sun Belt - East"
+  },
+  "georgia state panthers": {
+    "team_id": 328,
+    "key": "GAST",
+    "name": "Panthers",
+    "school": "Georgia State",
+    "full_name": "Georgia State Panthers",
+    "conference": "Sun Belt - East"
+  },
+  "gas": {
+    "team_id": 329,
+    "key": "GAS",
+    "name": "Eagles",
+    "school": "Georgia Southern",
+    "full_name": "Georgia Southern Eagles",
+    "conference": "Sun Belt - East"
+  },
+  "georgia southern": {
+    "team_id": 329,
+    "key": "GAS",
+    "name": "Eagles",
+    "school": "Georgia Southern",
+    "full_name": "Georgia Southern Eagles",
+    "conference": "Sun Belt - East"
+  },
+  "georgia southern eagles": {
+    "team_id": 329,
+    "key": "GAS",
+    "name": "Eagles",
+    "school": "Georgia Southern",
+    "full_name": "Georgia Southern Eagles",
+    "conference": "Sun Belt - East"
+  },
+  "sala": {
+    "team_id": 330,
+    "key": "SALA",
+    "name": "Jaguars",
+    "school": "South Alabama",
+    "full_name": "South Alabama Jaguars",
+    "conference": "Sun Belt - West"
+  },
+  "south alabama": {
+    "team_id": 330,
+    "key": "SALA",
+    "name": "Jaguars",
+    "school": "South Alabama",
+    "full_name": "South Alabama Jaguars",
+    "conference": "Sun Belt - West"
+  },
+  "south alabama jaguars": {
+    "team_id": 330,
+    "key": "SALA",
+    "name": "Jaguars",
+    "school": "South Alabama",
+    "full_name": "South Alabama Jaguars",
+    "conference": "Sun Belt - West"
+  },
+  "applst": {
+    "team_id": 331,
+    "key": "APPLST",
+    "name": "Mountaineers",
+    "school": "Appalachian State",
+    "full_name": "Appalachian State Mountaineers",
+    "conference": "Sun Belt - East"
+  },
+  "appalachian state": {
+    "team_id": 331,
+    "key": "APPLST",
+    "name": "Mountaineers",
+    "school": "Appalachian State",
+    "full_name": "Appalachian State Mountaineers",
+    "conference": "Sun Belt - East"
+  },
+  "appalachian state mountaineers": {
+    "team_id": 331,
+    "key": "APPLST",
+    "name": "Mountaineers",
+    "school": "Appalachian State",
+    "full_name": "Appalachian State Mountaineers",
+    "conference": "Sun Belt - East"
+  },
+  "txst": {
+    "team_id": 332,
+    "key": "TXST",
+    "name": "Bobcats",
+    "school": "Texas State",
+    "full_name": "Texas State Bobcats",
+    "conference": "Sun Belt - West"
+  },
+  "texas state": {
+    "team_id": 332,
+    "key": "TXST",
+    "name": "Bobcats",
+    "school": "Texas State",
+    "full_name": "Texas State Bobcats",
+    "conference": "Sun Belt - West"
+  },
+  "texas state bobcats": {
+    "team_id": 332,
+    "key": "TXST",
+    "name": "Bobcats",
+    "school": "Texas State",
+    "full_name": "Texas State Bobcats",
+    "conference": "Sun Belt - West"
+  },
+  "troy": {
+    "team_id": 333,
+    "key": "TROY",
+    "name": "Trojans",
+    "school": "Troy",
+    "full_name": "Troy Trojans",
+    "conference": "Sun Belt - West"
+  },
+  "troy trojans": {
+    "team_id": 333,
+    "key": "TROY",
+    "name": "Trojans",
+    "school": "Troy",
+    "full_name": "Troy Trojans",
+    "conference": "Sun Belt - West"
+  },
+  "byu": {
+    "team_id": 336,
+    "key": "BYU",
+    "name": "Cougars",
+    "school": "BYU",
+    "full_name": "BYU Cougars",
+    "conference": "Big 12"
+  },
+  "byu cougars": {
+    "team_id": 336,
+    "key": "BYU",
+    "name": "Cougars",
+    "school": "BYU",
+    "full_name": "BYU Cougars",
+    "conference": "Big 12"
+  },
+  "nmxst": {
+    "team_id": 344,
+    "key": "NMXST",
+    "name": "Aggies",
+    "school": "New Mexico State",
+    "full_name": "New Mexico State Aggies",
+    "conference": "Conference USA"
+  },
+  "new mexico state": {
+    "team_id": 344,
+    "key": "NMXST",
+    "name": "Aggies",
+    "school": "New Mexico State",
+    "full_name": "New Mexico State Aggies",
+    "conference": "Conference USA"
+  },
+  "new mexico state aggies": {
+    "team_id": 344,
+    "key": "NMXST",
+    "name": "Aggies",
+    "school": "New Mexico State",
+    "full_name": "New Mexico State Aggies",
+    "conference": "Conference USA"
+  },
+  "hdsm": {
+    "team_id": 354,
+    "key": "HDSM",
+    "name": "Cowboys",
+    "school": "Hardin-Simmons",
+    "full_name": "Hardin-Simmons Cowboys",
+    "conference": null
+  },
+  "hardin-simmons": {
+    "team_id": 354,
+    "key": "HDSM",
+    "name": "Cowboys",
+    "school": "Hardin-Simmons",
+    "full_name": "Hardin-Simmons Cowboys",
+    "conference": null
+  },
+  "hardin-simmons cowboys": {
+    "team_id": 354,
+    "key": "HDSM",
+    "name": "Cowboys",
+    "school": "Hardin-Simmons",
+    "full_name": "Hardin-Simmons Cowboys",
+    "conference": null
+  },
+  "nmh": {
+    "team_id": 391,
+    "key": "NMH",
+    "name": "Cowboys",
+    "school": "New Mexico Highlands",
+    "full_name": "New Mexico Highlands Cowboys",
+    "conference": null
+  },
+  "new mexico highlands": {
+    "team_id": 391,
+    "key": "NMH",
+    "name": "Cowboys",
+    "school": "New Mexico Highlands",
+    "full_name": "New Mexico Highlands Cowboys",
+    "conference": null
+  },
+  "new mexico highlands cowboys": {
+    "team_id": 391,
+    "key": "NMH",
+    "name": "Cowboys",
+    "school": "New Mexico Highlands",
+    "full_name": "New Mexico Highlands Cowboys",
+    "conference": null
+  },
+  "txamc": {
+    "team_id": 392,
+    "key": "TXAMC",
+    "name": "Lions",
+    "school": "East Texas A&M",
+    "full_name": "East Texas A&M Lions",
+    "conference": null
+  },
+  "east texas a&m": {
+    "team_id": 392,
+    "key": "TXAMC",
+    "name": "Lions",
+    "school": "East Texas A&M",
+    "full_name": "East Texas A&M Lions",
+    "conference": null
+  },
+  "east texas a&m lions": {
+    "team_id": 392,
+    "key": "TXAMC",
+    "name": "Lions",
+    "school": "East Texas A&M",
+    "full_name": "East Texas A&M Lions",
+    "conference": null
+  },
+  "nwost": {
+    "team_id": 393,
+    "key": "NWOST",
+    "name": "Rangers",
+    "school": "Northwestern Oklahoma State",
+    "full_name": "Northwestern Oklahoma State Rangers",
+    "conference": null
+  },
+  "rangers": {
+    "team_id": 393,
+    "key": "NWOST",
+    "name": "Rangers",
+    "school": "Northwestern Oklahoma State",
+    "full_name": "Northwestern Oklahoma State Rangers",
+    "conference": null
+  },
+  "northwestern oklahoma state": {
+    "team_id": 393,
+    "key": "NWOST",
+    "name": "Rangers",
+    "school": "Northwestern Oklahoma State",
+    "full_name": "Northwestern Oklahoma State Rangers",
+    "conference": null
+  },
+  "northwestern oklahoma state rangers": {
+    "team_id": 393,
+    "key": "NWOST",
+    "name": "Rangers",
+    "school": "Northwestern Oklahoma State",
+    "full_name": "Northwestern Oklahoma State Rangers",
+    "conference": null
+  },
+  "nal": {
+    "team_id": 396,
+    "key": "NAL",
+    "name": "Lions",
+    "school": "North Alabama",
+    "full_name": "North Alabama Lions",
+    "conference": null
+  },
+  "north alabama": {
+    "team_id": 396,
+    "key": "NAL",
+    "name": "Lions",
+    "school": "North Alabama",
+    "full_name": "North Alabama Lions",
+    "conference": null
+  },
+  "north alabama lions": {
+    "team_id": 396,
+    "key": "NAL",
+    "name": "Lions",
+    "school": "North Alabama",
+    "full_name": "North Alabama Lions",
+    "conference": null
+  },
+  "wilm": {
+    "team_id": 618,
+    "key": "WILM",
+    "name": "Fightin' Quakers",
+    "school": "Wilmington (OH)",
+    "full_name": "Wilmington (OH) Fightin' Quakers",
+    "conference": null
+  },
+  "fightin' quakers": {
+    "team_id": 618,
+    "key": "WILM",
+    "name": "Fightin' Quakers",
+    "school": "Wilmington (OH)",
+    "full_name": "Wilmington (OH) Fightin' Quakers",
+    "conference": null
+  },
+  "wilmington (oh)": {
+    "team_id": 618,
+    "key": "WILM",
+    "name": "Fightin' Quakers",
+    "school": "Wilmington (OH)",
+    "full_name": "Wilmington (OH) Fightin' Quakers",
+    "conference": null
+  },
+  "wilmington (oh) fightin' quakers": {
+    "team_id": 618,
+    "key": "WILM",
+    "name": "Fightin' Quakers",
+    "school": "Wilmington (OH)",
+    "full_name": "Wilmington (OH) Fightin' Quakers",
+    "conference": null
+  },
+  "tusk": {
+    "team_id": 665,
+    "key": "TUSK",
+    "name": "Golden Tigers",
+    "school": "Tuskegee",
+    "full_name": "Tuskegee Golden Tigers",
+    "conference": null
+  },
+  "golden tigers": {
+    "team_id": 665,
+    "key": "TUSK",
+    "name": "Golden Tigers",
+    "school": "Tuskegee",
+    "full_name": "Tuskegee Golden Tigers",
+    "conference": null
+  },
+  "tuskegee": {
+    "team_id": 665,
+    "key": "TUSK",
+    "name": "Golden Tigers",
+    "school": "Tuskegee",
+    "full_name": "Tuskegee Golden Tigers",
+    "conference": null
+  },
+  "tuskegee golden tigers": {
+    "team_id": 665,
+    "key": "TUSK",
+    "name": "Golden Tigers",
+    "school": "Tuskegee",
+    "full_name": "Tuskegee Golden Tigers",
+    "conference": null
+  },
+  "nopa": {
+    "team_id": 667,
+    "key": "NOPA",
+    "name": "Vikings",
+    "school": "North Park",
+    "full_name": "North Park Vikings",
+    "conference": null
+  },
+  "north park": {
+    "team_id": 667,
+    "key": "NOPA",
+    "name": "Vikings",
+    "school": "North Park",
+    "full_name": "North Park Vikings",
+    "conference": null
+  },
+  "north park vikings": {
+    "team_id": 667,
+    "key": "NOPA",
+    "name": "Vikings",
+    "school": "North Park",
+    "full_name": "North Park Vikings",
+    "conference": null
+  },
+  "enm": {
+    "team_id": 723,
+    "key": "ENM",
+    "name": "Greyhounds",
+    "school": "Eastern New Mexico",
+    "full_name": "Eastern New Mexico Greyhounds",
+    "conference": null
+  },
+  "greyhounds": {
+    "team_id": 723,
+    "key": "ENM",
+    "name": "Greyhounds",
+    "school": "Eastern New Mexico",
+    "full_name": "Eastern New Mexico Greyhounds",
+    "conference": null
+  },
+  "eastern new mexico": {
+    "team_id": 723,
+    "key": "ENM",
+    "name": "Greyhounds",
+    "school": "Eastern New Mexico",
+    "full_name": "Eastern New Mexico Greyhounds",
+    "conference": null
+  },
+  "eastern new mexico greyhounds": {
+    "team_id": 723,
+    "key": "ENM",
+    "name": "Greyhounds",
+    "school": "Eastern New Mexico",
+    "full_name": "Eastern New Mexico Greyhounds",
+    "conference": null
+  },
+  "jac": {
+    "team_id": 741,
+    "key": "JAC",
+    "name": "Lions",
+    "school": "Lindenwood",
+    "full_name": "Lindenwood Lions",
+    "conference": null
+  },
+  "lindenwood": {
+    "team_id": 741,
+    "key": "JAC",
+    "name": "Lions",
+    "school": "Lindenwood",
+    "full_name": "Lindenwood Lions",
+    "conference": null
+  },
+  "lindenwood lions": {
+    "team_id": 741,
+    "key": "JAC",
+    "name": "Lions",
+    "school": "Lindenwood",
+    "full_name": "Lindenwood Lions",
+    "conference": null
+  },
+  "dxst": {
+    "team_id": 750,
+    "key": "DXST",
+    "name": "Trailblazers",
+    "school": "Utah Tech",
+    "full_name": "Utah Tech Trailblazers",
+    "conference": null
+  },
+  "trailblazers": {
+    "team_id": 750,
+    "key": "DXST",
+    "name": "Trailblazers",
+    "school": "Utah Tech",
+    "full_name": "Utah Tech Trailblazers",
+    "conference": null
+  },
+  "utah tech": {
+    "team_id": 750,
+    "key": "DXST",
+    "name": "Trailblazers",
+    "school": "Utah Tech",
+    "full_name": "Utah Tech Trailblazers",
+    "conference": null
+  },
+  "utah tech trailblazers": {
+    "team_id": 750,
+    "key": "DXST",
+    "name": "Trailblazers",
+    "school": "Utah Tech",
+    "full_name": "Utah Tech Trailblazers",
+    "conference": null
+  },
+  "utech": {
+    "team_id": 750,
+    "key": "DXST",
+    "name": "Trailblazers",
+    "school": "Utah Tech",
+    "full_name": "Utah Tech Trailblazers",
+    "conference": null
+  },
+  "armon": {
+    "team_id": 751,
+    "key": "ARMON",
+    "name": "Boll Weevils",
+    "school": "Arkansas-Monticello",
+    "full_name": "Arkansas-Monticello Boll Weevils",
+    "conference": null
+  },
+  "boll weevils": {
+    "team_id": 751,
+    "key": "ARMON",
+    "name": "Boll Weevils",
+    "school": "Arkansas-Monticello",
+    "full_name": "Arkansas-Monticello Boll Weevils",
+    "conference": null
+  },
+  "arkansas-monticello": {
+    "team_id": 751,
+    "key": "ARMON",
+    "name": "Boll Weevils",
+    "school": "Arkansas-Monticello",
+    "full_name": "Arkansas-Monticello Boll Weevils",
+    "conference": null
+  },
+  "arkansas-monticello boll weevils": {
+    "team_id": 751,
+    "key": "ARMON",
+    "name": "Boll Weevils",
+    "school": "Arkansas-Monticello",
+    "full_name": "Arkansas-Monticello Boll Weevils",
+    "conference": null
+  },
+  "merri": {
+    "team_id": 817,
+    "key": "MERRI",
+    "name": "Warriors",
+    "school": "Merrimack College",
+    "full_name": "Merrimack College Warriors",
+    "conference": null
+  },
+  "warriors": {
+    "team_id": 817,
+    "key": "MERRI",
+    "name": "Warriors",
+    "school": "Merrimack College",
+    "full_name": "Merrimack College Warriors",
+    "conference": null
+  },
+  "merrimack college": {
+    "team_id": 817,
+    "key": "MERRI",
+    "name": "Warriors",
+    "school": "Merrimack College",
+    "full_name": "Merrimack College Warriors",
+    "conference": null
+  },
+  "merrimack college warriors": {
+    "team_id": 817,
+    "key": "MERRI",
+    "name": "Warriors",
+    "school": "Merrimack College",
+    "full_name": "Merrimack College Warriors",
+    "conference": null
+  },
+  "merr": {
+    "team_id": 817,
+    "key": "MERRI",
+    "name": "Warriors",
+    "school": "Merrimack College",
+    "full_name": "Merrimack College Warriors",
+    "conference": null
+  },
+  "chde": {
+    "team_id": 825,
+    "key": "CHDE",
+    "name": "Eagles",
+    "school": "Chadron State",
+    "full_name": "Chadron State Eagles",
+    "conference": null
+  },
+  "chadron state": {
+    "team_id": 825,
+    "key": "CHDE",
+    "name": "Eagles",
+    "school": "Chadron State",
+    "full_name": "Chadron State Eagles",
+    "conference": null
+  },
+  "chadron state eagles": {
+    "team_id": 825,
+    "key": "CHDE",
+    "name": "Eagles",
+    "school": "Chadron State",
+    "full_name": "Chadron State Eagles",
+    "conference": null
+  },
+  "chd": {
+    "team_id": 825,
+    "key": "CHDE",
+    "name": "Eagles",
+    "school": "Chadron State",
+    "full_name": "Chadron State Eagles",
+    "conference": null
+  },
+  "illwes": {
+    "team_id": 899,
+    "key": "IllWes",
+    "name": "Titans",
+    "school": "Illinois Wesleyan ",
+    "full_name": "Illinois Wesleyan  Titans",
+    "conference": null
+  },
+  "titans": {
+    "team_id": 899,
+    "key": "IllWes",
+    "name": "Titans",
+    "school": "Illinois Wesleyan ",
+    "full_name": "Illinois Wesleyan  Titans",
+    "conference": null
+  },
+  "illinois wesleyan": {
+    "team_id": 899,
+    "key": "IllWes",
+    "name": "Titans",
+    "school": "Illinois Wesleyan ",
+    "full_name": "Illinois Wesleyan  Titans",
+    "conference": null
+  },
+  "illinois wesleyan  titans": {
+    "team_id": 899,
+    "key": "IllWes",
+    "name": "Titans",
+    "school": "Illinois Wesleyan ",
+    "full_name": "Illinois Wesleyan  Titans",
+    "conference": null
+  },
+  "wnm": {
+    "team_id": 903,
+    "key": "WNM",
+    "name": "Mustangs",
+    "school": "Western New Mexico",
+    "full_name": "Western New Mexico Mustangs",
+    "conference": null
+  },
+  "western new mexico": {
+    "team_id": 903,
+    "key": "WNM",
+    "name": "Mustangs",
+    "school": "Western New Mexico",
+    "full_name": "Western New Mexico Mustangs",
+    "conference": null
+  },
+  "western new mexico mustangs": {
+    "team_id": 903,
+    "key": "WNM",
+    "name": "Mustangs",
+    "school": "Western New Mexico",
+    "full_name": "Western New Mexico Mustangs",
+    "conference": null
+  },
+  "fairs": {
+    "team_id": 921,
+    "key": "FAIRS",
+    "name": "Falcons",
+    "school": "Fairmont State",
+    "full_name": "Fairmont State Falcons",
+    "conference": null
+  },
+  "fairmont state": {
+    "team_id": 921,
+    "key": "FAIRS",
+    "name": "Falcons",
+    "school": "Fairmont State",
+    "full_name": "Fairmont State Falcons",
+    "conference": null
+  },
+  "fairmont state falcons": {
+    "team_id": 921,
+    "key": "FAIRS",
+    "name": "Falcons",
+    "school": "Fairmont State",
+    "full_name": "Fairmont State Falcons",
+    "conference": null
+  },
+  "sru": {
+    "team_id": 994,
+    "key": "SRU",
+    "name": "Rock",
+    "school": "Slippery Rock",
+    "full_name": "Slippery Rock Rock",
+    "conference": null
+  },
+  "rock": {
+    "team_id": 994,
+    "key": "SRU",
+    "name": "Rock",
+    "school": "Slippery Rock",
+    "full_name": "Slippery Rock Rock",
+    "conference": null
+  },
+  "slippery rock": {
+    "team_id": 994,
+    "key": "SRU",
+    "name": "Rock",
+    "school": "Slippery Rock",
+    "full_name": "Slippery Rock Rock",
+    "conference": null
+  },
+  "slippery rock rock": {
+    "team_id": 994,
+    "key": "SRU",
+    "name": "Rock",
+    "school": "Slippery Rock",
+    "full_name": "Slippery Rock Rock",
+    "conference": null
+  },
+  "lbb": {
+    "team_id": 1001,
+    "key": "LBB",
+    "name": "Blue Bears",
+    "school": "Livingstone",
+    "full_name": "Livingstone Blue Bears",
+    "conference": null
+  },
+  "blue bears": {
+    "team_id": 1001,
+    "key": "LBB",
+    "name": "Blue Bears",
+    "school": "Livingstone",
+    "full_name": "Livingstone Blue Bears",
+    "conference": null
+  },
+  "livingstone": {
+    "team_id": 1001,
+    "key": "LBB",
+    "name": "Blue Bears",
+    "school": "Livingstone",
+    "full_name": "Livingstone Blue Bears",
+    "conference": null
+  },
+  "livingstone blue bears": {
+    "team_id": 1001,
+    "key": "LBB",
+    "name": "Blue Bears",
+    "school": "Livingstone",
+    "full_name": "Livingstone Blue Bears",
+    "conference": null
+  },
+  "obb": {
+    "team_id": 1003,
+    "key": "OBB",
+    "name": "Bison",
+    "school": "Oklahoma Baptist",
+    "full_name": "Oklahoma Baptist Bison",
+    "conference": null
+  },
+  "oklahoma baptist": {
+    "team_id": 1003,
+    "key": "OBB",
+    "name": "Bison",
+    "school": "Oklahoma Baptist",
+    "full_name": "Oklahoma Baptist Bison",
+    "conference": null
+  },
+  "oklahoma baptist bison": {
+    "team_id": 1003,
+    "key": "OBB",
+    "name": "Bison",
+    "school": "Oklahoma Baptist",
+    "full_name": "Oklahoma Baptist Bison",
+    "conference": null
+  },
+  "alf": {
+    "team_id": 1022,
+    "key": "ALF",
+    "name": "Pioneers",
+    "school": "Alfred State College",
+    "full_name": "Alfred State College Pioneers",
+    "conference": null
+  },
+  "alfred state college": {
+    "team_id": 1022,
+    "key": "ALF",
+    "name": "Pioneers",
+    "school": "Alfred State College",
+    "full_name": "Alfred State College Pioneers",
+    "conference": null
+  },
+  "alfred state college pioneers": {
+    "team_id": 1022,
+    "key": "ALF",
+    "name": "Pioneers",
+    "school": "Alfred State College",
+    "full_name": "Alfred State College Pioneers",
+    "conference": null
+  },
+  "tarl": {
+    "team_id": 1024,
+    "key": "TARL",
+    "name": "Texans",
+    "school": "Tarleton State",
+    "full_name": "Tarleton State Texans",
+    "conference": null
+  },
+  "texans": {
+    "team_id": 1024,
+    "key": "TARL",
+    "name": "Texans",
+    "school": "Tarleton State",
+    "full_name": "Tarleton State Texans",
+    "conference": null
+  },
+  "tarleton state": {
+    "team_id": 1024,
+    "key": "TARL",
+    "name": "Texans",
+    "school": "Tarleton State",
+    "full_name": "Tarleton State Texans",
+    "conference": null
+  },
+  "tarleton state texans": {
+    "team_id": 1024,
+    "key": "TARL",
+    "name": "Texans",
+    "school": "Tarleton State",
+    "full_name": "Tarleton State Texans",
+    "conference": null
+  },
+  "tusc": {
+    "team_id": 1058,
+    "key": "TUSC",
+    "name": "Pioneers",
+    "school": "Tusculum",
+    "full_name": "Tusculum Pioneers",
+    "conference": null
+  },
+  "tusculum": {
+    "team_id": 1058,
+    "key": "TUSC",
+    "name": "Pioneers",
+    "school": "Tusculum",
+    "full_name": "Tusculum Pioneers",
+    "conference": null
+  },
+  "tusculum pioneers": {
+    "team_id": 1058,
+    "key": "TUSC",
+    "name": "Pioneers",
+    "school": "Tusculum",
+    "full_name": "Tusculum Pioneers",
+    "conference": null
+  },
+  "cata": {
+    "team_id": 1074,
+    "key": "CATA",
+    "name": "Indians",
+    "school": "Catawba",
+    "full_name": "Catawba Indians",
+    "conference": null
+  },
+  "indians": {
+    "team_id": 1074,
+    "key": "CATA",
+    "name": "Indians",
+    "school": "Catawba",
+    "full_name": "Catawba Indians",
+    "conference": null
+  },
+  "catawba": {
+    "team_id": 1074,
+    "key": "CATA",
+    "name": "Indians",
+    "school": "Catawba",
+    "full_name": "Catawba Indians",
+    "conference": null
+  },
+  "catawba indians": {
+    "team_id": 1074,
+    "key": "CATA",
+    "name": "Indians",
+    "school": "Catawba",
+    "full_name": "Catawba Indians",
+    "conference": null
+  },
+  "stmn": {
+    "team_id": 1112,
+    "key": "STMN",
+    "name": "Tommies",
+    "school": "St. Thomas (MN)",
+    "full_name": "St. Thomas (MN) Tommies",
+    "conference": null
+  },
+  "tommies": {
+    "team_id": 1112,
+    "key": "STMN",
+    "name": "Tommies",
+    "school": "St. Thomas (MN)",
+    "full_name": "St. Thomas (MN) Tommies",
+    "conference": null
+  },
+  "st. thomas (mn)": {
+    "team_id": 1112,
+    "key": "STMN",
+    "name": "Tommies",
+    "school": "St. Thomas (MN)",
+    "full_name": "St. Thomas (MN) Tommies",
+    "conference": null
+  },
+  "st. thomas (mn) tommies": {
+    "team_id": 1112,
+    "key": "STMN",
+    "name": "Tommies",
+    "school": "St. Thomas (MN)",
+    "full_name": "St. Thomas (MN) Tommies",
+    "conference": null
+  },
+  "loaks": {
+    "team_id": 1170,
+    "key": "LOAKS",
+    "name": "Oaks",
+    "school": "Lincoln (CA)",
+    "full_name": "Lincoln (CA) Oaks",
+    "conference": null
+  },
+  "oaks": {
+    "team_id": 1170,
+    "key": "LOAKS",
+    "name": "Oaks",
+    "school": "Lincoln (CA)",
+    "full_name": "Lincoln (CA) Oaks",
+    "conference": null
+  },
+  "lincoln (ca)": {
+    "team_id": 1170,
+    "key": "LOAKS",
+    "name": "Oaks",
+    "school": "Lincoln (CA)",
+    "full_name": "Lincoln (CA) Oaks",
+    "conference": null
+  },
+  "lincoln (ca) oaks": {
+    "team_id": 1170,
+    "key": "LOAKS",
+    "name": "Oaks",
+    "school": "Lincoln (CA)",
+    "full_name": "Lincoln (CA) Oaks",
+    "conference": null
+  },
+  "lchb": {
+    "team_id": 1214,
+    "key": "LCHB",
+    "name": "Hornets",
+    "school": "Lynchburg",
+    "full_name": "Lynchburg Hornets",
+    "conference": null
+  },
+  "lynchburg": {
+    "team_id": 1214,
+    "key": "LCHB",
+    "name": "Hornets",
+    "school": "Lynchburg",
+    "full_name": "Lynchburg Hornets",
+    "conference": null
+  },
+  "lynchburg hornets": {
+    "team_id": 1214,
+    "key": "LCHB",
+    "name": "Hornets",
+    "school": "Lynchburg",
+    "full_name": "Lynchburg Hornets",
+    "conference": null
+  },
+  "uwg": {
+    "team_id": 1391,
+    "key": "UWG",
+    "name": "Wolves",
+    "school": "West Georgia",
+    "full_name": "West Georgia Wolves",
+    "conference": null
+  },
+  "wolves": {
+    "team_id": 1391,
+    "key": "UWG",
+    "name": "Wolves",
+    "school": "West Georgia",
+    "full_name": "West Georgia Wolves",
+    "conference": null
+  },
+  "west georgia": {
+    "team_id": 1391,
+    "key": "UWG",
+    "name": "Wolves",
+    "school": "West Georgia",
+    "full_name": "West Georgia Wolves",
+    "conference": null
+  },
+  "west georgia wolves": {
+    "team_id": 1391,
+    "key": "UWG",
+    "name": "Wolves",
+    "school": "West Georgia",
+    "full_name": "West Georgia Wolves",
+    "conference": null
+  },
+  "lake": {
+    "team_id": 1392,
+    "key": "LAKE",
+    "name": "Muskies",
+    "school": "Lakeland",
+    "full_name": "Lakeland Muskies",
+    "conference": null
+  },
+  "muskies": {
+    "team_id": 1392,
+    "key": "LAKE",
+    "name": "Muskies",
+    "school": "Lakeland",
+    "full_name": "Lakeland Muskies",
+    "conference": null
+  },
+  "lakeland": {
+    "team_id": 1392,
+    "key": "LAKE",
+    "name": "Muskies",
+    "school": "Lakeland",
+    "full_name": "Lakeland Muskies",
+    "conference": null
+  },
+  "lakeland muskies": {
+    "team_id": 1392,
+    "key": "LAKE",
+    "name": "Muskies",
+    "school": "Lakeland",
+    "full_name": "Lakeland Muskies",
+    "conference": null
+  }
+}

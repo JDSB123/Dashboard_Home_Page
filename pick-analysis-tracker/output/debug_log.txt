@@ -1,0 +1,375 @@
+C:\Users\JB\green-bier-ventures\DASHBOARD_main\pick-analysis-tracker\grade_picks.py:304: FutureWarning: Parsed string "2025-12-13 15:00 ET" included an un-recognized timezone "ET". Dropping unrecognized timezones is deprecated; in a future version this will raise. Instead pass the string without the timezone, then use .tz_localize to convert to a recognized timezone.
+  dt = pd.to_datetime(date_raw)
+C:\Users\JB\green-bier-ventures\DASHBOARD_main\pick-analysis-tracker\grade_picks.py:304: FutureWarning: Parsed string "2025-12-13 15:30 ET" included an un-recognized timezone "ET". Dropping unrecognized timezones is deprecated; in a future version this will raise. Instead pass the string without the timezone, then use .tz_localize to convert to a recognized timezone.
+  dt = pd.to_datetime(date_raw)
+C:\Users\JB\green-bier-ventures\DASHBOARD_main\pick-analysis-tracker\grade_picks.py:304: FutureWarning: Parsed string "2025-12-13 17:30 ET" included an un-recognized timezone "ET". Dropping unrecognized timezones is deprecated; in a future version this will raise. Instead pass the string without the timezone, then use .tz_localize to convert to a recognized timezone.
+  dt = pd.to_datetime(date_raw)
+C:\Users\JB\green-bier-ventures\DASHBOARD_main\pick-analysis-tracker\grade_picks.py:304: FutureWarning: Parsed string "2025-12-13 21:00 ET" included an un-recognized timezone "ET". Dropping unrecognized timezones is deprecated; in a future version this will raise. Instead pass the string without the timezone, then use .tz_localize to convert to a recognized timezone.
+  dt = pd.to_datetime(date_raw)
+C:\Users\JB\green-bier-ventures\DASHBOARD_main\pick-analysis-tracker\grade_picks.py:304: FutureWarning: Parsed string "2025-12-13 20:00 ET" included an un-recognized timezone "ET". Dropping unrecognized timezones is deprecated; in a future version this will raise. Instead pass the string without the timezone, then use .tz_localize to convert to a recognized timezone.
+  dt = pd.to_datetime(date_raw)
+C:\Users\JB\green-bier-ventures\DASHBOARD_main\pick-analysis-tracker\grade_picks.py:304: FutureWarning: Parsed string "2025-12-13 19:30 CT" included an un-recognized timezone "CT". Dropping unrecognized timezones is deprecated; in a future version this will raise. Instead pass the string without the timezone, then use .tz_localize to convert to a recognized timezone.
+  dt = pd.to_datetime(date_raw)
+C:\Users\JB\green-bier-ventures\DASHBOARD_main\pick-analysis-tracker\grade_picks.py:304: FutureWarning: Parsed string "2025-12-13 21:30 ET" included an un-recognized timezone "ET". Dropping unrecognized timezones is deprecated; in a future version this will raise. Instead pass the string without the timezone, then use .tz_localize to convert to a recognized timezone.
+  dt = pd.to_datetime(date_raw)
+DEBUG: Inferred spurs on 2025-12-08
+DEBUG: Inferred pacers on 2025-12-08
+DEBUG: Inferred pacers on 2025-12-08
+DEBUG: Found Clippers@Rockets on 2025-12-11
+DEBUG: Found Clippers@Rockets on 2025-12-11
+DEBUG: Found Clippers@Rockets on 2025-12-11
+DEBUG: Found Clippers@Rockets on 2025-12-11
+DEBUG: Found Clippers@Rockets on 2025-12-11
+DEBUG: Found Clippers@Rockets on 2025-12-11
+DEBUG: No event found for TBD on 2025-12-08 +/- 3 days
+DEBUG: Found Clippers@Rockets on 2025-12-11
+DEBUG: Found Clippers@Rockets on 2025-12-11
+DEBUG: Found Clippers@Rockets on 2025-12-11
+DEBUG: Found Wisconsin@Nebraska on 2025-12-10
+DEBUG: Found Wisconsin@Nebraska on 2025-12-10
+DEBUG: Found Wisconsin@Nebraska on 2025-12-10
+DEBUG: Found Duquesne@Boise State on 2025-12-10
+DEBUG: Found Duquesne@Boise State on 2025-12-10
+DEBUG: Found Duquesne@Boise State on 2025-12-10
+DEBUG: Found Suns@Thunder on 2025-12-10
+DEBUG: Found Suns@Thunder on 2025-12-10
+DEBUG: Found Suns@Thunder on 2025-12-10
+DEBUG: Found Spurs@Lakers on 2025-12-10
+DEBUG: Found Spurs@Lakers on 2025-12-10
+DEBUG: Found Spurs@Lakers on 2025-12-10
+DEBUG: Found Celtics@Bucks on 2025-12-11
+DEBUG: Found Celtics@Bucks on 2025-12-11
+DEBUG: Found Celtics@Bucks on 2025-12-11
+DEBUG: Found Clippers@Rockets on 2025-12-11
+DEBUG: Found Trail Blazes@Pelicans on 2025-12-11
+DEBUG: Found Iowa@Iowa State on 2025-12-11
+DEBUG: Found Iowa@Iowa State on 2025-12-11
+DEBUG: Found Iowa@Iowa State on 2025-12-11
+DEBUG: Found North Dakota State@CSU Bakersfield on 2025-12-11
+DEBUG: Found North Dakota State@CSU Bakersfield on 2025-12-11
+DEBUG: Found North Dakota State@CSU Bakersfield on 2025-12-11
+DEBUG: Found North Dakota State@CSU Bakersfield on 2025-12-11
+DEBUG: Found St. Joseph's@Syracuse on 2025-12-11
+DEBUG: Found Atlanta Falcons@Tampa Bay Buccaneers on 2025-12-11
+DEBUG: Found Atlanta Falcons@Tampa Bay Buccaneers on 2025-12-11
+DEBUG: Found Atlanta Falcons@Tampa Bay Buccaneers on 2025-12-11
+DEBUG: Found Chicago Bulls@Charlotte Hornets on 2025-12-12
+DEBUG: Found Chicago Bulls@Charlotte Hornets on 2025-12-12
+DEBUG: Found Cleveland Cavaliers@Washington Wizards on 2025-12-12
+DEBUG: Found Cleveland Cavaliers@Washington Wizards on 2025-12-12
+DEBUG: Found Cleveland Cavaliers@Washington Wizards on 2025-12-12
+DEBUG: Found Indiana Pacers@Philadelphia 76ers on 2025-12-12
+DEBUG: Found Utah Jazz@Memphis Grizzlies on 2025-12-12
+DEBUG: Found Utah Jazz@Memphis Grizzlies on 2025-12-12
+DEBUG: Found Utah Jazz@Memphis Grizzlies on 2025-12-12
+DEBUG: Found Utah Jazz@Memphis Grizzlies on 2025-12-12
+DEBUG: Found Utah Jazz@Memphis Grizzlies on 2025-12-12
+DEBUG: Found Utah Jazz@Memphis Grizzlies on 2025-12-12
+DEBUG: Found Brooklyn Nets@Dallas Mavericks on 2025-12-12
+DEBUG: Found Brooklyn Nets@Dallas Mavericks on 2025-12-12
+DEBUG: Found Brooklyn Nets@Dallas Mavericks on 2025-12-12
+DEBUG: Found Brooklyn Nets@Dallas Mavericks on 2025-12-12
+DEBUG: Found Brooklyn Nets@Dallas Mavericks on 2025-12-12
+DEBUG: Found Minnesota Timberwolves@Golden State Warriors on 2025-12-12
+DEBUG: Found Minnesota Timberwolves@Golden State Warriors on 2025-12-12
+DEBUG: Found Minnesota Timberwolves@Golden State Warriors on 2025-12-12
+DEBUG: Found Texas@UConn on 2025-12-12
+DEBUG: Found Texas@UConn on 2025-12-12
+DEBUG: Found Texas@UConn on 2025-12-12
+DEBUG: Found Texas@UConn on 2025-12-12
+DEBUG: Found California Baptist@Eastern Washington on 2025-12-12
+DEBUG: Found California Baptist@Eastern Washington on 2025-12-12
+DEBUG: Found California Baptist@Eastern Washington on 2025-12-12
+DEBUG: Found California Baptist@Eastern Washington on 2025-12-12
+DEBUG: No event found for Army @ Navy on 2025-12-13 +/- 3 days
+DEBUG: No event found for Army @ Navy on 2025-12-13 +/- 3 days
+DEBUG: No event found for Army @ Navy on 2025-12-13 +/- 3 days
+DEBUG: No event found for Army @ Navy on 2025-12-13 +/- 3 days
+DEBUG: No event found for Army @ Navy on 2025-12-13 +/- 3 days
+DEBUG: No event found for Army @ Navy on 2025-12-13 +/- 3 days
+DEBUG: No event found for Army @ Navy on 2025-12-13 +/- 3 days
+DEBUG: Found Memphis@Louisville on 2025-12-13
+DEBUG: Found Memphis@Louisville on 2025-12-13
+DEBUG: Found Memphis@Louisville on 2025-12-13
+DEBUG: Found Knicks@Magic on 2025-12-13
+DEBUG: Found Knicks@Magic on 2025-12-13
+DEBUG: Found Knicks@Magic on 2025-12-13
+DEBUG: Found Knicks@Magic on 2025-12-13
+DEBUG: Found Spurs@Thunder on 2025-12-13
+DEBUG: Found Spurs@Thunder on 2025-12-13
+DEBUG: Found Spurs@Thunder on 2025-12-13
+DEBUG: Found Spurs@Thunder on 2025-12-13
+DEBUG: Found SMU@LSU on 2025-12-13
+DEBUG: Found SMU@LSU on 2025-12-13
+DEBUG: Found SMU@LSU on 2025-12-13
+DEBUG: Found UC Riverside@BYU on 2025-12-13
+DEBUG: Found UC Riverside@BYU on 2025-12-13
+DEBUG: Inferred alabama +3 on 2025-12-13
+DEBUG: Inferred alabama ml on 2025-12-13
+DEBUG: Inferred alabama +1.5 1h on 2025-12-13
+DEBUG: Inferred alabama +3 2h on 2025-12-13
+DEBUG: Inferred arizona/alabama u92.5 2h on 2025-12-13
+DEBUG: Inferred gonzaga -5 2h on 2025-12-13
+DEBUG: Inferred gonzaga/ucla o79 2h on 2025-12-13
+DEBUG: Found Mississippi State@Utah on 2025-12-13
+DEBUG: Found Mississippi State@Utah on 2025-12-13
+DEBUG: Found Pepperdine@Cal State Bakersfield on 2025-12-13
+DEBUG: Found Pepperdine@Cal State Bakersfield on 2025-12-13
+DEBUG: Found Tennessee State@UNLV on 2025-12-13
+DEBUG: Found Tennessee State@UNLV on 2025-12-13
+DEBUG: No event found for Alabama vs Arizona (neutral) on 2025-12-13 +/- 3 days
+DEBUG: Inferred alabama +3 on 2025-12-13
+DEBUG: No event found for Army @ Navy on 2025-12-13 +/- 3 days
+DEBUG: No event found for Army @ Navy on 2025-12-13 +/- 3 days
+DEBUG: No event found for Army @ Navy on 2025-12-13 +/- 3 days
+DEBUG: No event found for Army @ Navy on 2025-12-13 +/- 3 days
+DEBUG: No event found for Army @ Navy on 2025-12-13 +/- 3 days
+DEBUG: No event found for Army @ Navy on 2025-12-13 +/- 3 days
+DEBUG: No event found for Army @ Navy on 2025-12-13 +/- 3 days
+DEBUG: Found Memphis@Louisville on 2025-12-13
+DEBUG: Found Memphis@Louisville on 2025-12-13
+DEBUG: Found Memphis@Louisville on 2025-12-13
+DEBUG: Inferred magic on 2025-12-13
+DEBUG: Inferred magic ml (+160) on 2025-12-13
+DEBUG: No event found for Knicks vs Magic (Neutral) on 2025-12-13 +/- 3 days
+DEBUG: Inferred magic on 2025-12-13
+DEBUG: Inferred spurs on 2025-12-13
+DEBUG: No event found for Thunder vs Spurs (Neutral) on 2025-12-13 +/- 3 days
+DEBUG: Inferred spurs on 2025-12-13
+DEBUG: Inferred spurs ml (+380) on 2025-12-13
+DEBUG: Inferred ohio state on 2025-12-13
+DEBUG: No event found for West Virginia vs Ohio State (Neutral) on 2025-12-13 +/- 3 days
+DEBUG: No event found for West Virginia vs Ohio State (Neutral) on 2025-12-13 +/- 3 days
+DEBUG: No event found for SMU vs LSU (Neutral) on 2025-12-13 +/- 3 days
+DEBUG: No event found for SMU vs LSU (Neutral) on 2025-12-13 +/- 3 days
+DEBUG: No event found for SMU vs LSU (Neutral) on 2025-12-13 +/- 3 days
+DEBUG: Found UC Riverside@BYU on 2025-12-13
+DEBUG: Found UC Riverside@BYU on 2025-12-13
+DEBUG: No event found for Mississippi State vs Utah on 2025-12-13 +/- 3 days
+DEBUG: No event found for Mississippi State vs Utah on 2025-12-13 +/- 3 days
+DEBUG: Inferred alabama on 2025-12-13
+DEBUG: Inferred alabama ml (+131) on 2025-12-13
+DEBUG: Inferred alabama on 2025-12-13
+DEBUG: No event found for Pepperdine vs CSU Bakersfield on 2025-12-13 +/- 3 days
+DEBUG: No event found for Pepperdine vs CSU Bakersfield on 2025-12-13 +/- 3 days
+DEBUG: No event found for Tennessee State vs UNLV (Neutral) on 2025-12-13 +/- 3 days
+DEBUG: No event found for Tennessee State vs UNLV (Neutral) on 2025-12-13 +/- 3 days
+DEBUG: No event found for Army @ Navy on 2025-12-13 +/- 3 days
+DEBUG: No event found for Army @ Navy on 2025-12-13 +/- 3 days
+DEBUG: No event found for Army @ Navy on 2025-12-13 +/- 3 days
+DEBUG: No event found for Army @ Navy on 2025-12-13 +/- 3 days
+DEBUG: No event found for Army @ Navy on 2025-12-13 +/- 3 days
+DEBUG: No event found for Army @ Navy on 2025-12-13 +/- 3 days
+DEBUG: Found Memphis@Louisville on 2025-12-13
+DEBUG: Found Knicks@Magic on 2025-12-13
+DEBUG: Found Knicks@Magic on 2025-12-13
+DEBUG: Found Knicks@Magic on 2025-12-13
+DEBUG: Found Spurs@Thunder on 2025-12-13
+DEBUG: Found Spurs@Thunder on 2025-12-13
+DEBUG: Found Spurs@Thunder on 2025-12-13
+DEBUG: Found Spurs@Thunder on 2025-12-13
+DEBUG: Found Raiders@Eagles on 2025-12-14
+DEBUG: Found Bills@Patriots on 2025-12-14
+DEBUG: Found Lions@Rams on 2025-12-14
+DEBUG: Found Lions@Rams on 2025-12-14
+DEBUG: Found Panthers@Saints on 2025-12-14
+DEBUG: Found Colts@Seahawks on 2025-12-14
+DEBUG: Found Titans@49ers on 2025-12-14
+DEBUG: Found Vikings@Cowboys on 2025-12-14
+DEBUG: Found Vikings@Cowboys on 2025-12-14
+DEBUG: Found Wizards@Pacers on 2025-12-14
+DEBUG: Found Wizards@Pacers on 2025-12-14
+DEBUG: Found Wizards@Pacers on 2025-12-14
+DEBUG: Found Wizards@Pacers on 2025-12-14
+DEBUG: Found Wizards@Pacers on 2025-12-14
+DEBUG: Found Hornets@Cavaliers on 2025-12-14
+DEBUG: Found Hornets@Cavaliers on 2025-12-14
+DEBUG: Found Hornets@Cavaliers on 2025-12-14
+DEBUG: Found Hornets@Cavaliers on 2025-12-14
+DEBUG: Found Charlotte@Charleston on 2025-12-14
+DEBUG: Found Charlotte@Charleston on 2025-12-14
+DEBUG: Found Charlotte@Charleston on 2025-12-14
+DEBUG: Found Charlotte@Charleston on 2025-12-14
+DEBUG: No event found for SD State @ Opponent on 2025-12-15 +/- 3 days
+DEBUG: No event found for SD State @ Opponent on 2025-12-15 +/- 3 days
+DEBUG: No event found for SD State @ Opponent on 2025-12-15 +/- 3 days
+DEBUG: No event found for Niagara @ Opponent on 2025-12-15 +/- 3 days
+DEBUG: No event found for Niagara @ Opponent on 2025-12-15 +/- 3 days
+DEBUG: No event found for Dolphins @ Opponent on 2025-12-15 +/- 3 days
+DEBUG: No event found for Dolphins @ Opponent on 2025-12-15 +/- 3 days
+DEBUG: No event found for Dolphins @ Opponent on 2025-12-15 +/- 3 days
+DEBUG: No event found for Celtics @ Opponent on 2025-12-15 +/- 3 days
+DEBUG: No event found for Raptors @ Opponent on 2025-12-15 +/- 3 days
+DEBUG: No event found for Jazz @ Opponent on 2025-12-15 +/- 3 days
+DEBUG: No event found for Grizzlies @ Opponent on 2025-12-15 +/- 3 days
+DEBUG: No event found for Rockets @ Opponent on 2025-12-15 +/- 3 days
+DEBUG: No event found for Jazz @ Opponent on 2025-12-15 +/- 3 days
+DEBUG: Found Mavericks@Jazz on 2025-12-15
+DEBUG: No event found for Jazz @ Opponent on 2025-12-15 +/- 3 days
+DEBUG: Found Nuggets@Rockets on 2025-12-15
+DEBUG: Found Raptors@Heat on 2025-12-15
+DEBUG: No event found for Celtics @ Opponent on 2025-12-15 +/- 3 days
+DEBUG: No event found for Celtics @ Opponent on 2025-12-15 +/- 3 days
+DEBUG: No event found for Rockets @ Opponent on 2025-12-15 +/- 3 days
+DEBUG: No event found for Grizzlies @ Opponent on 2025-12-15 +/- 3 days
+DEBUG: Found Spurs@Knicks on 2025-12-16
+DEBUG: Found Spurs@Knicks on 2025-12-16
+DEBUG: Found Spurs@Knicks on 2025-12-16
+DEBUG: Found Spurs@Knicks on 2025-12-16
+DEBUG: Found FSU@Dayton on 2025-12-16
+DEBUG: Found Marist@GT on 2025-12-16
+DEBUG: No event found for SC @ Clemson on 2025-12-16 +/- 3 days
+DEBUG: No event found for NC A&T @ UNCG on 2025-12-16 +/- 3 days
+DEBUG: No event found for UMKC @ Oklahoma on 2025-12-16 +/- 3 days
+DEBUG: No event found for UMKC @ Oklahoma on 2025-12-16 +/- 3 days
+DEBUG: No event found for Oral Rob @ MO St on 2025-12-16 +/- 3 days
+DEBUG: No event found for ETSU @ UNC on 2025-12-16 +/- 3 days
+DEBUG: Found Butler@UConn on 2025-12-16
+DEBUG: Found Butler@UConn on 2025-12-16
+DEBUG: Found Butler@UConn on 2025-12-16
+DEBUG: Found Towson@Kansas on 2025-12-16
+DEBUG: Found Pacific@BYU on 2025-12-16
+DEBUG: No event found for ACU @ Arizona on 2025-12-16 +/- 3 days
+DEBUG: No event found for ACU @ Arizona on 2025-12-16 +/- 3 days
+DEBUG: Found Montana St@Cal Poly on 2025-12-16
+DEBUG: Found Cavaliers@Bulls on 2025-12-17
+DEBUG: Found Cavaliers@Bulls on 2025-12-17
+DEBUG: Found Grizzlies@Timberwolves on 2025-12-17
+DEBUG: Found Arizona State@UCLA on 2025-12-17
+DEBUG: Found Arizona State@UCLA on 2025-12-17
+DEBUG: Found Portland@Oregon on 2025-12-17
+DEBUG: Found Portland@Oregon on 2025-12-17
+DEBUG: No event found for Stanford @ Opponent on 2025-12-17 +/- 3 days
+DEBUG: Found Pepperdine@Long Beach St on 2025-12-18
+DEBUG: Found Pepperdine@Long Beach St on 2025-12-18
+DEBUG: Found Pepperdine@Long Beach St on 2025-12-18
+DEBUG: Found Raptors@Bucks on 2025-12-18
+DEBUG: Found Clippers@Thunder on 2025-12-18
+DEBUG: Found Wizards@Spurs on 2025-12-18
+DEBUG: Found Hawks@Hornets on 2025-12-18
+DEBUG: No event found for Nets @ Opponent on 2025-12-18 +/- 3 days
+DEBUG: No event found for Jazz @ Opponent on 2025-12-18 +/- 3 days
+DEBUG: No event found for Knicks @ Opponent on 2025-12-18 +/- 3 days
+DEBUG: No event found for Hornets @ Opponent on 2025-12-18 +/- 3 days
+DEBUG: Found Hawks@Hornets on 2025-12-18
+DEBUG: Found Hawks@Hornets on 2025-12-18
+DEBUG: Found Heat@Nets on 2025-12-18
+DEBUG: Found Heat@Nets on 2025-12-18
+DEBUG: Found Rockets@Pelicans on 2025-12-18
+DEBUG: Found Clippers@Thunder on 2025-12-18
+DEBUG: Found Raptors@Bucks on 2025-12-18
+DEBUG: Found Raptors@Bucks on 2025-12-18
+DEBUG: Found Wizards@Spurs on 2025-12-18
+DEBUG: Found Pistons@Mavericks on 2025-12-18
+DEBUG: Found Warriors@Suns on 2025-12-18
+DEBUG: Found Lakers@Jazz on 2025-12-18
+DEBUG: Found Lakers@Jazz on 2025-12-18
+DEBUG: Found Heat@Celtics on 2025-12-19
+DEBUG: Found Heat@Celtics on 2025-12-19
+DEBUG: Found Heat@Celtics on 2025-12-19
+DEBUG: Found Bulls@Cavaliers on 2025-12-19
+DEBUG: Found Bulls@Cavaliers on 2025-12-19
+DEBUG: Found Spurs@Hawks on 2025-12-19
+DEBUG: Found Thunder@Timberwolves on 2025-12-19
+DEBUG: Found Thunder@Timberwolves on 2025-12-19
+DEBUG: Found 76ers@Knicks on 2025-12-19
+DEBUG: Found 76ers@Knicks on 2025-12-19
+DEBUG: Found 76ers@Knicks on 2025-12-19
+DEBUG: Found Alabama@Oklahoma University on 2025-12-19
+DEBUG: Found Alabama@Oklahoma University on 2025-12-19
+DEBUG: Found Alabama@Oklahoma University on 2025-12-19
+DEBUG: Found Alabama@Oklahoma University on 2025-12-19
+DEBUG: Found Eagles@Commanders on 2025-12-20
+DEBUG: Found Packers@Bears on 2025-12-20
+DEBUG: Found Packers@Bears on 2025-12-20
+DEBUG: Found Packers@Bears on 2025-12-20
+DEBUG: Found Packers@Bears on 2025-12-20
+DEBUG: Found Packers@Bears on 2025-12-20
+DEBUG: Found Packers@Bears on 2025-12-20
+DEBUG: Found Magic@Jazz on 2025-12-20
+DEBUG: Found Magic@Jazz on 2025-12-20
+DEBUG: Found Magic@Jazz on 2025-12-20
+DEBUG: Found Magic@Jazz on 2025-12-20
+DEBUG: Found Magic@Jazz on 2025-12-20
+DEBUG: Found Magic@Jazz on 2025-12-20
+DEBUG: Found Trail Blazers@Kings on 2025-12-20
+DEBUG: Found Trail Blazers@Kings on 2025-12-20
+DEBUG: Found Lakers@Clippers on 2025-12-20
+DEBUG: Found Jaguars@Broncos on 2025-12-21
+DEBUG: Found Jaguars@Broncos on 2025-12-21
+DEBUG: Found Jaguars@Broncos on 2025-12-21
+DEBUG: Found Jaguars@Broncos on 2025-12-21
+DEBUG: Found Jaguars@Broncos on 2025-12-21
+DEBUG: Found Falcons@Cardinals on 2025-12-21
+DEBUG: Found Falcons@Cardinals on 2025-12-21
+DEBUG: Found Falcons@Cardinals on 2025-12-21
+DEBUG: Found Falcons@Cardinals on 2025-12-21
+DEBUG: Found Raiders@Texans on 2025-12-21
+DEBUG: Found Raiders@Texans on 2025-12-21
+DEBUG: Found Patriots@Ravens on 2025-12-21
+DEBUG: Found Patriots@Ravens on 2025-12-21
+DEBUG: Found Patriots@Ravens on 2025-12-21
+DEBUG: Found Patriots@Ravens on 2025-12-21
+DEBUG: Found Rockets@Kings on 2025-12-21
+DEBUG: Found Rockets@Kings on 2025-12-21
+DEBUG: Found Rockets@Kings on 2025-12-21
+DEBUG: Found Rockets@Kings on 2025-12-21
+DEBUG: Found North Dakota@Nebraska on 2025-12-21
+DEBUG: Found North Dakota@Nebraska on 2025-12-21
+DEBUG: Found North Dakota@Nebraska on 2025-12-21
+DEBUG: Found North Dakota@Nebraska on 2025-12-21
+DEBUG: Found North Dakota@Nebraska on 2025-12-21
+DEBUG: Found Norfolk@UTEP on 2025-12-21
+DEBUG: Found Norfolk@UTEP on 2025-12-21
+DEBUG: Found Norfolk@UTEP on 2025-12-21
+DEBUG: Found Toledo@Louisville on 2025-12-23
+DEBUG: Found Toledo@Louisville on 2025-12-23
+DEBUG: Found Toledo@Louisville on 2025-12-23
+DEBUG: Found Toledo@Louisville on 2025-12-23
+DEBUG: Found Western Kentucky@Southern Miss on 2025-12-23
+DEBUG: Found Western Kentucky@Southern Miss on 2025-12-23
+DEBUG: Found Western Kentucky@Southern Miss on 2025-12-23
+DEBUG: Found Western Kentucky@Southern Miss on 2025-12-23
+DEBUG: Found Western Kentucky@Southern Miss on 2025-12-23
+DEBUG: Found Western Kentucky@Southern Miss on 2025-12-23
+DEBUG: Found Western Kentucky@Southern Miss on 2025-12-23
+DEBUG: Found Western Kentucky@Southern Miss on 2025-12-23
+DEBUG: Found Western Kentucky@Southern Miss on 2025-12-23
+DEBUG: Found UNLV@Ohio on 2025-12-23
+DEBUG: Found UNLV@Ohio on 2025-12-23
+DEBUG: Found UNLV@Ohio on 2025-12-23
+DEBUG: Found UNLV@Ohio on 2025-12-23
+DEBUG: Found UNLV@Ohio on 2025-12-23
+DEBUG: Found UNLV@Ohio on 2025-12-23
+DEBUG: Found Nets@76ers on 2025-12-23
+DEBUG: Found Nets@76ers on 2025-12-23
+DEBUG: Found Wizards@Hornets on 2025-12-23
+DEBUG: Found Wizards@Hornets on 2025-12-23
+DEBUG: Found Bulls@Hawks on 2025-12-23
+DEBUG: Found Bulls@Hawks on 2025-12-23
+DEBUG: Found Bulls@Hawks on 2025-12-23
+DEBUG: Found Pelicans@Cavaliers on 2025-12-23
+DEBUG: Found Pelicans@Cavaliers on 2025-12-23
+DEBUG: Found Nuggets@Mavericks on 2025-12-23
+DEBUG: Found Nuggets@Mavericks on 2025-12-23
+DEBUG: Found Thunder@Spurs on 2025-12-23
+DEBUG: Found Thunder@Spurs on 2025-12-23
+DEBUG: Found Grizzlies@Jazz on 2025-12-23
+DEBUG: Found Raptors@Heat on 2025-12-23
+DEBUG: Found Pistons@Kings on 2025-12-23
+DEBUG: Found Magic@Trail Blazers on 2025-12-23
+DEBUG: Found Villanova@Seton Hall on 2025-12-23
+DEBUG: Found Villanova@Seton Hall on 2025-12-23
+DEBUG: Found Villanova@Seton Hall on 2025-12-23
+DEBUG: Found Villanova@Seton Hall on 2025-12-23
+DEBUG: Found Villanova@Seton Hall on 2025-12-23
+DEBUG: No event found for 49ers @ Opponent TBD on 2025-12-22 +/- 3 days
+DEBUG: No event found for grizzlies on 2025-12-22 +/- 3 days
+DEBUG: No event found for BYU @ Opponent TBD on 2025-12-22 +/- 3 days
+DEBUG: No event found for Grizzlies @ Opponent TBD on 2025-12-22 +/- 3 days
+DEBUG: Found Rockets@Clippers on 2025-12-23
+DEBUG: Found Rockets@Clippers on 2025-12-23
+DEBUG: Found Rockets@Clippers on 2025-12-23
+DEBUG: Found Rockets@Clippers on 2025-12-23
+DEBUG: Found Rockets@Clippers on 2025-12-23
+Graded 360 rows -> C:\Users\JB\green-bier-ventures\DASHBOARD_main\pick-analysis-tracker\output\graded_picks.csv

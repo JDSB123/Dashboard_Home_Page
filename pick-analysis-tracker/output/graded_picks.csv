@@ -1,0 +1,361 @@
+Date,League,Matchup,Segment,Pick,Odds,Risk,ToWin,Hit/Miss,PnL,StakeRule
+2025-12-08,NBA,Spurs @ TBD,fg,Spurs -9 (-113),-113,56500.0,50000.0,loss,-56500.0,rule-negative
+2025-12-08,NBA,Pacers @ TBD,fg,Pacers -4 (-102),-102,51000.0,50000.0,win,50000.0,rule-negative
+2025-12-08,NBA,Pacers @ TBD,1h,Pacers -2 (-106),-106,53000.0,50000.0,win,50000.0,rule-negative
+2025-12-08,NBA,Clippers @ Rockets,fg,Clippers +3 (-130),-130,65000.0,50000.0,win,50000.0,rule-negative
+2025-12-08,NBA,Clippers @ Rockets,1q,Clippers -115,-115,57500.0,50000.0,loss,-57500.0,rule-negative
+2025-12-08,NBA,Clippers @ Rockets,1h,Clippers +108,108,50000.0,54000.0,win,54000.0,rule-positive
+2025-12-08,NBA,Clippers @ Rockets,1h,Clippers Team Total Under 20.5 (-105),-105,52500.0,50000.0,loss,-52500.0,rule-negative
+2025-12-08,NBA,Clippers @ Rockets,fg,Clippers Team Total Under 42.5 (-118),-118,59000.0,50000.0,loss,-59000.0,rule-negative
+2025-12-08,NBA,Clippers @ Rockets,fg,Clippers +120,120,50000.0,60000.0,loss,-50000.0,rule-positive
+2025-12-08,NBA,TBD,fg,Under 7.5 (-125),-125,62500.0,50000.0,unknown,,rule-negative
+2025-12-08,NBA,Clippers @ Rockets,2h,Clippers +1 (EVEN),100,50000.0,50000.0,loss,-50000.0,rule-positive
+2025-12-08,NBA,Clippers @ Rockets,2h,Clippers +125,125,50000.0,62500.0,loss,-50000.0,rule-positive
+2025-12-08,NBA,Clippers @ Rockets,2h,Clippers Team Total Under 20 (+105),105,50000.0,52500.0,loss,-50000.0,rule-positive
+2025-12-10,NCAAM,Wisconsin @ Nebraska,fg, Wisconsin +2 (-107) ,-107,53500.0,50000.0,loss,-53500.0,rule-negative
+2025-12-10,NCAAM,Wisconsin @ Nebraska,1h, Wisconsin +1 (-108) ,-108,54000.0,50000.0,loss,-54000.0,rule-negative
+2025-12-10,NCAAM,Wisconsin @ Nebraska,fg, Under 158.5 (-105) ,-105,52500.0,50000.0,win,50000.0,rule-negative
+2025-12-10,NCAAM,Duquesne @ Boise State,fg, Under 150.5 (-108) ,-108,54000.0,50000.0,win,50000.0,rule-negative
+2025-12-10,NCAAM,Duquesne @ Boise State,1h, Duquesne +8 (-108) ,-108,54000.0,50000.0,loss,-54000.0,rule-negative
+2025-12-10,NCAAM,Duquesne @ Boise State,fg, Duquesne +14 (-108) ,-108,54000.0,50000.0,loss,-54000.0,rule-negative
+2025-12-10,NBA,Suns @ Thunder,fg, Suns +15.5 (-110) ,-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-10,NBA,Suns @ Thunder,1h, Suns +9 (-108) ,-108,54000.0,50000.0,loss,-54000.0,rule-negative
+2025-12-10,NBA,Suns @ Thunder,fg, Over 220.5 (-109) ,-109,54500.0,50000.0,win,50000.0,rule-negative
+2025-12-10,NBA,Spurs @ Lakers,fg, Under 241.5 (-108) ,-108,54000.0,50000.0,loss,-54000.0,rule-negative
+2025-12-10,NBA,Spurs @ Lakers,fg, Spurs +7.5 (-118) ,-118,59000.0,50000.0,win,50000.0,rule-negative
+2025-12-10,NBA,Spurs @ Lakers,1h, Under 124.5 (-105) ,-105,52500.0,50000.0,loss,-52500.0,rule-negative
+2025-12-11,NBA,Celtics @ Bucks,1h,Under 115.5 (-116),-116,58000.0,50000.0,loss,-58000.0,rule-negative
+2025-12-11,NBA,Celtics @ Bucks,fg,Over 223 (-110),-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-11,NBA,Celtics @ Bucks,fg,Bucks +9.5 (-115),-115,57500.0,50000.0,win,50000.0,rule-negative
+2025-12-11,NBA,Clippers @ Rockets,fg,Over 222 (-113),-113,56500.0,50000.0,win,50000.0,rule-negative
+2025-12-11,NBA,Trail Blazes @ Pelicans,1h,Under 123.5 (-104),-104,52000.0,50000.0,loss,-52000.0,rule-negative
+2025-12-11,NCAAM,Iowa @ Iowa State,1h,Over 66.5 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-11,NCAAM,Iowa @ Iowa State,fg,Over 141 (-108),-108,54000.0,50000.0,loss,-54000.0,rule-negative
+2025-12-11,NCAAM,Iowa @ Iowa State,fg,Iowa +11.5 (-115),-115,57500.0,50000.0,win,50000.0,rule-negative
+2025-12-11,NCAAM,North Dakota State @ CSU Bakersfield,2h,CSU Bakersfield +2 (pk),100,50000.0,50000.0,win,50000.0,rule-positive
+2025-12-11,NCAAM,North Dakota State @ CSU Bakersfield,2h,Under 81.5 (pk),100,50000.0,50000.0,win,50000.0,rule-positive
+2025-12-11,NCAAM,North Dakota State @ CSU Bakersfield,fg,Under 149.5 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-11,NCAAM,North Dakota State @ CSU Bakersfield,fg,CSU Bakersfield +6.5 (-110),-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-11,NCAAM,St. Joseph's @ Syracuse,2h,Under 77 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-11,NFL,Atlanta Falcons @ Tampa Bay Buccaneers,2h,Buccaneers -2.5 (-110),-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-11,NFL,Atlanta Falcons @ Tampa Bay Buccaneers,2h,Over 21 (-135),-135,67500.0,50000.0,win,50000.0,rule-negative
+2025-12-11,NFL,Atlanta Falcons @ Tampa Bay Buccaneers,2h,Buccaneers ML (-145),-145,72500.0,50000.0,push,,rule-negative
+2025-12-12,NBA,Chicago Bulls @ Charlotte Hornets,1h,Under 121 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-12,NBA,Chicago Bulls @ Charlotte Hornets,fg,Over 231 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-12,NBA,Cleveland Cavaliers @ Washington Wizards,fg,Wizards +14.5 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-12,NBA,Cleveland Cavaliers @ Washington Wizards,1h,Wizards +8.5 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-12,NBA,Cleveland Cavaliers @ Washington Wizards,1h,Under 117.5 (-110),-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-12,NBA,Indiana Pacers @ Philadelphia 76ers,fg,Over 227.5 (-110),-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-12,NBA,Utah Jazz @ Memphis Grizzlies,fg,Jazz +7 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-12,NBA,Utah Jazz @ Memphis Grizzlies,fg,Under 243.5 (-110),-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-12,NBA,Utah Jazz @ Memphis Grizzlies,fg,Jazz ML (+200 assumed),200,50000.0,100000.0,win,100000.0,rule-positive
+2025-12-12,NBA,Utah Jazz @ Memphis Grizzlies,1h,Jazz +4 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-12,NBA,Utah Jazz @ Memphis Grizzlies,1h,Under 118 (-110),-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-12,NBA,Utah Jazz @ Memphis Grizzlies,2h,Under 125.5 (-110),-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-12,NBA,Brooklyn Nets @ Dallas Mavericks,fg,Nets +7.7 (-110),-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-12,NBA,Brooklyn Nets @ Dallas Mavericks,fg,Over 219.5 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-12,NBA,Brooklyn Nets @ Dallas Mavericks,fg,Nets ML (+300 assumed),300,50000.0,150000.0,loss,-50000.0,rule-positive
+2025-12-12,NBA,Brooklyn Nets @ Dallas Mavericks,1h,Nets +4.5 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-12,NBA,Brooklyn Nets @ Dallas Mavericks,1h,Under 113.5 (-110),-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-12,NBA,Minnesota Timberwolves @ Golden State Warriors,fg,Timberwolves +4.5 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-12,NBA,Minnesota Timberwolves @ Golden State Warriors,fg,Timberwolves ML (+160 assumed),160,50000.0,80000.0,win,80000.0,rule-positive
+2025-12-12,NBA,Minnesota Timberwolves @ Golden State Warriors,1h,Timberwolves +2.5 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-12,NCAAM,Texas @ UConn,fg,Over 146.5 (-110),-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-12,NCAAM,Texas @ UConn,fg,Texas +12 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-12,NCAAM,Texas @ UConn,1h,Texas +6.5 (-110),-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-12,NCAAM,Texas @ UConn,1h,Over 69.5 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-12,NCAAM,California Baptist @ Eastern Washington,fg,Cal Baptist -3.5 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-12,NCAAM,California Baptist @ Eastern Washington,fg,Over 154.5 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-12,NCAAM,California Baptist @ Eastern Washington,1h,Cal Baptist -2 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-12,NCAAM,California Baptist @ Eastern Washington,1h,Over 72.5 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-13,NCAAF,Army @ Navy,fg,Army o16 TT -122,-122,61000.0,50000.0,win,50000.0,rule-negative
+2025-12-13,NCAAF,Army @ Navy,fg,Army/Navy o37.5 (even),100,50000.0,50000.0,loss,-50000.0,rule-positive
+2025-12-13,NCAAF,Army @ Navy,1h,Army ML 1H +160,160,50000.0,80000.0,push,,rule-positive
+2025-12-13,NCAAF,Army @ Navy,1h,Army +3 1H (even),100,50000.0,50000.0,win,50000.0,rule-positive
+2025-12-13,NCAAF,Army @ Navy,1h,Army/Navy o17.5 1H (even),100,50000.0,50000.0,loss,-50000.0,rule-positive
+2025-12-13,NCAAF,Army @ Navy,2h,Army +3 2H -120,-120,60000.0,50000.0,win,50000.0,rule-negative
+2025-12-13,NCAAF,Army @ Navy,2h,Army o29 2H -125,-125,62500.0,50000.0,loss,-62500.0,rule-negative
+2025-12-13,NCAAM,Memphis @ Louisville,fg,Memphis +17 -110,-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-13,NCAAM,Memphis @ Louisville,1h,Memphis +10 1H -110,-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-13,NCAAM,Memphis @ Louisville,1h,o77 1H -110,-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-13,NBA,Knicks @ Magic,fg,Magic o224.5 -110,-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-13,NBA,Knicks @ Magic,fg,Magic +4.5 -112,-112,56000.0,50000.0,loss,-56000.0,rule-negative
+2025-12-13,NBA,Knicks @ Magic,fg,Magic ML +160,160,50000.0,80000.0,loss,-50000.0,rule-positive
+2025-12-13,NBA,Knicks @ Magic,1h,Magic +2.5 1H -115,-115,57500.0,50000.0,loss,-57500.0,rule-negative
+2025-12-13,NBA,Spurs @ Thunder,fg,Spurs +11 -110,-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-13,NBA,Spurs @ Thunder,fg,Spurs/Thunder u232 -110,-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-13,NBA,Spurs @ Thunder,1h,Spurs +6 1H -105,-105,52500.0,50000.0,win,50000.0,rule-negative
+2025-12-13,NBA,Spurs @ Thunder,fg,Spurs ML +380,380,50000.0,190000.0,win,190000.0,rule-positive
+2025-12-13,NCAAM,SMU @ LSU,fg,SMU o158.5 -115,-115,57500.0,50000.0,win,50000.0,rule-negative
+2025-12-13,NCAAM,SMU @ LSU,1h,SMU o75 1H -111,-111,55500.0,50000.0,win,50000.0,rule-negative
+2025-12-13,NCAAM,SMU @ LSU,2h,LSU u83 2H -110,-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-13,NCAAM,UC Riverside @ BYU,fg,UC Riverside +34 -110,-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-13,NCAAM,UC Riverside @ BYU,fg,UC Riverside o155 -110,-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-13,NCAAM,Alabama vs Arizona (neutral),fg,Alabama +3 -118,-118,59000.0,50000.0,loss,-59000.0,rule-negative
+2025-12-13,NCAAM,Alabama vs Arizona (neutral),fg,Alabama ML +131,131,50000.0,65500.0,loss,-50000.0,rule-positive
+2025-12-13,NCAAM,Alabama vs Arizona (neutral),1h,Alabama +1.5 1H -114,-114,57000.0,50000.0,loss,-57000.0,rule-negative
+2025-12-13,NCAAM,Alabama vs Arizona (neutral),2h,Alabama +3 2H -110,-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-13,NCAAM,Alabama vs Arizona (neutral),2h,Arizona/Alabama u92.5 2H -110,-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-13,NCAAM,Gonzaga vs UCLA (neutral),2h,Gonzaga -5 2H -105,-105,52500.0,50000.0,loss,-52500.0,rule-negative
+2025-12-13,NCAAM,Gonzaga vs UCLA (neutral),2h,Gonzaga/UCLA o79 2H -106,-106,53000.0,50000.0,loss,-53000.0,rule-negative
+2025-12-13,NCAAM,Mississippi State @ Utah,fg,Over 153.5 -115,-115,57500.0,50000.0,win,50000.0,rule-negative
+2025-12-13,NCAAM,Mississippi State @ Utah,1h,Over 72 -110,-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-13,NCAAM,Pepperdine @ Cal State Bakersfield,fg,Over 148 -110,-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-13,NCAAM,Pepperdine @ Cal State Bakersfield,1h,Over 69.5 -110,-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-13,NCAAM,Tennessee State @ UNLV,fg,Over 161 -110,-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-13,NCAAM,Tennessee State @ UNLV,1h,Over 76 -110,-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-13,NCAAM,Alabama vs Arizona (neutral),2h,Under 92.5 -110,-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-13,NCAAM,Alabama vs Arizona (neutral),2h,Alabama +3 -110,-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-13,NCAAF,Army @ Navy,fg,Army Team Total Over 16,-110,55000.0,50000.0,push,,rule-negative
+2025-12-13,NCAAF,Army @ Navy,fg,Army Team Total Over 16 (-122),-122,61000.0,50000.0,push,,rule-negative
+2025-12-13,NCAAF,Army @ Navy,fg,Total Over 37.5 (-115),-115,57500.0,50000.0,loss,-57500.0,rule-negative
+2025-12-13,NCAAF,Army @ Navy,1h,Army ML (+160),160,50000.0,80000.0,push,,rule-positive
+2025-12-13,NCAAF,Army @ Navy,1h,Army Team Total Over 17.5 (-105),-105,52500.0,50000.0,loss,-52500.0,rule-negative
+2025-12-13,NCAAF,Army @ Navy,2h,Army +3 (-120),-120,60000.0,50000.0,win,50000.0,rule-negative
+2025-12-13,NCAAF,Army @ Navy,2h,Army Team Total Over 29 (-125),-125,62500.0,50000.0,loss,-62500.0,rule-negative
+2025-12-13,NCAAM,Memphis @ Louisville,fg,Memphis +17 (-110),-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-13,NCAAM,Memphis @ Louisville,1h,Memphis +10 (-110),-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-13,NCAAM,Memphis @ Louisville,1h,Over 77 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-13,NBA,Knicks vs Magic (Neutral),fg,Magic +4.5 (-112),-112,56000.0,50000.0,loss,-56000.0,rule-negative
+2025-12-13,NBA,Knicks vs Magic (Neutral),fg,Magic ML (+160),160,50000.0,80000.0,loss,-50000.0,rule-positive
+2025-12-13,NBA,Knicks vs Magic (Neutral),fg,Over 225 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-13,NBA,Knicks vs Magic (Neutral),1h,Magic +2.5 (-115),-115,57500.0,50000.0,loss,-57500.0,rule-negative
+2025-12-13,NBA,Thunder vs Spurs (Neutral),fg,Spurs +11 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-13,NBA,Thunder vs Spurs (Neutral),fg,Under 232 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-13,NBA,Thunder vs Spurs (Neutral),1h,Spurs +6 (-105),-105,52500.0,50000.0,win,50000.0,rule-negative
+2025-12-13,NBA,Thunder vs Spurs (Neutral),fg,Spurs ML (+380),380,50000.0,190000.0,win,190000.0,rule-positive
+2025-12-13,NCAAM,West Virginia vs Ohio State (Neutral),fg,Ohio State -3.5 (-107),-107,53500.0,50000.0,loss,-53500.0,rule-negative
+2025-12-13,NCAAM,West Virginia vs Ohio State (Neutral),fg,Over 145 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-13,NCAAM,West Virginia vs Ohio State (Neutral),1h,Over 68.5 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-13,NCAAM,SMU vs LSU (Neutral),fg,Over 158.5 (-115),-115,57500.0,50000.0,win,50000.0,rule-negative
+2025-12-13,NCAAM,SMU vs LSU (Neutral),1h,Over 75 (-111),-111,55500.0,50000.0,win,50000.0,rule-negative
+2025-12-13,NCAAM,SMU vs LSU (Neutral),2h,Under 83 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-13,NCAAM,UC Riverside @ BYU,fg,UC Riverside +34 (-110),-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-13,NCAAM,UC Riverside @ BYU,fg,Over 155 (-110),-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-13,NCAAM,Mississippi State vs Utah,fg,Over 153.5 (-115),-115,57500.0,50000.0,win,50000.0,rule-negative
+2025-12-13,NCAAM,Mississippi State vs Utah,1h,Over 72 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-13,NCAAM,Arizona vs Alabama,fg,Alabama +3 (-118),-118,59000.0,50000.0,loss,-59000.0,rule-negative
+2025-12-13,NCAAM,Arizona vs Alabama,fg,Alabama ML (+131),131,50000.0,65500.0,loss,-50000.0,rule-positive
+2025-12-13,NCAAM,Arizona vs Alabama,1h,Alabama +1.5 (-114),-114,57000.0,50000.0,loss,-57000.0,rule-negative
+2025-12-13,NCAAM,Pepperdine vs CSU Bakersfield,fg,Over 148 (-110),-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-13,NCAAM,Pepperdine vs CSU Bakersfield,1h,Over 69.5,-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-13,NCAAM,Tennessee State vs UNLV (Neutral),fg,Over 161 (-110),-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-13,NCAAM,Tennessee State vs UNLV (Neutral),1h,Over 76 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-13,NCAAF,Army @ Navy,fg tt,Army O16 (-122),-122,61000.0,50000.0,win,50000.0,rule-negative
+2025-12-13,NCAAF,Army @ Navy,fg,O37.5 (-115),-115,57500.0,50000.0,loss,-57500.0,rule-negative
+2025-12-13,NCAAF,Army @ Navy,1h,Army +3 (-105),-105,52500.0,50000.0,win,50000.0,rule-negative
+2025-12-13,NCAAF,Army @ Navy,1h ml,Army ML (+160),160,50000.0,80000.0,loss,-50000.0,rule-positive
+2025-12-13,NCAAF,Army @ Navy,1h,O17.5 (-105),-105,52500.0,50000.0,loss,-52500.0,rule-negative
+2025-12-13,NCAAF,Army @ Navy,2h,O29 (-125),-125,62500.0,50000.0,loss,-62500.0,rule-negative
+2025-12-13,NCAAM,Memphis @ Louisville,1h,O77 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-13,NBA,Knicks @ Magic,fg,O225 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-13,NBA,Knicks @ Magic,fg,Magic +4.5 (-112),-112,56000.0,50000.0,loss,-56000.0,rule-negative
+2025-12-13,NBA,Knicks @ Magic,fg ml,Magic ML (+160),160,50000.0,80000.0,loss,-50000.0,rule-positive
+2025-12-13,NBA,Spurs @ Thunder,fg,Spurs +11 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-13,NBA,Spurs @ Thunder,fg,U232 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-13,NBA,Spurs @ Thunder,1h,Spurs +6 (-105),-105,52500.0,50000.0,win,50000.0,rule-negative
+2025-12-13,NBA,Spurs @ Thunder,fg ml,Spurs ML (+380),380,50000.0,190000.0,win,190000.0,rule-positive
+2025-12-14,NFL,Raiders @ Eagles,1h,Raiders +7.5 (-107),-107,53500.0,50000.0,loss,-53500.0,rule-negative
+2025-12-14,NFL,Bills @ Patriots,fg,U49.5 (-110),-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-14,NFL,Lions @ Rams,1h,U27 (-105),-105,52500.0,50000.0,loss,-52500.0,rule-negative
+2025-12-14,NFL,Lions @ Rams,fg,U54.5 (-110),-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-14,NFL,Panthers @ Saints,fg,U41.5 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-14,NFL,Colts @ Seahawks,fg,U41.5 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-14,NFL,Titans @ 49ers,fg,U44.5 (-110),-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-14,NFL,Vikings @ Cowboys,fg,Cowboys -5.5 (-110),-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-14,NFL,Vikings @ Cowboys,fg,U47.5 (-110),-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-14,NBA,Wizards @ Pacers,fg,Wiz +9.5 (-106),-106,53000.0,50000.0,win,50000.0,rule-negative
+2025-12-14,NBA,Wizards @ Pacers,fg,U234.5 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-14,NBA,Wizards @ Pacers,1h,U120.5 (-108),-108,54000.0,50000.0,win,50000.0,rule-negative
+2025-12-14,NBA,Wizards @ Pacers,fg ml,Wiz ML (+340),340,50000.0,170000.0,win,170000.0,rule-positive
+2025-12-14,NBA,Wizards @ Pacers,1h,Wiz +5.5 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-14,NBA,Hornets @ Cavaliers,fg,Hornets +12 (-118),-118,59000.0,50000.0,win,50000.0,rule-negative
+2025-12-14,NBA,Hornets @ Cavaliers,fg ml,Hornets ML (+440),440,50000.0,220000.0,win,220000.0,rule-positive
+2025-12-14,NBA,Hornets @ Cavaliers,1h,Hornets +6.5 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-14,NBA,Hornets @ Cavaliers,1h,O113.5 (-109),-109,54500.0,50000.0,loss,-54500.0,rule-negative
+2025-12-14,NCAAM,Charlotte @ Charleston,fg,O140.5 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-14,NCAAM,Charlotte @ Charleston,1h,O66 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-14,NCAAM,Charlotte @ Charleston,fg,Charlotte +6 (-110),-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-14,NCAAM,Charlotte @ Charleston,1h,Charlotte +3.5 (-110),-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-15,NCAAM,SD State @ Opponent,fg,SD State +4.5 (-120),-120,60000.0,50000.0,win,50000.0,rule-negative
+2025-12-15,NCAAM,SD State @ Opponent,1h,SD State +2 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-15,NCAAM,SD State @ Opponent,1h ml,SD State ML (+130),130,50000.0,65000.0,win,65000.0,rule-positive
+2025-12-15,NCAAM,Niagara @ Opponent,fg,Niagara +31 (-120),-120,60000.0,50000.0,win,50000.0,rule-negative
+2025-12-15,NCAAM,Niagara @ Opponent,1h,Niagara +18 (-115),-115,57500.0,50000.0,loss,-57500.0,rule-negative
+2025-12-15,NFL,Dolphins @ Opponent,fg,Dolphins +3.5 (-123),-123,61500.0,50000.0,loss,-61500.0,rule-negative
+2025-12-15,NFL,Dolphins @ Opponent,fg,Under 43 (-118),-118,59000.0,50000.0,push,,rule-negative
+2025-12-15,NFL,Dolphins @ Opponent,1h,Dolphins +2 (-107),-107,53500.0,50000.0,loss,-53500.0,rule-negative
+2025-12-15,NBA,Celtics @ Opponent,fg,Celtics -1.5 (-111),-111,55500.0,50000.0,loss,-55500.0,rule-negative
+2025-12-15,NBA,Raptors @ Opponent,fg,Raptors +6 (-112),-112,56000.0,50000.0,win,50000.0,rule-negative
+2025-12-15,NBA,Jazz @ Opponent,fg,Jazz +2 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-15,NBA,Grizzlies @ Opponent,fg,Grizzlies +4.5 (-113),-113,56500.0,50000.0,win,50000.0,rule-negative
+2025-12-15,NBA,Rockets @ Opponent,fg,Rockets +1 (-118),-118,59000.0,50000.0,loss,-59000.0,rule-negative
+2025-12-15,NBA,Jazz @ Opponent,fg ml,Jazz ML (+115),115,50000.0,57500.0,win,57500.0,rule-positive
+2025-12-15,NBA,Mavericks @ Jazz,fg,Under 241 (-112),-112,56000.0,50000.0,loss,-56000.0,rule-negative
+2025-12-15,NBA,Jazz @ Opponent,1h,Under 123 (-110),-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-15,NBA,Nuggets @ Rockets,1h,Over 115 (-112),-112,56000.0,50000.0,loss,-56000.0,rule-negative
+2025-12-15,NBA,Raptors @ Heat,1h,Over 114 (-115),-115,57500.0,50000.0,loss,-57500.0,rule-negative
+2025-12-15,NBA,Celtics @ Opponent,2h,Celtics +1.5 (-107),-107,53500.0,50000.0,loss,-53500.0,rule-negative
+2025-12-15,NBA,Celtics @ Opponent,2h,Over 112.5 (-110),-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-15,NBA,Rockets @ Opponent,2h,Rockets -3 (-115),-115,57500.0,50000.0,win,50000.0,rule-negative
+2025-12-15,NBA,Grizzlies @ Opponent,2h,Grizzlies +4.5 (-112),-112,56000.0,50000.0,win,50000.0,rule-negative
+2025-12-16,NBA,Spurs @ Knicks,fg,Spurs +2.5 (-105),-105,52500.0,50000.0,loss,-52500.0,rule-negative
+2025-12-16,NBA,Spurs @ Knicks,fg ml,Spurs ML (+118),118,50000.0,59000.0,loss,-50000.0,rule-positive
+2025-12-16,NBA,Spurs @ Knicks,1h,Spurs +1.5 (-115),-115,57500.0,50000.0,win,50000.0,rule-negative
+2025-12-16,NBA,Spurs @ Knicks,1h ml,Spurs ML (+112),112,50000.0,56000.0,loss,-50000.0,rule-positive
+2025-12-16,NCAAM,FSU @ Dayton,fg,Under 161.5 (-113),-113,56500.0,50000.0,loss,-56500.0,rule-negative
+2025-12-16,NCAAM,Marist @ GT,fg,Under 140.5 (-113),-113,56500.0,50000.0,loss,-56500.0,rule-negative
+2025-12-16,NCAAM,SC @ Clemson,1h,Over 67 (-111),-111,55500.0,50000.0,win,50000.0,rule-negative
+2025-12-16,NCAAM,NC A&T @ UNCG,fg,Over 147,-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-16,NCAAM,UMKC @ Oklahoma,fg,UMKC +29 (-111),-111,55500.0,50000.0,win,50000.0,rule-negative
+2025-12-16,NCAAM,UMKC @ Oklahoma,1h,UMKC +16.5 (-109),-109,54500.0,50000.0,loss,-54500.0,rule-negative
+2025-12-16,NCAAM,Oral Rob @ MO St,1h,Over 69 (-111),-111,55500.0,50000.0,win,50000.0,rule-negative
+2025-12-16,NCAAM,ETSU @ UNC,fg,Under 151 (-115),-115,57500.0,50000.0,win,50000.0,rule-negative
+2025-12-16,NCAAM,Butler @ UConn,fg,Over 145.5 (-111),-111,55500.0,50000.0,loss,-55500.0,rule-negative
+2025-12-16,NCAAM,Butler @ UConn,1h,Over 70 (-105),-105,52500.0,50000.0,win,50000.0,rule-negative
+2025-12-16,NCAAM,Butler @ UConn,2h,Over 75 (-107),-107,53500.0,50000.0,loss,-53500.0,rule-negative
+2025-12-16,NCAAM,Towson @ Kansas,fg,Kansas -16 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-16,NCAAM,Pacific @ BYU,fg,Pacific +23 (-110),-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-16,NCAAM,ACU @ Arizona,fg,ACU +33.5 (-111),-111,55500.0,50000.0,loss,-55500.0,rule-negative
+2025-12-16,NCAAM,ACU @ Arizona,1h,ACU +19.5 (-108),-108,54000.0,50000.0,loss,-54000.0,rule-negative
+2025-12-16,NCAAM,Montana St @ Cal Poly,fg,Under 159 (-110),-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-17,NBA,Cavaliers @ Bulls,2h,Under 124 (-105),-105,52500.0,50000.0,win,50000.0,rule-negative
+2025-12-17,NBA,Cavaliers @ Bulls,2h,Bulls +5 (-115),-115,57500.0,50000.0,win,50000.0,rule-negative
+2025-12-17,NBA,Grizzlies @ Timberwolves,2h,Over 110.5 (-109),-109,54500.0,50000.0,loss,-54500.0,rule-negative
+2025-12-17,NCAAM,Arizona State @ UCLA,fg,Over 143 (-105),-105,52500.0,50000.0,win,50000.0,rule-negative
+2025-12-17,NCAAM,Arizona State @ UCLA,1h,Over 68 (-105),-105,52500.0,50000.0,win,50000.0,rule-negative
+2025-12-17,NCAAM,Portland @ Oregon,fg,Portland +19.5 (-119),-119,59500.0,50000.0,loss,-59500.0,rule-negative
+2025-12-17,NCAAM,Portland @ Oregon,1h,Portland +11.5 (-121),-121,60500.0,50000.0,loss,-60500.0,rule-negative
+2025-12-17,NCAAM,Stanford @ Opponent,2h,Stanford -3 (-105),-105,52500.0,50000.0,loss,-52500.0,rule-negative
+2025-12-18,NCAAM,Pepperdine @ Long Beach St,fg,Pepperdine +4 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-18,NCAAM,Pepperdine @ Long Beach St,fg,Pepperdine ML (+160),160,50000.0,80000.0,loss,-50000.0,rule-positive
+2025-12-18,NCAAM,Pepperdine @ Long Beach St,fg,Over 141 (-111),-111,55500.0,50000.0,win,50000.0,rule-negative
+2025-12-18,NBA,Raptors @ Bucks,1h,Over 106.5 (-115),-115,57500.0,50000.0,win,50000.0,rule-negative
+2025-12-18,NBA,Clippers @ Thunder,1h,Over 107.5 (-115),-115,57500.0,50000.0,win,50000.0,rule-negative
+2025-12-18,NBA,Wizards @ Spurs,1h,Under 123.5 (-111),-111,55500.0,50000.0,win,50000.0,rule-negative
+2025-12-18,NBA,Hawks @ Hornets,1h,Under 123.5 (-107),-107,53500.0,50000.0,loss,-53500.0,rule-negative
+2025-12-18,NBA,Nets @ Opponent,1h,Nets +3.5 (-110),-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-18,NBA,Jazz @ Opponent,1h,Jazz +4.5 (-105),-105,52500.0,50000.0,win,50000.0,rule-negative
+2025-12-18,NBA,Knicks @ Opponent,2h,Knicks -2 (-115),-115,57500.0,50000.0,win,50000.0,rule-negative
+2025-12-18,NBA,Hornets @ Opponent,2h,Under 117 (-111),-111,55500.0,50000.0,win,50000.0,rule-negative
+2025-12-18,NBA,Hawks @ Hornets,fg,Hornets +5.5 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-18,NBA,Hawks @ Hornets,fg ml,Hornets ML (+176),176,50000.0,88000.0,win,88000.0,rule-positive
+2025-12-18,NBA,Heat @ Nets,fg,Nets +7.5 (-111),-111,55500.0,50000.0,loss,-55500.0,rule-negative
+2025-12-18,NBA,Heat @ Nets,fg ml,Nets ML (+220),220,50000.0,110000.0,loss,-50000.0,rule-positive
+2025-12-18,NBA,Rockets @ Pelicans,fg,Pelicans +9.5 (-111),-111,55500.0,50000.0,win,50000.0,rule-negative
+2025-12-18,NBA,Clippers @ Thunder,fg,Clippers +17.5 (-118),-118,59000.0,50000.0,loss,-59000.0,rule-negative
+2025-12-18,NBA,Raptors @ Bucks,fg,Bucks +4 (-105),-105,52500.0,50000.0,loss,-52500.0,rule-negative
+2025-12-18,NBA,Raptors @ Bucks,fg,Over 219.5 (-105),-105,52500.0,50000.0,loss,-52500.0,rule-negative
+2025-12-18,NBA,Wizards @ Spurs,fg,Wizards +15.5 (-111),-111,55500.0,50000.0,loss,-55500.0,rule-negative
+2025-12-18,NBA,Pistons @ Mavericks,fg,Mavericks +7.5 (-115),-115,57500.0,50000.0,win,50000.0,rule-negative
+2025-12-18,NBA,Warriors @ Suns,fg,Suns +1.5 (-107),-107,53500.0,50000.0,win,50000.0,rule-negative
+2025-12-18,NBA,Lakers @ Jazz,fg,Jazz +9 (-116),-116,58000.0,50000.0,win,50000.0,rule-negative
+2025-12-18,NBA,Lakers @ Jazz,fg ml,Jazz ML (+300),300,50000.0,150000.0,loss,-50000.0,rule-positive
+2025-12-19,NBA,Heat @ Celtics,1h,Celtics -3.5 (-115),-115,57500.0,50000.0,loss,-57500.0,rule-negative
+2025-12-19,NBA,Heat @ Celtics,1h,Over 120 (-115),-115,57500.0,50000.0,loss,-57500.0,rule-negative
+2025-12-19,NBA,Heat @ Celtics,fg,Over 232.5 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-19,NBA,Bulls @ Cavaliers,fg,Over 240.5 (-115),-115,57500.0,50000.0,win,50000.0,rule-negative
+2025-12-19,NBA,Bulls @ Cavaliers,1h,Cavaliers -3.5 (-120),-120,60000.0,50000.0,loss,-60000.0,rule-negative
+2025-12-19,NBA,Spurs @ Hawks,fg,Over 239 (-112),-112,56000.0,50000.0,loss,-56000.0,rule-negative
+2025-12-19,NBA,Thunder @ Timberwolves,fg,Over 233 (-111),-111,55500.0,50000.0,loss,-55500.0,rule-negative
+2025-12-19,NBA,Thunder @ Timberwolves,1h,Timberwolves +3.5 (-111),-111,55500.0,50000.0,win,50000.0,rule-negative
+2025-12-19,NBA,76ers @ Knicks,fg,Knicks ML (-230),-230,115000.0,50000.0,loss,-115000.0,rule-negative
+2025-12-19,NBA,76ers @ Knicks,1h,76ers +3.5 (-120),-120,60000.0,50000.0,win,50000.0,rule-negative
+2025-12-19,NBA,76ers @ Knicks,1h,Under 118 (-115),-115,57500.0,50000.0,win,50000.0,rule-negative
+2025-12-19,NCAAF,Alabama @ Oklahoma University,fg,Oklahoma -1.5 (-110),-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-19,NCAAF,Alabama @ Oklahoma University,fg ml,Oklahoma ML (-135),-135,67500.0,50000.0,loss,-67500.0,rule-negative
+2025-12-19,NCAAF,Alabama @ Oklahoma University,fg,Over 41.5 (-111),-111,55500.0,50000.0,win,50000.0,rule-negative
+2025-12-19,NCAAF,Alabama @ Oklahoma University,1h tt,Over 20.5 (-116),-116,58000.0,50000.0,win,50000.0,rule-negative
+2025-12-20,NFL,Eagles @ Commanders,2h,Eagles -6 (-102),-102,51000.0,50000.0,win,50000.0,rule-negative
+2025-12-20,NFL,Packers @ Bears,2h,Packers ML (+200),200,50000.0,100000.0,loss,-50000.0,rule-positive
+2025-12-20,NFL,Packers @ Bears,fg,Packers +4.5 (-115),-115,57500.0,50000.0,loss,-57500.0,rule-negative
+2025-12-20,NFL,Packers @ Bears,2h,Under 45 (-111),-111,55500.0,50000.0,win,50000.0,rule-negative
+2025-12-20,NFL,Packers @ Bears,2h,Packers +1 (-110),-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-20,NFL,Packers @ Bears,2h,Packers ML Even,100,50000.0,50000.0,loss,-50000.0,rule-positive
+2025-12-20,NFL,Packers @ Bears,2h,Under 20.5 (-122),-122,61000.0,50000.0,loss,-61000.0,rule-negative
+2025-12-20,NBA,Magic @ Jazz,fg,Jazz +8 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-20,NBA,Magic @ Jazz,fg ml,Jazz ML (+255),255,50000.0,127500.0,loss,-50000.0,rule-positive
+2025-12-20,NBA,Magic @ Jazz,fg,Under 240 (-110),-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-20,NBA,Magic @ Jazz,1h,Jazz +4 (-115),-115,57500.0,50000.0,loss,-57500.0,rule-negative
+2025-12-20,NBA,Magic @ Jazz,1h ml,Jazz ML (+180),180,50000.0,90000.0,loss,-50000.0,rule-positive
+2025-12-20,NBA,Magic @ Jazz,1h,Under 124 (-110),-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-20,NBA,Trail Blazers @ Kings,fg,Kings +4 (-115),-115,57500.0,50000.0,loss,-57500.0,rule-negative
+2025-12-20,NBA,Trail Blazers @ Kings,fg ml,Kings ML (+145),145,50000.0,72500.0,loss,-50000.0,rule-positive
+2025-12-20,NBA,Lakers @ Clippers,1h,Under 118 (-119),-119,59500.0,50000.0,win,50000.0,rule-negative
+2025-12-21,NFL,Jaguars @ Broncos,1h,Jaguars +2 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-21,NFL,Jaguars @ Broncos,fg,Jaguars +3.5 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-21,NFL,Jaguars @ Broncos,2h,Jaguars +4 (-109),-109,54500.0,50000.0,win,50000.0,rule-negative
+2025-12-21,NFL,Jaguars @ Broncos,2h ml,Jaguars ML (+235),235,50000.0,117500.0,win,117500.0,rule-positive
+2025-12-21,NFL,Jaguars @ Broncos,2h,Over 23 (-115),-115,57500.0,50000.0,win,50000.0,rule-negative
+2025-12-21,NFL,Falcons @ Cardinals,fg,Cardinals +2.5 (-107),-107,53500.0,50000.0,win,50000.0,rule-negative
+2025-12-21,NFL,Falcons @ Cardinals,2h,Cardinals +3 (-125),-125,62500.0,50000.0,win,50000.0,rule-negative
+2025-12-21,NFL,Falcons @ Cardinals,2h ml,Cardinals ML (+134),134,50000.0,67000.0,win,67000.0,rule-positive
+2025-12-21,NFL,Falcons @ Cardinals,2h tt,Cardinals Over 10.5 (-115),-115,57500.0,50000.0,win,50000.0,rule-negative
+2025-12-21,NFL,Raiders @ Texans,fg,Texans -14 (-111),-111,55500.0,50000.0,loss,-55500.0,rule-negative
+2025-12-21,NFL,Raiders @ Texans,fg,Texans Over 40 (-111),-111,55500.0,50000.0,win,50000.0,rule-negative
+2025-12-21,NFL,Patriots @ Ravens,1h,Ravens -3 (-108),-108,54000.0,50000.0,loss,-54000.0,rule-negative
+2025-12-21,NFL,Patriots @ Ravens,fg,Under 47.5 (-115),-115,57500.0,50000.0,loss,-57500.0,rule-negative
+2025-12-21,NFL,Patriots @ Ravens,2h,Ravens +3 (-135),-135,67500.0,50000.0,loss,-67500.0,rule-negative
+2025-12-21,NFL,Patriots @ Ravens,2h,Under 22.5 (-110),-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-21,NBA,Rockets @ Kings,fg,Kings +12.5 (-115),-115,57500.0,50000.0,win,50000.0,rule-negative
+2025-12-21,NBA,Rockets @ Kings,1h,Kings +7.5 (-112),-112,56000.0,50000.0,loss,-56000.0,rule-negative
+2025-12-21,NBA,Rockets @ Kings,fg,Over 223 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-21,NBA,Rockets @ Kings,1h,Over 108.5 (-105),-105,52500.0,50000.0,win,50000.0,rule-negative
+2025-12-21,NCAAM,North Dakota @ Nebraska,fg,ND +29.5 (-115),-115,57500.0,50000.0,win,50000.0,rule-negative
+2025-12-21,NCAAM,North Dakota @ Nebraska,fg,Over 152.5 (-110),-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-21,NCAAM,North Dakota @ Nebraska,1h,ND +17.5 (-110),-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-21,NCAAM,North Dakota @ Nebraska,1h,Under 73.5 (-111),-111,55500.0,50000.0,loss,-55500.0,rule-negative
+2025-12-21,NCAAM,North Dakota @ Nebraska,2h,Over 77.5 (-115),-115,57500.0,50000.0,loss,-57500.0,rule-negative
+2025-12-21,NCAAM,Norfolk @ UTEP,1h,Norfolk ML (+200),200,50000.0,100000.0,win,100000.0,rule-positive
+2025-12-21,NCAAM,Norfolk @ UTEP,1h,Under 62.5 (-110),-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-21,NCAAM,Norfolk @ UTEP,fg,Norfolk ML (+295),295,50000.0,147500.0,win,147500.0,rule-positive
+2025-12-23,NCAAF,Toledo @ Louisville,fg,Toledo +12 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-23,NCAAF,Toledo @ Louisville,fg,Under 45 (-121),-121,60500.0,50000.0,loss,-60500.0,rule-negative
+2025-12-23,NCAAF,Toledo @ Louisville,1h,Under 23 (-125),-125,62500.0,50000.0,win,50000.0,rule-negative
+2025-12-23,NCAAF,Toledo @ Louisville,2h,Under 25.5 (-108),-108,54000.0,50000.0,win,50000.0,rule-negative
+2025-12-23,NCAAF,Western Kentucky @ Southern Miss,fg,Southern Miss -3 (-102),-102,51000.0,50000.0,loss,-51000.0,rule-negative
+2025-12-23,NCAAF,Western Kentucky @ Southern Miss,fg,Southern Miss ML (-142),-142,71000.0,50000.0,loss,-71000.0,rule-negative
+2025-12-23,NCAAF,Western Kentucky @ Southern Miss,fg,Over 59 (-119),-119,59500.0,50000.0,loss,-59500.0,rule-negative
+2025-12-23,NCAAF,Western Kentucky @ Southern Miss,1h,Southern Miss -1 (-115),-115,57500.0,50000.0,loss,-57500.0,rule-negative
+2025-12-23,NCAAF,Western Kentucky @ Southern Miss,1h,Southern Miss ML (-140),-140,70000.0,50000.0,push,,rule-negative
+2025-12-23,NCAAF,Western Kentucky @ Southern Miss,1h,Over 28.5 (-115),-115,57500.0,50000.0,loss,-57500.0,rule-negative
+2025-12-23,NCAAF,Western Kentucky @ Southern Miss,2h,Southern Miss -3 (-115),-115,57500.0,50000.0,loss,-57500.0,rule-negative
+2025-12-23,NCAAF,Western Kentucky @ Southern Miss,2h,Southern Miss ML (-156),-156,78000.0,50000.0,push,,rule-negative
+2025-12-23,NCAAF,Western Kentucky @ Southern Miss,2h,Over 27 (-115),-115,57500.0,50000.0,loss,-57500.0,rule-negative
+2025-12-23,NCAAF,UNLV @ Ohio,1h,Ohio +3.5 (odds not provided),100,50000.0,50000.0,win,50000.0,rule-positive
+2025-12-23,NCAAF,UNLV @ Ohio,1h,Over 31.5 (odds not provided),100,50000.0,50000.0,loss,-50000.0,rule-positive
+2025-12-23,NCAAF,UNLV @ Ohio,fg,Ohio +6.5 (-120),-120,60000.0,50000.0,win,50000.0,rule-negative
+2025-12-23,NCAAF,UNLV @ Ohio,fg,over 64 (-118),-118,59000.0,50000.0,loss,-59000.0,rule-negative
+2025-12-23,NCAAF,UNLV @ Ohio,2h,Ohio +3 (-102),-102,51000.0,50000.0,win,50000.0,rule-negative
+2025-12-23,NCAAF,UNLV @ Ohio,2h,Under 28.5 (-107),-107,53500.0,50000.0,win,50000.0,rule-negative
+2025-12-23,NBA,Nets @ 76ers,fg,Nets +10 (-120),-120,60000.0,50000.0,win,50000.0,rule-negative
+2025-12-23,NBA,Nets @ 76ers,fg,Over 218.5 (-111),-111,55500.0,50000.0,win,50000.0,rule-negative
+2025-12-23,NBA,Wizards @ Hornets,fg,Wizards +6.5 (-111),-111,55500.0,50000.0,loss,-55500.0,rule-negative
+2025-12-23,NBA,Wizards @ Hornets,fg,Under 239 (-111),-111,55500.0,50000.0,win,50000.0,rule-negative
+2025-12-23,NBA,Bulls @ Hawks,fg,Bulls +4 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-23,NBA,Bulls @ Hawks,fg,Under 254.5 (-118),-118,59000.0,50000.0,win,50000.0,rule-negative
+2025-12-23,NBA,Bulls @ Hawks,1h,under 123.5 (-111),-111,55500.0,50000.0,win,50000.0,rule-negative
+2025-12-23,NBA,Pelicans @ Cavaliers,fg,Pelicans +9 (-116),-116,58000.0,50000.0,loss,-58000.0,rule-negative
+2025-12-23,NBA,Pelicans @ Cavaliers,fg,Under 248 (-109),-109,54500.0,50000.0,loss,-54500.0,rule-negative
+2025-12-23,NBA,Nuggets @ Mavericks,fg,Mavericks +6.5 (-115),-115,57500.0,50000.0,win,50000.0,rule-negative
+2025-12-23,NBA,Nuggets @ Mavericks,fg,Under 237 (-111),-111,55500.0,50000.0,loss,-55500.0,rule-negative
+2025-12-23,NBA,Thunder @ Spurs,fg,Spurs +7 (-115),-115,57500.0,50000.0,win,50000.0,rule-negative
+2025-12-23,NBA,Thunder @ Spurs,fg,Under 233 (-111),-111,55500.0,50000.0,loss,-55500.0,rule-negative
+2025-12-23,NBA,Grizzlies @ Jazz,1h,Under 124.5 (-112),-112,56000.0,50000.0,loss,-56000.0,rule-negative
+2025-12-23,NBA,Raptors @ Heat,1h,Over 111 (-117),-117,58500.0,50000.0,loss,-58500.0,rule-negative
+2025-12-23,NBA,Pistons @ Kings,1h,Under 117 (-111),-111,55500.0,50000.0,loss,-55500.0,rule-negative
+2025-12-23,NBA,Magic @ Trail Blazers,1h,Under 119 (-107),-107,53500.0,50000.0,win,50000.0,rule-negative
+2025-12-23,NCAAM,Villanova @ Seton Hall,fg,Over 136 (-111),-111,55500.0,50000.0,loss,-55500.0,rule-negative
+2025-12-23,NCAAM,Villanova @ Seton Hall,fg,Seton Hall -1 (-110),-110,55000.0,50000.0,loss,-55000.0,rule-negative
+2025-12-23,NCAAM,Villanova @ Seton Hall,fg,Seton Hall ML (-118),-118,59000.0,50000.0,loss,-59000.0,rule-negative
+2025-12-23,NCAAM,Villanova @ Seton Hall,1h,Over 62.5 (-118),-118,59000.0,50000.0,win,50000.0,rule-negative
+2025-12-23,NCAAM,Villanova @ Seton Hall,1h,Seton Hall PK (-110),100,50000.0,50000.0,loss,-50000.0,rule-positive
+2025-12-22,NFL,49ers @ Opponent TBD,2h,49ers ML (-130),-130,65000.0,50000.0,win,50000.0,rule-negative
+2025-12-22,NBA,grizzlies,2h,Over 114.5 (-111),-111,55500.0,50000.0,unknown,,rule-negative
+2025-12-22,NCAAM,BYU @ Opponent TBD,2h,Under 89 (-113),-113,56500.0,50000.0,win,50000.0,rule-negative
+2025-12-22,NBA,Grizzlies @ Opponent TBD,2h,Over 114.5 (-111),-111,55500.0,50000.0,loss,-55500.0,rule-negative
+2025-12-23,NBA,Rockets @ Clippers,fg,over 219 (-111),-111,55500.0,50000.0,win,50000.0,rule-negative
+2025-12-23,NBA,Rockets @ Clippers,fg,Clipper ML (+224),224,50000.0,112000.0,win,112000.0,rule-positive
+2025-12-23,NBA,Rockets @ Clippers,1h,Clippers ml (+167),167,50000.0,83500.0,win,83500.0,rule-positive
+2025-12-23,NBA,Rockets @ Clippers,1h,Clippers +4 (-110),-110,55000.0,50000.0,win,50000.0,rule-negative
+2025-12-23,NBA,Rockets @ Clippers,1h,Over 112,-110,55000.0,50000.0,win,50000.0,rule-negative
