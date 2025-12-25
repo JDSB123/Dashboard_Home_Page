@@ -23,11 +23,12 @@
             try {
                 if (window.NBAPicksFetcher) {
                     const data = await window.NBAPicksFetcher.fetchPicks('today');
-                    const picks = data.picks || data.plays || data.recommendations || [];
-                    picks.forEach(pick => {
-                        allPicks.push(window.NBAPicksFetcher.formatPickForTable(pick));
+                    // API returns { plays: [...] } not { picks: [...] }
+                    const plays = data.plays || data.picks || data.recommendations || [];
+                    plays.forEach(play => {
+                        allPicks.push(window.NBAPicksFetcher.formatPickForTable(play));
                     });
-                    console.log(`[UNIFIED-FETCHER] NBA: ${picks.length} picks`);
+                    console.log(`[UNIFIED-FETCHER] NBA: ${plays.length} picks`);
                 }
             } catch (e) {
                 console.error('[UNIFIED-FETCHER] NBA fetch error:', e.message);
