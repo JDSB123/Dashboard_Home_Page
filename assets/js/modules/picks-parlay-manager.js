@@ -608,108 +608,17 @@
          * Initialize parlay functionality
          */
         initParlays() {
-            const tbody = document.getElementById('picks-tbody');
-            if (!tbody) return;
-
-            // Remove any existing listeners to prevent duplicates
-            if (this._parlayClickHandler) {
-                tbody.removeEventListener('click', this._parlayClickHandler);
-            }
-
-            // Simple, reliable click handler
-            this._parlayClickHandler = (e) => {
-                const row = e.target.closest('tr.parlay-row');
-                if (!row) return;
-
-                // Ignore clicks on status badges (they have tooltips)
-                if (e.target.closest('.status-badge')) {
-                    return;
-                }
-
-                // Ignore clicks on links
-                if (e.target.tagName === 'A' || e.target.closest('a')) {
-                    return;
-                }
-
-                // Everything else on the row toggles expansion
-                e.preventDefault();
-                e.stopPropagation();
-                this.toggleParlayExpansion(row);
-            };
-
-            tbody.addEventListener('click', this._parlayClickHandler);
-
-            // Keyboard support
-            if (this._parlayKeyHandler) {
-                tbody.removeEventListener('keydown', this._parlayKeyHandler);
-            }
-            this._parlayKeyHandler = (e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    const row = e.target.closest('tr.parlay-row');
-                    if (row) {
-                        e.preventDefault();
-                        this.toggleParlayExpansion(row);
-                    }
-                }
-            };
-            tbody.addEventListener('keydown', this._parlayKeyHandler);
-
-            // Refresh parlay visibility based on state
-            this.refreshAllParlayVisibility();
-
-            // Prime existing parlays with summaries
-            this.primeParlaySummaries();
-
-            // Refresh parlay statuses
-            this.refreshParlayStatuses();
+            // Parlays disabled - not initializing any parlay functionality
+            return;
         },
 
         /**
          * Re-initialize parlays after dynamic content changes
-         * Call this after adding new parlay rows to the table
+         * DISABLED: Parlay expansion and toggle insertion removed. Implement later if needed.
          */
         reinitParlays() {
-            // Ensure all parlay rows have proper toggle elements
-            const tbody = document.getElementById('picks-tbody');
-            if (!tbody) return;
-
-            const parlayRows = tbody.querySelectorAll('tr.parlay-row');
-            parlayRows.forEach(row => {
-                // Ensure toggle element exists
-                const hasToggle = row.querySelector('.parlay-toggle, .parlay-toggle-icon, .parlay-expand-arrow');
-                if (!hasToggle) {
-                    // Try to add toggle to first cell
-                    const dateCell = row.querySelector('td:first-child');
-                    if (dateCell) {
-                        const toggle = document.createElement('span');
-                        toggle.className = 'parlay-toggle-icon';
-                        toggle.setAttribute('aria-label', 'Expand parlay details');
-                        toggle.setAttribute('aria-expanded', 'false');
-                        toggle.textContent = '▶';
-                        toggle.setAttribute('role', 'button');
-                        toggle.setAttribute('tabindex', '0');
-                        
-                        const firstChild = dateCell.firstElementChild || dateCell.firstChild;
-                        if (firstChild) {
-                            dateCell.insertBefore(toggle, firstChild);
-                        } else {
-                            dateCell.appendChild(toggle);
-                        }
-                    }
-                }
-
-                // Ensure row has data-row-id for state management
-                if (!row.getAttribute('data-row-id')) {
-                    const rowId = row.id || `parlay-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-                    row.setAttribute('data-row-id', rowId);
-                    if (!row.id) {
-                        row.id = rowId;
-                    }
-                }
-            });
-
-            // Refresh visibility
-            this.refreshAllParlayVisibility();
+            // Feature disabled
+            return;
         },
 
         /**
@@ -735,81 +644,11 @@
 
         /**
          * Ingest parlay legs data (for dynamic updates)
+         * DISABLED: Parlay legs display removed. Implement later if needed.
          */
         ingestParlayLegs(rowRef, legsData) {
-            let parentRow;
-
-            // Find parent row by reference
-            if (typeof rowRef === 'string') {
-                parentRow = document.querySelector(rowRef);
-            } else if (rowRef instanceof Element) {
-                parentRow = rowRef;
-            }
-
-            if (!parentRow || !Array.isArray(legsData)) {
-                console.error('Invalid row reference or legs data');
-                return;
-            }
-
-            // Store legs data
-            parentRow.setAttribute('data-parlay-legs', JSON.stringify(legsData));
-
-            // Mark as parlay row
-            parentRow.classList.add('parlay-row');
-
-            // Ensure toggle element exists (check for any type)
-            const hasToggle = parentRow.querySelector('.parlay-toggle, .parlay-toggle-icon, .parlay-expand-arrow');
-            if (!hasToggle) {
-                // Try to add to first cell (datetime cell) or matchup cell
-                const dateCell = parentRow.querySelector('td:first-child');
-                const matchupCell = this.getCell(parentRow, 'matchup', 2);
-                const targetCell = dateCell || matchupCell;
-                
-                if (targetCell) {
-                    const toggle = document.createElement('span');
-                    toggle.className = 'parlay-toggle-icon';
-                    toggle.setAttribute('aria-label', 'Expand parlay details');
-                    toggle.setAttribute('aria-expanded', 'false');
-                    toggle.textContent = '▶';
-                    toggle.setAttribute('role', 'button');
-                    toggle.setAttribute('tabindex', '0');
-                    
-                    // Insert at beginning of cell
-                    const firstChild = targetCell.firstElementChild || targetCell.firstChild;
-                    if (firstChild) {
-                        targetCell.insertBefore(toggle, firstChild);
-                    } else {
-                        targetCell.appendChild(toggle);
-                    }
-                }
-            }
-
-            // Create legs row if doesn't exist
-            let legsRow = this.findParlayLegsRow(parentRow);
-            if (!legsRow) {
-                legsRow = document.createElement('tr');
-                legsRow.className = 'parlay-legs';
-                legsRow.style.display = 'none';
-
-                // Set data attributes for relationship
-                const rowId = parentRow.getAttribute('data-row-id') ||
-                             `parlay-${Date.now()}`;
-                parentRow.setAttribute('data-row-id', rowId);
-                legsRow.setAttribute('data-parent-id', rowId);
-
-                // Create cell spanning all columns
-                const td = document.createElement('td');
-                td.setAttribute('colspan', String(this.getColumnCount(parentRow, 10)));
-                td.innerHTML = '<div class="parlay-legs-container"></div>';
-                legsRow.appendChild(td);
-
-                // Insert after parent row
-                parentRow.parentNode.insertBefore(legsRow, parentRow.nextSibling);
-            }
-
-            // Update summary and status
-            this.syncParlaySummary(parentRow, legsData);
-            this.updateParlayStatus(parentRow, legsData);
+            // Feature disabled
+            return;
         },
 
         /**

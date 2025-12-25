@@ -397,25 +397,11 @@
 
     /**
      * Toggle parlay leg visibility
+     * DISABLED: Parlay legs expansion removed. Implement later if needed.
      */
     function toggleParlayLegs(parlayId, forceState) {
-        const parentRow = document.querySelector(`tr.parlay-row[data-parlay-id="${parlayId}"]`);
-        if (!parentRow) return;
-
-        const legsRow = document.querySelector(`tr.parlay-legs[data-parent-id="${parlayId}"]`);
-        const shouldExpand = typeof forceState === 'boolean' ? forceState : !parentRow.classList.contains('expanded');
-        parentRow.classList.toggle('expanded', shouldExpand);
-        parentRow.setAttribute('aria-expanded', shouldExpand);
-
-        if (legsRow) {
-            legsRow.style.display = shouldExpand ? 'table-row' : 'none';
-        }
-
-        // Rotate the expand arrow
-        const arrow = parentRow.querySelector('.parlay-expand-arrow');
-        if (arrow) {
-            arrow.style.transform = shouldExpand ? 'rotate(90deg)' : 'rotate(0deg)';
-        }
+        // Feature disabled
+        return;
     }
 
     function refreshPicksTable() {
@@ -448,14 +434,8 @@
             if (entry.type === 'single') {
                 const row = createPickRow(entry.pick, entryIdx);
                 tbody.appendChild(row);
-            } else {
-                const group = parlayLookup.get(entry.parlayId);
-                if (!group) return;
-                
-                // Create Parent Row (parlay legs table removed)
-                const parentRow = createParlayParentRow(group, entryIdx);
-                tbody.appendChild(parentRow);
             }
+            // Parlay rows disabled - render only single picks
         });
 
         console.log(`📊 Displayed ${picks.length} picks in table`);
@@ -775,7 +755,6 @@
             </td>
             <td>
                 <div class="matchup-cell parlay-matchup">
-                    <span class="parlay-expand-arrow">▶</span>
                     <span class="team-name-full">Multi-Leg</span>
                     <span class="parlay-leg-count">(${legCount} legs)</span>
                 </div>
@@ -814,10 +793,11 @@
             </td>
         `;
 
-        row.addEventListener('click', (e) => {
-            e.stopPropagation();
-            toggleParlayLegs(group.parlayId);
-        });
+        // Parlay expansion click handler disabled
+        // row.addEventListener('click', (e) => {
+        //     e.stopPropagation();
+        //     toggleParlayLegs(group.parlayId);
+        // });
         return row;
     }
 

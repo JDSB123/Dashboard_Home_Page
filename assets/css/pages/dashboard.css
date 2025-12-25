@@ -24,7 +24,7 @@ body.page-active-picks .main-container {
     padding-right: 0.75in;
 }
 
-/* Override the heavy dark overlay from page-layout.css */
+/* Override the heavy dark overlay from page-layout.css - MATCHING ODDS MARKET */
 body.page-active-picks::before {
     background: linear-gradient(180deg,
         rgba(4, 10, 20, 0.12) 0%,
@@ -37,11 +37,10 @@ body.page-active-picks::before {
     animation: none;
 }
 
-/* Subtle wash to balance bear image visibility */
+/* Wash to balance bear image visibility - MATCHING ODDS MARKET */
 body.page-active-picks::after {
-    background: rgba(3, 11, 22, 0.5);
+    background: rgba(3, 11, 22, 0.75);
     mix-blend-mode: multiply;
-    opacity: 0.6;
 }
 
 /* ==========================================================================
@@ -171,7 +170,8 @@ body.page-active-picks .kpi-subtext {
    ========================================================================== */
 
 /* ===== TABLE CONTAINER - SEMI-TRANSPARENT (matches weekly lineup) ===== */
-body.page-active-picks .table-container {
+body.page-active-picks .table-container,
+body.page-active-picks .table-container.has-picks {
     margin-top: 0;
     margin-left: 0;
     margin-right: 0;
@@ -190,6 +190,9 @@ body.page-active-picks .table-container {
     border-radius: 0 !important;
     padding: 0;
     contain: none !important;
+    /* Override backdrop blur from picks-table.css */
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
 }
 
 body.page-active-picks .picks-table {
