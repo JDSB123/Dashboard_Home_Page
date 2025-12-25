@@ -457,14 +457,15 @@
     }
 
     /**
-     * Reset date filter to show all
+     * Reset ALL filters (date, column filters, and sort)
      */
     function resetDateFilter() {
+        // 1. Reset date filter state
         currentDateRange = 'all';
         customStartDate = null;
         customEndDate = null;
 
-        // Reset active states
+        // Reset date toggle active states
         const allButtons = document.querySelectorAll('.date-toggle-btn');
         allButtons.forEach(btn => btn.classList.remove('active'));
 
@@ -479,8 +480,53 @@
             customRangeSection.classList.remove('active');
         }
 
-        // Show all rows
-        applyDateFilter('all');
+        // 2. Reset column filters and sort via state manager
+        if (window.PicksStateManager) {
+            window.PicksStateManager.resetAllFilters();
+            window.PicksStateManager.resetSort();
+        } else if (window.tableState) {
+            // Fallback: reset tableState directly
+            window.tableState.filters = {
+                date: { start: null, end: null },
+                league: [],
+                team: [],
+                betType: [],
+                segment: [],
+                status: []
+            };
+            window.tableState.sort = { column: null, direction: 'asc' };
+        }
+
+        // 3. Reset filter UI checkboxes and selects
+        document.querySelectorAll('.th-filter-dropdown input[type="checkbox"]').forEach(cb => {
+            cb.checked = false;
+        });
+        document.querySelectorAll('.th-filter-dropdown select').forEach(sel => {
+            sel.selectedIndex = 0;
+        });
+        document.querySelectorAll('.th-filter-dropdown input[type="text"]').forEach(inp => {
+            inp.value = '';
+        });
+
+        // 4. Remove filter indicator dots from kebab buttons
+        document.querySelectorAll('.th-filter-btn.has-filter').forEach(btn => {
+            btn.classList.remove('has-filter');
+        });
+
+        // 5. Reset sort indicators on headers
+        if (window.PicksSortManager) {
+            window.PicksSortManager.updateSortIndicators();
+        }
+
+        // 6. Update table display
+        if (window.updateTableWithFilters) {
+            window.updateTableWithFilters();
+        } else if (window.PicksTableRenderer) {
+            window.PicksTableRenderer.updateTable();
+        }
+
+        // 7. Update KPIs
+        updateKPIs();
     }
 
     // Initialize on DOM ready

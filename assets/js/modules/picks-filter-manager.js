@@ -519,6 +519,10 @@
             if (filters.matchup?.league) {
                 const rowLeague = (row.getAttribute('data-league') || '').toLowerCase();
                 if (rowLeague !== filters.matchup.league.toLowerCase()) return false;
+            } else if (filters.matchup?.selectedLeagues?.length > 0) {
+                const rowLeague = (row.getAttribute('data-league') || '').toLowerCase();
+                const selectedLeagues = filters.matchup.selectedLeagues.map(l => l.toLowerCase());
+                if (!selectedLeagues.includes(rowLeague)) return false;
             }
 
             // 4. Segment Filter
@@ -526,8 +530,15 @@
                 const rowSegment = (row.getAttribute('data-segment') || '').toLowerCase();
                 let normalizedRowSegment = rowSegment;
                 if (rowSegment === 'full game') normalizedRowSegment = 'full';
-                
+
                 if (normalizedRowSegment !== filters.pick.segment.toLowerCase()) return false;
+            } else if (filters.pick?.selectedSegments?.length > 0) {
+                const rowSegment = (row.getAttribute('data-segment') || '').toLowerCase();
+                let normalizedRowSegment = rowSegment;
+                if (rowSegment === 'full game') normalizedRowSegment = 'full';
+
+                const selectedSegments = filters.pick.selectedSegments.map(s => s.toLowerCase());
+                if (!selectedSegments.includes(normalizedRowSegment)) return false;
             }
 
             return true;
@@ -581,6 +592,12 @@
                     break;
                 case 'status':
                     this.syncStatusFilterStateFromUI();
+                    break;
+                case 'league':
+                    this.syncLeagueFilterStateFromUI();
+                    break;
+                case 'segment':
+                    this.syncSegmentFilterStateFromUI();
                     break;
             }
 
@@ -739,6 +756,60 @@
         },
 
         /**
+         * Sync league filter state from UI
+         */
+        syncLeagueFilterStateFromUI() {
+            const container = document.getElementById('league-options');
+            if (!container) return;
+
+            const checked = container.querySelectorAll('input[type="checkbox"]:checked');
+            const leagues = Array.from(checked).map(cb => cb.value);
+
+            // If all are checked, treat as no filter
+            const allCheckboxes = container.querySelectorAll('input[type="checkbox"]');
+            if (leagues.length === allCheckboxes.length) {
+                window.tableState.filters.matchup.league = null;
+            } else if (leagues.length === 1) {
+                // Single league selected
+                window.tableState.filters.matchup.league = leagues[0];
+            } else if (leagues.length > 0) {
+                // Multiple leagues - store as array
+                window.tableState.filters.matchup.selectedLeagues = leagues;
+                window.tableState.filters.matchup.league = null;
+            } else {
+                window.tableState.filters.matchup.league = null;
+                window.tableState.filters.matchup.selectedLeagues = null;
+            }
+        },
+
+        /**
+         * Sync segment filter state from UI
+         */
+        syncSegmentFilterStateFromUI() {
+            const container = document.getElementById('segment-options');
+            if (!container) return;
+
+            const checked = container.querySelectorAll('input[type="checkbox"]:checked');
+            const segments = Array.from(checked).map(cb => cb.value);
+
+            // If all are checked, treat as no filter
+            const allCheckboxes = container.querySelectorAll('input[type="checkbox"]');
+            if (segments.length === allCheckboxes.length) {
+                window.tableState.filters.pick.segment = null;
+            } else if (segments.length === 1) {
+                // Single segment selected
+                window.tableState.filters.pick.segment = segments[0];
+            } else if (segments.length > 0) {
+                // Multiple segments - store as array
+                window.tableState.filters.pick.selectedSegments = segments;
+                window.tableState.filters.pick.segment = null;
+            } else {
+                window.tableState.filters.pick.segment = null;
+                window.tableState.filters.pick.selectedSegments = null;
+            }
+        },
+
+        /**
          * Clear filter UI elements
          */
         clearFilterUI(type) {
@@ -768,6 +839,14 @@
                 case 'status':
                     const statusChecks = document.querySelectorAll('#status-filter-options input[type="checkbox"]');
                     statusChecks.forEach(cb => cb.checked = false);
+                    break;
+                case 'league':
+                    const leagueChecks = document.querySelectorAll('#league-options input[type="checkbox"]');
+                    leagueChecks.forEach(cb => cb.checked = true); // Reset to all selected
+                    break;
+                case 'segment':
+                    const segmentChecks = document.querySelectorAll('#segment-options input[type="checkbox"]');
+                    segmentChecks.forEach(cb => cb.checked = true); // Reset to all selected
                     break;
             }
         },

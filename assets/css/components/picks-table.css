@@ -154,8 +154,7 @@
     max-width: 100%;
     margin: 0 auto;
     padding: 0;
-    overflow-x: hidden; /* No horizontal scroll - table uses fixed layout */
-    overflow-y: visible;
+    overflow: visible; /* Allow dropdowns/kebabs to render outside the container */
     position: relative;
     z-index: var(--z-table); /* REFINEMENT: Using z-index scale */
     display: flex;
