@@ -1021,18 +1021,8 @@ tr[data-is-parlay="true"] {
     padding-left: 8px;
 }
 
-.parlay-expand-arrow {
-    color: var(--color-primary, #00d689);
-    font-size: 0.7rem;
-    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 20px;
-    height: 20px;
-}
+/* parlay-expand-arrow removed */
 
-.parlay-row.expanded .parlay-expand-arrow,
 .parlay-row.expanded .parlay-toggle-icon {
     transform: rotate(90deg);
     color: var(--color-primary-bright, #00d689);

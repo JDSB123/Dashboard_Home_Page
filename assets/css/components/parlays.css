@@ -723,20 +723,7 @@ tr.parlay-leg td:first-child {
     padding-left: 28px;
 }
 
-/* Parlay expand arrow in matchup cell */
-.parlay-expand-arrow {
-    display: inline-block;
-    color: var(--color-primary, #008f58);
-    font-size: 0.75rem;
-    margin-right: 8px;
-    transition: transform 0.25s ease;
-    vertical-align: middle;
-}
-
-.parlay-row.expanded .parlay-expand-arrow {
-    transform: rotate(90deg);
-    color: var(--color-primary-bright, #00d689);
-}
+/* parlay-expand-arrow removed */
 
 /* ==========================================================================
    COMPACT PARLAY LEGS - Smaller, tighter styling for expanded leg rows
