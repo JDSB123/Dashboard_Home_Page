@@ -550,9 +550,9 @@ body.page-active-picks .cell-date {
 
 /* ===== SEGMENT CELL (matches weekly lineup) ===== */
 body.page-active-picks .game-segment {
-    font-family: var(--font-display, 'Oswald', sans-serif);
+    font-family: var(--font-body), 'Cormorant Garamond', Georgia, serif;
     font-weight: 600;
-    font-size: 0.8rem;
+    font-size: var(--text-base, 0.8125rem);
     color: var(--neutral-200);
     text-transform: uppercase;
     letter-spacing: 0.02em;
@@ -574,7 +574,8 @@ body.page-active-picks .currency-line {
 
 body.page-active-picks .risk-label,
 body.page-active-picks .win-label {
-    font-size: 0.65rem;
+    font-family: var(--font-body), 'Cormorant Garamond', Georgia, serif;
+    font-size: var(--text-sm, 0.75rem);
     font-weight: 500;
     color: var(--neutral-500);
     text-transform: uppercase;
@@ -583,9 +584,9 @@ body.page-active-picks .win-label {
 
 body.page-active-picks .risk-amount,
 body.page-active-picks .win-amount {
-    font-family: var(--font-display, 'Oswald', sans-serif);
+    font-family: var(--font-body), 'Cormorant Garamond', Georgia, serif;
     font-weight: 600;
-    font-size: 0.85rem;
+    font-size: var(--text-base, 0.8125rem);
     color: var(--neutral-100);
 }
 
