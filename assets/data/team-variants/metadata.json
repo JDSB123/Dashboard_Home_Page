@@ -1,0 +1,27 @@
+{
+  "source": "Open Source Sports Data Repositories",
+  "repositories": {
+    "nfl": {
+      "name": "nflverse",
+      "url": "https://github.com/nflverse",
+      "data_source": "https://github.com/nflverse/nfldata"
+    },
+    "cfb": {
+      "name": "cfbfastR / College Football Data API",
+      "url": "https://github.com/sportsdataverse/cfbfastR",
+      "data_source": "https://api.collegefootballdata.com"
+    },
+    "nba": {
+      "name": "hoopR / NBA Stats",
+      "url": "https://github.com/sportsdataverse/hoopR",
+      "data_source": "Manual compilation with historical data"
+    },
+    "ncaam": {
+      "name": "ESPN College Basketball API",
+      "url": "https://site.api.espn.com",
+      "data_source": "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams"
+    }
+  },
+  "generated": "2024-12-24",
+  "description": "Comprehensive team name variants, abbreviations, and historical information"
+}

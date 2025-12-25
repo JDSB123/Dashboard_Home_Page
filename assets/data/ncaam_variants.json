@@ -1,0 +1,1718 @@
+{
+  "duke": {
+    "canonical": "Duke",
+    "code": "DUKE"
+  },
+  "north carolina": {
+    "canonical": "North Carolina",
+    "code": "NORTH_CARO"
+  },
+  "virginia": {
+    "canonical": "Virginia",
+    "code": "VIRGINIA"
+  },
+  "wake forest": {
+    "canonical": "Wake Forest",
+    "code": "WAKE_FORES"
+  },
+  "n.c. state": {
+    "canonical": "N.C. State",
+    "code": "N.C._STATE"
+  },
+  "clemson": {
+    "canonical": "Clemson",
+    "code": "CLEMSON"
+  },
+  "florida st.": {
+    "canonical": "Florida St.",
+    "code": "FLORIDA_ST"
+  },
+  "louisville": {
+    "canonical": "Louisville",
+    "code": "LOUISVILLE"
+  },
+  "miami fl": {
+    "canonical": "Miami FL",
+    "code": "MIAMI_FL"
+  },
+  "notre dame": {
+    "canonical": "Notre Dame",
+    "code": "NOTRE_DAME"
+  },
+  "pittsburgh": {
+    "canonical": "Pittsburgh",
+    "code": "PITTSBURGH"
+  },
+  "syracuse": {
+    "canonical": "Syracuse",
+    "code": "SYRACUSE"
+  },
+  "virginia tech": {
+    "canonical": "Virginia Tech",
+    "code": "VIRGINIA_T"
+  },
+  "georgia tech": {
+    "canonical": "Georgia Tech",
+    "code": "GEORGIA_TE"
+  },
+  "boston college": {
+    "canonical": "Boston College",
+    "code": "BOSTON_COL"
+  },
+  "kansas": {
+    "canonical": "Kansas",
+    "code": "KANSAS"
+  },
+  "baylor": {
+    "canonical": "Baylor",
+    "code": "BAYLOR"
+  },
+  "texas tech": {
+    "canonical": "Texas Tech",
+    "code": "TEXAS_TECH"
+  },
+  "tcu": {
+    "canonical": "TCU",
+    "code": "TCU"
+  },
+  "kansas st.": {
+    "canonical": "Kansas St.",
+    "code": "KANSAS_ST."
+  },
+  "oklahoma st.": {
+    "canonical": "Oklahoma St.",
+    "code": "OKLAHOMA_S"
+  },
+  "iowa st.": {
+    "canonical": "Iowa St.",
+    "code": "IOWA_ST."
+  },
+  "west virginia": {
+    "canonical": "West Virginia",
+    "code": "WEST_VIRGI"
+  },
+  "texas": {
+    "canonical": "Texas",
+    "code": "TEXAS"
+  },
+  "oklahoma": {
+    "canonical": "Oklahoma",
+    "code": "OKLAHOMA"
+  },
+  "byu": {
+    "canonical": "BYU",
+    "code": "BYU"
+  },
+  "ucf": {
+    "canonical": "UCF",
+    "code": "UCF"
+  },
+  "cincinnati": {
+    "canonical": "Cincinnati",
+    "code": "CINCINNATI"
+  },
+  "houston": {
+    "canonical": "Houston",
+    "code": "HOUSTON"
+  },
+  "purdue": {
+    "canonical": "Purdue",
+    "code": "PURDUE"
+  },
+  "michigan": {
+    "canonical": "Michigan",
+    "code": "MICHIGAN"
+  },
+  "michigan st.": {
+    "canonical": "Michigan St.",
+    "code": "MICHIGAN_S"
+  },
+  "indiana": {
+    "canonical": "Indiana",
+    "code": "INDIANA"
+  },
+  "illinois": {
+    "canonical": "Illinois",
+    "code": "ILLINOIS"
+  },
+  "ohio st.": {
+    "canonical": "Ohio St.",
+    "code": "OHIO_ST."
+  },
+  "iowa": {
+    "canonical": "Iowa",
+    "code": "IOWA"
+  },
+  "wisconsin": {
+    "canonical": "Wisconsin",
+    "code": "WISCONSIN"
+  },
+  "minnesota": {
+    "canonical": "Minnesota",
+    "code": "MINNESOTA"
+  },
+  "northwestern": {
+    "canonical": "Northwestern",
+    "code": "NORTHWESTE"
+  },
+  "penn st.": {
+    "canonical": "Penn St.",
+    "code": "PENN_ST."
+  },
+  "rutgers": {
+    "canonical": "Rutgers",
+    "code": "RUTGERS"
+  },
+  "maryland": {
+    "canonical": "Maryland",
+    "code": "MARYLAND"
+  },
+  "nebraska": {
+    "canonical": "Nebraska",
+    "code": "NEBRASKA"
+  },
+  "ucla": {
+    "canonical": "UCLA",
+    "code": "UCLA"
+  },
+  "usc": {
+    "canonical": "South Carolina",
+    "code": "SOUTH_CARO"
+  },
+  "oregon": {
+    "canonical": "Oregon",
+    "code": "OREGON"
+  },
+  "washington": {
+    "canonical": "Washington",
+    "code": "WASHINGTON"
+  },
+  "alabama": {
+    "canonical": "Alabama",
+    "code": "ALABAMA"
+  },
+  "auburn": {
+    "canonical": "Auburn",
+    "code": "AUBURN"
+  },
+  "kentucky": {
+    "canonical": "Kentucky",
+    "code": "KENTUCKY"
+  },
+  "tennessee": {
+    "canonical": "Tennessee",
+    "code": "TENNESSEE"
+  },
+  "arkansas": {
+    "canonical": "Arkansas",
+    "code": "ARKANSAS"
+  },
+  "florida": {
+    "canonical": "Florida",
+    "code": "FLORIDA"
+  },
+  "lsu": {
+    "canonical": "LSU",
+    "code": "LSU"
+  },
+  "mississippi st.": {
+    "canonical": "Mississippi St.",
+    "code": "MISSISSIPP"
+  },
+  "mississippi": {
+    "canonical": "Mississippi",
+    "code": "MISSISSIPP"
+  },
+  "missouri": {
+    "canonical": "Missouri",
+    "code": "MISSOURI"
+  },
+  "south carolina": {
+    "canonical": "South Carolina",
+    "code": "SOUTH_CARO"
+  },
+  "georgia": {
+    "canonical": "Georgia",
+    "code": "GEORGIA"
+  },
+  "vanderbilt": {
+    "canonical": "Vanderbilt",
+    "code": "VANDERBILT"
+  },
+  "texas a&m": {
+    "canonical": "Texas A&M",
+    "code": "TEXAS_A&M"
+  },
+  "arizona": {
+    "canonical": "Arizona",
+    "code": "ARIZONA"
+  },
+  "arizona st.": {
+    "canonical": "Arizona St.",
+    "code": "ARIZONA_ST"
+  },
+  "colorado": {
+    "canonical": "Colorado",
+    "code": "COLORADO"
+  },
+  "utah": {
+    "canonical": "Utah",
+    "code": "UTAH"
+  },
+  "connecticut": {
+    "canonical": "Connecticut",
+    "code": "CONNECTICU"
+  },
+  "creighton": {
+    "canonical": "Creighton",
+    "code": "CREIGHTON"
+  },
+  "marquette": {
+    "canonical": "Marquette",
+    "code": "MARQUETTE"
+  },
+  "providence": {
+    "canonical": "Providence",
+    "code": "PROVIDENCE"
+  },
+  "seton hall": {
+    "canonical": "Seton Hall",
+    "code": "SETON_HALL"
+  },
+  "villanova": {
+    "canonical": "Villanova",
+    "code": "VILLANOVA"
+  },
+  "xavier": {
+    "canonical": "Xavier",
+    "code": "XAVIER"
+  },
+  "butler": {
+    "canonical": "Butler",
+    "code": "BUTLER"
+  },
+  "georgetown": {
+    "canonical": "Georgetown",
+    "code": "GEORGETOWN"
+  },
+  "depaul": {
+    "canonical": "DePaul",
+    "code": "DEPAUL"
+  },
+  "memphis": {
+    "canonical": "Memphis",
+    "code": "MEMPHIS"
+  },
+  "smu": {
+    "canonical": "SMU",
+    "code": "SMU"
+  },
+  "tulsa": {
+    "canonical": "Tulsa",
+    "code": "TULSA"
+  },
+  "tulane": {
+    "canonical": "Tulane",
+    "code": "TULANE"
+  },
+  "temple": {
+    "canonical": "Temple",
+    "code": "TEMPLE"
+  },
+  "wichita st.": {
+    "canonical": "Wichita St.",
+    "code": "WICHITA_ST"
+  },
+  "south florida": {
+    "canonical": "South Florida",
+    "code": "SOUTH_FLOR"
+  },
+  "east carolina": {
+    "canonical": "East Carolina",
+    "code": "EAST_CAROL"
+  },
+  "san diego st.": {
+    "canonical": "San Diego St.",
+    "code": "SAN_DIEGO_"
+  },
+  "nevada": {
+    "canonical": "Nevada",
+    "code": "NEVADA"
+  },
+  "unlv": {
+    "canonical": "UNLV",
+    "code": "UNLV"
+  },
+  "new mexico": {
+    "canonical": "New Mexico",
+    "code": "NEW_MEXICO"
+  },
+  "utah st.": {
+    "canonical": "Utah St.",
+    "code": "UTAH_ST."
+  },
+  "boise st.": {
+    "canonical": "Boise St.",
+    "code": "BOISE_ST."
+  },
+  "fresno st.": {
+    "canonical": "Fresno St.",
+    "code": "FRESNO_ST."
+  },
+  "wyoming": {
+    "canonical": "Wyoming",
+    "code": "WYOMING"
+  },
+  "colorado st.": {
+    "canonical": "Colorado St.",
+    "code": "COLORADO_S"
+  },
+  "air force": {
+    "canonical": "Air Force",
+    "code": "AIR_FORCE"
+  },
+  "san jose st.": {
+    "canonical": "San Jose St.",
+    "code": "SAN_JOSE_S"
+  },
+  "gonzaga": {
+    "canonical": "Gonzaga",
+    "code": "GONZAGA"
+  },
+  "san francisco": {
+    "canonical": "San Francisco",
+    "code": "SAN_FRANCI"
+  },
+  "santa clara": {
+    "canonical": "Santa Clara",
+    "code": "SANTA_CLAR"
+  },
+  "loyola marymount": {
+    "canonical": "Loyola Marymount",
+    "code": "LOYOLA_MAR"
+  },
+  "pepperdine": {
+    "canonical": "Pepperdine",
+    "code": "PEPPERDINE"
+  },
+  "san diego": {
+    "canonical": "San Diego",
+    "code": "SAN_DIEGO"
+  },
+  "pacific": {
+    "canonical": "Pacific",
+    "code": "PACIFIC"
+  },
+  "portland": {
+    "canonical": "Portland",
+    "code": "PORTLAND"
+  },
+  "dayton": {
+    "canonical": "Dayton",
+    "code": "DAYTON"
+  },
+  "vcu": {
+    "canonical": "VCU",
+    "code": "VCU"
+  },
+  "richmond": {
+    "canonical": "Richmond",
+    "code": "RICHMOND"
+  },
+  "saint louis": {
+    "canonical": "Saint Louis",
+    "code": "SAINT_LOUI"
+  },
+  "st. bonaventure": {
+    "canonical": "St. Bonaventure",
+    "code": "ST._BONAVE"
+  },
+  "rhode island": {
+    "canonical": "Rhode Island",
+    "code": "RHODE_ISLA"
+  },
+  "massachusetts": {
+    "canonical": "Massachusetts",
+    "code": "MASSACHUSE"
+  },
+  "george mason": {
+    "canonical": "George Mason",
+    "code": "GEORGE_MAS"
+  },
+  "davidson": {
+    "canonical": "Davidson",
+    "code": "DAVIDSON"
+  },
+  "fordham": {
+    "canonical": "Fordham",
+    "code": "FORDHAM"
+  },
+  "la salle": {
+    "canonical": "La Salle",
+    "code": "LA_SALLE"
+  },
+  "duquesne": {
+    "canonical": "Duquesne",
+    "code": "DUQUESNE"
+  },
+  "george washington": {
+    "canonical": "George Washington",
+    "code": "GEORGE_WAS"
+  },
+  "harvard": {
+    "canonical": "Harvard",
+    "code": "HARVARD"
+  },
+  "yale": {
+    "canonical": "Yale",
+    "code": "YALE"
+  },
+  "princeton": {
+    "canonical": "Princeton",
+    "code": "PRINCETON"
+  },
+  "penn": {
+    "canonical": "Penn",
+    "code": "PENN"
+  },
+  "columbia": {
+    "canonical": "Columbia",
+    "code": "COLUMBIA"
+  },
+  "cornell": {
+    "canonical": "Cornell",
+    "code": "CORNELL"
+  },
+  "brown": {
+    "canonical": "Brown",
+    "code": "BROWN"
+  },
+  "dartmouth": {
+    "canonical": "Dartmouth",
+    "code": "DARTMOUTH"
+  },
+  "charleston": {
+    "canonical": "Charleston",
+    "code": "CHARLESTON"
+  },
+  "hofstra": {
+    "canonical": "Hofstra",
+    "code": "HOFSTRA"
+  },
+  "delaware": {
+    "canonical": "Delaware",
+    "code": "DELAWARE"
+  },
+  "drexel": {
+    "canonical": "Drexel",
+    "code": "DREXEL"
+  },
+  "northeastern": {
+    "canonical": "Northeastern",
+    "code": "NORTHEASTE"
+  },
+  "towson": {
+    "canonical": "Towson",
+    "code": "TOWSON"
+  },
+  "william & mary": {
+    "canonical": "William & Mary",
+    "code": "WILLIAM_&_"
+  },
+  "elon": {
+    "canonical": "Elon",
+    "code": "ELON"
+  },
+  "unc wilmington": {
+    "canonical": "UNC Wilmington",
+    "code": "UNC_WILMIN"
+  },
+  "north carolina a&t": {
+    "canonical": "North Carolina A&T",
+    "code": "NORTH_CARO"
+  },
+  "monmouth": {
+    "canonical": "Monmouth",
+    "code": "MONMOUTH"
+  },
+  "stony brook": {
+    "canonical": "Stony Brook",
+    "code": "STONY_BROO"
+  },
+  "hampton": {
+    "canonical": "Hampton",
+    "code": "HAMPTON"
+  },
+  "toledo": {
+    "canonical": "Toledo",
+    "code": "TOLEDO"
+  },
+  "akron": {
+    "canonical": "Akron",
+    "code": "AKRON"
+  },
+  "kent st.": {
+    "canonical": "Kent St.",
+    "code": "KENT_ST."
+  },
+  "bowling green": {
+    "canonical": "Bowling Green",
+    "code": "BOWLING_GR"
+  },
+  "buffalo": {
+    "canonical": "Buffalo",
+    "code": "BUFFALO"
+  },
+  "ohio": {
+    "canonical": "Ohio",
+    "code": "OHIO"
+  },
+  "miami oh": {
+    "canonical": "Miami OH",
+    "code": "MIAMI_OH"
+  },
+  "ball st.": {
+    "canonical": "Ball St.",
+    "code": "BALL_ST."
+  },
+  "western michigan": {
+    "canonical": "Western Michigan",
+    "code": "WESTERN_MI"
+  },
+  "central michigan": {
+    "canonical": "Central Michigan",
+    "code": "CENTRAL_MI"
+  },
+  "eastern michigan": {
+    "canonical": "Eastern Michigan",
+    "code": "EASTERN_MI"
+  },
+  "northern illinois": {
+    "canonical": "Northern Illinois",
+    "code": "NORTHERN_I"
+  },
+  "drake": {
+    "canonical": "Drake",
+    "code": "DRAKE"
+  },
+  "bradley": {
+    "canonical": "Bradley",
+    "code": "BRADLEY"
+  },
+  "uni": {
+    "canonical": "UNI",
+    "code": "UNI"
+  },
+  "missouri st.": {
+    "canonical": "Missouri St.",
+    "code": "MISSOURI_S"
+  },
+  "indiana st.": {
+    "canonical": "Indiana St.",
+    "code": "INDIANA_ST"
+  },
+  "southern illinois": {
+    "canonical": "Southern Illinois",
+    "code": "SOUTHERN_I"
+  },
+  "illinois st.": {
+    "canonical": "Illinois St.",
+    "code": "ILLINOIS_S"
+  },
+  "valparaiso": {
+    "canonical": "Valparaiso",
+    "code": "VALPARAISO"
+  },
+  "evansville": {
+    "canonical": "Evansville",
+    "code": "EVANSVILLE"
+  },
+  "loyola chicago": {
+    "canonical": "Loyola Chicago",
+    "code": "LOYOLA_CHI"
+  },
+  "murray st.": {
+    "canonical": "Murray St.",
+    "code": "MURRAY_ST."
+  },
+  "belmont": {
+    "canonical": "Belmont",
+    "code": "BELMONT"
+  },
+  "south dakota st.": {
+    "canonical": "South Dakota St.",
+    "code": "SOUTH_DAKO"
+  },
+  "north dakota st.": {
+    "canonical": "North Dakota St.",
+    "code": "NORTH_DAKO"
+  },
+  "oral roberts": {
+    "canonical": "Oral Roberts",
+    "code": "ORAL_ROBER"
+  },
+  "south dakota": {
+    "canonical": "South Dakota",
+    "code": "SOUTH_DAKO"
+  },
+  "north dakota": {
+    "canonical": "North Dakota",
+    "code": "NORTH_DAKO"
+  },
+  "denver": {
+    "canonical": "Denver",
+    "code": "DENVER"
+  },
+  "omaha": {
+    "canonical": "Omaha",
+    "code": "OMAHA"
+  },
+  "st. thomas": {
+    "canonical": "St. Thomas",
+    "code": "ST._THOMAS"
+  },
+  "wright st.": {
+    "canonical": "Wright St.",
+    "code": "WRIGHT_ST."
+  },
+  "cleveland st.": {
+    "canonical": "Cleveland St.",
+    "code": "CLEVELAND_"
+  },
+  "oakland": {
+    "canonical": "Oakland",
+    "code": "OAKLAND"
+  },
+  "milwaukee": {
+    "canonical": "Milwaukee",
+    "code": "MILWAUKEE"
+  },
+  "youngstown st.": {
+    "canonical": "Youngstown St.",
+    "code": "YOUNGSTOWN"
+  },
+  "green bay": {
+    "canonical": "Green Bay",
+    "code": "GREEN_BAY"
+  },
+  "northern kentucky": {
+    "canonical": "Northern Kentucky",
+    "code": "NORTHERN_K"
+  },
+  "detroit mercy": {
+    "canonical": "Detroit Mercy",
+    "code": "DETROIT_ME"
+  },
+  "iupui": {
+    "canonical": "IUPUI",
+    "code": "IUPUI"
+  },
+  "robert morris": {
+    "canonical": "Robert Morris",
+    "code": "ROBERT_MOR"
+  },
+  "purdue fort wayne": {
+    "canonical": "Purdue Fort Wayne",
+    "code": "PURDUE_FOR"
+  },
+  "uab": {
+    "canonical": "UAB",
+    "code": "UAB"
+  },
+  "louisiana tech": {
+    "canonical": "Louisiana Tech",
+    "code": "LOUISIANA_"
+  },
+  "middle tennessee": {
+    "canonical": "Middle Tennessee",
+    "code": "MIDDLE_TEN"
+  },
+  "western kentucky": {
+    "canonical": "Western Kentucky",
+    "code": "WESTERN_KE"
+  },
+  "florida atlantic": {
+    "canonical": "Florida Atlantic",
+    "code": "FLORIDA_AT"
+  },
+  "florida international": {
+    "canonical": "Florida International",
+    "code": "FLORIDA_IN"
+  },
+  "charlotte": {
+    "canonical": "Charlotte",
+    "code": "CHARLOTTE"
+  },
+  "old dominion": {
+    "canonical": "Old Dominion",
+    "code": "OLD_DOMINI"
+  },
+  "marshall": {
+    "canonical": "Marshall",
+    "code": "MARSHALL"
+  },
+  "southern miss": {
+    "canonical": "Southern Miss",
+    "code": "SOUTHERN_M"
+  },
+  "north texas": {
+    "canonical": "North Texas",
+    "code": "NORTH_TEXA"
+  },
+  "utep": {
+    "canonical": "UTEP",
+    "code": "UTEP"
+  },
+  "utsa": {
+    "canonical": "UTSA",
+    "code": "UTSA"
+  },
+  "rice": {
+    "canonical": "Rice",
+    "code": "RICE"
+  },
+  "arkansas st.": {
+    "canonical": "Arkansas St.",
+    "code": "ARKANSAS_S"
+  },
+  "appalachian st.": {
+    "canonical": "Appalachian St.",
+    "code": "APPALACHIA"
+  },
+  "coastal carolina": {
+    "canonical": "Coastal Carolina",
+    "code": "COASTAL_CA"
+  },
+  "georgia st.": {
+    "canonical": "Georgia St.",
+    "code": "GEORGIA_ST"
+  },
+  "georgia southern": {
+    "canonical": "Georgia Southern",
+    "code": "GEORGIA_SO"
+  },
+  "troy": {
+    "canonical": "Troy",
+    "code": "TROY"
+  },
+  "louisiana": {
+    "canonical": "Louisiana",
+    "code": "LOUISIANA"
+  },
+  "texas st.": {
+    "canonical": "Texas St.",
+    "code": "TEXAS_ST."
+  },
+  "ul monroe": {
+    "canonical": "UL Monroe",
+    "code": "UL_MONROE"
+  },
+  "south alabama": {
+    "canonical": "South Alabama",
+    "code": "SOUTH_ALAB"
+  },
+  "arkansas little rock": {
+    "canonical": "Arkansas Little Rock",
+    "code": "ARKANSAS_L"
+  },
+  "ut arlington": {
+    "canonical": "UT Arlington",
+    "code": "UT_ARLINGT"
+  },
+  "james madison": {
+    "canonical": "James Madison",
+    "code": "JAMES_MADI"
+  },
+  "iona": {
+    "canonical": "Iona",
+    "code": "IONA"
+  },
+  "siena": {
+    "canonical": "Siena",
+    "code": "SIENA"
+  },
+  "rider": {
+    "canonical": "Rider",
+    "code": "RIDER"
+  },
+  "quinnipiac": {
+    "canonical": "Quinnipiac",
+    "code": "QUINNIPIAC"
+  },
+  "fairfield": {
+    "canonical": "Fairfield",
+    "code": "FAIRFIELD"
+  },
+  "manhattan": {
+    "canonical": "Manhattan",
+    "code": "MANHATTAN"
+  },
+  "marist": {
+    "canonical": "Marist",
+    "code": "MARIST"
+  },
+  "canisius": {
+    "canonical": "Canisius",
+    "code": "CANISIUS"
+  },
+  "niagara": {
+    "canonical": "Niagara",
+    "code": "NIAGARA"
+  },
+  "duke blue devils": {
+    "canonical": "Duke",
+    "code": "DUKE"
+  },
+  "north carolina tar heels": {
+    "canonical": "North Carolina",
+    "code": "NORTH_CARO"
+  },
+  "unc": {
+    "canonical": "North Carolina",
+    "code": "NORTH_CARO"
+  },
+  "unc tar heels": {
+    "canonical": "North Carolina",
+    "code": "NORTH_CARO"
+  },
+  "kentucky wildcats": {
+    "canonical": "Kentucky",
+    "code": "KENTUCKY"
+  },
+  "uk": {
+    "canonical": "Kentucky",
+    "code": "KENTUCKY"
+  },
+  "kansas jayhawks": {
+    "canonical": "Kansas",
+    "code": "KANSAS"
+  },
+  "ku": {
+    "canonical": "Kansas",
+    "code": "KANSAS"
+  },
+  "ucla bruins": {
+    "canonical": "UCLA",
+    "code": "UCLA"
+  },
+  "uconn": {
+    "canonical": "Connecticut",
+    "code": "CONNECTICU"
+  },
+  "connecticut huskies": {
+    "canonical": "Connecticut",
+    "code": "CONNECTICU"
+  },
+  "uconn huskies": {
+    "canonical": "Connecticut",
+    "code": "CONNECTICU"
+  },
+  "michigan state": {
+    "canonical": "Michigan St.",
+    "code": "MICHIGAN_S"
+  },
+  "michigan state spartans": {
+    "canonical": "Michigan St.",
+    "code": "MICHIGAN_S"
+  },
+  "msu": {
+    "canonical": "Mississippi St.",
+    "code": "MISSISSIPP"
+  },
+  "ohio state": {
+    "canonical": "Ohio St.",
+    "code": "OHIO_ST."
+  },
+  "ohio state buckeyes": {
+    "canonical": "Ohio St.",
+    "code": "OHIO_ST."
+  },
+  "osu": {
+    "canonical": "Ohio St.",
+    "code": "OHIO_ST."
+  },
+  "penn state": {
+    "canonical": "Penn St.",
+    "code": "PENN_ST."
+  },
+  "penn state nittany lions": {
+    "canonical": "Penn St.",
+    "code": "PENN_ST."
+  },
+  "psu": {
+    "canonical": "Penn St.",
+    "code": "PENN_ST."
+  },
+  "arizona state": {
+    "canonical": "Arizona St.",
+    "code": "ARIZONA_ST"
+  },
+  "arizona state sun devils": {
+    "canonical": "Arizona St.",
+    "code": "ARIZONA_ST"
+  },
+  "asu": {
+    "canonical": "Arizona St.",
+    "code": "ARIZONA_ST"
+  },
+  "florida state": {
+    "canonical": "Florida St.",
+    "code": "FLORIDA_ST"
+  },
+  "florida state seminoles": {
+    "canonical": "Florida St.",
+    "code": "FLORIDA_ST"
+  },
+  "fsu": {
+    "canonical": "Florida St.",
+    "code": "FLORIDA_ST"
+  },
+  "iowa state": {
+    "canonical": "Iowa St.",
+    "code": "IOWA_ST."
+  },
+  "iowa state cyclones": {
+    "canonical": "Iowa St.",
+    "code": "IOWA_ST."
+  },
+  "kansas state": {
+    "canonical": "Kansas St.",
+    "code": "KANSAS_ST."
+  },
+  "kansas state wildcats": {
+    "canonical": "Kansas St.",
+    "code": "KANSAS_ST."
+  },
+  "k-state": {
+    "canonical": "Kansas St.",
+    "code": "KANSAS_ST."
+  },
+  "oklahoma state": {
+    "canonical": "Oklahoma St.",
+    "code": "OKLAHOMA_S"
+  },
+  "oklahoma state cowboys": {
+    "canonical": "Oklahoma St.",
+    "code": "OKLAHOMA_S"
+  },
+  "okie state": {
+    "canonical": "Oklahoma St.",
+    "code": "OKLAHOMA_S"
+  },
+  "mississippi state": {
+    "canonical": "Mississippi St.",
+    "code": "MISSISSIPP"
+  },
+  "mississippi state bulldogs": {
+    "canonical": "Mississippi St.",
+    "code": "MISSISSIPP"
+  },
+  "miss state": {
+    "canonical": "Mississippi St.",
+    "code": "MISSISSIPP"
+  },
+  "nc state": {
+    "canonical": "N.C. State",
+    "code": "N.C._STATE"
+  },
+  "nc state wolfpack": {
+    "canonical": "N.C. State",
+    "code": "N.C._STATE"
+  },
+  "north carolina state": {
+    "canonical": "N.C. State",
+    "code": "N.C._STATE"
+  },
+  "ncsu": {
+    "canonical": "N.C. State",
+    "code": "N.C._STATE"
+  },
+  "lsu tigers": {
+    "canonical": "LSU",
+    "code": "LSU"
+  },
+  "louisiana state": {
+    "canonical": "LSU",
+    "code": "LSU"
+  },
+  "texas a&m aggies": {
+    "canonical": "Texas A&M",
+    "code": "TEXAS_A&M"
+  },
+  "tamu": {
+    "canonical": "Texas A&M",
+    "code": "TEXAS_A&M"
+  },
+  "texas a & m": {
+    "canonical": "Texas A&M",
+    "code": "TEXAS_A&M"
+  },
+  "ucf knights": {
+    "canonical": "UCF",
+    "code": "UCF"
+  },
+  "central florida": {
+    "canonical": "UCF",
+    "code": "UCF"
+  },
+  "smu mustangs": {
+    "canonical": "SMU",
+    "code": "SMU"
+  },
+  "southern methodist": {
+    "canonical": "SMU",
+    "code": "SMU"
+  },
+  "tcu horned frogs": {
+    "canonical": "TCU",
+    "code": "TCU"
+  },
+  "texas christian": {
+    "canonical": "TCU",
+    "code": "TCU"
+  },
+  "byu cougars": {
+    "canonical": "BYU",
+    "code": "BYU"
+  },
+  "brigham young": {
+    "canonical": "BYU",
+    "code": "BYU"
+  },
+  "vcu rams": {
+    "canonical": "VCU",
+    "code": "VCU"
+  },
+  "virginia commonwealth": {
+    "canonical": "VCU",
+    "code": "VCU"
+  },
+  "unlv rebels": {
+    "canonical": "UNLV",
+    "code": "UNLV"
+  },
+  "nevada las vegas": {
+    "canonical": "UNLV",
+    "code": "UNLV"
+  },
+  "miami": {
+    "canonical": "Miami FL",
+    "code": "MIAMI_FL"
+  },
+  "miami hurricanes": {
+    "canonical": "Miami FL",
+    "code": "MIAMI_FL"
+  },
+  "miami (fl)": {
+    "canonical": "Miami FL",
+    "code": "MIAMI_FL"
+  },
+  "the u": {
+    "canonical": "Miami FL",
+    "code": "MIAMI_FL"
+  },
+  "miami (oh)": {
+    "canonical": "Miami OH",
+    "code": "MIAMI_OH"
+  },
+  "miami ohio": {
+    "canonical": "Miami OH",
+    "code": "MIAMI_OH"
+  },
+  "miami redhawks": {
+    "canonical": "Miami OH",
+    "code": "MIAMI_OH"
+  },
+  "st. louis": {
+    "canonical": "Saint Louis",
+    "code": "SAINT_LOUI"
+  },
+  "st louis": {
+    "canonical": "Saint Louis",
+    "code": "SAINT_LOUI"
+  },
+  "saint louis billikens": {
+    "canonical": "Saint Louis",
+    "code": "SAINT_LOUI"
+  },
+  "slu": {
+    "canonical": "Saint Louis",
+    "code": "SAINT_LOUI"
+  },
+  "st bonaventure": {
+    "canonical": "St. Bonaventure",
+    "code": "ST._BONAVE"
+  },
+  "saint bonaventure": {
+    "canonical": "St. Bonaventure",
+    "code": "ST._BONAVE"
+  },
+  "st. bonaventure bonnies": {
+    "canonical": "St. Bonaventure",
+    "code": "ST._BONAVE"
+  },
+  "san diego state": {
+    "canonical": "San Diego St.",
+    "code": "SAN_DIEGO_"
+  },
+  "san diego state aztecs": {
+    "canonical": "San Diego St.",
+    "code": "SAN_DIEGO_"
+  },
+  "sdsu": {
+    "canonical": "San Diego St.",
+    "code": "SAN_DIEGO_"
+  },
+  "boise state": {
+    "canonical": "Boise St.",
+    "code": "BOISE_ST."
+  },
+  "boise state broncos": {
+    "canonical": "Boise St.",
+    "code": "BOISE_ST."
+  },
+  "utah state": {
+    "canonical": "Utah St.",
+    "code": "UTAH_ST."
+  },
+  "utah state aggies": {
+    "canonical": "Utah St.",
+    "code": "UTAH_ST."
+  },
+  "fresno state": {
+    "canonical": "Fresno St.",
+    "code": "FRESNO_ST."
+  },
+  "fresno state bulldogs": {
+    "canonical": "Fresno St.",
+    "code": "FRESNO_ST."
+  },
+  "colorado state": {
+    "canonical": "Colorado St.",
+    "code": "COLORADO_S"
+  },
+  "colorado state rams": {
+    "canonical": "Colorado St.",
+    "code": "COLORADO_S"
+  },
+  "csu": {
+    "canonical": "Colorado St.",
+    "code": "COLORADO_S"
+  },
+  "san jose state": {
+    "canonical": "San Jose St.",
+    "code": "SAN_JOSE_S"
+  },
+  "san jose state spartans": {
+    "canonical": "San Jose St.",
+    "code": "SAN_JOSE_S"
+  },
+  "sjsu": {
+    "canonical": "San Jose St.",
+    "code": "SAN_JOSE_S"
+  },
+  "wichita state": {
+    "canonical": "Wichita St.",
+    "code": "WICHITA_ST"
+  },
+  "wichita state shockers": {
+    "canonical": "Wichita St.",
+    "code": "WICHITA_ST"
+  },
+  "kent state": {
+    "canonical": "Kent St.",
+    "code": "KENT_ST."
+  },
+  "kent state golden flashes": {
+    "canonical": "Kent St.",
+    "code": "KENT_ST."
+  },
+  "ball state": {
+    "canonical": "Ball St.",
+    "code": "BALL_ST."
+  },
+  "ball state cardinals": {
+    "canonical": "Ball St.",
+    "code": "BALL_ST."
+  },
+  "ole miss": {
+    "canonical": "Mississippi",
+    "code": "MISSISSIPP"
+  },
+  "ole miss rebels": {
+    "canonical": "Mississippi",
+    "code": "MISSISSIPP"
+  },
+  "mississippi rebels": {
+    "canonical": "Mississippi",
+    "code": "MISSISSIPP"
+  },
+  "gonzaga bulldogs": {
+    "canonical": "Gonzaga",
+    "code": "GONZAGA"
+  },
+  "zags": {
+    "canonical": "Gonzaga",
+    "code": "GONZAGA"
+  },
+  "purdue boilermakers": {
+    "canonical": "Purdue",
+    "code": "PURDUE"
+  },
+  "alabama crimson tide": {
+    "canonical": "Alabama",
+    "code": "ALABAMA"
+  },
+  "bama": {
+    "canonical": "Alabama",
+    "code": "ALABAMA"
+  },
+  "tennessee volunteers": {
+    "canonical": "Tennessee",
+    "code": "TENNESSEE"
+  },
+  "tenn": {
+    "canonical": "Tennessee",
+    "code": "TENNESSEE"
+  },
+  "vols": {
+    "canonical": "Tennessee",
+    "code": "TENNESSEE"
+  },
+  "houston cougars": {
+    "canonical": "Houston",
+    "code": "HOUSTON"
+  },
+  "uh": {
+    "canonical": "Houston",
+    "code": "HOUSTON"
+  },
+  "auburn tigers": {
+    "canonical": "Auburn",
+    "code": "AUBURN"
+  },
+  "arizona wildcats": {
+    "canonical": "Arizona",
+    "code": "ARIZONA"
+  },
+  "u of a": {
+    "canonical": "Arizona",
+    "code": "ARIZONA"
+  },
+  "indiana hoosiers": {
+    "canonical": "Indiana",
+    "code": "INDIANA"
+  },
+  "iu": {
+    "canonical": "Indiana",
+    "code": "INDIANA"
+  },
+  "illinois fighting illini": {
+    "canonical": "Illinois",
+    "code": "ILLINOIS"
+  },
+  "u of i": {
+    "canonical": "Illinois",
+    "code": "ILLINOIS"
+  },
+  "iowa hawkeyes": {
+    "canonical": "Iowa",
+    "code": "IOWA"
+  },
+  "wisconsin badgers": {
+    "canonical": "Wisconsin",
+    "code": "WISCONSIN"
+  },
+  "wisc": {
+    "canonical": "Wisconsin",
+    "code": "WISCONSIN"
+  },
+  "michigan wolverines": {
+    "canonical": "Michigan",
+    "code": "MICHIGAN"
+  },
+  "u-m": {
+    "canonical": "Michigan",
+    "code": "MICHIGAN"
+  },
+  "texas longhorns": {
+    "canonical": "Texas",
+    "code": "TEXAS"
+  },
+  "ut": {
+    "canonical": "Texas",
+    "code": "TEXAS"
+  },
+  "baylor bears": {
+    "canonical": "Baylor",
+    "code": "BAYLOR"
+  },
+  "texas tech red raiders": {
+    "canonical": "Texas Tech",
+    "code": "TEXAS_TECH"
+  },
+  "ttu": {
+    "canonical": "Texas Tech",
+    "code": "TEXAS_TECH"
+  },
+  "villanova wildcats": {
+    "canonical": "Villanova",
+    "code": "VILLANOVA"
+  },
+  "nova": {
+    "canonical": "Villanova",
+    "code": "VILLANOVA"
+  },
+  "creighton bluejays": {
+    "canonical": "Creighton",
+    "code": "CREIGHTON"
+  },
+  "marquette golden eagles": {
+    "canonical": "Marquette",
+    "code": "MARQUETTE"
+  },
+  "xavier musketeers": {
+    "canonical": "Xavier",
+    "code": "XAVIER"
+  },
+  "butler bulldogs": {
+    "canonical": "Butler",
+    "code": "BUTLER"
+  },
+  "georgetown hoyas": {
+    "canonical": "Georgetown",
+    "code": "GEORGETOWN"
+  },
+  "providence friars": {
+    "canonical": "Providence",
+    "code": "PROVIDENCE"
+  },
+  "seton hall pirates": {
+    "canonical": "Seton Hall",
+    "code": "SETON_HALL"
+  },
+  "depaul blue demons": {
+    "canonical": "DePaul",
+    "code": "DEPAUL"
+  },
+  "arkansas razorbacks": {
+    "canonical": "Arkansas",
+    "code": "ARKANSAS"
+  },
+  "ark": {
+    "canonical": "Arkansas",
+    "code": "ARKANSAS"
+  },
+  "florida gators": {
+    "canonical": "Florida",
+    "code": "FLORIDA"
+  },
+  "uf": {
+    "canonical": "Florida",
+    "code": "FLORIDA"
+  },
+  "missouri tigers": {
+    "canonical": "Missouri",
+    "code": "MISSOURI"
+  },
+  "mizzou": {
+    "canonical": "Missouri",
+    "code": "MISSOURI"
+  },
+  "south carolina gamecocks": {
+    "canonical": "South Carolina",
+    "code": "SOUTH_CARO"
+  },
+  "georgia bulldogs": {
+    "canonical": "Georgia",
+    "code": "GEORGIA"
+  },
+  "uga": {
+    "canonical": "Georgia",
+    "code": "GEORGIA"
+  },
+  "vanderbilt commodores": {
+    "canonical": "Vanderbilt",
+    "code": "VANDERBILT"
+  },
+  "vandy": {
+    "canonical": "Vanderbilt",
+    "code": "VANDERBILT"
+  },
+  "west virginia mountaineers": {
+    "canonical": "West Virginia",
+    "code": "WEST_VIRGI"
+  },
+  "wvu": {
+    "canonical": "West Virginia",
+    "code": "WEST_VIRGI"
+  },
+  "oklahoma sooners": {
+    "canonical": "Oklahoma",
+    "code": "OKLAHOMA"
+  },
+  "ou": {
+    "canonical": "Oklahoma",
+    "code": "OKLAHOMA"
+  },
+  "cincinnati bearcats": {
+    "canonical": "Cincinnati",
+    "code": "CINCINNATI"
+  },
+  "cincy": {
+    "canonical": "Cincinnati",
+    "code": "CINCINNATI"
+  },
+  "usc trojans": {
+    "canonical": "USC",
+    "code": "USC"
+  },
+  "southern california": {
+    "canonical": "USC",
+    "code": "USC"
+  },
+  "southern cal": {
+    "canonical": "USC",
+    "code": "USC"
+  },
+  "virginia cavaliers": {
+    "canonical": "Virginia",
+    "code": "VIRGINIA"
+  },
+  "uva": {
+    "canonical": "Virginia",
+    "code": "VIRGINIA"
+  },
+  "wake forest demon deacons": {
+    "canonical": "Wake Forest",
+    "code": "WAKE_FORES"
+  },
+  "clemson tigers": {
+    "canonical": "Clemson",
+    "code": "CLEMSON"
+  },
+  "louisville cardinals": {
+    "canonical": "Louisville",
+    "code": "LOUISVILLE"
+  },
+  "notre dame fighting irish": {
+    "canonical": "Notre Dame",
+    "code": "NOTRE_DAME"
+  },
+  "pittsburgh panthers": {
+    "canonical": "Pittsburgh",
+    "code": "PITTSBURGH"
+  },
+  "pitt": {
+    "canonical": "Pittsburgh",
+    "code": "PITTSBURGH"
+  },
+  "syracuse orange": {
+    "canonical": "Syracuse",
+    "code": "SYRACUSE"
+  },
+  "cuse": {
+    "canonical": "Syracuse",
+    "code": "SYRACUSE"
+  },
+  "virginia tech hokies": {
+    "canonical": "Virginia Tech",
+    "code": "VIRGINIA_T"
+  },
+  "vt": {
+    "canonical": "Virginia Tech",
+    "code": "VIRGINIA_T"
+  },
+  "georgia tech yellow jackets": {
+    "canonical": "Georgia Tech",
+    "code": "GEORGIA_TE"
+  },
+  "gt": {
+    "canonical": "Georgia Tech",
+    "code": "GEORGIA_TE"
+  },
+  "boston college eagles": {
+    "canonical": "Boston College",
+    "code": "BOSTON_COL"
+  },
+  "bc": {
+    "canonical": "Boston College",
+    "code": "BOSTON_COL"
+  },
+  "memphis tigers": {
+    "canonical": "Memphis",
+    "code": "MEMPHIS"
+  },
+  "temple owls": {
+    "canonical": "Temple",
+    "code": "TEMPLE"
+  },
+  "tulsa golden hurricane": {
+    "canonical": "Tulsa",
+    "code": "TULSA"
+  },
+  "tulane green wave": {
+    "canonical": "Tulane",
+    "code": "TULANE"
+  },
+  "south florida bulls": {
+    "canonical": "South Florida",
+    "code": "SOUTH_FLOR"
+  },
+  "usf": {
+    "canonical": "South Florida",
+    "code": "SOUTH_FLOR"
+  },
+  "east carolina pirates": {
+    "canonical": "East Carolina",
+    "code": "EAST_CAROL"
+  },
+  "ecu": {
+    "canonical": "East Carolina",
+    "code": "EAST_CAROL"
+  },
+  "nevada wolf pack": {
+    "canonical": "Nevada",
+    "code": "NEVADA"
+  },
+  "new mexico lobos": {
+    "canonical": "New Mexico",
+    "code": "NEW_MEXICO"
+  },
+  "unm": {
+    "canonical": "New Mexico",
+    "code": "NEW_MEXICO"
+  },
+  "wyoming cowboys": {
+    "canonical": "Wyoming",
+    "code": "WYOMING"
+  },
+  "air force falcons": {
+    "canonical": "Air Force",
+    "code": "AIR_FORCE"
+  },
+  "san francisco dons": {
+    "canonical": "San Francisco",
+    "code": "SAN_FRANCI"
+  },
+  "santa clara broncos": {
+    "canonical": "Santa Clara",
+    "code": "SANTA_CLAR"
+  },
+  "loyola marymount lions": {
+    "canonical": "Loyola Marymount",
+    "code": "LOYOLA_MAR"
+  },
+  "lmu": {
+    "canonical": "Loyola Marymount",
+    "code": "LOYOLA_MAR"
+  },
+  "pepperdine waves": {
+    "canonical": "Pepperdine",
+    "code": "PEPPERDINE"
+  },
+  "san diego toreros": {
+    "canonical": "San Diego",
+    "code": "SAN_DIEGO"
+  },
+  "pacific tigers": {
+    "canonical": "Pacific",
+    "code": "PACIFIC"
+  },
+  "portland pilots": {
+    "canonical": "Portland",
+    "code": "PORTLAND"
+  },
+  "dayton flyers": {
+    "canonical": "Dayton",
+    "code": "DAYTON"
+  },
+  "richmond spiders": {
+    "canonical": "Richmond",
+    "code": "RICHMOND"
+  },
+  "george mason patriots": {
+    "canonical": "George Mason",
+    "code": "GEORGE_MAS"
+  },
+  "gmu": {
+    "canonical": "George Mason",
+    "code": "GEORGE_MAS"
+  },
+  "davidson wildcats": {
+    "canonical": "Davidson",
+    "code": "DAVIDSON"
+  },
+  "rhode island rams": {
+    "canonical": "Rhode Island",
+    "code": "RHODE_ISLA"
+  },
+  "uri": {
+    "canonical": "Rhode Island",
+    "code": "RHODE_ISLA"
+  },
+  "massachusetts minutemen": {
+    "canonical": "Massachusetts",
+    "code": "MASSACHUSE"
+  },
+  "umass": {
+    "canonical": "Massachusetts",
+    "code": "MASSACHUSE"
+  },
+  "oregon ducks": {
+    "canonical": "Oregon",
+    "code": "OREGON"
+  },
+  "washington huskies": {
+    "canonical": "Washington",
+    "code": "WASHINGTON"
+  },
+  "uw": {
+    "canonical": "Washington",
+    "code": "WASHINGTON"
+  },
+  "colorado buffaloes": {
+    "canonical": "Colorado",
+    "code": "COLORADO"
+  },
+  "cu": {
+    "canonical": "Colorado",
+    "code": "COLORADO"
+  },
+  "utah utes": {
+    "canonical": "Utah",
+    "code": "UTAH"
+  },
+  "minnesota golden gophers": {
+    "canonical": "Minnesota",
+    "code": "MINNESOTA"
+  },
+  "northwestern wildcats": {
+    "canonical": "Northwestern",
+    "code": "NORTHWESTE"
+  },
+  "nebraska cornhuskers": {
+    "canonical": "Nebraska",
+    "code": "NEBRASKA"
+  },
+  "maryland terrapins": {
+    "canonical": "Maryland",
+    "code": "MARYLAND"
+  },
+  "terps": {
+    "canonical": "Maryland",
+    "code": "MARYLAND"
+  },
+  "rutgers scarlet knights": {
+    "canonical": "Rutgers",
+    "code": "RUTGERS"
+  },
+  "nevada-las vegas": {
+    "canonical": "UNLV",
+    "code": "UNLV"
+  },
+  "so methodist": {
+    "canonical": "SMU",
+    "code": "SMU"
+  }
+}

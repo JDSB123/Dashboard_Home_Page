@@ -1,0 +1,294 @@
+{
+  "ATL": {
+    "name": "Atlanta Hawks",
+    "location": "Atlanta",
+    "nickname": "Hawks",
+    "abbreviations": [
+      "ATL"
+    ]
+  },
+  "BOS": {
+    "name": "Boston Celtics",
+    "location": "Boston",
+    "nickname": "Celtics",
+    "abbreviations": [
+      "BOS"
+    ]
+  },
+  "BKN": {
+    "name": "Brooklyn Nets",
+    "location": "Brooklyn",
+    "nickname": "Nets",
+    "abbreviations": [
+      "BKN",
+      "BRK"
+    ],
+    "historical": [
+      {
+        "name": "New Jersey Nets",
+        "years": "1977-2012"
+      }
+    ]
+  },
+  "CHA": {
+    "name": "Charlotte Hornets",
+    "location": "Charlotte",
+    "nickname": "Hornets",
+    "abbreviations": [
+      "CHA",
+      "CHO"
+    ],
+    "historical": [
+      {
+        "name": "Charlotte Bobcats",
+        "years": "2004-2014"
+      }
+    ]
+  },
+  "CHI": {
+    "name": "Chicago Bulls",
+    "location": "Chicago",
+    "nickname": "Bulls",
+    "abbreviations": [
+      "CHI"
+    ]
+  },
+  "CLE": {
+    "name": "Cleveland Cavaliers",
+    "location": "Cleveland",
+    "nickname": "Cavaliers",
+    "abbreviations": [
+      "CLE"
+    ]
+  },
+  "DAL": {
+    "name": "Dallas Mavericks",
+    "location": "Dallas",
+    "nickname": "Mavericks",
+    "abbreviations": [
+      "DAL"
+    ]
+  },
+  "DEN": {
+    "name": "Denver Nuggets",
+    "location": "Denver",
+    "nickname": "Nuggets",
+    "abbreviations": [
+      "DEN"
+    ]
+  },
+  "DET": {
+    "name": "Detroit Pistons",
+    "location": "Detroit",
+    "nickname": "Pistons",
+    "abbreviations": [
+      "DET"
+    ]
+  },
+  "GSW": {
+    "name": "Golden State Warriors",
+    "location": "Golden State",
+    "nickname": "Warriors",
+    "abbreviations": [
+      "GSW",
+      "GS"
+    ]
+  },
+  "HOU": {
+    "name": "Houston Rockets",
+    "location": "Houston",
+    "nickname": "Rockets",
+    "abbreviations": [
+      "HOU"
+    ]
+  },
+  "IND": {
+    "name": "Indiana Pacers",
+    "location": "Indiana",
+    "nickname": "Pacers",
+    "abbreviations": [
+      "IND"
+    ]
+  },
+  "LAC": {
+    "name": "Los Angeles Clippers",
+    "location": "Los Angeles",
+    "nickname": "Clippers",
+    "abbreviations": [
+      "LAC",
+      "LAL"
+    ],
+    "historical": [
+      {
+        "name": "San Diego Clippers",
+        "years": "1978-1984"
+      }
+    ]
+  },
+  "LAL": {
+    "name": "Los Angeles Lakers",
+    "location": "Los Angeles",
+    "nickname": "Lakers",
+    "abbreviations": [
+      "LAL",
+      "LA"
+    ]
+  },
+  "MEM": {
+    "name": "Memphis Grizzlies",
+    "location": "Memphis",
+    "nickname": "Grizzlies",
+    "abbreviations": [
+      "MEM"
+    ],
+    "historical": [
+      {
+        "name": "Vancouver Grizzlies",
+        "years": "1995-2001"
+      }
+    ]
+  },
+  "MIA": {
+    "name": "Miami Heat",
+    "location": "Miami",
+    "nickname": "Heat",
+    "abbreviations": [
+      "MIA"
+    ]
+  },
+  "MIL": {
+    "name": "Milwaukee Bucks",
+    "location": "Milwaukee",
+    "nickname": "Bucks",
+    "abbreviations": [
+      "MIL"
+    ]
+  },
+  "MIN": {
+    "name": "Minnesota Timberwolves",
+    "location": "Minnesota",
+    "nickname": "Timberwolves",
+    "abbreviations": [
+      "MIN"
+    ]
+  },
+  "NOP": {
+    "name": "New Orleans Pelicans",
+    "location": "New Orleans",
+    "nickname": "Pelicans",
+    "abbreviations": [
+      "NOP",
+      "NO"
+    ],
+    "historical": [
+      {
+        "name": "New Orleans Hornets",
+        "years": "2002-2013"
+      }
+    ]
+  },
+  "NYK": {
+    "name": "New York Knicks",
+    "location": "New York",
+    "nickname": "Knicks",
+    "abbreviations": [
+      "NYK",
+      "NY"
+    ]
+  },
+  "OKC": {
+    "name": "Oklahoma City Thunder",
+    "location": "Oklahoma City",
+    "nickname": "Thunder",
+    "abbreviations": [
+      "OKC"
+    ],
+    "historical": [
+      {
+        "name": "Seattle SuperSonics",
+        "years": "1967-2008"
+      }
+    ]
+  },
+  "ORL": {
+    "name": "Orlando Magic",
+    "location": "Orlando",
+    "nickname": "Magic",
+    "abbreviations": [
+      "ORL"
+    ]
+  },
+  "PHI": {
+    "name": "Philadelphia 76ers",
+    "location": "Philadelphia",
+    "nickname": "76ers",
+    "abbreviations": [
+      "PHI"
+    ]
+  },
+  "PHX": {
+    "name": "Phoenix Suns",
+    "location": "Phoenix",
+    "nickname": "Suns",
+    "abbreviations": [
+      "PHX",
+      "PHO"
+    ]
+  },
+  "POR": {
+    "name": "Portland Trail Blazers",
+    "location": "Portland",
+    "nickname": "Trail Blazers",
+    "abbreviations": [
+      "POR"
+    ]
+  },
+  "SAC": {
+    "name": "Sacramento Kings",
+    "location": "Sacramento",
+    "nickname": "Kings",
+    "abbreviations": [
+      "SAC"
+    ]
+  },
+  "SAS": {
+    "name": "San Antonio Spurs",
+    "location": "San Antonio",
+    "nickname": "Spurs",
+    "abbreviations": [
+      "SAS",
+      "SA"
+    ]
+  },
+  "TOR": {
+    "name": "Toronto Raptors",
+    "location": "Toronto",
+    "nickname": "Raptors",
+    "abbreviations": [
+      "TOR"
+    ]
+  },
+  "UTA": {
+    "name": "Utah Jazz",
+    "location": "Utah",
+    "nickname": "Jazz",
+    "abbreviations": [
+      "UTA",
+      "UTH"
+    ]
+  },
+  "WAS": {
+    "name": "Washington Wizards",
+    "location": "Washington",
+    "nickname": "Wizards",
+    "abbreviations": [
+      "WAS"
+    ],
+    "historical": [
+      {
+        "name": "Washington Bullets",
+        "years": "1974-1997"
+      }
+    ]
+  }
+}
