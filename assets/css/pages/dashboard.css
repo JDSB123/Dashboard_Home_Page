@@ -194,9 +194,6 @@ body.page-active-picks .table-container.has-picks {
     border-radius: 0 !important;
     padding: 0;
     contain: none !important;
-    /* Override backdrop blur from picks-table.css */
-    -webkit-backdrop-filter: none !important;
-    backdrop-filter: none !important;
 }
 
 body.page-active-picks .picks-table {
@@ -386,8 +383,6 @@ body.page-active-picks .picks-table thead {
     top: 0;
     z-index: 110;
     background: transparent !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
 }
 
 body.page-active-picks .picks-table thead th {
@@ -490,8 +485,6 @@ body.page-active-picks .picks-table tbody {
     position: relative;
     z-index: 10;
     background: transparent !important;
-    -webkit-backdrop-filter: none !important;
-    backdrop-filter: none !important;
 }
 
 body.page-active-picks .picks-table tbody tr {
@@ -737,8 +730,6 @@ body.page-active-picks .back-to-top {
     transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease, border-color 0.2s ease;
     z-index: 9999;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
 }
 
 body.page-active-picks .back-to-top.visible {
@@ -1032,13 +1023,13 @@ body.page-active-picks .picks-table tbody td .game-segment {
 
 /* ===== HEADER GRADIENTS & TRANSPARENCY ===== */
 #picks-table thead th {
-    background: none !important;
+    background: linear-gradient(180deg,
+        rgba(0, 214, 137, 0.08) 0%,
+        rgba(0, 214, 137, 0.04) 50%,
+        rgba(0, 214, 137, 0.02) 100%) !important;
     background-color: transparent !important;
-    background-image: none !important;
-    border-bottom: 1px solid rgba(0, 214, 137, 0.20) !important;
-    border-right: 1px solid rgba(0, 214, 137, 0.08) !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
+    border-bottom: 1px solid rgba(0, 214, 137, 0.25) !important;
+    border-right: 1px solid rgba(0, 214, 137, 0.10) !important;
 }
 
 /* Remove border from last header */

@@ -164,14 +164,6 @@
     pointer-events: auto;
 }
 
-/* Apply backdrop-filter blur only when table has picks (controlled by JS) */
-/* DISABLED - causes milky look on dashboard
-.table-container.has-picks {
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
-}
-*/
-
 /* ===== COLUMN FILTER OUTPUT CHIPS ===== */
 /* Styles defined in filters.css */
 
@@ -653,14 +645,6 @@ th[data-sort].sort-desc .sort-icon {
     background: transparent;
     pointer-events: auto; /* CRITICAL FIX: Ensure tbody accepts clicks */
 }
-
-/* Apply backdrop-filter blur only when table has picks (controlled by JS) */
-/* DISABLED - causes milky look on dashboard
-.table-container.has-picks .picks-table tbody {
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
-}
-*/
 
 .picks-table tbody tr {
     background: transparent;
