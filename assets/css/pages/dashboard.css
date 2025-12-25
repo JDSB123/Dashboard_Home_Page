@@ -28,8 +28,12 @@ body.page-active-picks .main-container {
     padding-right: 0.75in;
 }
 
-/* Override the heavy dark overlay from page-layout.css - MATCHING ODDS MARKET */
+/* Override the heavy dark overlay from page-layout.css - MATCHING WEEKLY LINEUP */
 body.page-active-picks::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
     background: linear-gradient(180deg,
         rgba(4, 10, 20, 0.12) 0%,
         rgba(4, 10, 20, 0.10) 15%,
@@ -37,14 +41,19 @@ body.page-active-picks::before {
         rgba(4, 10, 20, 0.14) 50%,
         rgba(4, 10, 20, 0.18) 75%,
         rgba(4, 10, 20, 0.25) 100%);
+    pointer-events: none;
     opacity: 0.2;
-    animation: none;
 }
 
-/* Wash to balance bear image visibility - MATCHING WEEKLY LINEUP */
+/* Additional wash to fade the bear image - MATCHING WEEKLY LINEUP */
 body.page-active-picks::after {
-    background: rgba(3, 11, 22, 0.82);
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background: rgba(3, 11, 22, 0.75);
     mix-blend-mode: multiply;
+    pointer-events: none;
 }
 
 /* ==========================================================================
