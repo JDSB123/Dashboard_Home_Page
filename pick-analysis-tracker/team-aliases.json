@@ -1,0 +1,46 @@
+{
+  "nfl": {
+    "aliases": {
+      "49ers": { "canonical": "San Francisco 49ers", "code": "SF" },
+      "niners": { "canonical": "San Francisco 49ers", "code": "SF" },
+      "san fran": { "canonical": "San Francisco 49ers", "code": "SF" },
+      "sf": { "canonical": "San Francisco 49ers", "code": "SF" },
+      "cowboys": { "canonical": "Dallas Cowboys", "code": "DAL" },
+      "boys": { "canonical": "Dallas Cowboys", "code": "DAL" },
+      "philly": { "canonical": "Philadelphia Eagles", "code": "PHI" },
+      "pats": { "canonical": "New England Patriots", "code": "NE" },
+      "saints": { "canonical": "New Orleans Saints", "code": "NO" },
+      "kc": { "canonical": "Kansas City Chiefs", "code": "KC" },
+      "chiefs": { "canonical": "Kansas City Chiefs", "code": "KC" }
+    }
+  },
+  "nba": {
+    "aliases": {
+      "clips": { "canonical": "Los Angeles Clippers", "code": "LAC" },
+      "clippers": { "canonical": "Los Angeles Clippers", "code": "LAC" },
+      "rox": { "canonical": "Houston Rockets", "code": "HOU" },
+      "rockets": { "canonical": "Houston Rockets", "code": "HOU" },
+      "spurs": { "canonical": "San Antonio Spurs", "code": "SAS" },
+      "pacers": { "canonical": "Indiana Pacers", "code": "IND" },
+      "suns": { "canonical": "Phoenix Suns", "code": "PHX" },
+      "thunder": { "canonical": "Oklahoma City Thunder", "code": "OKC" },
+      "lakers": { "canonical": "Los Angeles Lakers", "code": "LAL" }
+    }
+  },
+  "ncaaf": {
+    "aliases": {
+      "bama": { "canonical": "Alabama Crimson Tide", "code": "ALA" },
+      "georgia": { "canonical": "Georgia Bulldogs", "code": "UGA" },
+      "longhorns": { "canonical": "Texas Longhorns", "code": "TEX" },
+      "wolverines": { "canonical": "Michigan Wolverines", "code": "MICH" },
+      "buckeyes": { "canonical": "Ohio State Buckeyes", "code": "OSU" },
+      "irish": { "canonical": "Notre Dame Fighting Irish", "code": "ND" }
+    }
+  },
+  "ncaam": {
+    "aliases": {
+      "duke": { "canonical": "Duke Blue Devils", "code": "DUKE" },
+      "uconn": { "canonical": "UConn Huskies", "code": "CONN" }
+    }
+  }
+}
