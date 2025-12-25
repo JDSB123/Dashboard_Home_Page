@@ -125,7 +125,7 @@
             border-right: none !important;
         }
 
-        /* Header shell - centered with room for sort icon */
+        /* Header shell - centered; sort icon hidden (kebab handles sort now) */
         #picks-table thead th .th-header-shell {
             position: static !important;
             display: flex !important;
@@ -141,7 +141,7 @@
             align-items: center !important;
             justify-content: center !important;
             text-align: center !important;
-            padding: 4px 20px 4px 4px !important;
+            padding: 4px 12px 4px 12px !important;
             gap: 0 !important;
             min-height: unset !important;
             position: relative !important;
@@ -170,43 +170,161 @@
         }
         /* Sort icon - absolute positioned at end of sort button */
         #picks-table thead th .sort-icon {
-            position: absolute !important;
-            right: 4px !important;
-            top: 50% !important;
-            transform: translateY(-50%) !important;
-            font-size: 11px !important;
-            line-height: 1 !important;
-            margin: 0 !important;
-            opacity: 0.7 !important;
-            font-weight: bold !important;
+            display: none !important;
         }
-        #picks-table thead th:hover .sort-icon,
-        #picks-table thead th.sorted-asc .sort-icon,
-        #picks-table thead th.sorted-desc .sort-icon {
-            opacity: 1 !important;
-        }
-        /* Filter buttons - absolute positioned */
+        /* Filter buttons - absolute positioned with 3-dot kebab icon */
         #picks-table thead th .th-filter-btn {
             position: absolute !important;
-            right: 2px !important;
+            right: 6px !important;
             top: 50% !important;
             transform: translateY(-50%) !important;
             z-index: 102 !important;
             pointer-events: auto !important;
-            width: 22px !important;
-            height: 22px !important;
-            min-width: 22px !important;
-            min-height: 22px !important;
+            width: 24px !important;
+            height: 24px !important;
+            min-width: 24px !important;
+            min-height: 24px !important;
             cursor: pointer !important;
             margin: 0 !important;
             padding: 0 !important;
-            background: transparent !important;
+            background: rgba(0, 214, 137, 0.12) !important;
+            border: 1px solid rgba(0, 214, 137, 0.4) !important;
+            border-radius: 6px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            opacity: 1 !important;
+            transition: opacity 0.15s ease, background 0.15s ease, box-shadow 0.2s ease !important;
+            color: #00d689 !important;
+            font-size: 15px !important;
+            font-weight: 700 !important;
+            box-shadow: 0 6px 14px rgba(0, 214, 137, 0.2) !important;
         }
+        #picks-table thead th .th-filter-btn::before {
+            content: "•••" !important;
+            letter-spacing: 2px !important;
+            line-height: 1 !important;
+            display: inline-block !important;
+            color: #00f0a8 !important;
+        }
+        #picks-table thead th:hover .th-filter-btn {
+            opacity: 1 !important;
+        }
+        #picks-table thead th .th-filter-btn:hover {
+            opacity: 1 !important;
+            background: rgba(0, 214, 137, 0.22) !important;
+            box-shadow: 0 10px 18px rgba(0, 214, 137, 0.25) !important;
+        }
+        #picks-table thead th .th-filter-btn[aria-expanded="true"] {
+            opacity: 1 !important;
+            background: rgba(0, 214, 137, 0.3) !important;
+            border-color: rgba(0, 214, 137, 0.65) !important;
+            box-shadow: 0 12px 22px rgba(0, 214, 137, 0.32) !important;
+        }
+        #picks-table thead th .th-filter-btn[aria-expanded="true"]::before {
+            content: "×" !important;
+            width: auto !important;
+            height: auto !important;
+            background-image: none !important;
+            font-size: 16px !important;
+            font-weight: 300 !important;
+            color: #00ffaa !important;
+            line-height: 1 !important;
+        }
+        /* Filter dropdown positioning */
         #picks-table thead th .th-filter-dropdown {
             position: absolute !important;
-            top: 100% !important;
-            left: 0 !important;
-            z-index: 1000 !important;
+            top: calc(100% + 4px) !important;
+            right: 0 !important;
+            left: auto !important;
+            z-index: 3000 !important;
+        }
+
+        /* Filter dropdown card styling */
+        #picks-table thead th .th-filter-dropdown {
+            min-width: 280px !important;
+            padding: 12px !important;
+            background: radial-gradient(circle at 20% 20%, rgba(0, 214, 137, 0.12), transparent 45%),
+                        linear-gradient(180deg, rgba(8, 14, 22, 0.95) 0%, rgba(6, 10, 18, 0.93) 100%) !important;
+            border: 1px solid rgba(0, 214, 137, 0.4) !important;
+            border-radius: 12px !important;
+            box-shadow: 0 22px 38px rgba(0, 0, 0, 0.55), 0 12px 28px rgba(0, 214, 137, 0.15) !important;
+            color: #e8f2f4 !important;
+            backdrop-filter: blur(10px) !important;
+            -webkit-backdrop-filter: blur(10px) !important;
+        }
+        #picks-table thead th .th-filter-dropdown .filter-header {
+            font-family: var(--font-display, 'Oswald', sans-serif) !important;
+            font-size: 0.78rem !important;
+            letter-spacing: 0.08em !important;
+            text-transform: uppercase !important;
+            color: #8cf0c4 !important;
+            margin-bottom: 10px !important;
+        }
+        #picks-table thead th .th-filter-dropdown .filter-sort-controls {
+            padding: 10px 10px 8px 10px !important;
+            background: rgba(0, 214, 137, 0.08) !important;
+            border: 1px solid rgba(0, 214, 137, 0.28) !important;
+            border-radius: 8px !important;
+            margin-bottom: 10px !important;
+        }
+        #picks-table thead th .th-filter-dropdown .filter-sort-label {
+            font-size: 0.72rem !important;
+            font-weight: 700 !important;
+            letter-spacing: 0.06em !important;
+            text-transform: uppercase !important;
+            color: #b4ffdd !important;
+            margin-bottom: 6px !important;
+        }
+        #picks-table thead th .th-filter-dropdown .filter-sort-buttons {
+            display: grid !important;
+            grid-template-columns: 1fr !important;
+            gap: 6px !important;
+        }
+        #picks-table thead th .th-filter-dropdown .sort-option {
+            width: 100% !important;
+            text-align: left !important;
+            padding: 8px 10px !important;
+            background: rgba(255, 255, 255, 0.02) !important;
+            border: 1px solid rgba(0, 214, 137, 0.3) !important;
+            border-radius: 6px !important;
+            color: #e7f9f0 !important;
+            font-weight: 600 !important;
+            letter-spacing: 0.02em !important;
+            cursor: pointer !important;
+            transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease !important;
+        }
+        #picks-table thead th .th-filter-dropdown .sort-option:hover {
+            background: rgba(0, 214, 137, 0.14) !important;
+            border-color: rgba(0, 214, 137, 0.5) !important;
+            transform: translateY(-1px) !important;
+        }
+        #picks-table thead th .th-filter-dropdown .filter-body {
+            padding: 6px 2px 8px 2px !important;
+            max-height: 320px !important;
+            overflow: auto !important;
+        }
+        #picks-table thead th .th-filter-dropdown .filter-footer {
+            display: flex !important;
+            justify-content: flex-end !important;
+            gap: 8px !important;
+            margin-top: 6px !important;
+        }
+        #picks-table thead th .th-filter-dropdown .filter-footer .filter-action-btn {
+            padding: 7px 12px !important;
+            border-radius: 6px !important;
+            border: 1px solid rgba(0, 214, 137, 0.35) !important;
+            background: rgba(0, 214, 137, 0.12) !important;
+            color: #def8ef !important;
+            font-weight: 650 !important;
+            letter-spacing: 0.04em !important;
+            text-transform: uppercase !important;
+            cursor: pointer !important;
+            transition: background 0.15s ease, border-color 0.15s ease !important;
+        }
+        #picks-table thead th .th-filter-dropdown .filter-footer .filter-action-btn:hover {
+            background: rgba(0, 214, 137, 0.2) !important;
+            border-color: rgba(0, 214, 137, 0.55) !important;
         }
 
         /* ===== TABLE BODY - HIGHLY VISIBLE ZEBRA STRIPES (matches weekly lineup) ===== */
@@ -552,7 +670,7 @@
                         <tr>
                             <th class="sortable" data-sort="date">
                                 <div class="th-header-shell">
-                                    <button class="th-sort-btn" aria-label="Sort by date">
+                                    <button class="th-sort-btn" aria-label="Date / Time">
                                         <span class="header-main-text">Date / Time</span>
                                         <span class="header-subtext">(CST)</span>
                                         <span class="sort-icon" aria-hidden="true">▲</span>
@@ -560,8 +678,16 @@
                                     <button class="th-filter-btn" aria-label="Filter by date" aria-controls="filter-date" data-filter="date" type="button"></button>
                                 </div>
                                 <!-- Date Filter Dropdown -->
-                                <div class="th-filter-dropdown" id="filter-date" hidden>
+                                <div class="th-filter-dropdown" id="filter-date" data-sort-key="date" hidden>
                                     <div class="filter-header">Filter Date/Time</div>
+                                    <div class="filter-sort-controls">
+                                        <div class="filter-sort-label">Sort</div>
+                                        <div class="filter-sort-buttons">
+                                            <button class="sort-option" data-direction="asc">Oldest → Newest</button>
+                                            <button class="sort-option" data-direction="desc">Newest → Oldest</button>
+                                            <button class="sort-option" data-direction="clear">Clear Sort</button>
+                                        </div>
+                                    </div>
                                     <div class="filter-body" id="date-filter-options">
                                         <!-- Populated by JS -->
                                     </div>
@@ -573,15 +699,28 @@
                             </th>
                             <th class="center sortable" data-sort="league">
                                 <div class="th-header-shell">
-                                    <button class="th-sort-btn" aria-label="Sort by league">
+                                    <button class="th-sort-btn" aria-label="League">
                                         <span class="header-main-text">League</span>
                                         <span class="sort-icon" aria-hidden="true">▲</span>
                                     </button>
+                                    <button class="th-filter-btn" aria-label="Sort league" aria-controls="filter-league" data-filter="league" type="button"></button>
+                                </div>
+                                <!-- League Sort Dropdown (sort-only) -->
+                                <div class="th-filter-dropdown" id="filter-league" data-sort-key="league" hidden>
+                                    <div class="filter-header">League Sort</div>
+                                    <div class="filter-sort-controls">
+                                        <div class="filter-sort-label">Sort</div>
+                                        <div class="filter-sort-buttons">
+                                            <button class="sort-option" data-direction="asc">A → Z</button>
+                                            <button class="sort-option" data-direction="desc">Z → A</button>
+                                            <button class="sort-option" data-direction="clear">Clear Sort</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </th>
                             <th class="sortable" data-sort="matchup">
                                 <div class="th-header-shell">
-                                    <button class="th-sort-btn" aria-label="Sort by matchup">
+                                    <button class="th-sort-btn" aria-label="Matchup">
                                         <span class="header-main-text">Matchup</span>
                                         <span class="header-subtext">Away vs Home</span>
                                         <span class="sort-icon" aria-hidden="true">▲</span>
@@ -589,8 +728,16 @@
                                     <button class="th-filter-btn" aria-label="Filter by matchup" aria-controls="filter-matchup" data-filter="matchup" type="button"></button>
                                 </div>
                                 <!-- Matchup Filter Dropdown -->
-                                <div class="th-filter-dropdown" id="filter-matchup" hidden>
+                                <div class="th-filter-dropdown" id="filter-matchup" data-sort-key="matchup" hidden>
                                     <div class="filter-header">Filter Matchup</div>
+                                    <div class="filter-sort-controls">
+                                        <div class="filter-sort-label">Sort</div>
+                                        <div class="filter-sort-buttons">
+                                            <button class="sort-option" data-direction="asc">A → Z</button>
+                                            <button class="sort-option" data-direction="desc">Z → A</button>
+                                            <button class="sort-option" data-direction="clear">Clear Sort</button>
+                                        </div>
+                                    </div>
                                     <div class="filter-body">
                                         <div class="filter-group">
                                             <label class="filter-label">League</label>
@@ -626,23 +773,44 @@
                             </th>
                             <th class="center sortable" data-sort="segment">
                                 <div class="th-header-shell">
-                                    <button class="th-sort-btn" aria-label="Sort by segment">
+                                    <button class="th-sort-btn" aria-label="Segment">
                                         <span class="header-main-text">Segment</span>
                                         <span class="sort-icon" aria-hidden="true">▲</span>
                                     </button>
+                                    <button class="th-filter-btn" aria-label="Sort segment" aria-controls="filter-segment" data-filter="segment" type="button"></button>
+                                </div>
+                                <!-- Segment Sort Dropdown (sort-only) -->
+                                <div class="th-filter-dropdown" id="filter-segment" data-sort-key="segment" hidden>
+                                    <div class="filter-header">Segment Sort</div>
+                                    <div class="filter-sort-controls">
+                                        <div class="filter-sort-label">Sort</div>
+                                        <div class="filter-sort-buttons">
+                                            <button class="sort-option" data-direction="asc">A → Z</button>
+                                            <button class="sort-option" data-direction="desc">Z → A</button>
+                                            <button class="sort-option" data-direction="clear">Clear Sort</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </th>
                             <th class="sortable" data-sort="pick">
                                 <div class="th-header-shell">
-                                    <button class="th-sort-btn" aria-label="Sort by pick">
+                                    <button class="th-sort-btn" aria-label="Pick">
                                         <span class="header-main-text">Pick</span>
                                         <span class="sort-icon" aria-hidden="true">▲</span>
                                     </button>
                                     <button class="th-filter-btn" aria-label="Filter by pick type" aria-controls="filter-pick" data-filter="pick" type="button"></button>
                                 </div>
                                 <!-- Pick Filter Dropdown -->
-                                <div class="th-filter-dropdown" id="filter-pick" hidden>
+                                <div class="th-filter-dropdown" id="filter-pick" data-sort-key="pick" hidden>
                                     <div class="filter-header">Filter Pick Type</div>
+                                    <div class="filter-sort-controls">
+        	                            <div class="filter-sort-label">Sort</div>
+                                        <div class="filter-sort-buttons">
+                                            <button class="sort-option" data-direction="asc">A → Z</button>
+                                            <button class="sort-option" data-direction="desc">Z → A</button>
+                                            <button class="sort-option" data-direction="clear">Clear Sort</button>
+                                        </div>
+                                    </div>
                                     <div class="filter-body">
                                         <div class="filter-group">
                                             <label class="filter-label">Bet Type</label>
@@ -695,15 +863,23 @@
                             </th>
                             <th class="center sortable" data-sort="risk">
                                 <div class="th-header-shell">
-                                    <button class="th-sort-btn" aria-label="Sort by risk">
+                                    <button class="th-sort-btn" aria-label="Risk/Win">
                                         <span class="header-main-text">$ Risk/Win $</span>
                                         <span class="sort-icon" aria-hidden="true">▲</span>
                                     </button>
                                     <button class="th-filter-btn" aria-label="Filter by risk amount" aria-controls="filter-risk" data-filter="risk" type="button"></button>
                                 </div>
                                 <!-- Risk Filter Dropdown -->
-                                <div class="th-filter-dropdown" id="filter-risk" hidden>
+                                <div class="th-filter-dropdown" id="filter-risk" data-sort-key="risk" hidden>
                                     <div class="filter-header">Filter Amount</div>
+                                    <div class="filter-sort-controls">
+                                        <div class="filter-sort-label">Sort</div>
+                                        <div class="filter-sort-buttons">
+                                            <button class="sort-option" data-direction="asc">Low → High</button>
+                                            <button class="sort-option" data-direction="desc">High → Low</button>
+                                            <button class="sort-option" data-direction="clear">Clear Sort</button>
+                                        </div>
+                                    </div>
                                     <div class="filter-body">
                                         <div class="filter-group">
                                             <label class="filter-label">Risk Range</label>
@@ -735,15 +911,23 @@
                             </th>
                             <th class="center sortable" data-sort="status">
                                 <div class="th-header-shell">
-                                    <button class="th-sort-btn" aria-label="Sort by status">
+                                    <button class="th-sort-btn" aria-label="Status">
                                         <span class="header-main-text">Status</span>
                                         <span class="sort-icon" aria-hidden="true">▲</span>
                                     </button>
                                     <button class="th-filter-btn" aria-label="Filter by status" aria-controls="filter-status" data-filter="status" type="button"></button>
                                 </div>
                                 <!-- Status Filter Dropdown -->
-                                <div class="th-filter-dropdown" id="filter-status" hidden>
+                                <div class="th-filter-dropdown" id="filter-status" data-sort-key="status" hidden>
                                     <div class="filter-header">Filter Status</div>
+                                    <div class="filter-sort-controls">
+                                        <div class="filter-sort-label">Sort</div>
+                                        <div class="filter-sort-buttons">
+                                            <button class="sort-option" data-direction="asc">Pending → Win</button>
+                                            <button class="sort-option" data-direction="desc">Win → Pending</button>
+                                            <button class="sort-option" data-direction="clear">Clear Sort</button>
+                                        </div>
+                                    </div>
                                     <div class="filter-body">
                                         <div class="filter-options-list" id="status-options">
                                             <label class="filter-option">
@@ -816,9 +1000,9 @@
     <script src="assets/js/modules/picks-state-manager.js?v=20251224-3" defer></script>
     <script src="assets/js/modules/picks-data-processor.js?v=20251224-3" defer></script>
     <script src="assets/js/modules/picks-filter-manager.js?v=20251224-4" defer></script>
-    <script src="assets/js/modules/picks-sort-manager.js?v=20251224-4" defer></script>
+    <script src="assets/js/modules/picks-sort-manager.js?v=20251224-6" defer></script>
     <script src="assets/js/modules/picks-table-renderer.js?v=20251224-3" defer></script>
-    <script src="assets/js/features/active-picks-modular.js?v=20251225-1" defer></script>
+    <script src="assets/js/features/active-picks-modular.js?v=20251225-4" defer></script>
     <script src="dashboard/js/kpi-calculator.js?v=20251224-3" defer></script>
     <script src="dashboard/js/smart-load-picks.js?v=20251225-2" defer></script>
     <script src="assets/js/core/navigation.js?v=20251224-3" defer></script>
@@ -827,6 +1011,13 @@
 
     <!-- Upload functionality -->
     <script src="assets/js/features/auto-game-fetcher.js?v=20251224-3" defer></script>
+
+    <!-- Model API Fetchers -->
+    <script src="assets/js/features/nba-picks-fetcher.js?v=20251225" defer></script>
+    <script src="assets/js/features/ncaam-picks-fetcher.js?v=20251225" defer></script>
+    <script src="assets/js/features/nfl-picks-fetcher.js?v=20251225" defer></script>
+    <script src="assets/js/features/ncaaf-picks-fetcher.js?v=20251225" defer></script>
+    <script src="assets/js/features/unified-picks-fetcher.js?v=20251225" defer></script>
     <script src="assets/js/features/pick-standardizer.js?v=20251224-3"></script>
     <script src="assets/js/features/import-options.js?v=20251224-3" defer></script>
 

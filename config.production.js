@@ -22,6 +22,12 @@ window.APP_CONFIG = Object.freeze({
   // API Configuration
   API_BASE_URL: 'https://green-bier-picks-api.azurewebsites.net/api',
 
+  // Model API Endpoints
+  NBA_API_URL: 'https://nba-gbsv-api.livelycoast-b48c3cb0.eastus.azurecontainerapps.io',
+  NCAAM_API_URL: 'https://ncaam-stable-prediction.blackglacier-5fab3573.centralus.azurecontainerapps.io',
+  NFL_API_URL: 'https://nfl-api.purplegrass-5889a981.eastus.azurecontainerapps.io',
+  NCAAF_API_URL: 'https://ncaaf-v5-prod.salmonwave-314d4ffe.eastus.azurecontainerapps.io',
+
   // Feature Flags
   AUTH_ENABLED: false,
   DEBUG_MODE: false,
