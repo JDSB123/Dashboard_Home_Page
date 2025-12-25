@@ -82,6 +82,48 @@
         }
     }
 
+    // ========== STATUS LABEL HELPER ==========
+
+    /**
+     * Format status badge label based on status and game time
+     * @param {string} status - The pick status
+     * @param {Object} pick - The pick object with countdown/scheduled info
+     * @returns {string} - Formatted label for the status badge
+     */
+    function formatStatusLabel(status, pick = {}) {
+        const normalizedStatus = (status || 'pending').toLowerCase();
+
+        // Map status to proper labels
+        const labelMap = {
+            'win': 'Won',
+            'won': 'Won',
+            'loss': 'Lost',
+            'lost': 'Lost',
+            'push': 'Push',
+            'on-track': 'On Track',
+            'at-risk': 'At Risk',
+            'live': 'Live'
+        };
+
+        if (labelMap[normalizedStatus]) {
+            return labelMap[normalizedStatus];
+        }
+
+        // For pending, show countdown or scheduled time if available
+        if (normalizedStatus === 'pending') {
+            if (pick.countdown) {
+                return pick.countdown;
+            }
+            if (pick.scheduled || pick.gameTime) {
+                return `Starts ${pick.scheduled || pick.gameTime}`;
+            }
+            return 'Pending';
+        }
+
+        // Default: capitalize first letter
+        return status.charAt(0).toUpperCase() + status.slice(1);
+    }
+
     // ========== TEAM DATA ==========
 
     const TEAM_DATA = {
@@ -709,7 +751,7 @@
                 ${boxscoreHtml}
             </td>
             <td class="center">
-                <span class="status-badge" data-status="${status}" data-blurb="">${status.charAt(0).toUpperCase() + status.slice(1)}</span>
+                <span class="status-badge" data-status="${status}" data-blurb="">${formatStatusLabel(status, pick)}</span>
             </td>
             <td class="center">
                 <span class="hit-miss-value" data-status="${status}">${hitMissValue}</span>
@@ -771,7 +813,7 @@
                 <span class="boxscore-placeholder">—</span>
             </td>
             <td class="center">
-                <span class="status-badge" data-status="${status}">${status.charAt(0).toUpperCase() + status.slice(1)}</span>
+                <span class="status-badge" data-status="${status}">${formatStatusLabel(status, summary)}</span>
             </td>
             <td class="center">
                 <span class="hit-miss-value" data-status="${status}">${hitMissValue}</span>

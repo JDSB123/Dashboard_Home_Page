@@ -1406,12 +1406,22 @@ function createParlayRow(pick, index) {
         matchup: pick.game,
         legs,
         start: pick.scheduled,
+        countdown: pick.countdown,
         market: pick.market
     });
     const statusClass = (statusMeta.statusKey || pick.status || 'pending').toLowerCase();
+
+    // Determine badge label for parlays
+    let parlayBadgeLabel = statusMeta.statusLabel || pick.status || 'Pending';
+    if (statusClass === 'pending' && pick.countdown) {
+        parlayBadgeLabel = pick.countdown;
+    } else if (statusClass === 'pending' && pick.scheduled) {
+        parlayBadgeLabel = `Starts ${pick.scheduled}`;
+    }
+
     const parlayBadgeMarkup = buildStatusBadgeHTML({
         statusClass,
-        label: statusMeta.statusLabel || pick.status || 'Pending',
+        label: parlayBadgeLabel,
         tooltip: statusMeta.tooltip || getStatusBlurb(pick.status, pick.result) || '',
         info: statusMeta.badgeContext
     });
@@ -1567,13 +1577,23 @@ function buildPickRow(pick, index) {
         description: pick.description,
         parsedPick,
         start: pick.scheduled,
+        countdown: pick.countdown,
         market: pick.market
     });
     const statusClass = (statusMeta.statusKey || pick.status || 'pending').toLowerCase();
     const isLive = statusClass === 'on-track' || statusClass === 'at-risk' || statusClass === 'live';
+
+    // Determine badge label - show countdown for pending, proper labels for live/final
+    let badgeLabel = statusMeta.statusLabel || pick.status || 'Pending';
+    if (statusClass === 'pending' && pick.countdown) {
+        badgeLabel = pick.countdown;
+    } else if (statusClass === 'pending' && pick.scheduled) {
+        badgeLabel = `Starts ${pick.scheduled}`;
+    }
+
     const statusBadgeMarkup = buildStatusBadgeHTML({
         statusClass,
-        label: statusMeta.statusLabel || pick.status || 'Pending',
+        label: badgeLabel,
         tooltip: statusMeta.tooltip || getStatusBlurb(pick.status, pick.result) || '',
         info: statusMeta.badgeContext
     });
