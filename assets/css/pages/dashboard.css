@@ -887,9 +887,9 @@ body.page-active-picks .picks-table tbody td .pick-team-info {
 body.page-active-picks .picks-table tbody td .pick-team-abbr {
     display: inline;
     font-family: var(--font-body), 'Cormorant Garamond', Georgia, serif;
-    font-weight: 600;
-    font-size: 1.05rem;
-    letter-spacing: 0.04em;
+    font-weight: var(--weight-semibold, 600);
+    font-size: var(--text-lg, 0.9375rem);
+    letter-spacing: var(--tracking-normal, 0.04em);
     color: #ffffff;
     white-space: nowrap;
 }
@@ -906,19 +906,19 @@ body.page-active-picks .picks-table tbody td .pick-details {
 body.page-active-picks .picks-table tbody td .pick-line {
     display: inline;
     font-family: var(--font-body), 'Cormorant Garamond', Georgia, serif;
-    font-weight: 600;
-    font-size: 1.05rem;
-    letter-spacing: 0.02em;
+    font-weight: var(--weight-semibold, 600);
+    font-size: var(--text-lg, 0.9375rem);
+    letter-spacing: var(--tracking-tight, 0.02em);
     color: #ffffff;
 }
 
 body.page-active-picks .picks-table tbody td .pick-odds {
     display: inline;
     font-family: var(--font-body), 'Cormorant Garamond', Georgia, serif;
-    font-weight: 400;
-    font-size: 0.95rem;
-    letter-spacing: 0.01em;
-    color: rgba(200, 215, 230, 0.85);
+    font-weight: var(--weight-regular, 400);
+    font-size: var(--text-md, 0.875rem);
+    letter-spacing: var(--tracking-tight, 0.02em);
+    color: var(--color-text-secondary, rgba(200, 215, 230, 0.85));
 }
 
 /* Currency combined - centered stacked layout */
