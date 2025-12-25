@@ -19,13 +19,15 @@
                 },
                 matchup: {
                     league: '',
+                    selectedLeagues: null,
                     selectedTeams: null,
                     ticketType: 'all'
                 },
                 pick: {
                     betType: '',
                     subtype: '',
-                    segment: ''
+                    segment: '',
+                    selectedSegments: null
                 },
                 risk: {
                     min: null,
@@ -64,6 +66,7 @@
         createMatchupFilterState() {
             return {
                 league: '',
+                selectedLeagues: null,
                 selectedTeams: null,
                 ticketType: 'all'
             };
@@ -88,7 +91,8 @@
             return {
                 betType: '',
                 subtype: '',
-                segment: ''
+                segment: '',
+                selectedSegments: null
             };
         },
 
@@ -208,6 +212,16 @@
                 case 'status':
                     window.tableState.filters.status = [];
                     break;
+                case 'league':
+                    // Reset league-specific filters only
+                    window.tableState.filters.matchup.league = '';
+                    window.tableState.filters.matchup.selectedLeagues = null;
+                    break;
+                case 'segment':
+                    // Reset segment-specific filters only
+                    window.tableState.filters.pick.segment = '';
+                    window.tableState.filters.pick.selectedSegments = null;
+                    break;
                 default:
                     console.warn(`Unknown filter type: ${filterType}`);
             }
@@ -320,14 +334,15 @@
                 return true;
             }
 
-            // Check matchup filters
-            if (filters.matchup.league || filters.matchup.selectedTeams ||
-                filters.matchup.ticketType !== 'all') {
+            // Check matchup/league filters
+            if (filters.matchup.league || filters.matchup.selectedLeagues ||
+                filters.matchup.selectedTeams || filters.matchup.ticketType !== 'all') {
                 return true;
             }
 
-            // Check pick filters
-            if (filters.pick.betType || filters.pick.subtype || filters.pick.segment) {
+            // Check pick/segment filters
+            if (filters.pick.betType || filters.pick.subtype || filters.pick.segment ||
+                filters.pick.selectedSegments) {
                 return true;
             }
 
@@ -356,9 +371,10 @@
             if (filters.date.selectedDates) count++;
             if (filters.date.selectedTimes) count++;
             if (filters.date.selectedBooks) count++;
-            if (filters.matchup.league || filters.matchup.selectedTeams) count++;
+            if (filters.matchup.league || filters.matchup.selectedLeagues) count++;
+            if (filters.matchup.selectedTeams) count++;
             if (filters.pick.betType || filters.pick.subtype) count++;
-            if (filters.pick.segment) count++;
+            if (filters.pick.segment || filters.pick.selectedSegments) count++;
             if (filters.risk.selectedRiskRanges.length > 0) count++;
             if (filters.risk.selectedWinRanges.length > 0) count++;
             if (filters.status.length > 0) count++;

@@ -293,53 +293,49 @@
          * NOTE: Sort indicators removed - filter icons are sufficient
          */
         updateSortIndicators() {
-            // No-op: Sort indicators removed per design
+            const state = window.PicksStateManager ?
+                window.PicksStateManager.getSortState() :
+                window.tableState.sort;
+
+            const headers = document.querySelectorAll('th[data-sort]');
+
+            headers.forEach(th => {
+                th.classList.remove('sorted-asc', 'sorted-desc');
+                th.setAttribute('aria-sort', 'none');
+
+                const icon = th.querySelector('.sort-icon');
+                if (icon) {
+                    icon.textContent = '▲';
+                }
+            });
+
+            if (!state.column) return;
+
+            const activeHeader = document.querySelector(`th[data-sort="${state.column}"]`);
+            if (!activeHeader) return;
+
+            const isDesc = state.direction === 'desc';
+            activeHeader.classList.add(isDesc ? 'sorted-desc' : 'sorted-asc');
+            activeHeader.setAttribute('aria-sort', isDesc ? 'descending' : 'ascending');
+
+            const activeIcon = activeHeader.querySelector('.sort-icon');
+            if (activeIcon) {
+                activeIcon.textContent = isDesc ? '▼' : '▲';
+            }
         },
 
         /**
          * Initialize sort functionality
          */
         initSorting() {
-            // Add click handlers to sortable headers
+            // Sorting is driven exclusively by kebab dropdown controls. Headers are no longer clickable.
             const headers = document.querySelectorAll('th[data-sort]');
-
             headers.forEach(header => {
-                const column = header.getAttribute('data-sort');
-                
-                // Make header clickable
-                header.style.cursor = 'pointer';
-                header.setAttribute('role', 'button');
-                header.setAttribute('aria-label', `Sort by ${column}`);
-
-                // Remove existing listeners to prevent duplicates
-                // Note: This cloning approach removes ALL listeners, including filter dropdown toggles if they are on the TH
-                // But filter buttons are usually children of TH.
-                // However, if the click listener is on the TH itself, it might conflict with filter button clicks.
-                // The original code did this, so I'll stick to it but be careful.
-                // Actually, the filter button has stopPropagation in active-picks-modular.js, so it should be fine.
-                
-                // Add click listener to the sort button if it exists, otherwise the header
-                const sortBtn = header.querySelector('.th-sort-btn');
-                const target = sortBtn || header;
-
-                target.addEventListener('click', (e) => {
-                    // Don't trigger sort if clicking filter button
-                    if (e.target.closest('.th-filter-btn') || e.target.closest('.th-filter-dropdown')) {
-                        return;
-                    }
-                    this.handleHeaderClick(column);
-                });
-
-                // Add keyboard support
-                target.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        this.handleHeaderClick(column);
-                    }
-                });
+                header.style.cursor = 'default';
+                header.removeAttribute('role');
             });
 
-            // Initialize indicators
+            // Initialize indicators (still used when sort is applied via dropdown)
             this.updateSortIndicators();
         }
     };

@@ -84,10 +84,14 @@
         initHeaderFilters() {
             // Get all filter buttons by class (matches HTML: class="th-filter-btn")
             const filterButtons = document.querySelectorAll('.th-filter-btn');
+            console.log('🔍 Found filter buttons:', filterButtons.length);
 
             filterButtons.forEach(btn => {
                 // Skip if handler already attached (prevents duplicates with weekly-lineup.js)
-                if (btn.dataset.filterHandlerAttached) return;
+                if (btn.dataset.filterHandlerAttached) {
+                    console.log('⏭️ Handler already attached for:', btn.getAttribute('data-filter'));
+                    return;
+                }
                 btn.dataset.filterHandlerAttached = 'true';
 
                 // Get dropdown ID from aria-controls attribute (e.g., "filter-date")
@@ -95,12 +99,26 @@
                 // Get filter type from data-filter attribute (e.g., "date")
                 const filterType = btn.getAttribute('data-filter');
                 const dropdownEl = document.getElementById(dropdownId);
+                console.log('✅ Attaching handler for:', filterType, 'dropdown:', dropdownId, 'found:', !!dropdownEl);
 
                 if (dropdownEl) {
                     // Toggle dropdown on click
                     btn.addEventListener('click', (e) => {
+                        e.preventDefault();
                         e.stopPropagation();
+                        console.log('🔘 Filter button clicked:', filterType, 'dropdown:', dropdownId);
                         this.toggleFilterDropdown(btn, dropdownEl);
+                    });
+
+                    // Sort options inside dropdown (kebab drives sorting now)
+                    const sortButtons = dropdownEl.querySelectorAll('.sort-option');
+                    sortButtons.forEach(sortBtn => {
+                        sortBtn.addEventListener('click', () => {
+                            const sortKey = dropdownEl.getAttribute('data-sort-key') || filterType;
+                            const direction = sortBtn.getAttribute('data-direction');
+                            this.applySortFromDropdown(sortKey, direction);
+                            this.closeDropdown(dropdownEl, btn);
+                        });
                     });
 
                     // Apply button in dropdown
@@ -125,12 +143,49 @@
                 }
             });
 
-            // Close dropdowns on outside click - DISABLED: handled by inline script in HTML
-            // document.addEventListener('click', (e) => {
-            //     if (!e.target.closest('.th-filter-dropdown') && !e.target.closest('.th-filter-btn')) {
-            //         this.closeAllFilterDropdowns();
-            //     }
-            // });
+            // Close dropdowns on outside click
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.th-filter-dropdown') && !e.target.closest('.th-filter-btn')) {
+                    this.closeAllFilterDropdowns();
+                }
+            });
+
+            // Close dropdowns on scroll (since fixed positioning won't follow scroll)
+            window.addEventListener('scroll', () => {
+                this.closeAllFilterDropdowns();
+            }, { passive: true });
+
+            // Also close on table container scroll
+            const tableContainer = document.querySelector('.table-container');
+            if (tableContainer) {
+                tableContainer.addEventListener('scroll', () => {
+                    this.closeAllFilterDropdowns();
+                }, { passive: true });
+            }
+
+            // Close on Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    this.closeAllFilterDropdowns();
+                }
+            });
+        },
+
+        /**
+         * Apply sort triggered from a dropdown's sort controls
+         */
+        applySortFromDropdown(sortKey, direction) {
+            if (!sortKey || !window.PicksSortManager) return;
+
+            if (direction === 'clear') {
+                window.PicksSortManager.resetSorting();
+            } else {
+                window.PicksSortManager.updateSort(sortKey, direction);
+                if (window.PicksTableRenderer) {
+                    window.PicksTableRenderer.updateTable();
+                }
+                window.PicksSortManager.updateSortIndicators();
+            }
         },
 
         /**
@@ -539,20 +594,75 @@
          */
         toggleFilterDropdown(btn, dropdown) {
             const isOpen = dropdown.classList.contains('open');
+            console.log('🔄 toggleFilterDropdown called, isOpen:', isOpen, 'dropdown:', dropdown.id);
 
             // Close all dropdowns first
             this.closeAllFilterDropdowns();
 
             if (!isOpen) {
-                // Remove hidden attribute and add open class
+                // CRITICAL: Position dropdown BEFORE making it visible
+                // This prevents the flash where CSS positions it incorrectly
+                this.positionDropdownFixed(btn, dropdown);
+
+                // Now make it visible
                 dropdown.removeAttribute('hidden');
                 dropdown.classList.add('open');
                 btn.setAttribute('aria-expanded', 'true');
-                // Position dropdown if needed
-                if (window.PicksDOMUtils && window.PicksDOMUtils.positionDropdown) {
-                    window.PicksDOMUtils.positionDropdown(btn, dropdown);
+                console.log('✅ Dropdown opened at:', dropdown.style.top, dropdown.style.left);
+            }
+        },
+
+        /**
+         * Position dropdown with fixed positioning relative to button
+         * Sets position SYNCHRONOUSLY before dropdown becomes visible
+         */
+        positionDropdownFixed(btn, dropdown) {
+            const btnRect = btn.getBoundingClientRect();
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+
+            // Use default dimensions since dropdown may not be rendered yet
+            const dropdownWidth = 280;
+            const dropdownHeight = 300;
+
+            // Position directly below the button
+            let top = btnRect.bottom + 8;
+            let left = btnRect.right - dropdownWidth; // Align right edge with button
+
+            // Keep within viewport bounds
+            if (left < 16) {
+                left = 16;
+            }
+            if (left + dropdownWidth > viewportWidth - 16) {
+                left = viewportWidth - dropdownWidth - 16;
+            }
+
+            // If dropdown would go below viewport, position above button instead
+            if (top + dropdownHeight > viewportHeight - 16) {
+                top = btnRect.top - dropdownHeight - 8;
+                if (top < 16) {
+                    top = 16; // Fallback if no room above either
                 }
             }
+
+            console.log('📍 Positioning dropdown:', {
+                top, left,
+                btnRect: {top: btnRect.top, bottom: btnRect.bottom, left: btnRect.left, right: btnRect.right},
+                viewport: {width: viewportWidth, height: viewportHeight}
+            });
+
+            // Use setProperty with 'important' flag - the proper way to set !important via JS
+            dropdown.style.setProperty('position', 'fixed', 'important');
+            dropdown.style.setProperty('top', top + 'px', 'important');
+            dropdown.style.setProperty('left', left + 'px', 'important');
+            dropdown.style.setProperty('right', 'auto', 'important');
+            dropdown.style.setProperty('bottom', 'auto', 'important');
+            dropdown.style.setProperty('max-height', (viewportHeight - top - 32) + 'px', 'important');
+            dropdown.style.setProperty('z-index', '2147483647', 'important');
+            dropdown.style.setProperty('transform', 'none', 'important');
+
+            // Verify the styles were applied
+            console.log('📍 Inline styles set:', dropdown.style.cssText);
         },
 
         /**
@@ -562,7 +672,16 @@
             document.querySelectorAll('.th-filter-dropdown.open').forEach(dropdown => {
                 dropdown.classList.remove('open');
                 dropdown.setAttribute('hidden', '');
-                
+                // Clear inline positioning styles
+                dropdown.style.removeProperty('position');
+                dropdown.style.removeProperty('top');
+                dropdown.style.removeProperty('left');
+                dropdown.style.removeProperty('right');
+                dropdown.style.removeProperty('bottom');
+                dropdown.style.removeProperty('max-height');
+                dropdown.style.removeProperty('z-index');
+                dropdown.style.removeProperty('transform');
+
                 // Find associated button via aria-controls
                 const btn = document.querySelector(`[aria-controls="${dropdown.id}"]`);
                 if (btn) {
@@ -577,6 +696,15 @@
         closeDropdown(dropdown, btn) {
             dropdown.classList.remove('open');
             dropdown.setAttribute('hidden', '');
+            // Clear inline positioning styles
+            dropdown.style.removeProperty('position');
+            dropdown.style.removeProperty('top');
+            dropdown.style.removeProperty('left');
+            dropdown.style.removeProperty('right');
+            dropdown.style.removeProperty('bottom');
+            dropdown.style.removeProperty('max-height');
+            dropdown.style.removeProperty('z-index');
+            dropdown.style.removeProperty('transform');
             if (btn) {
                 btn.setAttribute('aria-expanded', 'false');
             }
