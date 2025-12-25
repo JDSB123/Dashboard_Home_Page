@@ -552,13 +552,13 @@ body.page-active-picks .cell-date {
 body.page-active-picks .game-segment {
     font-family: var(--font-body), 'Cormorant Garamond', Georgia, serif;
     font-weight: 600;
-    font-size: var(--text-base, 0.8125rem);
+    font-size: var(--text-md, 0.875rem);
     color: var(--neutral-200);
     text-transform: uppercase;
     letter-spacing: 0.02em;
 }
 
-/* ===== RISK/WIN CELL (inline layout with separator) ===== */
+/* ===== RISK/WIN CELL (stacked layout with separator) ===== */
 body.page-active-picks .currency-combined {
     display: flex;
     flex-direction: column;
@@ -566,18 +566,19 @@ body.page-active-picks .currency-combined {
     gap: 2px;
 }
 
-/* New inline layout with / separator */
+/* Stacked layout with / separator */
 body.page-active-picks .currency-combined.currency-inline {
-    flex-direction: row !important;
-    justify-content: center;
-    gap: 0.35em;
+    flex-direction: column !important;
+    align-items: center;
+    gap: 0;
 }
 
 body.page-active-picks .currency-separator {
     font-family: var(--font-body), 'Cormorant Garamond', Georgia, serif;
     font-weight: 400;
-    font-size: var(--text-base, 0.8125rem);
-    color: rgba(200, 215, 230, 0.6);
+    font-size: var(--text-sm, 0.75rem);
+    color: rgba(200, 215, 230, 0.5);
+    line-height: 1;
 }
 
 body.page-active-picks .currency-line {
@@ -599,14 +600,14 @@ body.page-active-picks .win-label {
 body.page-active-picks .risk-amount {
     font-family: var(--font-body), 'Cormorant Garamond', Georgia, serif;
     font-weight: 600;
-    font-size: var(--text-base, 0.8125rem);
+    font-size: var(--text-md, 0.875rem);
     color: #ff9999;
 }
 
 body.page-active-picks .win-amount {
     font-family: var(--font-body), 'Cormorant Garamond', Georgia, serif;
     font-weight: 600;
-    font-size: var(--text-base, 0.8125rem);
+    font-size: var(--text-md, 0.875rem);
     color: #66ffbb;
 }
 
