@@ -162,8 +162,16 @@
         #picks-table thead th .th-sort-btn {
             display: none !important;
         }
+        /* Make th-header-shell the positioning context for the filter button */
+        #picks-table thead th .th-header-shell {
+            position: relative !important;
+        }
         /* Filter buttons - absolute positioned with vertical 3-dot kebab icon */
         #picks-table thead th .th-filter-btn {
+            /* Reset flex properties - button is absolutely positioned, not a flex item */
+            flex: none !important;
+            /* Clear any inherited left value - only use right for positioning */
+            left: auto !important;
             position: absolute !important;
             right: 6px !important;
             top: 50% !important;
@@ -1052,7 +1060,7 @@
     <script src="assets/js/modules/picks-filter-manager.js?v=20251224-4" defer></script>
     <script src="assets/js/modules/picks-sort-manager.js?v=20251224-6" defer></script>
     <script src="assets/js/modules/picks-table-renderer.js?v=20251224-3" defer></script>
-    <script src="assets/js/features/active-picks-modular.js?v=20251225-6" defer></script>
+    <script src="assets/js/features/active-picks-modular.js?v=20251225-7" defer></script>
     <script src="dashboard/js/kpi-calculator.js?v=20251224-3" defer></script>
     <script src="dashboard/js/smart-load-picks.js?v=20251225-2" defer></script>
     <script src="assets/js/core/navigation.js?v=20251224-3" defer></script>
