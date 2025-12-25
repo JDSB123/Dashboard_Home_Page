@@ -15,8 +15,8 @@ body.page-active-picks {
     /* Use Garamond-based fonts from variables.css - don't override */
 
     /* Zebra Stripe Overrides - High Contrast with More Transparency (Matches Weekly Lineup) */
-    --zebra-odd: rgba(4, 12, 24, 0.35);
-    --zebra-even: rgba(30, 55, 85, 0.28);
+    --zebra-odd: rgba(4, 12, 24, 0.15);
+    --zebra-even: rgba(30, 55, 85, 0.08);
 
     /* Lighter background to show bear image - match weekly-lineup */
     background-color: rgba(3, 11, 22, 0.18);
@@ -41,9 +41,9 @@ body.page-active-picks::before {
     animation: none;
 }
 
-/* Wash to balance bear image visibility - MATCHING ODDS MARKET */
+/* Wash to balance bear image visibility - MATCHING WEEKLY LINEUP */
 body.page-active-picks::after {
-    background: rgba(3, 11, 22, 0.75);
+    background: rgba(3, 11, 22, 0.82);
     mix-blend-mode: multiply;
 }
 
@@ -1024,12 +1024,12 @@ body.page-active-picks .picks-table tbody td .game-segment {
 /* ===== HEADER GRADIENTS & TRANSPARENCY ===== */
 #picks-table thead th {
     background: linear-gradient(180deg,
-        rgba(26, 35, 126, 0.85) 0%,
-        rgba(26, 35, 126, 0.6) 50%,
-        rgba(26, 35, 126, 0.35) 100%) !important;
-    background-color: transparent !important;
-    border-bottom: 1px solid rgba(26, 35, 126, 0.4) !important;
-    border-right: 1px solid rgba(26, 35, 126, 0.15) !important;
+        rgba(0, 214, 137, 0.06) 0%,
+        rgba(0, 214, 137, 0.03) 45%,
+        rgba(8, 12, 22, 0.18) 100%) !important;
+    background-color: rgba(8, 12, 22, 0.15) !important;
+    border-bottom: 1px solid rgba(0, 214, 137, 0.20) !important;
+    border-right: 1px solid rgba(0, 214, 137, 0.08) !important;
 }
 
 /* Remove border from last header */
