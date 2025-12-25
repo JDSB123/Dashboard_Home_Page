@@ -1620,6 +1620,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
     // Export for external use
     window.WeeklyLineup = {
         loadModelOutputs,
+        populateTable: populateWeeklyLineupTable,
         showNotification
     };
 

@@ -102,28 +102,52 @@
     const fetchAndDisplayPicks = async function(league = 'all') {
         const result = await fetchPicks(league);
 
-        // Add picks to the table using PicksStateManager if available
-        if (window.PicksStateManager && result.picks.length > 0) {
-            result.picks.forEach(pick => {
-                window.PicksStateManager.addPick({
-                    sport: pick.sport,
-                    game: pick.game,
-                    pick: pick.pick,
-                    odds: pick.odds,
-                    edge: pick.edge,
-                    fire: pick.confidence,
-                    time: pick.time,
-                    market: pick.market,
-                    period: pick.period,
-                    source: 'api'
-                });
-            });
-            console.log(`[UNIFIED-FETCHER] Added ${result.picks.length} picks to state manager`);
-        }
+        // Use WeeklyLineup.populateTable if available (weekly lineup page)
+        if (window.WeeklyLineup?.populateTable && result.picks.length > 0) {
+            // Transform picks to the format expected by populateWeeklyLineupTable
+            const formattedPicks = result.picks.map(pick => {
+                // Parse game string "Away @ Home" to get teams
+                const gameParts = (pick.game || '').split(' @ ');
+                const awayTeam = gameParts[0] || '';
+                const homeTeam = gameParts[1] || '';
 
-        // Trigger table re-render if available
-        if (window.PicksTableRenderer?.render) {
-            window.PicksTableRenderer.render();
+                // Parse edge percentage string to number
+                let edgeNum = 0;
+                if (typeof pick.edge === 'string') {
+                    edgeNum = parseFloat(pick.edge.replace('%', '')) || 0;
+                } else if (typeof pick.edge === 'number') {
+                    edgeNum = pick.edge;
+                }
+
+                return {
+                    date: new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }),
+                    time: pick.time || '',
+                    sport: pick.sport || 'NBA',
+                    awayTeam: awayTeam,
+                    homeTeam: homeTeam,
+                    segment: pick.period || 'FG',
+                    pickTeam: pick.pick || '',
+                    pickType: (pick.market || 'spread').toLowerCase(),
+                    line: pick.line || '',
+                    odds: pick.odds || '-110',
+                    modelPrice: pick.modelPrice || '',
+                    edge: edgeNum,
+                    fire: parseInt(pick.confidence) || 3,
+                    fireLabel: edgeNum >= 6 ? 'MAX' : '',
+                    status: 'pending'
+                };
+            });
+
+            // Sort by edge (highest first)
+            formattedPicks.sort((a, b) => b.edge - a.edge);
+
+            window.WeeklyLineup.populateTable(formattedPicks);
+            console.log(`[UNIFIED-FETCHER] Populated table with ${formattedPicks.length} picks`);
+
+            // Show notification
+            if (window.WeeklyLineup.showNotification) {
+                window.WeeklyLineup.showNotification(`Loaded ${formattedPicks.length} picks from API`, 'success');
+            }
         }
 
         return result;

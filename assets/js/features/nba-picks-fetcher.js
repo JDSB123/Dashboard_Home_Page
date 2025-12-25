@@ -88,16 +88,37 @@
      * @returns {Object} Formatted pick
      */
     function formatPickForTable(pick) {
+        // Parse matchup to get teams (format: "Away Team (W-L) @ Home Team (W-L)")
+        const matchupStr = pick.matchup || '';
+        const matchParts = matchupStr.split(' @ ');
+        const awayTeam = matchParts[0]?.replace(/\s*\([^)]*\)/, '').trim() || pick.away_team || '';
+        const homeTeam = matchParts[1]?.replace(/\s*\([^)]*\)/, '').trim() || pick.home_team || '';
+
+        // Parse edge - can be percentage string or number
+        let edgeValue = pick.edge || 0;
+        if (typeof edgeValue === 'string') {
+            edgeValue = parseFloat(edgeValue.replace('%', '').replace('+', '')) || 0;
+        }
+
+        // Convert fire_rating to number (ELITE=5, STRONG=4, GOOD=3)
+        let fireNum = 3;
+        const fireRating = (pick.fire_rating || '').toUpperCase();
+        if (fireRating === 'ELITE' || fireRating === 'MAX') fireNum = 5;
+        else if (fireRating === 'STRONG') fireNum = 4;
+        else if (fireRating === 'GOOD') fireNum = 3;
+
         return {
             sport: 'NBA',
-            game: `${pick.away_team} @ ${pick.home_team}`,
-            pick: pick.pick_display || pick.pick,
-            odds: pick.odds || pick.market_odds,
-            edge: pick.edge ? `${(pick.edge * 100).toFixed(1)}%` : '',
-            confidence: pick.fire_rating || pick.confidence || '',
-            time: pick.game_time || '',
-            market: pick.market_type || pick.market,
-            period: pick.period || 'FG'
+            game: `${awayTeam} @ ${homeTeam}`,
+            pick: pick.pick || pick.pick_display || '',
+            odds: pick.pick_odds || pick.odds || pick.market_odds || '-110',
+            edge: typeof edgeValue === 'number' ? `${edgeValue.toFixed(1)}%` : edgeValue,
+            confidence: fireNum,
+            time: pick.time_cst || pick.game_time || '',
+            market: pick.market || pick.market_type || 'spread',
+            period: pick.period || 'FG',
+            line: pick.market_line || '',
+            modelPrice: pick.model_prediction || ''
         };
     }
 
