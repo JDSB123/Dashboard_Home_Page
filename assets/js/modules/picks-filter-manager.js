@@ -677,28 +677,13 @@
          * Sync matchup filter state from UI
          */
         syncMatchupFilterStateFromUI() {
-            const leagueSelect = document.getElementById('league-select');
-            const teamsList = document.getElementById('teams-list');
+            const teamCheckboxes = document.querySelectorAll('#teams-list input[type="checkbox"]:not(#teams-select-all)');
+            const selectedTeams = Array.from(teamCheckboxes)
+                .filter(cb => cb.checked)
+                .map(cb => cb.value);
 
-            if (leagueSelect) {
-                window.tableState.filters.matchup.league = leagueSelect.value;
-            }
-
-            if (teamsList) {
-                const checkedTeams = teamsList.querySelectorAll('input[type="checkbox"]:checked');
-                const teams = Array.from(checkedTeams)
-                    .filter(cb => cb.id !== 'teams-select-all')
-                    .map(cb => cb.value);
-
-                window.tableState.filters.matchup.selectedTeams =
-                    teams.length > 0 ? teams : null;
-            }
-
-            // Get ticket type
-            const ticketType = document.querySelector('input[name="ticket-type"]:checked');
-            if (ticketType) {
-                window.tableState.filters.matchup.ticketType = ticketType.value;
-            }
+            window.tableState.filters.matchup.selectedTeams =
+                selectedTeams.length > 0 ? selectedTeams : null;
         },
 
         /**

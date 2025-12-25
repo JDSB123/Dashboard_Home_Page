@@ -14,6 +14,10 @@ body.page-active-picks {
     --dashboard-text: #e6f2f6;
     /* Use Garamond-based fonts from variables.css - don't override */
 
+    /* Zebra Stripe Overrides - High Contrast with More Transparency (Matches Weekly Lineup) */
+    --zebra-odd: rgba(4, 12, 24, 0.15);
+    --zebra-even: rgba(30, 55, 85, 0.08);
+
     /* Lighter background to show bear image - match weekly-lineup */
     background-color: rgba(3, 11, 22, 0.18);
 }
@@ -205,6 +209,8 @@ body.page-active-picks .picks-table {
     --table-font: var(--font-body);
     /* CRITICAL: Ensure proper table display */
     display: table !important;
+    /* CRITICAL: Override base picks-table.css opaque background */
+    background: transparent !important;
 }
 
 /* Table cell base styling - proper overflow handling */
@@ -339,25 +345,23 @@ body.page-active-picks .profit-amount.profit-negative { color: rgba(255, 95, 109
 body.page-active-picks .profit-amount.profit-neutral { color: rgba(184, 197, 208, 0.92); }
 
 /* ===== TABLE HEADERS - VERY TRANSPARENT GREEN GRADIENT (matches weekly lineup) ===== */
-body.page-active-picks .picks-table thead th {
+body.page-active-picks .picks-table thead th,
+body.page-active-picks .picks-table thead th.center.sortable {
     /* CRITICAL: Override base picks-table.css opaque background with transparent green */
-    background: linear-gradient(180deg,
-        rgba(0, 214, 137, 0.06) 0%,
-        rgba(0, 214, 137, 0.03) 45%,
-        rgba(8, 12, 22, 0.18) 100%) !important;
-    background-color: rgba(8, 12, 22, 0.15) !important;
-    border-bottom: 1px solid rgba(0, 214, 137, 0.20) !important;
-    border-right: 1px solid rgba(0, 214, 137, 0.08) !important;
-    padding: 6px 4px;
+    background: transparent !important;
+    background-color: transparent !important;
+    border-bottom: 1px solid rgba(0, 214, 137, 0.20);
+    border-right: 1px solid rgba(0, 214, 137, 0.08);
+    padding: 0.75rem 0.75rem;
     text-align: center;
     font-family: var(--font-display, 'Oswald', sans-serif);
     font-weight: 700;
-    font-size: 0.75rem;
-    letter-spacing: 0.03em;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
     color: #f4fbff;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
-    line-height: 1.1;
+    line-height: 1.2;
     position: relative;
     /* Text containment - prevent wrapping and overflow */
     white-space: nowrap;
@@ -382,14 +386,14 @@ body.page-active-picks .picks-table thead {
     top: 0;
     z-index: 110;
     background: transparent !important;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
 }
 
 body.page-active-picks .picks-table thead th {
     position: relative;
     text-align: center;
-    padding: 6px 4px !important;
+    padding: 8px 6px !important;
     background-clip: padding-box;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
     vertical-align: middle;
@@ -411,12 +415,13 @@ body.page-active-picks .th-header-shell {
 
 body.page-active-picks .th-sort-btn {
     flex: 1 1 auto;
-    display: inline-flex;
+    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 4px 20px 4px 4px !important;
+    width: 100%;
+    padding: 4px 24px 4px 6px !important; /* increased right padding for icon space */
     gap: 0;
     min-height: unset;
     position: relative;
@@ -425,9 +430,9 @@ body.page-active-picks .th-sort-btn {
 /* Header main text styling (matches weekly lineup) */
 body.page-active-picks .header-main-text {
     display: block;
-    font-size: 0.72rem;
+    font-size: 0.85rem;
     font-weight: 700;
-    line-height: 1.1;
+    line-height: 1.2;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -445,9 +450,28 @@ body.page-active-picks .header-subtext {
     line-height: 1;
 }
 
-/* Sort icon hidden - sorting via kebab only */
+/* Sort icon positioned at bottom-right of th cell */
 body.page-active-picks .sort-icon {
-    display: none !important;
+    position: absolute !important;
+    right: 0 !important; /* flush to right edge */
+    bottom: 0 !important; /* flush to bottom edge */
+    top: auto;
+    transform: none;
+    font-size: 14px;
+    line-height: 1;
+    margin: 0;
+    opacity: 0.7;
+    font-weight: bold;
+    pointer-events: none;
+    display: block !important;
+}
+
+body.page-active-picks .picks-table th:hover .sort-icon,
+body.page-active-picks .picks-table th.sorted-asc .sort-icon,
+body.page-active-picks .picks-table th.sorted-desc .sort-icon,
+body.page-active-picks .picks-table th[data-sort].sort-asc .sort-icon,
+body.page-active-picks .picks-table th[data-sort].sort-desc .sort-icon {
+    opacity: 1;
 }
 
 /* Filter button - defer to inline styles in dashboard.html for full styling */
@@ -465,7 +489,9 @@ body.page-active-picks .picks-table tbody {
     display: table-row-group !important; /* CRITICAL: Maintain table structure */
     position: relative;
     z-index: 10;
-    background: rgba(8, 12, 22, 0.52);
+    background: transparent !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
 }
 
 body.page-active-picks .picks-table tbody tr {
@@ -475,15 +501,24 @@ body.page-active-picks .picks-table tbody tr {
 }
 
 body.page-active-picks .picks-table tbody tr:nth-child(odd) {
-    background: rgba(4, 12, 24, 0.42);
+    background: var(--zebra-odd) !important;
 }
 
 body.page-active-picks .picks-table tbody tr:nth-child(even) {
-    background: rgba(30, 55, 85, 0.28);
+    background: var(--zebra-even) !important;
 }
 
 body.page-active-picks .picks-table tbody tr:hover {
     background: rgba(40, 60, 90, 0.48);
+}
+
+/* Override zebra-stripes.js applied classes to ensure transparency */
+body.page-active-picks .picks-table tbody tr.zebra-odd {
+    background: var(--zebra-odd) !important;
+}
+
+body.page-active-picks .picks-table tbody tr.zebra-even {
+    background: var(--zebra-even) !important;
 }
 
 body.page-active-picks .picks-table tbody td {
@@ -989,4 +1024,115 @@ body.page-active-picks .picks-table tbody td .status-badge {
 body.page-active-picks .picks-table tbody td .game-segment {
     display: inline-block;
     text-align: center;
+}
+/* ==========================================================================
+   DASHBOARD OVERRIDES
+   Fixes for visual parity with Weekly Lineup (transparency, gradients, icons)
+   ========================================================================== */
+
+/* ===== HEADER GRADIENTS & TRANSPARENCY ===== */
+#picks-table thead th {
+    background: none !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    border-bottom: 1px solid rgba(0, 214, 137, 0.20) !important;
+    border-right: 1px solid rgba(0, 214, 137, 0.08) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* Remove border from last header */
+#picks-table thead th:last-child {
+    border-right: none !important;
+}
+
+/* ===== ZEBRA STRIPES (Exact match to Weekly Lineup) ===== */
+#picks-table tbody {
+    background: transparent !important;
+}
+
+#picks-table tbody tr {
+    background: transparent !important;
+    border-bottom: 1px solid rgba(80, 100, 130, 0.12) !important;
+}
+
+#picks-table tbody tr:nth-child(odd) {
+    background: rgba(4, 12, 24, 0.42) !important;
+}
+
+#picks-table tbody tr:nth-child(even) {
+    background: rgba(30, 55, 85, 0.28) !important;
+}
+
+#picks-table tbody tr:hover {
+    background: rgba(40, 60, 90, 0.48) !important;
+}
+
+/* ===== FILTER BUTTON VISIBILITY & POSITIONING ===== */
+/* Position filter button to left of sort icon to avoid overlap */
+.th-filter-btn {
+    position: absolute !important;
+    right: 18px !important; /* Shifted left to avoid sort icon */
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    width: 22px !important;
+    height: 22px !important;
+    z-index: 102 !important;
+    
+    /* Add visible icon via background image since HTML button is empty */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.6)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3'%3E%3C/polygon%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-size: 12px 12px !important;
+    background-color: transparent !important;
+    border: none !important;
+    opacity: 0.7;
+    transition: all 0.2s ease !important;
+}
+
+.th-filter-btn:hover {
+    opacity: 1;
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3'%3E%3C/polygon%3E%3C/svg%3E") !important;
+    border-radius: 4px !important;
+}
+
+.th-filter-btn[aria-expanded="true"],
+.th-filter-btn.active {
+    opacity: 1;
+    background-color: rgba(0, 214, 137, 0.2) !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4af37' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3'%3E%3C/polygon%3E%3C/svg%3E") !important;
+}
+
+/* Sort Icon Positioning */
+.sort-icon {
+    position: absolute !important;
+    right: 2px !important;
+    bottom: 2px !important;
+    font-size: 10px !important;
+    opacity: 0.5;
+}
+
+/* Header Shell - Ensure it doesn't block clicks */
+.th-header-shell {
+    position: static !important;
+    width: 100% !important;
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* Sort Button - Make it fill the header but respect padding */
+.th-sort-btn {
+    width: 100% !important;
+    height: 100% !important;
+    padding: 8px 24px 8px 8px !important; /* Right padding for filter button */
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: transparent !important;
+    border: none !important;
+    cursor: pointer !important;
 }

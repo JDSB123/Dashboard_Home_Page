@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(nslookup:*)",
+      "Bash(az account show:*)",
+      "Bash(az group create:*)",
+      "Bash(az network dns zone create:*)",
+      "Bash(az network dns zone show:*)",
+      "Bash(git remote get-url:*)",
+      "Bash(az network dns record-set list:*)",
+      "Bash(az network dns record-set cname set-record:*)",
+      "Bash(az staticwebapp hostname set:*)",
+      "Bash(az staticwebapp hostname show:*)",
+      "Bash(az network dns record-set txt add-record:*)",
+      "Bash(az network dns record-set a add-record:*)",
+      "Bash(az staticwebapp hostname list:*)",
+      "Bash(az group list:*)",
+      "Bash(az resource list:*)",
+      "Bash(az containerapp show:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push)"
+    ]
+  }
+}

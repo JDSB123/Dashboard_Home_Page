@@ -165,10 +165,12 @@
 }
 
 /* Apply backdrop-filter blur only when table has picks (controlled by JS) */
+/* DISABLED - causes milky look on dashboard
 .table-container.has-picks {
     -webkit-backdrop-filter: blur(12px);
     backdrop-filter: blur(12px);
 }
+*/
 
 /* ===== COLUMN FILTER OUTPUT CHIPS ===== */
 /* Styles defined in filters.css */
@@ -321,7 +323,7 @@
     border-bottom: 1px solid rgba(var(--color-primary-rgb), 0.25);
     white-space: nowrap;
     position: relative;
-    background: linear-gradient(180deg, rgba(0, 30, 45, 0.7) 0%, rgba(0, 20, 35, 0.8) 100%);
+    background: transparent;
     transition: all 0.25s ease;
     line-height: var(--table-heading-line);
     vertical-align: middle;
@@ -648,15 +650,17 @@ th[data-sort].sort-desc .sort-icon {
 .picks-table tbody {
     position: relative;
     z-index: 10;
-    background: rgba(8, 12, 22, 0.75);
+    background: transparent;
     pointer-events: auto; /* CRITICAL FIX: Ensure tbody accepts clicks */
 }
 
 /* Apply backdrop-filter blur only when table has picks (controlled by JS) */
+/* DISABLED - causes milky look on dashboard
 .table-container.has-picks .picks-table tbody {
     -webkit-backdrop-filter: blur(8px);
     backdrop-filter: blur(8px);
 }
+*/
 
 .picks-table tbody tr {
     background: transparent;

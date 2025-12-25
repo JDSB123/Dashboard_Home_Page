@@ -69,12 +69,16 @@
          * Initialize filter functionality
          */
         initializeFilters() {
+            // Filters are now handled by dashboard-filters-adapter.js which supports the new UI
+            console.log('Filters initialization delegated to dashboard-filters-adapter.js');
+            /*
             this.initHeaderFilters();
             this.initDateFilter();
             this.initMatchupFilter();
             this.initPickFilter();
             this.initRiskFilter();
             this.initStatusFilter();
+            */
         },
 
         /**
@@ -329,31 +333,106 @@
          * Initialize matchup filter
          */
         initMatchupFilter() {
-            // League dropdown
-            const leagueSelect = document.getElementById('league-select');
-            if (leagueSelect) {
-                this.populateLeagueDropdown();
+            this.populateMatchupTeamOptions();
 
-                leagueSelect.addEventListener('change', (e) => {
-                    this.populateTeamsList(e.target.value);
+            this.attachTeamsSelectAllHandler();
+
+            const searchInput = document.getElementById('team-search');
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    this.filterTeamList(e.target.value);
                 });
             }
+        },
 
-            // Teams select all
+        /**
+         * Populate the teams list used by the matchup filter
+         */
+        populateMatchupTeamOptions() {
+            const container = document.getElementById('teams-list');
+            if (!container || !window.PicksDataProcessor) return;
+
+            const selectAllOption = container.querySelector('.select-all-option');
+            const selectAllClone = selectAllOption ? selectAllOption.cloneNode(true) : null;
+            container.innerHTML = '';
+            if (selectAllClone) {
+                container.appendChild(selectAllClone);
+            }
+
+            const teams = this.collectMatchupTeams();
+            if (teams.length === 0) {
+                const notice = document.createElement('div');
+                notice.className = 'filter-info';
+                notice.textContent = 'No teams available yet';
+                container.appendChild(notice);
+                return;
+            }
+
+            teams.forEach(team => {
+                const option = document.createElement('div');
+                option.className = 'filter-option';
+                const teamId = team.replace(/[^a-z0-9]/gi, '-').toLowerCase();
+                option.innerHTML = `
+                    <label>
+                        <input type="checkbox" id="team-filter-${teamId}" name="team-filter-${teamId}" value="${team}">
+                        <span>${window.PicksDOMUtils.formatTeamName(team)}</span>
+                    </label>
+                `;
+                container.appendChild(option);
+            });
+        },
+
+        /**
+         * Gather all unique teams from the picks table
+         */
+        collectMatchupTeams() {
+            const rows = document.querySelectorAll('#picks-tbody tr:not(.parlay-legs)');
+            const teams = new Set();
+
+            rows.forEach(row => {
+                const cell = window.PicksDataProcessor.getCell(row, 'matchup', 3);
+                const extracted = window.PicksDataProcessor.extractTeamsFromCell(cell);
+                extracted.forEach(team => teams.add(team));
+            });
+
+            return Array.from(teams).sort((a, b) => a.localeCompare(b));
+        },
+
+        /**
+         * Attach the select-all handler for matchup teams
+         */
+        attachTeamsSelectAllHandler() {
             const teamsSelectAll = document.getElementById('teams-select-all');
-            if (teamsSelectAll) {
-                teamsSelectAll.addEventListener('change', (e) => {
-                    const checkboxes = document.querySelectorAll('#teams-list input[type="checkbox"]:not(#teams-select-all)');
-                    checkboxes.forEach(cb => cb.checked = e.target.checked);
-                });
-            }
+            if (!teamsSelectAll) return;
 
-            // Ticket type radio buttons
-            const ticketRadios = document.querySelectorAll('input[name="ticket-type"]');
-            ticketRadios.forEach(radio => {
-                radio.addEventListener('change', () => {
-                    window.tableState.filters.matchup.ticketType = radio.value;
-                });
+            teamsSelectAll.addEventListener('change', (e) => {
+                const checkboxes = this.getTeamCheckboxes();
+                checkboxes.forEach(cb => cb.checked = e.target.checked);
+            });
+        },
+
+        /**
+         * Return all matchup team checkboxes (excluding select-all)
+         */
+        getTeamCheckboxes() {
+            const container = document.getElementById('teams-list');
+            if (!container) return [];
+            return Array.from(container.querySelectorAll('input[type="checkbox"]:not(#teams-select-all)'));
+        },
+
+        /**
+         * Filter the matchup team options based on the search input
+         */
+        filterTeamList(query) {
+            const container = document.getElementById('teams-list');
+            if (!container) return;
+            const needle = query.trim().toLowerCase();
+
+            this.getTeamCheckboxes().forEach(cb => {
+                const option = cb.closest('.filter-option');
+                if (!option) return;
+                const label = cb.value.toLowerCase();
+                option.style.display = label.includes(needle) ? '' : 'none';
             });
         },
 
@@ -430,97 +509,25 @@
          * Initialize pick filter
          */
         initPickFilter() {
-            const betTypes = window.PicksDataProcessor.collectBetTypes();
-
-            // Populate bet type dropdown
-            const betTypeSelect = document.getElementById('bet-type-select');
-            if (betTypeSelect) {
-                betTypeSelect.innerHTML = '<option value="">All Types</option>';
-                betTypes.types.forEach(type => {
-                    const option = document.createElement('option');
-                    option.value = type;
-                    option.textContent = window.PicksDOMUtils.formatBetTypeLabel(type);
-                    betTypeSelect.appendChild(option);
-                });
-            }
-
-            // Populate subtype dropdown
-            const subtypeSelect = document.getElementById('subtype-select');
-            if (subtypeSelect) {
-                subtypeSelect.innerHTML = '<option value="">All Subtypes</option>';
-                betTypes.subtypes.forEach(subtype => {
-                    const option = document.createElement('option');
-                    option.value = subtype;
-                    option.textContent = window.PicksDOMUtils.formatSubtypeLabel(subtype);
-                    subtypeSelect.appendChild(option);
-                });
-            }
-
-            // Segment dropdown
-            const segmentSelect = document.getElementById('segment-select');
-            if (segmentSelect) {
-                segmentSelect.innerHTML = `
-                    <option value="">All Segments</option>
-                    <option value="game">Full Game</option>
-                    <option value="1h">1st Half</option>
-                    <option value="2h">2nd Half</option>
-                `;
-            }
+            // Checkboxes are static in the markup; no additional setup required.
         },
 
         /**
          * Initialize risk filter
          */
         initRiskFilter() {
-            // Collect risk ranges (Risk/Win is now column 6 in 10-column dashboard layout)
-            const riskRanges = window.PicksDataProcessor.collectValueRanges(6);
-            const winRanges = window.PicksDataProcessor.collectValueRanges(6);
-
-            // Populate risk ranges
-            const riskContainer = document.getElementById('risk-ranges');
-            if (riskContainer && riskRanges.length > 0) {
-                riskContainer.innerHTML = '<div class="filter-group-label">Risk Amount</div>';
-                riskRanges.forEach(range => {
-                    const option = document.createElement('div');
-                    option.className = 'filter-option';
-                    const rangeId = range.replace(/\s+/g, '-').toLowerCase().replace(/[<>]/g, '');
-                    option.innerHTML = `
-                        <label>
-                            <input type="checkbox" id="risk-range-${rangeId}" name="risk-range-${rangeId}" value="${range}">
-                            <span>${window.PicksDOMUtils.formatRangeLabel(range)}</span>
-                        </label>
-                    `;
-                    riskContainer.appendChild(option);
-                });
-            }
-
-            // Populate win ranges
-            const winContainer = document.getElementById('win-ranges');
-            if (winContainer && winRanges.length > 0) {
-                winContainer.innerHTML = '<div class="filter-group-label">Win Amount</div>';
-                winRanges.forEach(range => {
-                    const option = document.createElement('div');
-                    option.className = 'filter-option';
-                    const rangeId = range.replace(/\s+/g, '-').toLowerCase().replace(/[<>]/g, '');
-                    option.innerHTML = `
-                        <label>
-                            <input type="checkbox" id="win-range-${rangeId}" name="win-range-${rangeId}" value="${range}">
-                            <span>${window.PicksDOMUtils.formatRangeLabel(range)}</span>
-                        </label>
-                    `;
-                    winContainer.appendChild(option);
-                });
-            }
+            // Inputs are already present in the markup; no dynamic setup needed.
         },
 
         /**
          * Initialize status filter
          */
         initStatusFilter() {
-            const container = document.getElementById('status-filter-options');
+            const container = document.getElementById('status-options');
             if (!container) return;
 
             const statuses = window.PicksDataProcessor.collectStatusValues();
+            if (!statuses.length) return;
 
             container.innerHTML = '';
             statuses.forEach(status => {

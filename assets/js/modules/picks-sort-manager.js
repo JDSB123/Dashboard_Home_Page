@@ -328,14 +328,25 @@
          * Initialize sort functionality
          */
         initSorting() {
-            // Sorting is driven exclusively by kebab dropdown controls. Headers are no longer clickable.
-            const headers = document.querySelectorAll('th[data-sort]');
-            headers.forEach(header => {
-                header.style.cursor = 'default';
-                header.removeAttribute('role');
+            // Select all sort buttons
+            const sortButtons = document.querySelectorAll('.th-sort-btn');
+            
+            sortButtons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    // Stop propagation to prevent bubbling issues
+                    e.stopPropagation();
+                    
+                    const th = btn.closest('th');
+                    if (!th) return;
+                    
+                    const column = th.getAttribute('data-sort');
+                    if (column) {
+                        this.handleHeaderClick(column);
+                    }
+                });
             });
 
-            // Initialize indicators (still used when sort is applied via dropdown)
+            // Initialize indicators
             this.updateSortIndicators();
         }
     };
