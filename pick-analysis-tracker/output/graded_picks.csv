@@ -351,7 +351,7 @@ Date,League,Matchup,Segment,Pick,Odds,Risk,ToWin,Hit/Miss,PnL,StakeRule
 2025-12-23,NCAAM,Villanova @ Seton Hall,1h,Over 62.5 (-118),-118,59000.0,50000.0,win,50000.0,rule-negative
 2025-12-23,NCAAM,Villanova @ Seton Hall,1h,Seton Hall PK (-110),100,50000.0,50000.0,loss,-50000.0,rule-positive
 2025-12-22,NFL,49ers @ Opponent TBD,2h,49ers ML (-130),-130,65000.0,50000.0,win,50000.0,rule-negative
-2025-12-22,NBA,grizzlies,2h,Over 114.5 (-111),-111,55500.0,50000.0,unknown,,rule-negative
+2025-12-22,NFL,grizzlies,2h,Over 114.5 (-111),-111,55500.0,50000.0,unknown,,rule-negative
 2025-12-22,NCAAM,BYU @ Opponent TBD,2h,Under 89 (-113),-113,56500.0,50000.0,win,50000.0,rule-negative
 2025-12-22,NBA,Grizzlies @ Opponent TBD,2h,Over 114.5 (-111),-111,55500.0,50000.0,loss,-55500.0,rule-negative
 2025-12-23,NBA,Rockets @ Clippers,fg,over 219 (-111),-111,55500.0,50000.0,win,50000.0,rule-negative

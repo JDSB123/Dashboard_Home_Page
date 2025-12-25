@@ -1,0 +1,154 @@
+.page--picks {
+  background: linear-gradient(135deg, #0f172a 0%, #111827 40%, #0b1323 100%);
+  color: #e5e7eb;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+.toolbar {
+  background: rgba(17, 24, 39, 0.9);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.toolbar__title {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.toolbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn {
+  background: #10b981;
+  color: #0b1323;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.2);
+}
+
+.status-pill {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 6px 10px;
+  font-size: 0.85rem;
+}
+
+.page__content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+.filter-card {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.filter-card label {
+  font-size: 0.9rem;
+  color: #9ca3af;
+}
+
+.filter-card select {
+  background: #0f172a;
+  color: #e5e7eb;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.summary {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 14px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 10px;
+  font-weight: 600;
+}
+
+.table-wrap {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 12px;
+  overflow: auto;
+}
+
+.picks-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: #e5e7eb;
+}
+
+.picks-table th,
+.picks-table td {
+  padding: 10px 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: left;
+  font-size: 0.95rem;
+}
+
+.picks-table thead {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.picks-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.badge-win {
+  color: #22c55e;
+  font-weight: 700;
+}
+
+.badge-loss {
+  color: #ef4444;
+  font-weight: 700;
+}
+
+.badge-unknown {
+  color: #fbbf24;
+  font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  .picks-table th:nth-child(3),
+  .picks-table td:nth-child(3),
+  .picks-table th:nth-child(4),
+  .picks-table td:nth-child(4) {
+    display: none;
+  }
+}
