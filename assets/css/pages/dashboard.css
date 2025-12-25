@@ -51,7 +51,7 @@ body.page-active-picks::after {
     position: fixed;
     inset: 0;
     z-index: -2;
-    background: rgba(3, 11, 22, 0.75);
+    background: rgba(3, 11, 22, 0.55);
     mix-blend-mode: multiply;
     pointer-events: none;
 }
