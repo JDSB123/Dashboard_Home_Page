@@ -15,8 +15,8 @@ body.page-active-picks {
     /* Use Garamond-based fonts from variables.css - don't override */
 
     /* Zebra Stripe Overrides - High Contrast with More Transparency (Matches Weekly Lineup) */
-    --zebra-odd: rgba(4, 12, 24, 0.15);
-    --zebra-even: rgba(30, 55, 85, 0.08);
+    --zebra-odd: rgba(4, 12, 24, 0.35);
+    --zebra-even: rgba(30, 55, 85, 0.28);
 
     /* Lighter background to show bear image - match weekly-lineup */
     background-color: rgba(3, 11, 22, 0.18);
@@ -1024,12 +1024,12 @@ body.page-active-picks .picks-table tbody td .game-segment {
 /* ===== HEADER GRADIENTS & TRANSPARENCY ===== */
 #picks-table thead th {
     background: linear-gradient(180deg,
-        rgba(0, 143, 88, 0.85) 0%,
-        rgba(0, 143, 88, 0.6) 50%,
-        rgba(0, 143, 88, 0.35) 100%) !important;
+        rgba(26, 35, 126, 0.85) 0%,
+        rgba(26, 35, 126, 0.6) 50%,
+        rgba(26, 35, 126, 0.35) 100%) !important;
     background-color: transparent !important;
-    border-bottom: 1px solid rgba(0, 143, 88, 0.4) !important;
-    border-right: 1px solid rgba(0, 143, 88, 0.15) !important;
+    border-bottom: 1px solid rgba(26, 35, 126, 0.4) !important;
+    border-right: 1px solid rgba(26, 35, 126, 0.15) !important;
 }
 
 /* Remove border from last header */
