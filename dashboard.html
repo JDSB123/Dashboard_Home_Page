@@ -46,7 +46,7 @@
     <link rel="stylesheet" href="assets/css/components/segment-colors.css?v=20251224-3">
 
     <!-- 8. Dashboard-specific styles (self-contained) -->
-    <link rel="stylesheet" href="assets/css/pages/dashboard.css?v=20251224-16">
+    <link rel="stylesheet" href="assets/css/pages/dashboard.css?v=20251225-3">
 
     <!--
     COLUMN ALIGNMENT FIX - Critical inline styles for table structure
@@ -247,43 +247,68 @@
             line-height: 1.2;
         }
 
-        /* Pick cell - force single line horizontal layout */
+        /* Pick cell - clean horizontal layout with Garamond */
         #picks-table tbody td .pick-cell {
             display: inline-flex !important;
             align-items: center !important;
             justify-content: center !important;
-            gap: 0.625rem !important;
+            gap: 0.5rem !important;
             white-space: nowrap !important;
             padding: 0.25rem 0 !important;
             flex-direction: row !important;
             flex-wrap: nowrap !important;
-            /* Fix typography - force Inter for data/numbers */
-            font-family: 'Inter', sans-serif !important;
-        }
-        
-        /* Force Oswald for team abbreviations to match Weekly Lineup intent */
-        #picks-table tbody td .pick-team-abbr {
-            font-family: 'Oswald', sans-serif !important;
-            font-weight: 700 !important;
-            letter-spacing: 0.02em !important;
+            font-family: var(--font-body), 'Cormorant Garamond', Georgia, serif !important;
         }
 
-        /* Force Inter for odds/lines */
-        #picks-table tbody td .pick-details,
-        #picks-table tbody td .pick-line,
-        #picks-table tbody td .pick-odds {
-            font-family: 'Inter', sans-serif !important;
-            font-weight: 500 !important;
-        }
-        #picks-table tbody td .pick-cell * {
-            white-space: nowrap !important;
+        /* Team abbreviation - Garamond bold, elegant spacing */
+        #picks-table tbody td .pick-team-abbr {
             display: inline !important;
+            font-family: var(--font-body), 'Cormorant Garamond', Georgia, serif !important;
+            font-weight: 600 !important;
+            font-size: 1.05rem !important;
+            letter-spacing: 0.04em !important;
+            color: #ffffff !important;
+            white-space: nowrap !important;
+        }
+
+        /* Pick details container */
+        #picks-table tbody td .pick-team-info {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 0.375rem !important;
+        }
+
+        /* Line and odds - Garamond consistent */
+        #picks-table tbody td .pick-details {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 0.375rem !important;
+            font-family: var(--font-body), 'Cormorant Garamond', Georgia, serif !important;
+        }
+        #picks-table tbody td .pick-line {
+            display: inline !important;
+            font-family: var(--font-body), 'Cormorant Garamond', Georgia, serif !important;
+            font-weight: 600 !important;
+            font-size: 1.05rem !important;
+            letter-spacing: 0.02em !important;
+            color: #ffffff !important;
+            white-space: nowrap !important;
+        }
+        #picks-table tbody td .pick-odds {
+            display: inline !important;
+            font-family: var(--font-body), 'Cormorant Garamond', Georgia, serif !important;
+            font-weight: 400 !important;
+            font-size: 0.95rem !important;
+            letter-spacing: 0.01em !important;
+            color: rgba(200, 215, 230, 0.85) !important;
+            white-space: nowrap !important;
         }
         #picks-table tbody td .pick-cell img {
             display: inline-block !important;
-            width: 20px !important;
-            height: 20px !important;
+            width: 22px !important;
+            height: 22px !important;
             flex-shrink: 0 !important;
+            vertical-align: middle !important;
         }
         #picks-table tbody td .league-cell,
         #picks-table tbody td .datetime-cell {
