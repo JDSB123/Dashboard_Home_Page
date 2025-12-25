@@ -6,7 +6,7 @@
 (function() {
     'use strict';
 
-    const NBA_API_URL = window.APP_CONFIG?.NBA_API_URL || 'https://nba-picks-api.icyglacier-9a6fbcf5.eastus.azurecontainerapps.io';
+    const NBA_API_URL = window.APP_CONFIG?.NBA_API_URL || 'https://nba-gbsv-api.livelycoast-b48c3cb0.eastus.azurecontainerapps.io';
 
     let picksCache = null;
     let lastFetch = null;

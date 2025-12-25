@@ -1336,28 +1336,50 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                 fetchBtn.disabled = true;
                 
                 console.log(`🔄 [Weekly Lineup] Fetching picks: ${fetchType}`);
-                
-                // Simulate fetch (replace with actual API call)
-                if (window.AutoGameFetcher?.fetchTodaysGames) {
-                    const options = fetchType !== 'all' ? { league: fetchType.toUpperCase() } : {};
-                    window.AutoGameFetcher.fetchTodaysGames(options)
-                        .then(() => {
-                            fetchBtn.textContent = '✓ Done';
-                            setTimeout(() => { 
-                                fetchBtn.textContent = '⟳ Fetch Picks ▾'; 
-                                fetchBtn.disabled = false; 
+
+                // Fetch from model APIs using UnifiedPicksFetcher
+                if (window.UnifiedPicksFetcher?.fetchAndDisplayPicks) {
+                    window.UnifiedPicksFetcher.fetchAndDisplayPicks(fetchType)
+                        .then((result) => {
+                            const count = result.picks?.length || 0;
+                            fetchBtn.textContent = `✓ ${count} picks`;
+                            setTimeout(() => {
+                                fetchBtn.textContent = '⟳ Fetch Picks ▾';
+                                fetchBtn.disabled = false;
                             }, 2000);
+
+                            // Show errors if any
+                            if (result.errors?.length > 0) {
+                                console.warn('[Weekly Lineup] Some APIs had errors:', result.errors);
+                            }
                         })
-                        .catch((err) => { 
+                        .catch((err) => {
                             console.error('Fetch error:', err);
-                            fetchBtn.textContent = '⟳ Fetch Picks ▾'; 
-                            fetchBtn.disabled = false; 
+                            fetchBtn.textContent = '⟳ Fetch Picks ▾';
+                            fetchBtn.disabled = false;
                         });
                 } else {
-                    setTimeout(() => { 
-                        fetchBtn.textContent = '⟳ Fetch Picks ▾'; 
-                        fetchBtn.disabled = false; 
-                    }, 1000);
+                    // Fallback to AutoGameFetcher for game data only
+                    if (window.AutoGameFetcher?.fetchTodaysGames) {
+                        window.AutoGameFetcher.fetchTodaysGames()
+                            .then(() => {
+                                fetchBtn.textContent = '✓ Done';
+                                setTimeout(() => {
+                                    fetchBtn.textContent = '⟳ Fetch Picks ▾';
+                                    fetchBtn.disabled = false;
+                                }, 2000);
+                            })
+                            .catch((err) => {
+                                console.error('Fetch error:', err);
+                                fetchBtn.textContent = '⟳ Fetch Picks ▾';
+                                fetchBtn.disabled = false;
+                            });
+                    } else {
+                        setTimeout(() => {
+                            fetchBtn.textContent = '⟳ Fetch Picks ▾';
+                            fetchBtn.disabled = false;
+                        }, 1000);
+                    }
                 }
             });
         });
