@@ -84,41 +84,70 @@
 
     /**
      * Format pick for display in the picks table
-     * @param {Object} pick - Raw pick from API
-     * @returns {Object} Formatted pick
+     * @param {Object} play - Raw play from API executive endpoint
+     * @returns {Object} Formatted pick for table display
+     *
+     * API returns:
+     * {
+     *   time_cst: "12/25 11:10 AM",
+     *   matchup: "Cleveland Cavaliers (17-14) @ New York Knicks (20-9)",
+     *   period: "1H",
+     *   market: "ML",
+     *   pick: "New York Knicks",
+     *   pick_odds: "-170",
+     *   model_prediction: "79.2%",
+     *   market_line: "63.0%",
+     *   edge: "+16.2%",
+     *   confidence: "57%",
+     *   fire_rating: "GOOD"
+     * }
      */
-    function formatPickForTable(pick) {
+    function formatPickForTable(play) {
         // Parse matchup to get teams (format: "Away Team (W-L) @ Home Team (W-L)")
-        const matchupStr = pick.matchup || '';
+        const matchupStr = play.matchup || '';
         const matchParts = matchupStr.split(' @ ');
-        const awayTeam = matchParts[0]?.replace(/\s*\([^)]*\)/, '').trim() || pick.away_team || '';
-        const homeTeam = matchParts[1]?.replace(/\s*\([^)]*\)/, '').trim() || pick.home_team || '';
+        const awayTeam = matchParts[0]?.replace(/\s*\([^)]*\)/, '').trim() || '';
+        const homeTeam = matchParts[1]?.replace(/\s*\([^)]*\)/, '').trim() || '';
 
-        // Parse edge - can be percentage string or number
-        let edgeValue = pick.edge || 0;
-        if (typeof edgeValue === 'string') {
-            edgeValue = parseFloat(edgeValue.replace('%', '').replace('+', '')) || 0;
+        // Parse edge - format is "+16.2%" or "-5.3%"
+        let edgeValue = 0;
+        if (typeof play.edge === 'string') {
+            edgeValue = parseFloat(play.edge.replace('%', '').replace('+', '')) || 0;
+        } else if (typeof play.edge === 'number') {
+            edgeValue = play.edge;
         }
 
         // Convert fire_rating to number (ELITE=5, STRONG=4, GOOD=3)
         let fireNum = 3;
-        const fireRating = (pick.fire_rating || '').toUpperCase();
+        const fireRating = (play.fire_rating || '').toUpperCase();
         if (fireRating === 'ELITE' || fireRating === 'MAX') fireNum = 5;
         else if (fireRating === 'STRONG') fireNum = 4;
         else if (fireRating === 'GOOD') fireNum = 3;
 
+        // Map market types (ML, SPREAD, TOTAL) to table format
+        let marketType = (play.market || 'spread').toLowerCase();
+        if (marketType === 'ml') marketType = 'moneyline';
+
+        // Parse time from "12/25 11:10 AM" format
+        let timeStr = play.time_cst || '';
+        if (timeStr.includes(' ')) {
+            // Extract just the time part
+            const timeParts = timeStr.split(' ');
+            timeStr = timeParts.slice(1).join(' '); // "11:10 AM"
+        }
+
         return {
             sport: 'NBA',
             game: `${awayTeam} @ ${homeTeam}`,
-            pick: pick.pick || pick.pick_display || '',
-            odds: pick.pick_odds || pick.odds || pick.market_odds || '-110',
-            edge: typeof edgeValue === 'number' ? `${edgeValue.toFixed(1)}%` : edgeValue,
+            pick: play.pick || '',
+            odds: play.pick_odds || '-110',
+            edge: edgeValue,
             confidence: fireNum,
-            time: pick.time_cst || pick.game_time || '',
-            market: pick.market || pick.market_type || 'spread',
-            period: pick.period || 'FG',
-            line: pick.market_line || '',
-            modelPrice: pick.model_prediction || ''
+            time: timeStr,
+            market: marketType,
+            period: play.period || 'FG',
+            line: play.market_line || '',
+            modelPrice: play.model_prediction || ''
         };
     }
 
