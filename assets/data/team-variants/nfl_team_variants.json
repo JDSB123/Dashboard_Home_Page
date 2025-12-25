@@ -1,0 +1,1673 @@
+{
+  "ARI": {
+    "abbreviations": [
+      "1",
+      "ARI",
+      "CRD"
+    ],
+    "names": [
+      "Arizona Cardinals"
+    ],
+    "locations": [
+      "Arizona"
+    ],
+    "nicknames": [
+      "Cardinals"
+    ],
+    "historical": [
+      {
+        "season": "2021",
+        "full_name": "Arizona Cardinals",
+        "location": "Arizona",
+        "nickname": "Cardinals"
+      },
+      {
+        "season": "2022",
+        "full_name": "Arizona Cardinals",
+        "location": "Arizona",
+        "nickname": "Cardinals"
+      },
+      {
+        "season": "2023",
+        "full_name": "Arizona Cardinals",
+        "location": "Arizona",
+        "nickname": "Cardinals"
+      },
+      {
+        "season": "2024",
+        "full_name": "Arizona Cardinals",
+        "location": "Arizona",
+        "nickname": "Cardinals"
+      },
+      {
+        "season": "2025",
+        "full_name": "Arizona Cardinals",
+        "location": "Arizona",
+        "nickname": "Cardinals"
+      }
+    ]
+  },
+  "ATL": {
+    "abbreviations": [
+      "2",
+      "ATL"
+    ],
+    "names": [
+      "Atlanta Falcons"
+    ],
+    "locations": [
+      "Atlanta"
+    ],
+    "nicknames": [
+      "Falcons"
+    ],
+    "historical": [
+      {
+        "season": "2021",
+        "full_name": "Atlanta Falcons",
+        "location": "Atlanta",
+        "nickname": "Falcons"
+      },
+      {
+        "season": "2022",
+        "full_name": "Atlanta Falcons",
+        "location": "Atlanta",
+        "nickname": "Falcons"
+      },
+      {
+        "season": "2023",
+        "full_name": "Atlanta Falcons",
+        "location": "Atlanta",
+        "nickname": "Falcons"
+      },
+      {
+        "season": "2024",
+        "full_name": "Atlanta Falcons",
+        "location": "Atlanta",
+        "nickname": "Falcons"
+      },
+      {
+        "season": "2025",
+        "full_name": "Atlanta Falcons",
+        "location": "Atlanta",
+        "nickname": "Falcons"
+      }
+    ]
+  },
+  "BAL": {
+    "abbreviations": [
+      "3",
+      "BAL",
+      "RAV"
+    ],
+    "names": [
+      "Baltimore Ravens"
+    ],
+    "locations": [
+      "Baltimore"
+    ],
+    "nicknames": [
+      "Ravens"
+    ],
+    "historical": [
+      {
+        "season": "2021",
+        "full_name": "Baltimore Ravens",
+        "location": "Baltimore",
+        "nickname": "Ravens"
+      },
+      {
+        "season": "2022",
+        "full_name": "Baltimore Ravens",
+        "location": "Baltimore",
+        "nickname": "Ravens"
+      },
+      {
+        "season": "2023",
+        "full_name": "Baltimore Ravens",
+        "location": "Baltimore",
+        "nickname": "Ravens"
+      },
+      {
+        "season": "2024",
+        "full_name": "Baltimore Ravens",
+        "location": "Baltimore",
+        "nickname": "Ravens"
+      },
+      {
+        "season": "2025",
+        "full_name": "Baltimore Ravens",
+        "location": "Baltimore",
+        "nickname": "Ravens"
+      }
+    ]
+  },
+  "BUF": {
+    "abbreviations": [
+      "4",
+      "BUF"
+    ],
+    "names": [
+      "Buffalo Bills"
+    ],
+    "locations": [
+      "Buffalo"
+    ],
+    "nicknames": [
+      "Bills"
+    ],
+    "historical": [
+      {
+        "season": "2021",
+        "full_name": "Buffalo Bills",
+        "location": "Buffalo",
+        "nickname": "Bills"
+      },
+      {
+        "season": "2022",
+        "full_name": "Buffalo Bills",
+        "location": "Buffalo",
+        "nickname": "Bills"
+      },
+      {
+        "season": "2023",
+        "full_name": "Buffalo Bills",
+        "location": "Buffalo",
+        "nickname": "Bills"
+      },
+      {
+        "season": "2024",
+        "full_name": "Buffalo Bills",
+        "location": "Buffalo",
+        "nickname": "Bills"
+      },
+      {
+        "season": "2025",
+        "full_name": "Buffalo Bills",
+        "location": "Buffalo",
+        "nickname": "Bills"
+      }
+    ]
+  },
+  "CAR": {
+    "abbreviations": [
+      "5",
+      "CAR"
+    ],
+    "names": [
+      "Carolina Panthers"
+    ],
+    "locations": [
+      "Carolina"
+    ],
+    "nicknames": [
+      "Panthers"
+    ],
+    "historical": [
+      {
+        "season": "2021",
+        "full_name": "Carolina Panthers",
+        "location": "Carolina",
+        "nickname": "Panthers"
+      },
+      {
+        "season": "2022",
+        "full_name": "Carolina Panthers",
+        "location": "Carolina",
+        "nickname": "Panthers"
+      },
+      {
+        "season": "2023",
+        "full_name": "Carolina Panthers",
+        "location": "Carolina",
+        "nickname": "Panthers"
+      },
+      {
+        "season": "2024",
+        "full_name": "Carolina Panthers",
+        "location": "Carolina",
+        "nickname": "Panthers"
+      },
+      {
+        "season": "2025",
+        "full_name": "Carolina Panthers",
+        "location": "Carolina",
+        "nickname": "Panthers"
+      }
+    ]
+  },
+  "CHI": {
+    "abbreviations": [
+      "6",
+      "CHI"
+    ],
+    "names": [
+      "Chicago Bears"
+    ],
+    "locations": [
+      "Chicago"
+    ],
+    "nicknames": [
+      "Bears"
+    ],
+    "historical": [
+      {
+        "season": "2021",
+        "full_name": "Chicago Bears",
+        "location": "Chicago",
+        "nickname": "Bears"
+      },
+      {
+        "season": "2022",
+        "full_name": "Chicago Bears",
+        "location": "Chicago",
+        "nickname": "Bears"
+      },
+      {
+        "season": "2023",
+        "full_name": "Chicago Bears",
+        "location": "Chicago",
+        "nickname": "Bears"
+      },
+      {
+        "season": "2024",
+        "full_name": "Chicago Bears",
+        "location": "Chicago",
+        "nickname": "Bears"
+      },
+      {
+        "season": "2025",
+        "full_name": "Chicago Bears",
+        "location": "Chicago",
+        "nickname": "Bears"
+      }
+    ]
+  },
+  "CIN": {
+    "abbreviations": [
+      "7",
+      "CIN"
+    ],
+    "names": [
+      "Cincinnati Bengals"
+    ],
+    "locations": [
+      "Cincinnati"
+    ],
+    "nicknames": [
+      "Bengals"
+    ],
+    "historical": [
+      {
+        "season": "2021",
+        "full_name": "Cincinnati Bengals",
+        "location": "Cincinnati",
+        "nickname": "Bengals"
+      },
+      {
+        "season": "2022",
+        "full_name": "Cincinnati Bengals",
+        "location": "Cincinnati",
+        "nickname": "Bengals"
+      },
+      {
+        "season": "2023",
+        "full_name": "Cincinnati Bengals",
+        "location": "Cincinnati",
+        "nickname": "Bengals"
+      },
+      {
+        "season": "2024",
+        "full_name": "Cincinnati Bengals",
+        "location": "Cincinnati",
+        "nickname": "Bengals"
+      },
+      {
+        "season": "2025",
+        "full_name": "Cincinnati Bengals",
+        "location": "Cincinnati",
+        "nickname": "Bengals"
+      }
+    ]
+  },
+  "CLE": {
+    "abbreviations": [
+      "8",
+      "CLE"
+    ],
+    "names": [
+      "Cleveland Browns"
+    ],
+    "locations": [
+      "Cleveland"
+    ],
+    "nicknames": [
+      "Browns"
+    ],
+    "historical": [
+      {
+        "season": "2021",
+        "full_name": "Cleveland Browns",
+        "location": "Cleveland",
+        "nickname": "Browns"
+      },
+      {
+        "season": "2022",
+        "full_name": "Cleveland Browns",
+        "location": "Cleveland",
+        "nickname": "Browns"
+      },
+      {
+        "season": "2023",
+        "full_name": "Cleveland Browns",
+        "location": "Cleveland",
+        "nickname": "Browns"
+      },
+      {
+        "season": "2024",
+        "full_name": "Cleveland Browns",
+        "location": "Cleveland",
+        "nickname": "Browns"
+      },
+      {
+        "season": "2025",
+        "full_name": "Cleveland Browns",
+        "location": "Cleveland",
+        "nickname": "Browns"
+      }
+    ]
+  },
+  "DAL": {
+    "abbreviations": [
+      "9",
+      "DAL"
+    ],
+    "names": [
+      "Dallas Cowboys"
+    ],
+    "locations": [
+      "Dallas"
+    ],
+    "nicknames": [
+      "Cowboys"
+    ],
+    "historical": [
+      {
+        "season": "2021",
+        "full_name": "Dallas Cowboys",
+        "location": "Dallas",
+        "nickname": "Cowboys"
+      },
+      {
+        "season": "2022",
+        "full_name": "Dallas Cowboys",
+        "location": "Dallas",
+        "nickname": "Cowboys"
+      },
+      {
+        "season": "2023",
+        "full_name": "Dallas Cowboys",
+        "location": "Dallas",
+        "nickname": "Cowboys"
+      },
+      {
+        "season": "2024",
+        "full_name": "Dallas Cowboys",
+        "location": "Dallas",
+        "nickname": "Cowboys"
+      },
+      {
+        "season": "2025",
+        "full_name": "Dallas Cowboys",
+        "location": "Dallas",
+        "nickname": "Cowboys"
+      }
+    ]
+  },
+  "DEN": {
+    "abbreviations": [
+      "10",
+      "DEN"
+    ],
+    "names": [
+      "Denver Broncos"
+    ],
+    "locations": [
+      "Denver"
+    ],
+    "nicknames": [
+      "Broncos"
+    ],
+    "historical": [
+      {
+        "season": "2021",
+        "full_name": "Denver Broncos",
+        "location": "Denver",
+        "nickname": "Broncos"
+      },
+      {
+        "season": "2022",
+        "full_name": "Denver Broncos",
+        "location": "Denver",
+        "nickname": "Broncos"
+      },
+      {
+        "season": "2023",
+        "full_name": "Denver Broncos",
+        "location": "Denver",
+        "nickname": "Broncos"
+      },
+      {
+        "season": "2024",
+        "full_name": "Denver Broncos",
+        "location": "Denver",
+        "nickname": "Broncos"
+      },
+      {
+        "season": "2025",
+        "full_name": "Denver Broncos",
+        "location": "Denver",
+        "nickname": "Broncos"
+      }
+    ]
+  },
+  "DET": {
+    "abbreviations": [
+      "11",
+      "DET"
+    ],
+    "names": [
+      "Detroit Lions"
+    ],
+    "locations": [
+      "Detroit"
+    ],
+    "nicknames": [
+      "Lions"
+    ],
+    "historical": [
+      {
+        "season": "2021",
+        "full_name": "Detroit Lions",
+        "location": "Detroit",
+        "nickname": "Lions"
+      },
+      {
+        "season": "2022",
+        "full_name": "Detroit Lions",
+        "location": "Detroit",
+        "nickname": "Lions"
+      },
+      {
+        "season": "2023",
+        "full_name": "Detroit Lions",
+        "location": "Detroit",
+        "nickname": "Lions"
+      },
+      {
+        "season": "2024",
+        "full_name": "Detroit Lions",
+        "location": "Detroit",
+        "nickname": "Lions"
+      },
+      {
+        "season": "2025",
+        "full_name": "Detroit Lions",
+        "location": "Detroit",
+        "nickname": "Lions"
+      }
+    ]
+  },
+  "GB": {
+    "abbreviations": [
+      "12",
+      "GB",
+      "GNB"
+    ],
+    "names": [
+      "Green Bay Packers"
+    ],
+    "locations": [
+      "Green Bay"
+    ],
+    "nicknames": [
+      "Packers"
+    ],
+    "historical": [
+      {
+        "season": "2021",
+        "full_name": "Green Bay Packers",
+        "location": "Green Bay",
+        "nickname": "Packers"
+      },
+      {
+        "season": "2022",
+        "full_name": "Green Bay Packers",
+        "location": "Green Bay",
+        "nickname": "Packers"
+      },
+      {
+        "season": "2023",
+        "full_name": "Green Bay Packers",
+        "location": "Green Bay",
+        "nickname": "Packers"
+      },
+      {
+        "season": "2024",
+        "full_name": "Green Bay Packers",
+        "location": "Green Bay",
+        "nickname": "Packers"
+      },
+      {
+        "season": "2025",
+        "full_name": "Green Bay Packers",
+        "location": "Green Bay",
+        "nickname": "Packers"
+      }
+    ]
+  },
+  "HOU": {
+    "abbreviations": [
+      "13",
+      "HOU",
+      "HTX"
+    ],
+    "names": [
+      "Houston Texans"
+    ],
+    "locations": [
+      "Houston"
+    ],
+    "nicknames": [
+      "Texans"
+    ],
+    "historical": [
+      {
+        "season": "2021",
+        "full_name": "Houston Texans",
+        "location": "Houston",
+        "nickname": "Texans"
+      },
+      {
+        "season": "2022",
+        "full_name": "Houston Texans",
+        "location": "Houston",
+        "nickname": "Texans"
+      },
+      {
+        "season": "2023",
+        "full_name": "Houston Texans",
+        "location": "Houston",
+        "nickname": "Texans"
+      },
+      {
+        "season": "2024",
+        "full_name": "Houston Texans",
+        "location": "Houston",
+        "nickname": "Texans"
+      },
+      {
+        "season": "2025",
+        "full_name": "Houston Texans",
+        "location": "Houston",
+        "nickname": "Texans"
+      }
+    ]
+  },
+  "IND": {
+    "abbreviations": [
+      "14",
+      "CLT",
+      "IND"
+    ],
+    "names": [
+      "Indianapolis Colts"
+    ],
+    "locations": [
+      "Indianapolis"
+    ],
+    "nicknames": [
+      "Colts"
+    ],
+    "historical": [
+      {
+        "season": "2021",
+        "full_name": "Indianapolis Colts",
+        "location": "Indianapolis",
+        "nickname": "Colts"
+      },
+      {
+        "season": "2022",
+        "full_name": "Indianapolis Colts",
+        "location": "Indianapolis",
+        "nickname": "Colts"
+      },
+      {
+        "season": "2023",
+        "full_name": "Indianapolis Colts",
+        "location": "Indianapolis",
+        "nickname": "Colts"
+      },
+      {
+        "season": "2024",
+        "full_name": "Indianapolis Colts",
+        "location": "Indianapolis",
+        "nickname": "Colts"
+      },
+      {
+        "season": "2025",
+        "full_name": "Indianapolis Colts",
+        "location": "Indianapolis",
+        "nickname": "Colts"
+      }
+    ]
+  },
+  "JAX": {
+    "abbreviations": [
+      "15",
+      "JAC",
+      "JAX"
+    ],
+    "names": [
+      "Jacksonville Jaguars"
+    ],
+    "locations": [
+      "Jacksonville"
+    ],
+    "nicknames": [
+      "Jaguars"
+    ],
+    "historical": [
+      {
+        "season": "2021",
+        "full_name": "Jacksonville Jaguars",
+        "location": "Jacksonville",
+        "nickname": "Jaguars"
+      },
+      {
+        "season": "2022",
+        "full_name": "Jacksonville Jaguars",
+        "location": "Jacksonville",
+        "nickname": "Jaguars"
+      },
+      {
+        "season": "2023",
+        "full_name": "Jacksonville Jaguars",
+        "location": "Jacksonville",
+        "nickname": "Jaguars"
+      },
+      {
+        "season": "2024",
+        "full_name": "Jacksonville Jaguars",
+        "location": "Jacksonville",
+        "nickname": "Jaguars"
+      },
+      {
+        "season": "2025",
+        "full_name": "Jacksonville Jaguars",
+        "location": "Jacksonville",
+        "nickname": "Jaguars"
+      }
+    ]
+  },
+  "KC": {
+    "abbreviations": [
+      "16",
+      "KAN",
+      "KC"
+    ],
+    "names": [
+      "Kansas City Chiefs"
+    ],
+    "locations": [
+      "Kansas City"
+    ],
+    "nicknames": [
+      "Chiefs"
+    ],
+    "historical": [
+      {
+        "season": "2021",
+        "full_name": "Kansas City Chiefs",
+        "location": "Kansas City",
+        "nickname": "Chiefs"
+      },
+      {
+        "season": "2022",
+        "full_name": "Kansas City Chiefs",
+        "location": "Kansas City",
+        "nickname": "Chiefs"
+      },
+      {
+        "season": "2023",
+        "full_name": "Kansas City Chiefs",
+        "location": "Kansas City",
+        "nickname": "Chiefs"
+      },
+      {
+        "season": "2024",
+        "full_name": "Kansas City Chiefs",
+        "location": "Kansas City",
+        "nickname": "Chiefs"
+      },
+      {
+        "season": "2025",
+        "full_name": "Kansas City Chiefs",
+        "location": "Kansas City",
+        "nickname": "Chiefs"
+      }
+    ]
+  },
+  "MIA": {
+    "abbreviations": [
+      "17",
+      "MIA"
+    ],
+    "names": [
+      "Miami Dolphins"
+    ],
+    "locations": [
+      "Miami"
+    ],
+    "nicknames": [
+      "Dolphins"
+    ],
+    "historical": [
+      {
+        "season": "2021",
+        "full_name": "Miami Dolphins",
+        "location": "Miami",
+        "nickname": "Dolphins"
+      },
+      {
+        "season": "2022",
+        "full_name": "Miami Dolphins",
+        "location": "Miami",
+        "nickname": "Dolphins"
+      },
+      {
+        "season": "2023",
+        "full_name": "Miami Dolphins",
+        "location": "Miami",
+        "nickname": "Dolphins"
+      },
+      {
+        "season": "2024",
+        "full_name": "Miami Dolphins",
+        "location": "Miami",
+        "nickname": "Dolphins"
+      },
+      {
+        "season": "2025",
+        "full_name": "Miami Dolphins",
+        "location": "Miami",
+        "nickname": "Dolphins"
+      }
+    ]
+  },
+  "MIN": {
+    "abbreviations": [
+      "18",
+      "MIN"
+    ],
+    "names": [
+      "Minnesota Vikings"
+    ],
+    "locations": [
+      "Minnesota"
+    ],
+    "nicknames": [
+      "Vikings"
+    ],
+    "historical": [
+      {
+        "season": "2021",
+        "full_name": "Minnesota Vikings",
+        "location": "Minnesota",
+        "nickname": "Vikings"
+      },
+      {
+        "season": "2022",
+        "full_name": "Minnesota Vikings",
+        "location": "Minnesota",
+        "nickname": "Vikings"
+      },
+      {
+        "season": "2023",
+        "full_name": "Minnesota Vikings",
+        "location": "Minnesota",
+        "nickname": "Vikings"
+      },
+      {
+        "season": "2024",
+        "full_name": "Minnesota Vikings",
+        "location": "Minnesota",
+        "nickname": "Vikings"
+      },
+      {
+        "season": "2025",
+        "full_name": "Minnesota Vikings",
+        "location": "Minnesota",
+        "nickname": "Vikings"
+      }
+    ]
+  },
+  "NE": {
+    "abbreviations": [
+      "19",
+      "NE",
+      "NWE"
+    ],
+    "names": [
+      "New England Patriots"
+    ],
+    "locations": [
+      "New England"
+    ],
+    "nicknames": [
+      "Patriots"
+    ],
+    "historical": [
+      {
+        "season": "2021",
+        "full_name": "New England Patriots",
+        "location": "New England",
+        "nickname": "Patriots"
+      },
+      {
+        "season": "2022",
+        "full_name": "New England Patriots",
+        "location": "New England",
+        "nickname": "Patriots"
+      },
+      {
+        "season": "2023",
+        "full_name": "New England Patriots",
+        "location": "New England",
+        "nickname": "Patriots"
+      },
+      {
+        "season": "2024",
+        "full_name": "New England Patriots",
+        "location": "New England",
+        "nickname": "Patriots"
+      },
+      {
+        "season": "2025",
+        "full_name": "New England Patriots",
+        "location": "New England",
+        "nickname": "Patriots"
+      }
+    ]
+  },
+  "NO": {
+    "abbreviations": [
+      "20",
+      "NO",
+      "NOR"
+    ],
+    "names": [
+      "New Orleans Saints"
+    ],
+    "locations": [
+      "New Orleans"
+    ],
+    "nicknames": [
+      "Saints"
+    ],
+    "historical": [
+      {
+        "season": "2021",
+        "full_name": "New Orleans Saints",
+        "location": "New Orleans",
+        "nickname": "Saints"
+      },
+      {
+        "season": "2022",
+        "full_name": "New Orleans Saints",
+        "location": "New Orleans",
+        "nickname": "Saints"
+      },
+      {
+        "season": "2023",
+        "full_name": "New Orleans Saints",
+        "location": "New Orleans",
+        "nickname": "Saints"
+      },
+      {
+        "season": "2024",
+        "full_name": "New Orleans Saints",
+        "location": "New Orleans",
+        "nickname": "Saints"
+      },
+      {
+        "season": "2025",
+        "full_name": "New Orleans Saints",
+        "location": "New Orleans",
+        "nickname": "Saints"
+      }
+    ]
+  },
+  "NYG": {
+    "abbreviations": [
+      "21",
+      "NYG"
+    ],
+    "names": [
+      "New York Giants"
+    ],
+    "locations": [
+      "New York Giants"
+    ],
+    "nicknames": [
+      "Giants"
+    ],
+    "historical": [
+      {
+        "season": "2021",
+        "full_name": "New York Giants",
+        "location": "New York Giants",
+        "nickname": "Giants"
+      },
+      {
+        "season": "2022",
+        "full_name": "New York Giants",
+        "location": "New York Giants",
+        "nickname": "Giants"
+      },
+      {
+        "season": "2023",
+        "full_name": "New York Giants",
+        "location": "New York Giants",
+        "nickname": "Giants"
+      },
+      {
+        "season": "2024",
+        "full_name": "New York Giants",
+        "location": "New York Giants",
+        "nickname": "Giants"
+      },
+      {
+        "season": "2025",
+        "full_name": "New York Giants",
+        "location": "New York Giants",
+        "nickname": "Giants"
+      }
+    ]
+  },
+  "NYJ": {
+    "abbreviations": [
+      "22",
+      "NYJ"
+    ],
+    "names": [
+      "New York Jets"
+    ],
+    "locations": [
+      "New York Jets"
+    ],
+    "nicknames": [
+      "Jets"
+    ],
+    "historical": [
+      {
+        "season": "2021",
+        "full_name": "New York Jets",
+        "location": "New York Jets",
+        "nickname": "Jets"
+      },
+      {
+        "season": "2022",
+        "full_name": "New York Jets",
+        "location": "New York Jets",
+        "nickname": "Jets"
+      },
+      {
+        "season": "2023",
+        "full_name": "New York Jets",
+        "location": "New York Jets",
+        "nickname": "Jets"
+      },
+      {
+        "season": "2024",
+        "full_name": "New York Jets",
+        "location": "New York Jets",
+        "nickname": "Jets"
+      },
+      {
+        "season": "2025",
+        "full_name": "New York Jets",
+        "location": "New York Jets",
+        "nickname": "Jets"
+      }
+    ]
+  },
+  "OAK": {
+    "abbreviations": [
+      "23",
+      "OAK",
+      "RAI"
+    ],
+    "names": [
+      "Oakland Raiders"
+    ],
+    "locations": [
+      "Oakland"
+    ],
+    "nicknames": [
+      "Raiders"
+    ],
+    "historical": [
+      {
+        "season": "2015",
+        "full_name": "Oakland Raiders",
+        "location": "Oakland",
+        "nickname": "Raiders"
+      },
+      {
+        "season": "2016",
+        "full_name": "Oakland Raiders",
+        "location": "Oakland",
+        "nickname": "Raiders"
+      },
+      {
+        "season": "2017",
+        "full_name": "Oakland Raiders",
+        "location": "Oakland",
+        "nickname": "Raiders"
+      },
+      {
+        "season": "2018",
+        "full_name": "Oakland Raiders",
+        "location": "Oakland",
+        "nickname": "Raiders"
+      },
+      {
+        "season": "2019",
+        "full_name": "Oakland Raiders",
+        "location": "Oakland",
+        "nickname": "Raiders"
+      }
+    ]
+  },
+  "PHI": {
+    "abbreviations": [
+      "24",
+      "PHI"
+    ],
+    "names": [
+      "Philadelphia Eagles"
+    ],
+    "locations": [
+      "Philadelphia"
+    ],
+    "nicknames": [
+      "Eagles"
+    ],
+    "historical": [
+      {
+        "season": "2021",
+        "full_name": "Philadelphia Eagles",
+        "location": "Philadelphia",
+        "nickname": "Eagles"
+      },
+      {
+        "season": "2022",
+        "full_name": "Philadelphia Eagles",
+        "location": "Philadelphia",
+        "nickname": "Eagles"
+      },
+      {
+        "season": "2023",
+        "full_name": "Philadelphia Eagles",
+        "location": "Philadelphia",
+        "nickname": "Eagles"
+      },
+      {
+        "season": "2024",
+        "full_name": "Philadelphia Eagles",
+        "location": "Philadelphia",
+        "nickname": "Eagles"
+      },
+      {
+        "season": "2025",
+        "full_name": "Philadelphia Eagles",
+        "location": "Philadelphia",
+        "nickname": "Eagles"
+      }
+    ]
+  },
+  "PIT": {
+    "abbreviations": [
+      "25",
+      "PIT"
+    ],
+    "names": [
+      "Pittsburgh Steelers"
+    ],
+    "locations": [
+      "Pittsburgh"
+    ],
+    "nicknames": [
+      "Steelers"
+    ],
+    "historical": [
+      {
+        "season": "2021",
+        "full_name": "Pittsburgh Steelers",
+        "location": "Pittsburgh",
+        "nickname": "Steelers"
+      },
+      {
+        "season": "2022",
+        "full_name": "Pittsburgh Steelers",
+        "location": "Pittsburgh",
+        "nickname": "Steelers"
+      },
+      {
+        "season": "2023",
+        "full_name": "Pittsburgh Steelers",
+        "location": "Pittsburgh",
+        "nickname": "Steelers"
+      },
+      {
+        "season": "2024",
+        "full_name": "Pittsburgh Steelers",
+        "location": "Pittsburgh",
+        "nickname": "Steelers"
+      },
+      {
+        "season": "2025",
+        "full_name": "Pittsburgh Steelers",
+        "location": "Pittsburgh",
+        "nickname": "Steelers"
+      }
+    ]
+  },
+  "SD": {
+    "abbreviations": [
+      "27",
+      "SD",
+      "SDG"
+    ],
+    "names": [
+      "San Diego Chargers"
+    ],
+    "locations": [
+      "San Diego"
+    ],
+    "nicknames": [
+      "Chargers"
+    ],
+    "historical": [
+      {
+        "season": "2012",
+        "full_name": "San Diego Chargers",
+        "location": "San Diego",
+        "nickname": "Chargers"
+      },
+      {
+        "season": "2013",
+        "full_name": "San Diego Chargers",
+        "location": "San Diego",
+        "nickname": "Chargers"
+      },
+      {
+        "season": "2014",
+        "full_name": "San Diego Chargers",
+        "location": "San Diego",
+        "nickname": "Chargers"
+      },
+      {
+        "season": "2015",
+        "full_name": "San Diego Chargers",
+        "location": "San Diego",
+        "nickname": "Chargers"
+      },
+      {
+        "season": "2016",
+        "full_name": "San Diego Chargers",
+        "location": "San Diego",
+        "nickname": "Chargers"
+      }
+    ]
+  },
+  "SEA": {
+    "abbreviations": [
+      "29",
+      "SEA"
+    ],
+    "names": [
+      "Seattle Seahawks"
+    ],
+    "locations": [
+      "Seattle"
+    ],
+    "nicknames": [
+      "Seahawks"
+    ],
+    "historical": [
+      {
+        "season": "2021",
+        "full_name": "Seattle Seahawks",
+        "location": "Seattle",
+        "nickname": "Seahawks"
+      },
+      {
+        "season": "2022",
+        "full_name": "Seattle Seahawks",
+        "location": "Seattle",
+        "nickname": "Seahawks"
+      },
+      {
+        "season": "2023",
+        "full_name": "Seattle Seahawks",
+        "location": "Seattle",
+        "nickname": "Seahawks"
+      },
+      {
+        "season": "2024",
+        "full_name": "Seattle Seahawks",
+        "location": "Seattle",
+        "nickname": "Seahawks"
+      },
+      {
+        "season": "2025",
+        "full_name": "Seattle Seahawks",
+        "location": "Seattle",
+        "nickname": "Seahawks"
+      }
+    ]
+  },
+  "SF": {
+    "abbreviations": [
+      "28",
+      "SF",
+      "SFO"
+    ],
+    "names": [
+      "San Francisco 49ers"
+    ],
+    "locations": [
+      "San Francisco"
+    ],
+    "nicknames": [
+      "49ers"
+    ],
+    "historical": [
+      {
+        "season": "2021",
+        "full_name": "San Francisco 49ers",
+        "location": "San Francisco",
+        "nickname": "49ers"
+      },
+      {
+        "season": "2022",
+        "full_name": "San Francisco 49ers",
+        "location": "San Francisco",
+        "nickname": "49ers"
+      },
+      {
+        "season": "2023",
+        "full_name": "San Francisco 49ers",
+        "location": "San Francisco",
+        "nickname": "49ers"
+      },
+      {
+        "season": "2024",
+        "full_name": "San Francisco 49ers",
+        "location": "San Francisco",
+        "nickname": "49ers"
+      },
+      {
+        "season": "2025",
+        "full_name": "San Francisco 49ers",
+        "location": "San Francisco",
+        "nickname": "49ers"
+      }
+    ]
+  },
+  "STL": {
+    "abbreviations": [
+      "26",
+      "RAM",
+      "STL"
+    ],
+    "names": [
+      "St Louis Rams"
+    ],
+    "locations": [
+      "St Louis"
+    ],
+    "nicknames": [
+      "Rams"
+    ],
+    "historical": [
+      {
+        "season": "2011",
+        "full_name": "St Louis Rams",
+        "location": "St Louis",
+        "nickname": "Rams"
+      },
+      {
+        "season": "2012",
+        "full_name": "St Louis Rams",
+        "location": "St Louis",
+        "nickname": "Rams"
+      },
+      {
+        "season": "2013",
+        "full_name": "St Louis Rams",
+        "location": "St Louis",
+        "nickname": "Rams"
+      },
+      {
+        "season": "2014",
+        "full_name": "St Louis Rams",
+        "location": "St Louis",
+        "nickname": "Rams"
+      },
+      {
+        "season": "2015",
+        "full_name": "St Louis Rams",
+        "location": "St Louis",
+        "nickname": "Rams"
+      }
+    ]
+  },
+  "TB": {
+    "abbreviations": [
+      "30",
+      "TAM",
+      "TB"
+    ],
+    "names": [
+      "Tampa Bay Buccaneers"
+    ],
+    "locations": [
+      "Tampa Bay"
+    ],
+    "nicknames": [
+      "Buccaneers"
+    ],
+    "historical": [
+      {
+        "season": "2021",
+        "full_name": "Tampa Bay Buccaneers",
+        "location": "Tampa Bay",
+        "nickname": "Buccaneers"
+      },
+      {
+        "season": "2022",
+        "full_name": "Tampa Bay Buccaneers",
+        "location": "Tampa Bay",
+        "nickname": "Buccaneers"
+      },
+      {
+        "season": "2023",
+        "full_name": "Tampa Bay Buccaneers",
+        "location": "Tampa Bay",
+        "nickname": "Buccaneers"
+      },
+      {
+        "season": "2024",
+        "full_name": "Tampa Bay Buccaneers",
+        "location": "Tampa Bay",
+        "nickname": "Buccaneers"
+      },
+      {
+        "season": "2025",
+        "full_name": "Tampa Bay Buccaneers",
+        "location": "Tampa Bay",
+        "nickname": "Buccaneers"
+      }
+    ]
+  },
+  "TEN": {
+    "abbreviations": [
+      "31",
+      "OTI",
+      "TEN"
+    ],
+    "names": [
+      "Tennessee Titans"
+    ],
+    "locations": [
+      "Tennessee"
+    ],
+    "nicknames": [
+      "Titans"
+    ],
+    "historical": [
+      {
+        "season": "2021",
+        "full_name": "Tennessee Titans",
+        "location": "Tennessee",
+        "nickname": "Titans"
+      },
+      {
+        "season": "2022",
+        "full_name": "Tennessee Titans",
+        "location": "Tennessee",
+        "nickname": "Titans"
+      },
+      {
+        "season": "2023",
+        "full_name": "Tennessee Titans",
+        "location": "Tennessee",
+        "nickname": "Titans"
+      },
+      {
+        "season": "2024",
+        "full_name": "Tennessee Titans",
+        "location": "Tennessee",
+        "nickname": "Titans"
+      },
+      {
+        "season": "2025",
+        "full_name": "Tennessee Titans",
+        "location": "Tennessee",
+        "nickname": "Titans"
+      }
+    ]
+  },
+  "WAS": {
+    "abbreviations": [
+      "32",
+      "WAS",
+      "WSH"
+    ],
+    "names": [
+      "Washington Commanders",
+      "Washington Football Team",
+      "Washington Redskins"
+    ],
+    "locations": [
+      "Washington"
+    ],
+    "nicknames": [
+      "Commanders",
+      "Football Team",
+      "Redskins"
+    ],
+    "historical": [
+      {
+        "season": "2021",
+        "full_name": "Washington Football Team",
+        "location": "Washington",
+        "nickname": "Football Team"
+      },
+      {
+        "season": "2022",
+        "full_name": "Washington Commanders",
+        "location": "Washington",
+        "nickname": "Commanders"
+      },
+      {
+        "season": "2023",
+        "full_name": "Washington Commanders",
+        "location": "Washington",
+        "nickname": "Commanders"
+      },
+      {
+        "season": "2024",
+        "full_name": "Washington Commanders",
+        "location": "Washington",
+        "nickname": "Commanders"
+      },
+      {
+        "season": "2025",
+        "full_name": "Washington Commanders",
+        "location": "Washington",
+        "nickname": "Commanders"
+      }
+    ]
+  },
+  "LA": {
+    "abbreviations": [
+      "26",
+      "LA",
+      "LAR",
+      "LARM",
+      "RAM"
+    ],
+    "names": [
+      "Los Angeles Rams"
+    ],
+    "locations": [
+      "Los Angeles Rams"
+    ],
+    "nicknames": [
+      "Rams"
+    ],
+    "historical": [
+      {
+        "season": "2021",
+        "full_name": "Los Angeles Rams",
+        "location": "Los Angeles Rams",
+        "nickname": "Rams"
+      },
+      {
+        "season": "2022",
+        "full_name": "Los Angeles Rams",
+        "location": "Los Angeles Rams",
+        "nickname": "Rams"
+      },
+      {
+        "season": "2023",
+        "full_name": "Los Angeles Rams",
+        "location": "Los Angeles Rams",
+        "nickname": "Rams"
+      },
+      {
+        "season": "2024",
+        "full_name": "Los Angeles Rams",
+        "location": "Los Angeles Rams",
+        "nickname": "Rams"
+      },
+      {
+        "season": "2025",
+        "full_name": "Los Angeles Rams",
+        "location": "Los Angeles Rams",
+        "nickname": "Rams"
+      }
+    ]
+  },
+  "LAC": {
+    "abbreviations": [
+      "27",
+      "LAC",
+      "LACH",
+      "SDG"
+    ],
+    "names": [
+      "Los Angeles Chargers"
+    ],
+    "locations": [
+      "Los Angeles Chargers"
+    ],
+    "nicknames": [
+      "Chargers"
+    ],
+    "historical": [
+      {
+        "season": "2021",
+        "full_name": "Los Angeles Chargers",
+        "location": "Los Angeles Chargers",
+        "nickname": "Chargers"
+      },
+      {
+        "season": "2022",
+        "full_name": "Los Angeles Chargers",
+        "location": "Los Angeles Chargers",
+        "nickname": "Chargers"
+      },
+      {
+        "season": "2023",
+        "full_name": "Los Angeles Chargers",
+        "location": "Los Angeles Chargers",
+        "nickname": "Chargers"
+      },
+      {
+        "season": "2024",
+        "full_name": "Los Angeles Chargers",
+        "location": "Los Angeles Chargers",
+        "nickname": "Chargers"
+      },
+      {
+        "season": "2025",
+        "full_name": "Los Angeles Chargers",
+        "location": "Los Angeles Chargers",
+        "nickname": "Chargers"
+      }
+    ]
+  },
+  "LV": {
+    "abbreviations": [
+      "23",
+      "LV",
+      "RAI"
+    ],
+    "names": [
+      "Las Vegas Raiders"
+    ],
+    "locations": [
+      "Las Vegas"
+    ],
+    "nicknames": [
+      "Raiders"
+    ],
+    "historical": [
+      {
+        "season": "2021",
+        "full_name": "Las Vegas Raiders",
+        "location": "Las Vegas",
+        "nickname": "Raiders"
+      },
+      {
+        "season": "2022",
+        "full_name": "Las Vegas Raiders",
+        "location": "Las Vegas",
+        "nickname": "Raiders"
+      },
+      {
+        "season": "2023",
+        "full_name": "Las Vegas Raiders",
+        "location": "Las Vegas",
+        "nickname": "Raiders"
+      },
+      {
+        "season": "2024",
+        "full_name": "Las Vegas Raiders",
+        "location": "Las Vegas",
+        "nickname": "Raiders"
+      },
+      {
+        "season": "2025",
+        "full_name": "Las Vegas Raiders",
+        "location": "Las Vegas",
+        "nickname": "Raiders"
+      }
+    ]
+  }
+}

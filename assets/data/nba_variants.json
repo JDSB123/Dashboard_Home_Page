@@ -1,0 +1,446 @@
+{
+  "los angeles lakers": {
+    "canonical": "Los Angeles Lakers",
+    "code": "LOS_ANGELE"
+  },
+  "lakers": {
+    "canonical": "Los Angeles Lakers",
+    "code": "LOS_ANGELE"
+  },
+  "la lakers": {
+    "canonical": "Los Angeles Lakers",
+    "code": "LAL"
+  },
+  "losangeleslakers": {
+    "canonical": "Los Angeles Lakers",
+    "code": "LAL"
+  },
+  "l.a. lakers": {
+    "canonical": "Los Angeles Lakers",
+    "code": "LAL"
+  },
+  "lal": {
+    "canonical": "Los Angeles Lakers",
+    "code": "LOS_ANGELE"
+  },
+  "boston celtics": {
+    "canonical": "Boston Celtics",
+    "code": "BOSTON_CEL"
+  },
+  "celtics": {
+    "canonical": "Boston Celtics",
+    "code": "BOS"
+  },
+  "bos": {
+    "canonical": "Boston Celtics",
+    "code": "BOS"
+  },
+  "new york knicks": {
+    "canonical": "New York Knicks",
+    "code": "NEW_YORK_K"
+  },
+  "knicks": {
+    "canonical": "New York Knicks",
+    "code": "NYK"
+  },
+  "ny knicks": {
+    "canonical": "New York Knicks",
+    "code": "NYK"
+  },
+  "nyk": {
+    "canonical": "New York Knicks",
+    "code": "NYK"
+  },
+  "golden state warriors": {
+    "canonical": "Golden State Warriors",
+    "code": "GOLDEN_STA"
+  },
+  "warriors": {
+    "canonical": "Golden State Warriors",
+    "code": "GOLDEN_STA"
+  },
+  "gsw": {
+    "canonical": "Golden State Warriors",
+    "code": "GSW"
+  },
+  "gs warriors": {
+    "canonical": "Golden State Warriors",
+    "code": "GSW"
+  },
+  "brooklyn nets": {
+    "canonical": "Brooklyn Nets",
+    "code": "BROOKLYN_N"
+  },
+  "nets": {
+    "canonical": "Brooklyn Nets",
+    "code": "BKN"
+  },
+  "bkn": {
+    "canonical": "Brooklyn Nets",
+    "code": "BKN"
+  },
+  "bkn nets": {
+    "canonical": "Brooklyn Nets",
+    "code": "BKN"
+  },
+  "miami heat": {
+    "canonical": "Miami Heat",
+    "code": "MIAMI_HEAT"
+  },
+  "heat": {
+    "canonical": "Miami Heat",
+    "code": "MIA"
+  },
+  "mia": {
+    "canonical": "Miami Heat",
+    "code": "MIA"
+  },
+  "philadelphia 76ers": {
+    "canonical": "Philadelphia 76ers",
+    "code": "PHILADELPH"
+  },
+  "76ers": {
+    "canonical": "Philadelphia 76Ers",
+    "code": "PHI"
+  },
+  "sixers": {
+    "canonical": "Philadelphia 76Ers",
+    "code": "PHI"
+  },
+  "phi": {
+    "canonical": "Philadelphia 76Ers",
+    "code": "PHI"
+  },
+  "phi 76ers": {
+    "canonical": "Philadelphia 76Ers",
+    "code": "PHI"
+  },
+  "los angeles clippers": {
+    "canonical": "Los Angeles Clippers",
+    "code": "LOS_ANGELE"
+  },
+  "clippers": {
+    "canonical": "Los Angeles Clippers",
+    "code": "LAC"
+  },
+  "lac": {
+    "canonical": "Los Angeles Clippers",
+    "code": "LAC"
+  },
+  "la clippers": {
+    "canonical": "Los Angeles Clippers",
+    "code": "LAC"
+  },
+  "denver nuggets": {
+    "canonical": "Denver Nuggets",
+    "code": "DENVER_NUG"
+  },
+  "nuggets": {
+    "canonical": "Denver Nuggets",
+    "code": "DEN"
+  },
+  "den": {
+    "canonical": "Denver Nuggets",
+    "code": "DEN"
+  },
+  "oklahoma city thunder": {
+    "canonical": "Oklahoma City Thunder",
+    "code": "OKLAHOMA_C"
+  },
+  "thunder": {
+    "canonical": "Oklahoma City Thunder",
+    "code": "OKC"
+  },
+  "okc": {
+    "canonical": "Oklahoma City Thunder",
+    "code": "OKC"
+  },
+  "okc thunder": {
+    "canonical": "Oklahoma City Thunder",
+    "code": "OKC"
+  },
+  "new orleans pelicans": {
+    "canonical": "New Orleans Pelicans",
+    "code": "NEW_ORLEAN"
+  },
+  "pelicans": {
+    "canonical": "New Orleans Pelicans",
+    "code": "NOP"
+  },
+  "nop": {
+    "canonical": "New Orleans Pelicans",
+    "code": "NOP"
+  },
+  "no pelicans": {
+    "canonical": "New Orleans Pelicans",
+    "code": "NOP"
+  },
+  "san antonio spurs": {
+    "canonical": "San Antonio Spurs",
+    "code": "SAN_ANTONI"
+  },
+  "spurs": {
+    "canonical": "San Antonio Spurs",
+    "code": "SAS"
+  },
+  "sas": {
+    "canonical": "San Antonio Spurs",
+    "code": "SAS"
+  },
+  "sa spurs": {
+    "canonical": "San Antonio Spurs",
+    "code": "SAS"
+  },
+  "portland trail blazers": {
+    "canonical": "Portland Trail Blazers",
+    "code": "PORTLAND_T"
+  },
+  "trail blazers": {
+    "canonical": "Portland Trail Blazers",
+    "code": "POR"
+  },
+  "blazers": {
+    "canonical": "Portland Trail Blazers",
+    "code": "POR"
+  },
+  "portland": {
+    "canonical": "Portland Trail Blazers",
+    "code": "POR"
+  },
+  "por": {
+    "canonical": "Portland Trail Blazers",
+    "code": "POR"
+  },
+  "por trail blazers": {
+    "canonical": "Portland Trail Blazers",
+    "code": "POR"
+  },
+  "phoenix suns": {
+    "canonical": "Phoenix Suns",
+    "code": "PHOENIX_SU"
+  },
+  "suns": {
+    "canonical": "Phoenix Suns",
+    "code": "PHX"
+  },
+  "phx": {
+    "canonical": "Phoenix Suns",
+    "code": "PHX"
+  },
+  "phx suns": {
+    "canonical": "Phoenix Suns",
+    "code": "PHX"
+  },
+  "atlanta hawks": {
+    "canonical": "Atlanta Hawks",
+    "code": "ATLANTA_HA"
+  },
+  "hawks": {
+    "canonical": "Atlanta Hawks",
+    "code": "ATL"
+  },
+  "atl": {
+    "canonical": "Atlanta Hawks",
+    "code": "ATL"
+  },
+  "detroit pistons": {
+    "canonical": "Detroit Pistons",
+    "code": "DETROIT_PI"
+  },
+  "pistons": {
+    "canonical": "Detroit Pistons",
+    "code": "DET"
+  },
+  "det": {
+    "canonical": "Detroit Pistons",
+    "code": "DET"
+  },
+  "cleveland cavaliers": {
+    "canonical": "Cleveland Cavaliers",
+    "code": "CLEVELAND_"
+  },
+  "cavaliers": {
+    "canonical": "Cleveland Cavaliers",
+    "code": "CLE"
+  },
+  "cavs": {
+    "canonical": "Cleveland Cavaliers",
+    "code": "CLE"
+  },
+  "cle": {
+    "canonical": "Cleveland Cavaliers",
+    "code": "CLE"
+  },
+  "chicago bulls": {
+    "canonical": "Chicago Bulls",
+    "code": "CHICAGO_BU"
+  },
+  "bulls": {
+    "canonical": "Chicago Bulls",
+    "code": "CHI"
+  },
+  "chi": {
+    "canonical": "Chicago Bulls",
+    "code": "CHI"
+  },
+  "indiana pacers": {
+    "canonical": "Indiana Pacers",
+    "code": "INDIANA_PA"
+  },
+  "pacers": {
+    "canonical": "Indiana Pacers",
+    "code": "IND"
+  },
+  "ind": {
+    "canonical": "Indiana Pacers",
+    "code": "IND"
+  },
+  "dallas mavericks": {
+    "canonical": "Dallas Mavericks",
+    "code": "DALLAS_MAV"
+  },
+  "mavericks": {
+    "canonical": "Dallas Mavericks",
+    "code": "DAL"
+  },
+  "mavs": {
+    "canonical": "Dallas Mavericks",
+    "code": "DAL"
+  },
+  "dal": {
+    "canonical": "Dallas Mavericks",
+    "code": "DAL"
+  },
+  "minnesota timberwolves": {
+    "canonical": "Minnesota Timberwolves",
+    "code": "MINNESOTA_"
+  },
+  "timberwolves": {
+    "canonical": "Minnesota Timberwolves",
+    "code": "MIN"
+  },
+  "twolves": {
+    "canonical": "Minnesota Timberwolves",
+    "code": "MIN"
+  },
+  "min": {
+    "canonical": "Minnesota Timberwolves",
+    "code": "MIN"
+  },
+  "utah jazz": {
+    "canonical": "Utah Jazz",
+    "code": "UTAH_JAZZ"
+  },
+  "jazz": {
+    "canonical": "Utah Jazz",
+    "code": "UTAH"
+  },
+  "uta": {
+    "canonical": "Utah Jazz",
+    "code": "UTAH"
+  },
+  "sacramento kings": {
+    "canonical": "Sacramento Kings",
+    "code": "SACRAMENTO"
+  },
+  "kings": {
+    "canonical": "Sacramento Kings",
+    "code": "SAC"
+  },
+  "sac": {
+    "canonical": "Sacramento Kings",
+    "code": "SAC"
+  },
+  "orlando magic": {
+    "canonical": "Orlando Magic",
+    "code": "ORLANDO_MA"
+  },
+  "magic": {
+    "canonical": "Orlando Magic",
+    "code": "ORL"
+  },
+  "orl": {
+    "canonical": "Orlando Magic",
+    "code": "ORL"
+  },
+  "toronto raptors": {
+    "canonical": "Toronto Raptors",
+    "code": "TORONTO_RA"
+  },
+  "raptors": {
+    "canonical": "Toronto Raptors",
+    "code": "TOR"
+  },
+  "tor": {
+    "canonical": "Toronto Raptors",
+    "code": "TOR"
+  },
+  "tor raptors": {
+    "canonical": "Toronto Raptors",
+    "code": "TOR"
+  },
+  "houston rockets": {
+    "canonical": "Houston Rockets",
+    "code": "HOUSTON_RO"
+  },
+  "rockets": {
+    "canonical": "Houston Rockets",
+    "code": "HOU"
+  },
+  "hou": {
+    "canonical": "Houston Rockets",
+    "code": "HOU"
+  },
+  "washington wizards": {
+    "canonical": "Washington Wizards",
+    "code": "WASHINGTON"
+  },
+  "wizards": {
+    "canonical": "Washington Wizards",
+    "code": "WAS"
+  },
+  "was": {
+    "canonical": "Washington Wizards",
+    "code": "WAS"
+  },
+  "was wizards": {
+    "canonical": "Washington Wizards",
+    "code": "WAS"
+  },
+  "memphis grizzlies": {
+    "canonical": "Memphis Grizzlies",
+    "code": "MEMPHIS_GR"
+  },
+  "grizzlies": {
+    "canonical": "Memphis Grizzlies",
+    "code": "MEM"
+  },
+  "mem": {
+    "canonical": "Memphis Grizzlies",
+    "code": "MEM"
+  },
+  "milwaukee bucks": {
+    "canonical": "Milwaukee Bucks",
+    "code": "MILWAUKEE_"
+  },
+  "bucks": {
+    "canonical": "Milwaukee Bucks",
+    "code": "MIL"
+  },
+  "mil": {
+    "canonical": "Milwaukee Bucks",
+    "code": "MIL"
+  },
+  "charlotte hornets": {
+    "canonical": "Charlotte Hornets",
+    "code": "CHARLOTTE_"
+  },
+  "hornets": {
+    "canonical": "Charlotte Hornets",
+    "code": "CHA"
+  },
+  "cha": {
+    "canonical": "Charlotte Hornets",
+    "code": "CHA"
+  }
+}
