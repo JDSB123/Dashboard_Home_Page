@@ -1,7 +1,6 @@
 /**
  * Dashboard Filters Adapter
- * Adapts the Weekly Lineup filter UI pattern for the Dashboard
- * Handles dropdown positioning, visibility, and interaction with TableFilters
+ * Handles table header filter dropdowns for the Dashboard
  */
 (function() {
     'use strict';
@@ -9,8 +8,8 @@
     const DashboardFilters = {
         init() {
             console.log('Initializing Dashboard Filters Adapter...');
-            this.initFilterButtons();
-            this.initFilterInteractions();
+            this.initHeaderFilters();
+            this.initFilterItemClicks();
             
             // Close dropdowns on click outside
             document.addEventListener('click', (e) => {
@@ -19,65 +18,137 @@
                 }
             });
 
-            // Close on scroll
-            window.addEventListener('scroll', () => this.closeAllDropdowns(), { passive: true });
-            const tableContainer = document.querySelector('.table-container');
-            if (tableContainer) {
-                tableContainer.addEventListener('scroll', () => this.closeAllDropdowns(), { passive: true });
-            }
+            // Close on Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') this.closeAllDropdowns();
+            });
         },
 
-        initFilterButtons() {
-            const buttons = document.querySelectorAll('.th-filter-btn');
-            buttons.forEach(btn => {
+        initHeaderFilters() {
+            // Find all filter buttons in table headers
+            const filterBtns = document.querySelectorAll('.th-filter-btn');
+            console.log('Found filter buttons:', filterBtns.length);
+            
+            filterBtns.forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    this.toggleDropdown(btn);
+                    
+                    const dropdownId = btn.getAttribute('aria-controls');
+                    const dropdown = document.getElementById(dropdownId);
+                    
+                    if (!dropdown) {
+                        console.warn('Dropdown not found:', dropdownId);
+                        return;
+                    }
+                    
+                    const isOpen = dropdown.classList.contains('open');
+                    
+                    // Close all dropdowns first
+                    this.closeAllDropdowns();
+                    
+                    if (!isOpen) {
+                        // Show dropdown first, then position it
+                        dropdown.classList.add('open');
+                        dropdown.hidden = false;
+                        // Explicitly set visible styles
+                        dropdown.style.display = 'block';
+                        dropdown.style.visibility = 'visible';
+                        dropdown.style.opacity = '1';
+                        dropdown.style.pointerEvents = 'auto';
+                        btn.classList.add('active');
+                        btn.setAttribute('aria-expanded', 'true');
+                        
+                        // Position dropdown using fixed positioning (relative to viewport)
+                        // Must happen AFTER showing so we can get accurate dimensions
+                        this.positionDropdown(dropdown, btn);
+                    }
                 });
             });
         },
 
-        toggleDropdown(btn) {
-            const dropdownId = btn.getAttribute('aria-controls');
-            const dropdown = document.getElementById(dropdownId);
-            
-            if (!dropdown) {
-                console.warn(`Dropdown not found for id: ${dropdownId}`);
-                return;
+        positionDropdown(dropdown, btn) {
+            const btnRect = btn.getBoundingClientRect();
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+
+            // Use default dimensions since dropdown may not be fully rendered
+            const dropdownWidth = dropdown.offsetWidth || 280;
+            const dropdownHeight = dropdown.offsetHeight || 300;
+
+            // Position BELOW the button, aligned with button's right edge
+            let top = btnRect.bottom + 8;
+            let left = btnRect.right - dropdownWidth;
+
+            // Keep within viewport bounds - left edge
+            if (left < 16) {
+                left = 16;
+            }
+            // Keep within viewport bounds - right edge
+            if (left + dropdownWidth > viewportWidth - 16) {
+                left = viewportWidth - dropdownWidth - 16;
             }
 
-            const isOpen = dropdown.classList.contains('open');
-            
-            // Close all others first
-            this.closeAllDropdowns();
-
-            if (!isOpen) {
-                this.openDropdown(dropdown, btn);
+            // If dropdown would go below viewport, position above button instead
+            if (top + dropdownHeight > viewportHeight - 16) {
+                top = btnRect.top - dropdownHeight - 8;
+                if (top < 16) {
+                    top = 16;
+                }
             }
+
+            console.log('📍 DashboardFilters positioning:', { top, left, btnRect: btnRect.toJSON ? btnRect.toJSON() : btnRect });
+
+            // Use setProperty with !important to override any CSS
+            dropdown.style.setProperty('position', 'fixed', 'important');
+            dropdown.style.setProperty('top', top + 'px', 'important');
+            dropdown.style.setProperty('left', left + 'px', 'important');
+            dropdown.style.setProperty('right', 'auto', 'important');
+            dropdown.style.setProperty('bottom', 'auto', 'important');
+            dropdown.style.setProperty('z-index', '2147483647', 'important');
+            dropdown.style.setProperty('transform', 'none', 'important');
         },
 
-        openDropdown(dropdown, btn) {
-            // Move to body to avoid clipping/stacking issues
-            if (dropdown.parentElement !== document.body) {
-                document.body.appendChild(dropdown);
-            }
-
-            dropdown.classList.add('open');
-            dropdown.hidden = false;
-            dropdown.style.display = 'flex';
+        initFilterItemClicks() {
+            // Handle clicks on filter items (league, pick type, status)
+            document.querySelectorAll('.th-filter-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    item.classList.toggle('active');
+                    this.applyFilters();
+                });
+            });
             
-            this.positionDropdown(dropdown, btn);
+            // Handle clicks on date chips (compact date filter)
+            document.querySelectorAll('.th-date-chip').forEach(chip => {
+                chip.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    // Date chips are exclusive - only one active at a time
+                    document.querySelectorAll('.th-date-chip').forEach(c => c.classList.remove('active'));
+                    chip.classList.add('active');
+                    this.applyFilters();
+                });
+            });
             
-            btn.setAttribute('aria-expanded', 'true');
-            btn.classList.add('active');
+            // Handle clicks on range buttons (risk/win)
+            document.querySelectorAll('.th-range-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    btn.classList.toggle('active');
+                    this.applyFilters();
+                });
+            });
         },
 
         closeAllDropdowns() {
             document.querySelectorAll('.th-filter-dropdown').forEach(dd => {
                 dd.classList.remove('open');
                 dd.hidden = true;
+                // Explicitly override styles to ensure hidden
                 dd.style.display = 'none';
+                dd.style.visibility = 'hidden';
+                dd.style.opacity = '0';
+                dd.style.pointerEvents = 'none';
             });
             
             document.querySelectorAll('.th-filter-btn').forEach(btn => {
@@ -86,392 +157,105 @@
             });
         },
 
-        positionDropdown(dropdown, btn) {
-            const btnRect = btn.getBoundingClientRect();
-            const dropdownWidth = 240; // Fixed width from CSS
-            
-            // Position below the button
-            let top = btnRect.bottom + 8;
-            let left = btnRect.left - dropdownWidth + btnRect.width; // Align right edge with button
-
-            // Ensure it doesn't go off screen
-            if (left < 10) left = 10;
-            if (left + dropdownWidth > window.innerWidth) left = window.innerWidth - dropdownWidth - 10;
-
-            dropdown.style.position = 'fixed';
-            dropdown.style.top = `${top}px`;
-            dropdown.style.left = `${left}px`;
-            dropdown.style.zIndex = '10000';
-        },
-
-        initFilterInteractions() {
-            // Date Range Buttons
-            this.attachGroupHandlers('.date-range-btn', 'date', 'range');
-            
-            // Time Slot Buttons
-            this.attachMultiSelectHandlers('.time-slot', 'date', 'time');
-            
-            // League Pills
-            this.attachMultiSelectHandlers('.league-pill', 'matchup', 'league');
-            
-            // Segment Pills
-            this.attachMultiSelectHandlers('.segment-pill', 'pick', 'segment');
-            
-            // Pick Type Pills
-            this.attachMultiSelectHandlers('.pick-pill', 'pick', 'type');
-            
-            // Status Pills
-            this.attachMultiSelectHandlers('.status-pill', 'status', 'status');
-            
-            // Quick Actions
-            document.querySelectorAll('.filter-action-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const action = btn.getAttribute('data-action');
-                    const dropdown = btn.closest('.th-filter-dropdown');
-                    if (!dropdown) return;
-                    
-                    if (action === 'clear') {
-                        this.clearFiltersInDropdown(dropdown);
-                    } else if (action === 'select-all') {
-                        this.selectAllInDropdown(dropdown);
-                    }
-                });
-            });
-        },
-
-        attachGroupHandlers(selector, filterType, dataAttr) {
-            document.querySelectorAll(selector).forEach(btn => {
-                btn.addEventListener('click', () => {
-                    // Toggle active class (single select behavior for ranges usually)
-                    const siblings = btn.parentElement.querySelectorAll(selector);
-                    siblings.forEach(s => s.classList.remove('active'));
-                    btn.classList.add('active');
-                    
-                    this.applyFilters();
-                });
-            });
-        },
-
-        attachMultiSelectHandlers(selector, filterType, dataAttr) {
-            document.querySelectorAll(selector).forEach(btn => {
-                btn.addEventListener('click', () => {
-                    // Toggle active class (multi select)
-                    // Special case for "All" buttons
-                    const value = btn.getAttribute(`data-${dataAttr}`);
-                    if (value === 'all') {
-                        const siblings = btn.parentElement.querySelectorAll(selector);
-                        siblings.forEach(s => s.classList.remove('active'));
-                        btn.classList.add('active');
-                    } else {
-                        btn.classList.toggle('active');
-                        // If we select a specific item, deselect "All"
-                        const allBtn = btn.parentElement.querySelector(`[data-${dataAttr}="all"]`);
-                        if (allBtn) allBtn.classList.remove('active');
-                        
-                        // If nothing is selected, select "All"
-                        const anyActive = Array.from(btn.parentElement.querySelectorAll(selector))
-                            .some(s => s.classList.contains('active') && s.getAttribute(`data-${dataAttr}`) !== 'all');
-                        if (!anyActive && allBtn) allBtn.classList.add('active');
-                    }
-                    
-                    this.applyFilters();
-                });
-            });
-        },
-
-        clearFiltersInDropdown(dropdown) {
-            dropdown.querySelectorAll('.active').forEach(el => el.classList.remove('active'));
-            // Reset to "All" if present
-            dropdown.querySelectorAll('[data-league="all"], [data-segment="all"], [data-pick="all"], [data-status="all"]').forEach(el => el.classList.add('active'));
-            this.applyFilters();
-        },
-
-        selectAllInDropdown(dropdown) {
-            // Select all options except "All"
-            dropdown.querySelectorAll('button[data-league], button[data-segment], button[data-pick], button[data-status]').forEach(btn => {
-                const val = btn.getAttribute('data-league') || btn.getAttribute('data-segment') || btn.getAttribute('data-pick') || btn.getAttribute('data-status');
-                if (val !== 'all') btn.classList.add('active');
-            });
-            // Deselect "All" buttons
-            dropdown.querySelectorAll('[data-league="all"], [data-segment="all"], [data-pick="all"], [data-status="all"]').forEach(el => el.classList.remove('active'));
-            this.applyFilters();
-        },
-
         applyFilters() {
-            // Collect state from UI and update window.tableState.filters
-            // Then call window.TableFilters.applyFilters()
+            // Collect active filters
+            const activeDatetime = Array.from(document.querySelectorAll('#th-datetime-dropdown .th-filter-item.active'))
+                .map(el => el.getAttribute('data-v'));
             
-            if (!window.tableState || !window.TableFilters) return;
-
-            const filters = window.tableState.filters;
-
-            // Date
-            const activeDateRange = document.querySelector('.date-range-btn.active')?.getAttribute('data-range') || 'all';
-            // Map range to start/end dates if needed, or just pass the range string if supported
-            // For now, let's assume we need to pass the range string to a helper or just store it
-            filters.date.activeRange = activeDateRange;
+            const activeLeagues = Array.from(document.querySelectorAll('#th-league-dropdown .th-filter-item.active'))
+                .map(el => el.getAttribute('data-v'));
             
-            const activeTimes = Array.from(document.querySelectorAll('.time-slot.active')).map(b => b.getAttribute('data-time'));
-            filters.date.selectedTimes = activeTimes.length ? activeTimes : null;
-
-            // League
-            const activeLeagues = Array.from(document.querySelectorAll('.league-pill.active'))
-                .map(b => b.getAttribute('data-league'))
-                .filter(v => v !== 'all');
-            filters.matchup.league = activeLeagues.length ? activeLeagues[0] : ''; // Assuming single league for now or update logic for multi
-
-            // Segment
-            const activeSegments = Array.from(document.querySelectorAll('.segment-pill.active'))
-                .map(b => b.getAttribute('data-segment'))
-                .filter(v => v !== 'all');
-            filters.pick.segment = activeSegments.length ? activeSegments[0] : '';
-
-            // Pick Type
-            const activePickTypes = Array.from(document.querySelectorAll('.pick-pill.active'))
-                .map(b => b.getAttribute('data-pick'))
-                .filter(v => v !== 'all');
-            filters.pick.betType = activePickTypes.length ? activePickTypes[0] : '';
-
-            // Status
-            const activeStatuses = Array.from(document.querySelectorAll('.status-pill.active'))
-                .map(b => b.getAttribute('data-status'))
-                .filter(v => v !== 'all');
-            filters.status = activeStatuses;
-
-            console.log('Applying filters:', filters);
-            window.TableFilters.applyFilters();
+            const activePicks = Array.from(document.querySelectorAll('#th-pick-dropdown .th-filter-item.active'))
+                .map(el => el.getAttribute('data-v'));
+            
+            const activeStatuses = Array.from(document.querySelectorAll('#th-status-dropdown .th-filter-item.active'))
+                .map(el => el.getAttribute('data-v'));
+            
+            const activeResults = Array.from(document.querySelectorAll('#th-result-dropdown .th-filter-item.active'))
+                .map(el => el.getAttribute('data-v'));
+            
+            const activeRiskRanges = Array.from(document.querySelectorAll('#th-riskwin-dropdown .th-range-btn.active[data-f="risk"]'))
+                .map(el => el.getAttribute('data-v'));
+            
+            const activeWinRanges = Array.from(document.querySelectorAll('#th-riskwin-dropdown .th-range-btn.active[data-f="win"]'))
+                .map(el => el.getAttribute('data-v'));
+            
+            console.log('Filters:', { activeDatetime, activeLeagues, activePicks, activeStatuses, activeResults, activeRiskRanges, activeWinRanges });
+            
+            // Apply to table rows
+            this.filterTableRows({ activeDatetime, activeLeagues, activePicks, activeStatuses, activeResults, activeRiskRanges, activeWinRanges });
         },
 
-        // ===== FILTER TOOLBAR HANDLING =====
-        initToolbar() {
-            const toolbar = document.getElementById('filter-toolbar');
-            if (!toolbar) return;
-
-            console.log('Initializing filter toolbar...');
-
-            // League pill toggles
-            toolbar.querySelectorAll('.ft-pill.ft-league').forEach(pill => {
-                pill.addEventListener('click', () => {
-                    pill.classList.toggle('active');
-                    this.applyToolbarFilters();
-                });
-            });
-
-            // Dropdown toggles
-            const dropdowns = toolbar.querySelectorAll('.ft-dropdown');
-            dropdowns.forEach(dropdown => {
-                const btn = dropdown.querySelector('.ft-dropdown-btn');
-                const menu = dropdown.querySelector('.ft-dropdown-menu');
-                if (btn && menu) {
-                    btn.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        // Close all other dropdowns
-                        dropdowns.forEach(d => {
-                            if (d !== dropdown) {
-                                d.querySelector('.ft-dropdown-menu')?.classList.remove('open');
-                                d.querySelector('.ft-dropdown-btn')?.classList.remove('open');
-                            }
+        filterTableRows(filters) {
+            const rows = document.querySelectorAll('#picks-table tbody tr');
+            const now = new Date();
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const yesterday = new Date(today); yesterday.setDate(yesterday.getDate() - 1);
+            const weekAgo = new Date(today); weekAgo.setDate(weekAgo.getDate() - 7);
+            const monthAgo = new Date(today); monthAgo.setMonth(monthAgo.getMonth() - 1);
+            
+            rows.forEach(row => {
+                let show = true;
+                
+                // Date/Time filter
+                if (filters.activeDatetime && filters.activeDatetime.length > 0 && !filters.activeDatetime.includes('all')) {
+                    const dateCell = row.querySelector('.col-datetime')?.textContent.trim();
+                    const rowDate = dateCell ? new Date(dateCell) : null;
+                    if (rowDate) {
+                        const matchesDate = filters.activeDatetime.some(dt => {
+                            if (dt === 'today') return rowDate >= today;
+                            if (dt === 'yesterday') return rowDate >= yesterday && rowDate < today;
+                            if (dt === 'week') return rowDate >= weekAgo;
+                            if (dt === 'month') return rowDate >= monthAgo;
+                            return true;
                         });
-                        menu.classList.toggle('open');
-                        btn.classList.toggle('open');
-                    });
-                }
-            });
-
-            // Close dropdowns on outside click
-            document.addEventListener('click', (e) => {
-                if (!e.target.closest('.ft-dropdown')) {
-                    toolbar.querySelectorAll('.ft-dropdown-menu').forEach(m => m.classList.remove('open'));
-                    toolbar.querySelectorAll('.ft-dropdown-btn').forEach(b => b.classList.remove('open'));
-                }
-            });
-
-            // Edge dropdown items
-            toolbar.querySelectorAll('#edge-dropdown-menu .ft-dropdown-item').forEach(item => {
-                item.addEventListener('click', () => {
-                    item.classList.toggle('active');
-                    const menu = item.closest('.ft-dropdown-menu');
-                    if (menu) {
-                        const activeCount = menu.querySelectorAll('.ft-dropdown-item.active').length;
-                        this.updateDropdownButtonText('edge-dropdown-btn', 'Edge', activeCount);
+                        if (!matchesDate) show = false;
                     }
-                    this.applyToolbarFilters();
-                });
-            });
-
-            // Fire dropdown items
-            toolbar.querySelectorAll('#fire-dropdown-menu .ft-dropdown-item').forEach(item => {
-                item.addEventListener('click', () => {
-                    item.classList.toggle('active');
-                    const menu = item.closest('.ft-dropdown-menu');
-                    if (menu) {
-                        const activeCount = menu.querySelectorAll('.ft-dropdown-item.active').length;
-                        this.updateDropdownButtonText('fire-dropdown-btn', '🔥 Fire', activeCount);
-                    }
-                    this.applyToolbarFilters();
-                });
-            });
-
-            // Clear button
-            const clearBtn = toolbar.querySelector('#ft-clear');
-            if (clearBtn) {
-                clearBtn.addEventListener('click', () => {
-                    // Clear all pills
-                    toolbar.querySelectorAll('.ft-pill.active').forEach(p => p.classList.remove('active'));
-                    // Clear dropdown selections
-                    toolbar.querySelectorAll('#edge-dropdown-menu .ft-dropdown-item').forEach(i => i.classList.remove('active'));
-                    const edgeBtn = document.getElementById('edge-dropdown-btn');
-                    if (edgeBtn) edgeBtn.innerHTML = '<svg class="edge-svg" viewBox="0 0 16 16" fill="currentColor"><path d="M4 14V9h2v5H4zm3 0V6h2v8H7zm3 0V2h2v12h-2z"/></svg>Edge ▾';
-                    
-                    toolbar.querySelectorAll('#fire-dropdown-menu .ft-dropdown-item').forEach(i => i.classList.remove('active'));
-                    const fireBtn = document.getElementById('fire-dropdown-btn');
-                    if (fireBtn) fireBtn.textContent = '🔥 Fire ▾';
-                    
-                    this.applyToolbarFilters();
-                    this.clearFilterChips();
-                });
-            }
-        },
-
-        updateDropdownButtonText(btnId, label, count) {
-            const btn = document.getElementById(btnId);
-            if (!btn) return;
-            if (btnId === 'edge-dropdown-btn') {
-                btn.innerHTML = `<svg class="edge-svg" viewBox="0 0 16 16" fill="currentColor"><path d="M4 14V9h2v5H4zm3 0V6h2v8H7zm3 0V2h2v12h-2z"/></svg>${label}${count > 0 ? ` (${count})` : ''} ▾`;
-            } else {
-                btn.textContent = `${label}${count > 0 ? ` (${count})` : ''} ▾`;
-            }
-        },
-
-        applyToolbarFilters() {
-            const toolbar = document.getElementById('filter-toolbar');
-            if (!toolbar) return;
-
-            // Collect active leagues
-            const activeLeagues = Array.from(toolbar.querySelectorAll('.ft-pill.ft-league.active'))
-                .map(p => p.getAttribute('data-league'));
-
-            // Collect active edge values
-            const activeEdges = Array.from(toolbar.querySelectorAll('#edge-dropdown-menu .ft-dropdown-item.active'))
-                .map(i => i.getAttribute('data-v'));
-
-            // Collect active fire values
-            const activeFires = Array.from(toolbar.querySelectorAll('#fire-dropdown-menu .ft-dropdown-item.active'))
-                .map(i => i.getAttribute('data-v'));
-
-            console.log('Toolbar filters:', { activeLeagues, activeEdges, activeFires });
-
-            // Apply to table filtering
-            if (window.tableState && window.TableFilters) {
-                // Set league filter
-                if (activeLeagues.length > 0) {
-                    window.tableState.filters.matchup.league = activeLeagues;
-                } else {
-                    window.tableState.filters.matchup.league = '';
                 }
                 
-                // Edge and Fire would need to be added to tableState.filters schema
-                // For now, store them and let TableFilters handle
-                window.tableState.filters.edge = activeEdges;
-                window.tableState.filters.fire = activeFires;
-
-                window.TableFilters.applyFilters();
-            }
-
-            // Update filter chips display
-            this.updateFilterChips(activeLeagues, activeEdges, activeFires);
-        },
-
-        updateFilterChips(leagues, edges, fires) {
-            const chipsContainer = document.getElementById('table-filter-chips');
-            if (!chipsContainer) return;
-
-            chipsContainer.innerHTML = '';
-            let hasChips = false;
-
-            leagues.forEach(league => {
-                hasChips = true;
-                const chip = document.createElement('span');
-                chip.className = 'filter-chip';
-                chip.innerHTML = `${league.toUpperCase()} <button class="chip-remove" data-type="league" data-value="${league}">×</button>`;
-                chipsContainer.appendChild(chip);
-            });
-
-            edges.forEach(edge => {
-                hasChips = true;
-                const chip = document.createElement('span');
-                chip.className = 'filter-chip';
-                const label = edge === 'high' ? 'Best Edge' : edge === 'medium' ? 'Good Edge' : 'Low Edge';
-                chip.innerHTML = `${label} <button class="chip-remove" data-type="edge" data-value="${edge}">×</button>`;
-                chipsContainer.appendChild(chip);
-            });
-
-            fires.forEach(fire => {
-                hasChips = true;
-                const chip = document.createElement('span');
-                chip.className = 'filter-chip';
-                chip.innerHTML = `${'🔥'.repeat(parseInt(fire))} <button class="chip-remove" data-type="fire" data-value="${fire}">×</button>`;
-                chipsContainer.appendChild(chip);
-            });
-
-            chipsContainer.setAttribute('data-has-chips', hasChips ? 'true' : 'false');
-
-            // Add chip remove handlers
-            chipsContainer.querySelectorAll('.chip-remove').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const type = btn.getAttribute('data-type');
-                    const value = btn.getAttribute('data-value');
-                    this.removeFilter(type, value);
-                });
-            });
-        },
-
-        removeFilter(type, value) {
-            const toolbar = document.getElementById('filter-toolbar');
-            if (!toolbar) return;
-
-            if (type === 'league') {
-                const pill = toolbar.querySelector(`.ft-pill.ft-league[data-league="${value}"]`);
-                if (pill) pill.classList.remove('active');
-            } else if (type === 'edge') {
-                const item = toolbar.querySelector(`#edge-dropdown-menu .ft-dropdown-item[data-v="${value}"]`);
-                if (item) item.classList.remove('active');
-                const menu = document.getElementById('edge-dropdown-menu');
-                if (menu) {
-                    const count = menu.querySelectorAll('.ft-dropdown-item.active').length;
-                    this.updateDropdownButtonText('edge-dropdown-btn', 'Edge', count);
+                // League filter
+                if (show && filters.activeLeagues.length > 0) {
+                    const rowLeague = row.querySelector('.col-league')?.textContent.trim().toLowerCase();
+                    if (!filters.activeLeagues.some(l => rowLeague?.includes(l))) show = false;
                 }
-            } else if (type === 'fire') {
-                const item = toolbar.querySelector(`#fire-dropdown-menu .ft-dropdown-item[data-v="${value}"]`);
-                if (item) item.classList.remove('active');
-                const menu = document.getElementById('fire-dropdown-menu');
-                if (menu) {
-                    const count = menu.querySelectorAll('.ft-dropdown-item.active').length;
-                    this.updateDropdownButtonText('fire-dropdown-btn', '🔥 Fire', count);
+                
+                // Pick type filter - check segment column content
+                if (show && filters.activePicks.length > 0) {
+                    const rowSegment = row.querySelector('.col-segment')?.textContent.trim().toLowerCase();
+                    if (!filters.activePicks.some(p => rowSegment?.includes(p))) show = false;
                 }
-            }
-
-            this.applyToolbarFilters();
-        },
-
-        clearFilterChips() {
-            const chipsContainer = document.getElementById('table-filter-chips');
-            if (chipsContainer) {
-                chipsContainer.innerHTML = '';
-                chipsContainer.setAttribute('data-has-chips', 'false');
-            }
+                
+                // Status filter
+                if (show && filters.activeStatuses.length > 0) {
+                    const rowStatus = row.getAttribute('data-status') || row.querySelector('[class*="status"]')?.textContent.trim().toLowerCase();
+                    if (!filters.activeStatuses.some(s => rowStatus?.includes(s))) show = false;
+                }
+                
+                // Result filter ($ Won/Lost)
+                if (show && filters.activeResults && filters.activeResults.length > 0) {
+                    const rowResult = row.querySelector('.col-result')?.textContent.trim();
+                    const matchesResult = filters.activeResults.some(r => {
+                        if (r === 'positive') return rowResult?.startsWith('+');
+                        if (r === 'negative') return rowResult?.startsWith('-');
+                        if (r === 'zero') return rowResult === '$0' || rowResult === '0';
+                        return true;
+                    });
+                    if (!matchesResult) show = false;
+                }
+                
+                row.style.display = show ? '' : 'none';
+            });
         }
     };
 
     // Initialize when DOM is ready
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
-            DashboardFilters.init();
-            DashboardFilters.initToolbar();
-        });
+        document.addEventListener('DOMContentLoaded', () => DashboardFilters.init());
     } else {
         DashboardFilters.init();
-        DashboardFilters.initToolbar();
     }
+
+    // Expose for debugging
+    window.DashboardFilters = DashboardFilters;
 
 })();
