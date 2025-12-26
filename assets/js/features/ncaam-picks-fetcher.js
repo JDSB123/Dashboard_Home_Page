@@ -1,7 +1,8 @@
 /**
- * NCAAM Picks Fetcher v2.0
+ * NCAAM Picks Fetcher v2.1
  * Fetches NCAAM model picks from the Azure Container App API
  * Updated to use /api/picks/{date} endpoint (matches NBA pattern)
+ * Supports date-specific caching
  */
 
 (function() {
@@ -9,8 +10,8 @@
 
     const NCAAM_API_URL = window.APP_CONFIG?.NCAAM_API_URL || 'https://ncaam-stable-prediction.blackglacier-5fab3573.centralus.azurecontainerapps.io';
 
-    let picksCache = null;
-    let lastFetch = null;
+    // Date-aware cache: { date: { data, timestamp } }
+    const picksCache = {};
     const CACHE_DURATION = 60000; // 1 minute
 
     /**
@@ -19,10 +20,14 @@
      * @returns {Promise<Object>} Picks data
      */
     const fetchNCAAMPicks = async function(date = 'today') {
-        // Use cache if fresh
-        if (picksCache && lastFetch && (Date.now() - lastFetch < CACHE_DURATION)) {
-            console.log('[NCAAM-PICKS] Using cached picks');
-            return picksCache;
+        // Normalize date for cache key
+        const cacheKey = date || 'today';
+
+        // Use cache if fresh for this specific date
+        const cached = picksCache[cacheKey];
+        if (cached && (Date.now() - cached.timestamp < CACHE_DURATION)) {
+            console.log(`[NCAAM-PICKS] Using cached picks for ${cacheKey}`);
+            return cached.data;
         }
 
         const url = `${NCAAM_API_URL}/api/picks/${date}`;
@@ -35,10 +40,14 @@
             }
 
             const data = await response.json();
-            picksCache = data;
-            lastFetch = Date.now();
 
-            console.log(`[NCAAM-PICKS] Fetched ${data.total_picks || 0} picks`);
+            // Cache with date key
+            picksCache[cacheKey] = {
+                data: data,
+                timestamp: Date.now()
+            };
+
+            console.log(`[NCAAM-PICKS] Fetched ${data.total_picks || 0} picks for ${cacheKey}`);
             return data;
         } catch (error) {
             console.error('[NCAAM-PICKS] Error fetching picks:', error.message);
@@ -131,10 +140,16 @@
         fetchPicks: fetchNCAAMPicks,
         checkHealth,
         formatPickForTable,
-        getCache: () => picksCache,
-        clearCache: () => { picksCache = null; lastFetch = null; }
+        getCache: (date) => picksCache[date || 'today']?.data || null,
+        clearCache: (date) => {
+            if (date) {
+                delete picksCache[date];
+            } else {
+                Object.keys(picksCache).forEach(k => delete picksCache[k]);
+            }
+        }
     };
 
-    console.log('NCAAM PicksFetcher v2.0 loaded');
+    console.log('NCAAM PicksFetcher v2.1 loaded');
 
 })();

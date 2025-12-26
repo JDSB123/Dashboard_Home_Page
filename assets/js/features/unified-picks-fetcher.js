@@ -1,6 +1,7 @@
 /**
- * Unified Picks Fetcher v1.0
+ * Unified Picks Fetcher v1.1
  * Orchestrates fetching picks from all model APIs and adds them to the weekly lineup
+ * Supports date-specific fetching
  */
 
 (function() {
@@ -9,20 +10,21 @@
     /**
      * Fetch picks from all or specific league APIs
      * @param {string} league - 'all', 'nba', 'ncaam', 'nfl', 'ncaaf'
+     * @param {string} date - 'today', 'tomorrow', or 'YYYY-MM-DD' (default: 'today')
      * @returns {Promise<Array>} Array of formatted picks
      */
-    const fetchPicks = async function(league = 'all') {
+    const fetchPicks = async function(league = 'all', date = 'today') {
         const allPicks = [];
         const errors = [];
         const leagueUpper = league.toUpperCase();
 
-        console.log(`[UNIFIED-FETCHER] Fetching picks for: ${league}`);
+        console.log(`[UNIFIED-FETCHER] Fetching picks for: ${league}, date: ${date}`);
 
         // NBA
         if (league === 'all' || leagueUpper === 'NBA') {
             try {
                 if (window.NBAPicksFetcher) {
-                    const data = await window.NBAPicksFetcher.fetchPicks('today');
+                    const data = await window.NBAPicksFetcher.fetchPicks(date);
                     // API returns { plays: [...] } not { picks: [...] }
                     const plays = data.plays || data.picks || data.recommendations || [];
                     plays.forEach(play => {
@@ -36,11 +38,11 @@
             }
         }
 
-        // NCAAM (v2.0 - uses /api/picks/{date} endpoint)
+        // NCAAM (v2.1 - uses /api/picks/{date} endpoint with date support)
         if (league === 'all' || leagueUpper === 'NCAAM' || leagueUpper === 'NCAAB') {
             try {
                 if (window.NCAAMPicksFetcher) {
-                    const data = await window.NCAAMPicksFetcher.fetchPicks('today');
+                    const data = await window.NCAAMPicksFetcher.fetchPicks(date);
                     const picks = data.picks || data.plays || data.recommendations || [];
                     picks.forEach(pick => {
                         allPicks.push(window.NCAAMPicksFetcher.formatPickForTable(pick));
@@ -57,7 +59,7 @@
         if (league === 'all' || leagueUpper === 'NFL') {
             try {
                 if (window.NFLPicksFetcher) {
-                    const data = await window.NFLPicksFetcher.fetchPicks('today');
+                    const data = await window.NFLPicksFetcher.fetchPicks(date);
                     const picks = data.picks || data.plays || data.recommendations || [];
                     picks.forEach(pick => {
                         allPicks.push(window.NFLPicksFetcher.formatPickForTable(pick));
@@ -74,7 +76,7 @@
         if (league === 'all' || leagueUpper === 'NCAAF') {
             try {
                 if (window.NCAAFPicksFetcher) {
-                    const data = await window.NCAAFPicksFetcher.fetchPicks();
+                    const data = await window.NCAAFPicksFetcher.fetchPicks(date);
                     const predictions = data.predictions || data.picks || data.plays || [];
                     predictions.forEach(pick => {
                         allPicks.push(window.NCAAFPicksFetcher.formatPickForTable(pick));
@@ -92,6 +94,7 @@
         return {
             picks: allPicks,
             errors: errors,
+            date: date,
             timestamp: new Date().toISOString()
         };
     };
@@ -99,9 +102,10 @@
     /**
      * Fetch picks and add them to the weekly lineup table
      * @param {string} league - 'all', 'nba', 'ncaam', 'nfl', 'ncaaf'
+     * @param {string} date - 'today', 'tomorrow', or 'YYYY-MM-DD' (default: 'today')
      */
-    const fetchAndDisplayPicks = async function(league = 'all') {
-        const result = await fetchPicks(league);
+    const fetchAndDisplayPicks = async function(league = 'all', date = 'today') {
+        const result = await fetchPicks(league, date);
 
         // Use WeeklyLineup.populateTable if available (weekly lineup page)
         if (window.WeeklyLineup?.populateTable && result.picks.length > 0) {
@@ -184,6 +188,6 @@
         checkAllHealth
     };
 
-    console.log('UnifiedPicksFetcher v1.0 loaded');
+    console.log('UnifiedPicksFetcher v1.1 loaded');
 
 })();
