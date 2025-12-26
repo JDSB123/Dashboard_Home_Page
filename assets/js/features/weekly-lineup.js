@@ -397,22 +397,18 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             // Update state
             lastFetchTimes[league] = timeStr;
 
-            // Format display text - more readable and intuitive
-            let displayText;
-            if (league === 'all') {
-                displayText = `All leagues fetched at ${timeStr}`;
-            } else {
-                const leagueLabel = league.toUpperCase().replace('NCAAB', 'NCAAM').replace('NCAAF', 'NCAAF');
-                displayText = `${leagueLabel} fetched at ${timeStr}`;
-            }
+            // Format league name
+            const leagueName = league === 'all' ? 'All Leagues' : league.toUpperCase().replace('NCAAB', 'NCAAM').replace('NCAAF', 'NCAAF');
 
-            // Add count info if available - clearer wording
+            // Build clean display text
+            let displayText = `${leagueName}  ·  Updated ${timeStr}`;
             if (count !== null) {
-                displayText += count === 0 ? ' — no picks available' : ` — ${count} pick${count !== 1 ? 's' : ''}`;
+                displayText += count === 0 ? '  ·  No picks' : `  ·  ${count} pick${count !== 1 ? 's' : ''}`;
             }
 
             el.textContent = displayText;
-            el.style.color = count === 0 ? 'rgba(255, 200, 100, 0.9)' : 'rgba(160, 175, 190, 0.85)';
+            el.classList.remove('fetching');
+            el.classList.toggle('has-data', count > 0);
         }
     }
 
@@ -1366,6 +1362,12 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             applyToolbarFilters();
         });
 
+        // Helper to format league name nicely
+        function formatLeagueName(fetchType) {
+            if (fetchType === 'all') return 'All Leagues';
+            return fetchType.toUpperCase().replace('NCAAB', 'NCAAM').replace('NCAAF', 'NCAAF');
+        }
+
         // Individual Fetch Buttons - one per league
         toolbar.querySelectorAll('.ft-fetch-league-btn').forEach(btn => {
             // Add hover listener to show last fetch time for this league
@@ -1373,39 +1375,42 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                 const fetchType = btn.dataset.fetch;
                 const time = lastFetchTimes[fetchType];
                 const el = document.getElementById('ft-last-fetched');
-                if (time && el) {
-                    const leagueLabel = fetchType === 'all' ? 'All leagues' : fetchType.toUpperCase().replace('NCAAB', 'NCAAM').replace('NCAAF', 'NCAAF');
-                    el.textContent = `${leagueLabel} last fetched at ${time}`;
-                    el.dataset.temp = "true";
-                } else if (el) {
-                    const leagueLabel = fetchType === 'all' ? 'All leagues' : fetchType.toUpperCase().replace('NCAAB', 'NCAAM').replace('NCAAF', 'NCAAF');
-                    el.textContent = `${leagueLabel} — not yet fetched`;
-                    el.dataset.temp = "true";
+                if (!el) return;
+
+                const leagueName = formatLeagueName(fetchType);
+                if (time) {
+                    el.textContent = `${leagueName}  ·  Last updated ${time}`;
+                    el.classList.add('has-data');
+                } else {
+                    el.textContent = `${leagueName}  ·  Not yet fetched today`;
+                    el.classList.remove('has-data');
                 }
+                el.dataset.temp = "true";
             });
 
             btn.addEventListener('mouseleave', () => {
                 const el = document.getElementById('ft-last-fetched');
                 if (el && el.dataset.temp === "true") {
                     el.dataset.temp = "false";
-                    el.textContent = 'Hover a league to see last fetch time';
-                    el.style.color = 'rgba(160, 175, 190, 0.7)';
+                    el.textContent = 'Select a league to fetch picks';
+                    el.classList.remove('has-data', 'fetching');
                 }
             });
 
             btn.addEventListener('click', async () => {
                 const fetchType = btn.dataset.fetch;
 
-                // Add loading state - spin the icon without replacing content
+                // Add loading state
                 btn.classList.add('loading');
                 const originalContent = btn.innerHTML;
 
                 // Update status text to show loading
                 const el = document.getElementById('ft-last-fetched');
                 if (el) {
-                    const leagueLabel = fetchType === 'all' ? 'all leagues' : fetchType.toUpperCase().replace('NCAAB', 'NCAAM').replace('NCAAF', 'NCAAF');
-                    el.textContent = `Fetching ${leagueLabel}...`;
-                    el.style.color = 'rgba(0, 214, 137, 0.8)';
+                    const leagueName = formatLeagueName(fetchType);
+                    el.textContent = `Fetching ${leagueName}...`;
+                    el.classList.add('fetching');
+                    el.classList.remove('has-data');
                 }
                 
                 console.log(`🔄 [Weekly Lineup] Fetching picks: ${fetchType}`);
@@ -1472,11 +1477,11 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                 } catch (err) {
                     console.error('[Weekly Lineup] Fetch error:', err);
                     btn.innerHTML = '<span style="color:#ff6b6b; font-weight:bold;">✕</span>';
-                    
+
                     const el = document.getElementById('ft-last-fetched');
                     if (el) {
-                        el.textContent = 'Error fetching picks';
-                        el.style.color = '#ff6b6b';
+                        el.textContent = 'Fetch error  ·  Please try again';
+                        el.classList.remove('fetching', 'has-data');
                     }
 
                     setTimeout(() => {
