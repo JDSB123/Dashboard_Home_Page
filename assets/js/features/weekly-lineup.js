@@ -1444,8 +1444,14 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
             // League filter
             if (activeLeagues.length > 0) {
+                // Check data-league on the row itself first
+                const rowLeague = (row.dataset.league || '').toLowerCase();
+                // Fallback to checking children if row attribute is missing (legacy support)
                 const badge = row.querySelector('.league-badge, [data-league]');
-                const lg = badge ? (badge.dataset.league || badge.textContent.trim()).toLowerCase() : '';
+                const childLeague = badge ? (badge.dataset.league || badge.textContent.trim()).toLowerCase() : '';
+                
+                const lg = rowLeague || childLeague;
+                
                 if (!activeLeagues.includes(lg)) show = false;
             }
 
