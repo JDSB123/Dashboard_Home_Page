@@ -1374,8 +1374,12 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                 const time = lastFetchTimes[fetchType];
                 const el = document.getElementById('ft-last-fetched');
                 if (time && el) {
-                    const leagueLabel = fetchType === 'all' ? 'All' : fetchType.toUpperCase().replace('NCAAB', 'NCAAM').replace('NCAAF', 'NCAAF');
-                    el.textContent = `${leagueLabel}: ${time}`;
+                    const leagueLabel = fetchType === 'all' ? 'All leagues' : fetchType.toUpperCase().replace('NCAAB', 'NCAAM').replace('NCAAF', 'NCAAF');
+                    el.textContent = `${leagueLabel} last fetched at ${time}`;
+                    el.dataset.temp = "true";
+                } else if (el) {
+                    const leagueLabel = fetchType === 'all' ? 'All leagues' : fetchType.toUpperCase().replace('NCAAB', 'NCAAM').replace('NCAAF', 'NCAAF');
+                    el.textContent = `${leagueLabel} — not yet fetched`;
                     el.dataset.temp = "true";
                 }
             });
@@ -1383,24 +1387,23 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             btn.addEventListener('mouseleave', () => {
                 const el = document.getElementById('ft-last-fetched');
                 if (el && el.dataset.temp === "true") {
-                    // Revert to most recent or default
-                    // For now, just clear temp flag, maybe revert to "Updated: --" if needed
-                    // Ideally we'd store the "current" main text.
-                    // Let's just leave it as the last hovered for now or revert to generic if needed.
+                    el.dataset.temp = "false";
+                    el.textContent = 'Hover a league to see last fetch time';
+                    el.style.color = 'rgba(160, 175, 190, 0.7)';
                 }
             });
 
             btn.addEventListener('click', async () => {
                 const fetchType = btn.dataset.fetch;
-                
+
                 // Add loading state - spin the icon without replacing content
                 btn.classList.add('loading');
                 const originalContent = btn.innerHTML;
-                
+
                 // Update status text to show loading
                 const el = document.getElementById('ft-last-fetched');
                 if (el) {
-                    const leagueLabel = fetchType === 'all' ? 'All' : fetchType.toUpperCase().replace('NCAAB', 'NCAAM').replace('NCAAF', 'NCAAF');
+                    const leagueLabel = fetchType === 'all' ? 'all leagues' : fetchType.toUpperCase().replace('NCAAB', 'NCAAM').replace('NCAAF', 'NCAAF');
                     el.textContent = `Fetching ${leagueLabel}...`;
                     el.style.color = 'rgba(0, 214, 137, 0.8)';
                 }
