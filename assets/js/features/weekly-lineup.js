@@ -221,6 +221,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         initializeSorting();
         initializeTimeSlots();
         initializeDateRangeSelector();
+        initializeTrackerButtons();
 
         try {
             console.log('[Weekly Lineup] Starting initialization...');
@@ -1617,11 +1618,187 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         }, 3000);
     }
 
+    // ===== TRACKER BUTTON HANDLER =====
+    function initializeTrackerButtons() {
+        // Use event delegation on the table body
+        const tbody = document.getElementById('weekly-lineup-tbody');
+        if (!tbody) {
+            console.warn('[Weekly Lineup] Table body not found for tracker buttons');
+            return;
+        }
+
+        tbody.addEventListener('click', function(e) {
+            const btn = e.target.closest('.tracker-btn');
+            if (!btn) return;
+
+            const row = btn.closest('tr');
+            if (!row) return;
+
+            // Extract pick data from the row
+            const pickData = extractPickFromRow(row);
+
+            if (pickData) {
+                addPickToDashboard(pickData, btn);
+            }
+        });
+
+        console.log('[Weekly Lineup] Tracker buttons initialized');
+    }
+
+    function extractPickFromRow(row) {
+        try {
+            // Get data from cells
+            const cells = row.querySelectorAll('td');
+
+            // Time cell (first cell)
+            const timeCell = cells[0];
+            const time = timeCell?.querySelector('.time-value')?.textContent?.trim() ||
+                         timeCell?.textContent?.trim() || '';
+
+            // League/Sport (second cell)
+            const leagueCell = cells[1];
+            const sport = leagueCell?.querySelector('.league-badge')?.textContent?.trim() ||
+                          leagueCell?.textContent?.trim() || 'NBA';
+
+            // Matchup (third cell) - format: "Away Team (W-L) @ Home Team (W-L)"
+            const matchupCell = cells[2];
+            const matchupText = matchupCell?.textContent?.trim() || '';
+            const matchupParts = matchupText.split('@').map(s => s.trim());
+
+            // Parse away team and record
+            let awayTeam = '', awayRecord = '';
+            if (matchupParts[0]) {
+                const awayMatch = matchupParts[0].match(/^(.+?)\s*\((\d+-\d+)\)$/);
+                if (awayMatch) {
+                    awayTeam = awayMatch[1].trim();
+                    awayRecord = awayMatch[2];
+                } else {
+                    awayTeam = matchupParts[0];
+                }
+            }
+
+            // Parse home team and record
+            let homeTeam = '', homeRecord = '';
+            if (matchupParts[1]) {
+                const homeMatch = matchupParts[1].match(/^(.+?)\s*\((\d+-\d+)\)$/);
+                if (homeMatch) {
+                    homeTeam = homeMatch[1].trim();
+                    homeRecord = homeMatch[2];
+                } else {
+                    homeTeam = matchupParts[1];
+                }
+            }
+
+            // Segment (4th cell)
+            const segmentCell = cells[3];
+            const segment = segmentCell?.textContent?.trim() || 'FG';
+
+            // Pick (5th cell) - contains team and line
+            const pickCell = cells[4];
+            const pickTeam = pickCell?.querySelector('.pick-team')?.textContent?.trim() ||
+                            pickCell?.querySelector('.team-name')?.textContent?.trim() || '';
+            const pickLine = pickCell?.querySelector('.pick-line')?.textContent?.trim() || '';
+            const pickOdds = pickCell?.querySelector('.pick-odds')?.textContent?.replace(/[()]/g, '').trim() || '-110';
+
+            // Determine pick type from line
+            let pickType = 'spread';
+            let pickDirection = '';
+            if (pickLine.toLowerCase().includes('over')) {
+                pickType = 'total';
+                pickDirection = 'Over';
+            } else if (pickLine.toLowerCase().includes('under')) {
+                pickType = 'total';
+                pickDirection = 'Under';
+            } else if (pickLine.toLowerCase() === 'ml' || pickLine === '') {
+                pickType = 'moneyline';
+            }
+
+            // Model prediction (6th cell)
+            const modelCell = cells[5];
+            const modelPrediction = modelCell?.textContent?.trim() || '';
+
+            // Market line (7th cell)
+            const marketCell = cells[6];
+            const marketLine = marketCell?.textContent?.trim() || '';
+
+            // Edge (8th cell)
+            const edgeCell = cells[7];
+            const edgeText = edgeCell?.textContent?.trim() || '0';
+            const edge = parseFloat(edgeText.replace(/[+%pts]/g, '')) || 0;
+
+            // Fire rating (9th cell)
+            const fireCell = cells[8];
+            const fireRating = fireCell?.textContent?.trim() || '';
+
+            // Build the pick object for LocalPicksManager
+            return {
+                sport: sport.toUpperCase(),
+                awayTeam: awayTeam,
+                homeTeam: homeTeam,
+                awayRecord: awayRecord,
+                homeRecord: homeRecord,
+                pickTeam: pickTeam || awayTeam,
+                pickType: pickType,
+                pickDirection: pickDirection,
+                line: pickLine.replace(/over|under/gi, '').trim(),
+                odds: pickOdds,
+                segment: segment,
+                gameTime: time,
+                gameDate: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+                modelPrediction: modelPrediction,
+                marketLine: marketLine,
+                edge: edge,
+                fireRating: fireRating,
+                risk: 100,  // Default risk amount
+                win: calculateWin(100, pickOdds),
+                status: 'pending',
+                source: 'weekly-lineup'
+            };
+        } catch (err) {
+            console.error('[Weekly Lineup] Error extracting pick from row:', err);
+            return null;
+        }
+    }
+
+    function calculateWin(risk, odds) {
+        const oddsNum = parseInt(odds) || -110;
+        if (oddsNum > 0) {
+            return Math.round(risk * (oddsNum / 100));
+        } else {
+            return Math.round(risk * (100 / Math.abs(oddsNum)));
+        }
+    }
+
+    function addPickToDashboard(pickData, btn) {
+        // Check if LocalPicksManager is available
+        if (!window.LocalPicksManager) {
+            console.error('[Weekly Lineup] LocalPicksManager not available');
+            showNotification('Dashboard not available. Please refresh the page.', 'error');
+            return;
+        }
+
+        // Add the pick
+        const added = window.LocalPicksManager.add([pickData]);
+
+        if (added && added.length > 0) {
+            // Visual feedback
+            btn.textContent = '✓';
+            btn.classList.add('added');
+            btn.disabled = true;
+
+            showNotification(`Added ${pickData.pickTeam} ${pickData.line} to Dashboard`, 'success');
+            console.log('[Weekly Lineup] Pick added to dashboard:', pickData);
+        } else {
+            showNotification('Failed to add pick', 'error');
+        }
+    }
+
     // Export for external use
     window.WeeklyLineup = {
         loadModelOutputs,
         populateTable: populateWeeklyLineupTable,
-        showNotification
+        showNotification,
+        addPickToDashboard
     };
 
     log('✅ Weekly Lineup v2.0 loaded');
