@@ -256,18 +256,26 @@
                     <button class="ft-clear" id="ft-clear">✕ Clear</button>
                 </div>
                 <div class="ft-right">
-                    <!-- Fetch dropdown with league logos -->
-                    <div class="ft-dropdown">
-                        <button class="ft-dropdown-btn ft-fetch-btn" id="fetch-dropdown-btn"><svg class="fetch-svg" viewBox="0 0 16 16" fill="currentColor"><path d="M8 12l-4-4h2.5V3h3v5H12L8 12z"/><path d="M2 14v-2h12v2H2z"/></svg>Fetch Picks ▾</button>
-                        <div class="ft-dropdown-menu ft-fetch-menu" id="fetch-dropdown-menu">
-                            <button class="ft-dropdown-item fetch-all-item" data-fetch="all">Fetch All Leagues</button>
-                            <div class="ft-menu-divider"></div>
-                            <button class="ft-dropdown-item league-fetch-item" data-fetch="nba"><img src="https://a.espncdn.com/i/teamlogos/leagues/500/nba.png" class="league-logo-sm" alt=""> NBA</button>
-                            <button class="ft-dropdown-item league-fetch-item" data-fetch="ncaab"><img src="assets/logo_ncaam_bball.png" class="league-logo-sm" alt="NCAAM"> NCAAM</button>
-                            <button class="ft-dropdown-item league-fetch-item" data-fetch="nfl"><img src="https://a.espncdn.com/i/teamlogos/leagues/500/nfl.png" class="league-logo-sm" alt="NFL"> NFL</button>
-                            <button class="ft-dropdown-item league-fetch-item" data-fetch="ncaaf"><img src="assets/logo_ncaa_football.png" class="league-logo-sm" alt="NCAAF"> NCAAF</button>
-                            <button class="ft-dropdown-item league-fetch-item" data-fetch="nhl"><img src="https://a.espncdn.com/i/teamlogos/leagues/500/nhl.png" class="league-logo-sm" alt=""> NHL</button>
-                        </div>
+                    <!-- Last Fetched Timestamp -->
+                    <span class="ft-last-fetched" id="ft-last-fetched">Last: --</span>
+                    
+                    <!-- Individual Fetch Buttons per League -->
+                    <div class="ft-fetch-buttons">
+                        <button class="ft-fetch-league-btn" data-fetch="all" title="Fetch All Leagues">
+                            <span class="fetch-icon">↻</span> All
+                        </button>
+                        <button class="ft-fetch-league-btn" data-fetch="nba" title="Fetch NBA Picks">
+                            <img src="https://a.espncdn.com/i/teamlogos/leagues/500/nba.png" class="league-logo-sm" alt="NBA">
+                        </button>
+                        <button class="ft-fetch-league-btn" data-fetch="ncaab" title="Fetch NCAAM Picks">
+                            <img src="assets/logo_ncaam_bball.png" class="league-logo-sm" alt="NCAAM">
+                        </button>
+                        <button class="ft-fetch-league-btn" data-fetch="nfl" title="Fetch NFL Picks">
+                            <img src="https://a.espncdn.com/i/teamlogos/leagues/500/nfl.png" class="league-logo-sm" alt="NFL">
+                        </button>
+                        <button class="ft-fetch-league-btn" data-fetch="ncaaf" title="Fetch NCAAF Picks">
+                            <img src="assets/logo_ncaa_football.png" class="league-logo-sm" alt="NCAAF">
+                        </button>
                     </div>
                 </div>
             </div>

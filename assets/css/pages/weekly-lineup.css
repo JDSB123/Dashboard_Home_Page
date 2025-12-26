@@ -4669,6 +4669,70 @@ body.page-weekly-lineup .th-filter-dropdown.weekly-lineup-filter-dropdown .team-
     cursor: wait;
 }
 
+/* ==========================================================================
+   FETCH BUTTONS - Individual league fetch buttons with timestamp
+   ========================================================================== */
+.ft-last-fetched {
+    font-size: 0.7rem;
+    color: rgba(180, 200, 220, 0.7);
+    margin-right: 12px;
+    white-space: nowrap;
+}
+
+.ft-fetch-buttons {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.ft-fetch-league-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 10px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: rgba(200, 215, 230, 0.95);
+    background: linear-gradient(135deg, rgba(20, 35, 60, 0.92) 0%, rgba(15, 28, 50, 0.96) 100%);
+    border: 1px solid rgba(100, 130, 170, 0.35);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    min-width: 36px;
+    height: 28px;
+}
+
+.ft-fetch-league-btn:hover {
+    color: #fff;
+    border-color: rgba(0, 214, 137, 0.5);
+    background: linear-gradient(135deg, rgba(25, 45, 75, 0.95) 0%, rgba(20, 38, 60, 0.98) 100%);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4), 0 0 10px rgba(0, 214, 137, 0.15);
+}
+
+.ft-fetch-league-btn:active {
+    transform: scale(0.95);
+}
+
+.ft-fetch-league-btn.loading {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.ft-fetch-league-btn .league-logo-sm {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+}
+
+.ft-fetch-league-btn .fetch-icon {
+    font-size: 0.85rem;
+    margin-right: 4px;
+}
+
+.ft-fetch-league-btn[data-fetch="all"] {
+    padding: 6px 12px;
+}
+
 @media (max-width: 768px) {
     .filter-toolbar {
         flex-wrap: wrap;
@@ -4677,5 +4741,13 @@ body.page-weekly-lineup .th-filter-dropdown.weekly-lineup-filter-dropdown .team-
     }
     .ft-left, .ft-right {
         gap: 6px;
+    }
+    .ft-last-fetched {
+        display: none;
+    }
+    .ft-fetch-league-btn {
+        min-width: 32px;
+        height: 26px;
+        padding: 4px 8px;
     }
 }

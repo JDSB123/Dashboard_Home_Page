@@ -358,6 +358,9 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                     // Sort by edge (highest first)
                     formattedPicks.sort((a, b) => b.edge - a.edge);
                     populateWeeklyLineupTable(formattedPicks);
+                    
+                    // Update last fetched timestamp
+                    updateLastFetchedTime();
                 } else {
                     console.log('[Weekly Lineup] ⚠️ No picks returned from APIs');
                     showNoPicks('No picks available for today. Check back later or fetch manually.');
@@ -372,6 +375,17 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         } catch (error) {
             console.error('[Weekly Lineup] ❌ Error fetching picks:', error);
             showNoPicks('Error loading picks. Please try the Fetch button to retry.');
+        }
+    }
+
+    // Update last fetched timestamp display (defined here for use in loadModelOutputs)
+    function updateLastFetchedTime() {
+        const el = document.getElementById('ft-last-fetched');
+        if (el) {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+            el.textContent = `Last: ${timeStr}`;
+            el.title = now.toLocaleString();
         }
     }
 
@@ -1325,64 +1339,77 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             applyToolbarFilters();
         });
 
-        // Fetch dropdown items
-        toolbar.querySelectorAll('#fetch-dropdown-menu .ft-dropdown-item').forEach(item => {
-            item.addEventListener('click', () => {
-                const fetchType = item.dataset.fetch;
-                const fetchBtn = document.getElementById('fetch-dropdown-btn');
-                const menu = document.getElementById('fetch-dropdown-menu');
+        // Individual Fetch Buttons - one per league
+        toolbar.querySelectorAll('.ft-fetch-league-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const fetchType = btn.dataset.fetch;
                 
-                menu.classList.remove('open');
-                fetchBtn.classList.remove('open');
-                
-                fetchBtn.textContent = '⟳ Fetching...';
-                fetchBtn.disabled = true;
+                // Add loading state
+                btn.classList.add('loading');
+                const originalContent = btn.innerHTML;
+                btn.innerHTML = '<span class="fetch-icon" style="animation: spin 0.8s linear infinite;">↻</span>';
                 
                 console.log(`🔄 [Weekly Lineup] Fetching picks: ${fetchType}`);
 
-                // Fetch from model APIs using UnifiedPicksFetcher
-                if (window.UnifiedPicksFetcher?.fetchAndDisplayPicks) {
-                    window.UnifiedPicksFetcher.fetchAndDisplayPicks(fetchType)
-                        .then((result) => {
-                            const count = result.picks?.length || 0;
-                            fetchBtn.textContent = `✓ ${count} picks`;
-                            setTimeout(() => {
-                                fetchBtn.textContent = '⟳ Fetch Picks ▾';
-                                fetchBtn.disabled = false;
-                            }, 2000);
-
-                            // Show errors if any
-                            if (result.errors?.length > 0) {
-                                console.warn('[Weekly Lineup] Some APIs had errors:', result.errors);
-                            }
-                        })
-                        .catch((err) => {
-                            console.error('Fetch error:', err);
-                            fetchBtn.textContent = '⟳ Fetch Picks ▾';
-                            fetchBtn.disabled = false;
-                        });
-                } else {
-                    // Fallback to AutoGameFetcher for game data only
-                    if (window.AutoGameFetcher?.fetchTodaysGames) {
-                        window.AutoGameFetcher.fetchTodaysGames()
-                            .then(() => {
-                                fetchBtn.textContent = '✓ Done';
-                                setTimeout(() => {
-                                    fetchBtn.textContent = '⟳ Fetch Picks ▾';
-                                    fetchBtn.disabled = false;
-                                }, 2000);
-                            })
-                            .catch((err) => {
-                                console.error('Fetch error:', err);
-                                fetchBtn.textContent = '⟳ Fetch Picks ▾';
-                                fetchBtn.disabled = false;
-                            });
-                    } else {
-                        setTimeout(() => {
-                            fetchBtn.textContent = '⟳ Fetch Picks ▾';
-                            fetchBtn.disabled = false;
-                        }, 1000);
+                try {
+                    // Wait for fetcher if not ready
+                    const fetcherReady = await waitForFetcher(10, 200);
+                    if (!fetcherReady) {
+                        throw new Error('Fetcher not available');
                     }
+
+                    const result = await window.UnifiedPicksFetcher.fetchPicks(
+                        fetchType === 'all' ? 'all' : fetchType, 
+                        'today'
+                    );
+                    
+                    if (result.picks && result.picks.length > 0) {
+                        // Add fetched picks to table
+                        const formattedPicks = result.picks.map(pick => ({
+                            date: pick.date || getTodayDateString(),
+                            time: pick.time || 'TBD',
+                            sport: pick.sport || pick.league || 'NBA',
+                            awayTeam: pick.awayTeam || (pick.game ? pick.game.split(' @ ')[0] : ''),
+                            homeTeam: pick.homeTeam || (pick.game ? pick.game.split(' @ ')[1] : ''),
+                            segment: pick.segment || 'FG',
+                            pickTeam: pick.pickTeam || pick.pick || '',
+                            pickType: pick.pickType || 'spread',
+                            line: pick.line || '',
+                            odds: pick.odds || '-110',
+                            modelPrice: pick.modelPrice || pick.model_price || '',
+                            edge: parseFloat(pick.edge) || 0,
+                            fire: parseInt(pick.fire) || Math.min(5, Math.ceil((parseFloat(pick.edge) || 0) / 1.5)),
+                            fireLabel: (parseFloat(pick.edge) >= 6) ? 'MAX' : '',
+                            status: pick.status || 'pending'
+                        }));
+                        formattedPicks.sort((a, b) => b.edge - a.edge);
+                        populateWeeklyLineupTable(formattedPicks);
+                        console.log(`[Weekly Lineup] ✅ Fetched ${result.picks.length} picks for ${fetchType}`);
+                    }
+
+                    // Update last fetched timestamp
+                    updateLastFetchedTime();
+
+                    // Show success briefly
+                    btn.innerHTML = '<span style="color:#00d689;">✓</span>';
+                    setTimeout(() => {
+                        btn.innerHTML = originalContent;
+                        btn.classList.remove('loading');
+                    }, 1500);
+
+                    // Log any errors
+                    if (result.errors?.length > 0) {
+                        result.errors.forEach(err => {
+                            console.warn(`[Weekly Lineup] ${err.league} API error:`, err.error);
+                        });
+                    }
+                } catch (err) {
+                    console.error('[Weekly Lineup] Fetch error:', err);
+                    btn.innerHTML = '<span style="color:#ff6b6b;">✕</span>';
+                    setTimeout(() => {
+                        btn.innerHTML = originalContent;
+                        btn.classList.remove('loading');
+                    }, 1500);
                 }
             });
         });
