@@ -882,3 +882,108 @@ input[type="date"]:focus::-webkit-calendar-picker-indicator {
     transform: scale(0.92);
 }
 
+/* =========================================================
+   DATE RANGE SELECTOR - Compact Dropdown Toggle
+   Single button with dropdown for date range selection
+   ========================================================= */
+
+.date-range-selector {
+    position: relative;
+    display: inline-flex;
+    align-items: flex-end; /* Align button to bottom */
+    margin: 0;
+    padding: 0;
+    z-index: 500;
+}
+
+/* Main toggle button */
+.date-range-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0; /* Reset browser default */
+    padding: 6px 12px;
+    background: rgba(10, 22, 38, 0.8);
+    border: 1px solid rgba(0, 214, 137, 0.4);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+}
+
+.date-range-toggle:hover {
+    background: rgba(0, 214, 137, 0.15);
+    border-color: rgba(0, 214, 137, 0.6);
+}
+
+.date-range-toggle[aria-expanded="true"] {
+    background: rgba(0, 214, 137, 0.2);
+    border-color: rgba(0, 214, 137, 0.7);
+}
+
+.date-range-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #00ffaa;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.date-range-arrow {
+    font-size: 0.55rem;
+    color: rgba(0, 214, 137, 0.7);
+    transition: transform 0.15s ease;
+}
+
+.date-range-toggle[aria-expanded="true"] .date-range-arrow {
+    transform: rotate(180deg);
+}
+
+/* Dropdown panel */
+.date-range-dropdown {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    min-width: 120px;
+    background: rgba(8, 18, 30, 0.98);
+    border: 1px solid rgba(0, 214, 137, 0.5);
+    border-radius: 6px;
+    padding: 4px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 12px rgba(0, 214, 137, 0.15);
+    z-index: 1000;
+}
+
+.date-range-dropdown[hidden] {
+    display: none;
+}
+
+/* Dropdown options */
+.date-range-option {
+    display: block;
+    width: 100%;
+    padding: 5px 10px;
+    background: transparent;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: left;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: rgba(230, 242, 246, 0.85);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: all 0.1s ease;
+}
+
+.date-range-option:hover {
+    background: rgba(0, 214, 137, 0.15);
+    color: #00ffaa;
+}
+
+.date-range-option.active {
+    background: rgba(0, 214, 137, 0.25);
+    color: #00ffaa;
+    font-weight: 700;
+}
+

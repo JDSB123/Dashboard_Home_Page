@@ -241,11 +241,11 @@ body.page-active-picks .picks-table thead th {
     --dashboard-topline-height: 76px;
     display: flex;
     flex-direction: row;
-    align-items: center; /* REFINEMENT: Changed from flex-end - better vertical balance */
+    align-items: flex-end; /* Align bottoms - date toggle aligns with KPI tiles */
     justify-content: flex-start; /* Pack elements to the left */
     gap: 12px; /* REFINEMENT: Increased from 8px - better breathing room */
     width: 100%;
-    margin-bottom: 20px; /* Increased spacing before table */
+    margin-bottom: 28px; /* Increased spacing before table */
     position: relative;
     z-index: 200;
 }
@@ -261,6 +261,11 @@ body.page-active-picks .picks-table thead th {
 
 .dashboard-topline .date-toggles-container {
     flex: 0 0 auto; /* Don't grow, don't shrink, use natural size */
+}
+
+.dashboard-topline .date-range-selector {
+    flex: 0 0 auto;
+    align-self: flex-end; /* Bottom aligns with KPI tiles */
 }
 
 .brand-stack {
@@ -367,9 +372,9 @@ nav {
     .dashboard-topline {
         --dashboard-topline-height: 72px;
         flex-wrap: wrap;
-        margin-bottom: 8px;
+        margin-bottom: 20px; /* Increased spacing before table */
     }
-    
+
     .main-dashboard-layout {
         width: 100%;
     }
@@ -400,7 +405,7 @@ nav {
 
     .dashboard-topline {
         --dashboard-topline-height: 66px;
-        margin-bottom: 6px; /* Tight spacing above the table */
+        margin-bottom: 14px; /* Increased spacing before table */
     }
 
     .topline-utilities {
@@ -426,7 +431,7 @@ nav {
     }
 
     .dashboard-topline {
-        margin-bottom: 6px; /* Tight spacing above the table */
+        margin-bottom: 12px; /* Increased spacing before table */
     }
 }
 

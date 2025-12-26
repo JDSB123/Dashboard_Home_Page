@@ -12,9 +12,89 @@
     let customEndDate = null;
 
     /**
+     * Initialize the compact date range dropdown selector
+     */
+    function initializeDateRangeDropdown() {
+        const toggle = document.getElementById('date-range-toggle');
+        const dropdown = document.getElementById('date-range-dropdown');
+        const label = document.getElementById('date-range-label');
+        const options = document.querySelectorAll('.date-range-option');
+
+        if (!toggle || !dropdown || !label) {
+            console.log('[DateToggles] Date range dropdown elements not found');
+            return;
+        }
+
+        // Toggle dropdown on button click
+        toggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const isOpen = !dropdown.hidden;
+
+            if (isOpen) {
+                dropdown.hidden = true;
+                toggle.setAttribute('aria-expanded', 'false');
+            } else {
+                dropdown.hidden = false;
+                toggle.setAttribute('aria-expanded', 'true');
+            }
+        });
+
+        // Handle option selection
+        options.forEach(option => {
+            option.addEventListener('click', function(e) {
+                e.stopPropagation();
+
+                const range = this.dataset.range;
+                const optionText = this.textContent;
+
+                // Update active state
+                options.forEach(opt => {
+                    opt.classList.remove('active');
+                    opt.setAttribute('aria-selected', 'false');
+                });
+                this.classList.add('active');
+                this.setAttribute('aria-selected', 'true');
+
+                // Update button label
+                label.textContent = optionText;
+
+                // Close dropdown
+                dropdown.hidden = true;
+                toggle.setAttribute('aria-expanded', 'false');
+
+                // Apply the date filter
+                currentDateRange = range;
+                applyDateFilter(range);
+            });
+        });
+
+        // Close dropdown on outside click
+        document.addEventListener('click', function(e) {
+            if (!dropdown.hidden && !toggle.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.hidden = true;
+                toggle.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        // Close on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && !dropdown.hidden) {
+                dropdown.hidden = true;
+                toggle.setAttribute('aria-expanded', 'false');
+                toggle.focus();
+            }
+        });
+
+        console.log('[DateToggles] Date range dropdown initialized');
+    }
+
+    /**
      * Initialize date toggles on page load
      */
     function initializeDateToggles() {
+        // Initialize compact dropdown selector (new style)
+        initializeDateRangeDropdown();
+
         const dateButtons = document.querySelectorAll('.date-toggle-btn');
         const customRangeSection = document.querySelector('.custom-date-range');
         const applyButton = document.querySelector('.date-apply-btn');
@@ -22,7 +102,7 @@
         const startDateInput = document.getElementById('date-range-start');
         const endDateInput = document.getElementById('date-range-end');
 
-        // Set default active state
+        // Set default active state (for legacy buttons if present)
         const allTimeButton = document.querySelector('.date-toggle-btn[data-range="all"]');
         if (allTimeButton) {
             allTimeButton.classList.add('active');
