@@ -172,7 +172,10 @@
             const activeLeagues = Array.from(document.querySelectorAll('#th-league-dropdown .th-filter-item.active'))
                 .map(el => el.getAttribute('data-v'));
             
-            const activePicks = Array.from(document.querySelectorAll('#th-pick-dropdown .th-filter-item.active'))
+            const activeSegments = Array.from(document.querySelectorAll('#th-segment-dropdown .th-filter-item.active'))
+                .map(el => el.getAttribute('data-v'));
+
+            const activePickTypes = Array.from(document.querySelectorAll('#th-picktype-dropdown .th-filter-item.active'))
                 .map(el => el.getAttribute('data-v'));
             
             const activeStatuses = Array.from(document.querySelectorAll('#th-status-dropdown .th-filter-item.active'))
@@ -187,10 +190,10 @@
             const activeWinRanges = Array.from(document.querySelectorAll('#th-riskwin-dropdown .th-range-btn.active[data-f="win"]'))
                 .map(el => el.getAttribute('data-v'));
             
-            console.log('Filters:', { activeDatetime, activeLeagues, activePicks, activeStatuses, activeResults, activeRiskRanges, activeWinRanges });
+            console.log('Filters:', { activeDatetime, activeLeagues, activeSegments, activePickTypes, activeStatuses, activeResults, activeRiskRanges, activeWinRanges });
             
             // Apply to table rows
-            this.filterTableRows({ activeDatetime, activeLeagues, activePicks, activeStatuses, activeResults, activeRiskRanges, activeWinRanges });
+            this.filterTableRows({ activeDatetime, activeLeagues, activeSegments, activePickTypes, activeStatuses, activeResults, activeRiskRanges, activeWinRanges });
         },
 
         filterTableRows(filters) {
@@ -206,8 +209,9 @@
                 
                 // Date/Time filter
                 if (filters.activeDatetime && filters.activeDatetime.length > 0 && !filters.activeDatetime.includes('all')) {
-                    const dateCell = row.querySelector('.col-datetime')?.textContent.trim();
-                    const rowDate = dateCell ? new Date(dateCell) : null;
+                    const epoch = parseInt(row.getAttribute('data-epoch'));
+                    const rowDate = epoch ? new Date(epoch) : null;
+                    
                     if (rowDate) {
                         const matchesDate = filters.activeDatetime.some(dt => {
                             if (dt === 'today') return rowDate >= today;
@@ -222,25 +226,38 @@
                 
                 // League filter
                 if (show && filters.activeLeagues.length > 0) {
-                    const rowLeague = row.querySelector('.col-league')?.textContent.trim().toLowerCase();
-                    if (!filters.activeLeagues.some(l => rowLeague?.includes(l))) show = false;
+                    const rowLeague = row.getAttribute('data-league');
+                    if (!filters.activeLeagues.some(l => rowLeague === l || rowLeague?.includes(l))) show = false;
+                }
+
+                // Segment filter
+                if (show && filters.activeSegments.length > 0) {
+                    const rowSegment = row.getAttribute('data-segment'); // '1h', '2h', 'full-game'
+                    if (!filters.activeSegments.some(s => {
+                        if (s === 'full') return rowSegment === 'full-game';
+                        return rowSegment === s;
+                    })) show = false;
                 }
                 
-                // Pick type filter - check segment column content
-                if (show && filters.activePicks.length > 0) {
-                    const rowSegment = row.querySelector('.col-segment')?.textContent.trim().toLowerCase();
-                    if (!filters.activePicks.some(p => rowSegment?.includes(p))) show = false;
+                // Pick Type filter
+                if (show && filters.activePickTypes.length > 0) {
+                    const rowPickType = row.getAttribute('data-pick-type');
+                    if (!filters.activePickTypes.some(p => rowPickType === p)) show = false;
                 }
                 
                 // Status filter
                 if (show && filters.activeStatuses.length > 0) {
-                    const rowStatus = row.getAttribute('data-status') || row.querySelector('[class*="status"]')?.textContent.trim().toLowerCase();
-                    if (!filters.activeStatuses.some(s => rowStatus?.includes(s))) show = false;
+                    const rowStatus = row.getAttribute('data-status'); // 'pending', 'win', 'loss', 'push'
+                    if (!filters.activeStatuses.some(s => {
+                        if (s === 'won') return rowStatus === 'win';
+                        if (s === 'lost') return rowStatus === 'loss';
+                        return rowStatus === s;
+                    })) show = false;
                 }
                 
                 // Result filter ($ Won/Lost)
                 if (show && filters.activeResults && filters.activeResults.length > 0) {
-                    const rowResult = row.querySelector('.col-result')?.textContent.trim();
+                    const rowResult = row.querySelector('.won-lost-value')?.textContent.trim();
                     const matchesResult = filters.activeResults.some(r => {
                         if (r === 'positive') return rowResult?.startsWith('+');
                         if (r === 'negative') return rowResult?.startsWith('-');

@@ -474,6 +474,11 @@
         if (window.ZebraStripes?.applyPicksTableZebraStripes) {
             setTimeout(() => window.ZebraStripes.applyPicksTableZebraStripes(), 50);
         }
+        
+        // Re-apply filters if they exist
+        if (window.DashboardFilters && typeof window.DashboardFilters.applyFilters === 'function') {
+            setTimeout(() => window.DashboardFilters.applyFilters(), 50);
+        }
     }
 
     // ========== CREATE ROW (FULL TEMPLATE) ==========
