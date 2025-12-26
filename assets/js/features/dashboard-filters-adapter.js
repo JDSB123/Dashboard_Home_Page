@@ -249,6 +249,38 @@
                     });
                     if (!matchesResult) show = false;
                 }
+
+                // Risk filter
+                if (show && filters.activeRiskRanges && filters.activeRiskRanges.length > 0) {
+                    const riskVal = parseFloat(row.getAttribute('data-risk')) || 0;
+                    const matchesRisk = filters.activeRiskRanges.some(range => {
+                        if (range === '1000+') {
+                            return riskVal >= 1000;
+                        }
+                        if (range.endsWith('+')) {
+                            return riskVal >= parseFloat(range);
+                        }
+                        const [min, max] = range.split('-').map(Number);
+                        return riskVal >= min && riskVal <= max;
+                    });
+                    if (!matchesRisk) show = false;
+                }
+
+                // Win filter
+                if (show && filters.activeWinRanges && filters.activeWinRanges.length > 0) {
+                    const winVal = parseFloat(row.getAttribute('data-win')) || 0;
+                    const matchesWin = filters.activeWinRanges.some(range => {
+                        if (range === '1000+') {
+                            return winVal >= 1000;
+                        }
+                        if (range.endsWith('+')) {
+                            return winVal >= parseFloat(range);
+                        }
+                        const [min, max] = range.split('-').map(Number);
+                        return winVal >= min && winVal <= max;
+                    });
+                    if (!matchesWin) show = false;
+                }
                 
                 row.style.display = show ? '' : 'none';
             });

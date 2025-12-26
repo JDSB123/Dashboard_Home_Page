@@ -18,6 +18,7 @@
     /* Default layout for halves (NCAAB): Team | 1H | 2H | T */
     grid-template-columns: minmax(85px, 1fr) 34px 34px 40px;
     width: 100%;
+    min-width: 200px;
     max-width: 200px;
     background: linear-gradient(
         180deg,
@@ -34,11 +35,13 @@
         0 0 0 1px rgba(0, 0, 0, 0.15);
     -webkit-backdrop-filter: blur(8px);
     backdrop-filter: blur(8px);
+    margin: 0 auto;
 }
 
 /* Quarters layout (NBA/NFL): Team | Q1 | Q2 | Q3 | Q4 | T */
 .boxscore-grid.boxscore-quarters {
     grid-template-columns: minmax(75px, 1fr) 28px 28px 28px 28px 36px;
+    min-width: 260px;
     max-width: 260px;
 }
 

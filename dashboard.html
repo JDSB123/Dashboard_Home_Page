@@ -39,14 +39,14 @@
 
     <!-- 6. Table System Components -->
     <link rel="stylesheet" href="assets/css/components/picks-table.css?v=20251225-99">
-    <link rel="stylesheet" href="assets/css/components/boxscores.css?v=20251225-1">
+    <link rel="stylesheet" href="assets/css/components/boxscores.css?v=20251225-3">
     <link rel="stylesheet" href="assets/css/components/status-badges.css?v=20251225-2">
 
     <!-- 7. Utility & Color Systems -->
     <link rel="stylesheet" href="assets/css/components/segment-colors.css?v=20251225-99">
 
     <!-- 8. Dashboard-specific styles (self-contained) -->
-    <link rel="stylesheet" href="assets/css/pages/dashboard.css?v=20251225-104">
+    <link rel="stylesheet" href="assets/css/pages/dashboard.css?v=20251225-111">
 
     <!--
     COLUMN ALIGNMENT FIX - Critical inline styles for table structure
@@ -797,9 +797,11 @@
                                     </div>
                                 </div>
                             </th>
-                            <th scope="col" class="center col-league">
+                            <th scope="col" class="center col-league sortable" data-sort="league">
                                 <div class="th-header-shell th-filterable">
-                                    <span class="th-header-text"><span class="header-main-text">League</span></span>
+                                    <button class="th-sort-btn" aria-label="Sort by league">
+                                        <span class="header-main-text">League</span>
+                                    </button>
                                     <button class="th-filter-btn" aria-label="Filter by league" aria-expanded="false" aria-controls="th-league-dropdown"><span class="kebab-dot"></span></button>
                                     <div class="th-filter-dropdown" id="th-league-dropdown" hidden>
                                         <button class="th-filter-item ft-league-item" data-f="league" data-v="nba"><img src="https://a.espncdn.com/i/teamlogos/leagues/500/nba.png" alt="NBA" class="ft-league-logo">NBA</button>
@@ -812,12 +814,17 @@
                             </th>
                             <th scope="col" class="sortable col-matchup" data-sort="matchup">
                                 <div class="th-header-shell">
-                                    <button class="th-sort-btn" aria-label="Sort by Matchup"><span class="header-main-text">Matchup</span><span class="header-subtext">Away vs Home</span><span class="sort-icon" aria-hidden="true">▲</span></button>
+                                    <button class="th-sort-btn" aria-label="Sort by Matchup">
+                                        <span class="header-main-text">Matchup</span>
+                                        <span class="header-subtext">Away vs Home</span>
+                                    </button>
                                 </div>
                             </th>
-                            <th scope="col" class="center col-segment">
+                            <th scope="col" class="center col-segment sortable" data-sort="segment">
                                 <div class="th-header-shell th-filterable">
-                                    <span class="th-header-text"><span class="header-main-text">Segment</span></span>
+                                    <button class="th-sort-btn" aria-label="Sort by segment">
+                                        <span class="header-main-text">Segment</span>
+                                    </button>
                                     <button class="th-filter-btn" aria-label="Filter by segment" aria-expanded="false" aria-controls="th-segment-dropdown"><span class="kebab-dot"></span></button>
                                     <div class="th-filter-dropdown" id="th-segment-dropdown" hidden>
                                         <button class="th-filter-item" data-f="segment" data-v="full">Full Game</button>
@@ -830,9 +837,11 @@
                                     </div>
                                 </div>
                             </th>
-                            <th scope="col" class="center col-pick">
+                            <th scope="col" class="center col-pick sortable" data-sort="pick">
                                 <div class="th-header-shell th-filterable">
-                                    <span class="th-header-text"><span class="header-main-text">Pick</span></span>
+                                    <button class="th-sort-btn" aria-label="Sort by pick">
+                                        <span class="header-main-text">Pick</span>
+                                    </button>
                                     <button class="th-filter-btn" aria-label="Filter by pick type" aria-expanded="false" aria-controls="th-picktype-dropdown"><span class="kebab-dot"></span></button>
                                     <div class="th-filter-dropdown" id="th-picktype-dropdown" hidden>
                                         <button class="th-filter-item" data-f="picktype" data-v="spread">Spread</button>
@@ -843,29 +852,33 @@
                                     </div>
                                 </div>
                             </th>
-                            <th scope="col" class="center">
+                            <th scope="col" class="center sortable" data-sort="risk">
                                 <div class="th-header-shell th-filterable">
-                                    <span class="th-header-text"><span class="header-main-text">$ Risk / $ Win</span></span>
+                                    <button class="th-sort-btn" aria-label="Sort by risk/win">
+                                        <span class="header-main-text">$ Risk /<br>$ Win</span>
+                                    </button>
                                     <button class="th-filter-btn" aria-label="Filter by risk/win" aria-expanded="false" aria-controls="th-riskwin-dropdown"><span class="kebab-dot"></span></button>
                                     <div class="th-filter-dropdown th-range-dropdown" id="th-riskwin-dropdown" hidden>
                                         <div class="th-range-section">
                                             <span class="th-range-label">Risk Amount</span>
                                             <div class="th-range-buttons">
-                                                <button class="th-range-btn" data-f="risk" data-v="0-50">$0-50</button>
-                                                <button class="th-range-btn" data-f="risk" data-v="50-100">$50-100</button>
-                                                <button class="th-range-btn" data-f="risk" data-v="100-250">$100-250</button>
-                                                <button class="th-range-btn" data-f="risk" data-v="250-500">$250-500</button>
-                                                <button class="th-range-btn" data-f="risk" data-v="500+">$500+</button>
+                                                <button class="th-range-btn" data-f="risk" data-v="0-50">$0 - $50</button>
+                                                <button class="th-range-btn" data-f="risk" data-v="50-100">$50 - $100</button>
+                                                <button class="th-range-btn" data-f="risk" data-v="100-250">$100 - $250</button>
+                                                <button class="th-range-btn" data-f="risk" data-v="250-500">$250 - $500</button>
+                                                <button class="th-range-btn" data-f="risk" data-v="500-1000">$500 - $1K</button>
+                                                <button class="th-range-btn" data-f="risk" data-v="1000+">$1K+</button>
                                             </div>
                                         </div>
                                         <div class="th-range-section">
                                             <span class="th-range-label">To Win</span>
                                             <div class="th-range-buttons">
-                                                <button class="th-range-btn" data-f="win" data-v="0-50">$0-50</button>
-                                                <button class="th-range-btn" data-f="win" data-v="50-100">$50-100</button>
-                                                <button class="th-range-btn" data-f="win" data-v="100-250">$100-250</button>
-                                                <button class="th-range-btn" data-f="win" data-v="250-500">$250-500</button>
-                                                <button class="th-range-btn" data-f="win" data-v="500+">$500+</button>
+                                                <button class="th-range-btn" data-f="win" data-v="0-50">$0 - $50</button>
+                                                <button class="th-range-btn" data-f="win" data-v="50-100">$50 - $100</button>
+                                                <button class="th-range-btn" data-f="win" data-v="100-250">$100 - $250</button>
+                                                <button class="th-range-btn" data-f="win" data-v="250-500">$250 - $500</button>
+                                                <button class="th-range-btn" data-f="win" data-v="500-1000">$500 - $1K</button>
+                                                <button class="th-range-btn" data-f="win" data-v="1000+">$1K+</button>
                                             </div>
                                         </div>
                                     </div>
@@ -875,13 +888,14 @@
                                 <div class="th-header-shell">
                                     <button class="th-sort-btn" aria-label="Sort by box score">
                                         <span class="header-main-text">Box Score</span>
-                                        <span class="sort-icon" aria-hidden="true">▲</span>
                                     </button>
                                 </div>
                             </th>
-                            <th scope="col" class="center">
+                            <th scope="col" class="center sortable" data-sort="status">
                                 <div class="th-header-shell th-filterable">
-                                    <span class="th-header-text"><span class="header-main-text">Status</span></span>
+                                    <button class="th-sort-btn" aria-label="Sort by status">
+                                        <span class="header-main-text">Status</span>
+                                    </button>
                                     <button class="th-filter-btn" aria-label="Filter by status" aria-expanded="false" aria-controls="th-status-dropdown"><span class="kebab-dot"></span></button>
                                     <div class="th-filter-dropdown" id="th-status-dropdown" hidden>
                                         <button class="th-filter-item" data-f="status" data-v="pending">Pending</button>
@@ -891,9 +905,11 @@
                                     </div>
                                 </div>
                             </th>
-                            <th scope="col" class="center">
+                            <th scope="col" class="center sortable" data-sort="profit">
                                 <div class="th-header-shell th-filterable">
-                                    <span class="th-header-text"><span class="header-main-text">$ Won / $ Lost</span></span>
+                                    <button class="th-sort-btn" aria-label="Sort by won/lost">
+                                        <span class="header-main-text">$ Won /<br>$ Lost</span>
+                                    </button>
                                     <button class="th-filter-btn" aria-label="Filter by result" aria-expanded="false" aria-controls="th-result-dropdown"><span class="kebab-dot"></span></button>
                                     <div class="th-filter-dropdown" id="th-result-dropdown" hidden>
                                         <button class="th-filter-item" data-f="result" data-v="positive">Won (+$)</button>
@@ -933,15 +949,15 @@
     <script src="assets/js/modules/picks-state-manager.js?v=20251224-3" defer></script>
     <script src="assets/js/modules/picks-data-processor.js?v=20251224-3" defer></script>
     <script src="assets/js/modules/picks-filter-manager.js?v=20251224-4" defer></script>
-    <script src="assets/js/modules/picks-sort-manager.js?v=20251224-6" defer></script>
+    <script src="assets/js/modules/picks-sort-manager.js?v=20251225-1" defer></script>
     <script src="assets/js/modules/picks-table-renderer.js?v=20251224-3" defer></script>
     <script src="assets/js/features/active-picks-modular.js?v=20251225-8" defer></script>
-    <script src="assets/js/features/dashboard-filters-adapter.js?v=20251225-6" defer></script>
+    <script src="assets/js/features/dashboard-filters-adapter.js?v=20251225-8" defer></script>
     <script src="dashboard/js/kpi-calculator.js?v=20251224-3" defer></script>
-    <script src="dashboard/js/smart-load-picks.js?v=20251225-2" defer></script>
+    <script src="dashboard/js/smart-load-picks.js?v=20251225-4" defer></script>
     <script src="assets/js/core/navigation.js?v=20251224-3" defer></script>
     <script src="dashboard/js/status-logic.js?v=20251224-3" defer></script>
-    <script src="dashboard/js/status-tooltip.js?v=20251225-2" defer></script>
+    <script src="dashboard/js/status-tooltip.js?v=20251225-3" defer></script>
 
     <!-- Upload functionality -->
     <script src="assets/js/features/auto-game-fetcher.js?v=20251224-3" defer></script>

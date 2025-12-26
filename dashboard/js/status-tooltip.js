@@ -206,14 +206,26 @@
         const blurb = target.getAttribute('data-blurb') || target.getAttribute('title') || '';
         // Additional status info (e.g., win/loss records like "2W-1L-0P")
         const statusInfo = target.getAttribute('data-status-info') || '';
+        // Margin info (e.g., "Covered by 5 pts")
+        const margin = target.getAttribute('data-margin') || '';
         
-        // Combine both if available, separated by a bullet point
-        let text = blurb.trim();
-        if (statusInfo && text) {
-            text = `${text} • ${statusInfo}`;
-        } else if (statusInfo) {
-            text = statusInfo;
+        // Build the tooltip text
+        let parts = [];
+        
+        if (blurb.trim()) {
+            parts.push(blurb.trim());
         }
+        
+        if (margin) {
+            parts.push(margin);
+        }
+        
+        if (statusInfo) {
+            parts.push(statusInfo);
+        }
+        
+        // Join parts with bullet separator
+        let text = parts.join(' • ');
         
         // Fallback to textContent if no data attributes
         if (!text) {
