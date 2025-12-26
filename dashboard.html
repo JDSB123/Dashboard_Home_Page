@@ -505,9 +505,9 @@
         }
 
         .th-filter-btn.active {
-            background: #00d689 !important;
-            color: #000 !important;
-            border-color: #00d689 !important;
+            background: transparent !important;
+            color: #00d689 !important;
+            border-color: transparent !important;
         }
 
         /* Filter Dropdown Container - POSITIONING HANDLED BY JS + earlier CSS rules (lines 134-154) */
@@ -833,9 +833,9 @@
                                     </div>
                                 </div>
                             </th>
-                            <th scope="col" class="sortable col-pick" data-sort="pick">
+                            <th scope="col" class="center col-pick">
                                 <div class="th-header-shell th-filterable">
-                                    <button class="th-sort-btn" aria-label="Sort by pick"><span class="header-main-text">Pick</span><span class="sort-icon" aria-hidden="true">▲</span></button>
+                                    <span class="th-header-text"><span class="header-main-text">Pick</span></span>
                                     <button class="th-filter-btn" aria-label="Filter by pick type" aria-expanded="false" aria-controls="th-picktype-dropdown"><span class="kebab-dot"></span></button>
                                     <div class="th-filter-dropdown" id="th-picktype-dropdown" hidden>
                                         <button class="th-filter-item" data-f="picktype" data-v="spread">Spread</button>
@@ -887,10 +887,10 @@
                                     <span class="th-header-text"><span class="header-main-text">Status</span></span>
                                     <button class="th-filter-btn" aria-label="Filter by status" aria-expanded="false" aria-controls="th-status-dropdown"><span class="kebab-dot"></span></button>
                                     <div class="th-filter-dropdown" id="th-status-dropdown" hidden>
-                                        <button class="th-filter-item" data-f="status" data-v="pending"><span class="status-dot pending"></span>Pending</button>
-                                        <button class="th-filter-item" data-f="status" data-v="won"><span class="status-dot won"></span>Won</button>
-                                        <button class="th-filter-item" data-f="status" data-v="lost"><span class="status-dot lost"></span>Lost</button>
-                                        <button class="th-filter-item" data-f="status" data-v="push"><span class="status-dot push"></span>Push</button>
+                                        <button class="th-filter-item" data-f="status" data-v="pending">Pending</button>
+                                        <button class="th-filter-item" data-f="status" data-v="won">Won</button>
+                                        <button class="th-filter-item" data-f="status" data-v="lost">Lost</button>
+                                        <button class="th-filter-item" data-f="status" data-v="push">Push</button>
                                     </div>
                                 </div>
                             </th>
@@ -899,9 +899,9 @@
                                     <span class="th-header-text"><span class="header-main-text">$ Won / $ Lost</span></span>
                                     <button class="th-filter-btn" aria-label="Filter by result" aria-expanded="false" aria-controls="th-result-dropdown"><span class="kebab-dot"></span></button>
                                     <div class="th-filter-dropdown" id="th-result-dropdown" hidden>
-                                        <button class="th-filter-item" data-f="result" data-v="positive"><span class="result-indicator positive">+$</span>Won</button>
-                                        <button class="th-filter-item" data-f="result" data-v="negative"><span class="result-indicator negative">-$</span>Lost</button>
-                                        <button class="th-filter-item" data-f="result" data-v="zero"><span class="result-indicator zero">$0</span>Push</button>
+                                        <button class="th-filter-item" data-f="result" data-v="positive">Won (+$)</button>
+                                        <button class="th-filter-item" data-f="result" data-v="negative">Lost (-$)</button>
+                                        <button class="th-filter-item" data-f="result" data-v="zero">Push ($0)</button>
                                     </div>
                                 </div>
                             </th>
