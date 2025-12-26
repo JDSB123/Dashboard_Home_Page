@@ -27,9 +27,16 @@
         initHeaderFilters() {
             // Find all filter buttons in table headers
             const filterBtns = document.querySelectorAll('.th-filter-btn');
-            console.log('Found filter buttons:', filterBtns.length);
-            
+            console.log('[DashboardFilters] Found filter buttons:', filterBtns.length);
+
             filterBtns.forEach(btn => {
+                // Skip if handler already attached by another script (e.g., active-picks-modular.js)
+                if (btn.dataset.filterHandlerAttached) {
+                    console.log('[DashboardFilters] Skipping - handler already attached for:', btn.getAttribute('aria-controls'));
+                    return;
+                }
+                btn.dataset.filterHandlerAttached = 'dashboard-filters-adapter';
+
                 btn.addEventListener('click', (e) => {
                     e.preventDefault();
                     e.stopPropagation();
