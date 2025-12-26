@@ -872,10 +872,10 @@
     // ========== INITIALIZE ==========
 
     function initialize() {
-        console.log('🏠 LocalPicksManager v2.4 initialized (won/lost dollars)');
-        
-        // Import today's picks (one-time)
-        importTodaysPicks();
+        console.log('🏠 LocalPicksManager v2.5 initialized (no demo import)');
+
+        // DISABLED: Demo picks import - users add real picks from weekly-lineup
+        // importTodaysPicks();
 
         // Override global functions
         window.processAndSavePicks = parseAndAddPicks;
