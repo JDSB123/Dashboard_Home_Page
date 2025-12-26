@@ -1,12 +1,13 @@
 /* ==========================================================================
-   WEEKLY LINEUP PAGE JAVASCRIPT v3.0
+   WEEKLY LINEUP PAGE JAVASCRIPT v33.00.0
    ==========================================================================
+   Production release - Real API data only, no mock data
    Today's Picks - Model outputs with Edge/Fire ratings
    Matches dashboard styling with team logos and sorting
    ========================================================================== */
 
 // IMMEDIATE DEBUG - OUTSIDE OF IIFE
-const WL_BUILD = '20251222p';
+const WL_BUILD = '33.00.0';
 console.log(`!!!!! WEEKLY-LINEUP.JS FILE IS BEING PARSED (build ${WL_BUILD}) !!!!!`);
 window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
@@ -293,91 +294,74 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
     }
 
     // ===== LOAD MODEL OUTPUTS (TODAY'S PICKS) =====
-    function loadModelOutputs() {
-        log('Loading today\'s model picks...');
+    /**
+     * v33.00.0 - Production: Fetch real picks from Azure Container Apps APIs
+     * No mock/placeholder data - uses unified-picks-fetcher.js
+     */
+    async function loadModelOutputs() {
+        log('🔄 Loading today\'s model picks from APIs...');
 
-        // Dynamic date - always shows current date
-        const todayDate = getTodayDateString();
+        const tbody = document.querySelector('.weekly-lineup-table tbody');
+        if (tbody) {
+            tbody.innerHTML = '<tr class="loading-row"><td colspan="8" class="loading-cell"><span class="loading-spinner">Fetching picks from model APIs...</span></td></tr>';
+        }
 
-        // Today's games data - NBA Picks with dynamic date
-        const todaysGames = [
-            // Game 1: Atlanta Hawks @ Charlotte Hornets (6:10 PM CST)
-            { date: todayDate, time: '6:10 PM', sport: 'NBA', awayTeam: 'Atlanta Hawks', homeTeam: 'Charlotte Hornets', segment: 'FG', pickTeam: 'Atlanta Hawks', pickType: 'spread', line: '-5.5', odds: '-110', modelPrice: '-7.2', edge: 3.5, fire: 3, fireLabel: '', status: 'pending' },
-            { date: todayDate, time: '6:10 PM', sport: 'NBA', awayTeam: 'Atlanta Hawks', homeTeam: 'Charlotte Hornets', segment: 'FG', pickTeam: 'Atlanta Hawks', pickType: 'moneyline', line: '', odds: '-225', modelPrice: '-280', edge: 4.2, fire: 4, fireLabel: '', status: 'pending' },
-            { date: todayDate, time: '6:10 PM', sport: 'NBA', awayTeam: 'Atlanta Hawks', homeTeam: 'Charlotte Hornets', segment: 'FG', pickTeam: 'Over', pickType: 'total', line: '221.5', odds: '-110', modelPrice: '228.3', edge: 6.8, fire: 5, fireLabel: 'MAX', status: 'pending' },
-            { date: todayDate, time: '6:10 PM', sport: 'NBA', awayTeam: 'Atlanta Hawks', homeTeam: 'Charlotte Hornets', segment: '1H', pickTeam: 'Atlanta Hawks', pickType: 'spread', line: '-3.0', odds: '-110', modelPrice: '-4.1', edge: 2.8, fire: 2, fireLabel: '', status: 'pending' },
-            { date: todayDate, time: '6:10 PM', sport: 'NBA', awayTeam: 'Atlanta Hawks', homeTeam: 'Charlotte Hornets', segment: '1H', pickTeam: 'Over', pickType: 'total', line: '112.0', odds: '-110', modelPrice: '117.5', edge: 5.5, fire: 5, fireLabel: '', status: 'pending' },
+        try {
+            // Use UnifiedPicksFetcher to get real picks from all APIs
+            if (window.UnifiedPicksFetcher && window.UnifiedPicksFetcher.fetchPicks) {
+                const result = await window.UnifiedPicksFetcher.fetchPicks('all', 'today');
+                
+                if (result.picks && result.picks.length > 0) {
+                    console.log(`[Weekly Lineup] ✅ Fetched ${result.picks.length} real picks from APIs`);
+                    
+                    // Transform picks to table format and sort by edge
+                    const formattedPicks = result.picks.map(pick => ({
+                        date: pick.date || getTodayDateString(),
+                        time: pick.time || 'TBD',
+                        sport: pick.sport || pick.league || 'NBA',
+                        awayTeam: pick.awayTeam || (pick.game ? pick.game.split(' @ ')[0] : ''),
+                        homeTeam: pick.homeTeam || (pick.game ? pick.game.split(' @ ')[1] : ''),
+                        segment: pick.segment || 'FG',
+                        pickTeam: pick.pickTeam || pick.pick || '',
+                        pickType: pick.pickType || 'spread',
+                        line: pick.line || '',
+                        odds: pick.odds || '-110',
+                        modelPrice: pick.modelPrice || pick.model_price || '',
+                        edge: parseFloat(pick.edge) || 0,
+                        fire: parseInt(pick.fire) || Math.min(5, Math.ceil((parseFloat(pick.edge) || 0) / 1.5)),
+                        fireLabel: (parseFloat(pick.edge) >= 6) ? 'MAX' : '',
+                        status: pick.status || 'pending'
+                    }));
 
-            // Game 2: New York Knicks @ Indiana Pacers (6:10 PM CST)
-            { date: todayDate, time: '6:10 PM', sport: 'NBA', awayTeam: 'New York Knicks', homeTeam: 'Indiana Pacers', segment: 'FG', pickTeam: 'Indiana Pacers', pickType: 'spread', line: '+2.5', odds: '-110', modelPrice: '+1.2', edge: 2.7, fire: 2, fireLabel: '', status: 'pending' },
-            { date: todayDate, time: '6:10 PM', sport: 'NBA', awayTeam: 'New York Knicks', homeTeam: 'Indiana Pacers', segment: 'FG', pickTeam: 'Over', pickType: 'total', line: '228.5', odds: '-110', modelPrice: '234.1', edge: 5.6, fire: 5, fireLabel: '', status: 'pending' },
-            { date: todayDate, time: '6:10 PM', sport: 'NBA', awayTeam: 'New York Knicks', homeTeam: 'Indiana Pacers', segment: '1H', pickTeam: 'Over', pickType: 'total', line: '115.5', odds: '-110', modelPrice: '120.8', edge: 5.3, fire: 5, fireLabel: '', status: 'pending' },
+                    // Sort by edge (highest first)
+                    formattedPicks.sort((a, b) => b.edge - a.edge);
+                    populateWeeklyLineupTable(formattedPicks);
+                } else {
+                    console.log('[Weekly Lineup] ⚠️ No picks returned from APIs');
+                    showNoPicks('No picks available for today. Check back later or fetch manually.');
+                }
 
-            // Game 3: Miami Heat @ Brooklyn Nets (6:40 PM CST)
-            { date: todayDate, time: '6:40 PM', sport: 'NBA', awayTeam: 'Miami Heat', homeTeam: 'Brooklyn Nets', segment: 'FG', pickTeam: 'Miami Heat', pickType: 'spread', line: '-4.0', odds: '-110', modelPrice: '-6.3', edge: 4.6, fire: 4, fireLabel: '', status: 'pending' },
-            { date: todayDate, time: '6:40 PM', sport: 'NBA', awayTeam: 'Miami Heat', homeTeam: 'Brooklyn Nets', segment: 'FG', pickTeam: 'Miami Heat', pickType: 'moneyline', line: '', odds: '-175', modelPrice: '-210', edge: 5.1, fire: 5, fireLabel: '', status: 'pending' },
-            { date: todayDate, time: '6:40 PM', sport: 'NBA', awayTeam: 'Miami Heat', homeTeam: 'Brooklyn Nets', segment: 'FG', pickTeam: 'Under', pickType: 'total', line: '212.5', odds: '-110', modelPrice: '208.2', edge: 4.3, fire: 4, fireLabel: '', status: 'pending' },
-            { date: todayDate, time: '6:40 PM', sport: 'NBA', awayTeam: 'Miami Heat', homeTeam: 'Brooklyn Nets', segment: '1H', pickTeam: 'Miami Heat', pickType: 'spread', line: '-2.0', odds: '-110', modelPrice: '-3.5', edge: 3.0, fire: 3, fireLabel: '', status: 'pending' },
+                // Log any errors
+                if (result.errors && result.errors.length > 0) {
+                    result.errors.forEach(err => {
+                        console.warn(`[Weekly Lineup] ${err.league} API error:`, err.error);
+                    });
+                }
+            } else {
+                console.warn('[Weekly Lineup] UnifiedPicksFetcher not available, waiting for script load...');
+                showNoPicks('Loading picks fetcher... Refresh if this persists.');
+            }
+        } catch (error) {
+            console.error('[Weekly Lineup] ❌ Error fetching picks:', error);
+            showNoPicks('Error loading picks. Please try the Fetch button to retry.');
+        }
+    }
 
-            // Game 4: Houston Rockets @ New Orleans Pelicans (7:10 PM CST)
-            { date: todayDate, time: '7:10 PM', sport: 'NBA', awayTeam: 'Houston Rockets', homeTeam: 'New Orleans Pelicans', segment: 'FG', pickTeam: 'Houston Rockets', pickType: 'spread', line: '-7.5', odds: '-110', modelPrice: '-9.8', edge: 4.6, fire: 4, fireLabel: '', status: 'pending' },
-            { date: todayDate, time: '7:10 PM', sport: 'NBA', awayTeam: 'Houston Rockets', homeTeam: 'New Orleans Pelicans', segment: 'FG', pickTeam: 'Houston Rockets', pickType: 'moneyline', line: '', odds: '-320', modelPrice: '-400', edge: 5.8, fire: 5, fireLabel: '', status: 'pending' },
-            { date: todayDate, time: '7:10 PM', sport: 'NBA', awayTeam: 'Houston Rockets', homeTeam: 'New Orleans Pelicans', segment: 'FG', pickTeam: 'Over', pickType: 'total', line: '215.5', odds: '-110', modelPrice: '222.4', edge: 6.9, fire: 5, fireLabel: 'MAX', status: 'pending' },
-            { date: todayDate, time: '7:10 PM', sport: 'NBA', awayTeam: 'Houston Rockets', homeTeam: 'New Orleans Pelicans', segment: '1H', pickTeam: 'Houston Rockets', pickType: 'spread', line: '-4.0', odds: '-110', modelPrice: '-5.6', edge: 3.2, fire: 3, fireLabel: '', status: 'pending' },
-
-            // Game 5: LA Clippers @ Oklahoma City Thunder (7:10 PM CST)
-            { date: todayDate, time: '7:10 PM', sport: 'NBA', awayTeam: 'Los Angeles Clippers', homeTeam: 'Oklahoma City Thunder', segment: 'FG', pickTeam: 'Oklahoma City Thunder', pickType: 'spread', line: '-10.5', odds: '-110', modelPrice: '-12.8', edge: 4.6, fire: 4, fireLabel: '', status: 'pending' },
-            { date: todayDate, time: '7:10 PM', sport: 'NBA', awayTeam: 'Los Angeles Clippers', homeTeam: 'Oklahoma City Thunder', segment: 'FG', pickTeam: 'Oklahoma City Thunder', pickType: 'moneyline', line: '', odds: '-550', modelPrice: '-680', edge: 5.2, fire: 5, fireLabel: '', status: 'pending' },
-            { date: todayDate, time: '7:10 PM', sport: 'NBA', awayTeam: 'Los Angeles Clippers', homeTeam: 'Oklahoma City Thunder', segment: 'FG', pickTeam: 'Under', pickType: 'total', line: '214.0', odds: '-110', modelPrice: '208.5', edge: 5.5, fire: 5, fireLabel: '', status: 'pending' },
-            { date: todayDate, time: '7:10 PM', sport: 'NBA', awayTeam: 'Los Angeles Clippers', homeTeam: 'Oklahoma City Thunder', segment: '1H', pickTeam: 'Oklahoma City Thunder', pickType: 'spread', line: '-5.5', odds: '-110', modelPrice: '-7.2', edge: 3.4, fire: 3, fireLabel: '', status: 'pending' },
-
-            // Game 6: Toronto Raptors @ Milwaukee Bucks (7:10 PM CST)
-            { date: todayDate, time: '7:10 PM', sport: 'NBA', awayTeam: 'Toronto Raptors', homeTeam: 'Milwaukee Bucks', segment: 'FG', pickTeam: 'Milwaukee Bucks', pickType: 'spread', line: '-12.0', odds: '-110', modelPrice: '-14.5', edge: 5.0, fire: 5, fireLabel: '', status: 'pending' },
-            { date: todayDate, time: '7:10 PM', sport: 'NBA', awayTeam: 'Toronto Raptors', homeTeam: 'Milwaukee Bucks', segment: 'FG', pickTeam: 'Milwaukee Bucks', pickType: 'moneyline', line: '', odds: '-700', modelPrice: '-900', edge: 4.8, fire: 4, fireLabel: '', status: 'pending' },
-            { date: todayDate, time: '7:10 PM', sport: 'NBA', awayTeam: 'Toronto Raptors', homeTeam: 'Milwaukee Bucks', segment: 'FG', pickTeam: 'Over', pickType: 'total', line: '223.5', odds: '-110', modelPrice: '229.8', edge: 6.3, fire: 5, fireLabel: 'MAX', status: 'pending' },
-            { date: todayDate, time: '7:10 PM', sport: 'NBA', awayTeam: 'Toronto Raptors', homeTeam: 'Milwaukee Bucks', segment: '1H', pickTeam: 'Milwaukee Bucks', pickType: 'spread', line: '-6.5', odds: '-110', modelPrice: '-8.2', edge: 3.4, fire: 3, fireLabel: '', status: 'pending' },
-
-            // Game 7: Washington Wizards @ San Antonio Spurs (7:40 PM CST)
-            { date: todayDate, time: '7:40 PM', sport: 'NBA', awayTeam: 'Washington Wizards', homeTeam: 'San Antonio Spurs', segment: 'FG', pickTeam: 'San Antonio Spurs', pickType: 'spread', line: '-8.5', odds: '-110', modelPrice: '-11.2', edge: 5.4, fire: 5, fireLabel: '', status: 'pending' },
-            { date: todayDate, time: '7:40 PM', sport: 'NBA', awayTeam: 'Washington Wizards', homeTeam: 'San Antonio Spurs', segment: 'FG', pickTeam: 'San Antonio Spurs', pickType: 'moneyline', line: '', odds: '-380', modelPrice: '-480', edge: 5.6, fire: 5, fireLabel: '', status: 'pending' },
-            { date: todayDate, time: '7:40 PM', sport: 'NBA', awayTeam: 'Washington Wizards', homeTeam: 'San Antonio Spurs', segment: 'FG', pickTeam: 'Over', pickType: 'total', line: '218.5', odds: '-110', modelPrice: '225.1', edge: 6.6, fire: 5, fireLabel: 'MAX', status: 'pending' },
-            { date: todayDate, time: '7:40 PM', sport: 'NBA', awayTeam: 'Washington Wizards', homeTeam: 'San Antonio Spurs', segment: '1H', pickTeam: 'San Antonio Spurs', pickType: 'spread', line: '-4.5', odds: '-110', modelPrice: '-6.1', edge: 3.2, fire: 3, fireLabel: '', status: 'pending' },
-
-            // Game 8: Detroit Pistons @ Dallas Mavericks (7:40 PM CST)
-            { date: todayDate, time: '7:40 PM', sport: 'NBA', awayTeam: 'Detroit Pistons', homeTeam: 'Dallas Mavericks', segment: 'FG', pickTeam: 'Dallas Mavericks', pickType: 'spread', line: '-9.0', odds: '-110', modelPrice: '-11.5', edge: 5.0, fire: 5, fireLabel: '', status: 'pending' },
-            { date: todayDate, time: '7:40 PM', sport: 'NBA', awayTeam: 'Detroit Pistons', homeTeam: 'Dallas Mavericks', segment: 'FG', pickTeam: 'Dallas Mavericks', pickType: 'moneyline', line: '', odds: '-420', modelPrice: '-520', edge: 5.3, fire: 5, fireLabel: '', status: 'pending' },
-            { date: todayDate, time: '7:40 PM', sport: 'NBA', awayTeam: 'Detroit Pistons', homeTeam: 'Dallas Mavericks', segment: 'FG', pickTeam: 'Over', pickType: 'total', line: '220.5', odds: '-110', modelPrice: '227.2', edge: 6.7, fire: 5, fireLabel: 'MAX', status: 'pending' },
-            { date: todayDate, time: '7:40 PM', sport: 'NBA', awayTeam: 'Detroit Pistons', homeTeam: 'Dallas Mavericks', segment: '1H', pickTeam: 'Dallas Mavericks', pickType: 'spread', line: '-5.0', odds: '-110', modelPrice: '-6.4', edge: 2.8, fire: 2, fireLabel: '', status: 'pending' },
-
-            // Game 9: Orlando Magic @ Denver Nuggets (8:10 PM CST)
-            { date: todayDate, time: '8:10 PM', sport: 'NBA', awayTeam: 'Orlando Magic', homeTeam: 'Denver Nuggets', segment: 'FG', pickTeam: 'Denver Nuggets', pickType: 'spread', line: '-6.5', odds: '-110', modelPrice: '-8.8', edge: 4.6, fire: 4, fireLabel: '', status: 'pending' },
-            { date: todayDate, time: '8:10 PM', sport: 'NBA', awayTeam: 'Orlando Magic', homeTeam: 'Denver Nuggets', segment: 'FG', pickTeam: 'Denver Nuggets', pickType: 'moneyline', line: '', odds: '-260', modelPrice: '-320', edge: 5.0, fire: 5, fireLabel: '', status: 'pending' },
-            { date: todayDate, time: '8:10 PM', sport: 'NBA', awayTeam: 'Orlando Magic', homeTeam: 'Denver Nuggets', segment: 'FG', pickTeam: 'Under', pickType: 'total', line: '213.5', odds: '-110', modelPrice: '208.8', edge: 4.7, fire: 4, fireLabel: '', status: 'pending' },
-            { date: todayDate, time: '8:10 PM', sport: 'NBA', awayTeam: 'Orlando Magic', homeTeam: 'Denver Nuggets', segment: '1H', pickTeam: 'Denver Nuggets', pickType: 'spread', line: '-3.5', odds: '-110', modelPrice: '-5.0', edge: 3.0, fire: 3, fireLabel: '', status: 'pending' },
-
-            // Game 10: Golden State Warriors @ Phoenix Suns (9:10 PM CST)
-            { date: todayDate, time: '9:10 PM', sport: 'NBA', awayTeam: 'Golden State Warriors', homeTeam: 'Phoenix Suns', segment: 'FG', pickTeam: 'Phoenix Suns', pickType: 'spread', line: '-4.5', odds: '-110', modelPrice: '-6.8', edge: 4.6, fire: 4, fireLabel: '', status: 'pending' },
-            { date: todayDate, time: '9:10 PM', sport: 'NBA', awayTeam: 'Golden State Warriors', homeTeam: 'Phoenix Suns', segment: 'FG', pickTeam: 'Phoenix Suns', pickType: 'moneyline', line: '', odds: '-190', modelPrice: '-240', edge: 4.8, fire: 4, fireLabel: '', status: 'pending' },
-            { date: todayDate, time: '9:10 PM', sport: 'NBA', awayTeam: 'Golden State Warriors', homeTeam: 'Phoenix Suns', segment: 'FG', pickTeam: 'Over', pickType: 'total', line: '229.5', odds: '-110', modelPrice: '236.2', edge: 6.7, fire: 5, fireLabel: 'MAX', status: 'pending' },
-            { date: todayDate, time: '9:10 PM', sport: 'NBA', awayTeam: 'Golden State Warriors', homeTeam: 'Phoenix Suns', segment: '1H', pickTeam: 'Phoenix Suns', pickType: 'spread', line: '-2.5', odds: '-110', modelPrice: '-4.0', edge: 3.0, fire: 3, fireLabel: '', status: 'pending' },
-
-            // Game 11: Los Angeles Lakers @ Utah Jazz (9:10 PM CST)
-            { date: todayDate, time: '9:10 PM', sport: 'NBA', awayTeam: 'Los Angeles Lakers', homeTeam: 'Utah Jazz', segment: 'FG', pickTeam: 'Los Angeles Lakers', pickType: 'spread', line: '-5.0', odds: '-110', modelPrice: '-7.3', edge: 4.6, fire: 4, fireLabel: '', status: 'pending' },
-            { date: todayDate, time: '9:10 PM', sport: 'NBA', awayTeam: 'Los Angeles Lakers', homeTeam: 'Utah Jazz', segment: 'FG', pickTeam: 'Los Angeles Lakers', pickType: 'moneyline', line: '', odds: '-210', modelPrice: '-270', edge: 5.0, fire: 5, fireLabel: '', status: 'pending' },
-            { date: todayDate, time: '9:10 PM', sport: 'NBA', awayTeam: 'Los Angeles Lakers', homeTeam: 'Utah Jazz', segment: 'FG', pickTeam: 'Over', pickType: 'total', line: '225.0', odds: '-110', modelPrice: '231.5', edge: 6.5, fire: 5, fireLabel: 'MAX', status: 'pending' },
-            { date: todayDate, time: '9:10 PM', sport: 'NBA', awayTeam: 'Los Angeles Lakers', homeTeam: 'Utah Jazz', segment: '1H', pickTeam: 'Los Angeles Lakers', pickType: 'spread', line: '-2.5', odds: '-110', modelPrice: '-4.2', edge: 3.4, fire: 3, fireLabel: '', status: 'pending' },
-
-            // Game 12: Sacramento Kings @ Portland Trail Blazers (9:10 PM CST)
-            { date: todayDate, time: '9:10 PM', sport: 'NBA', awayTeam: 'Sacramento Kings', homeTeam: 'Portland Trail Blazers', segment: 'FG', pickTeam: 'Sacramento Kings', pickType: 'spread', line: '-6.5', odds: '-110', modelPrice: '-8.9', edge: 4.8, fire: 4, fireLabel: '', status: 'pending' },
-            { date: todayDate, time: '9:10 PM', sport: 'NBA', awayTeam: 'Sacramento Kings', homeTeam: 'Portland Trail Blazers', segment: 'FG', pickTeam: 'Sacramento Kings', pickType: 'moneyline', line: '', odds: '-275', modelPrice: '-340', edge: 5.2, fire: 5, fireLabel: '', status: 'pending' },
-            { date: todayDate, time: '9:10 PM', sport: 'NBA', awayTeam: 'Sacramento Kings', homeTeam: 'Portland Trail Blazers', segment: 'FG', pickTeam: 'Over', pickType: 'total', line: '224.5', odds: '-110', modelPrice: '231.0', edge: 6.5, fire: 5, fireLabel: 'MAX', status: 'pending' },
-            { date: todayDate, time: '9:10 PM', sport: 'NBA', awayTeam: 'Sacramento Kings', homeTeam: 'Portland Trail Blazers', segment: '1H', pickTeam: 'Sacramento Kings', pickType: 'spread', line: '-3.5', odds: '-110', modelPrice: '-5.1', edge: 3.2, fire: 3, fireLabel: '', status: 'pending' }
-        ];
-
-        // Sort by edge (highest first) for display
-        todaysGames.sort((a, b) => b.edge - a.edge);
-
-        populateWeeklyLineupTable(todaysGames);
+    function showNoPicks(message) {
+        const tbody = document.querySelector('.weekly-lineup-table tbody');
+        if (tbody) {
+            tbody.innerHTML = `<tr class="no-picks-row"><td colspan="8" class="no-picks-cell">${message}</td></tr>`;
+        }
     }
 
     // ===== HELPER FUNCTIONS =====
