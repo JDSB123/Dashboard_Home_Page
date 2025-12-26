@@ -1344,10 +1344,9 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             btn.addEventListener('click', async () => {
                 const fetchType = btn.dataset.fetch;
                 
-                // Add loading state
+                // Add loading state - spin the icon without replacing content
                 btn.classList.add('loading');
                 const originalContent = btn.innerHTML;
-                btn.innerHTML = '<span class="fetch-icon" style="animation: spin 0.8s linear infinite;">↻</span>';
                 
                 console.log(`🔄 [Weekly Lineup] Fetching picks: ${fetchType}`);
 
