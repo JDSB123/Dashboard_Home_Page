@@ -1,6 +1,7 @@
 /**
- * NCAAM Picks Fetcher v1.0
+ * NCAAM Picks Fetcher v2.0
  * Fetches NCAAM model picks from the Azure Container App API
+ * Updated to use /api/picks/{date} endpoint (matches NBA pattern)
  */
 
 (function() {
@@ -13,17 +14,18 @@
     const CACHE_DURATION = 60000; // 1 minute
 
     /**
-     * Fetch NCAAM picks
+     * Fetch NCAAM picks for a given date
+     * @param {string} date - Date in YYYY-MM-DD format, 'today', or 'tomorrow'
      * @returns {Promise<Object>} Picks data
      */
-    const fetchNCAAMPicks = async function() {
+    const fetchNCAAMPicks = async function(date = 'today') {
         // Use cache if fresh
         if (picksCache && lastFetch && (Date.now() - lastFetch < CACHE_DURATION)) {
             console.log('[NCAAM-PICKS] Using cached picks');
             return picksCache;
         }
 
-        const url = `${NCAAM_API_URL}/trigger-picks-sync`;
+        const url = `${NCAAM_API_URL}/api/picks/${date}`;
         console.log(`[NCAAM-PICKS] Fetching picks from: ${url}`);
 
         try {
@@ -36,7 +38,7 @@
             picksCache = data;
             lastFetch = Date.now();
 
-            console.log(`[NCAAM-PICKS] Fetched picks successfully`);
+            console.log(`[NCAAM-PICKS] Fetched ${data.total_picks || 0} picks`);
             return data;
         } catch (error) {
             console.error('[NCAAM-PICKS] Error fetching picks:', error.message);
@@ -62,20 +64,65 @@
 
     /**
      * Format pick for display in the picks table
-     * @param {Object} pick - Raw pick from API
+     * @param {Object} pick - Raw pick from API (v2.0 format)
      * @returns {Object} Formatted pick
+     *
+     * API returns:
+     * {
+     *   time_cst: "12/25 11:10 AM",
+     *   matchup: "Away Team @ Home Team",
+     *   home_team: "Home Team",
+     *   away_team: "Away Team",
+     *   period: "1H" or "FG",
+     *   market: "SPREAD" or "TOTAL",
+     *   pick: "Team Name" or "OVER"/"UNDER",
+     *   pick_odds: "-110",
+     *   model_line: -3.5,
+     *   market_line: -2.5,
+     *   edge: "+3.5",
+     *   confidence: "72%",
+     *   fire_rating: "GOOD"
+     * }
      */
     const formatPickForTable = function(pick) {
+        // Parse edge - format is "+3.5" or "-1.2"
+        let edgeValue = 0;
+        if (typeof pick.edge === 'string') {
+            edgeValue = parseFloat(pick.edge.replace('+', '')) || 0;
+        } else if (typeof pick.edge === 'number') {
+            edgeValue = pick.edge;
+        }
+
+        // Convert fire_rating to number (MAX=5, STRONG=4, GOOD=3, STANDARD=2)
+        let fireNum = 3;
+        const fireRating = (pick.fire_rating || '').toUpperCase();
+        if (fireRating === 'MAX' || fireRating === 'ELITE') fireNum = 5;
+        else if (fireRating === 'STRONG') fireNum = 4;
+        else if (fireRating === 'GOOD') fireNum = 3;
+        else if (fireRating === 'STANDARD') fireNum = 2;
+
+        // Map market types
+        let marketType = (pick.market || 'spread').toLowerCase();
+
+        // Parse time from "12/25 11:10 AM" format
+        let timeStr = pick.time_cst || '';
+        if (timeStr.includes(' ')) {
+            const timeParts = timeStr.split(' ');
+            timeStr = timeParts.slice(1).join(' '); // "11:10 AM"
+        }
+
         return {
             sport: 'NCAAM',
-            game: `${pick.away_team || pick.awayTeam} @ ${pick.home_team || pick.homeTeam}`,
-            pick: pick.pick_display || pick.pick || pick.recommendation,
-            odds: pick.odds || pick.market_odds || '',
-            edge: pick.edge ? `${(pick.edge * 100).toFixed(1)}%` : '',
-            confidence: pick.fire_rating || pick.confidence || '',
-            time: pick.game_time || pick.time || '',
-            market: pick.market_type || pick.market || '',
-            period: pick.period || 'FG'
+            game: pick.matchup || `${pick.away_team} @ ${pick.home_team}`,
+            pick: pick.pick || '',
+            odds: pick.pick_odds || '-110',
+            edge: edgeValue,
+            confidence: fireNum,
+            time: timeStr,
+            market: marketType,
+            period: pick.period || 'FG',
+            line: pick.market_line || '',
+            modelPrice: pick.model_line || ''
         };
     };
 
@@ -88,6 +135,6 @@
         clearCache: () => { picksCache = null; lastFetch = null; }
     };
 
-    console.log('NCAAM PicksFetcher v1.0 loaded');
+    console.log('NCAAM PicksFetcher v2.0 loaded');
 
 })();

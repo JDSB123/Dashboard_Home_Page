@@ -36,11 +36,11 @@
             }
         }
 
-        // NCAAM
-        if (league === 'all' || leagueUpper === 'NCAAM') {
+        // NCAAM (v2.0 - uses /api/picks/{date} endpoint)
+        if (league === 'all' || leagueUpper === 'NCAAM' || leagueUpper === 'NCAAB') {
             try {
                 if (window.NCAAMPicksFetcher) {
-                    const data = await window.NCAAMPicksFetcher.fetchPicks();
+                    const data = await window.NCAAMPicksFetcher.fetchPicks('today');
                     const picks = data.picks || data.plays || data.recommendations || [];
                     picks.forEach(pick => {
                         allPicks.push(window.NCAAMPicksFetcher.formatPickForTable(pick));
