@@ -4319,30 +4319,29 @@ body.page-weekly-lineup .th-filter-dropdown.weekly-lineup-filter-dropdown .team-
 }
 
 /* ==========================================================================
-   LOADING SPINNER - Refined & Elegant
+   LOADING SPINNER - Minimalist (Text + Small Rotator)
    ========================================================================== */
 .loading-spinner {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
+    gap: 10px;
     padding: 24px 0;
-    font-size: 0.9rem;
-    color: rgba(200, 220, 240, 0.8);
-    letter-spacing: 0.03em;
+    font-size: 0.85rem;
+    color: rgba(200, 220, 240, 0.7);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
     font-weight: 500;
 }
 
 .loading-spinner::before {
     content: "";
-    width: 22px;
-    height: 22px;
-    border: 2px solid rgba(0, 214, 137, 0.1);
+    width: 12px;
+    height: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
     border-top-color: #00d689;
-    border-right-color: rgba(0, 214, 137, 0.4);
     border-radius: 50%;
-    animation: spin 0.8s cubic-bezier(0.4, 0.0, 0.2, 1) infinite;
-    box-shadow: 0 0 10px rgba(0, 214, 137, 0.15);
+    animation: spin 0.8s linear infinite;
 }
 
 @keyframes spin {
@@ -4352,16 +4351,11 @@ body.page-weekly-lineup .th-filter-dropdown.weekly-lineup-filter-dropdown .team-
 /* Pulsing dots animation for "Fetching..." text */
 .loading-cell {
     text-align: center;
-    background: linear-gradient(180deg, rgba(0, 20, 30, 0.2) 0%, rgba(0, 15, 25, 0.3) 100%);
+    background: rgba(0, 20, 30, 0.2);
 }
 
 .loading-row {
-    animation: pulse-row 2s ease-in-out infinite;
-}
-
-@keyframes pulse-row {
-    0%, 100% { opacity: 0.9; }
-    50% { opacity: 0.6; }
+    /* No pulse animation for the row itself, keep it static and clean */
 }
 
 /* ==========================================================================
