@@ -628,13 +628,13 @@
             const viewportWidth = window.innerWidth;
             const viewportHeight = window.innerHeight;
 
-            // Use default dimensions since dropdown may not be rendered yet
-            const dropdownWidth = 280;
-            const dropdownHeight = 300;
+            // Use actual dropdown dimensions if available, otherwise small defaults
+            const dropdownWidth = dropdown.offsetWidth || 150;
+            const dropdownHeight = dropdown.offsetHeight || 200;
 
-            // Position directly below the button
-            let top = btnRect.bottom + 8;
-            let left = btnRect.right - dropdownWidth; // Align right edge with button
+            // Position directly below the button, aligned to button's right edge
+            let top = btnRect.bottom + 4;
+            let left = btnRect.right - dropdownWidth;
 
             // Keep within viewport bounds
             if (left < 16) {

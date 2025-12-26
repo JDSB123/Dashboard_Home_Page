@@ -144,16 +144,17 @@
             visibility: hidden;
             opacity: 0;
             pointer-events: none;
-            /* Card styling - compact */
-            min-width: 200px !important;
-            max-width: 280px !important;
+            /* Card styling - ultra compact, fits content */
+            min-width: auto !important;
+            width: fit-content !important;
+            max-width: 240px !important;
             max-height: 70vh !important;
             overflow-y: auto !important;
-            padding: 8px !important;
+            padding: 6px !important;
             background: radial-gradient(circle at 20% 20%, rgba(0, 214, 137, 0.12), transparent 45%),
                         linear-gradient(180deg, rgba(8, 14, 22, 0.98) 0%, rgba(6, 10, 18, 0.96) 100%) !important;
             border: 1px solid rgba(0, 214, 137, 0.5) !important;
-            border-radius: 12px !important;
+            border-radius: 8px !important;
             box-shadow: 0 22px 38px rgba(0, 0, 0, 0.65), 0 12px 28px rgba(0, 214, 137, 0.2) !important;
             color: #e8f2f4 !important;
             transition: opacity 0.15s ease, visibility 0.15s ease !important;
