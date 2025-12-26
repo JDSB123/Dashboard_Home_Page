@@ -1770,25 +1770,33 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
     }
 
     function addPickToDashboard(pickData, btn) {
-        // Check if LocalPicksManager is available
-        if (!window.LocalPicksManager) {
-            console.error('[Weekly Lineup] LocalPicksManager not available');
-            showNotification('Dashboard not available. Please refresh the page.', 'error');
-            return;
-        }
+        // Save directly to localStorage (same key as LocalPicksManager)
+        const STORAGE_KEY = 'gbsv_picks';
 
-        // Add the pick
-        const added = window.LocalPicksManager.add([pickData]);
+        try {
+            // Get existing picks
+            const existingData = localStorage.getItem(STORAGE_KEY);
+            const existingPicks = existingData ? JSON.parse(existingData) : [];
 
-        if (added && added.length > 0) {
+            // Add ID and timestamp
+            pickData.id = `pick_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+            pickData.createdAt = new Date().toISOString();
+
+            // Add to array
+            existingPicks.push(pickData);
+
+            // Save back
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(existingPicks));
+
             // Visual feedback
             btn.textContent = '✓';
             btn.classList.add('added');
             btn.disabled = true;
 
             showNotification(`Added ${pickData.pickTeam} ${pickData.line} to Dashboard`, 'success');
-            console.log('[Weekly Lineup] Pick added to dashboard:', pickData);
-        } else {
+            console.log('[Weekly Lineup] Pick saved to localStorage:', pickData);
+        } catch (err) {
+            console.error('[Weekly Lineup] Failed to save pick:', err);
             showNotification('Failed to add pick', 'error');
         }
     }
