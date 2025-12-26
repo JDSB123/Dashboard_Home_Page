@@ -4695,16 +4695,55 @@ body.page-weekly-lineup .th-filter-dropdown.weekly-lineup-filter-dropdown .team-
 .fetch-controls-wrapper {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
 }
 
+/* Fetch Status Display - Clean styled container */
 .ft-last-fetched {
-    font-size: 0.7rem;
-    color: rgba(160, 175, 190, 0.85);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background: linear-gradient(135deg, rgba(20, 30, 48, 0.7) 0%, rgba(25, 38, 58, 0.6) 100%);
+    border: 1px solid rgba(80, 110, 150, 0.25);
+    border-radius: 6px;
+    font-size: 0.72rem;
+    color: rgba(180, 195, 215, 0.95);
     white-space: nowrap;
     font-family: 'EB Garamond', 'Garamond', Georgia, serif;
-    font-style: italic;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.015em;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    min-width: 200px;
+    transition: all 0.2s ease;
+}
+
+.ft-last-fetched::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    background: rgba(100, 140, 180, 0.6);
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.ft-last-fetched.has-data::before {
+    background: #00d689;
+    box-shadow: 0 0 6px rgba(0, 214, 137, 0.4);
+}
+
+.ft-last-fetched.fetching {
+    border-color: rgba(0, 214, 137, 0.4);
+    color: #00d689;
+}
+
+.ft-last-fetched.fetching::before {
+    background: #00d689;
+    animation: pulse-dot 1s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
 }
 
 .ft-fetch-buttons {
@@ -4750,32 +4789,41 @@ body.page-weekly-lineup .th-filter-dropdown.weekly-lineup-filter-dropdown .team-
     transform: translateY(1px);
 }
 
-/* Active/Loading State */
+/* Active/Loading State - Elegant spinner */
 .ft-fetch-league-btn.loading {
     pointer-events: none;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(0, 214, 137, 0.08);
+    border-color: rgba(0, 214, 137, 0.2);
 }
 
 .ft-fetch-league-btn.loading .refresh-icon,
 .ft-fetch-league-btn.loading .league-logo-sm {
-    display: none; /* Hide icon */
+    display: none;
 }
 
-/* Small thinking rotator replacing the icon */
+/* Elegant dual-ring spinner */
 .ft-fetch-league-btn.loading::before {
     content: "";
-    width: 12px;
-    height: 12px;
-    border: 2px solid rgba(255, 255, 255, 0.15);
+    width: 14px;
+    height: 14px;
+    border: 2px solid transparent;
     border-top-color: #00d689;
+    border-right-color: rgba(0, 214, 137, 0.3);
     border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    margin-right: 6px;
+    animation: elegant-spin 0.7s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    margin-right: 5px;
+    flex-shrink: 0;
 }
 
+@keyframes elegant-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.ft-fetch-league-btn.loading .league-label,
 .ft-fetch-league-btn.loading span {
-    opacity: 0.9;
-    color: #00d689; /* Green text to indicate active */
+    color: #00d689;
+    font-weight: 600;
 }
 
 /* Fetch All Button - Distinct but integrated */
