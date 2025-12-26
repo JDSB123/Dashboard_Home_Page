@@ -4699,10 +4699,12 @@ body.page-weekly-lineup .th-filter-dropdown.weekly-lineup-filter-dropdown .team-
 }
 
 .ft-last-fetched {
-    font-size: 0.65rem;
-    color: rgba(140, 160, 180, 0.6);
+    font-size: 0.7rem;
+    color: rgba(160, 175, 190, 0.85);
     white-space: nowrap;
-    font-family: 'Roboto Mono', monospace;
+    font-family: 'EB Garamond', 'Garamond', Georgia, serif;
+    font-style: italic;
+    letter-spacing: 0.02em;
 }
 
 .ft-fetch-buttons {

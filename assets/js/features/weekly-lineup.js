@@ -393,24 +393,26 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         if (el) {
             const now = new Date();
             const timeStr = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-            
+
             // Update state
             lastFetchTimes[league] = timeStr;
-            
-            // Format display text
-            let displayText = `Updated: ${timeStr}`;
-            if (league !== 'all') {
-                const leagueLabel = league.toUpperCase().replace('NCAAB', 'CBB').replace('NCAAF', 'CFB');
-                displayText = `${leagueLabel}: ${timeStr}`;
+
+            // Format display text - more readable and intuitive
+            let displayText;
+            if (league === 'all') {
+                displayText = `All leagues fetched at ${timeStr}`;
+            } else {
+                const leagueLabel = league.toUpperCase().replace('NCAAB', 'NCAAM').replace('NCAAF', 'NCAAF');
+                displayText = `${leagueLabel} fetched at ${timeStr}`;
             }
-            
-            // Add count info if available
+
+            // Add count info if available - clearer wording
             if (count !== null) {
-                displayText += count === 0 ? ' (No picks)' : ` (${count})`;
+                displayText += count === 0 ? ' — no picks available' : ` — ${count} pick${count !== 1 ? 's' : ''}`;
             }
-            
+
             el.textContent = displayText;
-            el.style.color = count === 0 ? 'rgba(255, 200, 100, 0.9)' : 'rgba(140, 160, 180, 0.8)';
+            el.style.color = count === 0 ? 'rgba(255, 200, 100, 0.9)' : 'rgba(160, 175, 190, 0.85)';
         }
     }
 
@@ -1372,7 +1374,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                 const time = lastFetchTimes[fetchType];
                 const el = document.getElementById('ft-last-fetched');
                 if (time && el) {
-                    const leagueLabel = fetchType === 'all' ? 'All' : fetchType.toUpperCase().replace('NCAAB', 'CBB').replace('NCAAF', 'CFB');
+                    const leagueLabel = fetchType === 'all' ? 'All' : fetchType.toUpperCase().replace('NCAAB', 'NCAAM').replace('NCAAF', 'NCAAF');
                     el.textContent = `${leagueLabel}: ${time}`;
                     el.dataset.temp = "true";
                 }
@@ -1398,7 +1400,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                 // Update status text to show loading
                 const el = document.getElementById('ft-last-fetched');
                 if (el) {
-                    const leagueLabel = fetchType === 'all' ? 'All' : fetchType.toUpperCase().replace('NCAAB', 'CBB').replace('NCAAF', 'CFB');
+                    const leagueLabel = fetchType === 'all' ? 'All' : fetchType.toUpperCase().replace('NCAAB', 'NCAAM').replace('NCAAF', 'NCAAF');
                     el.textContent = `Fetching ${leagueLabel}...`;
                     el.style.color = 'rgba(0, 214, 137, 0.8)';
                 }
