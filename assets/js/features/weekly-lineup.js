@@ -293,6 +293,21 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         });
     }
 
+    // ===== WAIT FOR FETCHER HELPER =====
+    /**
+     * Wait for UnifiedPicksFetcher to be available
+     * Retries up to 20 times with 250ms delay (5 seconds total)
+     */
+    async function waitForFetcher(maxRetries = 20, delay = 250) {
+        for (let i = 0; i < maxRetries; i++) {
+            if (window.UnifiedPicksFetcher && window.UnifiedPicksFetcher.fetchPicks) {
+                return true;
+            }
+            await new Promise(resolve => setTimeout(resolve, delay));
+        }
+        return false;
+    }
+
     // ===== LOAD MODEL OUTPUTS (TODAY'S PICKS) =====
     /**
      * v33.00.0 - Production: Fetch real picks from Azure Container Apps APIs
@@ -307,12 +322,19 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         }
 
         try {
-            // Use UnifiedPicksFetcher to get real picks from all APIs
-            if (window.UnifiedPicksFetcher && window.UnifiedPicksFetcher.fetchPicks) {
-                const result = await window.UnifiedPicksFetcher.fetchPicks('all', 'today');
-                
-                if (result.picks && result.picks.length > 0) {
-                    console.log(`[Weekly Lineup] ✅ Fetched ${result.picks.length} real picks from APIs`);
+            // Wait for UnifiedPicksFetcher to load (handles script load order)
+            const fetcherReady = await waitForFetcher();
+            
+            if (!fetcherReady) {
+                console.warn('[Weekly Lineup] UnifiedPicksFetcher not available after timeout');
+                showNoPicks('API fetcher failed to load. Please refresh the page.');
+                return;
+            }
+
+            const result = await window.UnifiedPicksFetcher.fetchPicks('all', 'today');
+            
+            if (result.picks && result.picks.length > 0) {
+                console.log(`[Weekly Lineup] ✅ Fetched ${result.picks.length} real picks from APIs`);
                     
                     // Transform picks to table format and sort by edge
                     const formattedPicks = result.picks.map(pick => ({
@@ -347,10 +369,6 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                         console.warn(`[Weekly Lineup] ${err.league} API error:`, err.error);
                     });
                 }
-            } else {
-                console.warn('[Weekly Lineup] UnifiedPicksFetcher not available, waiting for script load...');
-                showNoPicks('Loading picks fetcher... Refresh if this persists.');
-            }
         } catch (error) {
             console.error('[Weekly Lineup] ❌ Error fetching picks:', error);
             showNoPicks('Error loading picks. Please try the Fetch button to retry.');
