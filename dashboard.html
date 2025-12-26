@@ -820,20 +820,30 @@
                             </th>
                             <th scope="col" class="center col-segment">
                                 <div class="th-header-shell th-filterable">
-                                    <span class="th-header-text"><span class="header-main-text">Pick Type</span></span>
-                                    <button class="th-filter-btn" aria-label="Filter by pick type" aria-expanded="false" aria-controls="th-pick-dropdown"><span class="kebab-dot"></span></button>
-                                    <div class="th-filter-dropdown" id="th-pick-dropdown" hidden>
-                                        <button class="th-filter-item" data-f="pick" data-v="spread">Spread</button>
-                                        <button class="th-filter-item" data-f="pick" data-v="moneyline">Moneyline</button>
-                                        <button class="th-filter-item" data-f="pick" data-v="total">Total O/U</button>
-                                        <button class="th-filter-item" data-f="pick" data-v="parlay">Parlay</button>
-                                        <button class="th-filter-item" data-f="pick" data-v="prop">Props</button>
+                                    <span class="th-header-text"><span class="header-main-text">Segment</span></span>
+                                    <button class="th-filter-btn" aria-label="Filter by segment" aria-expanded="false" aria-controls="th-segment-dropdown"><span class="kebab-dot"></span></button>
+                                    <div class="th-filter-dropdown" id="th-segment-dropdown" hidden>
+                                        <button class="th-filter-item" data-f="segment" data-v="full">Full Game</button>
+                                        <button class="th-filter-item" data-f="segment" data-v="1h">1st Half</button>
+                                        <button class="th-filter-item" data-f="segment" data-v="2h">2nd Half</button>
+                                        <button class="th-filter-item" data-f="segment" data-v="1q">1st Qtr</button>
+                                        <button class="th-filter-item" data-f="segment" data-v="2q">2nd Qtr</button>
+                                        <button class="th-filter-item" data-f="segment" data-v="3q">3rd Qtr</button>
+                                        <button class="th-filter-item" data-f="segment" data-v="4q">4th Qtr</button>
                                     </div>
                                 </div>
                             </th>
                             <th scope="col" class="sortable col-pick" data-sort="pick">
-                                <div class="th-header-shell">
+                                <div class="th-header-shell th-filterable">
                                     <button class="th-sort-btn" aria-label="Sort by pick"><span class="header-main-text">Pick</span><span class="sort-icon" aria-hidden="true">▲</span></button>
+                                    <button class="th-filter-btn" aria-label="Filter by pick type" aria-expanded="false" aria-controls="th-picktype-dropdown"><span class="kebab-dot"></span></button>
+                                    <div class="th-filter-dropdown" id="th-picktype-dropdown" hidden>
+                                        <button class="th-filter-item" data-f="picktype" data-v="spread">Spread</button>
+                                        <button class="th-filter-item" data-f="picktype" data-v="moneyline">Moneyline</button>
+                                        <button class="th-filter-item" data-f="picktype" data-v="total">Total O/U</button>
+                                        <button class="th-filter-item" data-f="picktype" data-v="parlay">Parlay</button>
+                                        <button class="th-filter-item" data-f="picktype" data-v="prop">Props</button>
+                                    </div>
                                 </div>
                             </th>
                             <th scope="col" class="center">
