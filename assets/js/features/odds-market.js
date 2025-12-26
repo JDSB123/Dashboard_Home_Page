@@ -1,11 +1,12 @@
 'use strict';
 
 /**
- * ODDS MARKET - Vegas Elite Odds Comparison
+ * ODDS MARKET v33.00.0 - Vegas Elite Odds Comparison
+ * Production release - Real API data only
  * 
  * Data Sources:
- * - NCAAF, NFL: SportsDataIO API
- * - NBA, NCAAB, NHL: The Odds API (and other open sources)
+ * - NCAAF, NFL: SportsDataIO API (via Azure Functions)
+ * - NBA, NCAAB, NHL: The Odds API (via Azure Functions)
  * 
  * Shows odds from major market sportsbooks for comparison.
  * Your connected books (Hulk Wager, etc.) are for PLACING bets.
@@ -36,11 +37,11 @@
     document.addEventListener('DOMContentLoaded', init);
 
     function init() {
-        console.log('📊 Odds Market initializing...');
+        console.log('📊 Odds Market v33.00.0 initializing...');
         console.log('📡 Data sources: SportsDataIO (NFL, NCAAF) | The Odds API (NBA, NCAAB, NHL)');
         renderBookHeaders();
         bindEvents();
-        loadMockData(); // TODO: Replace with real API calls
+        loadLiveOdds(); // v33.00.0: Load from real APIs
         render();
         updateKPIs();
     }
@@ -115,10 +116,56 @@
         container.innerHTML = html;
     }
 
-    // ===== MOCK DATA =====
-    // TODO: Replace with real API integration
-    // NFL/NCAAF -> SportsDataIO, NBA/NCAAB -> The Odds API
-    function loadMockData() {
+    // ===== LOAD LIVE ODDS FROM APIs =====
+    // v33.00.0: Fetch real odds data, show loading state
+    async function loadLiveOdds() {
+        state.games = [];
+        state.lastRefresh = new Date();
+        
+        // Show loading state
+        const container = document.getElementById('odds-grid');
+        if (container) {
+            container.innerHTML = '<div class="loading-odds">Loading live odds from market APIs...</div>';
+        }
+
+        try {
+            const API_BASE = window.APP_CONFIG?.API_BASE_URL || 'https://green-bier-picks-api.azurewebsites.net/api';
+            
+            // Fetch odds from Azure Functions proxy
+            const response = await fetch(`${API_BASE}/odds/all`);
+            
+            if (!response.ok) {
+                throw new Error(`API returned ${response.status}`);
+            }
+            
+            const data = await response.json();
+            
+            if (data.games && data.games.length > 0) {
+                state.games = data.games;
+                console.log(`✅ Loaded ${state.games.length} games with live odds`);
+            } else {
+                console.log('⚠️ No games with odds available');
+                showNoOddsMessage();
+            }
+        } catch (error) {
+            console.error('❌ Error fetching odds:', error);
+            showNoOddsMessage('Unable to load odds. API may be unavailable.');
+        }
+        
+        updateRefreshTime();
+        render();
+    }
+
+    function showNoOddsMessage(message = 'No odds available at this time.') {
+        const container = document.getElementById('odds-grid');
+        if (container) {
+            container.innerHTML = `<div class="no-odds-message">${message}</div>`;
+        }
+    }
+
+    // ===== MOCK DATA (DEPRECATED - kept for reference) =====
+    // TODO: Remove after confirming API integration works
+    function loadMockData_DEPRECATED() {
         const now = new Date();
         const hour = 60 * 60 * 1000;
 
