@@ -1623,7 +1623,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
     // ===== TRACKER BUTTON HANDLER =====
     function initializeTrackerButtons() {
         // Use event delegation on the table body
-        const tbody = document.getElementById('weekly-lineup-tbody');
+        const tbody = document.getElementById('picks-tbody') || document.querySelector('.weekly-lineup-table tbody');
         if (!tbody) {
             console.warn('[Weekly Lineup] Table body not found for tracker buttons');
             return;
