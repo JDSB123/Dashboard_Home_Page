@@ -15,6 +15,18 @@
     {
       "route": "/odds-market",
       "rewrite": "/odds-market.html"
+    },
+    {
+      "route": "/assets/js/*",
+      "headers": {
+        "Cache-Control": "no-cache, must-revalidate"
+      }
+    },
+    {
+      "route": "/*.js",
+      "headers": {
+        "Cache-Control": "no-cache, must-revalidate"
+      }
     }
   ],
   "responseOverrides": {
