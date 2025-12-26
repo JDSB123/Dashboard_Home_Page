@@ -403,8 +403,8 @@ body.page-active-picks .picks-table thead th {
     vertical-align: middle;
     /* Ensure text containment */
     white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
+    /* Allow overflow for filter dropdowns */
+    overflow: visible !important;
 }
 
 /* Center header labels (matches weekly lineup) */
@@ -481,8 +481,7 @@ body.page-active-picks .picks-table th[data-sort].sort-desc .sort-icon {
 /* Filter button - defer to inline styles in dashboard.html for full styling */
 /* This rule only provides fallback and hover states */
 body.page-active-picks .picks-table thead th .th-filter-btn:focus {
-    outline: 2px solid rgba(0, 214, 137, 0.6) !important;
-    outline-offset: 2px !important;
+    outline: none !important;
 }
 
 /* Filter dropdown - styles handled by inline CSS in dashboard.html for specificity */
@@ -767,7 +766,7 @@ body.page-active-picks .back-to-top:hover::before {
 }
 
 /* ==========================================================================
-   FILTER BUTTON - Clean Emerald Theme
+   FILTER BUTTON - Kebab Dots Theme
    ========================================================================== */
 body.page-active-picks .th-filter-btn:hover {
     opacity: 1;
@@ -783,48 +782,38 @@ body.page-active-picks .th-filter-btn[aria-expanded="true"] {
     opacity: 1;
 }
 
-/* Filter icon styling */
-body.page-active-picks .th-filter-icon {
-    font-size: 1.1rem;
-    line-height: 1;
-    color: rgba(230, 242, 246, 0.75);
-    opacity: 1;
-    letter-spacing: 0.12em;
-    pointer-events: none;
-    font-weight: bold;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-    transition: all 0.2s ease;
+/* Kebab dots for filter button - 3 vertical dots */
+body.page-active-picks .th-filter-btn::before,
+body.page-active-picks .th-filter-btn::after {
+    content: '' !important;
+    display: block !important;
+    width: 3px !important;
+    height: 3px !important;
+    background: #00d689 !important;
+    border-radius: 50% !important;
 }
 
-body.page-active-picks .th-filter-btn:hover .th-filter-icon {
-    color: #fff;
-    transform: scale(1.1);
-    text-shadow: 0 0 8px rgba(0, 214, 137, 0.4);
+body.page-active-picks .th-filter-btn span.kebab-dot {
+    display: block !important;
+    width: 3px !important;
+    height: 3px !important;
+    background: #00d689 !important;
+    border-radius: 50% !important;
 }
 
-body.page-active-picks .th-filter-btn[aria-expanded="true"] .th-filter-icon {
-    color: var(--dashboard-accent-primary);
-    text-shadow: 0 0 12px rgba(0, 214, 137, 0.5);
+body.page-active-picks .th-filter-btn:hover::before,
+body.page-active-picks .th-filter-btn:hover::after,
+body.page-active-picks .th-filter-btn:hover span.kebab-dot {
+    background: #00e08a !important;
 }
 
-/* Hide filter button pseudo-element icons */
-body.page-active-picks .th-filter-btn::before {
-    content: none !important;
-    display: none !important;
-}
-
-/* Active filter indicator dot */
-body.page-active-picks .th-filter-btn.has-filter::after {
-    content: '';
-    position: absolute;
-    top: 2px;
-    right: 2px;
-    width: 6px;
-    height: 6px;
-    background: var(--dashboard-accent-primary);
-    border-radius: 50%;
-    box-shadow: 0 0 6px rgba(0, 214, 137, 0.6);
-    pointer-events: none;
+body.page-active-picks .th-filter-btn[aria-expanded="true"]::before,
+body.page-active-picks .th-filter-btn[aria-expanded="true"]::after,
+body.page-active-picks .th-filter-btn[aria-expanded="true"] span.kebab-dot,
+body.page-active-picks .th-filter-btn.active::before,
+body.page-active-picks .th-filter-btn.active::after,
+body.page-active-picks .th-filter-btn.active span.kebab-dot {
+    background: #00e08a !important;
 }
 
 /* Sort icon descending state */
@@ -1070,38 +1059,74 @@ body.page-active-picks .picks-table tbody td .game-segment {
 
 /* ===== FILTER BUTTON VISIBILITY & POSITIONING ===== */
 /* Position filter button to left of sort icon to avoid overlap */
+/* Kebab dots icon - no SVG, dots created via ::before, span, ::after */
 .th-filter-btn {
     position: absolute !important;
     right: 18px !important; /* Shifted left to avoid sort icon */
     top: 50% !important;
     transform: translateY(-50%) !important;
-    width: 22px !important;
-    height: 22px !important;
+    width: 18px !important;
+    height: 18px !important;
     z-index: 102 !important;
     
-    /* Add visible icon via background image since HTML button is empty */
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.6)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3'%3E%3C/polygon%3E%3C/svg%3E") !important;
-    background-repeat: no-repeat !important;
-    background-position: center !important;
-    background-size: 12px 12px !important;
-    background-color: transparent !important;
+    /* Kebab dots layout */
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 2px !important;
+    
+    background: transparent !important;
     border: none !important;
-    opacity: 0.7;
+    border-radius: 3px !important;
+    cursor: pointer !important;
+    opacity: 0.6;
     transition: all 0.2s ease !important;
 }
 
 .th-filter-btn:hover {
     opacity: 1;
-    background-color: rgba(255, 255, 255, 0.1) !important;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3'%3E%3C/polygon%3E%3C/svg%3E") !important;
-    border-radius: 4px !important;
+    background: rgba(255, 255, 255, 0.1) !important;
 }
 
 .th-filter-btn[aria-expanded="true"],
 .th-filter-btn.active {
     opacity: 1;
-    background-color: rgba(0, 214, 137, 0.2) !important;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4af37' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3'%3E%3C/polygon%3E%3C/svg%3E") !important;
+    background: rgba(0, 214, 137, 0.15) !important;
+}
+
+/* Kebab dots - 3 dots via pseudo-elements and span */
+.th-filter-btn::before,
+.th-filter-btn::after {
+    content: '' !important;
+    display: block !important;
+    width: 3px !important;
+    height: 3px !important;
+    background: rgba(200, 210, 220, 0.9) !important;
+    border-radius: 50% !important;
+}
+
+.th-filter-btn span.kebab-dot {
+    display: block !important;
+    width: 3px !important;
+    height: 3px !important;
+    background: rgba(200, 210, 220, 0.9) !important;
+    border-radius: 50% !important;
+}
+
+.th-filter-btn:hover::before,
+.th-filter-btn:hover::after,
+.th-filter-btn:hover span.kebab-dot {
+    background: #00e08a !important;
+}
+
+.th-filter-btn.active::before,
+.th-filter-btn.active::after,
+.th-filter-btn.active span.kebab-dot,
+.th-filter-btn[aria-expanded="true"]::before,
+.th-filter-btn[aria-expanded="true"]::after,
+.th-filter-btn[aria-expanded="true"] span.kebab-dot {
+    background: #00e08a !important;
 }
 
 /* Sort Icon Positioning */
@@ -1295,14 +1320,20 @@ body.page-active-picks .picks-table tbody td .game-segment {
     min-height: 24px;
 }
 
-.table-filter-chips {
+.table-filter-chips,
+.filter-chips,
+#table-filter-chips {
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
 }
 
 .table-filter-chips:empty,
-.table-filter-chips[data-has-chips="false"] {
+.table-filter-chips[data-has-chips="false"],
+.filter-chips:empty,
+.filter-chips[data-has-chips="false"],
+#table-filter-chips:empty,
+#table-filter-chips[data-has-chips="false"] {
     display: none;
 }
 
@@ -1314,11 +1345,19 @@ body.page-active-picks .picks-table tbody td .game-segment {
     padding: 4px 10px;
     font-size: 0.72rem;
     font-weight: 600;
+    font-family: inherit;
     color: rgba(200, 215, 230, 0.95);
     background: linear-gradient(135deg, rgba(20, 35, 60, 0.92) 0%, rgba(15, 28, 50, 0.96) 100%);
     border: 1px solid rgba(0, 214, 137, 0.3);
     border-radius: 12px;
+    cursor: pointer;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+    transition: all 0.12s ease;
+}
+
+.filter-chip:hover {
+    border-color: rgba(239, 68, 68, 0.5);
+    background: linear-gradient(135deg, rgba(50, 30, 35, 0.92) 0%, rgba(40, 20, 25, 0.96) 100%);
 }
 
 .chip-remove {
@@ -1341,4 +1380,524 @@ body.page-active-picks .picks-table tbody td .game-segment {
 .chip-remove:hover {
     color: #ef5050;
     background: rgba(239, 68, 68, 0.2);
+}
+
+/* League logo styling */
+.ft-league-logo {
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+    vertical-align: middle;
+    border-radius: 2px;
+    object-fit: contain;
+}
+
+.ft-league-item {
+    display: flex;
+    align-items: center;
+}
+
+/* Status dot styling */
+.ft-status-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin-right: 8px;
+    border-radius: 50%;
+}
+
+.ft-status-dot.pending {
+    background: #f59e0b;
+    box-shadow: 0 0 6px rgba(245, 158, 11, 0.5);
+}
+
+.ft-status-dot.won {
+    background: #22c55e;
+    box-shadow: 0 0 6px rgba(34, 197, 94, 0.5);
+}
+
+.ft-status-dot.lost {
+    background: #ef4444;
+    box-shadow: 0 0 6px rgba(239, 68, 68, 0.5);
+}
+
+.ft-status-dot.push {
+    background: #6b7280;
+    box-shadow: 0 0 6px rgba(107, 114, 128, 0.5);
+}
+
+.ft-status-item {
+    display: flex;
+    align-items: center;
+}
+
+/* Risk/Win range menu styling */
+.ft-range-menu {
+    padding: 10px 12px;
+    min-width: 220px;
+}
+
+.ft-range-section {
+    margin-bottom: 10px;
+}
+
+.ft-range-section:last-child {
+    margin-bottom: 0;
+}
+
+.ft-range-label {
+    display: block;
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: rgba(180, 190, 210, 0.8);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+}
+
+.ft-range-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.ft-range-btn {
+    padding: 4px 8px;
+    font-size: 0.68rem;
+    font-weight: 500;
+    font-family: inherit;
+    color: rgba(200, 210, 225, 0.85);
+    background: rgba(30, 45, 70, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.12s ease;
+}
+
+.ft-range-btn:hover {
+    background: rgba(0, 214, 137, 0.12);
+    border-color: rgba(0, 214, 137, 0.3);
+    color: #00e08a;
+}
+
+.ft-range-btn.active {
+    background: rgba(0, 214, 137, 0.2);
+    border-color: rgba(0, 214, 137, 0.5);
+    color: #00e08a;
+}
+
+/* ===== Table Header Filter Dropdowns ===== */
+.th-filterable {
+    position: relative;
+    flex-wrap: nowrap;
+}
+
+.th-header-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.th-filter-btn {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    width: 16px;
+    height: 16px;
+    margin-left: 4px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: opacity 0.12s ease;
+    vertical-align: middle;
+    opacity: 0.5;
+}
+
+.th-filter-btn:hover {
+    opacity: 1;
+}
+
+.th-filter-btn.active {
+    opacity: 1;
+}
+
+/* Three kebab dots - middle dot from span, top/bottom from pseudo-elements */
+.th-filter-btn::before,
+.th-filter-btn::after {
+    content: '';
+    display: block;
+    width: 3px;
+    height: 3px;
+    background: currentColor;
+    border-radius: 50%;
+    color: rgba(200, 210, 220, 0.9);
+}
+
+.th-filter-btn span.kebab-dot {
+    display: block;
+    width: 3px;
+    height: 3px;
+    background: rgba(200, 210, 220, 0.9);
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.th-filter-btn:hover::before,
+.th-filter-btn:hover::after,
+.th-filter-btn:hover span.kebab-dot {
+    background: #00e08a;
+}
+
+.th-filter-btn.active::before,
+.th-filter-btn.active::after,
+.th-filter-btn.active span.kebab-dot {
+    background: #00e08a;
+}
+
+.th-filter-dropdown {
+    display: none;
+    position: fixed;
+    min-width: 120px;
+    background: linear-gradient(165deg, rgba(18, 28, 42, 0.98) 0%, rgba(8, 14, 24, 0.99) 100%);
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    border-radius: 8px;
+    padding: 6px;
+    z-index: 10080;
+    box-shadow: 
+        0 4px 24px rgba(0, 0, 0, 0.6),
+        0 0 1px rgba(212, 175, 55, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(12px);
+    contain: layout style;
+    transform: translateZ(0);
+    will-change: opacity;
+}
+
+.th-filter-dropdown.open {
+    display: block;
+    animation: dropdownFadeIn 0.12s ease-out forwards;
+}
+
+@keyframes dropdownFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* League icon styling */
+.ft-league-icon {
+    font-size: 0.85rem;
+    margin-right: 6px;
+}
+
+/* League logo images in filter dropdown */
+.ft-league-logo {
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+    flex-shrink: 0;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
+}
+
+.th-filter-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    padding: 5px 8px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    font-family: inherit;
+    color: rgba(230, 235, 245, 0.9);
+    background: transparent;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.12s ease;
+    letter-spacing: 0.2px;
+    position: relative;
+}
+
+.th-filter-item:hover {
+    background: linear-gradient(90deg, rgba(212, 175, 55, 0.12) 0%, rgba(0, 214, 137, 0.08) 100%);
+    color: #fff;
+}
+
+.th-filter-item:hover::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2px;
+    height: 60%;
+    background: linear-gradient(180deg, #d4af37, #00d689);
+    border-radius: 1px;
+}
+
+.th-filter-item.active {
+    color: #d4af37;
+    background: linear-gradient(90deg, rgba(212, 175, 55, 0.15) 0%, rgba(212, 175, 55, 0.05) 100%);
+    font-weight: 600;
+}
+
+.th-filter-item.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2px;
+    height: 60%;
+    background: #d4af37;
+    border-radius: 1px;
+}
+
+/* Date dropdown - compact horizontal chip layout */
+.th-date-dropdown {
+    min-width: auto !important;
+    padding: 6px 8px !important;
+    z-index: 10090 !important;
+}
+
+.th-date-row {
+    display: flex;
+    gap: 4px;
+    flex-wrap: nowrap;
+}
+
+.th-date-chip {
+    padding: 4px 8px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    font-family: inherit;
+    color: rgba(220, 225, 235, 0.9);
+    background: linear-gradient(180deg, rgba(40, 55, 80, 0.7) 0%, rgba(25, 38, 58, 0.8) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.12s ease;
+    white-space: nowrap;
+    letter-spacing: 0.2px;
+}
+
+.th-date-chip:hover {
+    background: linear-gradient(180deg, rgba(212, 175, 55, 0.2) 0%, rgba(212, 175, 55, 0.1) 100%);
+    border-color: rgba(212, 175, 55, 0.35);
+    color: #d4af37;
+    transform: translateY(-1px);
+}
+
+.th-date-chip.active {
+    background: linear-gradient(180deg, rgba(212, 175, 55, 0.3) 0%, rgba(212, 175, 55, 0.15) 100%);
+    border-color: rgba(212, 175, 55, 0.5);
+    color: #d4af37;
+    box-shadow: 0 2px 8px rgba(212, 175, 55, 0.2);
+}
+
+/* Range dropdown in table header - Vegas sportsbook style */
+.th-range-dropdown {
+    min-width: 160px;
+    padding: 8px;
+}
+
+.th-range-section {
+    margin-bottom: 6px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+.th-range-section:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.th-range-label {
+    display: block;
+    font-size: 0.58rem;
+    font-weight: 700;
+    color: rgba(212, 175, 55, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 4px;
+}
+
+.th-range-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+}
+
+.th-range-btn {
+    padding: 3px 6px;
+    font-size: 0.62rem;
+    font-weight: 600;
+    font-family: inherit;
+    color: rgba(220, 225, 235, 0.9);
+    background: linear-gradient(180deg, rgba(40, 55, 80, 0.7) 0%, rgba(25, 38, 58, 0.8) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.12s ease;
+    letter-spacing: 0.2px;
+}
+
+.th-range-btn:hover {
+    background: linear-gradient(180deg, rgba(212, 175, 55, 0.2) 0%, rgba(212, 175, 55, 0.1) 100%);
+    border-color: rgba(212, 175, 55, 0.35);
+    color: #d4af37;
+    transform: translateY(-1px);
+}
+
+.th-range-btn.active {
+    background: linear-gradient(180deg, rgba(212, 175, 55, 0.25) 0%, rgba(212, 175, 55, 0.15) 100%);
+    border-color: rgba(212, 175, 55, 0.5);
+    color: #d4af37;
+    box-shadow: 0 2px 8px rgba(212, 175, 55, 0.15);
+}
+
+/* ============================
+   FILTER BADGE STYLES
+   ============================ */
+
+/* League Badges */
+.ft-league-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.ft-league-badge.nba {
+    background: rgba(29, 66, 138, 0.25);
+    color: #c8102e;
+    border: 1px solid rgba(200, 16, 46, 0.4);
+}
+
+.ft-league-badge.ncaam {
+    background: rgba(0, 83, 155, 0.2);
+    color: #f58426;
+    border: 1px solid rgba(245, 132, 38, 0.4);
+}
+
+.ft-league-badge.nfl {
+    background: rgba(1, 51, 105, 0.25);
+    color: #d50a0a;
+    border: 1px solid rgba(213, 10, 10, 0.4);
+}
+
+.ft-league-badge.ncaaf {
+    background: rgba(0, 83, 155, 0.2);
+    color: #c5b358;
+    border: 1px solid rgba(197, 179, 88, 0.4);
+}
+
+.ft-league-badge.nhl {
+    background: rgba(0, 0, 0, 0.3);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+/* Status Badges */
+.ft-status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+/* Status indicator dots for filter dropdown - Vegas style */
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    box-shadow: 0 0 6px currentColor;
+}
+
+.status-dot.pending {
+    background: #d4af37;
+    box-shadow: 0 0 6px rgba(212, 175, 55, 0.5);
+}
+
+.status-dot.won {
+    background: #00d689;
+    box-shadow: 0 0 6px rgba(0, 214, 137, 0.5);
+}
+
+.status-dot.lost {
+    background: #ff4757;
+    box-shadow: 0 0 6px rgba(255, 71, 87, 0.5);
+}
+
+.status-dot.push {
+    background: #8892a0;
+    box-shadow: 0 0 6px rgba(136, 146, 160, 0.4);
+}
+
+/* Result indicators for filter dropdown - Vegas style */
+.result-indicator {
+    font-size: 0.7rem;
+    font-weight: 700;
+    min-width: 22px;
+    text-align: center;
+    letter-spacing: 0.5px;
+}
+
+.result-indicator.positive {
+    color: #00d689;
+    text-shadow: 0 0 8px rgba(0, 214, 137, 0.3);
+}
+
+.result-indicator.negative {
+    color: #ff4757;
+    text-shadow: 0 0 8px rgba(255, 71, 87, 0.3);
+}
+
+.result-indicator.zero {
+    color: #8892a0;
+}
+
+/* Result Badges ($ Won/Lost) */
+.ft-result-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.65rem;
+    font-weight: 700;
+}
+
+.ft-result-badge.positive {
+    background: rgba(0, 214, 137, 0.15);
+    color: #00d689;
+    border: 1px solid rgba(0, 214, 137, 0.3);
+}
+
+.ft-result-badge.negative {
+    background: rgba(255, 71, 87, 0.15);
+    color: #ff4757;
+    border: 1px solid rgba(255, 71, 87, 0.3);
+}
+
+.ft-result-badge.zero {
+    background: rgba(108, 117, 125, 0.15);
+    color: #adb5bd;
+    border: 1px solid rgba(108, 117, 125, 0.3);
 }
