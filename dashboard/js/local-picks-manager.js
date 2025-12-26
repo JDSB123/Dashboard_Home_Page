@@ -816,56 +816,9 @@
         }
     }
 
-    // ========== DEMO PICKS IMPORT (SAFE - does not override existing data) ==========
-    
-    /**
-     * Import demo picks with varied statuses for development/demo purposes.
-     * v4: Force reimport with dollar amounts in Won/Lost column
-     */
-    function importTodaysPicks() {
-        const IMPORT_KEY = 'gbsv_demo_imported_v4'; // v4 forces fresh demo data
-
-        // If already imported v4, skip
-        if (localStorage.getItem(IMPORT_KEY)) {
-            console.log('✅ Demo picks v4 already imported');
-            return;
-        }
-
-        // Clear old demo data to replace with varied status demos
-        localStorage.removeItem(STORAGE_KEY);
-        console.log('🔄 Clearing old picks to import varied status demos');
-
-        // Generate dates for demo picks
-        const today = new Date();
-        const todayStr = today.toISOString().split('T')[0];
-        const yesterday = new Date(today);
-        yesterday.setDate(yesterday.getDate() - 1);
-        const yesterdayStr = yesterday.toISOString().split('T')[0];
-
-        const demoPicks = [
-            // PENDING - Game hasn't started yet
-            { sport: 'NBA', sportsbook: 'FanDuel', pickTeam: 'San Antonio Spurs', awayTeam: 'San Antonio Spurs', homeTeam: 'New York Knicks', awayRecord: '13-13', homeRecord: '18-9', pickType: 'spread', line: '+2.5', odds: '-110', segment: 'Full Game', gameDate: todayStr, gameTime: '7:30 PM', risk: 1100, win: 1000, status: 'pending' },
-
-            // ON-TRACK - Live game, covering the spread
-            { sport: 'NBA', sportsbook: 'DraftKings', pickTeam: 'Boston Celtics', awayTeam: 'Boston Celtics', homeTeam: 'Miami Heat', awayRecord: '22-5', homeRecord: '15-12', pickType: 'spread', line: '-4.5', odds: '-110', segment: 'Full Game', gameDate: todayStr, gameTime: '6:00 PM', risk: 550, win: 500, status: 'on-track', result: 'BOS 78 - MIA 65', countdown: 'Q3 4:32' },
-
-            // AT-RISK - Live game, not covering
-            { sport: 'NCAAB', sportsbook: 'BetMGM', pickTeam: 'Duke Blue Devils', awayTeam: 'Duke Blue Devils', homeTeam: 'North Carolina', awayRecord: '10-2', homeRecord: '9-3', pickType: 'spread', line: '-6.5', odds: '-105', segment: 'Full Game', gameDate: todayStr, gameTime: '5:00 PM', risk: 1050, win: 1000, status: 'at-risk', result: 'DUKE 45 - UNC 44', countdown: 'H2 8:15' },
-
-            // WON - Completed game, won the bet
-            { sport: 'NFL', sportsbook: 'Caesars', pickTeam: 'Philadelphia Eagles', awayTeam: 'Dallas Cowboys', homeTeam: 'Philadelphia Eagles', awayRecord: '7-7', homeRecord: '12-2', pickType: 'moneyline', line: 'ML', odds: '-145', segment: 'Full Game', gameDate: yesterdayStr, gameTime: '4:25 PM', risk: 1450, win: 1000, status: 'win', result: 'DAL 17 - PHI 31' },
-
-            // LOST - Completed game, lost the bet
-            { sport: 'NBA', sportsbook: 'FanDuel', pickTeam: 'Lakers', awayTeam: 'Los Angeles Lakers', homeTeam: 'Golden State Warriors', awayRecord: '14-13', homeRecord: '15-12', pickType: 'total', pickDirection: 'Over', line: '224.5', odds: '-110', segment: 'Full Game', gameDate: yesterdayStr, gameTime: '7:00 PM', risk: 1100, win: 1000, status: 'loss', result: 'LAL 102 - GSW 108' },
-
-            // PUSH - Completed game, push
-            { sport: 'NCAAB', sportsbook: 'DraftKings', pickTeam: 'Butler Bulldogs', awayTeam: 'Butler Bulldogs', homeTeam: 'UConn Huskies', awayRecord: '6-4', homeRecord: '8-2', pickType: 'spread', line: '+7', odds: '-110', segment: 'Full Game', gameDate: yesterdayStr, gameTime: '8:00 PM', risk: 1100, win: 1000, status: 'push', result: 'BUT 68 - CONN 75' }
-        ];
-
-        addPicks(demoPicks);
-        localStorage.setItem(IMPORT_KEY, 'true');
-        console.log('🎯 Imported demo picks with varied statuses');
-    }
+    // ========== DEMO PICKS REMOVED (v33.00.0 Production) ==========
+    // Demo picks functionality has been completely removed for production.
+    // Real picks come from weekly-lineup page and model APIs only.
 
     // ========== INITIALIZE ==========
 
