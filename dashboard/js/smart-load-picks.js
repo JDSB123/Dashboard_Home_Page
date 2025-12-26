@@ -183,6 +183,10 @@ function getTeamAbbr(teamName) {
         'raiders': 'LV',
         'denver broncos': 'DEN',
         'broncos': 'DEN',
+        'dallas cowboys': 'DAL',
+        'cowboys': 'DAL',
+        'philadelphia eagles': 'PHI',
+        'eagles': 'PHI',
         'phoenix suns': 'PHX',
         'suns': 'PHX',
         'los angeles clippers': 'LAC',
@@ -212,6 +216,8 @@ function getTeamAbbr(teamName) {
         'east tennessee state': 'ETSU',
         'north carolina': 'UNC',
         'unc': 'UNC',
+        'duke': 'DUKE',
+        'duke blue devils': 'DUKE',
         'san antonio spurs': 'SAS',
         'spurs': 'SAS',
         'new york knicks': 'NYK',
@@ -265,7 +271,9 @@ function getTeamLogoId(teamName) {
         'east tennessee st': '2193',
         'east tennessee state': '2193',
         'north carolina': '153',
-        'unc': '153'
+        'unc': '153',
+        'duke': '150',
+        'duke blue devils': '150'
     };
 
     const key = teamName.toLowerCase();
@@ -1054,11 +1062,106 @@ function escapeHtmlForStatus(text) {
         .replace(/'/g, '&#39;');
 }
 
-function buildStatusBadgeHTML({ statusClass, label, tooltip, info, extraClass = '' }) {
+function calculatePickMargin(parsedPick, result, game) {
+    /**
+     * Calculate how much a pick won/lost by
+     * Returns margin string like "Covered by 5 pts" or "Lost by 3 pts"
+     */
+    if (!result || !parsedPick) return null;
+    
+    // Extract scores from result
+    const scoreMatch = result.match(/(\d+)-(\d+)|(\d+)\s*-\s*(\d+)/);
+    if (!scoreMatch) return null;
+    
+    const awayScore = parseInt(scoreMatch[1] || scoreMatch[3]);
+    const homeScore = parseInt(scoreMatch[2] || scoreMatch[4]);
+    
+    if (isNaN(awayScore) || isNaN(homeScore)) return null;
+    
+    const actualDiff = awayScore - homeScore; // positive = away won
+    const actualTotal = awayScore + homeScore;
+    
+    // Determine which team was picked (away or home)
+    let isPickedAway = false;
+    if (parsedPick.pickTeam && game) {
+        const teams = parseTeamsFromGame(game);
+        const pickTeamLower = parsedPick.pickTeam.toLowerCase();
+        const awayLower = teams.away.toLowerCase();
+        isPickedAway = awayLower.includes(pickTeamLower) || pickTeamLower.includes(awayLower);
+    }
+    
+    // Calculate margin based on pick type
+    if (parsedPick.pickType === 'Spread' && parsedPick.line) {
+        const spread = parseFloat(parsedPick.line);
+        // If picked away team with spread, their adjusted score is awayScore + spread
+        // If picked home team with spread, their adjusted score is homeScore + spread
+        let coverMargin;
+        if (isPickedAway) {
+            // Away team + spread vs home team
+            coverMargin = (awayScore + spread) - homeScore;
+        } else {
+            // Home team + spread vs away team
+            coverMargin = (homeScore + spread) - awayScore;
+        }
+        
+        const absMargin = Math.abs(coverMargin);
+        if (coverMargin > 0) {
+            return `Covered by ${absMargin.toFixed(1)} pts`;
+        } else if (coverMargin < 0) {
+            return `Lost by ${absMargin.toFixed(1)} pts`;
+        } else {
+            return 'Push (exact)';
+        }
+    } else if (parsedPick.pickType === 'Over' || parsedPick.pickType === 'Under') {
+        const line = parseFloat(parsedPick.line);
+        if (isNaN(line)) return null;
+        
+        const margin = Math.abs(actualTotal - line);
+        if (parsedPick.pickType === 'Over') {
+            if (actualTotal > line) {
+                return `Covered by ${margin.toFixed(1)} pts`;
+            } else if (actualTotal < line) {
+                return `Lost by ${margin.toFixed(1)} pts`;
+            } else {
+                return 'Push (exact)';
+            }
+        } else { // Under
+            if (actualTotal < line) {
+                return `Covered by ${margin.toFixed(1)} pts`;
+            } else if (actualTotal > line) {
+                return `Lost by ${margin.toFixed(1)} pts`;
+            } else {
+                return 'Push (exact)';
+            }
+        }
+    } else if (parsedPick.pickType === 'Moneyline') {
+        // For moneyline, just show the score differential
+        let margin;
+        if (isPickedAway) {
+            margin = awayScore - homeScore;
+        } else {
+            margin = homeScore - awayScore;
+        }
+        
+        const absMargin = Math.abs(margin);
+        if (margin > 0) {
+            return `Won by ${absMargin} pts`;
+        } else if (margin < 0) {
+            return `Lost by ${absMargin} pts`;
+        } else {
+            return 'Tied';
+        }
+    }
+    
+    return null;
+}
+
+function buildStatusBadgeHTML({ statusClass, label, tooltip, info, extraClass = '', margin = null }) {
     const safeStatus = escapeHtmlForStatus(statusClass || 'pending');
     const safeLabel = escapeHtmlForStatus(label || '');
     const safeTooltip = tooltip ? escapeHtmlForStatus(tooltip) : '';
     const safeInfo = info ? escapeHtmlForStatus(info) : '';
+    const safeMargin = margin ? escapeHtmlForStatus(margin) : '';
     
     // Only include info if it's meaningful (has wins or losses, not just "0W-0L-XP")
     const hasWinOrLoss = safeInfo && /(^|[^\d])([1-9]\d*)W|(^|[^\d])([1-9]\d*)L/.test(safeInfo);
@@ -1066,9 +1169,10 @@ function buildStatusBadgeHTML({ statusClass, label, tooltip, info, extraClass = 
     
     const tooltipAttr = safeTooltip ? ` data-blurb="${safeTooltip}"` : '';
     const infoAttr = shouldShowInfo ? ` data-status-info="${safeInfo}"` : '';
+    const marginAttr = safeMargin ? ` data-margin="${safeMargin}"` : '';
     // Note: status-badge-info span removed - info is now shown in tooltip via data-status-info
     const extraClassValue = extraClass ? ` ${extraClass}` : '';
-    return `<span class="status-badge${extraClassValue}" data-status="${safeStatus}"${tooltipAttr}${infoAttr}>${safeLabel}</span>`;
+    return `<span class="status-badge${extraClassValue}" data-status="${safeStatus}"${tooltipAttr}${infoAttr}${marginAttr}>${safeLabel}</span>`;
 }
 
 function formatGameTimeStatus(statusClass, liveInfo, result, status, countdown, start) {
@@ -1261,11 +1365,18 @@ function buildPickRow(pick, index) {
         badgeLabel = `Starts ${pick.scheduled}`;
     }
 
+    // Calculate margin for won/lost picks
+    let marginText = null;
+    if ((statusClass === 'win' || statusClass === 'lost') && pick.result) {
+        marginText = calculatePickMargin(parsedPick, pick.result, pick.game);
+    }
+
     const statusBadgeMarkup = buildStatusBadgeHTML({
         statusClass,
         label: badgeLabel,
         tooltip: statusMeta.tooltip || getStatusBlurb(pick.status, pick.result) || '',
-        info: statusMeta.badgeContext
+        info: statusMeta.badgeContext,
+        margin: marginText
     });
     const outcome = computeHitMissAndProfit(statusClass, pick.risk, pick.win);
 

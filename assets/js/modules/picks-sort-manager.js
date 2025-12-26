@@ -168,6 +168,20 @@
                     return this.getStatusSortPriority(cell.textContent.trim().toLowerCase());
                 }
 
+                case 'profit': {
+                    const cell = row.querySelector('td:last-child');
+                    if (!cell) return 0;
+                    const amountEl = cell.querySelector('.profit-amount');
+                    if (!amountEl) return 0;
+                    const text = amountEl.textContent.replace(/[$,]/g, '').trim();
+                    return parseFloat(text) || 0;
+                }
+
+                case 'score': {
+                    const dataEpoch = row.getAttribute('data-epoch');
+                    return dataEpoch ? parseInt(dataEpoch, 10) : 0;
+                }
+
                 default:
                     return '';
             }
