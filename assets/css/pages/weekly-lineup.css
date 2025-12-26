@@ -4318,24 +4318,49 @@ body.page-weekly-lineup .th-filter-dropdown.weekly-lineup-filter-dropdown .team-
     font-size: 0.95rem;
 }
 
+/* ==========================================================================
+   LOADING SPINNER - Enhanced with pulsing glow effect
+   ========================================================================== */
 .loading-spinner {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
+    justify-content: center;
+    gap: 12px;
+    padding: 24px 0;
+    font-size: 0.95rem;
+    color: rgba(200, 220, 240, 0.9);
+    letter-spacing: 0.02em;
 }
 
 .loading-spinner::before {
     content: "";
-    width: 18px;
-    height: 18px;
-    border: 2px solid rgba(0, 214, 137, 0.3);
-    border-top-color: rgba(0, 214, 137, 0.9);
+    width: 28px;
+    height: 28px;
+    border: 3px solid rgba(0, 214, 137, 0.15);
+    border-top-color: #00d689;
+    border-right-color: rgba(0, 214, 137, 0.5);
     border-radius: 50%;
-    animation: spin 0.8s linear infinite;
+    animation: spin 0.7s cubic-bezier(0.5, 0.1, 0.5, 0.9) infinite;
+    box-shadow: 0 0 15px rgba(0, 214, 137, 0.3), inset 0 0 8px rgba(0, 214, 137, 0.1);
 }
 
 @keyframes spin {
     to { transform: rotate(360deg); }
+}
+
+/* Pulsing dots animation for "Fetching..." text */
+.loading-cell {
+    text-align: center;
+    background: linear-gradient(180deg, rgba(0, 30, 40, 0.3) 0%, rgba(0, 20, 30, 0.5) 100%);
+}
+
+.loading-row {
+    animation: pulse-row 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-row {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
 }
 
 /* ==========================================================================
