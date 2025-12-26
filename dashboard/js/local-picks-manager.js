@@ -872,7 +872,16 @@
     // ========== INITIALIZE ==========
 
     function initialize() {
-        console.log('🏠 LocalPicksManager v2.5 initialized (no demo import)');
+        console.log('🏠 LocalPicksManager v2.6 initialized (clean slate)');
+
+        // ONE-TIME CLEANUP: Remove old demo data (runs once, then sets flag)
+        const CLEANUP_KEY = 'gbsv_demo_cleanup_v1';
+        if (!localStorage.getItem(CLEANUP_KEY)) {
+            localStorage.removeItem(STORAGE_KEY);  // Clear old picks
+            localStorage.removeItem('gbsv_demo_imported_v4');  // Clear old import flag
+            localStorage.setItem(CLEANUP_KEY, 'true');
+            console.log('🧹 Cleared old demo data (one-time cleanup)');
+        }
 
         // DISABLED: Demo picks import - users add real picks from weekly-lineup
         // importTodaysPicks();
