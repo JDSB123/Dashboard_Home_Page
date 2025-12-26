@@ -1947,3 +1947,20 @@ body.page-active-picks .picks-table tbody td .game-segment {
     color: #adb5bd;
     border: 1px solid rgba(108, 117, 125, 0.3);
 }
+
+/* Delete Pick Button */
+.delete-pick-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255, 107, 107, 0.6);
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0 4px;
+    margin-left: 8px;
+    transition: color 0.2s ease;
+    line-height: 1;
+}
+
+.delete-pick-btn:hover {
+    color: rgba(255, 107, 107, 1);
+}

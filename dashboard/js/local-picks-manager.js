@@ -465,8 +465,11 @@
         console.log(`📊 Displayed ${picks.length} picks in table`);
 
         // Trigger recalculations
-        if (typeof window.calculateKPIs === 'function') {
-            setTimeout(() => window.calculateKPIs(), 100);
+        if (typeof window.calculateKPIs === 'function' && typeof window.updateKPITiles === 'function') {
+            setTimeout(() => {
+                const kpis = window.calculateKPIs(getAllPicks());
+                window.updateKPITiles(kpis);
+            }, 100);
         }
         if (window.ZebraStripes?.applyPicksTableZebraStripes) {
             setTimeout(() => window.ZebraStripes.applyPicksTableZebraStripes(), 50);
@@ -734,6 +737,7 @@
             </td>
             <td class="center">
                 <span class="won-lost-value" data-status="${status}">${wonLostValue}</span>
+                <button class="delete-pick-btn" onclick="window.LocalPicksManager.delete('${pick.id}')" title="Remove Pick">×</button>
             </td>
         `;
 
