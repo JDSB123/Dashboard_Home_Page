@@ -1,9 +1,7 @@
 /**
- * Local Picks Manager v2.2
+ * Local Picks Manager v33.00.0
+ * Production version - Real data only, no sample data
  * Stores picks in localStorage, auto-fetches game data from ESPN
- * Full formatting matching dashboard template
- * v2.1: Added team records, improved money display
- * v2.2: Auto re-enrich existing picks on page load to add missing records
  */
 
 (function() {
@@ -872,20 +870,10 @@
     // ========== INITIALIZE ==========
 
     function initialize() {
-        console.log('[LocalPicksManager] v2.7 - fresh start');
-
-        // FORCE CLEANUP v2: Clears ALL stale/demo data
-        const CLEANUP_KEY = 'gbsv_cleanup_v2';
-        if (!localStorage.getItem(CLEANUP_KEY)) {
-            localStorage.removeItem(STORAGE_KEY);
-            localStorage.removeItem('gbsv_demo_imported_v4');
-            localStorage.removeItem('gbsv_demo_cleanup_v1');
-            localStorage.setItem(CLEANUP_KEY, 'done');
-            console.log('[LocalPicksManager] Cleared stale data');
-        }
-
-        // DISABLED: Demo picks import - users add real picks from weekly-lineup
-        // importTodaysPicks();
+        console.log('🏠 LocalPicksManager v33.00.0 initialized (real data only)');
+        
+        // NO DEMO DATA: Production version uses only real picks from weekly-lineup
+        // importTodaysPicks(); -- DISABLED: No sample/placeholder data in production
 
         // Override global functions
         window.processAndSavePicks = parseAndAddPicks;
