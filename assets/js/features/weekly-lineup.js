@@ -318,7 +318,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
         const tbody = document.querySelector('.weekly-lineup-table tbody');
         if (tbody) {
-            tbody.innerHTML = '<tr class="loading-row"><td colspan="8" class="loading-cell">Loading picks...</td></tr>';
+            tbody.innerHTML = '<tr class="loading-row"><td colspan="8" class="loading-cell"><span class="ft-league-name">Loading picks...</span></td></tr>';
         }
 
         try {
