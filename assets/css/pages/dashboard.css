@@ -820,7 +820,7 @@ body.page-active-picks .th-filter-btn.active span.kebab-dot {
 /* Sort icon descending state */
 body.page-active-picks th.sorted-desc .sort-icon,
 body.page-active-picks th[data-sort].sort-desc .sort-icon {
-    transform: rotate(180deg);
+    transform: translateY(-50%) rotate(180deg);
 }
 
 /* ==========================================================================
