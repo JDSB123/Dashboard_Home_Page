@@ -2248,6 +2248,11 @@ body.page-active-picks #picks-table tbody tr {
     background: transparent;
 }
 
+/* Ensure filtered/hidden rows stay hidden */
+body.page-active-picks #picks-table tbody tr.filter-hidden {
+    display: none !important;
+}
+
 body.page-active-picks #picks-table tbody tr:hover {
     background: rgba(40, 60, 90, 0.48);
 }

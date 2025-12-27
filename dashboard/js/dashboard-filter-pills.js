@@ -263,10 +263,30 @@
      * Apply filters to table rows
      */
     function applyFilters() {
-        const rows = document.querySelectorAll('#picks-table tbody tr');
+        const table = document.getElementById('picks-table');
+        if (!table) {
+            console.warn('[DashboardFilterPills] Table #picks-table not found');
+            return;
+        }
+        
+        const tbody = table.querySelector('tbody');
+        if (!tbody) {
+            console.warn('[DashboardFilterPills] Table tbody not found');
+            return;
+        }
+        
+        const rows = tbody.querySelectorAll('tr');
+        if (rows.length === 0) {
+            console.log('[DashboardFilterPills] No rows found in table');
+            return;
+        }
+        
+        console.log(`[DashboardFilterPills] Applying filters to ${rows.length} rows`);
+        console.log('[DashboardFilterPills] Active filters:', activeFilters);
+        
         let visibleCount = 0;
 
-        rows.forEach(row => {
+        rows.forEach((row, index) => {
             let shouldShow = true;
 
             // League filter (multi-select)
@@ -285,6 +305,7 @@
                 });
                 if (!leagueMatches) {
                     shouldShow = false;
+                    if (index < 3) console.log(`[DashboardFilterPills] Row ${index} hidden by league filter. Row league: "${rowLeague}", Filter leagues:`, activeFilters.leagues);
                 }
             }
 
@@ -295,6 +316,7 @@
                 const normalizedFilterSegment = activeFilters.segment.toLowerCase().trim();
                 if (normalizedRowSegment !== normalizedFilterSegment) {
                     shouldShow = false;
+                    if (index < 3) console.log(`[DashboardFilterPills] Row ${index} hidden by segment filter. Row segment: "${rowSegment}" (normalized: "${normalizedRowSegment}"), Filter: "${normalizedFilterSegment}"`);
                 }
             }
 
@@ -305,6 +327,7 @@
                 const normalizedFilterPickType = activeFilters.pick.toLowerCase().trim();
                 if (normalizedRowPickType !== normalizedFilterPickType) {
                     shouldShow = false;
+                    if (index < 3) console.log(`[DashboardFilterPills] Row ${index} hidden by pick type filter. Row pick type: "${rowPickType}" (normalized: "${normalizedRowPickType}"), Filter: "${normalizedFilterPickType}"`);
                 }
             }
 
@@ -325,14 +348,17 @@
                 }
                 if (!statusMatches) {
                     shouldShow = false;
+                    if (index < 3) console.log(`[DashboardFilterPills] Row ${index} hidden by status filter. Row status: "${rowStatus}", Filter: "${filterStatus}"`);
                 }
             }
 
             if (shouldShow) {
                 row.style.display = '';
+                row.classList.remove('filter-hidden');
                 visibleCount++;
             } else {
                 row.style.display = 'none';
+                row.classList.add('filter-hidden');
             }
         });
 
