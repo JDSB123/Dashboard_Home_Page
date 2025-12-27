@@ -38,11 +38,22 @@
             }
         }
 
-        // NCAAM (v2.1 - uses /api/picks/{date} endpoint with date support)
+        // NCAAM - Try container app first, fallback to main API
         if (league === 'all' || leagueUpper === 'NCAAM' || leagueUpper === 'NCAAB') {
             try {
                 if (window.NCAAMPicksFetcher) {
-                    const data = await window.NCAAMPicksFetcher.fetchPicks(date);
+                    let data;
+                    try {
+                        data = await window.NCAAMPicksFetcher.fetchPicks(date);
+                    } catch (containerError) {
+                        console.warn('[UNIFIED-FETCHER] NCAAM container app failed, trying main API:', containerError.message);
+                        // Fallback to main API
+                        const mainApiUrl = `${window.APP_CONFIG?.API_BASE_URL || 'https://green-bier-picks-api.azurewebsites.net/api'}/picks?league=ncaam`;
+                        const response = await fetch(mainApiUrl);
+                        if (!response.ok) throw new Error(`Main API error: ${response.status}`);
+                        data = await response.json();
+                    }
+
                     const picks = data.picks || data.plays || data.recommendations || [];
                     picks.forEach(pick => {
                         allPicks.push(window.NCAAMPicksFetcher.formatPickForTable(pick));
@@ -55,11 +66,22 @@
             }
         }
 
-        // NFL
+        // NFL - Try container app first, fallback to main API
         if (league === 'all' || leagueUpper === 'NFL') {
             try {
                 if (window.NFLPicksFetcher) {
-                    const data = await window.NFLPicksFetcher.fetchPicks(date);
+                    let data;
+                    try {
+                        data = await window.NFLPicksFetcher.fetchPicks(date);
+                    } catch (containerError) {
+                        console.warn('[UNIFIED-FETCHER] NFL container app failed, trying main API:', containerError.message);
+                        // Fallback to main API
+                        const mainApiUrl = `${window.APP_CONFIG?.API_BASE_URL || 'https://green-bier-picks-api.azurewebsites.net/api'}/picks?league=nfl`;
+                        const response = await fetch(mainApiUrl);
+                        if (!response.ok) throw new Error(`Main API error: ${response.status}`);
+                        data = await response.json();
+                    }
+
                     const picks = data.picks || data.plays || data.recommendations || [];
                     picks.forEach(pick => {
                         allPicks.push(window.NFLPicksFetcher.formatPickForTable(pick));
@@ -72,11 +94,22 @@
             }
         }
 
-        // NCAAF
+        // NCAAF - Try container app first, fallback to main API
         if (league === 'all' || leagueUpper === 'NCAAF') {
             try {
                 if (window.NCAAFPicksFetcher) {
-                    const data = await window.NCAAFPicksFetcher.fetchPicks(date);
+                    let data;
+                    try {
+                        data = await window.NCAAFPicksFetcher.fetchPicks(date);
+                    } catch (containerError) {
+                        console.warn('[UNIFIED-FETCHER] NCAAF container app failed, trying main API:', containerError.message);
+                        // Fallback to main API
+                        const mainApiUrl = `${window.APP_CONFIG?.API_BASE_URL || 'https://green-bier-picks-api.azurewebsites.net/api'}/picks?league=ncaaf`;
+                        const response = await fetch(mainApiUrl);
+                        if (!response.ok) throw new Error(`Main API error: ${response.status}`);
+                        data = await response.json();
+                    }
+
                     const predictions = data.predictions || data.picks || data.plays || [];
                     predictions.forEach(pick => {
                         allPicks.push(window.NCAAFPicksFetcher.formatPickForTable(pick));
