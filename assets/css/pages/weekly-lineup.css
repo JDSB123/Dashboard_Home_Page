@@ -4707,10 +4707,13 @@ body.page-weekly-lineup .th-filter-dropdown.weekly-lineup-filter-dropdown .team-
 }
 
 .ft-last-refreshed {
-    font-size: 0.65rem;
-    color: rgba(144, 164, 174, 0.7);
-    font-family: var(--font-body, 'Cormorant Garamond', Georgia, serif);
-    letter-spacing: 0.02em;
+    font-size: 0.55rem;
+    color: rgba(144, 164, 174, 0.5);
+    font-family: inherit;
+    letter-spacing: 0.01em;
+    font-weight: 400;
+    opacity: 0.8;
+    margin-top: 1px;
 }
 
 .ft-last-refreshed:empty {
