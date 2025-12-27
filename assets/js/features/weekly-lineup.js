@@ -227,11 +227,10 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         try {
             console.log('[Weekly Lineup] Starting initialization...');
 
-            // Load picks immediately from mock data (no API delay)
-            console.log('[Weekly Lineup] Loading model outputs...');
-            loadModelOutputs();
+            // Don't auto-load picks - user must click Fetch button
+            // Picks will only load when user triggers fetch via toolbar buttons
 
-            // Initialize filter system after table is populated
+            // Initialize filter system
             requestAnimationFrame(() => {
                 console.log('[Weekly Lineup] Initializing filter system...');
                 if (window.TableFilters) {
@@ -446,6 +445,13 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
         // Clear placeholder/stale rows
         tbody.innerHTML = '';
+
+        // Show empty state if no picks
+        if (!picks || picks.length === 0) {
+            tbody.innerHTML = '<tr class="empty-state-row"><td colspan="8" class="empty-state-cell"><div class="empty-state"><span class="empty-icon">📊</span><span class="empty-message">No picks available. Try fetching again or check back later.</span></div></td></tr>';
+            log('📊 No picks to display');
+            return;
+        }
 
         // Add each pick as a row
         picks.forEach((pick, idx) => {
@@ -1380,6 +1386,12 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                         throw new Error('Fetcher not available');
                     }
 
+                    // Show loading state in table
+                    const tbody = document.querySelector('.weekly-lineup-table tbody');
+                    if (tbody) {
+                        tbody.innerHTML = '<tr class="empty-state-row"><td colspan="8" class="empty-state-cell"><div class="empty-state"><span class="empty-icon">📊</span><span class="empty-message">Loading picks...</span></div></td></tr>';
+                    }
+
                     const result = await window.UnifiedPicksFetcher.fetchPicks(
                         fetchType === 'all' ? 'all' : fetchType, 
                         'today'
@@ -1409,6 +1421,10 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                         formattedPicks.sort((a, b) => b.edge - a.edge);
                         populateWeeklyLineupTable(formattedPicks);
                         console.log(`[Weekly Lineup] ✅ Fetched ${result.picks.length} picks for ${fetchType}`);
+                    } else {
+                        // Show empty state when no picks returned
+                        populateWeeklyLineupTable([]);
+                        console.log(`[Weekly Lineup] ⚠️ No picks returned for ${fetchType}`);
                     }
 
                     // Update last fetched timestamp with count
@@ -1435,6 +1451,12 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                 } catch (err) {
                     console.error('[Weekly Lineup] Fetch error:', err);
                     btn.innerHTML = '<span style="color:#ff6b6b; font-weight:bold;">✕</span>';
+                    
+                    // Show error state in table
+                    const tbody = document.querySelector('.weekly-lineup-table tbody');
+                    if (tbody) {
+                        showNoPicks('Error fetching picks. Please try again.');
+                    }
 
                     setTimeout(() => {
                         btn.innerHTML = originalContent;
