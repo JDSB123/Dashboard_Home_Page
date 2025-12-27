@@ -4707,19 +4707,18 @@ body.page-weekly-lineup .th-filter-dropdown.weekly-lineup-filter-dropdown .team-
 }
 
 .ft-last-refreshed {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    font-size: 9px;
-    color: #607d8b;
-    font-weight: 400;
+    font-family: var(--font-body), 'Cormorant Garamond', Georgia, serif;
+    font-size: 0.7rem;
+    color: rgba(200, 215, 225, 0.6);
+    font-weight: 500;
     letter-spacing: 0.02em;
     white-space: nowrap;
     margin-top: 2px;
-    opacity: 0.7;
 }
 
 .ft-last-refreshed .sync-time {
-    color: #78909c;
-    font-weight: 500;
+    color: rgba(200, 215, 225, 0.75);
+    font-weight: 600;
 }
 .ft-fetch-buttons {
     display: flex;
@@ -4847,7 +4846,7 @@ body.page-weekly-lineup .th-filter-dropdown.weekly-lineup-filter-dropdown .team-
         gap: 6px;
     }
     .ft-last-refreshed {
-        font-size: 8px;
+        font-size: 0.6rem;
     }
     .ft-fetch-league-btn {
         min-width: 32px;
