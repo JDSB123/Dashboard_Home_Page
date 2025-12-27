@@ -1632,6 +1632,11 @@ async function loadAndAppendPicks() {
             updateTableWithFilters();
         }
 
+        // Re-apply filter pills if available
+        if (window.DashboardFilterPills && typeof window.DashboardFilterPills.applyFilters === 'function') {
+            window.DashboardFilterPills.applyFilters();
+        }
+
         // Ensure zebra stripes are applied after DOM is fully updated
         // Use multiple animation frames to ensure all DOM updates and style calculations are complete
         requestAnimationFrame(() => {

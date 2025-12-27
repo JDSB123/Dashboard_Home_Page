@@ -495,6 +495,11 @@
         if (window.DashboardFilters && typeof window.DashboardFilters.applyFilters === 'function') {
             setTimeout(() => window.DashboardFilters.applyFilters(), 50);
         }
+        
+        // Re-apply filter pills if available
+        if (window.DashboardFilterPills && typeof window.DashboardFilterPills.applyFilters === 'function') {
+            setTimeout(() => window.DashboardFilterPills.applyFilters(), 50);
+        }
     }
 
     // ========== CREATE ROW (FULL TEMPLATE) ==========
