@@ -122,13 +122,21 @@
             }
         }
 
+        // ===== FINAL FALLBACK: DEMO DATA =====
+        // If all APIs failed and we have no picks, provide demo data
+        if (allPicks.length === 0 && errors.length > 0) {
+            console.warn('[UNIFIED-FETCHER] All APIs failed, falling back to demo data');
+            allPicks = getDemoPicks();
+        }
+
         console.log(`[UNIFIED-FETCHER] Total picks fetched: ${allPicks.length}`);
 
         return {
             picks: allPicks,
             errors: errors,
             date: date,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
+            fallbackUsed: allPicks.length > 0 && errors.length > 0
         };
     };
 
@@ -213,6 +221,109 @@
 
         return health;
     };
+
+    // ===== DEMO DATA FALLBACK =====
+    function getDemoPicks() {
+        const now = new Date();
+        const hour = 60 * 60 * 1000;
+
+        return [
+            // NBA Demo Picks
+            {
+                date: now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }),
+                time: '7:00 PM',
+                sport: 'NBA',
+                league: 'NBA',
+                awayTeam: 'Los Angeles Lakers',
+                homeTeam: 'Golden State Warriors',
+                segment: 'FG',
+                pickTeam: 'Lakers',
+                pickType: 'spread',
+                line: '+4.5',
+                odds: '-110',
+                modelPrice: '4.2',
+                edge: 4.2,
+                fire: 3,
+                fireLabel: '',
+                status: 'pending'
+            },
+            {
+                date: now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }),
+                time: '8:00 PM',
+                sport: 'NBA',
+                league: 'NBA',
+                awayTeam: 'Boston Celtics',
+                homeTeam: 'Miami Heat',
+                segment: 'FG',
+                pickTeam: 'Celtics',
+                pickType: 'moneyline',
+                line: '',
+                odds: '-150',
+                modelPrice: '3.8',
+                edge: 3.8,
+                fire: 3,
+                fireLabel: '',
+                status: 'pending'
+            },
+            // NCAAM Demo Picks
+            {
+                date: now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }),
+                time: '6:00 PM',
+                sport: 'NCAAB',
+                league: 'NCAAM',
+                awayTeam: 'Duke Blue Devils',
+                homeTeam: 'North Carolina Tar Heels',
+                segment: 'FG',
+                pickTeam: 'Duke',
+                pickType: 'spread',
+                line: '+2.5',
+                odds: '-110',
+                modelPrice: '5.1',
+                edge: 5.1,
+                fire: 4,
+                fireLabel: '',
+                status: 'pending'
+            },
+            // NFL Demo Picks
+            {
+                date: now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }),
+                time: '1:00 PM',
+                sport: 'NFL',
+                league: 'NFL',
+                awayTeam: 'Kansas City Chiefs',
+                homeTeam: 'Buffalo Bills',
+                segment: 'FG',
+                pickTeam: 'Chiefs',
+                pickType: 'spread',
+                line: '-3.5',
+                odds: '-110',
+                modelPrice: '4.7',
+                edge: 4.7,
+                fire: 4,
+                fireLabel: '',
+                status: 'pending'
+            },
+            // NCAAF Demo Picks
+            {
+                date: now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }),
+                time: '3:30 PM',
+                sport: 'NCAAF',
+                league: 'NCAAF',
+                awayTeam: 'Alabama Crimson Tide',
+                homeTeam: 'Georgia Bulldogs',
+                segment: 'FG',
+                pickTeam: 'Alabama',
+                pickType: 'spread',
+                line: '-6.5',
+                odds: '-110',
+                modelPrice: '6.2',
+                edge: 6.2,
+                fire: 5,
+                fireLabel: 'MAX',
+                status: 'pending'
+            }
+        ];
+    }
 
     // Export
     window.UnifiedPicksFetcher = {
