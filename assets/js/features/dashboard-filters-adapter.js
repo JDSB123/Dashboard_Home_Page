@@ -166,7 +166,8 @@
 
         applyFilters() {
             // Collect active filters
-            const activeDatetime = Array.from(document.querySelectorAll('#th-datetime-dropdown .th-filter-item.active'))
+            // Date chips use .th-date-chip class, not .th-filter-item
+            const activeDatetime = Array.from(document.querySelectorAll('#th-datetime-dropdown .th-date-chip.active'))
                 .map(el => el.getAttribute('data-v'));
             
             const activeLeagues = Array.from(document.querySelectorAll('#th-league-dropdown .th-filter-item.active'))
@@ -301,6 +302,48 @@
                 
                 row.style.display = show ? '' : 'none';
             });
+
+            // Recalculate KPIs based on visible rows only
+            this.recalculateKPIsForVisibleRows();
+        },
+
+        recalculateKPIsForVisibleRows() {
+            // Get only visible rows and calculate KPIs from their data
+            const visibleRows = document.querySelectorAll('#picks-table tbody tr:not([style*="display: none"])');
+
+            if (visibleRows.length === 0) {
+                // No visible rows - show zeros
+                if (typeof window.updateKPITiles === 'function') {
+                    window.updateKPITiles({
+                        activePicks: 0, activeRisk: 0, toWin: 0,
+                        onTrackAmount: 0, atRiskAmount: 0, projected: 0,
+                        netProfit: 0, totalWon: 0, totalLost: 0,
+                        wins: 0, losses: 0, pushes: 0,
+                        roePercentage: 0, winPercentage: 0, currentStreak: 'W0', totalRisk: 0
+                    });
+                }
+                return;
+            }
+
+            // Build picks array from visible rows
+            const picks = [];
+            visibleRows.forEach(row => {
+                const status = row.getAttribute('data-status') || 'pending';
+                const risk = parseFloat(row.getAttribute('data-risk')) || 0;
+                const win = parseFloat(row.getAttribute('data-win')) || 0;
+                const league = row.getAttribute('data-league') || '';
+                const pickType = row.getAttribute('data-pick-type') || '';
+                const segment = row.getAttribute('data-segment') || '';
+                const book = row.getAttribute('data-book') || '';
+
+                picks.push({ status, risk, win, league, pickType, segment, book });
+            });
+
+            // Calculate and update KPIs
+            if (typeof window.calculateKPIs === 'function' && typeof window.updateKPITiles === 'function') {
+                const kpis = window.calculateKPIs(picks);
+                window.updateKPITiles(kpis);
+            }
         }
     };
 
