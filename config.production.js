@@ -34,7 +34,7 @@ window.APP_CONFIG = Object.freeze({
 
   // Repository Info
   REPO_URL: 'https://github.com/JDSB123/Dashboard_Home_Page',
-  OWNER: 'jb@greenbiercapital.com'
+  OWNER: 'jb@greenbiercapital.com',
 
   // Note: External API keys (SportsDataIO, TheOddsAPI) are configured in Azure Function App Settings
   // All external API calls are proxied through Azure Functions for security
