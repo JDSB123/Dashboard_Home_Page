@@ -163,43 +163,6 @@
         }
     }
 
-    // ===== MOCK DATA (DEPRECATED - kept for reference) =====
-    // TODO: Remove after confirming API integration works
-    function loadMockData_DEPRECATED() {
-        const now = new Date();
-        const hour = 60 * 60 * 1000;
-
-        state.games = [
-            // NFL games - data from SportsDataIO
-            // Spreads use actual realistic lines with half-points
-            createGame('NFL', 'Houston Texans', 'HOU', '9-5', 'Indianapolis Colts', 'IND', '6-8', 
-                { spread: -3.5, total: 44.5 }, now.getTime() + hour, false),
-            createGame('NFL', 'San Francisco 49ers', 'SF', '6-8', 'Seattle Seahawks', 'SEA', '8-6', 
-                { spread: 2.5, total: 47 }, now.getTime() - 30 * 60 * 1000, true, { away: 14, home: 10, period: 'Q2', clock: '7:32' }),
-            createGame('NFL', 'Dallas Cowboys', 'DAL', '7-7', 'Carolina Panthers', 'CAR', '3-11', 
-                { spread: -7, total: 42.5 }, now.getTime() + 3 * hour, false),
-            
-            // NBA games - data from The Odds API
-            createGame('NBA', 'Los Angeles Lakers', 'LAL', '15-12', 'Golden State Warriors', 'GSW', '14-11', 
-                { spread: 4.5, total: 224.5 }, now.getTime() + 2 * hour, false),
-            createGame('NBA', 'Boston Celtics', 'BOS', '22-6', 'Miami Heat', 'MIA', '14-12', 
-                { spread: -6.5, total: 217 }, now.getTime() - 45 * 60 * 1000, true, { away: 58, home: 52, period: '3Q', clock: '4:15' }),
-            createGame('NBA', 'Denver Nuggets', 'DEN', '16-10', 'Los Angeles Clippers', 'LAC', '17-11', 
-                { spread: -2, total: 221.5 }, now.getTime() + 5 * hour, false),
-            
-            // NCAAF - data from SportsDataIO
-            createGame('NCAAF', 'Georgia Bulldogs', 'UGA', '11-2', 'Alabama Crimson Tide', 'ALA', '9-3', 
-                { spread: -3, total: 52.5 }, now.getTime() + 6 * hour, false),
-            
-            // NCAAB - data from The Odds API
-            createGame('NCAAB', 'Duke Blue Devils', 'DUKE', '10-2', 'North Carolina Tar Heels', 'UNC', '9-4', 
-                { spread: -4.5, total: 148.5 }, now.getTime() + 4 * hour, false)
-        ];
-
-        state.lastRefresh = new Date();
-        updateRefreshTime();
-    }
-
     /**
      * Create a game with realistic odds across sportsbooks
      * Lines vary by 0.5 points between books (realistic market variance)
