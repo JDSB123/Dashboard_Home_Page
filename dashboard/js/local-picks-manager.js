@@ -414,9 +414,9 @@
         "NCAA MEN'S BASKETBALL": 'assets/logo_ncaam_bball.png',
         'CBB': 'assets/logo_ncaam_bball.png',
         // NCAA Football - using local cached logo
-        'NCAAF': 'assets/logo_ncaa_football',
-        'COLLEGE FOOTBALL': 'assets/logo_ncaa_football',
-        'CFB': 'assets/logo_ncaa_football',
+        'NCAAF': 'assets/logo_ncaa_football.png',
+        'COLLEGE FOOTBALL': 'assets/logo_ncaa_football.png',
+        'CFB': 'assets/logo_ncaa_football.png',
         // Other pro leagues
         'MLB': 'https://a.espncdn.com/i/teamlogos/leagues/500/mlb.png',
         'NHL': 'https://a.espncdn.com/i/teamlogos/leagues/500/nhl.png',
@@ -424,11 +424,27 @@
     };
 
     function renderLeagueCell(sport) {
-        const logo = LEAGUE_LOGOS[sport] || '';
+        // Convert to uppercase for lookup (LEAGUE_LOGOS keys are uppercase)
+        const sportUpper = (sport || '').toUpperCase();
+        // Map normalized values to display names
+        const displayMap = {
+            'NCAAAB': 'NCAAM',
+            'NCAAB': 'NCAAM',
+            'NCAAF': 'NCAAF',
+            'NBA': 'NBA',
+            'NFL': 'NFL',
+            'MLB': 'MLB',
+            'NHL': 'NHL'
+        };
+        const displayText = displayMap[sportUpper] || sportUpper;
+        // Try multiple key variations for logo lookup
+        const logo = LEAGUE_LOGOS[sportUpper] || 
+                    LEAGUE_LOGOS[displayText] || 
+                    LEAGUE_LOGOS[sportUpper === 'NCAAAB' ? 'NCAAM' : sportUpper] || '';
         return `
             <div class="league-cell">
-                ${logo ? `<img src="${logo}" class="league-logo" alt="${sport}" onerror="this.style.display='none'">` : ''}
-                <span class="league-text">${sport}</span>
+                ${logo ? `<img src="${logo}" class="league-logo" alt="${displayText}" onerror="this.style.display='none'">` : ''}
+                <span class="league-text">${displayText}</span>
             </div>
         `;
     }
