@@ -211,60 +211,133 @@ function calculateStreak(picks) {
 function updateKPITiles(kpis) {
     /**
      * Update the KPI tiles in the dashboard
-     * Uses simplified single-layer structure (.kpi-tile-front only)
+     * Uses dual-layer structure (.kpi-tile-layer) with flip functionality
      */
 
-    // Tile 1 - Projected PnL
+    // Tile 1 - Projected PnL (front) / Net Profit (back)
     const tile1 = document.querySelector('[data-tile-id="1"]');
     if (tile1) {
-        const valueEl = tile1.querySelector('.kpi-tile-front .kpi-value');
-        const subtextEl = tile1.querySelector('.kpi-tile-front .kpi-subtext');
-        
-        if (valueEl) {
-            const projectedSign = kpis.projected >= 0 ? '+' : '';
-            valueEl.textContent = `${projectedSign}$${Math.abs(kpis.projected).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
-            
-            // Apply conditional formatting
-            valueEl.classList.remove('positive', 'negative');
-            if (kpis.projected > 0) {
-                valueEl.classList.add('positive');
-            } else if (kpis.projected < 0) {
-                valueEl.classList.add('negative');
+        const layers = tile1.querySelectorAll('.kpi-tile-layer');
+
+        // Front layer - Projected PnL
+        if (layers[0]) {
+            const valueEl = layers[0].querySelector('.kpi-value');
+            const subtextEl = layers[0].querySelector('.kpi-subtext');
+
+            if (valueEl) {
+                const projectedSign = kpis.projected >= 0 ? '+' : '';
+                valueEl.textContent = `${projectedSign}$${Math.abs(kpis.projected).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+
+                valueEl.classList.remove('positive', 'negative');
+                if (kpis.projected > 0) {
+                    valueEl.classList.add('positive');
+                } else if (kpis.projected < 0) {
+                    valueEl.classList.add('negative');
+                }
+            }
+
+            if (subtextEl) {
+                subtextEl.textContent = `${kpis.activePicks} Active Picks`;
             }
         }
-        
-        if (subtextEl) {
-            subtextEl.textContent = `${kpis.activePicks} Active Picks`;
+
+        // Back layer - Net Profit
+        if (layers[1]) {
+            const valueEl = layers[1].querySelector('.kpi-value');
+            const subtextEl = layers[1].querySelector('.kpi-subtext');
+
+            if (valueEl) {
+                const netSign = kpis.netProfit >= 0 ? '+' : '';
+                valueEl.textContent = `${netSign}$${Math.abs(kpis.netProfit).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+
+                valueEl.classList.remove('positive', 'negative');
+                if (kpis.netProfit > 0) {
+                    valueEl.classList.add('positive');
+                } else if (kpis.netProfit < 0) {
+                    valueEl.classList.add('negative');
+                }
+            }
+
+            if (subtextEl) {
+                subtextEl.textContent = `Season Total`;
+            }
         }
     }
 
-    // Tile 2 - Win Rate
+    // Tile 2 - Win Rate (front) / ROI (back)
     const tile2 = document.querySelector('[data-tile-id="2"]');
     if (tile2) {
-        const valueEl = tile2.querySelector('.kpi-tile-front .kpi-value');
-        const subtextEl = tile2.querySelector('.kpi-tile-front .kpi-subtext');
-        
-        if (valueEl) {
-            valueEl.textContent = `${kpis.winPercentage}%`;
+        const layers = tile2.querySelectorAll('.kpi-tile-layer');
+
+        // Front layer - Win Rate
+        if (layers[0]) {
+            const valueEl = layers[0].querySelector('.kpi-value');
+            const subtextEl = layers[0].querySelector('.kpi-subtext');
+
+            if (valueEl) {
+                valueEl.textContent = `${kpis.winPercentage}%`;
+            }
+
+            if (subtextEl) {
+                subtextEl.textContent = `${kpis.wins}-${kpis.losses}-${kpis.pushes} Record`;
+            }
         }
-        
-        if (subtextEl) {
-            subtextEl.textContent = `${kpis.wins}-${kpis.losses}-${kpis.pushes} Record`;
+
+        // Back layer - ROI
+        if (layers[1]) {
+            const valueEl = layers[1].querySelector('.kpi-value');
+            const subtextEl = layers[1].querySelector('.kpi-subtext');
+
+            if (valueEl) {
+                const roiSign = parseFloat(kpis.roePercentage) >= 0 ? '+' : '';
+                valueEl.textContent = `${roiSign}${kpis.roePercentage}%`;
+
+                valueEl.classList.remove('positive', 'negative');
+                if (parseFloat(kpis.roePercentage) > 0) {
+                    valueEl.classList.add('positive');
+                } else if (parseFloat(kpis.roePercentage) < 0) {
+                    valueEl.classList.add('negative');
+                }
+            }
+
+            if (subtextEl) {
+                subtextEl.textContent = `Return on Equity`;
+            }
         }
     }
 
-    // Tile 3 - Active Volume (Total Risk)
+    // Tile 3 - Active Volume (front) / To Win (back)
     const tile3 = document.querySelector('[data-tile-id="3"]');
     if (tile3) {
-        const valueEl = tile3.querySelector('.kpi-tile-front .kpi-value');
-        const subtextEl = tile3.querySelector('.kpi-tile-front .kpi-subtext');
-        
-        if (valueEl) {
-            valueEl.textContent = `$${kpis.activeRisk.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+        const layers = tile3.querySelectorAll('.kpi-tile-layer');
+
+        // Front layer - Active Risk
+        if (layers[0]) {
+            const valueEl = layers[0].querySelector('.kpi-value');
+            const subtextEl = layers[0].querySelector('.kpi-subtext');
+
+            if (valueEl) {
+                valueEl.textContent = `$${kpis.activeRisk.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+            }
+
+            if (subtextEl) {
+                subtextEl.textContent = `Total at Risk`;
+            }
         }
-        
-        if (subtextEl) {
-            subtextEl.textContent = `Total Risk`;
+
+        // Back layer - To Win
+        if (layers[1]) {
+            const valueEl = layers[1].querySelector('.kpi-value');
+            const subtextEl = layers[1].querySelector('.kpi-subtext');
+
+            if (valueEl) {
+                valueEl.textContent = `$${kpis.toWin.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+                valueEl.classList.add('positive');
+            }
+
+            if (subtextEl) {
+                subtextEl.textContent = `Potential Payout`;
+            }
         }
     }
 }
