@@ -1099,6 +1099,28 @@ body.page-active-picks .picks-table thead th .th-sort-btn {
     }
 }
 
+@media (max-width: 768px) {
+    .toolbar-container.toolbar-layout .filter-toolbar {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    .toolbar-container.toolbar-layout .ft-left,
+    .toolbar-container.toolbar-layout .ft-right {
+        gap: 6px;
+    }
+    .toolbar-container.toolbar-layout {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    .ft-pill,
+    .ft-dropdown-btn,
+    .ft-clear {
+        flex-grow: 1;
+        min-width: 120px;
+        text-align: center;
+    }
+}
+
 .filter-toolbar {
     display: flex;
     justify-content: space-between;
