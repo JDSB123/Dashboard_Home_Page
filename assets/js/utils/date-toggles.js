@@ -47,6 +47,18 @@
                 const range = this.dataset.range;
                 const optionText = this.textContent;
 
+                // Special handling for custom range - open calendar card instead
+                if (range === 'custom') {
+                    const calendarCard = document.getElementById('custom-calendar-card');
+                    if (calendarCard) {
+                        dropdown.hidden = true;
+                        toggle.setAttribute('aria-expanded', 'false');
+                        calendarCard.hidden = false;
+                        initializeCustomCalendarCard();
+                        return;
+                    }
+                }
+
                 // Update active state
                 options.forEach(opt => {
                     opt.classList.remove('active');
@@ -78,14 +90,254 @@
 
         // Close on Escape key
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && !dropdown.hidden) {
-                dropdown.hidden = true;
-                toggle.setAttribute('aria-expanded', 'false');
-                toggle.focus();
+            if (e.key === 'Escape') {
+                if (!dropdown.hidden) {
+                    dropdown.hidden = true;
+                    toggle.setAttribute('aria-expanded', 'false');
+                    toggle.focus();
+                }
+                const calendarCard = document.getElementById('custom-calendar-card');
+                if (calendarCard && !calendarCard.hidden) {
+                    calendarCard.hidden = true;
+                    toggle.focus();
+                }
             }
         });
 
         console.log('[DateToggles] Date range dropdown initialized');
+        
+        // Initialize calendar card close button
+        const calendarCardClose = document.getElementById('calendar-card-close');
+        const calendarCard = document.getElementById('custom-calendar-card');
+        if (calendarCardClose && calendarCard) {
+            calendarCardClose.addEventListener('click', function(e) {
+                e.stopPropagation();
+                calendarCard.hidden = true;
+            });
+        }
+        
+        // Close calendar card when clicking outside
+        document.addEventListener('click', function(e) {
+            if (calendarCard && !calendarCard.hidden) {
+                const isClickInside = calendarCard.contains(e.target) || 
+                                     document.getElementById('custom-range-trigger')?.contains(e.target);
+                if (!isClickInside) {
+                    calendarCard.hidden = true;
+                }
+            }
+        });
+    }
+    
+    /**
+     * Initialize custom calendar card
+     */
+    function initializeCustomCalendarCard() {
+        const calendarCard = document.getElementById('custom-calendar-card');
+        if (!calendarCard) return;
+        
+        const startDisplay = document.getElementById('date-range-start-display');
+        const endDisplay = document.getElementById('date-range-end-display');
+        const daysContainer = document.getElementById('custom-calendar-days');
+        const monthLabel = document.getElementById('custom-calendar-month');
+        const prevBtn = calendarCard.querySelector('.calendar-nav.prev');
+        const nextBtn = calendarCard.querySelector('.calendar-nav.next');
+        const targetButtons = calendarCard.querySelectorAll('.date-target-btn');
+        const applyBtn = document.getElementById('calendar-apply-btn');
+        const clearBtn = document.getElementById('calendar-clear-btn');
+        
+        if (!daysContainer || !monthLabel || !prevBtn || !nextBtn || !startDisplay || !endDisplay) {
+            console.warn('[DateToggles] Calendar card elements not found');
+            return;
+        }
+        
+        // Set active target
+        function setActiveTarget(target) {
+            calendarActiveTarget = target === 'end' ? 'end' : 'start';
+            targetButtons.forEach(btn => {
+                const isActive = btn.dataset.target === calendarActiveTarget;
+                btn.classList.toggle('active', isActive);
+                btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+            });
+        }
+        
+        // Update display from selected dates
+        function updateDisplayFromSelected() {
+            if (calendarCardStartDate) {
+                startDisplay.textContent = formatDisplayDate(calendarCardStartDate);
+                startDisplay.classList.remove('is-placeholder');
+            } else {
+                startDisplay.textContent = '—';
+                startDisplay.classList.add('is-placeholder');
+            }
+            
+            if (calendarCardEndDate) {
+                endDisplay.textContent = formatDisplayDate(calendarCardEndDate);
+                endDisplay.classList.remove('is-placeholder');
+            } else {
+                endDisplay.textContent = '—';
+                endDisplay.classList.add('is-placeholder');
+            }
+        }
+        
+        // Render calendar
+        function renderCalendarCard() {
+            const year = calendarMonthCursor.getFullYear();
+            const month = calendarMonthCursor.getMonth();
+            
+            monthLabel.textContent = calendarMonthCursor.toLocaleDateString('en-US', {
+                month: 'long',
+                year: 'numeric'
+            });
+            
+            daysContainer.innerHTML = '';
+            
+            const firstDay = new Date(year, month, 1);
+            const startWeekDay = firstDay.getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            
+            const startTime = calendarCardStartDate ? calendarCardStartDate.getTime() : null;
+            const endTime = calendarCardEndDate ? calendarCardEndDate.getTime() : null;
+            
+            // Fill leading blanks
+            for (let i = 0; i < startWeekDay; i++) {
+                const emptyCell = document.createElement('button');
+                emptyCell.className = 'calendar-day empty';
+                emptyCell.tabIndex = -1;
+                emptyCell.setAttribute('aria-hidden', 'true');
+                daysContainer.appendChild(emptyCell);
+            }
+            
+            // Fill actual days
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateObj = new Date(year, month, day);
+                const iso = formatISODate(dateObj);
+                const time = dateObj.getTime();
+                
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'calendar-day';
+                btn.textContent = String(day);
+                btn.setAttribute('data-date', iso);
+                btn.setAttribute('aria-label', formatDisplayDate(dateObj));
+                
+                if (startTime && time === startTime) {
+                    btn.classList.add('selected', 'selected-start');
+                }
+                if (endTime && time === endTime) {
+                    btn.classList.add('selected', 'selected-end');
+                }
+                if (startTime && endTime && time > startTime && time < endTime) {
+                    btn.classList.add('in-range');
+                }
+                
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    handleDaySelectionCard(dateObj);
+                });
+                
+                daysContainer.appendChild(btn);
+            }
+            
+            updateDisplayFromSelected();
+        }
+        
+        // Handle day selection
+        function handleDaySelectionCard(dateObj) {
+            const iso = formatISODate(dateObj);
+            
+            if (calendarActiveTarget === 'start') {
+                calendarCardStartDate = dateObj;
+                // If start goes after end, clear end
+                if (calendarCardEndDate && dateObj.getTime() > calendarCardEndDate.getTime()) {
+                    calendarCardEndDate = null;
+                }
+            } else {
+                calendarCardEndDate = dateObj;
+                // If end goes before start, shift start
+                if (calendarCardStartDate && dateObj.getTime() < calendarCardStartDate.getTime()) {
+                    calendarCardStartDate = dateObj;
+                }
+            }
+            
+            renderCalendarCard();
+        }
+        
+        // Target toggle buttons
+        targetButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const target = btn.dataset.target === 'end' ? 'end' : 'start';
+                setActiveTarget(target);
+            });
+        });
+        
+        // Month navigation
+        prevBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            calendarMonthCursor.setMonth(calendarMonthCursor.getMonth() - 1);
+            renderCalendarCard();
+        });
+        
+        nextBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            calendarMonthCursor.setMonth(calendarMonthCursor.getMonth() + 1);
+            renderCalendarCard();
+        });
+        
+        // Apply button
+        if (applyBtn) {
+            applyBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (calendarCardStartDate && calendarCardEndDate) {
+                    customStartDate = new Date(calendarCardStartDate);
+                    customStartDate.setHours(0, 0, 0, 0);
+                    customEndDate = new Date(calendarCardEndDate);
+                    customEndDate.setHours(23, 59, 59, 999);
+                    
+                    // Update label
+                    const label = document.getElementById('date-range-label');
+                    if (label) {
+                        label.textContent = `${formatDisplayDate(customStartDate)} - ${formatDisplayDate(customEndDate)}`;
+                    }
+                    
+                    // Update active state
+                    const options = document.querySelectorAll('.date-range-option');
+                    options.forEach(opt => {
+                        opt.classList.remove('active');
+                        opt.setAttribute('aria-selected', 'false');
+                    });
+                    const customOption = document.getElementById('custom-range-trigger');
+                    if (customOption) {
+                        customOption.classList.add('active');
+                        customOption.setAttribute('aria-selected', 'true');
+                    }
+                    
+                    // Close calendar card
+                    calendarCard.hidden = true;
+                    
+                    // Apply filter
+                    currentDateRange = 'custom';
+                    applyDateFilter('custom');
+                }
+            });
+        }
+        
+        // Clear button
+        if (clearBtn) {
+            clearBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                calendarCardStartDate = null;
+                calendarCardEndDate = null;
+                renderCalendarCard();
+            });
+        }
+        
+        // Initialize
+        setActiveTarget('start');
+        calendarMonthCursor = new Date();
+        calendarMonthCursor.setDate(1);
+        updateDisplayFromSelected();
+        renderCalendarCard();
     }
 
     /**
@@ -215,6 +467,10 @@
     let calendarActiveTarget = 'start'; // 'start' or 'end'
     let calendarMonthCursor = new Date(); // first day of visible month
     calendarMonthCursor.setDate(1);
+    
+    // Calendar card state
+    let calendarCardStartDate = null;
+    let calendarCardEndDate = null;
 
     function formatISODate(date) {
         const y = date.getFullYear();
@@ -472,7 +728,33 @@
                 endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
                 break;
 
+            case 'yesterday':
+                startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
+                startDate.setHours(0, 0, 0, 0);
+                endDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1, 23, 59, 59, 999);
+                break;
+
+            case 'lastWeek':
+                // Last week (previous Sunday to Saturday)
+                const lastWeekDayOfWeek = now.getDay();
+                startDate = new Date(now);
+                startDate.setDate(now.getDate() - lastWeekDayOfWeek - 7);
+                startDate.setHours(0, 0, 0, 0);
+                endDate = new Date(startDate);
+                endDate.setDate(startDate.getDate() + 6);
+                endDate.setHours(23, 59, 59, 999);
+                break;
+
+            case 'lastMonth':
+                // Previous month (first day to last day)
+                startDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+                startDate.setHours(0, 0, 0, 0);
+                endDate = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59, 999);
+                break;
+
+            case 'last30days':
             case '30days':
+                // Last 30 days (including today)
                 startDate = new Date(now);
                 startDate.setDate(now.getDate() - 30);
                 startDate.setHours(0, 0, 0, 0);
@@ -482,6 +764,13 @@
             case 'custom':
                 startDate = customStartDate;
                 endDate = customEndDate;
+                break;
+
+            case 'sinceInception':
+                // Since inception - set start date to a very early date (e.g., Jan 1, 2020)
+                startDate = new Date(2020, 0, 1);
+                startDate.setHours(0, 0, 0, 0);
+                endDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
                 break;
 
             case 'all':

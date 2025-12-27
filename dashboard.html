@@ -240,7 +240,50 @@
                     <button class="date-range-option" data-range="lastMonth" role="option" aria-selected="false">Last Month</button>
                     <button class="date-range-option" data-range="last30days" role="option" aria-selected="false">Last 30 Days</button>
                     <div class="date-range-divider"></div>
+                    <button class="date-range-option" data-range="custom" role="option" aria-selected="false" id="custom-range-trigger">Custom Range</button>
+                    <button class="date-range-option" data-range="sinceInception" role="option" aria-selected="false">Since Inception</button>
                     <button class="date-range-option" data-range="all" role="option" aria-selected="false">All Time</button>
+                </div>
+                
+                <!-- Custom Calendar Dropdown Card -->
+                <div class="custom-calendar-card" id="custom-calendar-card" hidden>
+                    <div class="calendar-card-header">
+                        <span class="calendar-card-title">Select Date Range</span>
+                        <button class="calendar-card-close" id="calendar-card-close" aria-label="Close calendar">×</button>
+                    </div>
+                    <div class="calendar-card-body">
+                        <div class="calendar-date-targets">
+                            <button class="date-target-btn active" data-target="start" id="target-start">
+                                <span class="date-target-label">From</span>
+                                <span class="date-target-value" id="date-range-start-display">—</span>
+                            </button>
+                            <button class="date-target-btn" data-target="end" id="target-end">
+                                <span class="date-target-label">To</span>
+                                <span class="date-target-value" id="date-range-end-display">—</span>
+                            </button>
+                        </div>
+                        <div class="custom-calendar">
+                            <div class="custom-calendar-header">
+                                <button class="calendar-nav prev" aria-label="Previous month">‹</button>
+                                <div class="calendar-month-label" id="custom-calendar-month">January 2025</div>
+                                <button class="calendar-nav next" aria-label="Next month">›</button>
+                            </div>
+                            <div class="calendar-weekdays">
+                                <span>S</span>
+                                <span>M</span>
+                                <span>T</span>
+                                <span>W</span>
+                                <span>T</span>
+                                <span>F</span>
+                                <span>S</span>
+                            </div>
+                            <div class="calendar-days" id="custom-calendar-days"></div>
+                        </div>
+                        <div class="calendar-card-actions">
+                            <button class="calendar-action-btn calendar-clear-btn" id="calendar-clear-btn">Clear</button>
+                            <button class="calendar-action-btn calendar-apply-btn" id="calendar-apply-btn">Apply</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </header>
