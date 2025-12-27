@@ -297,68 +297,6 @@
         }
     }
 
-    /**
-     * Update filter chips display - DISABLED (chips removed per user request)
-     */
-    function updateFilterChips() {
-        // Filter chips functionality removed - filters work via pills/dropdowns only
-        return;
-    }
-
-    /**
-     * Remove a specific filter
-     */
-    function removeFilter(type, value) {
-        console.log('[DashboardFilterPills] Removing filter:', type, value);
-        
-        const toolbar = document.getElementById('filter-toolbar');
-        if (!toolbar) return;
-
-        if (type === 'league') {
-            // For leagues, remove specific league from array or clear all
-            if (value.includes(',')) {
-                // Multiple leagues - clear all
-                activeFilters.leagues = [];
-                document.querySelectorAll('.ft-pill.ft-league').forEach(p => p.classList.remove('active'));
-                document.querySelector('.ft-pill.ft-league[data-league="all"]')?.classList.add('active');
-            } else {
-                // Single league - remove from array
-                activeFilters.leagues = activeFilters.leagues.filter(l => l !== value.toLowerCase());
-                document.querySelector(`.ft-pill.ft-league[data-league="${value}"]`)?.classList.remove('active');
-                // If no leagues selected, activate "All"
-                if (activeFilters.leagues.length === 0) {
-                    document.querySelector('.ft-pill.ft-league[data-league="all"]')?.classList.add('active');
-                }
-            }
-        } else {
-            // Reset dropdown filters
-            activeFilters[type] = '';
-            
-            const dropdownId = `${type}-dropdown-menu`;
-            const btnId = `${type}-dropdown-btn`;
-            const menu = toolbar.querySelector(`#${dropdownId}`);
-            const btn = document.getElementById(btnId);
-            
-            if (menu && btn) {
-                menu.querySelectorAll('.ft-dropdown-item').forEach(item => {
-                    item.classList.remove('active');
-                    if (item.getAttribute('data-v') === 'all') {
-                        item.classList.add('active');
-                    }
-                });
-                
-                const defaultLabels = {
-                    'segment': 'Segment',
-                    'pick': 'Pick Type',
-                    'status': 'Status'
-                };
-                btn.textContent = `${defaultLabels[type] || type} ▾`;
-            }
-        }
-        
-        applyFilters();
-        updateFilterChips();
-    }
 
     /**
      * Clear all filters
@@ -411,7 +349,6 @@
         }
 
         applyFilters();
-        updateFilterChips();
     }
 
     // Initialize on DOM ready
@@ -424,9 +361,7 @@
     // Export for external access
     window.DashboardFilterPills = {
         applyFilters,
-        clearAllFilters,
-        removeFilter,
-        updateFilterChips
+        clearAllFilters
     };
 
 })();
