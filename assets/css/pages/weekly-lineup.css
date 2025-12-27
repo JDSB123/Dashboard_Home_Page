@@ -517,14 +517,14 @@ body.page-weekly-lineup .picks-table tbody tr:hover,
 }
 
 .weekly-lineup-table tbody td {
-    padding: 0.4rem 0.4rem;
-    color: rgba(232, 240, 242, 0.95);
+    padding: 0.625rem 0.75rem; /* Increased from 0.4rem for better breathing room */
+    color: rgba(232, 240, 242, 0.98); /* Slightly brighter for better contrast */
     vertical-align: middle;
-    font-family: var(--font-body, 'Inter', sans-serif);
-    font-weight: 500;
-    font-size: 0.825rem;
-    line-height: 1.2;
-    letter-spacing: 0.01em;
+    font-family: var(--font-body, 'Cormorant Garamond', Georgia, serif);
+    font-weight: var(--weight-medium, 500);
+    font-size: 0.9375rem; /* Increased from 0.825rem (15px vs 13.2px) */
+    line-height: 1.5; /* Increased from 1.2 for better readability */
+    letter-spacing: 0.03em; /* Increased from 0.01em for better character spacing */
     white-space: nowrap;
 }
 
@@ -535,11 +535,12 @@ body.page-weekly-lineup .picks-table tbody tr:hover,
 
 /* ===== TIME CELL ===== */
 .weekly-lineup-table .cell-time {
-    font-family: var(--font-display, 'Oswald', sans-serif);
-    font-weight: 500;
-    font-size: 0.8rem;
-    color: var(--neutral-300);
-    letter-spacing: 0.02em;
+    font-family: var(--font-body, 'Cormorant Garamond', Georgia, serif);
+    font-weight: var(--weight-semibold, 600);
+    font-size: 0.875rem; /* Increased from 0.8rem */
+    color: rgba(200, 215, 225, 0.9); /* Better contrast */
+    letter-spacing: 0.04em; /* Increased for better readability */
+    line-height: 1.4;
 }
 
 /* ===== MATCHUP CELL - INLINE COMPACT ===== */
@@ -559,18 +560,20 @@ body.page-weekly-lineup .picks-table tbody tr:hover,
 }
 
 .weekly-lineup-table .matchup-inline .team-abbr {
-    font-family: var(--font-display, 'Oswald', sans-serif);
-    font-weight: 600;
-    font-size: 0.825rem;
-    color: var(--neutral-100);
-    letter-spacing: 0.02em;
+    font-family: var(--font-body, 'Cormorant Garamond', Georgia, serif);
+    font-weight: var(--weight-semibold, 600);
+    font-size: 0.9375rem; /* Increased from 0.825rem */
+    color: rgba(232, 240, 242, 0.98); /* Better contrast */
+    letter-spacing: 0.04em; /* Increased for better readability */
+    line-height: 1.4;
 }
 
 .weekly-lineup-table .matchup-inline .vs-at {
-    color: var(--neutral-500);
-    font-size: 0.65rem;
-    font-weight: 400;
-    margin: 0 0.1rem;
+    color: rgba(144, 164, 174, 0.85); /* Better contrast */
+    font-size: 0.75rem; /* Increased from 0.65rem */
+    font-weight: var(--weight-regular, 400);
+    margin: 0 0.15rem; /* Slightly more spacing */
+    letter-spacing: 0.02em;
 }
 
 /* ===== PICK CELL - INLINE COMPACT ===== */
@@ -590,61 +593,70 @@ body.page-weekly-lineup .picks-table tbody tr:hover,
 }
 
 .weekly-lineup-table .pick-inline .pick-team {
-    font-family: var(--font-display, 'Oswald', sans-serif);
-    font-weight: 700;
-    font-size: 0.825rem;
-    color: var(--emerald-400);
-    letter-spacing: 0.02em;
+    font-family: var(--font-body, 'Cormorant Garamond', Georgia, serif);
+    font-weight: var(--weight-bold, 700);
+    font-size: 0.9375rem; /* Increased from 0.825rem */
+    color: rgba(0, 214, 137, 0.95); /* Better emerald contrast */
+    letter-spacing: 0.04em; /* Increased for better readability */
+    line-height: 1.4;
 }
 
 .weekly-lineup-table .pick-inline .pick-direction {
-    font-family: var(--font-display, 'Oswald', sans-serif);
-    font-weight: 700;
-    font-size: 0.825rem;
-    color: var(--emerald-400);
+    font-family: var(--font-body, 'Cormorant Garamond', Georgia, serif);
+    font-weight: var(--weight-bold, 700);
+    font-size: 0.9375rem; /* Increased from 0.825rem */
+    color: rgba(0, 214, 137, 0.95); /* Better emerald contrast */
     text-transform: uppercase;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.06em; /* Increased for uppercase readability */
+    line-height: 1.4;
 }
 
 .weekly-lineup-table .pick-inline .pick-line {
-    font-family: var(--font-display, 'Oswald', sans-serif);
-    font-weight: 600;
-    font-size: 0.825rem;
-    color: var(--neutral-100);
+    font-family: var(--font-body, 'Cormorant Garamond', Georgia, serif);
+    font-weight: var(--weight-semibold, 600);
+    font-size: 0.9375rem; /* Increased from 0.825rem */
+    color: rgba(232, 240, 242, 0.98); /* Better contrast */
+    letter-spacing: 0.03em;
+    line-height: 1.4;
 }
 
 .weekly-lineup-table .pick-inline .pick-odds {
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: var(--neutral-400);
+    font-size: 0.8125rem; /* Increased from 0.75rem */
+    font-weight: var(--weight-medium, 500);
+    color: rgba(144, 164, 174, 0.9); /* Better contrast */
+    letter-spacing: 0.02em;
+    line-height: 1.4;
 }
 
 /* ===== PICK CELL - UNIFIED STYLING ===== */
 /* Team name in pick cell */
 .weekly-lineup-table .pick-team-name {
-    font-family: var(--font-display, 'Oswald', sans-serif);
-    font-weight: 700;
-    font-size: 0.9rem;
-    color: var(--emerald-400);
-    letter-spacing: 0.02em;
+    font-family: var(--font-body, 'Cormorant Garamond', Georgia, serif);
+    font-weight: var(--weight-bold, 700);
+    font-size: 0.9375rem; /* Increased from 0.9rem */
+    color: rgba(0, 214, 137, 0.95); /* Better emerald contrast */
+    letter-spacing: 0.04em; /* Increased for uppercase readability */
     text-transform: uppercase;
+    line-height: 1.4;
 }
 
 /* Line value (spread number or ML) */
 .weekly-lineup-table .pick-line-value {
-    font-family: var(--font-display, 'Oswald', sans-serif);
-    font-weight: 600;
-    font-size: 0.9rem;
-    color: var(--neutral-100);
-    letter-spacing: 0.01em;
+    font-family: var(--font-body, 'Cormorant Garamond', Georgia, serif);
+    font-weight: var(--weight-semibold, 600);
+    font-size: 0.9375rem; /* Increased from 0.9rem */
+    color: rgba(232, 240, 242, 0.98); /* Better contrast */
+    letter-spacing: 0.03em; /* Increased for better readability */
+    line-height: 1.4;
 }
 
 /* Odds display - matches team-record color */
 .weekly-lineup-table .pick-odds {
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: var(--neutral-400);
-    letter-spacing: 0.01em;
+    font-size: 0.8125rem; /* Increased from 0.75rem */
+    font-weight: var(--weight-medium, 500);
+    color: rgba(144, 164, 174, 0.9); /* Better contrast */
+    letter-spacing: 0.02em; /* Increased for better readability */
+    line-height: 1.4;
 }
 
 /* Legacy - keep for backwards compat */
@@ -657,32 +669,37 @@ body.page-weekly-lineup .picks-table tbody tr:hover,
 }
 
 .weekly-lineup-table .pick-odds-line {
-    font-family: var(--font-display, 'Oswald', sans-serif) !important;
-    font-weight: 500;
-    font-size: 0.8rem;
-    color: var(--neutral-400);
-    letter-spacing: 0.01em;
+    font-family: var(--font-body, 'Cormorant Garamond', Georgia, serif) !important;
+    font-weight: var(--weight-medium, 500);
+    font-size: 0.8125rem; /* Increased from 0.8rem */
+    color: rgba(144, 164, 174, 0.9); /* Better contrast */
+    letter-spacing: 0.02em; /* Increased for better readability */
+    line-height: 1.4;
 }
 
 /* ===== MODEL CELL ===== */
 .weekly-lineup-table .cell-model {
-    font-family: var(--font-display, 'Oswald', sans-serif) !important;
-    font-weight: 500;
-    font-size: 0.8rem;
-    color: var(--neutral-200);
+    font-family: var(--font-body, 'Cormorant Garamond', Georgia, serif) !important;
+    font-weight: var(--weight-medium, 500);
+    font-size: 0.875rem; /* Increased from 0.8rem */
+    color: rgba(200, 215, 225, 0.9); /* Better contrast */
+    letter-spacing: 0.03em;
+    line-height: 1.4;
 }
 
 /* ===== MARKET CELL ===== */
 .weekly-lineup-table .cell-market .market-odds {
-    font-family: var(--font-display, 'Oswald', sans-serif) !important;
-    font-weight: 600;
-    font-size: 0.8rem;
-    color: var(--gold-400);
-    padding: 0.15rem 0.35rem;
-    background: rgba(255, 193, 7, 0.08);
-    border: 1px solid rgba(255, 193, 7, 0.2);
+    font-family: var(--font-body, 'Cormorant Garamond', Georgia, serif) !important;
+    font-weight: var(--weight-semibold, 600);
+    font-size: 0.875rem; /* Increased from 0.8rem */
+    color: rgba(255, 193, 7, 0.95); /* Better contrast */
+    padding: 0.25rem 0.5rem; /* Increased padding for better readability */
+    background: rgba(255, 193, 7, 0.12); /* Slightly more visible */
+    border: 1px solid rgba(255, 193, 7, 0.3); /* Slightly more visible */
     border-radius: 4px;
     display: inline-block;
+    letter-spacing: 0.03em;
+    line-height: 1.4;
 }
 
 /* ===== EDGE + FIRE CELL ===== */
@@ -695,14 +712,16 @@ body.page-weekly-lineup .picks-table tbody tr:hover,
 }
 
 .weekly-lineup-table .edge-value {
-    font-family: var(--font-display, 'Oswald', sans-serif);
-    font-weight: 700;
-    font-size: 0.85rem;
-    padding: 0.15rem 0.35rem;
+    font-family: var(--font-body, 'Cormorant Garamond', Georgia, serif);
+    font-weight: var(--weight-bold, 700);
+    font-size: 0.9375rem; /* Increased from 0.85rem */
+    padding: 0.25rem 0.5rem; /* Increased padding for better readability */
     border-radius: 4px;
     display: inline-block;
-    min-width: 42px;
+    min-width: 48px; /* Slightly wider for better spacing */
     text-align: center;
+    letter-spacing: 0.03em;
+    line-height: 1.4;
 }
 
 .weekly-lineup-table .edge-value.edge-hot {
@@ -2821,20 +2840,24 @@ body.page-weekly-lineup .filter-title,
 
 /* Fire Rating Styling - allow MAX badge to show */
 .weekly-lineup-table .fire-rating {
-    font-size: 0.8rem;
-    letter-spacing: -0.02em;
+    font-size: 1rem; /* Increased from 0.8rem for better visibility */
+    letter-spacing: 0.02em; /* Changed from negative to positive for better readability */
     white-space: nowrap;
     display: inline-flex;
     align-items: center;
-    gap: 0.2rem;
+    gap: 0.3rem; /* Increased gap for better spacing */
     overflow: visible;
+    line-height: 1.4;
 }
 
 /* Pick Display */
 .weekly-lineup-table .pick-display {
-    font-weight: 600;
-    color: var(--neutral-100);
-    font-size: 0.95rem;
+    font-family: var(--font-body, 'Cormorant Garamond', Georgia, serif);
+    font-weight: var(--weight-semibold, 600);
+    color: rgba(232, 240, 242, 0.98); /* Better contrast */
+    font-size: 0.9375rem; /* Slightly reduced from 0.95rem for consistency */
+    letter-spacing: 0.03em;
+    line-height: 1.4;
 }
 
 /* Center alignment for specific columns */
