@@ -355,10 +355,6 @@
             window.recalculateKPIs();
         }
 
-        // Update table with filters if function exists
-        if (typeof window.updateTableWithFilters === 'function') {
-            window.updateTableWithFilters();
-        }
     }
 
 
