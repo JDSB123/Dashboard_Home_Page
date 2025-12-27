@@ -117,34 +117,42 @@
         },
 
         initFilterItemClicks() {
-            // Handle clicks on filter items (league, pick type, status)
-            document.querySelectorAll('.th-filter-item').forEach(item => {
-                item.addEventListener('click', (e) => {
+            // Use event delegation for all filter clicks - handles dynamic content
+            // This attaches ONE handler to document that catches all filter clicks
+            document.addEventListener('click', (e) => {
+                // Handle filter items (league, pick type, status, segment)
+                const filterItem = e.target.closest('.th-filter-item');
+                if (filterItem) {
                     e.stopPropagation();
-                    item.classList.toggle('active');
+                    filterItem.classList.toggle('active');
+                    console.log('[DashboardFilters] Filter item clicked:', filterItem.getAttribute('data-f'), filterItem.getAttribute('data-v'), 'active:', filterItem.classList.contains('active'));
                     this.applyFilters();
-                });
-            });
-            
-            // Handle clicks on date chips (compact date filter)
-            document.querySelectorAll('.th-date-chip').forEach(chip => {
-                chip.addEventListener('click', (e) => {
+                    return;
+                }
+
+                // Handle date chips (exclusive - only one active at a time)
+                const dateChip = e.target.closest('.th-date-chip');
+                if (dateChip) {
                     e.stopPropagation();
-                    // Date chips are exclusive - only one active at a time
                     document.querySelectorAll('.th-date-chip').forEach(c => c.classList.remove('active'));
-                    chip.classList.add('active');
+                    dateChip.classList.add('active');
+                    console.log('[DashboardFilters] Date chip clicked:', dateChip.getAttribute('data-v'));
                     this.applyFilters();
-                });
-            });
-            
-            // Handle clicks on range buttons (risk/win)
-            document.querySelectorAll('.th-range-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
+                    return;
+                }
+
+                // Handle range buttons (risk/win)
+                const rangeBtn = e.target.closest('.th-range-btn');
+                if (rangeBtn) {
                     e.stopPropagation();
-                    btn.classList.toggle('active');
+                    rangeBtn.classList.toggle('active');
+                    console.log('[DashboardFilters] Range button clicked:', rangeBtn.getAttribute('data-f'), rangeBtn.getAttribute('data-v'));
                     this.applyFilters();
-                });
+                    return;
+                }
             });
+
+            console.log('[DashboardFilters] Event delegation initialized for filter items');
         },
 
         closeAllDropdowns() {
@@ -191,14 +199,48 @@
             const activeWinRanges = Array.from(document.querySelectorAll('#th-riskwin-dropdown .th-range-btn.active[data-f="win"]'))
                 .map(el => el.getAttribute('data-v'));
             
-            console.log('Filters:', { activeDatetime, activeLeagues, activeSegments, activePickTypes, activeStatuses, activeResults, activeRiskRanges, activeWinRanges });
-            
+            console.log('[DashboardFilters] Active filters:', { activeDatetime, activeLeagues, activeSegments, activePickTypes, activeStatuses, activeResults, activeRiskRanges, activeWinRanges });
+
             // Apply to table rows
             this.filterTableRows({ activeDatetime, activeLeagues, activeSegments, activePickTypes, activeStatuses, activeResults, activeRiskRanges, activeWinRanges });
         },
 
+        clearAllFilters() {
+            // Remove active class from all filter items
+            document.querySelectorAll('.th-filter-item.active, .th-date-chip.active, .th-range-btn.active').forEach(el => {
+                el.classList.remove('active');
+            });
+            // Show all rows
+            document.querySelectorAll('#picks-table tbody tr').forEach(row => {
+                row.style.display = '';
+            });
+            // Recalculate KPIs for all rows
+            this.recalculateKPIsForVisibleRows();
+            console.log('[DashboardFilters] All filters cleared');
+        },
+
         filterTableRows(filters) {
             const rows = document.querySelectorAll('#picks-table tbody tr');
+            console.log('[DashboardFilters] Filtering', rows.length, 'rows');
+
+            // If no filters are active, show all rows
+            const hasActiveFilters =
+                (filters.activeDatetime && filters.activeDatetime.length > 0 && !filters.activeDatetime.includes('all')) ||
+                filters.activeLeagues.length > 0 ||
+                filters.activeSegments.length > 0 ||
+                filters.activePickTypes.length > 0 ||
+                filters.activeStatuses.length > 0 ||
+                (filters.activeResults && filters.activeResults.length > 0) ||
+                (filters.activeRiskRanges && filters.activeRiskRanges.length > 0) ||
+                (filters.activeWinRanges && filters.activeWinRanges.length > 0);
+
+            if (!hasActiveFilters) {
+                console.log('[DashboardFilters] No active filters - showing all rows');
+                rows.forEach(row => { row.style.display = ''; });
+                this.recalculateKPIsForVisibleRows();
+                return;
+            }
+
             const now = new Date();
             const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
             const yesterday = new Date(today); yesterday.setDate(yesterday.getDate() - 1);
@@ -302,6 +344,11 @@
                 
                 row.style.display = show ? '' : 'none';
             });
+
+            // Log results
+            const visibleCount = document.querySelectorAll('#picks-table tbody tr:not([style*="display: none"])').length;
+            const hiddenCount = rows.length - visibleCount;
+            console.log('[DashboardFilters] Filter results:', visibleCount, 'visible,', hiddenCount, 'hidden');
 
             // Recalculate KPIs based on visible rows only
             this.recalculateKPIsForVisibleRows();
