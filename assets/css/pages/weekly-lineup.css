@@ -4721,16 +4721,6 @@ body.page-weekly-lineup .th-filter-dropdown.weekly-lineup-filter-dropdown .team-
     color: #78909c;
     font-weight: 500;
 }
-
-/* Legacy - can be removed after confirming new style works */
-.ft-last-fetched {
-    display: none;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-    min-width: 200px;
-    transition: all 0.2s ease;
-}
-
-
 .ft-fetch-buttons {
     display: flex;
     align-items: center;
