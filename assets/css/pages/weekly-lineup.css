@@ -4699,73 +4699,32 @@ body.page-weekly-lineup .th-filter-dropdown.weekly-lineup-filter-dropdown .team-
 }
 
 /* Fetch Status Display - Clean styled container */
-.ft-last-fetched {
+.ft-all-group {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 10px;
-    padding: 8px 14px;
-    background: rgba(15, 25, 40, 0.75);
-    border: 1px solid rgba(80, 110, 150, 0.3);
-    border-radius: 6px;
-    font-size: 0.75rem;
-    white-space: nowrap;
+    gap: 2px;
+}
+
+.ft-last-refreshed {
+    font-size: 0.65rem;
+    color: rgba(144, 164, 174, 0.7);
     font-family: var(--font-body, 'Cormorant Garamond', Georgia, serif);
+    letter-spacing: 0.02em;
+}
+
+.ft-last-refreshed:empty {
+    display: none;
+}
+
+/* Legacy - can be removed after confirming new style works */
+.ft-last-fetched {
+    display: none;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
     min-width: 200px;
     transition: all 0.2s ease;
 }
 
-.ft-last-fetched .ft-league-name {
-    font-weight: 600;
-    color: rgba(232, 240, 242, 0.95);
-    letter-spacing: 0.02em;
-}
-
-.ft-last-fetched .ft-separator {
-    color: rgba(144, 164, 174, 0.5);
-    font-weight: 300;
-    margin: 0 2px;
-}
-
-.ft-last-fetched .ft-time {
-    color: rgba(200, 215, 225, 0.85);
-    font-weight: 500;
-    letter-spacing: 0.01em;
-}
-
-.ft-last-fetched .ft-count {
-    color: rgba(0, 214, 137, 0.9);
-    font-weight: 500;
-}
-
-.ft-last-fetched::before {
-    content: "";
-    width: 6px;
-    height: 6px;
-    background: rgba(100, 140, 180, 0.6);
-    border-radius: 50%;
-    flex-shrink: 0;
-}
-
-.ft-last-fetched.has-data::before {
-    background: #00d689;
-    box-shadow: 0 0 6px rgba(0, 214, 137, 0.4);
-}
-
-.ft-last-fetched.fetching {
-    border-color: rgba(0, 214, 137, 0.4);
-    color: #00d689;
-}
-
-.ft-last-fetched.fetching::before {
-    background: #00d689;
-    animation: pulse-dot 1s ease-in-out infinite;
-}
-
-@keyframes pulse-dot {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(0.8); }
-}
 
 .ft-fetch-buttons {
     display: flex;
@@ -4892,8 +4851,8 @@ body.page-weekly-lineup .th-filter-dropdown.weekly-lineup-filter-dropdown .team-
     .ft-left, .ft-right {
         gap: 6px;
     }
-    .ft-last-fetched {
-        display: none;
+    .ft-last-refreshed {
+        font-size: 0.6rem;
     }
     .ft-fetch-league-btn {
         min-width: 32px;
