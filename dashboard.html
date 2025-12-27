@@ -291,6 +291,50 @@
         <!-- ===== Main Dashboard Layout ===== -->
         <div class="main-dashboard-layout">
 
+            <!-- Filter Toolbar -->
+            <div class="toolbar-container" style="margin-left: 0.75in; margin-right: 0.75in; width: calc(100% - 1.5in);">
+                <div class="filter-toolbar" id="filter-toolbar">
+                    <div class="ft-left">
+                        <!-- League pills -->
+                        <button class="ft-pill ft-league active" data-league="all">All</button>
+                        <button class="ft-pill ft-league" data-league="nba">NBA</button>
+                        <button class="ft-pill ft-league" data-league="ncaab">NCAAM</button>
+                        <button class="ft-pill ft-league" data-league="nfl">NFL</button>
+                        <button class="ft-pill ft-league" data-league="ncaaf">NCAAF</button>
+                        <button class="ft-pill ft-league" data-league="nhl">NHL</button>
+                        <button class="ft-pill ft-league" data-league="mlb">MLB</button>
+                        <!-- Segment pills -->
+                        <div class="ft-separator"></div>
+                        <button class="ft-pill ft-segment active" data-segment="all">All Segments</button>
+                        <button class="ft-pill ft-segment" data-segment="full">Full Game</button>
+                        <button class="ft-pill ft-segment" data-segment="1h">1st Half</button>
+                        <button class="ft-pill ft-segment" data-segment="2h">2nd Half</button>
+                        <!-- Pick type pills -->
+                        <div class="ft-separator"></div>
+                        <button class="ft-pill ft-pick active" data-pick="all">All Picks</button>
+                        <button class="ft-pill ft-pick" data-pick="spread">Spread</button>
+                        <button class="ft-pill ft-pick" data-pick="ml">Moneyline</button>
+                        <button class="ft-pill ft-pick" data-pick="total">Total</button>
+                        <button class="ft-pill ft-pick" data-pick="tt">Team Total</button>
+                        <!-- Status pills -->
+                        <div class="ft-separator"></div>
+                        <button class="ft-pill ft-status active" data-status="all">All Status</button>
+                        <button class="ft-pill ft-status" data-status="pending">Pending</button>
+                        <button class="ft-pill ft-status" data-status="win">Won</button>
+                        <button class="ft-pill ft-status" data-status="loss">Lost</button>
+                        <button class="ft-pill ft-status" data-status="push">Push</button>
+                        <button class="ft-clear" id="ft-clear">✕ Clear</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Chips -->
+            <div class="chips-container" style="margin-left: 0.75in; margin-right: 0.75in; width: calc(100% - 1.5in);">
+                <div class="table-filter-chips-wrapper">
+                    <div class="table-filter-chips filter-chips" id="table-filter-chips" aria-live="polite" data-has-chips="false"></div>
+                </div>
+            </div>
+
             <!-- ===== Active Picks Table ===== -->
             <div class="table-container">
                 <table class="picks-table" id="picks-table">
@@ -318,11 +362,6 @@
                                         <span class="header-main-text">League</span>
                                         <span class="sort-icon" aria-hidden="true">▲</span>
                                     </button>
-                                    <button class="th-filter-btn" data-filter="league" aria-label="Filter by league" aria-expanded="false" aria-controls="filter-league" type="button"><span class="kebab-dot"></span></button>
-                                </div>
-                                <div class="th-filter-dropdown nav-panel-dropdown filter-integrated" id="filter-league" role="dialog" hidden>
-                                    <div class="filter-header-integrated"><span class="filter-title">League</span><div class="filter-quick-actions"><button class="filter-action-btn" data-action="select-all">All</button><button class="filter-action-btn" data-action="clear">Clear</button></div></div>
-                                    <div class="filter-section-compact"><div class="league-pills"><button class="league-pill active" data-league="all">All</button><button class="league-pill" data-league="nba">NBA</button><button class="league-pill" data-league="nfl">NFL</button><button class="league-pill" data-league="ncaab">NCAAB</button><button class="league-pill" data-league="ncaaf">NCAAF</button><button class="league-pill" data-league="nhl">NHL</button><button class="league-pill" data-league="mlb">MLB</button></div></div>
                                 </div>
                             </th>
                             <th scope="col" class="sortable col-matchup" data-sort="matchup">
@@ -340,11 +379,6 @@
                                         <span class="header-main-text">Segment</span>
                                         <span class="sort-icon" aria-hidden="true">▲</span>
                                     </button>
-                                    <button class="th-filter-btn" data-filter="segment" aria-label="Filter by segment" aria-expanded="false" aria-controls="filter-segment" type="button"><span class="kebab-dot"></span></button>
-                                </div>
-                                <div class="th-filter-dropdown nav-panel-dropdown filter-integrated" id="filter-segment" role="dialog" hidden>
-                                    <div class="filter-header-integrated"><span class="filter-title">Segment</span><div class="filter-quick-actions"><button class="filter-action-btn" data-action="select-all">All</button><button class="filter-action-btn" data-action="clear">Clear</button></div></div>
-                                    <div class="filter-section-compact"><div class="segment-pills"><button class="segment-pill active" data-segment="all">All</button><button class="segment-pill" data-segment="full">Full Game</button><button class="segment-pill" data-segment="1h">1st Half</button><button class="segment-pill" data-segment="2h">2nd Half</button></div></div>
                                 </div>
                             </th>
                             <th scope="col" class="center col-pick sortable" data-sort="pick">
@@ -353,11 +387,6 @@
                                         <span class="header-main-text">Pick</span>
                                         <span class="sort-icon" aria-hidden="true">▲</span>
                                     </button>
-                                    <button class="th-filter-btn" data-filter="pick" aria-label="Filter by pick type" aria-expanded="false" aria-controls="filter-pick" type="button"><span class="kebab-dot"></span></button>
-                                </div>
-                                <div class="th-filter-dropdown nav-panel-dropdown filter-integrated" id="filter-pick" role="dialog" hidden>
-                                    <div class="filter-header-integrated"><span class="filter-title">Pick Type</span><div class="filter-quick-actions"><button class="filter-action-btn" data-action="select-all">All</button><button class="filter-action-btn" data-action="clear">Clear</button></div></div>
-                                    <div class="filter-section-compact"><div class="pick-type-pills"><button class="pick-pill active" data-pick="all">All</button><button class="pick-pill" data-pick="spread">Spread</button><button class="pick-pill" data-pick="ml">Moneyline</button><button class="pick-pill" data-pick="total">Total</button><button class="pick-pill" data-pick="tt">Team Total</button></div></div>
                                 </div>
                             </th>
                             <th scope="col" class="center sortable" data-sort="risk">
@@ -382,11 +411,6 @@
                                         <span class="header-main-text">Status</span>
                                         <span class="sort-icon" aria-hidden="true">▲</span>
                                     </button>
-                                    <button class="th-filter-btn" data-filter="status" aria-label="Filter by status" aria-expanded="false" aria-controls="filter-status" type="button"><span class="kebab-dot"></span></button>
-                                </div>
-                                <div class="th-filter-dropdown nav-panel-dropdown filter-integrated" id="filter-status" role="dialog" hidden>
-                                    <div class="filter-header-integrated"><span class="filter-title">Status</span><div class="filter-quick-actions"><button class="filter-action-btn" data-action="select-all">All</button><button class="filter-action-btn" data-action="clear">Clear</button></div></div>
-                                    <div class="filter-section-compact"><div class="status-pills"><button class="status-pill active" data-status="all">All</button><button class="status-pill" data-status="pending">Pending</button><button class="status-pill" data-status="win">Won</button><button class="status-pill" data-status="loss">Lost</button><button class="status-pill" data-status="push">Push</button></div></div>
                                 </div>
                             </th>
                             <th scope="col" class="center sortable" data-sort="profit">
@@ -451,6 +475,9 @@
 
     <!-- Dashboard Initialization (KPI tiles, flip, refresh) -->
     <script src="dashboard/js/dashboard-init.js?v=20251224-3" defer></script>
+    
+    <!-- Dashboard Filter Pills Handler -->
+    <script src="dashboard/js/dashboard-filter-pills.js?v=20251227-1" defer></script>
 
     <!-- Date Toggles Functionality -->
     <script src="assets/js/utils/date-toggles.js?v=20251224-3" defer></script>
