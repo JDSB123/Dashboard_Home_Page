@@ -124,9 +124,11 @@
 
         // ===== FINAL FALLBACK: DEMO DATA =====
         // If all APIs failed and we have no picks, provide demo data
+        let fallbackUsed = false;
         if (allPicks.length === 0 && errors.length > 0) {
             console.warn('[UNIFIED-FETCHER] All APIs failed, falling back to demo data');
             allPicks = getDemoPicks();
+            fallbackUsed = true;
         }
 
         console.log(`[UNIFIED-FETCHER] Total picks fetched: ${allPicks.length}`);
@@ -136,7 +138,7 @@
             errors: errors,
             date: date,
             timestamp: new Date().toISOString(),
-            fallbackUsed: allPicks.length > 0 && errors.length > 0
+            fallbackUsed: fallbackUsed
         };
     };
 
@@ -230,96 +232,71 @@
         return [
             // NBA Demo Picks
             {
-                date: now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }),
+                game: 'Los Angeles Lakers @ Golden State Warriors',
                 time: '7:00 PM',
                 sport: 'NBA',
                 league: 'NBA',
-                awayTeam: 'Los Angeles Lakers',
-                homeTeam: 'Golden State Warriors',
-                segment: 'FG',
-                pickTeam: 'Lakers',
-                pickType: 'spread',
+                pick: 'Lakers',
+                market: 'spread',
                 line: '+4.5',
                 odds: '-110',
-                modelPrice: '4.2',
-                edge: 4.2,
-                fire: 3,
-                fireLabel: '',
+                edge: '4.2%',
+                confidence: 3,
                 status: 'pending'
             },
             {
-                date: now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }),
+                game: 'Boston Celtics @ Miami Heat',
                 time: '8:00 PM',
                 sport: 'NBA',
                 league: 'NBA',
-                awayTeam: 'Boston Celtics',
-                homeTeam: 'Miami Heat',
-                segment: 'FG',
-                pickTeam: 'Celtics',
-                pickType: 'moneyline',
+                pick: 'Celtics',
+                market: 'moneyline',
                 line: '',
                 odds: '-150',
-                modelPrice: '3.8',
-                edge: 3.8,
-                fire: 3,
-                fireLabel: '',
+                edge: '3.8%',
+                confidence: 3,
                 status: 'pending'
             },
             // NCAAM Demo Picks
             {
-                date: now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }),
+                game: 'Duke Blue Devils @ North Carolina Tar Heels',
                 time: '6:00 PM',
                 sport: 'NCAAB',
                 league: 'NCAAM',
-                awayTeam: 'Duke Blue Devils',
-                homeTeam: 'North Carolina Tar Heels',
-                segment: 'FG',
-                pickTeam: 'Duke',
-                pickType: 'spread',
+                pick: 'Duke',
+                market: 'spread',
                 line: '+2.5',
                 odds: '-110',
-                modelPrice: '5.1',
-                edge: 5.1,
-                fire: 4,
-                fireLabel: '',
+                edge: '5.1%',
+                confidence: 4,
                 status: 'pending'
             },
             // NFL Demo Picks
             {
-                date: now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }),
+                game: 'Kansas City Chiefs @ Buffalo Bills',
                 time: '1:00 PM',
                 sport: 'NFL',
                 league: 'NFL',
-                awayTeam: 'Kansas City Chiefs',
-                homeTeam: 'Buffalo Bills',
-                segment: 'FG',
-                pickTeam: 'Chiefs',
-                pickType: 'spread',
+                pick: 'Chiefs',
+                market: 'spread',
                 line: '-3.5',
                 odds: '-110',
-                modelPrice: '4.7',
-                edge: 4.7,
-                fire: 4,
-                fireLabel: '',
+                edge: '4.7%',
+                confidence: 4,
                 status: 'pending'
             },
             // NCAAF Demo Picks
             {
-                date: now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }),
+                game: 'Alabama Crimson Tide @ Georgia Bulldogs',
                 time: '3:30 PM',
                 sport: 'NCAAF',
                 league: 'NCAAF',
-                awayTeam: 'Alabama Crimson Tide',
-                homeTeam: 'Georgia Bulldogs',
-                segment: 'FG',
-                pickTeam: 'Alabama',
-                pickType: 'spread',
+                pick: 'Alabama',
+                market: 'spread',
                 line: '-6.5',
                 odds: '-110',
-                modelPrice: '6.2',
-                edge: 6.2,
-                fire: 5,
-                fireLabel: 'MAX',
+                edge: '6.2%',
+                confidence: 5,
                 status: 'pending'
             }
         ];
