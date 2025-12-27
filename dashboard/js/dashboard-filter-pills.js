@@ -26,12 +26,19 @@
             return;
         }
 
-        // League filter pills (multi-select)
+        // League filter pills (multi-select) - ensure they don't trigger dropdowns
         document.querySelectorAll('.ft-pill.ft-league').forEach(pill => {
             pill.addEventListener('click', function(e) {
+                e.preventDefault();
                 e.stopPropagation();
+                e.stopImmediatePropagation();
+                
                 const leagueValue = this.getAttribute('data-league');
                 console.log('[DashboardFilterPills] League pill clicked:', leagueValue);
+
+                // Ensure no dropdowns are open
+                toolbar.querySelectorAll('.ft-dropdown-menu').forEach(m => m.classList.remove('open'));
+                toolbar.querySelectorAll('.ft-dropdown-btn').forEach(b => b.classList.remove('open'));
 
                 // Toggle active state
                 this.classList.toggle('active');
@@ -61,15 +68,24 @@
             });
         });
 
-        // Dropdown toggle logic
+        // Dropdown toggle logic - ONLY for dropdown buttons, not pills
         const dropdowns = toolbar.querySelectorAll('.ft-dropdown');
         dropdowns.forEach(dropdown => {
             const btn = dropdown.querySelector('.ft-dropdown-btn');
             const menu = dropdown.querySelector('.ft-dropdown-menu');
             if (!btn || !menu) return;
             
+            // Only attach to dropdown buttons, explicitly exclude pills
             btn.addEventListener('click', (e) => {
+                // Prevent if clicking on a pill
+                if (e.target.closest('.ft-pill')) {
+                    return;
+                }
+                
+                e.preventDefault();
                 e.stopPropagation();
+                e.stopImmediatePropagation();
+                
                 // Close all other dropdowns
                 dropdowns.forEach(d => {
                     if (d !== dropdown) {
@@ -83,8 +99,14 @@
             });
         });
 
-        // Close dropdowns when clicking outside
+        // Close dropdowns when clicking outside - but not on league pills
         document.addEventListener('click', (e) => {
+            // Don't close if clicking on a league pill
+            if (e.target.closest('.ft-pill.ft-league')) {
+                return;
+            }
+            
+            // Close dropdowns if clicking outside dropdown containers
             if (!e.target.closest('.ft-dropdown')) {
                 toolbar.querySelectorAll('.ft-dropdown-menu').forEach(m => m.classList.remove('open'));
                 toolbar.querySelectorAll('.ft-dropdown-btn').forEach(b => b.classList.remove('open'));
@@ -94,9 +116,18 @@
         // Segment dropdown items (exclusive selection)
         toolbar.querySelectorAll('#segment-dropdown-menu .ft-dropdown-item').forEach(item => {
             item.addEventListener('click', function(e) {
+                e.preventDefault();
                 e.stopPropagation();
+                e.stopImmediatePropagation();
+                
                 const segmentValue = this.getAttribute('data-v');
                 console.log('[DashboardFilterPills] Segment dropdown item clicked:', segmentValue);
+
+                // Close dropdown
+                const menu = this.closest('.ft-dropdown-menu');
+                const dropdown = menu?.closest('.ft-dropdown');
+                if (menu) menu.classList.remove('open');
+                if (dropdown) dropdown.querySelector('.ft-dropdown-btn')?.classList.remove('open');
 
                 // Exclusive selection - remove active from siblings
                 toolbar.querySelectorAll('#segment-dropdown-menu .ft-dropdown-item').forEach(i => i.classList.remove('active'));
@@ -121,9 +152,18 @@
         // Pick type dropdown items (exclusive selection)
         toolbar.querySelectorAll('#pick-dropdown-menu .ft-dropdown-item').forEach(item => {
             item.addEventListener('click', function(e) {
+                e.preventDefault();
                 e.stopPropagation();
+                e.stopImmediatePropagation();
+                
                 const pickValue = this.getAttribute('data-v');
                 console.log('[DashboardFilterPills] Pick type dropdown item clicked:', pickValue);
+
+                // Close dropdown
+                const menu = this.closest('.ft-dropdown-menu');
+                const dropdown = menu?.closest('.ft-dropdown');
+                if (menu) menu.classList.remove('open');
+                if (dropdown) dropdown.querySelector('.ft-dropdown-btn')?.classList.remove('open');
 
                 // Exclusive selection
                 toolbar.querySelectorAll('#pick-dropdown-menu .ft-dropdown-item').forEach(i => i.classList.remove('active'));
@@ -149,9 +189,18 @@
         // Status dropdown items (exclusive selection)
         toolbar.querySelectorAll('#status-dropdown-menu .ft-dropdown-item').forEach(item => {
             item.addEventListener('click', function(e) {
+                e.preventDefault();
                 e.stopPropagation();
+                e.stopImmediatePropagation();
+                
                 const statusValue = this.getAttribute('data-v');
                 console.log('[DashboardFilterPills] Status dropdown item clicked:', statusValue);
+
+                // Close dropdown
+                const menu = this.closest('.ft-dropdown-menu');
+                const dropdown = menu?.closest('.ft-dropdown');
+                if (menu) menu.classList.remove('open');
+                if (dropdown) dropdown.querySelector('.ft-dropdown-btn')?.classList.remove('open');
 
                 // Exclusive selection
                 toolbar.querySelectorAll('#status-dropdown-menu .ft-dropdown-item').forEach(i => i.classList.remove('active'));

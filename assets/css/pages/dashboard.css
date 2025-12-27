@@ -2494,6 +2494,15 @@ body.page-active-picks .ft-pill {
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35), 0 0 6px rgba(80, 120, 180, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.08);
     white-space: nowrap;
+    position: relative;
+    /* Explicitly prevent dropdown behavior */
+    z-index: auto;
+}
+
+/* Ensure pills are NOT dropdowns */
+body.page-active-picks .ft-pill::after {
+    display: none !important;
+    content: none !important;
 }
 
 body.page-active-picks .ft-pill:hover {
