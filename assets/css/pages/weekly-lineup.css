@@ -4855,3 +4855,160 @@ body.page-weekly-lineup .th-filter-dropdown.weekly-lineup-filter-dropdown .team-
         padding: 4px 8px;
     }
 }
+
+/* ==========================================================================
+   PRODUCTION STYLES - Consolidated from inline HTML
+   v33.00.5 - Migrated inline styles for maintainability
+   ========================================================================== */
+
+/* Table structure */
+.weekly-lineup-table {
+    table-layout: fixed;
+    width: 100%;
+}
+
+/* Force table-cell display on ALL cells - fixes alignment */
+.weekly-lineup-table thead th,
+.weekly-lineup-table tbody td,
+.weekly-lineup-table tbody td.center {
+    display: table-cell;
+    padding: 4px 8px;
+    text-align: center;
+    vertical-align: middle;
+    box-sizing: border-box;
+    white-space: nowrap;
+}
+
+/* Header cell content - keep it simple, centered */
+.weekly-lineup-table thead th .th-header-shell {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+}
+
+.weekly-lineup-table thead th .th-sort-btn {
+    padding: 0;
+    margin: 0;
+    background: none;
+    border: none;
+    pointer-events: auto;
+}
+
+/* Keep header subtext visible for CST and (away vs home) */
+.weekly-lineup-table thead th .header-subtext {
+    display: block;
+    font-size: 0.65rem;
+    color: rgba(200, 215, 225, 0.7);
+    margin-top: 2px;
+}
+
+/* Sort icon */
+.weekly-lineup-table thead th .sort-icon {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* Filter buttons - separate from sort buttons */
+.weekly-lineup-table thead th .th-filter-btn {
+    position: absolute;
+    right: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* Body cell content - single line, no wrapping */
+.weekly-lineup-table tbody td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Pick cell - force single line horizontal layout */
+.weekly-lineup-table tbody td .pick-cell {
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 0.35rem;
+    white-space: nowrap;
+}
+
+.weekly-lineup-table tbody td .pick-cell * {
+    white-space: nowrap;
+    display: inline;
+}
+
+.weekly-lineup-table tbody td .pick-cell img {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+.weekly-lineup-table tbody td .league-cell,
+.weekly-lineup-table tbody td .datetime-cell {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Ensure league logo is reasonably sized */
+.weekly-lineup-table tbody td .league-logo {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
+/* ==========================================================================
+   PAGE-LEVEL LAYOUT OVERRIDES
+   ========================================================================== */
+
+/* Bear Background Image */
+body.page-weekly-lineup {
+    background-image: url('../../JB_Bearish_Market_FULL_page.png');
+    background-size: cover;
+    background-position: center top;
+    background-attachment: fixed;
+}
+
+/* Table wrapper with semi-transparency */
+body.page-weekly-lineup .weekly-lineup-table-wrapper {
+    background: rgba(5, 12, 22, 0.40);
+    border: none;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    margin-top: 0;
+    margin-left: 0.75in;
+    margin-right: 0.75in;
+    width: calc(100% - 1.5in);
+}
+
+/* Remove black fill from filter toolbar */
+body.page-weekly-lineup .filter-toolbar {
+    background: transparent;
+    border-bottom: none;
+    box-shadow: none;
+}
+
+/* Ensure toolbar container is transparent */
+body.page-weekly-lineup .toolbar-container {
+    background: transparent;
+    margin-bottom: 0;
+}
+
+body.page-weekly-lineup .main-container {
+    margin-top: 12px;
+}
+
+/* Align branding logo with left edge */
+body.page-weekly-lineup .dashboard-topline {
+    padding-left: 0.75in;
+    padding-right: 0.75in;
+}
+
+body.page-weekly-lineup .brand-header-inline {
+    padding-left: 0;
+}
