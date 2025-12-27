@@ -520,13 +520,28 @@
 
         const status = pick.status || 'pending';
         const sportsbook = pick.sportsbook || '';
-        const sport = (pick.sport || 'NBA').toUpperCase();
+        let sport = (pick.sport || 'NBA').toLowerCase();
+
+        // Normalize league values to match filter dropdown options
+        const leagueNormMap = {
+            'college': 'ncaaf',
+            'cfb': 'ncaaf',
+            'college football': 'ncaaf',
+            'ncaa football': 'ncaaf',
+            'cbb': 'ncaab',
+            'college basketball': 'ncaab',
+            'ncaa basketball': 'ncaab',
+            'ncaam': 'ncaab'
+        };
+        if (leagueNormMap[sport]) {
+            sport = leagueNormMap[sport];
+        }
 
         const epochTime = pick.gameDate && pick.gameTime ?
             new Date(`${pick.gameDate} ${pick.gameTime}`).getTime() : Date.now();
 
         row.setAttribute('data-pick-id', pick.id || `pick-${idx}`);
-        row.setAttribute('data-league', sport.toLowerCase());
+        row.setAttribute('data-league', sport);
         row.setAttribute('data-epoch', epochTime);
         row.setAttribute('data-book', sportsbook.toLowerCase());
         row.setAttribute('data-away', awayTeam.toLowerCase());

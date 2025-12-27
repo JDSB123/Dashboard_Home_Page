@@ -1387,7 +1387,22 @@ function buildPickRow(pick, index) {
     } else if (pick.game && (pick.game.includes('Suns') || pick.game.includes('Clippers'))) {
         league = 'nba';
     } else if (pick.game && (pick.game.includes('Georgia') || pick.game.includes('UTSA') || pick.game.includes('Appalachian'))) {
-        league = 'college';
+        league = 'ncaaf'; // Use normalized value for college football
+    }
+
+    // Normalize league values to match filter dropdown options
+    const leagueNormMap = {
+        'college': 'ncaaf',
+        'cfb': 'ncaaf',
+        'college football': 'ncaaf',
+        'ncaa football': 'ncaaf',
+        'cbb': 'ncaab',
+        'college basketball': 'ncaab',
+        'ncaa basketball': 'ncaab',
+        'ncaam': 'ncaab'
+    };
+    if (leagueNormMap[league]) {
+        league = leagueNormMap[league];
     }
 
     // Parse teams

@@ -269,8 +269,19 @@
                 
                 // League filter
                 if (show && filters.activeLeagues.length > 0) {
-                    const rowLeague = row.getAttribute('data-league');
-                    if (!filters.activeLeagues.some(l => rowLeague === l || rowLeague?.includes(l))) show = false;
+                    const rowLeague = (row.getAttribute('data-league') || '').toLowerCase();
+                    const matchesLeague = filters.activeLeagues.some(filterLeague => {
+                        const fl = filterLeague.toLowerCase();
+                        // Direct match
+                        if (rowLeague === fl) return true;
+                        // Handle college variations
+                        if (fl === 'ncaaf' && (rowLeague === 'college' || rowLeague === 'cfb' || rowLeague.includes('college football') || rowLeague.includes('ncaaf'))) return true;
+                        if (fl === 'ncaab' && (rowLeague === 'ncaam' || rowLeague === 'cbb' || rowLeague.includes('college basketball') || rowLeague.includes('ncaab') || rowLeague.includes('ncaam'))) return true;
+                        // Partial match (e.g., filter="nba" matches data-league="nba basketball")
+                        if (rowLeague.includes(fl) || fl.includes(rowLeague)) return true;
+                        return false;
+                    });
+                    if (!matchesLeague) show = false;
                 }
 
                 // Segment filter
