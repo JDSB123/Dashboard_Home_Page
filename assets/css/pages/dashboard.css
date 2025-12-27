@@ -853,6 +853,11 @@ body.page-active-picks .picks-table tbody td {
     padding: 8px 6px !important;
 }
 
+/* Table headers need relative positioning for absolute sort icons */
+body.page-active-picks .picks-table thead th {
+    position: relative !important;
+}
+
 /* Override any nth-child text-align rules from picks-table.css */
 body.page-active-picks .picks-table thead th:nth-child(n),
 body.page-active-picks .picks-table tbody td:nth-child(n) {
@@ -870,22 +875,25 @@ body.page-active-picks .picks-table thead th .th-header-shell {
 
 /* Sort button - inline layout */
 body.page-active-picks .picks-table thead th .th-sort-btn {
-    padding: 4px 24px 4px 4px;
+    padding: 4px 20px 4px 4px;
     margin: 0;
     background: none;
     border: none;
     cursor: pointer;
+    position: relative;
+    width: 100%;
 }
 
-/* Sort icon - positioned relative to th-sort-btn */
+/* Sort icon - positioned on right edge, vertically centered */
 body.page-active-picks .picks-table thead th .sort-icon {
     position: absolute;
-    right: 8px;
+    right: 4px;
     top: 50%;
     transform: translateY(-50%);
     margin-left: 0;
     font-size: 10px;
-    opacity: 0.5;
+    opacity: 0.6;
+    pointer-events: none;
 }
 
 /* Filter button - positioned in header with high z-index for click priority */
@@ -1136,13 +1144,23 @@ body.page-active-picks .picks-table tbody td .game-segment {
     background: #00e08a !important;
 }
 
-/* Sort Icon Positioning */
-.sort-icon {
+/* Sort Icon Positioning - Right edge, vertically centered */
+body.page-active-picks .picks-table thead th .sort-icon {
     position: absolute !important;
-    right: 2px !important;
-    bottom: 2px !important;
+    right: 4px !important;
+    top: 50% !important;
+    bottom: auto !important;
+    transform: translateY(-50%) !important;
     font-size: 10px !important;
-    opacity: 0.5;
+    opacity: 0.6;
+    pointer-events: none;
+    transition: opacity 0.2s, color 0.2s, transform 0.2s;
+}
+
+/* Rotate icon when sorted descending - preserve vertical centering */
+body.page-active-picks .picks-table thead th.sorted-desc .sort-icon,
+body.page-active-picks .picks-table thead th.sort-desc .sort-icon {
+    transform: translateY(-50%) rotate(180deg) !important;
 }
 
 /* Header Shell - Ensure it doesn't block clicks */
@@ -1156,10 +1174,10 @@ body.page-active-picks .picks-table tbody td .game-segment {
 }
 
 /* Sort Button - Make it fill the header but respect padding */
-.th-sort-btn {
+body.page-active-picks .picks-table thead th .th-sort-btn {
     width: 100% !important;
     height: 100% !important;
-    padding: 8px 24px 8px 8px !important; /* Right padding for filter button */
+    padding: 8px 20px 8px 8px !important; /* Right padding for sort icon */
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
@@ -1167,6 +1185,7 @@ body.page-active-picks .picks-table tbody td .game-segment {
     background: transparent !important;
     border: none !important;
     cursor: pointer !important;
+    position: relative !important;
 }
 
 /* ==========================================================================
