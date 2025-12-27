@@ -420,7 +420,7 @@ body.page-active-picks .th-sort-btn {
     justify-content: center;
     text-align: center;
     width: 100%;
-    padding: 6px !important; /* equal padding for centered text */
+    padding: 4px 24px 4px 6px !important; /* increased right padding for icon and filter space */
     gap: 0;
     min-height: unset;
     position: relative;
@@ -428,15 +428,15 @@ body.page-active-picks .th-sort-btn {
 
 /* Headers with kebab filter button - add extra right padding for kebab space */
 body.page-active-picks .th-filterable .th-sort-btn {
-    padding-right: 2px !important; /* minimal padding since kebab is positioned separately */
+    padding: 4px 24px 4px 6px !important; /* increased right padding for icon and filter space */
 }
 
 /* Header main text styling (matches weekly lineup) */
 body.page-active-picks .header-main-text {
     display: block;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     font-weight: 700;
-    line-height: 1.3;
+    line-height: 1.2;
     white-space: normal;
     overflow: visible;
     text-overflow: clip;
@@ -455,20 +455,19 @@ body.page-active-picks .header-subtext {
     line-height: 1;
 }
 
-/* Sort icon positioned at top-center of th cell */
+/* Sort icon positioned at bottom-right of th cell */
 body.page-active-picks .sort-icon {
     position: absolute !important;
-    left: 50% !important;
-    top: 4px !important;
-    bottom: auto;
-    transform: translateX(-50%);
-    font-size: 10px;
+    right: 0 !important; /* flush to right edge */
+    bottom: 0 !important; /* flush to bottom edge */
+    top: auto;
+    transform: none;
+    font-size: 14px;
     line-height: 1;
     margin: 0;
-    opacity: 0.5;
+    opacity: 0.7;
     font-weight: bold;
     pointer-events: none;
-    display: block !important;
 }
 
 body.page-active-picks .picks-table th:hover .sort-icon,
@@ -875,7 +874,7 @@ body.page-active-picks .picks-table thead th .th-header-shell {
 
 /* Sort button - inline layout */
 body.page-active-picks .picks-table thead th .th-sort-btn {
-    padding: 4px 20px 4px 4px;
+    padding: 4px 24px 4px 6px !important; /* increased right padding for icon and filter space */
     margin: 0;
     background: none;
     border: none;
