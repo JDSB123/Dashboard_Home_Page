@@ -90,9 +90,9 @@
         }
         /* Header styles are now in dashboard.css */
         
-        /* Header shell - flexbox centering only, no positioning (let th handle it) */
+        /* Header shell - flexbox centering, position relative for filter button */
         #picks-table thead th .th-header-shell {
-            position: static !important; /* kebab/dropdown position relative to th, not shell */
+            position: relative !important; /* Positioning context for absolute filter button */
             display: flex !important;
             flex-direction: column !important;
             background: transparent !important;
@@ -101,7 +101,7 @@
             width: 100% !important;
             gap: 2px !important;
             overflow: visible !important;
-            padding: 4px 28px 4px 8px !important; /* right padding for kebab */
+            padding: 4px 8px !important; /* Equal padding - text centered, kebab absolute */
         }
         /* Header main text styling - now direct child of shell */
         #picks-table thead th .header-main-text {
@@ -124,11 +124,6 @@
             text-align: center !important;
         }
         /* Sort icon and button styles moved to dashboard.css */
-        
-        /* Make th-header-shell the positioning context for the filter button */
-        #picks-table thead th .th-header-shell {
-            position: relative !important;
-        }
         /* Filter button styles moved to dashboard.css */
         /* Filter dropdown - hidden by default, shown when .open class added */
         #picks-table thead th .th-filter-dropdown {
@@ -416,7 +411,7 @@
             background-color: transparent !important;
         }
 
-        /* Sort Button - Takes up full space but respects filter button area */
+        /* Sort Button - Centered text, filter button positioned absolutely */
         .th-sort-btn {
             flex: 1 1 auto;
             display: flex;
@@ -425,7 +420,7 @@
             justify-content: center;
             text-align: center;
             width: 100%;
-            padding: 8px 24px 8px 8px !important; /* Right padding for filter button space */
+            padding: 8px 8px !important; /* Equal padding - kebab positioned absolutely */
             background: transparent;
             border: none;
             cursor: pointer;
