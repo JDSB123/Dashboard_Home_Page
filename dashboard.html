@@ -303,26 +303,38 @@
                         <button class="ft-pill ft-league" data-league="ncaaf">NCAAF</button>
                         <button class="ft-pill ft-league" data-league="nhl">NHL</button>
                         <button class="ft-pill ft-league" data-league="mlb">MLB</button>
-                        <!-- Segment pills -->
-                        <div class="ft-separator"></div>
-                        <button class="ft-pill ft-segment active" data-segment="all">All Segments</button>
-                        <button class="ft-pill ft-segment" data-segment="full">Full Game</button>
-                        <button class="ft-pill ft-segment" data-segment="1h">1st Half</button>
-                        <button class="ft-pill ft-segment" data-segment="2h">2nd Half</button>
-                        <!-- Pick type pills -->
-                        <div class="ft-separator"></div>
-                        <button class="ft-pill ft-pick active" data-pick="all">All Picks</button>
-                        <button class="ft-pill ft-pick" data-pick="spread">Spread</button>
-                        <button class="ft-pill ft-pick" data-pick="ml">Moneyline</button>
-                        <button class="ft-pill ft-pick" data-pick="total">Total</button>
-                        <button class="ft-pill ft-pick" data-pick="tt">Team Total</button>
-                        <!-- Status pills -->
-                        <div class="ft-separator"></div>
-                        <button class="ft-pill ft-status active" data-status="all">All Status</button>
-                        <button class="ft-pill ft-status" data-status="pending">Pending</button>
-                        <button class="ft-pill ft-status" data-status="win">Won</button>
-                        <button class="ft-pill ft-status" data-status="loss">Lost</button>
-                        <button class="ft-pill ft-status" data-status="push">Push</button>
+                        <!-- Segment dropdown -->
+                        <div class="ft-dropdown">
+                            <button class="ft-dropdown-btn" id="segment-dropdown-btn">Segment ▾</button>
+                            <div class="ft-dropdown-menu" id="segment-dropdown-menu">
+                                <button class="ft-dropdown-item active" data-f="segment" data-v="all">All Segments</button>
+                                <button class="ft-dropdown-item" data-f="segment" data-v="full">Full Game</button>
+                                <button class="ft-dropdown-item" data-f="segment" data-v="1h">1st Half</button>
+                                <button class="ft-dropdown-item" data-f="segment" data-v="2h">2nd Half</button>
+                            </div>
+                        </div>
+                        <!-- Pick type dropdown -->
+                        <div class="ft-dropdown">
+                            <button class="ft-dropdown-btn" id="pick-dropdown-btn">Pick Type ▾</button>
+                            <div class="ft-dropdown-menu" id="pick-dropdown-menu">
+                                <button class="ft-dropdown-item active" data-f="pick" data-v="all">All Picks</button>
+                                <button class="ft-dropdown-item" data-f="pick" data-v="spread">Spread</button>
+                                <button class="ft-dropdown-item" data-f="pick" data-v="ml">Moneyline</button>
+                                <button class="ft-dropdown-item" data-f="pick" data-v="total">Total</button>
+                                <button class="ft-dropdown-item" data-f="pick" data-v="tt">Team Total</button>
+                            </div>
+                        </div>
+                        <!-- Status dropdown -->
+                        <div class="ft-dropdown">
+                            <button class="ft-dropdown-btn" id="status-dropdown-btn">Status ▾</button>
+                            <div class="ft-dropdown-menu" id="status-dropdown-menu">
+                                <button class="ft-dropdown-item active" data-f="status" data-v="all">All Status</button>
+                                <button class="ft-dropdown-item" data-f="status" data-v="pending">Pending</button>
+                                <button class="ft-dropdown-item" data-f="status" data-v="win">Won</button>
+                                <button class="ft-dropdown-item" data-f="status" data-v="loss">Lost</button>
+                                <button class="ft-dropdown-item" data-f="status" data-v="push">Push</button>
+                            </div>
+                        </div>
                         <button class="ft-clear" id="ft-clear">✕ Clear</button>
                     </div>
                 </div>
