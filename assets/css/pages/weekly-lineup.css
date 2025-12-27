@@ -4702,19 +4702,40 @@ body.page-weekly-lineup .th-filter-dropdown.weekly-lineup-filter-dropdown .team-
 .ft-last-fetched {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 6px 12px;
-    background: linear-gradient(135deg, rgba(20, 30, 48, 0.7) 0%, rgba(25, 38, 58, 0.6) 100%);
-    border: 1px solid rgba(80, 110, 150, 0.25);
+    gap: 10px;
+    padding: 8px 14px;
+    background: rgba(15, 25, 40, 0.75);
+    border: 1px solid rgba(80, 110, 150, 0.3);
     border-radius: 6px;
-    font-size: 0.72rem;
-    color: rgba(180, 195, 215, 0.95);
+    font-size: 0.75rem;
     white-space: nowrap;
-    font-family: 'EB Garamond', 'Garamond', Georgia, serif;
-    letter-spacing: 0.015em;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    font-family: var(--font-body, 'Cormorant Garamond', Georgia, serif);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
     min-width: 200px;
     transition: all 0.2s ease;
+}
+
+.ft-last-fetched .ft-league-name {
+    font-weight: 600;
+    color: rgba(232, 240, 242, 0.95);
+    letter-spacing: 0.02em;
+}
+
+.ft-last-fetched .ft-separator {
+    color: rgba(144, 164, 174, 0.5);
+    font-weight: 300;
+    margin: 0 2px;
+}
+
+.ft-last-fetched .ft-time {
+    color: rgba(200, 215, 225, 0.85);
+    font-weight: 500;
+    letter-spacing: 0.01em;
+}
+
+.ft-last-fetched .ft-count {
+    color: rgba(0, 214, 137, 0.9);
+    font-weight: 500;
 }
 
 .ft-last-fetched::before {

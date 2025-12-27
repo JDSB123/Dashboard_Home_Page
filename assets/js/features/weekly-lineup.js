@@ -400,13 +400,14 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             // Format league name
             const leagueName = league === 'all' ? 'All Leagues' : league.toUpperCase().replace('NCAAB', 'NCAAM').replace('NCAAF', 'NCAAF');
 
-            // Build clean display text
-            let displayText = `${leagueName}  ·  Updated ${timeStr}`;
+            // Build clean display with HTML structure
+            let html = `<span class="ft-league-name">${leagueName}</span><span class="ft-separator">·</span><span class="ft-time">${timeStr}</span>`;
             if (count !== null) {
-                displayText += count === 0 ? '  ·  No picks' : `  ·  ${count} pick${count !== 1 ? 's' : ''}`;
+                const countText = count === 0 ? 'No picks' : `${count} pick${count !== 1 ? 's' : ''}`;
+                html += `<span class="ft-separator">·</span><span class="ft-count">${countText}</span>`;
             }
 
-            el.textContent = displayText;
+            el.innerHTML = html;
             el.classList.remove('fetching');
             el.classList.toggle('has-data', count > 0);
         }
@@ -1379,10 +1380,10 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
                 const leagueName = formatLeagueName(fetchType);
                 if (time) {
-                    el.textContent = `${leagueName}  ·  Last updated ${time}`;
+                    el.innerHTML = `<span class="ft-league-name">${leagueName}</span><span class="ft-separator">·</span><span class="ft-time">Last updated ${time}</span>`;
                     el.classList.add('has-data');
                 } else {
-                    el.textContent = `${leagueName}  ·  Not yet fetched today`;
+                    el.innerHTML = `<span class="ft-league-name">${leagueName}</span><span class="ft-separator">·</span><span class="ft-time">Not yet fetched today</span>`;
                     el.classList.remove('has-data');
                 }
                 el.dataset.temp = "true";
@@ -1392,7 +1393,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                 const el = document.getElementById('ft-last-fetched');
                 if (el && el.dataset.temp === "true") {
                     el.dataset.temp = "false";
-                    el.textContent = 'Select a league to fetch picks';
+                    el.innerHTML = '<span class="ft-league-name">Select a league to fetch picks</span>';
                     el.classList.remove('has-data', 'fetching');
                 }
             });
