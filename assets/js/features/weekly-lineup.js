@@ -318,7 +318,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
         const tbody = document.querySelector('.weekly-lineup-table tbody');
         if (tbody) {
-            tbody.innerHTML = '<tr class="loading-row"><td colspan="8" class="loading-cell"><span class="ft-league-name">Loading picks...</span></td></tr>';
+            tbody.innerHTML = '<tr class="empty-state-row"><td colspan="8" class="empty-state-cell"><div class="empty-state"><span class="empty-icon">📊</span><span class="empty-message">Loading picks...</span></div></td></tr>';
         }
 
         try {
@@ -404,8 +404,13 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
     function showNoPicks(message) {
         const tbody = document.querySelector('.weekly-lineup-table tbody');
         if (tbody) {
-            tbody.innerHTML = `<tr class="no-picks-row"><td colspan="8" class="no-picks-cell">${message}</td></tr>`;
+            tbody.innerHTML = `<tr class="empty-state-row"><td colspan="8" class="empty-state-cell"><div class="empty-state"><span class="empty-icon">📊</span><span class="empty-message">${message}</span></div></td></tr>`;
         }
+    }
+    
+    // Alias for showEmptyState (used by unified-picks-fetcher.js)
+    function showEmptyState(message) {
+        showNoPicks(message);
     }
 
     // ===== HELPER FUNCTIONS =====
@@ -1866,6 +1871,8 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         loadModelOutputs,
         populateTable: populateWeeklyLineupTable,
         showNotification,
+        showEmptyState,
+        showNoPicks,
         addPickToDashboard
     };
 

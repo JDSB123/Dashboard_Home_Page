@@ -4319,8 +4319,56 @@ body.page-weekly-lineup .th-filter-dropdown.weekly-lineup-filter-dropdown .team-
 }
 
 /* ==========================================================================
-   LOADING SPINNER - Minimalist (Text + Small Rotator)
+   EMPTY STATE - Icon + Message
    ========================================================================== */
+.empty-state-row {
+    background: transparent !important;
+}
+
+.empty-state-cell {
+    text-align: center;
+    padding: 64px 24px !important;
+    color: rgba(180, 200, 220, 0.8);
+    font-size: 0.95rem;
+}
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 24px 0;
+}
+
+.empty-icon {
+    font-size: 3rem;
+    line-height: 1;
+    opacity: 0.6;
+    animation: emptyPulse 2s ease-in-out infinite;
+}
+
+@keyframes emptyPulse {
+    0%, 100% {
+        opacity: 0.6;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.8;
+        transform: scale(1.05);
+    }
+}
+
+.empty-message {
+    font-size: 0.95rem;
+    color: rgba(200, 220, 240, 0.7);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-family: var(--font-body, 'Cormorant Garamond', Georgia, serif);
+}
+
+/* Legacy loading spinner (kept for compatibility) */
 .loading-spinner {
     display: inline-flex;
     align-items: center;
@@ -4346,16 +4394,6 @@ body.page-weekly-lineup .th-filter-dropdown.weekly-lineup-filter-dropdown .team-
 
 @keyframes spin {
     to { transform: rotate(360deg); }
-}
-
-/* Pulsing dots animation for "Fetching..." text */
-.loading-cell {
-    text-align: center;
-    background: rgba(0, 20, 30, 0.2);
-}
-
-.loading-row {
-    /* No pulse animation for the row itself, keep it static and clean */
 }
 
 /* ==========================================================================

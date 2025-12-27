@@ -251,8 +251,13 @@
                     </tr>
                 </thead>
                 <tbody id="picks-tbody">
-                    <tr class="loading-row" aria-busy="true">
-                        <td colspan="8" class="loading-cell"><span class="loading-spinner" aria-label="Loading picks...">Loading picks...</span></td>
+                    <tr class="empty-state-row" aria-busy="true">
+                        <td colspan="8" class="empty-state-cell">
+                            <div class="empty-state">
+                                <span class="empty-icon">📊</span>
+                                <span class="empty-message">Loading picks...</span>
+                            </div>
+                        </td>
                     </tr>
                 </tbody>
             </table>
