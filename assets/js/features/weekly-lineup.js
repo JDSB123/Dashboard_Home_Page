@@ -389,27 +389,12 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
     // Update last fetched timestamp display
     function updateLastFetchedTime(league = 'all', count = null) {
-        const el = document.getElementById('ft-last-fetched');
+        const el = document.getElementById('ft-last-refreshed');
         if (el) {
             const now = new Date();
             const timeStr = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-
-            // Update state
             lastFetchTimes[league] = timeStr;
-
-            // Format league name
-            const leagueName = league === 'all' ? 'All Leagues' : league.toUpperCase().replace('NCAAB', 'NCAAM').replace('NCAAF', 'NCAAF');
-
-            // Build clean display with HTML structure
-            let html = `<span class="ft-league-name">${leagueName}</span><span class="ft-separator">·</span><span class="ft-time">${timeStr}</span>`;
-            if (count !== null) {
-                const countText = count === 0 ? 'No picks' : `${count} pick${count !== 1 ? 's' : ''}`;
-                html += `<span class="ft-separator">·</span><span class="ft-count">${countText}</span>`;
-            }
-
-            el.innerHTML = html;
-            el.classList.remove('fetching');
-            el.classList.toggle('has-data', count > 0);
+            el.textContent = `Last refreshed ${timeStr}`;
         }
     }
 
@@ -1371,48 +1356,12 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
         // Individual Fetch Buttons - one per league
         toolbar.querySelectorAll('.ft-fetch-league-btn').forEach(btn => {
-            // Add hover listener to show last fetch time for this league
-            btn.addEventListener('mouseenter', () => {
-                const fetchType = btn.dataset.fetch;
-                const time = lastFetchTimes[fetchType];
-                const el = document.getElementById('ft-last-fetched');
-                if (!el) return;
-
-                const leagueName = formatLeagueName(fetchType);
-                if (time) {
-                    el.innerHTML = `<span class="ft-league-name">${leagueName}</span><span class="ft-separator">·</span><span class="ft-time">Last updated ${time}</span>`;
-                    el.classList.add('has-data');
-                } else {
-                    el.innerHTML = `<span class="ft-league-name">${leagueName}</span><span class="ft-separator">·</span><span class="ft-time">Not yet fetched today</span>`;
-                    el.classList.remove('has-data');
-                }
-                el.dataset.temp = "true";
-            });
-
-            btn.addEventListener('mouseleave', () => {
-                const el = document.getElementById('ft-last-fetched');
-                if (el && el.dataset.temp === "true") {
-                    el.dataset.temp = "false";
-                    el.innerHTML = '<span class="ft-league-name">Select a league to fetch picks</span>';
-                    el.classList.remove('has-data', 'fetching');
-                }
-            });
-
             btn.addEventListener('click', async () => {
                 const fetchType = btn.dataset.fetch;
 
                 // Add loading state
                 btn.classList.add('loading');
                 const originalContent = btn.innerHTML;
-
-                // Update status text to show loading
-                const el = document.getElementById('ft-last-fetched');
-                if (el) {
-                    const leagueName = formatLeagueName(fetchType);
-                    el.textContent = `Fetching ${leagueName}...`;
-                    el.classList.add('fetching');
-                    el.classList.remove('has-data');
-                }
                 
                 console.log(`🔄 [Weekly Lineup] Fetching picks: ${fetchType}`);
 
@@ -1478,12 +1427,6 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                 } catch (err) {
                     console.error('[Weekly Lineup] Fetch error:', err);
                     btn.innerHTML = '<span style="color:#ff6b6b; font-weight:bold;">✕</span>';
-
-                    const el = document.getElementById('ft-last-fetched');
-                    if (el) {
-                        el.textContent = 'Fetch error  ·  Please try again';
-                        el.classList.remove('fetching', 'has-data');
-                    }
 
                     setTimeout(() => {
                         btn.innerHTML = originalContent;

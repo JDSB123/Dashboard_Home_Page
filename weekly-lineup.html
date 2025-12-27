@@ -259,14 +259,16 @@
                 </div>
                 <div class="ft-right">
                     <div class="fetch-controls-wrapper">
-                        <span class="ft-last-fetched" id="ft-last-fetched">Select a league to fetch picks</span>
                         <div class="ft-fetch-buttons">
-                            <button class="ft-fetch-league-btn ft-fetch-all" data-fetch="all" title="Refresh All">
-                                <svg class="refresh-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
-                                </svg>
-                                <span>All</span>
-                            </button>
+                            <div class="ft-all-group">
+                                <button class="ft-fetch-league-btn ft-fetch-all" data-fetch="all" title="Refresh All">
+                                    <svg class="refresh-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+                                    </svg>
+                                    <span>All</span>
+                                </button>
+                                <span class="ft-last-refreshed" id="ft-last-refreshed"></span>
+                            </div>
                             <div class="fetch-separator"></div>
                             <button class="ft-fetch-league-btn" data-fetch="nba" title="Fetch NBA">
                                 <img src="https://a.espncdn.com/i/teamlogos/leagues/500/nba.png" class="league-logo-sm" alt="NBA">
