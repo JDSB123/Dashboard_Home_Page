@@ -543,13 +543,13 @@
         const isSingleTeamBet = !pick.homeTeam || homeTeam === 'TBD';
 
         const awayLogoHtml = awayInfo.logo 
-            ? `<img src="${awayInfo.logo}" class="team-logo" loading="lazy" alt="${awayInfo.abbr}" onerror="this.style.display='none'">`
+            ? `<img src="${awayInfo.logo}" class="team-logo" alt="${awayInfo.abbr}" onerror="this.style.display='none'">`
             : '';
         const homeLogoHtml = homeInfo.logo 
-            ? `<img src="${homeInfo.logo}" class="team-logo" loading="lazy" alt="${homeInfo.abbr}" onerror="this.style.display='none'">`
+            ? `<img src="${homeInfo.logo}" class="team-logo" alt="${homeInfo.abbr}" onerror="this.style.display='none'">`
             : '';
         const pickLogoHtml = pickTeamInfo.logo
-            ? `<img src="${pickTeamInfo.logo}" class="pick-team-logo" loading="lazy" alt="${pickTeamInfo.abbr}" onerror="this.style.display='none'">`
+            ? `<img src="${pickTeamInfo.logo}" class="pick-team-logo" alt="${pickTeamInfo.abbr}" onerror="this.style.display='none'">`
             : '';
 
         const matchupHtml = isSingleTeamBet 
@@ -600,7 +600,7 @@
                 <div class="boxscore-row">
                     <div class="boxscore-cell team-cell">
                         <div class="boxscore-team">
-                            ${awayInfo.logo ? `<img src="${awayInfo.logo}" class="boxscore-team-logo" loading="lazy" alt="${awayInfo.abbr}" onerror="this.style.display='none'">` : ''}
+                            ${awayInfo.logo ? `<img src="${awayInfo.logo}" class="boxscore-team-logo"  alt="${awayInfo.abbr}" onerror="this.style.display='none'">` : ''}
                             <span class="boxscore-team-abbr">${awayInfo.abbr}</span>
                         </div>
                     </div>
@@ -615,7 +615,7 @@
                 <div class="boxscore-row">
                     <div class="boxscore-cell team-cell">
                         <div class="boxscore-team">
-                            ${homeInfo.logo ? `<img src="${homeInfo.logo}" class="boxscore-team-logo" loading="lazy" alt="${homeInfo.abbr}" onerror="this.style.display='none'">` : ''}
+                            ${homeInfo.logo ? `<img src="${homeInfo.logo}" class="boxscore-team-logo"  alt="${homeInfo.abbr}" onerror="this.style.display='none'">` : ''}
                             <span class="boxscore-team-abbr">${homeInfo.abbr}</span>
                         </div>
                     </div>
@@ -636,7 +636,7 @@
                 <div class="boxscore-row">
                     <div class="boxscore-cell team-cell">
                         <div class="boxscore-team">
-                            ${awayInfo.logo ? `<img src="${awayInfo.logo}" class="boxscore-team-logo" loading="lazy" alt="${awayInfo.abbr}" onerror="this.style.display='none'">` : ''}
+                            ${awayInfo.logo ? `<img src="${awayInfo.logo}" class="boxscore-team-logo"  alt="${awayInfo.abbr}" onerror="this.style.display='none'">` : ''}
                             <span class="boxscore-team-abbr">${awayInfo.abbr}</span>
                         </div>
                     </div>
@@ -649,7 +649,7 @@
                 <div class="boxscore-row">
                     <div class="boxscore-cell team-cell">
                         <div class="boxscore-team">
-                            ${homeInfo.logo ? `<img src="${homeInfo.logo}" class="boxscore-team-logo" loading="lazy" alt="${homeInfo.abbr}" onerror="this.style.display='none'">` : ''}
+                            ${homeInfo.logo ? `<img src="${homeInfo.logo}" class="boxscore-team-logo"  alt="${homeInfo.abbr}" onerror="this.style.display='none'">` : ''}
                             <span class="boxscore-team-abbr">${homeInfo.abbr}</span>
                         </div>
                     </div>
