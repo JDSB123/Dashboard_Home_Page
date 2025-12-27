@@ -274,11 +274,10 @@
                         const fl = filterLeague.toLowerCase();
                         // Direct match
                         if (rowLeague === fl) return true;
-                        // Handle college variations
-                        if (fl === 'ncaaf' && (rowLeague === 'college' || rowLeague === 'cfb' || rowLeague.includes('college football') || rowLeague.includes('ncaaf'))) return true;
-                        if (fl === 'ncaab' && (rowLeague === 'ncaam' || rowLeague === 'cbb' || rowLeague.includes('college basketball') || rowLeague.includes('ncaab') || rowLeague.includes('ncaam'))) return true;
-                        // Partial match (e.g., filter="nba" matches data-league="nba basketball")
-                        if (rowLeague.includes(fl) || fl.includes(rowLeague)) return true;
+                        // Handle college football variations
+                        if (fl === 'ncaaf' && (rowLeague === 'college' || rowLeague === 'cfb' || rowLeague === 'college football' || rowLeague === 'ncaa football')) return true;
+                        // Handle college basketball variations
+                        if (fl === 'ncaab' && (rowLeague === 'ncaam' || rowLeague === 'cbb' || rowLeague === 'college basketball' || rowLeague === 'ncaa basketball')) return true;
                         return false;
                     });
                     if (!matchesLeague) show = false;

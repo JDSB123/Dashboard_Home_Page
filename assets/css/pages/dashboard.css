@@ -420,10 +420,15 @@ body.page-active-picks .th-sort-btn {
     justify-content: center;
     text-align: center;
     width: 100%;
-    padding: 6px 24px 6px 6px !important; /* increased vertical padding for wrapped text */
+    padding: 6px !important; /* equal padding for centered text */
     gap: 0;
     min-height: unset;
     position: relative;
+}
+
+/* Headers with kebab filter button - add extra right padding for kebab space */
+body.page-active-picks .th-filterable .th-sort-btn {
+    padding-right: 2px !important; /* minimal padding since kebab is positioned separately */
 }
 
 /* Header main text styling (matches weekly lineup) */
