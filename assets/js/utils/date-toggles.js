@@ -134,6 +134,10 @@
     function initializeCustomCalendarCard() {
         const calendarCard = document.getElementById('custom-calendar-card');
         if (!calendarCard) return;
+        if (calendarCardInitialized) {
+            renderCalendarCard();
+            return;
+        }
         
         const startDisplay = document.getElementById('date-range-start-display');
         const endDisplay = document.getElementById('date-range-end-display');
@@ -339,6 +343,7 @@
         calendarMonthCursor.setDate(1);
         updateDisplayFromSelected();
         renderCalendarCard();
+        calendarCardInitialized = true;
     }
 
     /**
@@ -472,6 +477,7 @@
     // Calendar card state
     let calendarCardStartDate = null;
     let calendarCardEndDate = null;
+    let calendarCardInitialized = false;
 
     function formatISODate(date) {
         const y = date.getFullYear();
