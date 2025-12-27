@@ -15,103 +15,8 @@
     <!-- CSS: Bundled for performance -->
     <link rel="stylesheet" href="dist/bundle.min.css?v=33.00.4">
     <!-- CSS: Page specific overrides (Hotfix for UI) -->
-    <link rel="stylesheet" href="assets/css/pages/weekly-lineup.css?v=33.00.4">
-    
-    <!-- Column alignment fix - uses colgroup for widths, CSS for padding/alignment -->
-    <style>
-        /* Table structure */
-        .weekly-lineup-table {
-            table-layout: fixed !important;
-            width: 100% !important;
-        }
-
-        /* CRITICAL: Force table-cell display on ALL cells - fixes alignment */
-        .weekly-lineup-table thead th,
-        .weekly-lineup-table tbody td,
-        .weekly-lineup-table tbody td.center {
-            display: table-cell !important;
-            padding: 4px 8px !important; /* Compact row height */
-            text-align: center !important;
-            vertical-align: middle !important;
-            box-sizing: border-box !important;
-            white-space: nowrap !important; /* Single line - no wrapping */
-        }
-
-        /* Header cell content - keep it simple, centered */
-        .weekly-lineup-table thead th .th-header-shell {
-            display: flex !important;
-            flex-direction: column !important;
-            justify-content: center !important;
-            align-items: center !important;
-            padding: 0 !important;
-        }
-        .weekly-lineup-table thead th .th-sort-btn {
-            padding: 0 !important;
-            margin: 0 !important;
-            background: none !important;
-            border: none !important;
-            /* Sorting buttons should NOT have dropdown functionality */
-            pointer-events: auto !important;
-        }
-        /* Keep header subtext visible for CST and (away vs home) */
-        .weekly-lineup-table thead th .header-subtext {
-            display: block !important;
-            font-size: 0.65rem !important;
-            color: rgba(200, 215, 225, 0.7) !important;
-            margin-top: 2px !important;
-        }
-        /* Sort icon - allow external CSS to position */
-        .weekly-lineup-table thead th .sort-icon {
-            font-size: 14px !important;
-            font-weight: bold !important;
-        }
-        /* Filter buttons - separate from sort buttons */
-        .weekly-lineup-table thead th .th-filter-btn {
-            position: absolute !important;
-            right: 2px !important;
-            top: 50% !important;
-            transform: translateY(-50%) !important;
-        }
-
-        /* Body cell content - single line, no wrapping */
-        .weekly-lineup-table tbody td {
-            white-space: nowrap !important;
-            overflow: hidden !important;
-            text-overflow: ellipsis !important;
-        }
-        /* Pick cell - force single line horizontal layout */
-        .weekly-lineup-table tbody td .pick-cell {
-            display: inline-flex !important;
-            flex-direction: row !important;
-            flex-wrap: nowrap !important;
-            align-items: center !important;
-            gap: 0.35rem !important;
-            white-space: nowrap !important;
-        }
-        .weekly-lineup-table tbody td .pick-cell * {
-            white-space: nowrap !important;
-            display: inline !important;
-        }
-        .weekly-lineup-table tbody td .pick-cell img {
-            display: inline-block !important;
-            width: 20px !important;
-            height: 20px !important;
-            flex-shrink: 0 !important;
-        }
-        .weekly-lineup-table tbody td .league-cell,
-        .weekly-lineup-table tbody td .datetime-cell {
-            display: inline-flex !important;
-            flex-direction: column !important;
-            align-items: center !important;
-            justify-content: center !important;
-        }
-        /* Ensure league logo is reasonably sized */
-        .weekly-lineup-table tbody td .league-logo {
-            width: 24px !important;
-            height: 24px !important;
-            object-fit: contain !important;
-        }
-    </style>
+    <link rel="stylesheet" href="assets/css/pages/weekly-lineup.css?v=33.01.0">
+    <!-- Styles consolidated in weekly-lineup.css v33.01.0 -->
     
     <!-- Silence console output in production BEFORE any other deferred scripts run -->
     <script src="assets/js/core/debug-config.js?v=33.00.0" defer></script>
@@ -123,57 +28,7 @@
     <script src="assets/js/features/ncaam-picks-fetcher.js?v=33.00.0" defer></script>
     <script src="assets/js/features/nfl-picks-fetcher.js?v=33.00.0" defer></script>
     <script src="assets/js/features/ncaaf-picks-fetcher.js?v=33.00.0" defer></script>
-    <script src="assets/js/features/unified-picks-fetcher.js?v=33.00.0" defer></script>
-    <style>
-        /* Force background image visibility */
-        body.page-weekly-lineup {
-            background-image: url('assets/JB_Bearish_Market_FULL_page.png') !important;
-            background-size: cover !important;
-            background-position: center top !important;
-            background-attachment: fixed !important;
-        }
-        /* Override forced transparency to match Odds Market semi-transparency */
-        body.page-weekly-lineup .weekly-lineup-table-wrapper {
-            background: rgba(5, 12, 22, 0.40) !important;
-            border: none !important;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3) !important;
-            border-radius: 8px !important;
-            margin-top: 0 !important;
-        }
-        /* Remove black fill from filter toolbar */
-        body.page-weekly-lineup .filter-toolbar {
-            background: transparent !important;
-            border-bottom: none !important;
-            box-shadow: none !important;
-        }
-        /* Ensure toolbar container is transparent */
-        body.page-weekly-lineup .toolbar-container {
-            background: transparent !important;
-            margin-bottom: 0 !important;
-        }
-        body.page-weekly-lineup .main-container {
-            margin-top: 12px !important;
-        }
-        /* Override forced transparency to match Odds Market semi-transparency */
-        body.page-weekly-lineup .weekly-lineup-table-wrapper {
-            background: rgba(5, 12, 22, 0.40) !important;
-            border: none !important;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3) !important;
-            border-radius: 8px !important;
-            margin-top: 0 !important;
-            margin-left: 0.75in !important;
-            margin-right: 0.75in !important;
-            width: calc(100% - 1.5in) !important;
-        }
-        /* Align branding logo with left edge */
-        body.page-weekly-lineup .dashboard-topline {
-            padding-left: 0.75in !important;
-            padding-right: 0.75in !important;
-        }
-        body.page-weekly-lineup .brand-header-inline {
-            padding-left: 0 !important; /* Remove internal padding to align perfectly */
-        }
-    </style>
+    <script src="assets/js/features/unified-picks-fetcher.js?v=33.01.0" defer></script>
 </head>
 <body class="page-glow page-weekly-lineup">
 <noscript>

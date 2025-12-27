@@ -1,24 +1,45 @@
 /**
- * Unified Picks Fetcher v1.1
+ * Unified Picks Fetcher v1.2
  * Orchestrates fetching picks from all model APIs and adds them to the weekly lineup
  * Supports date-specific fetching
+ *
+ * Production-ready: No demo/placeholder data fallback
  */
 
 (function() {
     'use strict';
 
+    // Helper to check if debug mode is enabled
+    const isDebugMode = () => window.APP_CONFIG?.DEBUG_MODE === true;
+
+    // Debug-gated logging
+    const debugLog = (...args) => {
+        if (isDebugMode()) console.log(...args);
+    };
+    const debugWarn = (...args) => {
+        if (isDebugMode()) console.warn(...args);
+    };
+    const debugError = (...args) => {
+        // Always log errors, but with less verbosity in production
+        if (isDebugMode()) {
+            console.error(...args);
+        } else {
+            console.error(args[0]); // Only first arg in production
+        }
+    };
+
     /**
      * Fetch picks from all or specific league APIs
      * @param {string} league - 'all', 'nba', 'ncaam', 'nfl', 'ncaaf'
      * @param {string} date - 'today', 'tomorrow', or 'YYYY-MM-DD' (default: 'today')
-     * @returns {Promise<Array>} Array of formatted picks
+     * @returns {Promise<Object>} Object with picks array, errors, and metadata
      */
     const fetchPicks = async function(league = 'all', date = 'today') {
-        const allPicks = [];
+        let allPicks = [];
         const errors = [];
         const leagueUpper = league.toUpperCase();
 
-        console.log(`[UNIFIED-FETCHER] Fetching picks for: ${league}, date: ${date}`);
+        debugLog(`[UNIFIED-FETCHER] Fetching picks for: ${league}, date: ${date}`);
 
         // NBA
         if (league === 'all' || leagueUpper === 'NBA') {
@@ -30,10 +51,10 @@
                     plays.forEach(play => {
                         allPicks.push(window.NBAPicksFetcher.formatPickForTable(play));
                     });
-                    console.log(`[UNIFIED-FETCHER] NBA: ${plays.length} picks`);
+                    debugLog(`[UNIFIED-FETCHER] NBA: ${plays.length} picks`);
                 }
             } catch (e) {
-                console.error('[UNIFIED-FETCHER] NBA fetch error:', e.message);
+                debugError('[UNIFIED-FETCHER] NBA fetch error:', e.message);
                 errors.push({ league: 'NBA', error: e.message });
             }
         }
@@ -46,7 +67,7 @@
                     try {
                         data = await window.NCAAMPicksFetcher.fetchPicks(date);
                     } catch (containerError) {
-                        console.warn('[UNIFIED-FETCHER] NCAAM container app failed, trying main API:', containerError.message);
+                        debugWarn('[UNIFIED-FETCHER] NCAAM container app failed, trying main API:', containerError.message);
                         // Fallback to main API
                         const mainApiUrl = `${window.APP_CONFIG?.API_BASE_URL || 'https://green-bier-picks-api.azurewebsites.net/api'}/picks?league=ncaam`;
                         const response = await fetch(mainApiUrl);
@@ -58,10 +79,10 @@
                     picks.forEach(pick => {
                         allPicks.push(window.NCAAMPicksFetcher.formatPickForTable(pick));
                     });
-                    console.log(`[UNIFIED-FETCHER] NCAAM: ${picks.length} picks`);
+                    debugLog(`[UNIFIED-FETCHER] NCAAM: ${picks.length} picks`);
                 }
             } catch (e) {
-                console.error('[UNIFIED-FETCHER] NCAAM fetch error:', e.message);
+                debugError('[UNIFIED-FETCHER] NCAAM fetch error:', e.message);
                 errors.push({ league: 'NCAAM', error: e.message });
             }
         }
@@ -74,7 +95,7 @@
                     try {
                         data = await window.NFLPicksFetcher.fetchPicks(date);
                     } catch (containerError) {
-                        console.warn('[UNIFIED-FETCHER] NFL container app failed, trying main API:', containerError.message);
+                        debugWarn('[UNIFIED-FETCHER] NFL container app failed, trying main API:', containerError.message);
                         // Fallback to main API
                         const mainApiUrl = `${window.APP_CONFIG?.API_BASE_URL || 'https://green-bier-picks-api.azurewebsites.net/api'}/picks?league=nfl`;
                         const response = await fetch(mainApiUrl);
@@ -86,10 +107,10 @@
                     picks.forEach(pick => {
                         allPicks.push(window.NFLPicksFetcher.formatPickForTable(pick));
                     });
-                    console.log(`[UNIFIED-FETCHER] NFL: ${picks.length} picks`);
+                    debugLog(`[UNIFIED-FETCHER] NFL: ${picks.length} picks`);
                 }
             } catch (e) {
-                console.error('[UNIFIED-FETCHER] NFL fetch error:', e.message);
+                debugError('[UNIFIED-FETCHER] NFL fetch error:', e.message);
                 errors.push({ league: 'NFL', error: e.message });
             }
         }
@@ -102,7 +123,7 @@
                     try {
                         data = await window.NCAAFPicksFetcher.fetchPicks(date);
                     } catch (containerError) {
-                        console.warn('[UNIFIED-FETCHER] NCAAF container app failed, trying main API:', containerError.message);
+                        debugWarn('[UNIFIED-FETCHER] NCAAF container app failed, trying main API:', containerError.message);
                         // Fallback to main API
                         const mainApiUrl = `${window.APP_CONFIG?.API_BASE_URL || 'https://green-bier-picks-api.azurewebsites.net/api'}/picks?league=ncaaf`;
                         const response = await fetch(mainApiUrl);
@@ -114,31 +135,26 @@
                     predictions.forEach(pick => {
                         allPicks.push(window.NCAAFPicksFetcher.formatPickForTable(pick));
                     });
-                    console.log(`[UNIFIED-FETCHER] NCAAF: ${predictions.length} picks`);
+                    debugLog(`[UNIFIED-FETCHER] NCAAF: ${predictions.length} picks`);
                 }
             } catch (e) {
-                console.error('[UNIFIED-FETCHER] NCAAF fetch error:', e.message);
+                debugError('[UNIFIED-FETCHER] NCAAF fetch error:', e.message);
                 errors.push({ league: 'NCAAF', error: e.message });
             }
         }
 
-        // ===== FINAL FALLBACK: DEMO DATA =====
-        // If all APIs failed and we have no picks, provide demo data
-        let fallbackUsed = false;
-        if (allPicks.length === 0 && errors.length > 0) {
-            console.warn('[UNIFIED-FETCHER] All APIs failed, falling back to demo data');
-            allPicks = getDemoPicks();
-            fallbackUsed = true;
-        }
+        // Production mode: No demo data fallback - show actual API status to users
+        // If all APIs failed, the errors array will contain details for user notification
+        const allApisFailed = allPicks.length === 0 && errors.length > 0;
 
-        console.log(`[UNIFIED-FETCHER] Total picks fetched: ${allPicks.length}`);
+        debugLog(`[UNIFIED-FETCHER] Total picks fetched: ${allPicks.length}`);
 
         return {
             picks: allPicks,
             errors: errors,
             date: date,
             timestamp: new Date().toISOString(),
-            fallbackUsed: fallbackUsed
+            allApisFailed: allApisFailed
         };
     };
 
@@ -149,6 +165,33 @@
      */
     const fetchAndDisplayPicks = async function(league = 'all', date = 'today') {
         const result = await fetchPicks(league, date);
+
+        // Handle API failures - notify user
+        if (result.allApisFailed) {
+            const failedLeagues = result.errors.map(e => e.league).join(', ');
+            if (window.WeeklyLineup?.showNotification) {
+                window.WeeklyLineup.showNotification(
+                    `Unable to load picks. API unavailable for: ${failedLeagues}`,
+                    'error'
+                );
+            }
+            // Show empty state in table
+            if (window.WeeklyLineup?.showEmptyState) {
+                window.WeeklyLineup.showEmptyState('No picks available. Please try again later.');
+            }
+            return result;
+        }
+
+        // Handle partial failures - warn user but continue
+        if (result.errors.length > 0 && result.picks.length > 0) {
+            const failedLeagues = result.errors.map(e => e.league).join(', ');
+            if (window.WeeklyLineup?.showNotification) {
+                window.WeeklyLineup.showNotification(
+                    `Some leagues unavailable: ${failedLeagues}`,
+                    'warning'
+                );
+            }
+        }
 
         // Use WeeklyLineup.populateTable if available (weekly lineup page)
         if (window.WeeklyLineup?.populateTable && result.picks.length > 0) {
@@ -190,11 +233,16 @@
             formattedPicks.sort((a, b) => b.edge - a.edge);
 
             window.WeeklyLineup.populateTable(formattedPicks);
-            console.log(`[UNIFIED-FETCHER] Populated table with ${formattedPicks.length} picks`);
+            debugLog(`[UNIFIED-FETCHER] Populated table with ${formattedPicks.length} picks`);
 
-            // Show notification
+            // Show success notification
             if (window.WeeklyLineup.showNotification) {
-                window.WeeklyLineup.showNotification(`Loaded ${formattedPicks.length} picks from API`, 'success');
+                window.WeeklyLineup.showNotification(`Loaded ${formattedPicks.length} picks`, 'success');
+            }
+        } else if (result.picks.length === 0) {
+            // No picks available (but no errors either - just no games today)
+            if (window.WeeklyLineup?.showEmptyState) {
+                window.WeeklyLineup.showEmptyState('No picks available for the selected date.');
             }
         }
 
@@ -224,84 +272,6 @@
         return health;
     };
 
-    // ===== DEMO DATA FALLBACK =====
-    function getDemoPicks() {
-        const now = new Date();
-        const hour = 60 * 60 * 1000;
-
-        return [
-            // NBA Demo Picks
-            {
-                game: 'Los Angeles Lakers @ Golden State Warriors',
-                time: '7:00 PM',
-                sport: 'NBA',
-                league: 'NBA',
-                pick: 'Lakers',
-                market: 'spread',
-                line: '+4.5',
-                odds: '-110',
-                edge: '4.2%',
-                confidence: 3,
-                status: 'pending'
-            },
-            {
-                game: 'Boston Celtics @ Miami Heat',
-                time: '8:00 PM',
-                sport: 'NBA',
-                league: 'NBA',
-                pick: 'Celtics',
-                market: 'moneyline',
-                line: '',
-                odds: '-150',
-                edge: '3.8%',
-                confidence: 3,
-                status: 'pending'
-            },
-            // NCAAM Demo Picks
-            {
-                game: 'Duke Blue Devils @ North Carolina Tar Heels',
-                time: '6:00 PM',
-                sport: 'NCAAB',
-                league: 'NCAAM',
-                pick: 'Duke',
-                market: 'spread',
-                line: '+2.5',
-                odds: '-110',
-                edge: '5.1%',
-                confidence: 4,
-                status: 'pending'
-            },
-            // NFL Demo Picks
-            {
-                game: 'Kansas City Chiefs @ Buffalo Bills',
-                time: '1:00 PM',
-                sport: 'NFL',
-                league: 'NFL',
-                pick: 'Chiefs',
-                market: 'spread',
-                line: '-3.5',
-                odds: '-110',
-                edge: '4.7%',
-                confidence: 4,
-                status: 'pending'
-            },
-            // NCAAF Demo Picks
-            {
-                game: 'Alabama Crimson Tide @ Georgia Bulldogs',
-                time: '3:30 PM',
-                sport: 'NCAAF',
-                league: 'NCAAF',
-                pick: 'Alabama',
-                market: 'spread',
-                line: '-6.5',
-                odds: '-110',
-                edge: '6.2%',
-                confidence: 5,
-                status: 'pending'
-            }
-        ];
-    }
-
     // Export
     window.UnifiedPicksFetcher = {
         fetchPicks,
@@ -309,6 +279,6 @@
         checkAllHealth
     };
 
-    console.log('UnifiedPicksFetcher v1.1 loaded');
+    debugLog('UnifiedPicksFetcher v1.2 loaded');
 
 })();

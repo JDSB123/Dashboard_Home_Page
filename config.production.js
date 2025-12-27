@@ -5,14 +5,14 @@
  * Repository:  github.com/JDSB123/Dashboard_Home_Page
  * Azure RG:    Dashboard_Home_Page (eastus)
  * Owner:       jb@greenbiercapital.com
- * Version:     33.00.0
+ * Version:     33.01.0
  * ═══════════════════════════════════════════════════════════════════════════
  */
 
 window.APP_CONFIG = Object.freeze({
   // Project Identification
   PROJECT_NAME: 'Dashboard_Home_Page',
-  VERSION: '33.00.0',
+  VERSION: '33.01.0',
   ENVIRONMENT: 'production',
 
   // Azure Configuration
