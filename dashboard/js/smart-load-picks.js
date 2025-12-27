@@ -1442,7 +1442,8 @@ function buildPickRow(pick, index) {
     if (parsedPick.pickType) {
         const pt = parsedPick.pickType.toLowerCase();
         if (pt === 'over' || pt === 'under') {
-            normalizedPickType = 'total';
+            // Distinguish between team totals and game totals
+            normalizedPickType = parsedPick.isTeamTotal ? 'tt' : 'total';
         } else if (pt === 'moneyline') {
             normalizedPickType = 'moneyline';
         } else if (pt === 'spread') {

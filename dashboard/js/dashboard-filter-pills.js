@@ -359,6 +359,64 @@
 
 
     /**
+     * Check if a single row passes all active filters
+     * Used by PicksTableRenderer for consistent filtering
+     * @param {HTMLElement} row - Table row element
+     * @returns {boolean} - Whether the row should be visible
+     */
+    function passesAllFilters(row) {
+        if (!row) return true;
+
+        // League filter (multi-select)
+        if (activeFilters.leagues.length > 0) {
+            const rowLeague = (row.getAttribute('data-league') || '').toLowerCase().trim();
+            const leagueMatches = activeFilters.leagues.some(filterLeague => {
+                const fl = filterLeague.toLowerCase().trim();
+                if (rowLeague === fl) return true;
+                if (fl === 'ncaaf' && (rowLeague === 'college' || rowLeague === 'cfb' || rowLeague.includes('college football') || rowLeague.includes('ncaa football'))) return true;
+                if (fl === 'ncaab' && (rowLeague === 'ncaam' || rowLeague === 'cbb' || rowLeague.includes('college basketball') || rowLeague.includes('ncaa basketball'))) return true;
+                return false;
+            });
+            if (!leagueMatches) return false;
+        }
+
+        // Segment filter
+        if (activeFilters.segment) {
+            const rowSegment = row.getAttribute('data-segment') || '';
+            const normalizedRowSegment = normalizeSegmentForFilter(rowSegment);
+            const normalizedFilterSegment = activeFilters.segment.toLowerCase().trim();
+            if (normalizedRowSegment !== normalizedFilterSegment) return false;
+        }
+
+        // Pick type filter
+        if (activeFilters.pick) {
+            const rowPickType = row.getAttribute('data-pick-type') || '';
+            const normalizedRowPickType = normalizePickTypeForFilter(rowPickType);
+            const normalizedFilterPickType = activeFilters.pick.toLowerCase().trim();
+            if (normalizedRowPickType !== normalizedFilterPickType) return false;
+        }
+
+        // Status filter
+        if (activeFilters.status) {
+            const rowStatus = (row.getAttribute('data-status') || '').toLowerCase().trim();
+            const filterStatus = activeFilters.status.toLowerCase().trim();
+            let statusMatches = false;
+            if (rowStatus === filterStatus) {
+                statusMatches = true;
+            } else if (filterStatus === 'win' && (rowStatus === 'won' || rowStatus === 'win')) {
+                statusMatches = true;
+            } else if (filterStatus === 'loss' && (rowStatus === 'lost' || rowStatus === 'loss')) {
+                statusMatches = true;
+            } else if (filterStatus === 'pending' && (rowStatus === 'pending' || rowStatus === 'live' || rowStatus === 'on-track' || rowStatus === 'at-risk')) {
+                statusMatches = true;
+            }
+            if (!statusMatches) return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Clear all filters
      */
     function clearAllFilters() {
@@ -421,7 +479,8 @@
     // Export for external access
     window.DashboardFilterPills = {
         applyFilters,
-        clearAllFilters
+        clearAllFilters,
+        passesAllFilters
     };
 
 })();

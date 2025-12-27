@@ -287,41 +287,6 @@
                 </div>
             </div>
             
-            <!-- Model Execution Controls -->
-            <div class="model-controls-section" id="model-controls">
-                <div class="model-controls">
-                    <div class="model-controls-label">Run Analysis</div>
-                    <div class="model-control-buttons">
-                        <button class="btn-execute model-btn" data-model="nba" aria-label="Run NBA Analysis">
-                            <span class="model-icon">🏀</span>
-                            <span>NBA</span>
-                        </button>
-                        <button class="btn-execute model-btn" data-model="ncaam" aria-label="Run NCAAM Analysis">
-                            <span class="model-icon">🎓</span>
-                            <span>NCAAM</span>
-                        </button>
-                        <button class="btn-execute model-btn" data-model="nfl" aria-label="Run NFL Analysis">
-                            <span class="model-icon">🏈</span>
-                            <span>NFL</span>
-                        </button>
-                        <button class="btn-execute model-btn" data-model="ncaaf" aria-label="Run NCAAF Analysis">
-                            <span class="model-icon">🏟️</span>
-                            <span>NCAAF</span>
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Model Execution Status Display -->
-                <div class="execution-status" id="model-status" style="display: none;">
-                    <div class="status-header">
-                        <span class="status-title">Model Execution Status</span>
-                        <button class="status-close" id="status-close" aria-label="Close status">×</button>
-                    </div>
-                    <div class="status-jobs" id="status-jobs">
-                        <!-- Job status items will be dynamically inserted here -->
-                    </div>
-                </div>
-            </div>
         </header>
 
         <!-- ===== Main Dashboard Layout ===== -->
@@ -511,11 +476,6 @@
     <script src="assets/js/features/unified-picks-fetcher.js?v=20251225" defer></script>
     <script src="assets/js/features/pick-standardizer.js?v=20251224-3" defer></script>
     <script src="assets/js/features/import-options.js?v=20251224-3" defer></script>
-
-    <!-- Model Execution Components -->
-    <script src="https://cdn.jsdelivr.net/npm/@microsoft/signalr@7/dist/browser/signalr.min.js"></script>
-    <script src="assets/js/features/model-executor.js?v=1.0.0" defer></script>
-    <script src="assets/js/features/model-ui-controller.js?v=1.0.0" defer></script>
 
     <!-- Dashboard-specific: Picks Manager for local development -->
     <script src="dashboard/js/local-picks-manager.js?v=20251227-1" defer></script>

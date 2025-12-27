@@ -123,9 +123,13 @@
             }
 
             rows.forEach(row => {
-                const shouldShow = window.PicksFilterManager ?
-                    window.PicksFilterManager.passesAllFilters(row) :
-                    true;
+                // Prioritize DashboardFilterPills for dashboard page filters
+                // Falls back to PicksFilterManager for other pages
+                const shouldShow = window.DashboardFilterPills?.passesAllFilters ?
+                    window.DashboardFilterPills.passesAllFilters(row) :
+                    (window.PicksFilterManager ?
+                        window.PicksFilterManager.passesAllFilters(row) :
+                        true);
 
                 row.style.display = shouldShow ? '' : 'none';
 

@@ -24,17 +24,7 @@ Created a complete Azure Functions app that serves as the central orchestration 
 
 ### 2. Dashboard UI Components
 
-#### Updated Files:
-- **`config.production.js`** - Added orchestrator and SignalR endpoints
-- **`dashboard.html`** - Added model execution controls UI
-- **`assets/js/features/model-executor.js`** - Core module for model execution
-- **`assets/js/features/model-ui-controller.js`** - UI interaction handler
-
-#### New UI Features:
-- Model execution buttons for NBA, NCAAM, NFL, NCAAF
-- Real-time status display showing job progress
-- Automatic picks refresh after model completion
-- SignalR integration for live updates
+Dashboard-triggered model execution UI has been removed (no “Run Analysis” buttons/status panel in `dashboard.html`).
 
 ### 3. CI/CD Pipeline
 
