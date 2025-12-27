@@ -394,7 +394,10 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             const now = new Date();
             const timeStr = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
             lastFetchTimes[league] = timeStr;
-            el.textContent = timeStr;
+            const syncSpan = el.querySelector('.sync-time');
+            if (syncSpan) {
+                syncSpan.textContent = timeStr;
+            }
         }
     }
 
