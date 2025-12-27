@@ -1605,7 +1605,6 @@ async function loadAndAppendPicks() {
         // Add each pick as a proper row
         picks.forEach((pick, index) => {
             try {
-                console.log(`[PICKS LOADER] Creating row ${index + 1} for:`, pick.description);
                 const row = buildPickRow(pick, index);
                 tbody.appendChild(row);
             } catch (error) {

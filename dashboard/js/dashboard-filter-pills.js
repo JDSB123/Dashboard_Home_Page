@@ -18,7 +18,6 @@
      * Initialize filter pill handlers
      */
     function initializeFilterPills() {
-        console.log('[DashboardFilterPills] Initializing filter pills...');
 
         const toolbar = document.getElementById('filter-toolbar');
         if (!toolbar) {
@@ -34,7 +33,6 @@
                 e.stopImmediatePropagation();
                 
                 const leagueValue = this.getAttribute('data-league');
-                console.log('[DashboardFilterPills] League pill clicked:', leagueValue);
 
                 // Ensure no dropdowns are open
                 toolbar.querySelectorAll('.ft-dropdown-menu').forEach(m => m.classList.remove('open'));
@@ -120,7 +118,6 @@
                 e.stopImmediatePropagation();
                 
                 const segmentValue = this.getAttribute('data-v');
-                console.log('[DashboardFilterPills] Segment dropdown item clicked:', segmentValue);
 
                 // Close dropdown
                 const menu = this.closest('.ft-dropdown-menu');
@@ -155,7 +152,6 @@
                 e.stopImmediatePropagation();
                 
                 const pickValue = this.getAttribute('data-v');
-                console.log('[DashboardFilterPills] Pick type dropdown item clicked:', pickValue);
 
                 // Close dropdown
                 const menu = this.closest('.ft-dropdown-menu');
@@ -191,7 +187,6 @@
                 e.stopImmediatePropagation();
                 
                 const statusValue = this.getAttribute('data-v');
-                console.log('[DashboardFilterPills] Status dropdown item clicked:', statusValue);
 
                 // Close dropdown
                 const menu = this.closest('.ft-dropdown-menu');
@@ -224,12 +219,10 @@
         if (clearBtn) {
             clearBtn.addEventListener('click', function(e) {
                 e.stopPropagation();
-                console.log('[DashboardFilterPills] Clear filters clicked');
                 clearAllFilters();
             });
         }
 
-        console.log('[DashboardFilterPills] Filter pills initialized');
     }
 
     /**
@@ -277,12 +270,9 @@
         
         const rows = tbody.querySelectorAll('tr');
         if (rows.length === 0) {
-            console.log('[DashboardFilterPills] No rows found in table');
+            console.warn('[DashboardFilterPills] No rows found in table');
             return;
         }
-        
-        console.log(`[DashboardFilterPills] Applying filters to ${rows.length} rows`);
-        console.log('[DashboardFilterPills] Active filters:', activeFilters);
         
         let visibleCount = 0;
 
@@ -305,7 +295,6 @@
                 });
                 if (!leagueMatches) {
                     shouldShow = false;
-                    if (index < 3) console.log(`[DashboardFilterPills] Row ${index} hidden by league filter. Row league: "${rowLeague}", Filter leagues:`, activeFilters.leagues);
                 }
             }
 
@@ -316,7 +305,6 @@
                 const normalizedFilterSegment = activeFilters.segment.toLowerCase().trim();
                 if (normalizedRowSegment !== normalizedFilterSegment) {
                     shouldShow = false;
-                    if (index < 3) console.log(`[DashboardFilterPills] Row ${index} hidden by segment filter. Row segment: "${rowSegment}" (normalized: "${normalizedRowSegment}"), Filter: "${normalizedFilterSegment}"`);
                 }
             }
 
@@ -327,7 +315,6 @@
                 const normalizedFilterPickType = activeFilters.pick.toLowerCase().trim();
                 if (normalizedRowPickType !== normalizedFilterPickType) {
                     shouldShow = false;
-                    if (index < 3) console.log(`[DashboardFilterPills] Row ${index} hidden by pick type filter. Row pick type: "${rowPickType}" (normalized: "${normalizedRowPickType}"), Filter: "${normalizedFilterPickType}"`);
                 }
             }
 
@@ -348,7 +335,6 @@
                 }
                 if (!statusMatches) {
                     shouldShow = false;
-                    if (index < 3) console.log(`[DashboardFilterPills] Row ${index} hidden by status filter. Row status: "${rowStatus}", Filter: "${filterStatus}"`);
                 }
             }
 
@@ -361,8 +347,6 @@
                 row.classList.add('filter-hidden');
             }
         });
-
-        console.log(`[DashboardFilterPills] Applied filters - ${visibleCount} rows visible`);
 
         // Update KPIs if function exists
         if (typeof window.updateKPIValues === 'function') {
