@@ -1674,7 +1674,8 @@ body.page-weekly-lineup .filter-title,
 /* ===== FILTER CHIPS WRAPPER ===== */
 .page-weekly-lineup .table-filter-chips-wrapper {
     position: relative;
-    margin-bottom: 12px;
+    /* When no chips are shown, keep the table tighter to the toolbar */
+    margin-bottom: 8px;
     margin-left: 24px;
     margin-right: 24px;
     z-index: 101; /* Above table z-index (100) */
@@ -1684,6 +1685,7 @@ body.page-weekly-lineup .filter-title,
 
 .page-weekly-lineup .table-filter-chips-wrapper:has([data-has-chips="true"]) {
     min-height: 60px;
+    margin-bottom: 12px;
 }
 
 /* ===== FILTER CHIPS ===== */
@@ -4429,7 +4431,8 @@ body.page-weekly-lineup .th-filter-dropdown.weekly-lineup-filter-dropdown .team-
 .filter-toolbar {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    /* Bottom-align fetch controls with filter pills */
+    align-items: flex-end;
     padding: 2px 0 0;
     margin: 0 0 -4px 0;
     /* Above sticky table header (which sits around z-index ~110) */
@@ -4765,19 +4768,21 @@ body.page-weekly-lineup .th-filter-dropdown.weekly-lineup-filter-dropdown .team-
 /* Fetch Status Display - Clean styled container */
 .ft-all-group {
     display: flex;
-    flex-direction: column;
+    /* Keep fetch controls the same height as the filter pills row */
+    flex-direction: row;
     align-items: center;
-    gap: 2px;
+    gap: 10px;
 }
 
 .ft-last-refreshed {
     font-family: var(--font-body), 'Cormorant Garamond', Georgia, serif;
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     color: rgba(200, 215, 225, 0.6);
     font-weight: 500;
     letter-spacing: 0.02em;
     white-space: nowrap;
-    margin-top: 2px;
+    margin-top: 0;
+    line-height: 1;
 }
 
 .ft-last-refreshed .sync-time {
