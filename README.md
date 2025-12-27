@@ -28,6 +28,18 @@ Key setting:
 
 Deploy the repository root as the app artifact (there is **no build step** required in this repo).
 
+## CI/CD (GitHub Actions → Azure)
+
+This repo includes an Azure Static Web Apps deployment workflow:
+- `.github/workflows/azure-static-web-apps.yml`
+
+To enable automatic deployments, add this GitHub repo secret:
+- `AZURE_STATIC_WEB_APPS_API_TOKEN` (Azure Portal → Static Web App → **Manage deployment token**)
+
+Behavior:
+- Pushes to `main` deploy to the production Static Web App
+- Pull requests create/update a preview environment and close it when the PR is closed
+
 ## Local dev
 
 Any static server works. Examples:
