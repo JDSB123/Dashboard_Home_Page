@@ -253,9 +253,10 @@
                 }
             } else {
                 calendarCardEndDate = dateObj;
-                // If end goes before start, shift start
+                // If end goes before start, clear start so user can re-pick
                 if (calendarCardStartDate && dateObj.getTime() < calendarCardStartDate.getTime()) {
-                    calendarCardStartDate = dateObj;
+                    calendarCardStartDate = null;
+                    setActiveTarget('start');
                 }
             }
             
