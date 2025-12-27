@@ -68,8 +68,10 @@
          * Initialize filter functionality
          */
         initializeFilters() {
-            // Filters removed from dashboard - no filter initialization needed
-            console.log('Filters removed from dashboard - skipping filter initialization');
+            // Initialize header filter buttons if on dashboard page
+            if (document.body.classList.contains('page-active-picks')) {
+                this.initHeaderFilters();
+            }
         },
 
         /**

@@ -820,7 +820,7 @@ body.page-active-picks .th-filter-btn.active span.kebab-dot {
 /* Sort icon descending state */
 body.page-active-picks th.sorted-desc .sort-icon,
 body.page-active-picks th[data-sort].sort-desc .sort-icon {
-    transform: translateY(-50%) rotate(180deg);
+    transform: rotate(180deg);
 }
 
 /* ==========================================================================
@@ -884,25 +884,42 @@ body.page-active-picks .picks-table thead th .th-sort-btn {
     width: 100%;
 }
 
-/* Sort icon - positioned on right edge, vertically centered */
+/* Sort icon - positioned at bottom-right like weekly lineup */
 body.page-active-picks .picks-table thead th .sort-icon {
-    position: absolute;
-    right: 4px;
-    top: 50%;
-    transform: translateY(-50%);
+    position: absolute !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    top: auto !important;
+    transform: none !important;
     margin-left: 0;
-    font-size: 10px;
-    opacity: 0.6;
+    font-size: 14px !important;
+    line-height: 1;
+    margin: 0;
+    opacity: 0.7;
+    font-weight: bold;
     pointer-events: none;
 }
 
-/* Filter button - positioned in header with high z-index for click priority */
+/* Filter button - positioned like weekly lineup (shifted left to avoid sort icon) */
 body.page-active-picks .picks-table thead th .th-filter-btn {
-    position: absolute;
-    right: 6px;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 1600;
+    position: absolute !important;
+    right: 18px !important; /* shifted left to avoid overlapping sort icon */
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    z-index: 102 !important;
+    pointer-events: auto !important;
+    width: 22px !important;
+    height: 22px !important;
+    min-width: 22px !important;
+    min-height: 22px !important;
+    cursor: pointer !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.15s ease !important;
 }
 
 /* Filter dropdown - absolute positioning to not affect column width */
@@ -1144,24 +1161,7 @@ body.page-active-picks .picks-table tbody td .game-segment {
     background: #00e08a !important;
 }
 
-/* Sort Icon Positioning - Right edge, vertically centered */
-body.page-active-picks .picks-table thead th .sort-icon {
-    position: absolute !important;
-    right: 4px !important;
-    top: 50% !important;
-    bottom: auto !important;
-    transform: translateY(-50%) !important;
-    font-size: 10px !important;
-    opacity: 0.6;
-    pointer-events: none;
-    transition: opacity 0.2s, color 0.2s, transform 0.2s;
-}
-
-/* Rotate icon when sorted descending - preserve vertical centering */
-body.page-active-picks .picks-table thead th.sorted-desc .sort-icon,
-body.page-active-picks .picks-table thead th.sort-desc .sort-icon {
-    transform: translateY(-50%) rotate(180deg) !important;
-}
+/* Duplicate removed - sort icon positioning handled above at line 887 */
 
 /* Header Shell - Ensure it doesn't block clicks */
 .th-header-shell {
@@ -2397,6 +2397,49 @@ body.page-active-picks #picks-table tbody td .league-logo {
     font-weight: 700;
     color: #e6edf3;
     text-transform: uppercase;
+}
+
+/* Filter pills styling - match weekly lineup */
+body.page-active-picks .picks-table .league-pills,
+body.page-active-picks .picks-table .segment-pills,
+body.page-active-picks .picks-table .pick-type-pills,
+body.page-active-picks .picks-table .status-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+}
+
+body.page-active-picks .picks-table .league-pill,
+body.page-active-picks .picks-table .segment-pill,
+body.page-active-picks .picks-table .pick-pill,
+body.page-active-picks .picks-table .status-pill {
+    padding: 0.3rem 0.55rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 3px;
+    font-size: 0.6rem;
+    font-weight: 500;
+    color: rgba(200, 210, 220, 0.8);
+    cursor: pointer;
+    transition: all 0.12s ease;
+    white-space: nowrap;
+}
+
+body.page-active-picks .picks-table .league-pill:hover,
+body.page-active-picks .picks-table .segment-pill:hover,
+body.page-active-picks .picks-table .pick-pill:hover,
+body.page-active-picks .picks-table .status-pill:hover {
+    background: rgba(180, 160, 120, 0.08);
+    border-color: rgba(180, 160, 120, 0.25);
+}
+
+body.page-active-picks .picks-table .league-pill.active,
+body.page-active-picks .picks-table .segment-pill.active,
+body.page-active-picks .picks-table .pick-pill.active,
+body.page-active-picks .picks-table .status-pill.active {
+    background: rgba(180, 160, 120, 0.12);
+    border-color: rgba(200, 180, 140, 0.4);
+    color: rgba(220, 200, 160, 1);
 }
 
 .filter-section-compact {

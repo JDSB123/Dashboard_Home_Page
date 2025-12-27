@@ -234,6 +234,12 @@
                     <button class="date-range-option active" data-range="today" role="option" aria-selected="true">Today</button>
                     <button class="date-range-option" data-range="tomorrow" role="option" aria-selected="false">Tomorrow</button>
                     <button class="date-range-option" data-range="week" role="option" aria-selected="false">This Week</button>
+                    <div class="date-range-divider"></div>
+                    <button class="date-range-option" data-range="yesterday" role="option" aria-selected="false">Yesterday</button>
+                    <button class="date-range-option" data-range="lastWeek" role="option" aria-selected="false">Last Week</button>
+                    <button class="date-range-option" data-range="lastMonth" role="option" aria-selected="false">Last Month</button>
+                    <button class="date-range-option" data-range="last30days" role="option" aria-selected="false">Last 30 Days</button>
+                    <div class="date-range-divider"></div>
                     <button class="date-range-option" data-range="all" role="option" aria-selected="false">All Time</button>
                 </div>
             </div>
@@ -269,6 +275,11 @@
                                         <span class="header-main-text">League</span>
                                         <span class="sort-icon" aria-hidden="true">▲</span>
                                     </button>
+                                    <button class="th-filter-btn" data-filter="league" aria-label="Filter by league" aria-expanded="false" aria-controls="filter-league" type="button"><span class="kebab-dot"></span></button>
+                                </div>
+                                <div class="th-filter-dropdown nav-panel-dropdown filter-integrated" id="filter-league" role="dialog" hidden>
+                                    <div class="filter-header-integrated"><span class="filter-title">League</span><div class="filter-quick-actions"><button class="filter-action-btn" data-action="select-all">All</button><button class="filter-action-btn" data-action="clear">Clear</button></div></div>
+                                    <div class="filter-section-compact"><div class="league-pills"><button class="league-pill active" data-league="all">All</button><button class="league-pill" data-league="nba">NBA</button><button class="league-pill" data-league="nfl">NFL</button><button class="league-pill" data-league="ncaab">NCAAB</button><button class="league-pill" data-league="ncaaf">NCAAF</button><button class="league-pill" data-league="nhl">NHL</button><button class="league-pill" data-league="mlb">MLB</button></div></div>
                                 </div>
                             </th>
                             <th scope="col" class="sortable col-matchup" data-sort="matchup">
@@ -286,6 +297,11 @@
                                         <span class="header-main-text">Segment</span>
                                         <span class="sort-icon" aria-hidden="true">▲</span>
                                     </button>
+                                    <button class="th-filter-btn" data-filter="segment" aria-label="Filter by segment" aria-expanded="false" aria-controls="filter-segment" type="button"><span class="kebab-dot"></span></button>
+                                </div>
+                                <div class="th-filter-dropdown nav-panel-dropdown filter-integrated" id="filter-segment" role="dialog" hidden>
+                                    <div class="filter-header-integrated"><span class="filter-title">Segment</span><div class="filter-quick-actions"><button class="filter-action-btn" data-action="select-all">All</button><button class="filter-action-btn" data-action="clear">Clear</button></div></div>
+                                    <div class="filter-section-compact"><div class="segment-pills"><button class="segment-pill active" data-segment="all">All</button><button class="segment-pill" data-segment="full">Full Game</button><button class="segment-pill" data-segment="1h">1st Half</button><button class="segment-pill" data-segment="2h">2nd Half</button></div></div>
                                 </div>
                             </th>
                             <th scope="col" class="center col-pick sortable" data-sort="pick">
@@ -294,6 +310,11 @@
                                         <span class="header-main-text">Pick</span>
                                         <span class="sort-icon" aria-hidden="true">▲</span>
                                     </button>
+                                    <button class="th-filter-btn" data-filter="pick" aria-label="Filter by pick type" aria-expanded="false" aria-controls="filter-pick" type="button"><span class="kebab-dot"></span></button>
+                                </div>
+                                <div class="th-filter-dropdown nav-panel-dropdown filter-integrated" id="filter-pick" role="dialog" hidden>
+                                    <div class="filter-header-integrated"><span class="filter-title">Pick Type</span><div class="filter-quick-actions"><button class="filter-action-btn" data-action="select-all">All</button><button class="filter-action-btn" data-action="clear">Clear</button></div></div>
+                                    <div class="filter-section-compact"><div class="pick-type-pills"><button class="pick-pill active" data-pick="all">All</button><button class="pick-pill" data-pick="spread">Spread</button><button class="pick-pill" data-pick="ml">Moneyline</button><button class="pick-pill" data-pick="total">Total</button><button class="pick-pill" data-pick="tt">Team Total</button></div></div>
                                 </div>
                             </th>
                             <th scope="col" class="center sortable" data-sort="risk">
@@ -318,6 +339,11 @@
                                         <span class="header-main-text">Status</span>
                                         <span class="sort-icon" aria-hidden="true">▲</span>
                                     </button>
+                                    <button class="th-filter-btn" data-filter="status" aria-label="Filter by status" aria-expanded="false" aria-controls="filter-status" type="button"><span class="kebab-dot"></span></button>
+                                </div>
+                                <div class="th-filter-dropdown nav-panel-dropdown filter-integrated" id="filter-status" role="dialog" hidden>
+                                    <div class="filter-header-integrated"><span class="filter-title">Status</span><div class="filter-quick-actions"><button class="filter-action-btn" data-action="select-all">All</button><button class="filter-action-btn" data-action="clear">Clear</button></div></div>
+                                    <div class="filter-section-compact"><div class="status-pills"><button class="status-pill active" data-status="all">All</button><button class="status-pill" data-status="pending">Pending</button><button class="status-pill" data-status="win">Won</button><button class="status-pill" data-status="loss">Lost</button><button class="status-pill" data-status="push">Push</button></div></div>
                                 </div>
                             </th>
                             <th scope="col" class="center sortable" data-sort="profit">
@@ -355,6 +381,7 @@
     <script src="assets/js/modules/picks-dom-utils.js?v=20251224-3" defer></script>
     <script src="assets/js/modules/picks-state-manager.js?v=20251224-3" defer></script>
     <script src="assets/js/modules/picks-data-processor.js?v=20251224-3" defer></script>
+    <script src="assets/js/modules/picks-filter-manager.js?v=20251224-4" defer></script>
     <script src="assets/js/modules/picks-sort-manager.js?v=20251225-1" defer></script>
     <script src="assets/js/modules/picks-table-renderer.js?v=20251224-3" defer></script>
     <script src="assets/js/features/active-picks-modular.js?v=20251225-8" defer></script>
