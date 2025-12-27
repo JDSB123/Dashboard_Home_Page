@@ -1439,8 +1439,8 @@ function buildPickRow(pick, index) {
     row.setAttribute('data-league', league);
     row.setAttribute('data-book', 'hulk wager');
     row.setAttribute('data-status', statusClass);
-    row.setAttribute('data-risk', pick.risk.replace(/,/g, ''));
-    row.setAttribute('data-win', pick.win.replace(/,/g, ''));
+    row.setAttribute('data-risk', pick.risk != null ? String(pick.risk).replace(/,/g, '') : '0');
+    row.setAttribute('data-win', pick.win != null ? String(pick.win).replace(/,/g, '') : '0');
     row.setAttribute('data-away', teams.away.toLowerCase());
     row.setAttribute('data-home', teams.home.toLowerCase());
     row.setAttribute('data-pick-type', normalizedPickType);
