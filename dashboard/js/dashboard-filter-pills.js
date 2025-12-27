@@ -64,7 +64,6 @@
                 }
 
                 applyFilters();
-                updateFilterChips();
             });
         });
 
@@ -145,7 +144,6 @@
 
                 activeFilters.segment = segmentValue === 'all' ? '' : segmentValue;
                 applyFilters();
-                updateFilterChips();
             });
         });
 
@@ -182,7 +180,6 @@
 
                 activeFilters.pick = pickValue === 'all' ? '' : pickValue;
                 applyFilters();
-                updateFilterChips();
             });
         });
 
@@ -219,7 +216,6 @@
 
                 activeFilters.status = statusValue === 'all' ? '' : statusValue;
                 applyFilters();
-                updateFilterChips();
             });
         });
 
@@ -302,71 +298,11 @@
     }
 
     /**
-     * Update filter chips display
+     * Update filter chips display - DISABLED (chips removed per user request)
      */
     function updateFilterChips() {
-        const chipsContainer = document.getElementById('table-filter-chips');
-        if (!chipsContainer) return;
-
-        const chips = [];
-        
-        if (activeFilters.leagues.length > 0) {
-            const leagueLabels = activeFilters.leagues.map(l => l.toUpperCase()).join(', ');
-            chips.push({ type: 'league', value: activeFilters.leagues.join(','), label: `League: ${leagueLabels}` });
-        }
-        
-        if (activeFilters.segment) {
-            const segmentLabels = {
-                'full': 'Full Game',
-                '1h': '1st Half',
-                '2h': '2nd Half'
-            };
-            chips.push({ type: 'segment', value: activeFilters.segment, label: `Segment: ${segmentLabels[activeFilters.segment] || activeFilters.segment}` });
-        }
-        
-        if (activeFilters.pick) {
-            const pickLabels = {
-                'spread': 'Spread',
-                'ml': 'Moneyline',
-                'total': 'Total',
-                'tt': 'Team Total'
-            };
-            chips.push({ type: 'pick', value: activeFilters.pick, label: `Pick: ${pickLabels[activeFilters.pick] || activeFilters.pick}` });
-        }
-        
-        if (activeFilters.status) {
-            const statusLabels = {
-                'pending': 'Pending',
-                'win': 'Won',
-                'loss': 'Lost',
-                'push': 'Push'
-            };
-            chips.push({ type: 'status', value: activeFilters.status, label: `Status: ${statusLabels[activeFilters.status] || activeFilters.status}` });
-        }
-
-        if (chips.length === 0) {
-            chipsContainer.setAttribute('data-has-chips', 'false');
-            chipsContainer.innerHTML = '';
-            return;
-        }
-
-        chipsContainer.setAttribute('data-has-chips', 'true');
-        chipsContainer.innerHTML = chips.map(chip => `
-            <div class="filter-chip" data-filter-type="${chip.type}" data-filter-value="${chip.value}">
-                <span>${chip.label}</span>
-                <span class="chip-remove" data-filter-type="${chip.type}" data-filter-value="${chip.value}">×</span>
-            </div>
-        `).join('');
-
-        // Add remove handlers to chips
-        chipsContainer.querySelectorAll('.chip-remove').forEach(removeBtn => {
-            removeBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                const filterType = this.getAttribute('data-filter-type');
-                const filterValue = this.getAttribute('data-filter-value');
-                removeFilter(filterType, filterValue);
-            });
-        });
+        // Filter chips functionality removed - filters work via pills/dropdowns only
+        return;
     }
 
     /**
