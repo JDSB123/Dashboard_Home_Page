@@ -40,7 +40,6 @@
             const required = [
                 'PicksStateManager',
                 'PicksTableRenderer',
-                'PicksFilterManager',
                 'PicksSortManager',
                 'PicksDOMUtils',
                 'PicksDataProcessor'
@@ -69,16 +68,8 @@
          * Initialize filter functionality
          */
         initializeFilters() {
-            // Filters are now handled by dashboard-filters-adapter.js which supports the new UI
-            console.log('Filters initialization delegated to dashboard-filters-adapter.js');
-            /*
-            this.initHeaderFilters();
-            this.initDateFilter();
-            this.initMatchupFilter();
-            this.initPickFilter();
-            this.initRiskFilter();
-            this.initStatusFilter();
-            */
+            // Filters removed from dashboard - no filter initialization needed
+            console.log('Filters removed from dashboard - skipping filter initialization');
         },
 
         /**
@@ -718,19 +709,27 @@
         },
 
         /**
-         * Apply filter
+         * Apply filter (optional - filters removed from dashboard)
          */
         applyFilter(type) {
-            window.PicksFilterManager.applyFilter(type);
-            window.PicksTableRenderer.updateFilterIndicators();
+            if (window.PicksFilterManager && window.PicksFilterManager.applyFilter) {
+                window.PicksFilterManager.applyFilter(type);
+            }
+            if (window.PicksTableRenderer && window.PicksTableRenderer.updateFilterIndicators) {
+                window.PicksTableRenderer.updateFilterIndicators();
+            }
         },
 
         /**
-         * Reset filter
+         * Reset filter (optional - filters removed from dashboard)
          */
         resetFilter(type) {
-            window.PicksFilterManager.resetFilter(type);
-            window.PicksTableRenderer.updateFilterIndicators();
+            if (window.PicksFilterManager && window.PicksFilterManager.resetFilter) {
+                window.PicksFilterManager.resetFilter(type);
+            }
+            if (window.PicksTableRenderer && window.PicksTableRenderer.updateFilterIndicators) {
+                window.PicksTableRenderer.updateFilterIndicators();
+            }
         },
 
         /**
