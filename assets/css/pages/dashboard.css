@@ -453,19 +453,17 @@ body.page-active-picks .header-subtext {
     line-height: 1;
 }
 
-/* Sort icon positioned at bottom-right of th cell */
+/* Sort icon styling comes from the shared table component (`picks-table.css`).
+   This file only positions it within the header. */
 body.page-active-picks .sort-icon {
     position: absolute !important;
-    right: 0 !important; /* flush to right edge */
-    bottom: 0 !important; /* flush to bottom edge */
+    right: 2px !important;
+    bottom: 2px !important;
     top: auto;
-    transform: none;
-    font-size: 14px;
-    line-height: 1;
-    margin: 0;
-    opacity: 0.7;
-    font-weight: bold;
+    margin: 0 !important;
+    margin-left: 0 !important;
     pointer-events: none;
+    transform: none !important; /* prevent any legacy rotate rules from flipping JS-provided glyphs */
 }
 
 body.page-active-picks .picks-table th:hover .sort-icon,
@@ -771,11 +769,7 @@ body.page-active-picks .back-to-top:hover::before {
 
 
 
-/* Sort icon descending state */
-body.page-active-picks th.sorted-desc .sort-icon,
-body.page-active-picks th[data-sort].sort-desc .sort-icon {
-    transform: rotate(180deg);
-}
+/* Descending/ascending glyph is set by JS (▲/▼ or ▴/▾); no CSS rotate needed. */
 
 /* ==========================================================================
    TABLE CELL ALIGNMENT FIX
@@ -841,16 +835,12 @@ body.page-active-picks .picks-table thead th .th-sort-btn {
 /* Sort icon - positioned at bottom-right like weekly lineup */
 body.page-active-picks .picks-table thead th .sort-icon {
     position: absolute !important;
-    right: 0 !important;
-    bottom: 0 !important;
+    right: 2px !important;
+    bottom: 2px !important;
     top: auto !important;
     transform: none !important;
-    margin-left: 0;
-    font-size: 14px !important;
-    line-height: 1;
-    margin: 0;
-    opacity: 0.7;
-    font-weight: bold;
+    margin-left: 0 !important;
+    margin: 0 !important;
     pointer-events: none;
 }
 
@@ -1073,9 +1063,10 @@ body.page-active-picks .picks-table thead th .th-sort-btn {
    FILTER TOOLBAR (ft-* namespace) - Dashboard version
    Left-aligned filters, right-aligned actions
    ========================================================================== */
-.toolbar-container.toolbar-layout {
+/* Align toolbar with the same gutter as `.main-container` (avoid double-indenting) */
+body.page-active-picks .toolbar-container.toolbar-layout {
     width: 100%;
-    padding: 0 0.75in;
+    padding: 0;
     box-sizing: border-box;
 }
 
@@ -1089,9 +1080,10 @@ body.page-active-picks .picks-table thead th .th-sort-btn {
 }
 
 @media (max-width: 900px) {
-    .toolbar-container.toolbar-layout {
-        padding-left: 1rem;
-        padding-right: 1rem;
+    /* Keep toolbar aligned with `.main-container` on smaller viewports too */
+    body.page-active-picks .toolbar-container.toolbar-layout {
+        padding-left: 0;
+        padding-right: 0;
     }
     .toolbar-container.toolbar-layout .ft-left {
         flex-wrap: wrap;
@@ -1108,9 +1100,10 @@ body.page-active-picks .picks-table thead th .th-sort-btn {
     .toolbar-container.toolbar-layout .ft-right {
         gap: 6px;
     }
-    .toolbar-container.toolbar-layout {
-        padding-left: 1rem;
-        padding-right: 1rem;
+    /* Keep toolbar aligned with `.main-container` on smaller viewports too */
+    body.page-active-picks .toolbar-container.toolbar-layout {
+        padding-left: 0;
+        padding-right: 0;
     }
     .ft-pill,
     .ft-dropdown-btn,

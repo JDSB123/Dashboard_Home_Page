@@ -514,20 +514,40 @@
     color: rgba(140, 235, 190, 0.98);
 }
 
-/* Sort icon - green triangle indicator */
+/* Sort icon - compact badge (arrow glyph is set by JS: ▴/▾ or ▲/▼) */
 .sort-icon {
-    display: inline-block;
-    font-size: 8px;
-    color: #22c55e;
-    opacity: 0.6;
-    margin-left: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    font-size: 11px;
+    line-height: 1;
+    font-weight: 700;
+    color: rgba(34, 197, 94, 0.85);
+    opacity: 0.55;
+    margin-left: 6px;
     vertical-align: middle;
-    transition: opacity 0.2s, color 0.2s, transform 0.2s;
+    border-radius: 4px;
+    background: rgba(2, 6, 23, 0.35);
+    border: 1px solid rgba(34, 197, 94, 0.25);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+    transition:
+        opacity 150ms ease,
+        color 150ms ease,
+        background-color 150ms ease,
+        border-color 150ms ease,
+        box-shadow 150ms ease;
 }
 
 .th-sort-btn:hover .sort-icon {
     opacity: 1;
-    color: #4ade80;
+    color: rgba(74, 222, 128, 1);
+    background: rgba(2, 6, 23, 0.55);
+    border-color: rgba(74, 222, 128, 0.45);
+    box-shadow:
+        0 0 0 1px rgba(74, 222, 128, 0.14),
+        0 6px 16px rgba(34, 197, 94, 0.18);
 }
 
 /* Active sort states */
@@ -536,13 +556,13 @@
 th[data-sort].sorted .sort-icon,
 th[data-sort].sort-asc .sort-icon,
 th[data-sort].sort-desc .sort-icon {
-    color: #22c55e;
     opacity: 1;
-}
-
-th[data-sort].sorted-desc .sort-icon,
-th[data-sort].sort-desc .sort-icon {
-    transform: rotate(180deg);
+    color: rgba(34, 197, 94, 1);
+    background: rgba(2, 6, 23, 0.65);
+    border-color: rgba(34, 197, 94, 0.6);
+    box-shadow:
+        0 0 0 1px rgba(34, 197, 94, 0.22),
+        0 8px 20px rgba(34, 197, 94, 0.22);
 }
 
 /* Header subtexts */
@@ -1774,7 +1794,9 @@ body.boxscores-collapsed .picks-table tbody tr.row-collapsed.parlay-row:hover {
     }
     
     .sort-icon {
-        font-size: var(--text-sm);
+        width: 16px;
+        height: 16px;
+        font-size: 11px;
     }
     
     .th-boxscore-toggle {
@@ -1833,8 +1855,11 @@ body.boxscores-collapsed .picks-table tbody tr.row-collapsed.parlay-row:hover {
     }
     
     .sort-icon {
-        font-size: var(--text-xs);
-        margin-left: 4px;
+        width: 15px;
+        height: 15px;
+        font-size: 10px;
+        margin-left: 5px;
+        border-radius: 4px;
     }
     
     .th-boxscore-toggle {
@@ -1979,8 +2004,11 @@ body.boxscores-collapsed .picks-table tbody tr.row-collapsed.parlay-row:hover {
     }
     
     .sort-icon {
-        font-size: 0.5625rem;
-        margin-left: 2px;
+        width: 14px;
+        height: 14px;
+        font-size: 9px;
+        margin-left: 4px;
+        border-radius: 3px;
     }
     
     .th-boxscore-toggle {
