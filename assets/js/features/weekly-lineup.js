@@ -1587,7 +1587,8 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                 icon.textContent = '▴';
             } else {
                 // Default (inactive) indicator
-                icon.textContent = '▴';
+                // Use an "unsorted" glyph distinct from both asc (▴) and desc (▾)
+                icon.textContent = '↕';
             }
         });
     }
