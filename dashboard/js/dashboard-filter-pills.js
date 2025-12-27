@@ -233,6 +233,33 @@
     }
 
     /**
+     * Normalize segment value for comparison
+     * Row values: 'full-game', '1st-half', '2nd-half'
+     * Filter values: 'full', '1h', '2h'
+     */
+    function normalizeSegmentForFilter(rowSegment) {
+        const seg = (rowSegment || '').toLowerCase().trim();
+        if (seg === 'full-game' || seg === 'full game' || seg === 'full') return 'full';
+        if (seg === '1st-half' || seg === '1st half' || seg === '1h' || seg.includes('1st')) return '1h';
+        if (seg === '2nd-half' || seg === '2nd half' || seg === '2h' || seg.includes('2nd')) return '2h';
+        return seg;
+    }
+
+    /**
+     * Normalize pick type for comparison
+     * Row values: 'spread', 'total', 'moneyline'
+     * Filter values: 'spread', 'ml', 'total', 'tt'
+     */
+    function normalizePickTypeForFilter(rowPickType) {
+        const pt = (rowPickType || '').toLowerCase().trim();
+        if (pt === 'moneyline' || pt === 'ml') return 'ml';
+        if (pt === 'spread') return 'spread';
+        if (pt === 'total' || pt === 'over' || pt === 'under') return 'total';
+        if (pt === 'team-total' || pt === 'team total' || pt === 'tt') return 'tt';
+        return pt;
+    }
+
+    /**
      * Apply filters to table rows
      */
     function applyFilters() {
@@ -244,8 +271,19 @@
 
             // League filter (multi-select)
             if (activeFilters.leagues.length > 0) {
-                const rowLeague = (row.getAttribute('data-league') || '').toLowerCase();
-                if (!activeFilters.leagues.includes(rowLeague)) {
+                const rowLeague = (row.getAttribute('data-league') || '').toLowerCase().trim();
+                // Handle league variations
+                const leagueMatches = activeFilters.leagues.some(filterLeague => {
+                    const fl = filterLeague.toLowerCase().trim();
+                    // Direct match
+                    if (rowLeague === fl) return true;
+                    // Handle college football variations
+                    if (fl === 'ncaaf' && (rowLeague === 'college' || rowLeague === 'cfb' || rowLeague.includes('college football') || rowLeague.includes('ncaa football'))) return true;
+                    // Handle college basketball variations
+                    if (fl === 'ncaab' && (rowLeague === 'ncaam' || rowLeague === 'cbb' || rowLeague.includes('college basketball') || rowLeague.includes('ncaa basketball'))) return true;
+                    return false;
+                });
+                if (!leagueMatches) {
                     shouldShow = false;
                 }
             }
@@ -253,7 +291,9 @@
             // Segment filter
             if (activeFilters.segment) {
                 const rowSegment = row.getAttribute('data-segment') || '';
-                if (rowSegment.toLowerCase() !== activeFilters.segment.toLowerCase()) {
+                const normalizedRowSegment = normalizeSegmentForFilter(rowSegment);
+                const normalizedFilterSegment = activeFilters.segment.toLowerCase().trim();
+                if (normalizedRowSegment !== normalizedFilterSegment) {
                     shouldShow = false;
                 }
             }
@@ -261,15 +301,29 @@
             // Pick type filter
             if (activeFilters.pick) {
                 const rowPickType = row.getAttribute('data-pick-type') || '';
-                if (rowPickType.toLowerCase() !== activeFilters.pick.toLowerCase()) {
+                const normalizedRowPickType = normalizePickTypeForFilter(rowPickType);
+                const normalizedFilterPickType = activeFilters.pick.toLowerCase().trim();
+                if (normalizedRowPickType !== normalizedFilterPickType) {
                     shouldShow = false;
                 }
             }
 
             // Status filter
             if (activeFilters.status) {
-                const rowStatus = row.getAttribute('data-status') || '';
-                if (rowStatus.toLowerCase() !== activeFilters.status.toLowerCase()) {
+                const rowStatus = (row.getAttribute('data-status') || '').toLowerCase().trim();
+                const filterStatus = activeFilters.status.toLowerCase().trim();
+                // Handle status variations
+                let statusMatches = false;
+                if (rowStatus === filterStatus) {
+                    statusMatches = true;
+                } else if (filterStatus === 'win' && (rowStatus === 'won' || rowStatus === 'win')) {
+                    statusMatches = true;
+                } else if (filterStatus === 'loss' && (rowStatus === 'lost' || rowStatus === 'loss')) {
+                    statusMatches = true;
+                } else if (filterStatus === 'pending' && (rowStatus === 'pending' || rowStatus === 'live' || rowStatus === 'on-track' || rowStatus === 'at-risk')) {
+                    statusMatches = true;
+                }
+                if (!statusMatches) {
                     shouldShow = false;
                 }
             }
