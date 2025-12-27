@@ -742,7 +742,7 @@
             </td>
             <td class="center">
                 <span class="won-lost-value" data-status="${status}">${wonLostValue}</span>
-                <button class="delete-pick-btn" onclick="window.LocalPicksManager.delete('${pick.id}')" title="Remove Pick">×</button>
+                <button class="delete-pick-btn" onclick="event.stopPropagation(); window.LocalPicksManager.delete('${pick.id}')" title="Remove pick from dashboard">✕</button>
             </td>
         `;
 
