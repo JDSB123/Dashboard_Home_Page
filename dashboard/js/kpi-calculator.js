@@ -67,8 +67,11 @@ function calculateKPIs(picks) {
     const sportsbookStats = {};
 
     picks.forEach(pick => {
-        const risk = parseFloat(pick.risk.replace(/,/g, ''));
-        const win = parseFloat(pick.win.replace(/,/g, ''));
+        // Safely parse risk and win values - handle both string and number types
+        const riskStr = pick.risk != null ? String(pick.risk).replace(/,/g, '') : '0';
+        const winStr = pick.win != null ? String(pick.win).replace(/,/g, '') : '0';
+        const risk = parseFloat(riskStr) || 0;
+        const win = parseFloat(winStr) || 0;
         const status = normalizeStatus(pick.status);
         const isLoss = status === 'loss';
 
