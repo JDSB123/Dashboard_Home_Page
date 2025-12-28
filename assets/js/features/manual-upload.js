@@ -13,6 +13,7 @@
             this.browseBtn = document.querySelector('.upload-browse-btn');
             this.textArea = document.querySelector('.manual-picks-input');
             this.submitBtn = document.querySelector('.manual-submit-btn-header');
+            this.clearBtn = document.querySelector('.manual-clear-btn-header');
             
             if (this.dropZone) {
                 this.init();
@@ -24,6 +25,7 @@
             this.setupFileSelection();
             this.setupPaste();
             this.setupSubmit();
+            this.setupClear();
         }
 
         setupDragAndDrop() {
@@ -98,6 +100,16 @@
                 e.stopPropagation();
                 this.uploadPicks();
             });
+        }
+
+        setupClear() {
+            if (this.clearBtn) {
+                this.clearBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.resetForm();
+                });
+            }
         }
 
         handleFiles(files) {

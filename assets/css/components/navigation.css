@@ -1059,6 +1059,34 @@ body.page-active-picks .nav-link[aria-current="page"] {
     box-shadow: 0 0 0 1px rgba(0, 214, 137, 0.2);
 }
 
+.manual-header-actions {
+    margin-left: auto;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.manual-clear-btn-header {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #90a4ae;
+    font-family: var(--sportsbook-heading-font);
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 2px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.manual-clear-btn-header:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
 .manual-submit-btn-header {
     background: rgba(0, 143, 88, 0.2);
     border: 1px solid rgba(0, 255, 170, 0.3);
@@ -1072,7 +1100,6 @@ body.page-active-picks .nav-link[aria-current="page"] {
     border-radius: 3px;
     cursor: pointer;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    margin-left: auto; /* Push to right */
 }
 
 .manual-submit-btn-header:hover {
