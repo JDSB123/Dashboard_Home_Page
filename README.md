@@ -17,7 +17,7 @@ Production runtime config is injected via:
 
 Key setting:
 
-- `window.APP_CONFIG.API_BASE_URL` (e.g. `https://green-bier-picks-api.azurewebsites.net/api`)
+- `window.APP_CONFIG.API_BASE_URL` → point to the orchestrator container app FQDN (e.g. `https://<orchestrator>.azurecontainerapps.io/api`)
 
 ## Azure Static Web Apps
 
@@ -33,12 +33,16 @@ Deploy the repository root as the app artifact (there is **no build step** requi
 This repo includes an Azure Static Web Apps deployment workflow:
 - `.github/workflows/azure-static-web-apps.yml`
 
+Backend (orchestrator) container deploy workflow:
+- `.github/workflows/azure-functions-container.yml`
+
 To enable automatic deployments, add this GitHub repo secret:
 - `AZURE_STATIC_WEB_APPS_API_TOKEN` (Azure Portal → Static Web App → **Manage deployment token**)
 
 Behavior:
 - Pushes to `main` deploy to the production Static Web App
 - Pull requests create/update a preview environment and close it when the PR is closed
+- Pushes to `main` also build/push the orchestrator container and deploy/update the Container App (requires ACR + Azure credentials secrets)
 
 ## Local dev
 

@@ -1,0 +1,143 @@
+name: Build and deploy orchestrator container
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'azure-functions/**'
+      - '.github/workflows/azure-functions-container.yml'
+  workflow_dispatch:
+
+env:
+  RESOURCE_GROUP: dashboard-gbsv-main-rg
+  LOCATION: eastus
+  CONTAINERAPPS_ENVIRONMENT: gbsv-aca-env
+  CONTAINER_APP_NAME: gbsv-orchestrator
+  IMAGE_NAME: gbsv-orchestrator
+  ACR_LOGIN_SERVER: ${{ secrets.ACR_LOGIN_SERVER }}
+  ACR_USERNAME: ${{ secrets.ACR_USERNAME }}
+  ACR_PASSWORD: ${{ secrets.ACR_PASSWORD }}
+  NBA_API_URL: https://nba-gbsv-api.livelycoast-b48c3cb0.eastus.azurecontainerapps.io
+  NCAAM_API_URL: https://ncaam-stable-prediction.blackglacier-5fab3573.centralus.azurecontainerapps.io
+  NFL_API_URL: https://nfl-api.purplegrass-5889a981.eastus.azurecontainerapps.io
+  NCAAF_API_URL: https://ncaaf-v5-prod.salmonwave-314d4ffe.eastus.azurecontainerapps.io
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Azure login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Docker login to ACR
+        env:
+          ACR_LOGIN_SERVER: ${{ env.ACR_LOGIN_SERVER }}
+          ACR_USERNAME: ${{ env.ACR_USERNAME }}
+          ACR_PASSWORD: ${{ env.ACR_PASSWORD }}
+        run: |
+          if [ -z "$ACR_LOGIN_SERVER" ] || [ -z "$ACR_USERNAME" ] || [ -z "$ACR_PASSWORD" ]; then
+            echo "ACR credentials not set";
+            exit 1;
+          fi
+          echo "$ACR_PASSWORD" | docker login "$ACR_LOGIN_SERVER" -u "$ACR_USERNAME" --password-stdin
+
+      - name: Build and push image
+        env:
+          ACR_LOGIN_SERVER: ${{ env.ACR_LOGIN_SERVER }}
+          IMAGE_NAME: ${{ env.IMAGE_NAME }}
+        run: |
+          IMAGE_TAG=${GITHUB_SHA}
+          IMAGE_REF="$ACR_LOGIN_SERVER/$IMAGE_NAME:$IMAGE_TAG"
+          docker build -t "$IMAGE_REF" -f azure-functions/Dockerfile azure-functions
+          docker push "$IMAGE_REF"
+          echo "IMAGE_REF=$IMAGE_REF" >> $GITHUB_ENV
+
+      - name: Ensure Container Apps environment
+        env:
+          RESOURCE_GROUP: ${{ env.RESOURCE_GROUP }}
+          LOCATION: ${{ env.LOCATION }}
+          CONTAINERAPPS_ENVIRONMENT: ${{ env.CONTAINERAPPS_ENVIRONMENT }}
+        run: |
+          az extension add --name containerapp --upgrade
+          az provider register --namespace Microsoft.App
+          az provider register --namespace Microsoft.OperationalInsights
+          az containerapp env create \
+            --name "$CONTAINERAPPS_ENVIRONMENT" \
+            --resource-group "$RESOURCE_GROUP" \
+            --location "$LOCATION" \
+            --logs-destination none
+
+      - name: Deploy container app
+        env:
+          RESOURCE_GROUP: ${{ env.RESOURCE_GROUP }}
+          CONTAINERAPPS_ENVIRONMENT: ${{ env.CONTAINERAPPS_ENVIRONMENT }}
+          CONTAINER_APP_NAME: ${{ env.CONTAINER_APP_NAME }}
+          ACR_LOGIN_SERVER: ${{ env.ACR_LOGIN_SERVER }}
+          ACR_USERNAME: ${{ env.ACR_USERNAME }}
+          ACR_PASSWORD: ${{ env.ACR_PASSWORD }}
+          AzureWebJobsStorage: ${{ secrets.AZURE_FUNCTIONS_STORAGE_CONNECTION }}
+          AzureSignalRConnectionString: ${{ secrets.AZURE_SIGNALR_CONNECTION_STRING }}
+          APPLICATIONINSIGHTS_CONNECTION_STRING: ${{ secrets.APPINSIGHTS_CONNECTION_STRING }}
+          NBA_API_URL: ${{ env.NBA_API_URL }}
+          NCAAM_API_URL: ${{ env.NCAAM_API_URL }}
+          NFL_API_URL: ${{ env.NFL_API_URL }}
+          NCAAF_API_URL: ${{ env.NCAAF_API_URL }}
+        run: |
+          if ! az containerapp show --name "$CONTAINER_APP_NAME" --resource-group "$RESOURCE_GROUP" &>/dev/null; then
+            az containerapp create \
+              --name "$CONTAINER_APP_NAME" \
+              --resource-group "$RESOURCE_GROUP" \
+              --environment "$CONTAINERAPPS_ENVIRONMENT" \
+              --image "$IMAGE_REF" \
+              --target-port 80 \
+              --ingress external \
+              --min-replicas 1 \
+              --max-replicas 2 \
+              --registry-server "$ACR_LOGIN_SERVER" \
+              --registry-username "$ACR_USERNAME" \
+              --registry-password "$ACR_PASSWORD" \
+              --env-vars \
+                AzureWebJobsStorage="$AzureWebJobsStorage" \
+                FUNCTIONS_WORKER_RUNTIME=node \
+                AzureSignalRConnectionString="$AzureSignalRConnectionString" \
+                APPLICATIONINSIGHTS_CONNECTION_STRING="$APPLICATIONINSIGHTS_CONNECTION_STRING" \
+                NBA_API_URL="$NBA_API_URL" \
+                NCAAM_API_URL="$NCAAM_API_URL" \
+                NFL_API_URL="$NFL_API_URL" \
+                NCAAF_API_URL="$NCAAF_API_URL"
+          else
+            az containerapp update \
+              --name "$CONTAINER_APP_NAME" \
+              --resource-group "$RESOURCE_GROUP" \
+              --image "$IMAGE_REF" \
+              --set-env-vars \
+                AzureWebJobsStorage="$AzureWebJobsStorage" \
+                FUNCTIONS_WORKER_RUNTIME=node \
+                AzureSignalRConnectionString="$AzureSignalRConnectionString" \
+                APPLICATIONINSIGHTS_CONNECTION_STRING="$APPLICATIONINSIGHTS_CONNECTION_STRING" \
+                NBA_API_URL="$NBA_API_URL" \
+                NCAAM_API_URL="$NCAAM_API_URL" \
+                NFL_API_URL="$NFL_API_URL" \
+                NCAAF_API_URL="$NCAAF_API_URL"
+          fi
+
+      - name: Show endpoint
+        env:
+          RESOURCE_GROUP: ${{ env.RESOURCE_GROUP }}
+          CONTAINER_APP_NAME: ${{ env.CONTAINER_APP_NAME }}
+        run: |
+          az containerapp show \
+            --name "$CONTAINER_APP_NAME" \
+            --resource-group "$RESOURCE_GROUP" \
+            --query properties.configuration.ingress.fqdn \
+            --output tsv

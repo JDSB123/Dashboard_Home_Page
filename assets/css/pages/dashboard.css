@@ -453,26 +453,8 @@ body.page-active-picks .header-subtext {
     line-height: 1;
 }
 
-/* Sort icon styling comes from the shared table component (`picks-table.css`).
-   This file only positions it within the header. */
-body.page-active-picks .sort-icon {
-    position: absolute !important;
-    right: 2px !important;
-    bottom: 2px !important;
-    top: auto;
-    margin: 0 !important;
-    margin-left: 0 !important;
-    pointer-events: none;
-    transform: none !important; /* prevent any legacy rotate rules from flipping JS-provided glyphs */
-}
-
-body.page-active-picks .picks-table th:hover .sort-icon,
-body.page-active-picks .picks-table th.sorted-asc .sort-icon,
-body.page-active-picks .picks-table th.sorted-desc .sort-icon,
-body.page-active-picks .picks-table th[data-sort].sort-asc .sort-icon,
-body.page-active-picks .picks-table th[data-sort].sort-desc .sort-icon {
-    opacity: 1;
-}
+/* Sort icon styling comes from the shared table component (`picks-table.css`) */
+/* No page-specific overrides needed - using standardized positioning */
 
 /* Filter button - defer to inline styles in dashboard.html for full styling */
 /* This rule only provides fallback and hover states */
@@ -832,17 +814,7 @@ body.page-active-picks .picks-table thead th .th-sort-btn {
     width: 100%;
 }
 
-/* Sort icon - positioned at bottom-right like weekly lineup */
-body.page-active-picks .picks-table thead th .sort-icon {
-    position: absolute !important;
-    right: 2px !important;
-    bottom: 2px !important;
-    top: auto !important;
-    transform: none !important;
-    margin-left: 0 !important;
-    margin: 0 !important;
-    pointer-events: none;
-}
+/* Sort icon - uses standardized positioning from picks-table.css */
 
 /* Filter button - positioned like weekly lineup (shifted left to avoid sort icon) */
 

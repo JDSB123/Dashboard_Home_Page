@@ -26,7 +26,18 @@ The orchestrator acts as a central hub in `dashboard-gbsv-main-rg` that:
 
 ## Deployment
 
-### Automatic Deployment
+### Option A: Container App (recommended)
+
+Deploy the Functions backend as a container via Azure Container Apps using the GitHub Actions workflow:
+
+1. Set GitHub secrets:
+  - `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`
+  - `ACR_LOGIN_SERVER`, `ACR_USERNAME`, `ACR_PASSWORD`
+  - `AZURE_FUNCTIONS_STORAGE_CONNECTION`, `AZURE_SIGNALR_CONNECTION_STRING`, `APPINSIGHTS_CONNECTION_STRING`
+2. Push to `main` or run `.github/workflows/azure-functions-container.yml` manually.
+3. After deploy, grab the Container App FQDN (workflow outputs it) and set `API_BASE_URL` in `config.production.js` to `https://<fqdn>/api`.
+
+### Option B: Zip deploy (legacy)
 
 #### Windows (PowerShell):
 ```powershell
@@ -39,35 +50,35 @@ chmod +x deploy.sh
 ./deploy.sh
 ```
 
-### Manual Deployment Steps
+Manual zip deploy steps remain the same:
 
 1. **Install dependencies:**
-   ```bash
-   npm install
-   ```
+  ```bash
+  npm install
+  ```
 
 2. **Create Azure resources:**
-   ```bash
-   # Create Function App
-   az functionapp create \
-     --resource-group dashboard-gbsv-main-rg \
-     --consumption-plan-location eastus \
-     --runtime node \
-     --runtime-version 18 \
-     --functions-version 4 \
-     --name gbsv-orchestrator \
-     --storage-account gbsvorchestratorstorage
+  ```bash
+  # Create Function App
+  az functionapp create \
+    --resource-group dashboard-gbsv-main-rg \
+    --consumption-plan-location eastus \
+    --runtime node \
+    --runtime-version 18 \
+    --functions-version 4 \
+    --name gbsv-orchestrator \
+    --storage-account gbsvorchestratorstorage
 
-   # Enable Managed Identity
-   az functionapp identity assign \
-     --name gbsv-orchestrator \
-     --resource-group dashboard-gbsv-main-rg
-   ```
+  # Enable Managed Identity
+  az functionapp identity assign \
+    --name gbsv-orchestrator \
+    --resource-group dashboard-gbsv-main-rg
+  ```
 
 3. **Deploy the code:**
-   ```bash
-   func azure functionapp publish gbsv-orchestrator
-   ```
+  ```bash
+  func azure functionapp publish gbsv-orchestrator
+  ```
 
 ## Post-Deployment Configuration
 

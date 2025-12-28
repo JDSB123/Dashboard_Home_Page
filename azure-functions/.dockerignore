@@ -1,0 +1,9 @@
+node_modules
+npm-debug.log
+Dockerfile
+deployment.zip
+.git
+.vscode
+local.settings.json
+*.md
+coverage

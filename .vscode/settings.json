@@ -1,5 +1,11 @@
 {
     "claudeCodeChat.permissions.yoloMode": true,
+    "github.copilot.chat.editing.alwaysApprove": true,
+    "github.copilot.chat.editing.reviewMode": "off",
+    "github.copilot.chat.requestFeedback": "never",
+    "github.copilot.advanced": {
+        "debug.overrideEngine": "claude-sonnet-4.5"
+    },
     "azureFunctions.deploySubpath": "Dashboard_Home_Page\\azure-functions",
     "azureFunctions.postDeployTask": "npm install (functions)",
     "azureFunctions.projectLanguage": "JavaScript",

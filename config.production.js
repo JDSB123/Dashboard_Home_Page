@@ -20,7 +20,7 @@ window.APP_CONFIG = Object.freeze({
   AZURE_REGION: 'eastus',
 
   // API Configuration
-  API_BASE_URL: 'https://green-bier-picks-api.azurewebsites.net/api',
+  API_BASE_URL: 'https://gbsv-orchestrator.wittypebble-41c11c65.eastus.azurecontainerapps.io/api',
 
   // Model API Endpoints
   NBA_API_URL: 'https://nba-gbsv-api.livelycoast-b48c3cb0.eastus.azurecontainerapps.io',

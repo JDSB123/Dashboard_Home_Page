@@ -45,18 +45,11 @@ Created deployment automation scripts:
 
 ## Deployment Instructions
 
-### Step 1: Deploy Azure Functions App
+### Step 1: Deploy Orchestrator as Container App
 
-1. Navigate to the azure-functions directory:
-   ```bash
-   cd azure-functions
-   ```
-
-2. Run the deployment script:
-   - **Windows**: `.\deploy.ps1`
-   - **Linux/Mac**: `./deploy.sh`
-
-3. Note the deployed Function App URL (e.g., `https://gbsv-orchestrator.azurewebsites.net`)
+1. Ensure Azure and ACR creds are set as GitHub secrets (see azure-functions/README.md).
+2. Push to `main` or manually run `.github/workflows/azure-functions-container.yml`.
+3. Note the Container App FQDN output by the workflow (e.g., `https://gbsv-orchestrator.<env>.azurecontainerapps.io`).
 
 ### Step 2: Configure SignalR Service
 
@@ -100,8 +93,9 @@ Each model Container App needs these endpoints:
 ### Step 5: Configure GitHub Secrets
 
 Add these secrets to your GitHub repository:
-- `ORCHESTRATOR_URL` - Function App API URL
-- `ORCHESTRATOR_KEY` - Function App host key
+- `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`
+- `ACR_LOGIN_SERVER`, `ACR_USERNAME`, `ACR_PASSWORD`
+- `AZURE_FUNCTIONS_STORAGE_CONNECTION`, `AZURE_SIGNALR_CONNECTION_STRING`, `APPINSIGHTS_CONNECTION_STRING`
 - `DASHBOARD_URL` - Your dashboard URL
 - `NOTIFICATION_WEBHOOK_URL` - Teams/Slack webhook (optional)
 
@@ -146,7 +140,8 @@ curl -X POST https://api.github.com/repos/YOUR_ORG/Dashboard_Home_Page/dispatche
 The implementation maintains your specified RG structure:
 
 - **`dashboard-gbsv-main-rg`**:
-  - Functions App (gbsv-orchestrator)
+  - Container App (gbsv-orchestrator)
+  - Container Apps Environment (gbsv-aca-env)
   - Storage Account (gbsvorchestratorstorage)
   - SignalR Service (gbsv-signalr)
   - Application Insights (gbsv-orchestrator-insights)
