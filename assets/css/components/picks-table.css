@@ -345,6 +345,15 @@
     text-align: center;
 }
 
+.picks-table th.center .th-sort-btn > :not(.sort-icon) {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
 .picks-table th.center .header-main-text {
     justify-content: center;
 }
@@ -518,7 +527,7 @@
 /* Positioned at right edge of table headers, no visible container */
 .sort-icon {
     position: absolute;
-    right: 4px;
+    right: 2px;
     top: 50%;
     transform: translateY(-50%);
     display: inline-flex;
@@ -526,7 +535,7 @@
     justify-content: center;
     width: auto;
     height: auto;
-    font-size: 14px;
+    font-size: 7px;
     line-height: 1;
     font-weight: bold;
     color: rgba(34, 197, 94, 0.5);
