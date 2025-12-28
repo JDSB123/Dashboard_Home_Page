@@ -940,32 +940,37 @@ body.page-active-picks .nav-link[aria-current="page"] {
 .manual-upload-content {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    margin-top: 8px;
-    padding-top: 8px;
+    gap: 6px;
+    margin-top: 6px;
+    padding-top: 6px;
     border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .upload-drop-zone {
     border: 1px dashed rgba(0, 214, 137, 0.3);
-    border-radius: 6px;
-    padding: 16px 12px;
-    text-align: center;
+    border-radius: 4px;
+    padding: 6px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
     background: linear-gradient(145deg, rgba(0, 0, 0, 0.3), rgba(0, 30, 20, 0.2));
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
     position: relative;
     overflow: hidden;
+    min-height: 32px;
 }
 
 .upload-drop-zone::before {
-    content: '☁️'; /* Cloud icon fallback */
+    content: '☁️';
     display: block;
-    font-size: 1.5rem;
-    margin-bottom: 8px;
+    font-size: 0.9rem;
+    margin: 0;
     opacity: 0.7;
     filter: grayscale(100%) brightness(1.5);
     transition: all 0.3s ease;
+    line-height: 1;
 }
 
 .upload-drop-zone:hover,
@@ -973,7 +978,6 @@ body.page-active-picks .nav-link[aria-current="page"] {
     border-color: var(--color-primary-bright, #00d689);
     background: linear-gradient(145deg, rgba(0, 214, 137, 0.1), rgba(0, 30, 20, 0.3));
     box-shadow: 0 0 15px rgba(0, 214, 137, 0.1) inset;
-    transform: translateY(-1px);
 }
 
 .upload-drop-zone:hover::before,
@@ -986,11 +990,16 @@ body.page-active-picks .nav-link[aria-current="page"] {
 .drop-zone-text {
     display: block;
     font-family: var(--sportsbook-heading-font);
-    font-size: 0.75rem;
+    font-size: 0.65rem;
     color: #b0bec5;
-    margin-bottom: 8px;
+    margin: 0;
     pointer-events: none;
     letter-spacing: 0.02em;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
 }
 
 .hidden-file-input {
@@ -1002,15 +1011,16 @@ body.page-active-picks .nav-link[aria-current="page"] {
     border: 1px solid rgba(0, 214, 137, 0.3);
     color: var(--color-primary-bright, #00d689);
     font-family: var(--sportsbook-heading-font);
-    font-size: 0.7rem;
-    padding: 4px 12px;
-    border-radius: 12px; /* Pill shape */
+    font-size: 0.6rem;
+    padding: 2px 8px;
+    border-radius: 3px;
     cursor: pointer;
     transition: all 0.2s ease;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.05em;
     font-weight: 600;
     display: inline-block;
+    white-space: nowrap;
 }
 
 .upload-browse-btn:hover {
@@ -1026,11 +1036,11 @@ body.page-active-picks .nav-link[aria-current="page"] {
     border: 1px solid rgba(255, 255, 255, 0.08);
     color: #e8f0f2;
     font-family: var(--sportsbook-mono-font, monospace);
-    font-size: 0.75rem;
-    padding: 8px 10px;
+    font-size: 0.7rem;
+    padding: 6px 8px;
     border-radius: 4px;
-    resize: vertical;
-    min-height: 50px;
+    resize: none; /* Prevent resizing to keep layout stable */
+    min-height: 60px; /* Taller default height */
     transition: all 0.2s ease;
     line-height: 1.4;
 }
