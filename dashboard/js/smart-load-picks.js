@@ -1552,6 +1552,9 @@ function buildPickRow(pick, index) {
                 : `<span class="profit-amount ${outcome.amountClass}">${formatSignedCurrency(outcome.amount)}</span>`
             }
         </td>
+        <td class="center">
+            <button class="remove-pick-btn" data-pick-index="${index}" title="Remove this pick" aria-label="Remove pick">×</button>
+        </td>
     `;
 
     return row;

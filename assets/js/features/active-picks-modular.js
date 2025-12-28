@@ -587,6 +587,19 @@
                     this.exportData();
                 });
             }
+
+            // Remove button click handler (delegated from table)
+            const tbody = document.getElementById('picks-tbody');
+            if (tbody) {
+                tbody.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('remove-pick-btn')) {
+                        const index = e.target.getAttribute('data-pick-index');
+                        if (index !== null) {
+                            this.removePick(parseInt(index, 10));
+                        }
+                    }
+                });
+            }
         },
 
         /**
@@ -795,6 +808,37 @@
             a.click();
             document.body.removeChild(a);
             window.URL.revokeObjectURL(url);
+        },
+
+        /**
+         * Remove a pick by index
+         */
+        removePick(index) {
+            console.log('[REMOVE PICK] Removing pick at index:', index);
+            
+            // Get the row element
+            const rows = document.querySelectorAll('#picks-tbody tr:not(.parlay-legs)');
+            if (index < 0 || index >= rows.length) {
+                console.warn('[REMOVE PICK] Invalid index:', index);
+                return;
+            }
+
+            const row = rows[index];
+            if (!row) return;
+
+            // Fade out and remove the row
+            row.style.transition = 'opacity 0.3s ease';
+            row.style.opacity = '0';
+
+            setTimeout(() => {
+                row.remove();
+                console.log('[REMOVE PICK] Removed row at index:', index);
+                
+                // Re-apply zebra striping after removal
+                if (window.PicksTableRenderer) {
+                    window.PicksTableRenderer.applyZebraStripes();
+                }
+            }, 300);
         }
     };
 
