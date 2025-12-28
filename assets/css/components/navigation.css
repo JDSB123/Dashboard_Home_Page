@@ -940,25 +940,47 @@ body.page-active-picks .nav-link[aria-current="page"] {
 .manual-upload-content {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    margin-top: 6px;
+    gap: 10px;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .upload-drop-zone {
-    border: 1px dashed rgba(255, 255, 255, 0.2);
-    border-radius: 4px;
-    padding: 12px;
+    border: 1px dashed rgba(0, 214, 137, 0.3);
+    border-radius: 6px;
+    padding: 16px 12px;
     text-align: center;
-    background: rgba(0, 0, 0, 0.2);
-    transition: all 0.2s ease;
+    background: linear-gradient(145deg, rgba(0, 0, 0, 0.3), rgba(0, 30, 20, 0.2));
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
     position: relative;
+    overflow: hidden;
+}
+
+.upload-drop-zone::before {
+    content: '☁️'; /* Cloud icon fallback */
+    display: block;
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+    opacity: 0.7;
+    filter: grayscale(100%) brightness(1.5);
+    transition: all 0.3s ease;
 }
 
 .upload-drop-zone:hover,
 .upload-drop-zone.drag-over {
-    border-color: #00ffaa;
-    background: rgba(0, 255, 170, 0.05);
+    border-color: var(--color-primary-bright, #00d689);
+    background: linear-gradient(145deg, rgba(0, 214, 137, 0.1), rgba(0, 30, 20, 0.3));
+    box-shadow: 0 0 15px rgba(0, 214, 137, 0.1) inset;
+    transform: translateY(-1px);
+}
+
+.upload-drop-zone:hover::before,
+.upload-drop-zone.drag-over::before {
+    transform: scale(1.1);
+    opacity: 1;
+    filter: none;
 }
 
 .drop-zone-text {
@@ -966,8 +988,9 @@ body.page-active-picks .nav-link[aria-current="page"] {
     font-family: var(--sportsbook-heading-font);
     font-size: 0.75rem;
     color: #b0bec5;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
     pointer-events: none;
+    letter-spacing: 0.02em;
 }
 
 .hidden-file-input {
@@ -975,63 +998,99 @@ body.page-active-picks .nav-link[aria-current="page"] {
 }
 
 .upload-browse-btn {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #e8f0f2;
+    background: rgba(0, 214, 137, 0.1);
+    border: 1px solid rgba(0, 214, 137, 0.3);
+    color: var(--color-primary-bright, #00d689);
     font-family: var(--sportsbook-heading-font);
     font-size: 0.7rem;
-    padding: 2px 8px;
-    border-radius: 3px;
+    padding: 4px 12px;
+    border-radius: 12px; /* Pill shape */
     cursor: pointer;
     transition: all 0.2s ease;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    display: inline-block;
 }
 
 .upload-browse-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(0, 214, 137, 0.2);
     color: #ffffff;
+    box-shadow: 0 0 8px rgba(0, 214, 137, 0.4);
+    border-color: var(--color-primary-bright, #00d689);
 }
 
 .manual-picks-input {
     width: 100%;
-    background: rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    color: #cfd8dc;
-    font-family: var(--sportsbook-body-font);
-    font-size: 0.8rem;
-    padding: 6px;
-    border-radius: 3px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #e8f0f2;
+    font-family: var(--sportsbook-mono-font, monospace);
+    font-size: 0.75rem;
+    padding: 8px 10px;
+    border-radius: 4px;
     resize: vertical;
-    min-height: 40px;
+    min-height: 50px;
+    transition: all 0.2s ease;
+    line-height: 1.4;
+}
+
+.manual-picks-input::placeholder {
+    color: rgba(176, 190, 197, 0.5);
+    font-family: var(--sportsbook-body-font, sans-serif);
+    font-style: italic;
 }
 
 .manual-picks-input:focus {
     outline: none;
-    border-color: rgba(0, 255, 170, 0.4);
-    background: rgba(0, 0, 0, 0.3);
+    border-color: var(--color-primary-bright, #00d689);
+    background: rgba(0, 10, 20, 0.4);
+    box-shadow: 0 0 0 1px rgba(0, 214, 137, 0.2);
 }
 
 .manual-submit-btn {
     width: 100%;
-    background: linear-gradient(135deg, rgba(0, 143, 88, 0.8), rgba(0, 100, 60, 0.9));
+    background: linear-gradient(135deg, var(--color-primary, #008f58), var(--color-primary-dark, #006b3f));
     border: 1px solid rgba(0, 255, 170, 0.2);
     color: #ffffff;
     font-family: var(--sportsbook-heading-font);
-    font-size: 0.75rem;
-    font-weight: 600;
+    font-size: 0.8rem;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    padding: 6px;
-    border-radius: 3px;
+    letter-spacing: 0.1em;
+    padding: 8px;
+    border-radius: 4px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    position: relative;
+    overflow: hidden;
+}
+
+.manual-submit-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: 0.5s;
 }
 
 .manual-submit-btn:hover {
-    background: linear-gradient(135deg, rgba(0, 180, 110, 0.9), rgba(0, 143, 88, 0.95));
-    border-color: rgba(0, 255, 170, 0.4);
-    box-shadow: 0 0 10px rgba(0, 255, 170, 0.2);
+    background: linear-gradient(135deg, var(--color-primary-bright, #00d689), var(--color-primary, #008f58));
+    border-color: rgba(0, 255, 170, 0.5);
+    box-shadow: 0 4px 12px rgba(0, 143, 88, 0.3);
+    transform: translateY(-1px);
+}
+
+.manual-submit-btn:hover::after {
+    left: 100%;
+}
+
+.manual-submit-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(0, 143, 88, 0.2);
 }
 
