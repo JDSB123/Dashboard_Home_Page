@@ -353,9 +353,12 @@ body.page-active-picks .profit-amount.profit-neutral { color: rgba(184, 197, 208
 /* ===== TABLE HEADERS - VERY TRANSPARENT GREEN GRADIENT (matches weekly lineup) ===== */
 body.page-active-picks .picks-table thead th,
 body.page-active-picks .picks-table thead th.center.sortable {
-    /* CRITICAL: Override base picks-table.css opaque background with transparent green */
-    background: transparent !important;
-    background-color: transparent !important;
+    /* Green gradient fill matching weekly-lineup */
+    background: linear-gradient(180deg,
+        rgba(0, 214, 137, 0.06) 0%,
+        rgba(0, 214, 137, 0.03) 45%,
+        rgba(8, 12, 22, 0.18) 100%) !important;
+    background-color: rgba(8, 12, 22, 0.15) !important;
     border-bottom: 1px solid rgba(0, 214, 137, 0.20);
     border-right: 1px solid rgba(0, 214, 137, 0.08);
     padding: 0.75rem 0.75rem;

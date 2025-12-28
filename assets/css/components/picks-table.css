@@ -312,10 +312,16 @@
     text-transform: uppercase;
     letter-spacing: var(--table-heading-letter);
     color: var(--table-strong);
-    border-bottom: 1px solid rgba(var(--color-primary-rgb), 0.25);
+    /* Green gradient fill matching weekly-lineup */
+    background: linear-gradient(180deg,
+        rgba(0, 214, 137, 0.06) 0%,
+        rgba(0, 214, 137, 0.03) 45%,
+        rgba(8, 12, 22, 0.18) 100%);
+    background-color: rgba(8, 12, 22, 0.15);
+    border-bottom: 1px solid rgba(0, 214, 137, 0.20);
+    border-right: 1px solid rgba(0, 214, 137, 0.08);
     white-space: nowrap;
     position: relative;
-    background: transparent;
     transition: all 0.25s ease;
     line-height: var(--table-heading-line);
     vertical-align: middle;
@@ -328,6 +334,7 @@
 
 .picks-table thead th:last-child {
     border-top-right-radius: 8px;
+    border-right: none;
 }
 
 /* Center aligned headers - all headers are now centered by default */

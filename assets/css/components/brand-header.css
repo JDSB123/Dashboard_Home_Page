@@ -13,7 +13,7 @@
     z-index: 200;
     height: var(--dashboard-topline-height, 76px);
     margin-right: 0;
-    padding: 0 8px;
+    padding: 0; /* No extra padding - align logo with filter chips and table */
 }
 
 /* Bear Shield Logo - Sharp edges with subtle glow, matches KPI tile height */
