@@ -18830,37 +18830,3 @@ body.page-weekly-lineup .th-filter-dropdown.weekly-lineup-filter-dropdown .team-
         gap: 6px;
     }
 }
-/* Remove button styling */
-.remove-pick-btn {
-    background: transparent;
-    border: 1px solid rgba(170, 188, 204, 0.3);
-    color: rgba(170, 188, 204, 0.7);
-    width: 28px;
-    height: 28px;
-    border-radius: 4px;
-    font-size: 18px;
-    font-weight: 300;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    transition: all 0.2s ease;
-    line-height: 1;
-}
-
-.remove-pick-btn:hover {
-    background: rgba(220, 100, 100, 0.15);
-    border-color: rgba(220, 100, 100, 0.6);
-    color: rgba(220, 100, 100, 0.9);
-}
-
-.remove-pick-btn:active {
-    background: rgba(220, 100, 100, 0.25);
-    border-color: rgba(220, 100, 100, 0.8);
-    color: rgba(220, 100, 100, 1);
-}
-
-.col-remove {
-    text-align: center;
-}

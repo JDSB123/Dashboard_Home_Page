@@ -1436,6 +1436,7 @@ function buildPickRow(pick, index) {
 
     const row = document.createElement('tr');
     row.className = `group-start ${isLive ? 'live-game' : ''}`;
+    row.dataset.pickIndex = index;
 
     // Normalize pick type for filters
     let normalizedPickType = 'spread'; // default
@@ -1551,9 +1552,6 @@ function buildPickRow(pick, index) {
                 ? '<span class="profit-amount profit-neutral">—</span>'
                 : `<span class="profit-amount ${outcome.amountClass}">${formatSignedCurrency(outcome.amount)}</span>`
             }
-        </td>
-        <td class="center">
-            <button class="remove-pick-btn" data-pick-index="${index}" title="Remove this pick" aria-label="Remove pick">×</button>
         </td>
     `;
 

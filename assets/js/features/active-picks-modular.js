@@ -588,14 +588,16 @@
                 });
             }
 
-            // Remove button click handler (delegated from table)
+            // Row hover delete handler
             const tbody = document.getElementById('picks-tbody');
             if (tbody) {
-                tbody.addEventListener('click', (e) => {
-                    if (e.target.classList.contains('remove-pick-btn')) {
-                        const index = e.target.getAttribute('data-pick-index');
-                        if (index !== null) {
-                            this.removePick(parseInt(index, 10));
+                tbody.addEventListener('contextmenu', (e) => {
+                    const row = e.target.closest('tr');
+                    if (row && row.dataset.pickIndex !== undefined) {
+                        e.preventDefault();
+                        const index = parseInt(row.dataset.pickIndex, 10);
+                        if (confirm('Remove this pick?')) {
+                            this.removePick(index);
                         }
                     }
                 });
