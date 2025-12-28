@@ -6124,9 +6124,10 @@ th[data-sort].sort-desc .sort-icon {
     opacity: 1;
 }
 
+/* Sort icon glyph set by JS - no CSS rotation needed */
 th[data-sort].sorted-desc .sort-icon,
 th[data-sort].sort-desc .sort-icon {
-    transform: rotate(180deg);
+    /* transform removed - JS sets ▼ glyph directly */
 }
 
 /* Header subtexts */
@@ -12598,10 +12599,10 @@ body.page-active-picks .th-filter-btn.has-filter::after {
     pointer-events: none;
 }
 
-/* Sort icon descending state */
+/* Sort icon descending state - glyph set by JS */
 body.page-active-picks th.sorted-desc .sort-icon,
 body.page-active-picks th[data-sort].sort-desc .sort-icon {
-    transform: rotate(180deg);
+    /* transform removed - JS sets ▼ glyph directly */
 }
 
 /* ==========================================================================
