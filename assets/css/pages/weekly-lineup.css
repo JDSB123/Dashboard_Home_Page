@@ -470,25 +470,22 @@ body.page-weekly-lineup .picks-table thead th,
 /* No page-specific overrides needed */
 }
 
-/* Filter button - absolutely positioned relative to th cell, shifted left for icon space */
+/* Filter button positioning to keep shared filter trigger near the sort icon */
 body.page-weekly-lineup .weekly-lineup-table thead th .th-filter-btn,
 .page-weekly-lineup .weekly-lineup-table thead th .th-filter-btn,
 body.page-weekly-lineup .picks-table.weekly-lineup-table thead th .th-filter-btn,
 .page-weekly-lineup .picks-table.weekly-lineup-table thead th .th-filter-btn {
     position: absolute !important;
-    right: 18px !important; /* shifted left to avoid overlapping sort icon */
+    right: 10px !important; /* align with centralized sort icon */
     top: 50% !important;
     transform: translateY(-50%) !important;
     z-index: 102 !important;
     pointer-events: auto !important;
-    width: 22px !important;
-    height: 22px !important;
-    min-width: 22px !important;
-    min-height: 22px !important;
+    width: 18px !important;
+    height: 18px !important;
     cursor: pointer !important;
     margin: 0 !important;
     padding: 0 !important;
-    background: transparent !important;
 }
 
 /* Sticky header fix: ensure tbody starts below header when sticky - MORE VISIBLE */
@@ -3577,93 +3574,16 @@ body.page-weekly-lineup .filter-title,
     margin-right: 8px;
 }
 
-/* ==========================================================================
-   FILTER BUTTON - Invisible box, prominent icon
-   Position is set in thead th context above - this is for styling only
-   ========================================================================== */
+/* Weekly lineup filter button leans on the shared kebab trigger styling */
 body.page-weekly-lineup .th-filter-btn,
 .page-weekly-lineup .th-filter-btn {
-    width: 22px !important;
-    height: 22px !important;
-    padding: 0 !important;
-    background: transparent !important;
-    border: none !important;
-    cursor: pointer !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    transition: all 0.15s ease !important;
-    z-index: 102 !important;
-    pointer-events: auto !important;
-    /* Position is absolute - set in thead th context above */
+    width: 18px !important;
+    height: 18px !important;
 }
 
-/* Hover state - subtle background + glow */
-body.page-weekly-lineup .th-filter-btn:hover,
-.page-weekly-lineup .th-filter-btn:hover {
-    opacity: 1;
-    background: rgba(255, 255, 255, 0.1) !important;
-    border-radius: 4px !important;
-}
-
-/* Active/pressed state */
-body.page-weekly-lineup .th-filter-btn:active,
-.page-weekly-lineup .th-filter-btn:active {
-    opacity: 0.8;
-}
-
-/* Expanded state (dropdown open) */
 body.page-weekly-lineup .th-filter-btn[aria-expanded="true"],
 .page-weekly-lineup .th-filter-btn[aria-expanded="true"] {
     opacity: 1;
-}
-
-/* Filter icon styling - Clean Gold/White Theme */
-body.page-weekly-lineup .th-filter-icon,
-.page-weekly-lineup .th-filter-icon {
-    font-size: 1.2rem;
-    line-height: 1;
-    color: rgba(255, 255, 255, 0.75);
-    opacity: 1;
-    letter-spacing: 0.12em;
-    pointer-events: none;
-    font-weight: bold;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-    transition: all 0.2s ease;
-}
-
-body.page-weekly-lineup .th-filter-btn:hover .th-filter-icon,
-.page-weekly-lineup .th-filter-btn:hover .th-filter-icon {
-    color: #fff;
-    transform: scale(1.1);
-    text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
-}
-
-body.page-weekly-lineup .th-filter-btn[aria-expanded="true"] .th-filter-icon,
-.page-weekly-lineup .th-filter-btn[aria-expanded="true"] .th-filter-icon {
-    color: #d4af37; /* Vegas Gold */
-    text-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
-}
-
-/* Hide the ::before pseudo-element (icon is in markup) */
-body.page-weekly-lineup .th-filter-btn::before,
-.page-weekly-lineup .th-filter-btn::before {
-    content: none !important;
-}
-
-/* Active filter indicator dot - Gold */
-body.page-weekly-lineup .th-filter-btn.has-filter::after,
-.page-weekly-lineup .th-filter-btn.has-filter::after {
-    content: '';
-    position: absolute;
-    top: 2px;
-    right: 2px;
-    width: 6px;
-    height: 6px;
-    background: #d4af37;
-    border-radius: 50%;
-    box-shadow: 0 0 6px rgba(212, 175, 55, 0.6);
-    pointer-events: none;
 }
 
 /* ==========================================================================
