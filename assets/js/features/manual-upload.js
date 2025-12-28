@@ -12,7 +12,7 @@
             this.fileInput = document.getElementById('manual-upload-file');
             this.browseBtn = document.querySelector('.upload-browse-btn');
             this.textArea = document.querySelector('.manual-picks-input');
-            this.submitBtn = document.querySelector('.manual-submit-btn');
+            this.submitBtn = document.querySelector('.manual-submit-btn-header');
             
             if (this.dropZone) {
                 this.init();
