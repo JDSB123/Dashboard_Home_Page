@@ -68,14 +68,17 @@ jobs:
           LOCATION: ${{ env.LOCATION }}
           CONTAINERAPPS_ENVIRONMENT: ${{ env.CONTAINERAPPS_ENVIRONMENT }}
         run: |
+          # Ensure the Container Apps CLI extension is available
           az extension add --name containerapp --upgrade
-          az provider register --namespace Microsoft.App
-          az provider register --namespace Microsoft.OperationalInsights
-          az containerapp env create \
-            --name "$CONTAINERAPPS_ENVIRONMENT" \
-            --resource-group "$RESOURCE_GROUP" \
-            --location "$LOCATION" \
-            --logs-destination none
+          # Check that the target Container Apps environment already exists.
+          # Provider registration is subscription-level and often blocked for repo service principals.
+          if az containerapp env show --name "$CONTAINERAPPS_ENVIRONMENT" --resource-group "$RESOURCE_GROUP" &>/dev/null; then
+            echo "Environment found: $CONTAINERAPPS_ENVIRONMENT"
+          else
+            echo "Container Apps environment '$CONTAINERAPPS_ENVIRONMENT' not found in resource group '$RESOURCE_GROUP'." >&2
+            echo "Please create it once (Portal or a privileged pipeline) and grant this workflow RG-level permissions." >&2
+            exit 1
+          fi
 
       - name: Deploy container app
         env:
