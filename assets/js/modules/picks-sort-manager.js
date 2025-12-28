@@ -300,14 +300,13 @@
          */
         /**
          * Sort icon glyphs - standardized across all pages
-         * ↕ = unsorted (bidirectional arrow shows sortable)
-         * ▴ = ascending (small up triangle)
-         * ▾ = descending (small down triangle)
+         * ▲ = unsorted/ascending (up triangle)
+         * ▼ = descending (down triangle)
          */
         SORT_ICONS: {
-            unsorted: '↕',
-            asc: '▴',
-            desc: '▾'
+            unsorted: '▲',
+            asc: '▲',
+            desc: '▼'
         },
 
         updateSortIndicators() {

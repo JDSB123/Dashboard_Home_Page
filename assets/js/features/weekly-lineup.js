@@ -1526,9 +1526,9 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
     // ===== SORTING INITIALIZATION =====
     // Standardized sort icons (matches picks-sort-manager.js)
     const SORT_ICONS = {
-        unsorted: '↕',  // bidirectional arrow - shows column is sortable
-        asc: '▴',       // small up triangle
-        desc: '▾'       // small down triangle
+        unsorted: '▲',  // up triangle - shows column is sortable
+        asc: '▲',       // up triangle for ascending
+        desc: '▼'       // down triangle for descending
     };
 
     function initializeSorting() {
