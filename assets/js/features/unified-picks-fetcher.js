@@ -28,6 +28,36 @@
         }
     };
 
+    // Request timeout in milliseconds (15 seconds)
+    const REQUEST_TIMEOUT_MS = 15000;
+
+    /**
+     * Fetch with timeout using AbortController
+     * @param {string} url - URL to fetch
+     * @param {object} options - Fetch options
+     * @param {number} timeoutMs - Timeout in milliseconds
+     * @returns {Promise<Response>}
+     */
+    const fetchWithTimeout = async (url, options = {}, timeoutMs = REQUEST_TIMEOUT_MS) => {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+        try {
+            const response = await fetch(url, {
+                ...options,
+                signal: controller.signal
+            });
+            clearTimeout(timeoutId);
+            return response;
+        } catch (error) {
+            clearTimeout(timeoutId);
+            if (error.name === 'AbortError') {
+                throw new Error(`Request timed out after ${timeoutMs}ms`);
+            }
+            throw error;
+        }
+    };
+
     /**
      * Fetch picks from all or specific league APIs
      * @param {string} league - 'all', 'nba', 'ncaam', 'nfl', 'ncaaf'
@@ -68,9 +98,9 @@
                         data = await window.NCAAMPicksFetcher.fetchPicks(date);
                     } catch (containerError) {
                         debugWarn('[UNIFIED-FETCHER] NCAAM container app failed, trying main API:', containerError.message);
-                        // Fallback to main API
+                        // Fallback to main API with timeout
                         const mainApiUrl = `${window.APP_CONFIG?.API_BASE_URL || 'https://green-bier-picks-api.azurewebsites.net/api'}/picks?league=ncaam`;
-                        const response = await fetch(mainApiUrl);
+                        const response = await fetchWithTimeout(mainApiUrl);
                         if (!response.ok) throw new Error(`Main API error: ${response.status}`);
                         data = await response.json();
                     }
@@ -96,9 +126,9 @@
                         data = await window.NFLPicksFetcher.fetchPicks(date);
                     } catch (containerError) {
                         debugWarn('[UNIFIED-FETCHER] NFL container app failed, trying main API:', containerError.message);
-                        // Fallback to main API
+                        // Fallback to main API with timeout
                         const mainApiUrl = `${window.APP_CONFIG?.API_BASE_URL || 'https://green-bier-picks-api.azurewebsites.net/api'}/picks?league=nfl`;
-                        const response = await fetch(mainApiUrl);
+                        const response = await fetchWithTimeout(mainApiUrl);
                         if (!response.ok) throw new Error(`Main API error: ${response.status}`);
                         data = await response.json();
                     }
@@ -124,9 +154,9 @@
                         data = await window.NCAAFPicksFetcher.fetchPicks(date);
                     } catch (containerError) {
                         debugWarn('[UNIFIED-FETCHER] NCAAF container app failed, trying main API:', containerError.message);
-                        // Fallback to main API
+                        // Fallback to main API with timeout
                         const mainApiUrl = `${window.APP_CONFIG?.API_BASE_URL || 'https://green-bier-picks-api.azurewebsites.net/api'}/picks?league=ncaaf`;
-                        const response = await fetch(mainApiUrl);
+                        const response = await fetchWithTimeout(mainApiUrl);
                         if (!response.ok) throw new Error(`Main API error: ${response.status}`);
                         data = await response.json();
                     }

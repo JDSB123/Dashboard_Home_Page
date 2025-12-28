@@ -6,52 +6,30 @@
     'use strict';
 
     const SortManager = {
-        _columnIndexCache: new WeakMap(),
-
         /**
-         * Get the 1-based column index for a given column key by reading the table header.
-         * Falls back to null if not found.
+         * Get 1-based column index - delegates to shared PicksDOMUtils
          */
         getColumnIndex(row, columnKey) {
-            try {
-                const table = row?.closest?.('table');
-                if (!table) return null;
-
-                let cacheForTable = this._columnIndexCache.get(table);
-                if (!cacheForTable) {
-                    cacheForTable = new Map();
-                    this._columnIndexCache.set(table, cacheForTable);
-                }
-
-                if (cacheForTable.has(columnKey)) {
-                    return cacheForTable.get(columnKey);
-                }
-
-                const th = table.querySelector(`thead th[data-sort="${columnKey}"]`) ||
-                           table.querySelector(`thead th[data-filter="${columnKey}"]`);
-                if (!th) {
-                    cacheForTable.set(columnKey, null);
-                    return null;
-                }
-
-                const rowEl = th.closest('tr');
-                const ths = rowEl ? Array.from(rowEl.children).filter(el => el.tagName === 'TH') : [];
-                const idx = ths.indexOf(th);
-                const oneBased = idx >= 0 ? idx + 1 : null;
-                cacheForTable.set(columnKey, oneBased);
-                return oneBased;
-            } catch (e) {
-                return null;
+            if (window.PicksDOMUtils?.getColumnIndex) {
+                return window.PicksDOMUtils.getColumnIndex(row, columnKey);
             }
+            return null;
         },
 
+        /**
+         * Get a table cell - delegates to shared PicksDOMUtils
+         */
         getCell(row, columnKey, fallbackIndex) {
-            const idx = this.getColumnIndex(row, columnKey) || fallbackIndex || null;
+            if (window.PicksDOMUtils?.getCell) {
+                return window.PicksDOMUtils.getCell(row, columnKey, fallbackIndex);
+            }
+            const idx = fallbackIndex || null;
             return idx ? row.querySelector(`td:nth-child(${idx})`) : null;
         },
 
         /**
          * Get date sort value from date text
+         * Handles cross-year dates (e.g., Dec 31 vs Jan 1)
          */
         getDateSortValue(dateText) {
             if (!dateText) return 0;
@@ -64,8 +42,22 @@
             if (parts.length === 2) {
                 const month = parseInt(parts[0], 10) || 0;
                 const day = parseInt(parts[1], 10) || 0;
-                const currentYear = new Date().getFullYear();
-                return new Date(currentYear, month - 1, day).getTime();
+                const now = new Date();
+                const currentMonth = now.getMonth() + 1; // 1-based
+                const currentYear = now.getFullYear();
+
+                // Handle year rollover: if we're in Dec (12) and date is Jan (1),
+                // assume it's next year. If we're in Jan and date is Dec, assume last year.
+                let year = currentYear;
+                if (currentMonth >= 11 && month <= 2) {
+                    // Late in year, early month dates are next year
+                    year = currentYear + 1;
+                } else if (currentMonth <= 2 && month >= 11) {
+                    // Early in year, late month dates are last year
+                    year = currentYear - 1;
+                }
+
+                return new Date(year, month - 1, day).getTime();
             }
 
             return 0;

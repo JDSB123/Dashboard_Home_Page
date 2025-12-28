@@ -134,8 +134,9 @@ function calculateKPIs(picks) {
 
     // Calculate percentages
     const totalGames = kpis.wins + kpis.losses + kpis.pushes;
-    if (totalGames > 0) {
-        kpis.winPercentage = ((kpis.wins / (kpis.wins + kpis.losses)) * 100).toFixed(1);
+    const totalDecided = kpis.wins + kpis.losses;
+    if (totalDecided > 0) {
+        kpis.winPercentage = ((kpis.wins / totalDecided) * 100).toFixed(1);
     }
 
     // Calculate ROE (Return on Equity)

@@ -20,47 +20,26 @@
     'use strict';
 
     const FilterManager = {
-        _columnIndexCache: new WeakMap(),
-
         /**
-         * Get 1-based column index by reading the table header for this table.
-         * Uses data-sort or data-filter on <th>.
+         * Get 1-based column index - delegates to shared PicksDOMUtils
          */
         getColumnIndex(row, columnKey) {
-            try {
-                const table = row?.closest?.('table');
-                if (!table) return null;
-
-                let cacheForTable = this._columnIndexCache.get(table);
-                if (!cacheForTable) {
-                    cacheForTable = new Map();
-                    this._columnIndexCache.set(table, cacheForTable);
-                }
-
-                if (cacheForTable.has(columnKey)) {
-                    return cacheForTable.get(columnKey);
-                }
-
-                const th = table.querySelector(`thead th[data-sort="${columnKey}"]`) ||
-                           table.querySelector(`thead th[data-filter="${columnKey}"]`);
-                if (!th) {
-                    cacheForTable.set(columnKey, null);
-                    return null;
-                }
-
-                const rowEl = th.closest('tr');
-                const ths = rowEl ? Array.from(rowEl.children).filter(el => el.tagName === 'TH') : [];
-                const idx = ths.indexOf(th);
-                const oneBased = idx >= 0 ? idx + 1 : null;
-                cacheForTable.set(columnKey, oneBased);
-                return oneBased;
-            } catch (e) {
-                return null;
+            if (window.PicksDOMUtils?.getColumnIndex) {
+                return window.PicksDOMUtils.getColumnIndex(row, columnKey);
             }
+            // Fallback if PicksDOMUtils not loaded yet
+            return null;
         },
 
+        /**
+         * Get a table cell - delegates to shared PicksDOMUtils
+         */
         getCell(row, columnKey, fallbackIndex) {
-            const idx = this.getColumnIndex(row, columnKey) || fallbackIndex || null;
+            if (window.PicksDOMUtils?.getCell) {
+                return window.PicksDOMUtils.getCell(row, columnKey, fallbackIndex);
+            }
+            // Fallback
+            const idx = fallbackIndex || null;
             return idx ? row.querySelector(`td:nth-child(${idx})`) : null;
         },
 
@@ -503,15 +482,20 @@
             if (filters.date) {
                 const { start, end } = filters.date;
                 if (start && end) {
-                    const rowEpoch = parseInt(row.getAttribute('data-epoch'), 10);
-                    if (isNaN(rowEpoch)) return false; 
-                    
-                    const rowDate = new Date(rowEpoch * 1000);
-                    // Set times to ensure inclusive comparison
-                    const startDate = new Date(start); startDate.setHours(0,0,0,0);
-                    const endDate = new Date(end); endDate.setHours(23,59,59,999);
-                    
-                    if (rowDate < startDate || rowDate > endDate) return false;
+                    const rowEpoch = row.getAttribute('data-epoch');
+                    // Only filter by epoch if the row has the data-epoch attribute
+                    // Rows without data-epoch should pass through (don't exclude valid data)
+                    if (rowEpoch) {
+                        const epochNum = parseInt(rowEpoch, 10);
+                        if (!isNaN(epochNum)) {
+                            const rowDate = new Date(epochNum * 1000);
+                            // Set times to ensure inclusive comparison
+                            const startDate = new Date(start); startDate.setHours(0,0,0,0);
+                            const endDate = new Date(end); endDate.setHours(23,59,59,999);
+
+                            if (rowDate < startDate || rowDate > endDate) return false;
+                        }
+                    }
                 }
             }
 

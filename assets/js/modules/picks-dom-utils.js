@@ -5,7 +5,73 @@
 (function() {
     'use strict';
 
+    // Shared column index cache across all modules
+    const _columnIndexCache = new WeakMap();
+
     const DOMUtils = {
+        /**
+         * Get the 1-based column index for a given column key by reading the table header.
+         * Shared utility to avoid duplication in filter/sort managers.
+         * @param {HTMLElement} row - A table row element
+         * @param {string} columnKey - The data-sort or data-filter attribute value
+         * @returns {number|null} 1-based column index or null if not found
+         */
+        getColumnIndex(row, columnKey) {
+            try {
+                const table = row?.closest?.('table');
+                if (!table) return null;
+
+                let cacheForTable = _columnIndexCache.get(table);
+                if (!cacheForTable) {
+                    cacheForTable = new Map();
+                    _columnIndexCache.set(table, cacheForTable);
+                }
+
+                if (cacheForTable.has(columnKey)) {
+                    return cacheForTable.get(columnKey);
+                }
+
+                const th = table.querySelector(`thead th[data-sort="${columnKey}"]`) ||
+                           table.querySelector(`thead th[data-filter="${columnKey}"]`);
+                if (!th) {
+                    cacheForTable.set(columnKey, null);
+                    return null;
+                }
+
+                const rowEl = th.closest('tr');
+                const ths = rowEl ? Array.from(rowEl.children).filter(el => el.tagName === 'TH') : [];
+                const idx = ths.indexOf(th);
+                const oneBased = idx >= 0 ? idx + 1 : null;
+                cacheForTable.set(columnKey, oneBased);
+                return oneBased;
+            } catch (e) {
+                return null;
+            }
+        },
+
+        /**
+         * Get a table cell by column key or fallback index
+         * @param {HTMLElement} row - A table row element
+         * @param {string} columnKey - The data-sort or data-filter attribute value
+         * @param {number} fallbackIndex - Fallback 1-based index if column not found
+         * @returns {HTMLElement|null} The table cell or null
+         */
+        getCell(row, columnKey, fallbackIndex) {
+            const idx = this.getColumnIndex(row, columnKey) || fallbackIndex || null;
+            return idx ? row.querySelector(`td:nth-child(${idx})`) : null;
+        },
+
+        /**
+         * Clear the column index cache for a specific table or all tables
+         * @param {HTMLElement} table - Optional table to clear cache for
+         */
+        clearColumnIndexCache(table) {
+            if (table) {
+                _columnIndexCache.delete(table);
+            }
+            // Note: WeakMap doesn't support clear(), but entries are garbage collected
+        },
+
         /**
          * Escape HTML to prevent XSS
          */

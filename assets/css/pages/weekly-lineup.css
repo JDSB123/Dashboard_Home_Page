@@ -5,6 +5,30 @@
    Now matches the dashboard layout and styling
    ========================================================================== */
 
+/* ===== TOOLBAR LAYOUT - Consistent margins for filter toolbar ===== */
+body.page-weekly-lineup .toolbar-layout {
+    margin-left: 0.75in;
+    margin-right: 0.75in;
+    width: calc(100% - 1.5in);
+    box-sizing: border-box;
+}
+
+@media (max-width: 900px) {
+    body.page-weekly-lineup .toolbar-layout {
+        margin-left: 0.5in;
+        margin-right: 0.5in;
+        width: calc(100% - 1in);
+    }
+}
+
+@media (max-width: 600px) {
+    body.page-weekly-lineup .toolbar-layout {
+        margin-left: 0.25in;
+        margin-right: 0.25in;
+        width: calc(100% - 0.5in);
+    }
+}
+
 /* ===== PAGE SPECIFIC - WITH HERO BANNER ===== */
 body.page-weekly-lineup {
     --weekly-accent-primary: var(--emerald-500);
@@ -442,52 +466,8 @@ body.page-weekly-lineup .picks-table thead th,
     line-height: 1;
 }
 
-/* Sort icon positioned at bottom-right of th cell */
-.page-weekly-lineup .weekly-lineup-table .sort-icon {
-    position: absolute !important;
-    right: 2px !important;
-    bottom: 2px !important;
-    top: auto;
-    transform: none !important; /* prevent any bundled rotate rules from flipping JS-provided glyphs */
-    margin: 0 !important;
-    margin-left: 0 !important;
-    pointer-events: none;
-
-    /* Badge styling (matches dashboard) */
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 16px;
-    height: 16px;
-    font-size: 11px;
-    line-height: 1;
-    font-weight: 700;
-    color: rgba(34, 197, 94, 0.85);
-    opacity: 0.55;
-    border-radius: 4px;
-    background: rgba(2, 6, 23, 0.35);
-    border: 1px solid rgba(34, 197, 94, 0.25);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
-    transition:
-        opacity 150ms ease,
-        color 150ms ease,
-        background-color 150ms ease,
-        border-color 150ms ease,
-        box-shadow 150ms ease;
-}
-
-.page-weekly-lineup .weekly-lineup-table th:hover .sort-icon,
-.page-weekly-lineup .weekly-lineup-table th.sorted-asc .sort-icon,
-.page-weekly-lineup .weekly-lineup-table th.sorted-desc .sort-icon,
-.page-weekly-lineup .weekly-lineup-table th[data-sort].sort-asc .sort-icon,
-.page-weekly-lineup .weekly-lineup-table th[data-sort].sort-desc .sort-icon {
-    opacity: 1;
-    color: rgba(34, 197, 94, 1);
-    background: rgba(2, 6, 23, 0.65);
-    border-color: rgba(34, 197, 94, 0.6);
-    box-shadow:
-        0 0 0 1px rgba(34, 197, 94, 0.22),
-        0 8px 20px rgba(34, 197, 94, 0.22);
+/* Sort icon - uses standardized positioning and styling from picks-table.css */
+/* No page-specific overrides needed */
 }
 
 /* Filter button - absolutely positioned relative to th cell, shifted left for icon space */
@@ -4972,11 +4952,7 @@ body.page-weekly-lineup .th-filter-dropdown.weekly-lineup-filter-dropdown .team-
     margin-top: 2px;
 }
 
-/* Sort icon */
-.weekly-lineup-table thead th .sort-icon {
-    font-size: 14px;
-    font-weight: bold;
-}
+/* Sort icon - uses standardized styles from picks-table.css */
 
 /* Filter buttons - separate from sort buttons */
 .weekly-lineup-table thead th .th-filter-btn {

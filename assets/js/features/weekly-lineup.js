@@ -6,9 +6,8 @@
    Matches dashboard styling with team logos and sorting
    ========================================================================== */
 
-// IMMEDIATE DEBUG - OUTSIDE OF IIFE
-const WL_BUILD = '33.00.4';
-console.log(`!!!!! WEEKLY-LINEUP.JS FILE IS BEING PARSED (build ${WL_BUILD}) !!!!!`);
+// Build version tracking
+const WL_BUILD = '33.00.5';
 window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
 (function() {
@@ -19,7 +18,6 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
     const MAX_FILTER_INIT_ATTEMPTS = 10;
 
     // ===== SCRIPT LOADING VERIFICATION =====
-    console.log('[Weekly Lineup] Script loaded and executing');
 
     // debug-config.js normalizes window.DEBUG to a boolean. Support both boolean and object-based flags.
     const debugEnabled = Boolean(
@@ -212,8 +210,8 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
     // ===== INITIALIZATION =====
     function runInitialization() {
-        console.log('🎬 [Weekly Lineup] runInitialization() called');
-        console.log('📄 [Weekly Lineup] document.readyState:', document.readyState);
+        log('🎬 [Weekly Lineup] runInitialization() called');
+        log('📄 [Weekly Lineup] document.readyState:', document.readyState);
 
         // Initialize the table filter system
         initializeFilters();
@@ -225,14 +223,14 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         initializeTrackerButtons();
 
         try {
-            console.log('[Weekly Lineup] Starting initialization...');
+            log('[Weekly Lineup] Starting initialization...');
 
             // Don't auto-load picks - user must click Fetch button
             // Picks will only load when user triggers fetch via toolbar buttons
 
             // Initialize filter system
             requestAnimationFrame(() => {
-                console.log('[Weekly Lineup] Initializing filter system...');
+                log('[Weekly Lineup] Initializing filter system...');
                 if (window.TableFilters) {
                     window.TableFilters.renderFilterChips();
                     window.TableFilters.updateFilterIndicators();
@@ -241,25 +239,22 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
             // Fetch team records in background (non-blocking)
             if (window.AutoGameFetcher && window.AutoGameFetcher.fetchTodaysGames) {
-                console.log('[Weekly Lineup] Setting up team records fetch...');
+                log('[Weekly Lineup] Setting up team records fetch...');
                 window.AutoGameFetcher.fetchTodaysGames().then(() => {
                     updateTeamRecords();
                 }).catch(() => {});
             }
 
-            console.log('[Weekly Lineup] Initialization completed successfully');
+            log('[Weekly Lineup] Initialization completed successfully');
         } catch (error) {
             console.error('[Weekly Lineup] ERROR during initialization:', error);
         }
     }
 
     // Handle both cases: DOM already ready OR still loading
-    console.log('[Weekly Lineup] Checking document.readyState:', document.readyState);
     if (document.readyState === 'loading') {
-        console.log('[Weekly Lineup] DOM still loading, adding DOMContentLoaded listener');
         document.addEventListener('DOMContentLoaded', runInitialization);
     } else {
-        console.log('[Weekly Lineup] DOM already ready, running init immediately');
         runInitialization();
     }
 
@@ -478,6 +473,17 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
     function createWeeklyLineupRow(pick, idx) {
         const row = document.createElement('tr');
 
+        // XSS protection - escape HTML in user/API-provided data
+        const escapeHtml = (str) => {
+            if (!str) return '';
+            if (window.PicksDOMUtils?.escapeHtml) {
+                return window.PicksDOMUtils.escapeHtml(str);
+            }
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        };
+
         // Format date - handle both date string and pre-formatted date
         const formatDate = (dateStr) => {
             if (!dateStr) return 'TBD';
@@ -487,10 +493,10 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
         };
 
-        // Get team info with logos
-        const awayTeamName = pick.awayTeam || 'TBD';
-        const homeTeamName = pick.homeTeam || 'TBD';
-        const pickTeamName = pick.pickTeam || 'Unknown';
+        // Get team info with logos (escape for XSS protection)
+        const awayTeamName = escapeHtml(pick.awayTeam) || 'TBD';
+        const homeTeamName = escapeHtml(pick.homeTeam) || 'TBD';
+        const pickTeamName = escapeHtml(pick.pickTeam) || 'Unknown';
 
         const awayInfo = getTeamInfo(awayTeamName);
         const homeInfo = getTeamInfo(homeTeamName);
@@ -503,11 +509,11 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             }
             return '';
         };
-        const awayRecord = pick.awayRecord || getRecord(awayTeamName);
-        const homeRecord = pick.homeRecord || getRecord(homeTeamName);
+        const awayRecord = escapeHtml(pick.awayRecord || getRecord(awayTeamName));
+        const homeRecord = escapeHtml(pick.homeRecord || getRecord(homeTeamName));
 
-        // Build pick display
-        const pickLabel = buildPickLabel(pick);
+        // Build pick display (escape the label)
+        const pickLabel = escapeHtml(buildPickLabel(pick));
         const isTeamPick = pickTeamName !== 'Over' && pickTeamName !== 'Under';
 
         // Create logo HTML
@@ -546,7 +552,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             ? `<div class="matchup-cell">${awayTeamHtml}</div>`
             : `<div class="matchup-cell">${awayTeamHtml}<div class="vs-divider">@</div>${homeTeamHtml}</div>`;
 
-        const pickOdds = pick.odds || '-110';
+        const pickOdds = escapeHtml(pick.odds) || '-110';
 
         // Pick cell - unified structure: [Logo] Subject Value (Juice)
         let pickCellHtml;
@@ -565,8 +571,8 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
         // Model Prediction - shows model's line/odds
         const getModelPredictionHtml = () => {
-            const modelPrice = pick.modelPrice || '-';
-            const modelSpread = pick.modelSpread || pick.predictedSpread || pickLabel || '';
+            const modelPrice = escapeHtml(pick.modelPrice) || '-';
+            const modelSpread = escapeHtml(pick.modelSpread || pick.predictedSpread) || pickLabel || '';
             const teamAbbrev = isTeamPick ? pickInfo.abbr : pickTeamName;
             const logoHtml = isTeamPick && pickInfo.logo
                 ? `<img src="${pickInfo.logo}" class="prediction-logo" loading="eager" alt="${teamAbbrev}" onerror="this.style.display='none'">`
@@ -610,9 +616,9 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         const marketHtml = getMarketHtml();
 
         // Edge and Fire rating
-        const edge = pick.edge || 0;
-        const fire = pick.fire || 0;
-        const fireLabel = pick.fireLabel || '';
+        const edge = parseFloat(pick.edge) || 0;
+        const fire = parseInt(pick.fire) || 0;
+        const fireLabel = escapeHtml(pick.fireLabel) || '';
 
         // Generate fire emoji display with styled MAX badge
         const fireEmojis = '🔥'.repeat(fire);
@@ -626,12 +632,12 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             return 'edge-low';
         };
 
-        const sport = (pick.sport || 'NCAAB').toUpperCase();
+        const sport = escapeHtml((pick.sport || 'NCAAB').toUpperCase());
         const gameDate = pick.date || pick.gameDate;
-        const gameTime = pick.time || pick.gameTime || 'TBD';
+        const gameTime = escapeHtml(pick.time || pick.gameTime) || 'TBD';
 
         // Segment display (FG = Full Game, 1H = First Half, 2H = Second Half)
-        const segment = pick.segment || 'FG';
+        const segment = escapeHtml(pick.segment) || 'FG';
         const getSegmentDisplay = (seg) => {
             const segmentMap = {
                 'FG': 'Full Game',
@@ -785,45 +791,27 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
     // ===== FILTER INITIALIZATION =====
     function initializeFilters() {
         filterInitAttempts++;
-        console.log(`🚀 [Weekly Lineup] initializeFilters() attempt ${filterInitAttempts}`);
+        log(`[Weekly Lineup] initializeFilters() attempt ${filterInitAttempts}`);
 
-        // Debug: Check if table exists
         const table = document.querySelector('.weekly-lineup-table');
-        console.log('📊 [Weekly Lineup] Table found:', !!table);
-
         if (!table) {
-            console.error('❌ [Weekly Lineup] TABLE NOT FOUND - check HTML structure');
             if (filterInitAttempts < MAX_FILTER_INIT_ATTEMPTS) {
                 setTimeout(initializeFilters, 200);
             }
             return;
         }
-
-        // Debug: Check if thead exists
-        const thead = table.querySelector('thead');
-        console.log('📋 [Weekly Lineup] Thead found:', !!thead);
 
         // Set up filter button click handlers
         const filterButtons = document.querySelectorAll('.th-filter-btn[data-filter]');
-        console.log('🔍 [Weekly Lineup] Found', filterButtons.length, 'filter buttons');
-
-        // Log each button found
-        filterButtons.forEach((btn, i) => {
-            console.log(`  → Button ${i}: data-filter="${btn.dataset.filter}", aria-controls="${btn.getAttribute('aria-controls')}"`);
-        });
 
         if (filterButtons.length === 0) {
-            console.warn('⚠️ [Weekly Lineup] No filter buttons found!');
             if (filterInitAttempts < MAX_FILTER_INIT_ATTEMPTS) {
-                console.log(`  → Retrying in 200ms (attempt ${filterInitAttempts + 1}/${MAX_FILTER_INIT_ATTEMPTS})`);
                 setTimeout(initializeFilters, 200);
-            } else {
-                console.error('❌ [Weekly Lineup] GAVE UP - no filter buttons after max attempts');
             }
             return;
         }
 
-        console.log('✅ [Weekly Lineup] Setting up filter buttons...');
+        log(`[Weekly Lineup] Setting up ${filterButtons.length} filter buttons`);
         setupFilterButtons(filterButtons);
     }
 
