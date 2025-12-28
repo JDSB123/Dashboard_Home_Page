@@ -1,16 +1,26 @@
 {
   "navigationFallback": {
-    "rewrite": "/weekly-lineup.html",
+    "rewrite": "/dashboard.html",
     "exclude": ["/assets/*", "/config.*.js", "/*.png", "/*.ico"]
   },
   "routes": [
     {
       "route": "/",
-      "redirect": "/weekly-lineup.html"
+      "rewrite": "/dashboard.html",
+      "headers": {
+        "Cache-Control": "no-cache, must-revalidate"
+      }
     },
     {
       "route": "/dashboard",
       "rewrite": "/dashboard.html",
+      "headers": {
+        "Cache-Control": "no-cache, must-revalidate"
+      }
+    },
+    {
+      "route": "/weekly-lineup",
+      "rewrite": "/weekly-lineup.html",
       "headers": {
         "Cache-Control": "no-cache, must-revalidate"
       }
@@ -43,7 +53,7 @@
   ],
   "responseOverrides": {
     "404": {
-      "redirect": "/weekly-lineup.html"
+      "rewrite": "/dashboard.html"
     }
   },
   "globalHeaders": {
