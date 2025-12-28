@@ -5,7 +5,7 @@ node_modules/
 build/
 
 # IDE
-.vscode/
+
 .idea/
 
 # OS files
@@ -33,3 +33,6 @@ venv/
 *.tmp
 *.temp
 nul
+
+# Nested repository
+Dashboard_Home_Page/
