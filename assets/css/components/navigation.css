@@ -935,3 +935,103 @@ body.page-active-picks .nav-link[aria-current="page"] {
     }
     
 }
+
+/* ===== Manual Upload Section ===== */
+.manual-upload-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.upload-drop-zone {
+    border: 1px dashed rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    padding: 12px;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+.upload-drop-zone:hover,
+.upload-drop-zone.drag-over {
+    border-color: #00ffaa;
+    background: rgba(0, 255, 170, 0.05);
+}
+
+.drop-zone-text {
+    display: block;
+    font-family: var(--sportsbook-heading-font);
+    font-size: 0.75rem;
+    color: #b0bec5;
+    margin-bottom: 6px;
+    pointer-events: none;
+}
+
+.hidden-file-input {
+    display: none;
+}
+
+.upload-browse-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #e8f0f2;
+    font-family: var(--sportsbook-heading-font);
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.upload-browse-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+}
+
+.manual-picks-input {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    color: #cfd8dc;
+    font-family: var(--sportsbook-body-font);
+    font-size: 0.8rem;
+    padding: 6px;
+    border-radius: 3px;
+    resize: vertical;
+    min-height: 40px;
+}
+
+.manual-picks-input:focus {
+    outline: none;
+    border-color: rgba(0, 255, 170, 0.4);
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.manual-submit-btn {
+    width: 100%;
+    background: linear-gradient(135deg, rgba(0, 143, 88, 0.8), rgba(0, 100, 60, 0.9));
+    border: 1px solid rgba(0, 255, 170, 0.2);
+    color: #ffffff;
+    font-family: var(--sportsbook-heading-font);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 6px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.manual-submit-btn:hover {
+    background: linear-gradient(135deg, rgba(0, 180, 110, 0.9), rgba(0, 143, 88, 0.95));
+    border-color: rgba(0, 255, 170, 0.4);
+    box-shadow: 0 0 10px rgba(0, 255, 170, 0.2);
+}
+

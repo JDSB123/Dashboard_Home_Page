@@ -1,14 +1,54 @@
 const { TableClient } = require('@azure/data-tables');
 const { BlobServiceClient } = require('@azure/storage-blob');
 
+const DEFAULT_ALLOWED_ORIGINS = ['*'];
+const configuredOrigins = (process.env.CORS_ALLOWED_ORIGINS || '')
+    .split(',')
+    .map(origin => origin.trim())
+    .filter(Boolean);
+const ALLOWED_ORIGINS = configuredOrigins.length > 0 ? configuredOrigins : DEFAULT_ALLOWED_ORIGINS;
+
+function buildCorsHeaders(req) {
+    const origin = req.headers?.origin;
+    const allowOrigin = ALLOWED_ORIGINS.includes('*')
+        ? '*'
+        : (origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0] || '*');
+
+    const headers = {
+        'Access-Control-Allow-Origin': allowOrigin,
+        'Access-Control-Allow-Methods': 'GET,OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, x-functions-key',
+        'Access-Control-Max-Age': '86400'
+    };
+
+    if (allowOrigin !== '*') {
+        headers['Vary'] = 'Origin';
+    }
+
+    return headers;
+}
+
+function sendResponse(context, req, status, body, extraHeaders = {}) {
+    context.res = {
+        status,
+        headers: {
+            ...buildCorsHeaders(req),
+            ...extraHeaders
+        },
+        body
+    };
+}
+
 module.exports = async function (context, req) {
     const jobId = context.bindingData.jobId;
     
+    if (req.method === 'OPTIONS') {
+        sendResponse(context, req, 204, null);
+        return;
+    }
+    
     if (!jobId) {
-        context.res = {
-            status: 400,
-            body: { error: 'Job ID is required' }
-        };
+        sendResponse(context, req, 400, { error: 'Job ID is required' });
         return;
     }
 
@@ -33,10 +73,7 @@ module.exports = async function (context, req) {
         }
 
         if (!jobEntity) {
-            context.res = {
-                status: 404,
-                body: { error: 'Job not found' }
-            };
+            sendResponse(context, req, 404, { error: 'Job not found' });
             return;
         }
 
@@ -79,23 +116,16 @@ module.exports = async function (context, req) {
             response.error = jobEntity.error;
         }
 
-        context.res = {
-            status: 200,
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: response
-        };
+        sendResponse(context, req, 200, response, {
+            'Content-Type': 'application/json'
+        });
 
     } catch (error) {
         context.log.error('Error retrieving job status:', error);
-        context.res = {
-            status: 500,
-            body: {
-                error: 'Internal server error',
-                message: error.message
-            }
-        };
+        sendResponse(context, req, 500, {
+            error: 'Internal server error',
+            message: error.message
+        });
     }
 };
 

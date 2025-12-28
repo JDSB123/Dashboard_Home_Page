@@ -208,6 +208,22 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
     let currentSort = { column: 'edge', direction: 'desc' };
     let allPicks = [];  // Store all picks for sorting
 
+    // ===== SHARED CONSTANTS (must be declared before initialization runs) =====
+    const SORT_ICONS = {
+        unsorted: '\u25B2',  // default sortable indicator
+        asc: '\u25B2',
+        desc: '\u25BC'
+    };
+
+    // Store last fetch times per league so timestamps can be updated safely
+    const lastFetchTimes = {
+        all: null,
+        nba: null,
+        ncaab: null,
+        nfl: null,
+        ncaaf: null
+    };
+
     // ===== INITIALIZATION =====
     function runInitialization() {
         log('🎬 [Weekly Lineup] runInitialization() called');
@@ -371,15 +387,6 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             showNoPicks('Error loading picks. Please try the Fetch button to retry.');
         }
     }
-
-    // Store last fetch times per league
-    const lastFetchTimes = {
-        all: null,
-        nba: null,
-        ncaab: null,
-        nfl: null,
-        ncaaf: null
-    };
 
     // Update last fetched timestamp display
     function updateLastFetchedTime(league = 'all', count = null) {
@@ -1522,14 +1529,6 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         console.log(`📊 [Toolbar Filter] ${visibleCount} rows visible`);
         applyZebraStripes();
     }
-
-    // ===== SORTING INITIALIZATION =====
-    // Standardized sort icons (matches picks-sort-manager.js)
-    const SORT_ICONS = {
-        unsorted: '▲',  // up triangle - shows column is sortable
-        asc: '▲',       // up triangle for ascending
-        desc: '▼'       // down triangle for descending
-    };
 
     function initializeSorting() {
         const sortButtons = document.querySelectorAll('.th-sort-btn');

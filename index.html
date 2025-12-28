@@ -59,6 +59,7 @@
 
     <!-- Core dashboard interactions: KPI tiles, sorting -->
     <script src="assets/js/core/debug-config.js?v=20251224-3" defer></script>
+    <script src="assets/js/features/manual-upload.js" defer></script>
 </head>
 <body class="page-active-picks">
 <noscript>
@@ -165,6 +166,24 @@
                             <input type="password" id="primetime-password" class="credential-input-compact" placeholder="Password" name="primetimeaction-secret" autocomplete="new-password" spellcheck="false" data-form-type="other" inputmode="text" aria-label="Prime Time Action password">
                         </div>
                     </form>
+                </section>
+                <!-- Manual Upload -->
+                <section class="sportsbook-card manual-upload-card" aria-labelledby="manual-upload-name">
+                    <div class="sportsbook-card-header">
+                        <div class="sportsbook-name-group" id="manual-upload-name">
+                            <span class="connection-status connected" style="background: #00d689; box-shadow: 0 0 8px rgba(0, 214, 137, 0.6);"></span>
+                            <span class="sportsbook-name">Manual Upload</span>
+                        </div>
+                    </div>
+                    <div class="manual-upload-content">
+                        <div class="upload-drop-zone" id="manual-upload-drop-zone">
+                            <span class="drop-zone-text">Drag & Drop or Paste Image</span>
+                            <input type="file" id="manual-upload-file" class="hidden-file-input" accept=".pdf,.html,.txt,.doc,.docx,.png,.jpg,.jpeg">
+                            <button type="button" class="upload-browse-btn">Browse Files</button>
+                        </div>
+                        <textarea class="manual-picks-input" placeholder="Or paste picks here (e.g. Bills -3, Eagles ML)..." rows="2"></textarea>
+                        <button type="button" class="manual-submit-btn">Upload Picks</button>
+                    </div>
                 </section>
             </div>
         </li>

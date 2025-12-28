@@ -7,10 +7,53 @@ const MODEL_ENDPOINTS = {
     ncaaf: process.env.NCAAF_API_URL || 'https://ncaaf-v5-prod.salmonwave-314d4ffe.eastus.azurecontainerapps.io'
 };
 
+const DEFAULT_ALLOWED_ORIGINS = ['*'];
+const configuredOrigins = (process.env.CORS_ALLOWED_ORIGINS || '')
+    .split(',')
+    .map(origin => origin.trim())
+    .filter(Boolean);
+const ALLOWED_ORIGINS = configuredOrigins.length > 0 ? configuredOrigins : DEFAULT_ALLOWED_ORIGINS;
+
+function buildCorsHeaders(req) {
+    const origin = req.headers?.origin;
+    const allowOrigin = ALLOWED_ORIGINS.includes('*')
+        ? '*'
+        : (origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0] || '*');
+
+    const headers = {
+        'Access-Control-Allow-Origin': allowOrigin,
+        'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, x-functions-key',
+        'Access-Control-Max-Age': '86400'
+    };
+
+    if (allowOrigin !== '*') {
+        headers['Vary'] = 'Origin';
+    }
+
+    return headers;
+}
+
+function sendResponse(context, req, status, body, extraHeaders = {}) {
+    context.res = {
+        status,
+        headers: {
+            ...buildCorsHeaders(req),
+            ...extraHeaders
+        },
+        body
+    };
+}
+
 module.exports = async function (context, req) {
     const action = context.bindingData.action || 'get';
 
     try {
+        if (req.method === 'OPTIONS') {
+            sendResponse(context, req, 204, null);
+            return;
+        }
+
         const tableClient = TableClient.fromConnectionString(
             process.env.AzureWebJobsStorage,
             'modelregistry'
@@ -42,24 +85,17 @@ module.exports = async function (context, req) {
                 }
             }
 
-            context.res = {
-                status: 200,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Cache-Control': 'public, max-age=60'
-                },
-                body: registry
-            };
+            sendResponse(context, req, 200, registry, {
+                'Content-Type': 'application/json',
+                'Cache-Control': 'public, max-age=60'
+            });
 
         } else if (req.method === 'POST' && action === 'update') {
             // Update model registry entry
             const { model, version, endpoint } = req.body;
 
             if (!model) {
-                context.res = {
-                    status: 400,
-                    body: { error: 'Model type is required' }
-                };
+                sendResponse(context, req, 400, { error: 'Model type is required' });
                 return;
             }
 
@@ -74,30 +110,21 @@ module.exports = async function (context, req) {
 
             await tableClient.upsertEntity(entity);
 
-            context.res = {
-                status: 200,
-                body: {
-                    message: 'Registry updated successfully',
-                    model: model,
-                    version: version
-                }
-            };
+            sendResponse(context, req, 200, {
+                message: 'Registry updated successfully',
+                model: model,
+                version: version
+            });
 
         } else {
-            context.res = {
-                status: 400,
-                body: { error: 'Invalid action' }
-            };
+            sendResponse(context, req, 400, { error: 'Invalid action' });
         }
 
     } catch (error) {
         context.log.error('Error in ModelRegistry:', error);
-        context.res = {
-            status: 500,
-            body: {
-                error: 'Internal server error',
-                message: error.message
-            }
-        };
+        sendResponse(context, req, 500, {
+            error: 'Internal server error',
+            message: error.message
+        });
     }
 };
