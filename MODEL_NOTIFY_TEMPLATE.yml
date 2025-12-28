@@ -1,0 +1,112 @@
+name: Notify Dashboard on Model Deploy
+
+on:
+  push:
+    branches: [main, dev]
+    # Adjust these paths to your actual model code
+    paths:
+      - 'src/**'
+      - 'app/**'
+      - 'requirements.txt'
+      - 'package.json'
+      - '.github/workflows/notify-dashboard-on-deploy.yml'
+
+jobs:
+  notify:
+    name: Notify Dashboard of New Model Endpoint
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Get Model Container App FQDN
+        id: get-fqdn
+        run: |
+          # ⚠️ EDIT THESE FOR YOUR MODEL ⚠️
+          MODEL_TYPE="nba"                    # Change: nba, ncaam, nfl, ncaaf
+          RG_NAME="nba-gbsv-model-rg"        # Your model's resource group
+          APP_NAME="nba-gbsv-api"            # Your model's container app name
+          
+          echo "Looking up: $APP_NAME in $RG_NAME"
+          
+          # Get the container app's public FQDN
+          FQDN=$(az containerapp show \
+            --name "$APP_NAME" \
+            --resource-group "$RG_NAME" \
+            --query 'properties.configuration.ingress.fqdn' \
+            --output tsv 2>/dev/null)
+          
+          if [ -z "$FQDN" ]; then
+            echo "❌ Failed to get FQDN for $APP_NAME in $RG_NAME"
+            echo "   Check that the RG and app names are correct."
+            exit 1
+          fi
+          
+          ENDPOINT="https://$FQDN"
+          echo "✅ Got endpoint: $ENDPOINT"
+          echo "model_type=$MODEL_TYPE" >> $GITHUB_OUTPUT
+          echo "endpoint=$ENDPOINT" >> $GITHUB_OUTPUT
+
+      - name: Update Dashboard Model Registry
+        run: |
+          MODEL_TYPE="${{ steps.get-fqdn.outputs.model_type }}"
+          ENDPOINT="${{ steps.get-fqdn.outputs.endpoint }}"
+          VERSION="${{ github.sha }}"
+          TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          
+          echo "Updating dashboard registry..."
+          echo "  Model: $MODEL_TYPE"
+          echo "  Endpoint: $ENDPOINT"
+          echo "  Version: $VERSION"
+          
+          RESPONSE=$(curl -s -X POST \
+            "${{ secrets.ORCHESTRATOR_URL }}/registry/update" \
+            -H "Content-Type: application/json" \
+            -H "x-functions-key: ${{ secrets.ORCHESTRATOR_KEY }}" \
+            -d '{
+              "model": "'$MODEL_TYPE'",
+              "endpoint": "'$ENDPOINT'",
+              "version": "'$VERSION'",
+              "timestamp": "'$TIMESTAMP'"
+            }')
+          
+          echo "Response: $RESPONSE"
+          
+          # Check if update was successful
+          if echo "$RESPONSE" | grep -q "successfully\|200\|updated"; then
+            echo "✅ Dashboard registry updated!"
+          else
+            echo "⚠️  Update response: $RESPONSE"
+          fi
+
+      - name: Notify Slack (Optional)
+        if: success()
+        run: |
+          # Only works if you set SLACK_WEBHOOK_URL secret
+          WEBHOOK="${{ secrets.SLACK_WEBHOOK_URL }}"
+          if [ -n "$WEBHOOK" ]; then
+            curl -X POST "$WEBHOOK" \
+              -H "Content-Type: application/json" \
+              -d '{
+                "text": "✅ Model endpoint updated",
+                "attachments": [{
+                  "color": "good",
+                  "fields": [
+                    {"title": "Model", "value": "${{ steps.get-fqdn.outputs.model_type }}", "short": true},
+                    {"title": "Endpoint", "value": "${{ steps.get-fqdn.outputs.endpoint }}", "short": false},
+                    {"title": "Commit", "value": "${{ github.sha }}", "short": true}
+                  ]
+                }]
+              }'
+          fi

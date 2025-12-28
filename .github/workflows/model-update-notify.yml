@@ -48,20 +48,91 @@ jobs:
             echo "trigger_execution=${{ github.event.inputs.trigger_execution }}" >> $GITHUB_OUTPUT
           fi
       
+      - name: Get Model Container App FQDN
+        id: get-fqdn
+        run: |
+          MODEL_TYPE="${{ steps.model-info.outputs.model_type }}"
+          
+          # Map model type to RG and app names
+          case "$MODEL_TYPE" in
+            nba)
+              RG_NAME="nba-gbsv-model-rg"
+              APP_NAME="nba-gbsv-api"
+              ;;
+            ncaam)
+              RG_NAME="ncaam-gbsv-model-rg"
+              APP_NAME="ncaam-stable-prediction"
+              ;;
+            nfl)
+              RG_NAME="nfl-gbsv-model-rg"
+              APP_NAME="nfl-api"
+              ;;
+            ncaaf)
+              RG_NAME="ncaaf-gbsv-model-rg"
+              APP_NAME="ncaaf-v5-prod"
+              ;;
+            *)
+              echo "Unknown model type: $MODEL_TYPE"
+              exit 1
+              ;;
+          esac
+          
+          echo "Model: $MODEL_TYPE"
+          echo "RG: $RG_NAME"
+          echo "App: $APP_NAME"
+          
+          # Get the container app FQDN
+          FQDN=$(az containerapp show \
+            --name "$APP_NAME" \
+            --resource-group "$RG_NAME" \
+            --query 'properties.configuration.ingress.fqdn' \
+            --output tsv 2>/dev/null)
+          
+          if [ -z "$FQDN" ]; then
+            echo "⚠️  Could not fetch FQDN from container app (may not exist yet)"
+            # Use endpoint from environment variable as fallback
+            case "$MODEL_TYPE" in
+              nba)
+                FQDN="nba-gbsv-api.livelycoast-b48c3cb0.eastus.azurecontainerapps.io"
+                ;;
+              ncaam)
+                FQDN="ncaam-stable-prediction.blackglacier-5fab3573.centralus.azurecontainerapps.io"
+                ;;
+              nfl)
+                FQDN="nfl-api.purplegrass-5889a981.eastus.azurecontainerapps.io"
+                ;;
+              ncaaf)
+                FQDN="ncaaf-v5-prod.salmonwave-314d4ffe.eastus.azurecontainerapps.io"
+                ;;
+            esac
+          fi
+          
+          ENDPOINT="https://$FQDN"
+          echo "Endpoint: $ENDPOINT"
+          echo "fqdn=$ENDPOINT" >> $GITHUB_OUTPUT
+
       - name: Update Model Registry
         env:
           ORCHESTRATOR_URL: ${{ secrets.ORCHESTRATOR_URL }}
           ORCHESTRATOR_KEY: ${{ secrets.ORCHESTRATOR_KEY }}
         run: |
-          echo "Updating model registry for ${{ steps.model-info.outputs.model_type }} to version ${{ steps.model-info.outputs.version }}"
+          MODEL_TYPE="${{ steps.model-info.outputs.model_type }}"
+          VERSION="${{ steps.model-info.outputs.version }}"
+          ENDPOINT="${{ steps.get-fqdn.outputs.fqdn }}"
+          
+          echo "Updating model registry:"
+          echo "  Model: $MODEL_TYPE"
+          echo "  Version: $VERSION"
+          echo "  Endpoint: $ENDPOINT"
           
           response=$(curl -X POST \
             "$ORCHESTRATOR_URL/registry/update" \
             -H "Content-Type: application/json" \
             -H "x-functions-key: $ORCHESTRATOR_KEY" \
             -d '{
-              "model": "${{ steps.model-info.outputs.model_type }}", 
-              "version": "${{ steps.model-info.outputs.version }}",
+              "model": "'$MODEL_TYPE'", 
+              "version": "'$VERSION'",
+              "endpoint": "'$ENDPOINT'",
               "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'"
             }' \
             -w "\n%{http_code}")
@@ -75,7 +146,7 @@ jobs:
             exit 1
           fi
           
-          echo "Registry updated successfully"
+          echo "✅ Registry updated successfully"
       
       - name: Invalidate Dashboard Cache
         env:

@@ -4,7 +4,7 @@ const { TableClient } = require('@azure/data-tables');
 const axios = require('axios');
 const { v4: uuidv4 } = require('uuid');
 
-// Model configuration mapping
+// Model configuration defaults (overridden by registry table when present)
 const MODEL_CONFIG = {
     nba: {
         endpoint: process.env.NBA_API_URL || 'https://nba-gbsv-api.livelycoast-b48c3cb0.eastus.azurecontainerapps.io',
@@ -24,6 +24,40 @@ const MODEL_CONFIG = {
     }
 };
 
+const MODEL_REGISTRY_TABLE = process.env.MODEL_REGISTRY_TABLE || 'modelregistry';
+const STORAGE_CONNECTION = process.env.AzureWebJobsStorage;
+
+async function resolveModelEndpoint(modelType, context) {
+    // Prefer registry table so endpoint updates do not require a code deploy
+    try {
+        if (!STORAGE_CONNECTION) {
+            context.log.warn('AzureWebJobsStorage not configured; falling back to defaults');
+            return MODEL_CONFIG[modelType]?.endpoint;
+        }
+
+        const registryClient = TableClient.fromConnectionString(
+            STORAGE_CONNECTION,
+            MODEL_REGISTRY_TABLE
+        );
+
+        const registry = registryClient.listEntities({
+            queryOptions: {
+                filter: `PartitionKey eq '${modelType}' and RowKey eq 'current'`
+            }
+        });
+
+        for await (const entity of registry) {
+            if (entity.endpoint) {
+                return entity.endpoint;
+            }
+        }
+    } catch (err) {
+        context.log.warn('Model registry lookup failed; using defaults', err.message);
+    }
+
+    return MODEL_CONFIG[modelType]?.endpoint;
+}
+
 module.exports = async function (context, req) {
     context.log('ModelOrchestrator triggered with request:', JSON.stringify(req.body));
 
@@ -42,7 +76,17 @@ module.exports = async function (context, req) {
         }
 
         const modelType = model.toLowerCase();
-        const modelConfig = MODEL_CONFIG[modelType];
+        const resolvedEndpoint = await resolveModelEndpoint(modelType, context);
+
+        if (!resolvedEndpoint) {
+            context.res = {
+                status: 500,
+                body: {
+                    error: 'No endpoint configured for requested model'
+                }
+            };
+            return;
+        }
         
         // Generate job ID
         const jobId = uuidv4();
@@ -50,7 +94,7 @@ module.exports = async function (context, req) {
 
         // Create job record in Table Storage
         const tableClient = TableClient.fromConnectionString(
-            process.env.AzureWebJobsStorage,
+            STORAGE_CONNECTION,
             'modelexecutions'
         );
 
@@ -61,7 +105,7 @@ module.exports = async function (context, req) {
             model: modelType,
             params: JSON.stringify(params),
             createdAt: timestamp,
-            endpoint: modelConfig.endpoint
+            endpoint: resolvedEndpoint
         };
 
         await tableClient.createEntity(jobEntity);
@@ -71,7 +115,7 @@ module.exports = async function (context, req) {
             jobId,
             modelType,
             params,
-            endpoint: modelConfig.endpoint,
+            endpoint: resolvedEndpoint,
             timestamp
         };
 
