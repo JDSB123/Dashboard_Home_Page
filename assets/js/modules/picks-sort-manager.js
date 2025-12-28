@@ -298,35 +298,49 @@
          * Update sort indicators in headers
          * NOTE: Sort indicators removed - filter icons are sufficient
          */
+        /**
+         * Sort icon glyphs - standardized across all pages
+         * ↕ = unsorted (bidirectional arrow shows sortable)
+         * ▴ = ascending (small up triangle)
+         * ▾ = descending (small down triangle)
+         */
+        SORT_ICONS: {
+            unsorted: '↕',
+            asc: '▴',
+            desc: '▾'
+        },
+
         updateSortIndicators() {
             const state = window.PicksStateManager ?
                 window.PicksStateManager.getSortState() :
-                window.tableState.sort;
+                window.tableState?.sort;
 
             const headers = document.querySelectorAll('th[data-sort]');
 
             headers.forEach(th => {
-                th.classList.remove('sorted-asc', 'sorted-desc');
+                // Remove both naming conventions for compatibility
+                th.classList.remove('sorted-asc', 'sorted-desc', 'sort-asc', 'sort-desc');
                 th.setAttribute('aria-sort', 'none');
 
                 const icon = th.querySelector('.sort-icon');
                 if (icon) {
-                    icon.textContent = '▲';
+                    icon.textContent = this.SORT_ICONS.unsorted;
                 }
             });
 
-            if (!state.column) return;
+            if (!state?.column) return;
 
             const activeHeader = document.querySelector(`th[data-sort="${state.column}"]`);
             if (!activeHeader) return;
 
             const isDesc = state.direction === 'desc';
+            // Use standardized class names
             activeHeader.classList.add(isDesc ? 'sorted-desc' : 'sorted-asc');
             activeHeader.setAttribute('aria-sort', isDesc ? 'descending' : 'ascending');
 
             const activeIcon = activeHeader.querySelector('.sort-icon');
             if (activeIcon) {
-                activeIcon.textContent = isDesc ? '▼' : '▲';
+                activeIcon.textContent = isDesc ? this.SORT_ICONS.desc : this.SORT_ICONS.asc;
             }
         },
 

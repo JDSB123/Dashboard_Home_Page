@@ -1524,6 +1524,13 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
     }
 
     // ===== SORTING INITIALIZATION =====
+    // Standardized sort icons (matches picks-sort-manager.js)
+    const SORT_ICONS = {
+        unsorted: '↕',  // bidirectional arrow - shows column is sortable
+        asc: '▴',       // small up triangle
+        desc: '▾'       // small down triangle
+    };
+
     function initializeSorting() {
         const sortButtons = document.querySelectorAll('.th-sort-btn');
 
@@ -1531,36 +1538,37 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             btn.addEventListener('click', function() {
                 const th = this.closest('th');
                 const sortKey = th.getAttribute('data-sort');
-                const currentDirection = th.classList.contains('sort-asc') ? 'asc' :
-                                       th.classList.contains('sort-desc') ? 'desc' : null;
+                // Check both naming conventions for compatibility
+                const currentDirection = th.classList.contains('sorted-asc') || th.classList.contains('sort-asc') ? 'asc' :
+                                       th.classList.contains('sorted-desc') || th.classList.contains('sort-desc') ? 'desc' : null;
 
-                // Remove sort classes from all headers
+                // Remove sort classes from all headers (both naming conventions for compatibility)
                 document.querySelectorAll('th[data-sort]').forEach(header => {
-                    header.classList.remove('sort-asc', 'sort-desc');
+                    header.classList.remove('sorted-asc', 'sorted-desc', 'sort-asc', 'sort-desc');
                     header.removeAttribute('aria-sort');
                 });
 
-                // Set new sort direction
+                // Set new sort direction - use standardized class names
                 let newDirection;
                 if (currentDirection === 'asc') {
                     newDirection = 'desc';
-                    th.classList.add('sort-desc');
+                    th.classList.add('sorted-desc');
                     th.setAttribute('aria-sort', 'descending');
                 } else {
                     newDirection = 'asc';
-                    th.classList.add('sort-asc');
+                    th.classList.add('sorted-asc');
                     th.setAttribute('aria-sort', 'ascending');
                 }
 
                 // Perform sort
                 sortTable(sortKey, newDirection);
 
-                // Update sort icons (carats for sorting)
+                // Update sort icons
                 updateSortIndicators();
             });
         });
 
-        // Initialize sort icons on load (carats for sorting)
+        // Initialize sort icons on load
         updateSortIndicators();
     }
 
@@ -1569,14 +1577,14 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             const icon = th.querySelector('.sort-icon');
             if (!icon) return;
 
-            if (th.classList.contains('sort-desc')) {
-                icon.textContent = '▾';
-            } else if (th.classList.contains('sort-asc')) {
-                icon.textContent = '▴';
+            // Check both naming conventions for compatibility
+            if (th.classList.contains('sorted-desc') || th.classList.contains('sort-desc')) {
+                icon.textContent = SORT_ICONS.desc;
+            } else if (th.classList.contains('sorted-asc') || th.classList.contains('sort-asc')) {
+                icon.textContent = SORT_ICONS.asc;
             } else {
-                // Default (inactive) indicator
-                // Use an "unsorted" glyph distinct from both asc (▴) and desc (▾)
-                icon.textContent = '↕';
+                // Default unsorted indicator
+                icon.textContent = SORT_ICONS.unsorted;
             }
         });
     }
