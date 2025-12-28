@@ -514,43 +514,44 @@
     color: rgba(140, 235, 190, 0.98);
 }
 
-/* Sort icon - compact badge (arrow glyph is set by JS: ▴/▾ or ▲/▼) */
+/* Sort icon - minimal arrow indicator (glyph set by JS: ▴/▾ or ▲/▼) */
+/* Positioned at right edge of table headers, no visible container */
 .sort-icon {
+    position: absolute;
+    right: 4px;
+    top: 50%;
+    transform: translateY(-50%);
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 16px;
-    height: 16px;
-    font-size: 11px;
+    width: auto;
+    height: auto;
+    font-size: 10px;
     line-height: 1;
-    font-weight: 700;
-    color: rgba(34, 197, 94, 0.85);
-    opacity: 0.55;
-    margin-left: 6px;
-    vertical-align: middle;
-    border-radius: 4px;
-    background: rgba(2, 6, 23, 0.35);
-    border: 1px solid rgba(34, 197, 94, 0.25);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
-    transition:
-        opacity 150ms ease,
-        color 150ms ease,
-        background-color 150ms ease,
-        border-color 150ms ease,
-        box-shadow 150ms ease;
+    font-weight: 400;
+    color: rgba(34, 197, 94, 0.5);
+    opacity: 0.6;
+    margin: 0;
+    pointer-events: none;
+    /* No background, border, or box-shadow - just the arrow */
+    background: none;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    transition: opacity 150ms ease, color 150ms ease;
 }
 
-.th-sort-btn:hover .sort-icon {
+.th-sort-btn:hover .sort-icon,
+th:hover .sort-icon {
     opacity: 1;
-    color: rgba(74, 222, 128, 1);
-    background: rgba(2, 6, 23, 0.55);
-    border-color: rgba(74, 222, 128, 0.45);
-    box-shadow:
-        0 0 0 1px rgba(74, 222, 128, 0.14),
-        0 6px 16px rgba(34, 197, 94, 0.18);
+    color: rgba(74, 222, 128, 0.9);
+    /* Keep clean - no background/border on hover */
+    background: none;
+    border: none;
+    box-shadow: none;
 }
 
-/* Active sort states */
+/* Active sort states - slightly brighter */
 .picks-table th.sorted-asc .sort-icon,
 .picks-table th.sorted-desc .sort-icon,
 th[data-sort].sorted .sort-icon,
@@ -558,11 +559,9 @@ th[data-sort].sort-asc .sort-icon,
 th[data-sort].sort-desc .sort-icon {
     opacity: 1;
     color: rgba(34, 197, 94, 1);
-    background: rgba(2, 6, 23, 0.65);
-    border-color: rgba(34, 197, 94, 0.6);
-    box-shadow:
-        0 0 0 1px rgba(34, 197, 94, 0.22),
-        0 8px 20px rgba(34, 197, 94, 0.22);
+    background: none;
+    border: none;
+    box-shadow: none;
 }
 
 /* Header subtexts */
@@ -1794,9 +1793,8 @@ body.boxscores-collapsed .picks-table tbody tr.row-collapsed.parlay-row:hover {
     }
     
     .sort-icon {
-        width: 16px;
-        height: 16px;
-        font-size: 11px;
+        font-size: 10px;
+        right: 4px;
     }
     
     .th-boxscore-toggle {
@@ -1855,11 +1853,8 @@ body.boxscores-collapsed .picks-table tbody tr.row-collapsed.parlay-row:hover {
     }
     
     .sort-icon {
-        width: 15px;
-        height: 15px;
-        font-size: 10px;
-        margin-left: 5px;
-        border-radius: 4px;
+        font-size: 9px;
+        right: 3px;
     }
     
     .th-boxscore-toggle {
@@ -2004,11 +1999,8 @@ body.boxscores-collapsed .picks-table tbody tr.row-collapsed.parlay-row:hover {
     }
     
     .sort-icon {
-        width: 14px;
-        height: 14px;
-        font-size: 9px;
-        margin-left: 4px;
-        border-radius: 3px;
+        font-size: 8px;
+        right: 2px;
     }
     
     .th-boxscore-toggle {
