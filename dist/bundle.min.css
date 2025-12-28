@@ -14262,7 +14262,7 @@ body.page-weekly-lineup .nav-link.active {
    ========================================================================== */
 body.page-weekly-lineup .main-container {
     padding: 0 0 20px;
-    margin-top: 156px; /* moved down ~1 inch (96px) to show more of the bear background */
+    margin-top: 376px; /* moved down 376px total to show more of the bear background */
 }
 
 body.page-weekly-lineup .main-dashboard-layout {
