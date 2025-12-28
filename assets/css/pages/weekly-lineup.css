@@ -433,7 +433,7 @@ body.page-weekly-lineup .picks-table thead th,
 }
 
 .page-weekly-lineup .weekly-lineup-table .th-sort-btn {
-    /* Sort button - no relative positioning to allow icon positioning relative to shell */
+    /* Sort button - inherit base styling from picks-table.css */
     flex: 1 1 auto;
     display: flex;
     flex-direction: column;
@@ -441,7 +441,7 @@ body.page-weekly-lineup .picks-table thead th,
     justify-content: center;
     text-align: center;
     width: 100%;
-    padding: 4px 24px 4px 6px !important; /* increased right padding for icon and filter space */
+    padding: 2px 4px; /* Match dashboard's picks-table.css padding */
     gap: 0;
     min-height: unset;
 }
@@ -466,8 +466,52 @@ body.page-weekly-lineup .picks-table thead th,
     line-height: 1;
 }
 
-/* Sort icon - uses standardized positioning and styling from picks-table.css */
-/* No page-specific overrides needed */
+/* Sort icon - match dashboard's picks-table.css styling */
+.page-weekly-lineup .weekly-lineup-table .sort-icon,
+.page-weekly-lineup .picks-table .sort-icon {
+    position: absolute;
+    right: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    height: auto;
+    font-size: 7px;
+    line-height: 1;
+    font-weight: bold;
+    color: rgba(34, 197, 94, 0.5);
+    opacity: 0.7;
+    margin: 0;
+    pointer-events: none;
+    background: none;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    transition: opacity 150ms ease, color 150ms ease;
+}
+
+.page-weekly-lineup .weekly-lineup-table th:hover .sort-icon,
+.page-weekly-lineup .picks-table th:hover .sort-icon {
+    opacity: 1;
+    color: rgba(74, 222, 128, 0.9);
+    background: none;
+    border: none;
+    box-shadow: none;
+}
+
+.page-weekly-lineup .weekly-lineup-table th.sorted-asc .sort-icon,
+.page-weekly-lineup .weekly-lineup-table th.sorted-desc .sort-icon,
+.page-weekly-lineup .picks-table th.sorted-asc .sort-icon,
+.page-weekly-lineup .picks-table th.sorted-desc .sort-icon,
+.page-weekly-lineup th[data-sort].sort-asc .sort-icon,
+.page-weekly-lineup th[data-sort].sort-desc .sort-icon {
+    opacity: 1;
+    color: rgba(34, 197, 94, 1);
+    background: none;
+    border: none;
+    box-shadow: none;
 }
 
 /* Filter button positioning to keep shared filter trigger near the sort icon */
@@ -4857,7 +4901,7 @@ body.page-weekly-lineup .th-filter-dropdown.weekly-lineup-filter-dropdown .team-
 }
 
 .weekly-lineup-table thead th .th-sort-btn {
-    padding: 0;
+    padding: 2px 4px; /* Match dashboard's picks-table.css */
     margin: 0;
     background: none;
     border: none;
