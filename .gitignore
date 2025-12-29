@@ -7,6 +7,8 @@ build/
 # IDE
 
 .idea/
+.claude/
+.mypy_cache/
 
 # OS files
 .DS_Store
@@ -33,6 +35,13 @@ venv/
 *.tmp
 *.temp
 nul
+
+# Generated datasets / caches (do not commit)
+pick-analysis-tracker/cache/
+pick-analysis-tracker/output/
+
+# Azure Functions local config (contains secrets in real use)
+azure-functions/local.settings.json
 
 # Nested repository
 Dashboard_Home_Page/
