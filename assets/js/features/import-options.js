@@ -14,6 +14,21 @@ const ALLOWED_MIME_TYPES = ['application/pdf', 'image/jpeg', 'image/png', 'text/
 const MAX_FILE_SIZE_MB = 10;
 const MAX_FILE_SIZE = MAX_FILE_SIZE_MB * 1024 * 1024;
 
+function getSelectedSportsbookMeta() {
+    const select = document.getElementById('upload-sportsbook-select') || document.getElementById('manual-sportsbook-select');
+    if (!select) {
+        return { value: 'manual', label: 'Manual Upload' };
+    }
+
+    const value = (select.value || '').trim();
+    const label = (select.options[select.selectedIndex]?.textContent || value || 'Manual Upload').trim();
+
+    return {
+        value: value || 'manual',
+        label: label || 'Manual Upload'
+    };
+}
+
 function isFileAllowed(file) {
     const ext = '.' + file.name.split('.').pop().toLowerCase();
     const isExtAllowed = ALLOWED_EXTENSIONS.includes(ext);
@@ -185,7 +200,10 @@ document.addEventListener('DOMContentLoaded', () => {
             // Upload files one by one to the API
             for (const file of selectedFiles) {
                 const formData = new FormData();
+                const { value: sportsbookKey, label: sportsbookLabel } = getSelectedSportsbookMeta();
                 formData.append('file', file);
+                formData.append('sportsbook', sportsbookKey);
+                formData.append('sportsbookLabel', sportsbookLabel);
 
                 const response = await fetch(`${API_BASE_URL}/upload`, {
                     method: 'POST',
@@ -235,6 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
         uploadPasteBtn.addEventListener('click', async (e) => {
             e.stopPropagation();
             const content = pasteArea.value.trim();
+            const selectedBook = getSelectedSportsbookMeta();
 
             if (!content) {
                 showStatus('Please paste some content first.', 'error');
@@ -250,7 +269,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Use LocalPicksManager if available (local dev), otherwise use API
                 const saveFn = window.LocalPicksManager?.parseAndAdd || processAndSavePicks;
-                const picks = await saveFn(content, isHTML);
+                const picks = window.LocalPicksManager?.parseAndAdd
+                    ? await saveFn(content, selectedBook.label)
+                    : await saveFn(content, isHTML, selectedBook);
                 
                 if (picks.length === 0) {
                     showStatus('No picks could be parsed from the pasted content.', 'error');
@@ -324,8 +345,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Function to process and save picks to database
-    async function processAndSavePicks(content, isHTML = false) {
+    async function processAndSavePicks(content, isHTML = false, selectedBookMeta = null) {
         try {
+            const bookMeta = selectedBookMeta || getSelectedSportsbookMeta();
+            const sportsbookKey = bookMeta?.value || 'manual';
+            const sportsbookLabel = bookMeta?.label || 'Manual Upload';
+
             // Parse the content to extract picks
             let picks = [];
 
@@ -340,6 +365,13 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 picks = isHTML ? parseHTMLPicks(content) : parseTextPicks(content);
             }
+
+            // Attach sportsbook metadata immediately for consistency
+            picks = picks.map(pick => ({
+                ...pick,
+                sportsbook: pick.sportsbook || sportsbookLabel,
+                bookKey: pick.bookKey || sportsbookKey
+            }));
 
             // Helper to derive teams from a game/description string like "Lakers @ Warriors Over"
             const deriveTeams = (pick) => {
@@ -413,7 +445,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     },
                     body: JSON.stringify({
                         picks: picks,
-                        source: 'upload'
+                        source: 'upload',
+                        sportsbook: sportsbookKey,
+                        sportsbookLabel: sportsbookLabel
                     })
                 });
 

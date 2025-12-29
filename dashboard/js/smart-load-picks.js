@@ -153,6 +153,34 @@ function parsePickDescription(description) {
     return result;
 }
 
+function buildDescriptionFromFields(pick = {}) {
+    const parts = [];
+    if (pick.awayTeam && pick.homeTeam) {
+        parts.push(`${pick.awayTeam} @ ${pick.homeTeam}`);
+    } else if (pick.game) {
+        parts.push(pick.game);
+    } else if (pick.pickTeam) {
+        parts.push(pick.pickTeam);
+    }
+
+    const type = (pick.pickType || '').toLowerCase();
+    if (type === 'moneyline' || type === 'ml') {
+        parts.push('ML');
+    } else if (type === 'spread' && pick.line) {
+        parts.push(pick.line);
+    } else if ((type === 'total' || type === 'team-total') && pick.pickDirection) {
+        parts.push(`${pick.pickDirection} ${pick.line || ''}`.trim());
+    } else if (pick.line) {
+        parts.push(pick.line);
+    }
+
+    if (pick.odds) {
+        parts.push(`(${pick.odds})`);
+    }
+
+    return parts.filter(Boolean).join(' ').trim();
+}
+
 function parseTeamsFromGame(gameString) {
     /**
      * Extract away and home teams from game string
@@ -1307,6 +1335,163 @@ function parseMoneyAmount(raw) {
     return Number.isFinite(n) ? n : 0;
 }
 
+function formatCurrencyTerse(value) {
+    if (value === null || value === undefined || value === '') return '—';
+    const num = parseMoneyAmount(value);
+    if (!Number.isFinite(num)) return '—';
+    return `$${Math.round(num).toLocaleString()}`;
+}
+
+function normalizeBookName(name) {
+    const trimmed = (name || '').toString().trim();
+    const cleaned = trimmed.replace(/_/g, ' ');
+    return cleaned || 'Manual Upload';
+}
+
+function normalizeBookKey(name) {
+    return normalizeBookName(name).toLowerCase().replace(/[^a-z0-9]+/g, '-');
+}
+
+function normalizeDateTimeParts(pick) {
+    let date = pick.gameDate || pick.date || '';
+    let time = pick.gameTime || pick.time || '';
+    const fallback = pick.scheduled || pick.start || pick.accepted || '';
+
+    const maybeParseFallback = (value) => {
+        const parsed = new Date(value);
+        if (!Number.isNaN(parsed.getTime())) {
+            return {
+                date: parsed.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }),
+                time: parsed.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })
+            };
+        }
+        const parts = value.split(' ');
+        if (parts.length >= 2) {
+            return { date: parts.slice(0, parts.length - 1).join(' '), time: parts.slice(-1)[0] };
+        }
+        return { date: value, time: '' };
+    };
+
+    if ((!date || !time) && fallback) {
+        const derived = maybeParseFallback(fallback);
+        if (!date) date = derived.date;
+        if (!time) time = derived.time;
+    }
+
+    const buildEpoch = () => {
+        if (date && time) {
+            const ts = Date.parse(`${date} ${time}`);
+            if (!Number.isNaN(ts)) return ts;
+        }
+        if (fallback) {
+            const ts = Date.parse(fallback);
+            if (!Number.isNaN(ts)) return ts;
+        }
+        return Date.now();
+    };
+
+    return {
+        displayDate: date || 'TBD',
+        displayTime: time || '',
+        epoch: buildEpoch()
+    };
+}
+
+function toMoneyValue(raw) {
+    if (raw === null || raw === undefined || raw === '') return null;
+    const cleaned = parseFloat(raw.toString().replace(/[$,]/g, '').trim());
+    return Number.isFinite(cleaned) ? cleaned : null;
+}
+
+function formatCurrencyDisplay(value, fallback = '-') {
+    if (value === null || value === undefined || Number.isNaN(value)) return fallback;
+    const num = typeof value === 'number' ? value : parseMoneyAmount(value);
+    if (!Number.isFinite(num)) return fallback;
+    return `$${num.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}`;
+}
+
+function calculateWinFromOdds(risk, odds) {
+    const riskVal = toMoneyValue(risk);
+    const oddsText = (odds || '').toString().trim();
+    const oddsNum = parseInt(oddsText.replace(/[^\d+-]/g, ''), 10);
+
+    if (riskVal === null || Number.isNaN(oddsNum)) return null;
+
+    if (oddsNum > 0) {
+        return riskVal * (oddsNum / 100);
+    }
+    if (oddsNum < 0) {
+        return riskVal / (Math.abs(oddsNum) / 100);
+    }
+    return null;
+}
+
+function normalizeOddsValue(odds) {
+    if (!odds && odds !== 0) return '';
+    const text = odds.toString().trim();
+    if (!text) return '';
+    if (!/^[+-]/.test(text) && /^\d/.test(text)) {
+        return `+${text}`;
+    }
+    return text;
+}
+
+function normalizeSegmentLabel(segment) {
+    const raw = (segment || '').toString().toLowerCase().trim();
+    if (raw.includes('1q')) return '1st Quarter';
+    if (raw.includes('2q')) return '2nd Quarter';
+    if (raw.includes('3q')) return '3rd Quarter';
+    if (raw.includes('4q')) return '4th Quarter';
+    if (raw.includes('1h') || raw.includes('1st half')) return '1st Half';
+    if (raw.includes('2h') || raw.includes('2nd half')) return '2nd Half';
+    if (raw.includes('full')) return 'Full Game';
+    return 'Full Game';
+}
+
+function combinePickDetails(parsedPick, rawPick) {
+    const combined = { ...parsedPick };
+    const rawType = (rawPick.pickType || '').toString().toLowerCase();
+    const rawDirection = (rawPick.pickDirection || rawPick.totalType || '').toString();
+    const segmentInput = rawPick.segment || rawPick.period || parsedPick.segment || 'Full Game';
+
+    combined.segment = normalizeSegmentLabel(segmentInput);
+    combined.pickTeam = combined.pickTeam || rawPick.pickTeam || rawPick.team || '';
+    combined.line = combined.line || rawPick.line || '';
+    combined.odds = normalizeOddsValue(combined.odds || rawPick.odds || rawPick.price || '');
+
+    if (!combined.pickDirection && rawDirection) {
+        combined.pickDirection = rawDirection.charAt(0).toUpperCase() + rawDirection.slice(1).toLowerCase();
+    }
+
+    if (!combined.pickType) {
+        if (rawType === 'moneyline' || rawType === 'ml') {
+            combined.pickType = 'Moneyline';
+        } else if (rawType === 'spread' || rawType === 'ats') {
+            combined.pickType = 'Spread';
+        } else if (rawType === 'team-total' || rawType === 'tt') {
+            combined.pickType = combined.pickDirection ? combined.pickDirection : 'Over';
+            combined.isTeamTotal = true;
+        } else if (rawType === 'total') {
+            combined.pickType = combined.pickDirection ? combined.pickDirection : 'Over';
+        }
+    }
+
+    if (!combined.pickType && combined.pickDirection) {
+        combined.pickType = combined.pickDirection;
+    }
+
+    if ((rawType === 'team-total' || rawPick.isTeamTotal) && combined.pickDirection) {
+        combined.isTeamTotal = true;
+    }
+
+    if (combined.pickType === 'Moneyline' && !combined.odds && combined.line) {
+        combined.odds = normalizeOddsValue(combined.line);
+        combined.line = '';
+    }
+
+    return combined;
+}
+
 function formatSignedCurrency(amount) {
     const sign = amount > 0 ? '+' : amount < 0 ? '-' : '';
     const abs = Math.abs(amount);
@@ -1341,16 +1526,22 @@ function buildPickRow(pick, index) {
     /**
      * Create a properly formatted table row matching the EXACT template structure
      */
-    const parsedPick = parsePickDescription(pick.description);
+    const description = pick.description || pick.selection || buildDescriptionFromFields(pick);
+    const parsedPick = combinePickDetails(parsePickDescription(description), pick);
+    const matchupLabel = pick.game
+        || (pick.awayTeam && pick.homeTeam ? `${pick.awayTeam} @ ${pick.homeTeam}`
+        : (parsedPick.awayTeam && parsedPick.homeTeam) ? `${parsedPick.awayTeam} @ ${parsedPick.homeTeam}`
+        : description);
+
     const statusMeta = buildStatusMeta({
         status: pick.status,
         result: pick.result,
         score: pick.result,
-        matchup: pick.game,
-        selection: pick.description,
-        description: pick.description,
+        matchup: matchupLabel,
+        selection: description,
+        description,
         parsedPick,
-        start: pick.scheduled,
+        start: pick.scheduled || pick.start,
         countdown: pick.countdown,
         market: pick.market
     });
@@ -1368,7 +1559,7 @@ function buildPickRow(pick, index) {
     // Calculate margin for won/lost picks
     let marginText = null;
     if ((statusClass === 'win' || statusClass === 'lost') && pick.result) {
-        marginText = calculatePickMargin(parsedPick, pick.result, pick.game);
+        marginText = calculatePickMargin(parsedPick, pick.result, pick.game || matchupLabel);
     }
 
     const statusBadgeMarkup = buildStatusBadgeHTML({
@@ -1378,16 +1569,16 @@ function buildPickRow(pick, index) {
         info: statusMeta.badgeContext,
         margin: marginText
     });
-    const outcome = computeHitMissAndProfit(statusClass, pick.risk, pick.win);
 
     // Determine league
-    let league = 'nfl';
-    if (pick.sport) {
-        league = pick.sport.toLowerCase();
-    } else if (pick.game && (pick.game.includes('Suns') || pick.game.includes('Clippers'))) {
+    const leagueFromPick = pick.league || pick.sport || '';
+    let league = leagueFromPick ? leagueFromPick.toString().toLowerCase() : '';
+    if (!league && pick.game && (pick.game.includes('Suns') || pick.game.includes('Clippers'))) {
         league = 'nba';
-    } else if (pick.game && (pick.game.includes('Georgia') || pick.game.includes('UTSA') || pick.game.includes('Appalachian'))) {
+    } else if (!league && pick.game && (pick.game.includes('Georgia') || pick.game.includes('UTSA') || pick.game.includes('Appalachian'))) {
         league = 'ncaaf'; // Use normalized value for college football
+    } else if (!league) {
+        league = 'nfl';
     }
 
     // Normalize league values to match filter dropdown options
@@ -1406,33 +1597,49 @@ function buildPickRow(pick, index) {
     }
 
     // Parse teams
-    const teams = parseTeamsFromGame(pick.game);
-    const awayAbbr = getTeamAbbr(teams.away);
-    const homeAbbr = getTeamAbbr(teams.home);
-    const awayLogo = getTeamLogo(teams.away, league);
-    const homeLogo = getTeamLogo(teams.home, league);
+    const teamsFromGame = parseTeamsFromGame(pick.game);
+    const awayTeamName = pick.awayTeam || teamsFromGame.away || parsedPick.awayTeam || parsedPick.pickTeam || 'TBD';
+    const homeTeamName = pick.homeTeam || teamsFromGame.home || '';
+    const awayAbbr = getTeamAbbr(awayTeamName);
+    const homeAbbr = homeTeamName ? getTeamAbbr(homeTeamName) : '';
+    const awayLogo = getTeamLogo(awayTeamName, league);
+    const homeLogo = homeTeamName ? getTeamLogo(homeTeamName, league) : '';
 
     // Determine which team is being picked
     let pickedTeamLogo = awayLogo;
-    let pickedTeamAbbr = awayAbbr;
-    let pickedTeamName = teams.away;
+    let pickedTeamAbbr = awayAbbr || (parsedPick.pickType === 'Over' ? 'O' : 'U');
+    let pickedTeamName = awayTeamName;
 
     if (parsedPick.pickTeam) {
         // Match the picked team name to away or home
         const pickTeamLower = parsedPick.pickTeam.toLowerCase();
-        const awayLower = teams.away.toLowerCase();
-        const homeLower = teams.home.toLowerCase();
+        const awayLower = awayTeamName.toLowerCase();
+        const homeLower = homeTeamName.toLowerCase();
 
         if (homeLower.includes(pickTeamLower) || pickTeamLower.includes(homeLower)) {
             pickedTeamLogo = homeLogo;
             pickedTeamAbbr = homeAbbr;
-            pickedTeamName = teams.home;
+            pickedTeamName = homeTeamName;
         }
     } else if (parsedPick.pickType === 'Over' || parsedPick.pickType === 'Under') {
         // For totals, show game icon or both teams - use away for now
         pickedTeamLogo = awayLogo;
         pickedTeamAbbr = parsedPick.pickType.substring(0, 1); // "O" or "U"
     }
+
+    const bookName = normalizeBookName(pick.sportsbook || pick.book || pick.sourceBook || pick.bookKey || pick.source);
+    const bookKey = normalizeBookKey(bookName);
+    const riskValue = toMoneyValue(pick.risk);
+    const winProvided = toMoneyValue(pick.win);
+    const derivedWin = winProvided !== null ? winProvided : calculateWinFromOdds(riskValue, parsedPick.odds);
+    const riskDisplay = formatCurrencyDisplay(riskValue);
+    const winDisplay = formatCurrencyDisplay(derivedWin);
+    const dateMeta = normalizeDateTimeParts({
+        ...pick,
+        gameDate: pick.gameDate || pick.date,
+        gameTime: pick.gameTime || pick.time
+    });
+    const outcome = computeHitMissAndProfit(statusClass, riskValue ?? 0, derivedWin ?? 0);
 
     const row = document.createElement('tr');
     row.className = `group-start ${isLive ? 'live-game' : ''}`;
@@ -1454,17 +1661,17 @@ function buildPickRow(pick, index) {
 
     // Set all data attributes for filters to work
     row.setAttribute('data-league', league);
-    row.setAttribute('data-book', 'hulk wager');
+    row.setAttribute('data-book', bookKey);
     row.setAttribute('data-status', statusClass);
-    row.setAttribute('data-risk', pick.risk != null ? String(pick.risk).replace(/,/g, '') : '0');
-    row.setAttribute('data-win', pick.win != null ? String(pick.win).replace(/,/g, '') : '0');
-    row.setAttribute('data-away', teams.away.toLowerCase());
-    row.setAttribute('data-home', teams.home.toLowerCase());
+    row.setAttribute('data-risk', riskValue != null ? String(riskValue).replace(/,/g, '') : '0');
+    row.setAttribute('data-win', derivedWin != null ? String(derivedWin).replace(/,/g, '') : '0');
+    row.setAttribute('data-away', awayTeamName.toLowerCase());
+    row.setAttribute('data-home', homeTeamName ? homeTeamName.toLowerCase() : '');
     row.setAttribute('data-pick-type', normalizedPickType);
-    row.setAttribute('data-pick-text', pick.description.toLowerCase());
+    row.setAttribute('data-pick-text', (description || '').toLowerCase());
     row.setAttribute('data-segment', parsedPick.segment.toLowerCase().replace(/\s+/g, '-'));
     row.setAttribute('data-odds', parsedPick.odds || '-110');
-    row.setAttribute('data-epoch', new Date(pick.scheduled || pick.accepted).getTime());
+    row.setAttribute('data-epoch', dateMeta.epoch);
 
     // Generate League Logo URL
     let leagueLogoUrl = '';
@@ -1479,9 +1686,9 @@ function buildPickRow(pick, index) {
     row.innerHTML = `
         <td>
             <div class="datetime-cell">
-                <span class="cell-date">${pick.accepted || 'Nov 6, 2025'}</span>
-                <span class="cell-time">${pick.scheduled ? pick.scheduled.split(' ').slice(-2).join(' ') : ''}</span>
-                <span class="sportsbook-value">Hulk Wager</span>
+                <span class="cell-date">${dateMeta.displayDate}</span>
+                <span class="cell-time">${dateMeta.displayTime}</span>
+                <span class="sportsbook-value">${bookName}</span>
             </div>
         </td>
         <td class="center">
@@ -1491,23 +1698,33 @@ function buildPickRow(pick, index) {
             </div>
         </td>
         <td>
-            <div class="matchup-cell">
-                <div class="team-line">
-                    <img src="${awayLogo}" class="team-logo" loading="lazy" alt="${awayAbbr}">
-                    <div class="team-name-wrapper">
-                        <span class="team-name-full">${teams.away}</span>
-                        <span class="team-record" data-team="${awayAbbr}"></span>
-                    </div>
-                </div>
-                <div class="vs-divider">vs</div>
-                <div class="team-line">
-                    <img src="${homeLogo}" class="team-logo" loading="lazy" alt="${homeAbbr}">
-                    <div class="team-name-wrapper">
-                        <span class="team-name-full">${teams.home}</span>
-                        <span class="team-record" data-team="${homeAbbr}"></span>
-                    </div>
-                </div>
-            </div>
+            ${homeTeamName
+                ? `<div class="matchup-cell">
+                        <div class="team-line">
+                            <img src="${awayLogo}" class="team-logo" loading="lazy" alt="${awayAbbr}">
+                            <div class="team-name-wrapper">
+                                <span class="team-name-full">${awayTeamName}</span>
+                                <span class="team-record" data-team="${awayAbbr}"></span>
+                            </div>
+                        </div>
+                        <div class="vs-divider">vs</div>
+                        <div class="team-line">
+                            <img src="${homeLogo}" class="team-logo" loading="lazy" alt="${homeAbbr}">
+                            <div class="team-name-wrapper">
+                                <span class="team-name-full">${homeTeamName}</span>
+                                <span class="team-record" data-team="${homeAbbr}"></span>
+                            </div>
+                        </div>
+                    </div>`
+                : `<div class="matchup-cell">
+                        <div class="team-line">
+                            <img src="${awayLogo}" class="team-logo" loading="lazy" alt="${awayAbbr}">
+                            <div class="team-name-wrapper">
+                                <span class="team-name-full">${awayTeamName}</span>
+                                <span class="team-record" data-team="${awayAbbr}"></span>
+                            </div>
+                        </div>
+                    </div>`}
         </td>
         <td class="center">
             <span class="game-segment">${parsedPick.segment || 'Full Game'}</span>
@@ -1519,8 +1736,8 @@ function buildPickRow(pick, index) {
         </td>
         <td class="center">
             <span class="currency-combined currency-stacked">
-                <span class="currency-risk-row"><span class="risk-amount">$${pick.risk}</span><span class="currency-separator"> /</span></span>
-                <span class="win-amount">$${pick.win}</span>
+                <span class="currency-risk-row"><span class="risk-amount">${riskDisplay}</span><span class="currency-separator"> /</span></span>
+                <span class="win-amount">${winDisplay}</span>
             </span>
         </td>
         <td class="center">
@@ -1537,7 +1754,14 @@ function buildPickRow(pick, index) {
                         <div class="boxscore-cell header-cell">Q4</div>
                         <div class="boxscore-cell header-cell">T</div>
                     </div>
-                    ${createBoxScoreRows(pick, awayLogo, awayAbbr, homeLogo, homeAbbr, statusClass)}
+                    ${createBoxScoreRows(
+                        pick,
+                        awayLogo,
+                        awayAbbr,
+                        homeLogo || awayLogo,
+                        homeAbbr || awayAbbr,
+                        statusClass
+                    )}
                 </div>
             </div>
         </td>

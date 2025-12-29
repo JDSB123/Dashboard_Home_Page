@@ -1066,6 +1066,33 @@ body.page-active-picks .nav-link[aria-current="page"] {
     align-items: center;
 }
 
+.sportsbook-select {
+    background: rgba(0, 20, 40, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #cfd8dc;
+    font-family: var(--sportsbook-heading-font);
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 2px 6px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 100px;
+}
+
+.sportsbook-select:focus {
+    outline: none;
+    border-color: var(--color-primary-bright, #00d689);
+    box-shadow: 0 0 0 1px rgba(0, 214, 137, 0.2);
+}
+
+.sportsbook-select option {
+    background: #0a1929;
+    color: #cfd8dc;
+}
+
 .manual-clear-btn-header {
     background: transparent;
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -1123,5 +1150,100 @@ body.page-active-picks .nav-link[aria-current="page"] {
 .manual-submit-btn:active {
     transform: translateY(0);
     box-shadow: 0 2px 6px rgba(0, 143, 88, 0.2);
+}
+
+/* ===== Dropdown Section Divider ===== */
+.dropdown-section-divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 12px 0 8px 0;
+    padding: 0 4px;
+}
+
+.dropdown-section-divider::before,
+.dropdown-section-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0, 214, 137, 0.3), transparent);
+}
+
+.divider-label {
+    font-family: var(--sportsbook-heading-font);
+    font-size: 0.6rem;
+    font-weight: 700;
+    color: #00d689;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    white-space: nowrap;
+}
+
+/* ===== Manual Upload Section - Reorganized ===== */
+.manual-upload-section {
+    background: linear-gradient(145deg, rgba(0, 30, 20, 0.4), rgba(0, 20, 40, 0.5));
+    border: 1px solid rgba(0, 214, 137, 0.2);
+    border-radius: 6px;
+    padding: 10px;
+    margin-top: 4px;
+}
+
+.manual-upload-header {
+    margin-bottom: 8px;
+}
+
+.sportsbook-select-large {
+    width: 100%;
+    background: rgba(0, 20, 40, 0.6);
+    border: 1px solid rgba(0, 214, 137, 0.3);
+    color: #e8f0f2;
+    font-family: var(--sportsbook-heading-font);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.sportsbook-select-large:focus {
+    outline: none;
+    border-color: var(--color-primary-bright, #00d689);
+    box-shadow: 0 0 0 2px rgba(0, 214, 137, 0.15);
+}
+
+.sportsbook-select-large option {
+    background: #0a1929;
+    color: #e8f0f2;
+    padding: 8px;
+}
+
+.manual-upload-body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.drop-zone-icon {
+    font-size: 1rem;
+    opacity: 0.7;
+    margin-right: 4px;
+}
+
+.manual-upload-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.manual-upload-actions .manual-clear-btn-header {
+    flex: 1;
+}
+
+.manual-upload-actions .manual-submit-btn-header {
+    flex: 2;
+    padding: 6px 12px;
 }
 

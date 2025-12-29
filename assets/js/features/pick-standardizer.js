@@ -15,72 +15,105 @@
 
     // Team name mappings (abbreviations to full names)
     const TEAM_ALIASES = {
-        // NBA
+        // NBA - Full names and nicknames
         'spurs': 'San Antonio Spurs',
         'san antonio': 'San Antonio Spurs',
+        'sas': 'San Antonio Spurs',
         'knicks': 'New York Knicks',
         'new york': 'New York Knicks',
+        'nyk': 'New York Knicks',
         'lakers': 'Los Angeles Lakers',
         'la lakers': 'Los Angeles Lakers',
+        'lal': 'Los Angeles Lakers',
         'clippers': 'Los Angeles Clippers',
         'la clippers': 'Los Angeles Clippers',
+        'lac': 'Los Angeles Clippers',
         'warriors': 'Golden State Warriors',
         'golden state': 'Golden State Warriors',
+        'gsw': 'Golden State Warriors',
+        'gs': 'Golden State Warriors',
         'celtics': 'Boston Celtics',
         'boston': 'Boston Celtics',
+        'bos': 'Boston Celtics',
         'heat': 'Miami Heat',
         'miami': 'Miami Heat',
+        'mia': 'Miami Heat',
         'bulls': 'Chicago Bulls',
         'chicago': 'Chicago Bulls',
+        'chi': 'Chicago Bulls',
         'cavs': 'Cleveland Cavaliers',
         'cavaliers': 'Cleveland Cavaliers',
         'cleveland': 'Cleveland Cavaliers',
+        'cle': 'Cleveland Cavaliers',
         'mavs': 'Dallas Mavericks',
         'mavericks': 'Dallas Mavericks',
         'dallas': 'Dallas Mavericks',
+        'dal': 'Dallas Mavericks',
         'nuggets': 'Denver Nuggets',
         'denver': 'Denver Nuggets',
+        'den': 'Denver Nuggets',
         'pistons': 'Detroit Pistons',
         'detroit': 'Detroit Pistons',
+        'det': 'Detroit Pistons',
         'rockets': 'Houston Rockets',
         'houston': 'Houston Rockets',
+        'hou': 'Houston Rockets',
         'pacers': 'Indiana Pacers',
         'indiana': 'Indiana Pacers',
+        'ind': 'Indiana Pacers',
         'grizzlies': 'Memphis Grizzlies',
         'memphis': 'Memphis Grizzlies',
+        'mem': 'Memphis Grizzlies',
         'bucks': 'Milwaukee Bucks',
         'milwaukee': 'Milwaukee Bucks',
+        'mil': 'Milwaukee Bucks',
         'wolves': 'Minnesota Timberwolves',
         'timberwolves': 'Minnesota Timberwolves',
         'minnesota': 'Minnesota Timberwolves',
+        'min': 'Minnesota Timberwolves',
         'pelicans': 'New Orleans Pelicans',
         'new orleans': 'New Orleans Pelicans',
+        'nop': 'New Orleans Pelicans',
+        'no': 'New Orleans Pelicans',
         'nets': 'Brooklyn Nets',
         'brooklyn': 'Brooklyn Nets',
+        'bkn': 'Brooklyn Nets',
+        'bk': 'Brooklyn Nets',
         'thunder': 'Oklahoma City Thunder',
         'okc': 'Oklahoma City Thunder',
         'magic': 'Orlando Magic',
         'orlando': 'Orlando Magic',
+        'orl': 'Orlando Magic',
         '76ers': 'Philadelphia 76ers',
         'sixers': 'Philadelphia 76ers',
         'philly': 'Philadelphia 76ers',
         'philadelphia': 'Philadelphia 76ers',
+        'phi': 'Philadelphia 76ers',
         'suns': 'Phoenix Suns',
         'phoenix': 'Phoenix Suns',
+        'phx': 'Phoenix Suns',
         'blazers': 'Portland Trail Blazers',
         'portland': 'Portland Trail Blazers',
+        'por': 'Portland Trail Blazers',
         'kings': 'Sacramento Kings',
         'sacramento': 'Sacramento Kings',
+        'sac': 'Sacramento Kings',
         'raptors': 'Toronto Raptors',
         'toronto': 'Toronto Raptors',
+        'tor': 'Toronto Raptors',
         'jazz': 'Utah Jazz',
         'utah': 'Utah Jazz',
+        'uta': 'Utah Jazz',
         'wizards': 'Washington Wizards',
         'washington': 'Washington Wizards',
+        'was': 'Washington Wizards',
+        'wsh': 'Washington Wizards',
         'hawks': 'Atlanta Hawks',
         'atlanta': 'Atlanta Hawks',
+        'atl': 'Atlanta Hawks',
         'hornets': 'Charlotte Hornets',
         'charlotte': 'Charlotte Hornets',
+        'cha': 'Charlotte Hornets',
 
         // NFL
         'chiefs': 'Kansas City Chiefs',
@@ -884,42 +917,277 @@
     }
 
     /**
-     * Parse text-based picks (shorthand format)
-     * Examples:
-     *   "Spurs 2.5 -105 $50"
-     *   "Spurs +118 $50"
-     *   "Spurs 1.5 -115 1h $50"
+     * Parse text-based picks - SMART INTUITIVE PARSER
+     * Handles any reasonable format:
+     *   "POR +7"
+     *   "bills fg -3; bills over 44.5"
+     *   "bills ml 1h; bills -2.5 1h"
+     *   "bills o10 tto 1h"
+     *   "BOS @ POR under 117.5"
+     *   "1H POR +3.5"
+     *   "under 220"
      */
     function parseTextPicks(text) {
         const picks = [];
-        const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+        
+        // Split on newlines, semicolons, and periods (but not decimal points)
+        const rawLines = text
+            .replace(/;/g, '\n')
+            .replace(/\.\s+/g, '\n')  // Period followed by space = new line
+            .split('\n')
+            .map(l => l.trim())
+            .filter(l => l.length > 0);
 
-        // Track context for game info
-        let currentGame = null;
         let currentSport = 'NBA';
+        let currentGame = null;
 
-        for (const line of lines) {
-            // Skip header/context lines
-            if (shouldSkipLine(line)) {
-                // But extract context if present
-                updateContextFromLine(line, ctx => {
-                    if (ctx.sport) currentSport = ctx.sport;
-                    if (ctx.game) currentGame = ctx.game;
-                });
-                continue;
-            }
+        for (const line of rawLines) {
+            // Check for sport/game context
+            const contextInfo = extractContext(line);
+            if (contextInfo.sport) currentSport = contextInfo.sport;
+            if (contextInfo.game) currentGame = contextInfo.game;
+            
+            // Skip if it's just a context line (no bet info)
+            if (contextInfo.isContextOnly) continue;
 
-            const pick = parseTextLine(line, currentSport, currentGame);
+            const pick = parseFlexibleLine(line, currentSport, currentGame);
             if (pick) {
                 picks.push(pick);
             }
         }
 
+        console.log(`📊 Parsed ${picks.length} picks from text input`);
         return picks;
     }
 
     /**
-     * Parse a single line of text picks
+     * Extract context (sport, game) from a line
+     */
+    function extractContext(line) {
+        const lower = line.toLowerCase();
+        const result = { sport: null, game: null, isContextOnly: false };
+
+        // Detect sport
+        if (/\bnfl\b/i.test(lower)) result.sport = 'NFL';
+        else if (/\bnba\b/i.test(lower)) result.sport = 'NBA';
+        else if (/\bncaab\b|\bncaam\b|\bcbb\b/i.test(lower)) result.sport = 'NCAAB';
+        else if (/\bncaaf\b|\bcfb\b/i.test(lower)) result.sport = 'NCAAF';
+        else if (/\bmlb\b/i.test(lower)) result.sport = 'MLB';
+        else if (/\bnhl\b/i.test(lower)) result.sport = 'NHL';
+
+        // Detect game matchup (eagles at bills, bos @ por, etc.)
+        const gameMatch = line.match(/\b([A-Za-z]+)\s*(?:at|@|vs\.?|versus)\s*([A-Za-z]+)\b/i);
+        if (gameMatch) {
+            result.game = {
+                away: resolveTeamName(gameMatch[1]),
+                home: resolveTeamName(gameMatch[2])
+            };
+        }
+
+        // Check if this line is ONLY context (no numbers = no bet)
+        if (!line.match(/\d/) && (result.sport || result.game)) {
+            result.isContextOnly = true;
+        }
+
+        return result;
+    }
+
+    /**
+     * Smart flexible parser - handles any format intuitively
+     */
+    function parseFlexibleLine(line, defaultSport, currentGame) {
+        const pick = {
+            sport: defaultSport,
+            segment: 'Full Game',
+            status: 'pending',
+            date: getTodayDate(),
+            gameDate: new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }),
+            gameTime: 'TBD'
+        };
+
+        // Apply game context if available
+        if (currentGame) {
+            pick.awayTeam = currentGame.away;
+            pick.homeTeam = currentGame.home;
+            pick.game = `${currentGame.away} @ ${currentGame.home}`;
+        }
+
+        // Normalize: remove extra spaces, handle slashes as spaces
+        let normalized = line.replace(/\s*\/\s*/g, ' ').replace(/\s+/g, ' ').trim();
+        const originalLine = normalized;
+
+        // ===== STEP 1: Extract segment (1H, 2H, FG, 1st half, etc.) =====
+        const segmentPatterns = [
+            { pattern: /\b(1st\s*half|first\s*half|1h)\b/i, segment: '1st Half' },
+            { pattern: /\b(2nd\s*half|second\s*half|2h)\b/i, segment: '2nd Half' },
+            { pattern: /\b(1st\s*quarter|first\s*quarter|1q)\b/i, segment: '1st Quarter' },
+            { pattern: /\b(full\s*game|fg)\b/i, segment: 'Full Game' }
+        ];
+
+        for (const { pattern, segment } of segmentPatterns) {
+            if (pattern.test(normalized)) {
+                pick.segment = segment;
+                normalized = normalized.replace(pattern, ' ').trim();
+                break;
+            }
+        }
+
+        // ===== STEP 2: Check for MONEYLINE (ml) =====
+        if (/\bml\b/i.test(normalized)) {
+            pick.pickType = 'moneyline';
+            normalized = normalized.replace(/\bml\b/gi, ' ').trim();
+            
+            // Find the team
+            const teamKeys = Object.keys(TEAM_ALIASES);
+            for (const teamKey of teamKeys) {
+                const teamRegex = new RegExp(`\\b${teamKey}\\b`, 'i');
+                if (teamRegex.test(normalized)) {
+                    pick.pickTeam = resolveTeamName(teamKey);
+                    break;
+                }
+            }
+            
+            // Extract odds if present
+            const oddsMatch = normalized.match(/([+-]\d{3,4})/);
+            if (oddsMatch) pick.odds = oddsMatch[1];
+            
+            if (pick.pickTeam) {
+                console.log(`✅ Parsed ML: "${originalLine}" -> ${pick.pickTeam} ML (${pick.segment})`);
+                return pick;
+            }
+        }
+
+        // ===== STEP 3: Check for TEAM TOTAL (tto/ttu or "team o/u") =====
+        const teamTotalMatch = normalized.match(/\b([A-Za-z]+)\s*(?:tto|ttu|o|u)\s*([\d.]+)/i) ||
+                               normalized.match(/\b([A-Za-z]+)\s+(?:over|under)\s*([\d.]+)/i);
+        if (teamTotalMatch) {
+            const teamPart = teamTotalMatch[1].toLowerCase();
+            const linePart = teamTotalMatch[2];
+            const fullMatch = teamTotalMatch[0].toLowerCase();
+            
+            // Check if it's actually a team (not "over" or "under")
+            if (teamPart !== 'over' && teamPart !== 'under' && teamPart !== 'o' && teamPart !== 'u') {
+                pick.pickType = 'team-total';
+                pick.pickTeam = resolveTeamName(teamPart);
+                pick.line = linePart;
+                
+                // Determine over/under
+                if (/tto|over|\bo\d/i.test(fullMatch)) {
+                    pick.pickDirection = 'Over';
+                } else {
+                    pick.pickDirection = 'Under';
+                }
+                
+                console.log(`✅ Parsed team total: "${originalLine}" -> ${pick.pickTeam} ${pick.pickDirection} ${pick.line} (${pick.segment})`);
+                return pick;
+            }
+        }
+
+        // ===== STEP 4: Detect GAME TOTAL (over/under without team prefix) =====
+        const gameTotalMatch = normalized.match(/\b(over|under|o|u)\s*([\d.]+)/i);
+        if (gameTotalMatch) {
+            pick.pickType = 'total';
+            pick.pickDirection = /^(over|o)$/i.test(gameTotalMatch[1]) ? 'Over' : 'Under';
+            pick.pickTeam = pick.pickDirection;
+            pick.line = gameTotalMatch[2];
+
+            // Extract odds if present
+            const oddsMatch = normalized.match(/([+-]\d{3,4})/);
+            if (oddsMatch) pick.odds = oddsMatch[1];
+
+            console.log(`✅ Parsed game total: "${originalLine}" -> ${pick.pickDirection} ${pick.line}`);
+            return pick;
+        }
+
+        // Remove remaining keywords
+        normalized = normalized.replace(/\b(spread|total|moneyline)\b/gi, ' ').trim();
+
+        // ===== STEP 5: Find team and spread =====
+        const teamKeys = Object.keys(TEAM_ALIASES);
+        let foundTeam = null;
+        let foundTeamPos = -1;
+        
+        for (const teamKey of teamKeys) {
+            const teamRegex = new RegExp(`\\b${teamKey}\\b`, 'i');
+            const match = normalized.match(teamRegex);
+            if (match) {
+                const pos = match.index;
+                if (foundTeamPos === -1 || pos < foundTeamPos) {
+                    foundTeam = teamKey;
+                    foundTeamPos = pos;
+                }
+            }
+        }
+
+        if (!foundTeam) {
+            // Try to find any capitalized word that might be a team
+            const capsMatch = normalized.match(/\b([A-Z]{2,4})\b/);
+            if (capsMatch) {
+                foundTeam = capsMatch[1].toLowerCase();
+            }
+        }
+
+        if (!foundTeam) {
+            console.log(`⚠️ No team found in: "${originalLine}"`);
+            return null;
+        }
+
+        pick.pickTeam = resolveTeamName(foundTeam);
+
+        // ===== STEP 4: Find the line (spread) =====
+        // Look for +/- number patterns
+        const spreadPatterns = [
+            /([+-]?\d+\.?\d*)\s*([+-]\d{3,4})?/, // "+7.0 -110" or "+7" or "7.0"
+        ];
+
+        // Find all numbers in the line
+        const numbers = normalized.match(/[+-]?\d+\.?\d*/g) || [];
+        
+        for (const num of numbers) {
+            const numVal = parseFloat(num);
+            
+            // Skip if it looks like odds (100+ with sign)
+            if (Math.abs(numVal) >= 100 && (num.startsWith('+') || num.startsWith('-'))) {
+                // This is likely odds, not a spread
+                pick.odds = num;
+                continue;
+            }
+            
+            // This is likely a spread
+            if (!pick.line) {
+                pick.pickType = 'spread';
+                pick.line = num.startsWith('+') || num.startsWith('-') ? num : `+${num}`;
+            }
+        }
+
+        // If no spread found but we have a team, might be ML
+        if (!pick.line && pick.pickTeam) {
+            // Check if there's just odds (moneyline)
+            const mlOdds = normalized.match(/([+-]\d{3,4})/);
+            if (mlOdds) {
+                pick.pickType = 'moneyline';
+                pick.odds = mlOdds[1];
+            } else {
+                // Just a team name with no line - invalid
+                console.log(`⚠️ No line/odds found for team in: "${originalLine}"`);
+                return null;
+            }
+        }
+
+        // ===== STEP 5: Try to find game context (opponent) =====
+        const vsMatch = normalized.match(/([A-Za-z]+)\s*[@vs]+\s*([A-Za-z]+)/i);
+        if (vsMatch) {
+            pick.awayTeam = resolveTeamName(vsMatch[1]);
+            pick.homeTeam = resolveTeamName(vsMatch[2]);
+            pick.game = `${pick.awayTeam} @ ${pick.homeTeam}`;
+        }
+
+        console.log(`✅ Parsed: "${originalLine}" -> ${pick.pickTeam} ${pick.line || pick.odds} (${pick.segment})`);
+        return pick;
+    }
+
+    /**
+     * Parse a single line of text picks (legacy function - kept for fallback)
      */
     function parseTextLine(line, defaultSport, defaultGame) {
         const pick = {

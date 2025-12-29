@@ -282,7 +282,100 @@
         'north carolina': { abbr: 'UNC', fullName: 'North Carolina Tar Heels', logo: 'https://a.espncdn.com/i/teamlogos/ncaa/500/153.png' },
         'unc': { abbr: 'UNC', fullName: 'North Carolina Tar Heels', logo: 'https://a.espncdn.com/i/teamlogos/ncaa/500/153.png' },
         'north carolina tar heels': { abbr: 'UNC', fullName: 'North Carolina Tar Heels', logo: 'https://a.espncdn.com/i/teamlogos/ncaa/500/153.png' },
-        'tar heels': { abbr: 'UNC', fullName: 'North Carolina Tar Heels', logo: 'https://a.espncdn.com/i/teamlogos/ncaa/500/153.png' }
+        'tar heels': { abbr: 'UNC', fullName: 'North Carolina Tar Heels', logo: 'https://a.espncdn.com/i/teamlogos/ncaa/500/153.png' },
+        
+        // NFL Teams
+        'buffalo bills': { abbr: 'BUF', fullName: 'Buffalo Bills', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/buf.png' },
+        'bills': { abbr: 'BUF', fullName: 'Buffalo Bills', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/buf.png' },
+        'buffalo': { abbr: 'BUF', fullName: 'Buffalo Bills', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/buf.png' },
+        'philadelphia eagles': { abbr: 'PHI', fullName: 'Philadelphia Eagles', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/phi.png' },
+        'eagles': { abbr: 'PHI', fullName: 'Philadelphia Eagles', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/phi.png' },
+        'kansas city chiefs': { abbr: 'KC', fullName: 'Kansas City Chiefs', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/kc.png' },
+        'chiefs': { abbr: 'KC', fullName: 'Kansas City Chiefs', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/kc.png' },
+        'kansas city': { abbr: 'KC', fullName: 'Kansas City Chiefs', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/kc.png' },
+        'detroit lions': { abbr: 'DET', fullName: 'Detroit Lions', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/det.png' },
+        'lions': { abbr: 'DET', fullName: 'Detroit Lions', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/det.png' },
+        'baltimore ravens': { abbr: 'BAL', fullName: 'Baltimore Ravens', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/bal.png' },
+        'ravens': { abbr: 'BAL', fullName: 'Baltimore Ravens', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/bal.png' },
+        'baltimore': { abbr: 'BAL', fullName: 'Baltimore Ravens', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/bal.png' },
+        'minnesota vikings': { abbr: 'MIN', fullName: 'Minnesota Vikings', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/min.png' },
+        'vikings': { abbr: 'MIN', fullName: 'Minnesota Vikings', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/min.png' },
+        'green bay packers': { abbr: 'GB', fullName: 'Green Bay Packers', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/gb.png' },
+        'packers': { abbr: 'GB', fullName: 'Green Bay Packers', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/gb.png' },
+        'green bay': { abbr: 'GB', fullName: 'Green Bay Packers', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/gb.png' },
+        'pittsburgh steelers': { abbr: 'PIT', fullName: 'Pittsburgh Steelers', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/pit.png' },
+        'steelers': { abbr: 'PIT', fullName: 'Pittsburgh Steelers', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/pit.png' },
+        'pittsburgh': { abbr: 'PIT', fullName: 'Pittsburgh Steelers', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/pit.png' },
+        'houston texans': { abbr: 'HOU', fullName: 'Houston Texans', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/hou.png' },
+        'texans': { abbr: 'HOU', fullName: 'Houston Texans', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/hou.png' },
+        'los angeles chargers': { abbr: 'LAC', fullName: 'Los Angeles Chargers', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/lac.png' },
+        'chargers': { abbr: 'LAC', fullName: 'Los Angeles Chargers', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/lac.png' },
+        'la chargers': { abbr: 'LAC', fullName: 'Los Angeles Chargers', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/lac.png' },
+        'denver broncos': { abbr: 'DEN', fullName: 'Denver Broncos', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/den.png' },
+        'broncos': { abbr: 'DEN', fullName: 'Denver Broncos', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/den.png' },
+        'denver': { abbr: 'DEN', fullName: 'Denver Broncos', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/den.png' },
+        'cincinnati bengals': { abbr: 'CIN', fullName: 'Cincinnati Bengals', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/cin.png' },
+        'bengals': { abbr: 'CIN', fullName: 'Cincinnati Bengals', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/cin.png' },
+        'cincinnati': { abbr: 'CIN', fullName: 'Cincinnati Bengals', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/cin.png' },
+        'seattle seahawks': { abbr: 'SEA', fullName: 'Seattle Seahawks', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/sea.png' },
+        'seahawks': { abbr: 'SEA', fullName: 'Seattle Seahawks', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/sea.png' },
+        'seattle': { abbr: 'SEA', fullName: 'Seattle Seahawks', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/sea.png' },
+        'tampa bay buccaneers': { abbr: 'TB', fullName: 'Tampa Bay Buccaneers', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/tb.png' },
+        'buccaneers': { abbr: 'TB', fullName: 'Tampa Bay Buccaneers', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/tb.png' },
+        'bucs': { abbr: 'TB', fullName: 'Tampa Bay Buccaneers', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/tb.png' },
+        'tampa bay': { abbr: 'TB', fullName: 'Tampa Bay Buccaneers', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/tb.png' },
+        'san francisco 49ers': { abbr: 'SF', fullName: 'San Francisco 49ers', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/sf.png' },
+        '49ers': { abbr: 'SF', fullName: 'San Francisco 49ers', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/sf.png' },
+        'niners': { abbr: 'SF', fullName: 'San Francisco 49ers', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/sf.png' },
+        'san francisco': { abbr: 'SF', fullName: 'San Francisco 49ers', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/sf.png' },
+        'dallas cowboys': { abbr: 'DAL', fullName: 'Dallas Cowboys', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/dal.png' },
+        'cowboys': { abbr: 'DAL', fullName: 'Dallas Cowboys', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/dal.png' },
+        'miami dolphins': { abbr: 'MIA', fullName: 'Miami Dolphins', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/mia.png' },
+        'dolphins': { abbr: 'MIA', fullName: 'Miami Dolphins', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/mia.png' },
+        'los angeles rams': { abbr: 'LAR', fullName: 'Los Angeles Rams', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/lar.png' },
+        'rams': { abbr: 'LAR', fullName: 'Los Angeles Rams', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/lar.png' },
+        'la rams': { abbr: 'LAR', fullName: 'Los Angeles Rams', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/lar.png' },
+        'arizona cardinals': { abbr: 'ARI', fullName: 'Arizona Cardinals', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/ari.png' },
+        'cardinals': { abbr: 'ARI', fullName: 'Arizona Cardinals', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/ari.png' },
+        'arizona': { abbr: 'ARI', fullName: 'Arizona Cardinals', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/ari.png' },
+        'indianapolis colts': { abbr: 'IND', fullName: 'Indianapolis Colts', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/ind.png' },
+        'colts': { abbr: 'IND', fullName: 'Indianapolis Colts', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/ind.png' },
+        'indianapolis': { abbr: 'IND', fullName: 'Indianapolis Colts', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/ind.png' },
+        'tennessee titans': { abbr: 'TEN', fullName: 'Tennessee Titans', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/ten.png' },
+        'titans': { abbr: 'TEN', fullName: 'Tennessee Titans', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/ten.png' },
+        'tennessee': { abbr: 'TEN', fullName: 'Tennessee Titans', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/ten.png' },
+        'jacksonville jaguars': { abbr: 'JAX', fullName: 'Jacksonville Jaguars', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/jax.png' },
+        'jaguars': { abbr: 'JAX', fullName: 'Jacksonville Jaguars', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/jax.png' },
+        'jags': { abbr: 'JAX', fullName: 'Jacksonville Jaguars', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/jax.png' },
+        'jacksonville': { abbr: 'JAX', fullName: 'Jacksonville Jaguars', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/jax.png' },
+        'cleveland browns': { abbr: 'CLE', fullName: 'Cleveland Browns', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/cle.png' },
+        'browns': { abbr: 'CLE', fullName: 'Cleveland Browns', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/cle.png' },
+        'new york giants': { abbr: 'NYG', fullName: 'New York Giants', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/nyg.png' },
+        'giants': { abbr: 'NYG', fullName: 'New York Giants', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/nyg.png' },
+        'ny giants': { abbr: 'NYG', fullName: 'New York Giants', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/nyg.png' },
+        'new york jets': { abbr: 'NYJ', fullName: 'New York Jets', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/nyj.png' },
+        'jets': { abbr: 'NYJ', fullName: 'New York Jets', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/nyj.png' },
+        'ny jets': { abbr: 'NYJ', fullName: 'New York Jets', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/nyj.png' },
+        'new england patriots': { abbr: 'NE', fullName: 'New England Patriots', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/ne.png' },
+        'patriots': { abbr: 'NE', fullName: 'New England Patriots', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/ne.png' },
+        'pats': { abbr: 'NE', fullName: 'New England Patriots', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/ne.png' },
+        'new england': { abbr: 'NE', fullName: 'New England Patriots', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/ne.png' },
+        'washington commanders': { abbr: 'WSH', fullName: 'Washington Commanders', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/wsh.png' },
+        'commanders': { abbr: 'WSH', fullName: 'Washington Commanders', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/wsh.png' },
+        'carolina panthers': { abbr: 'CAR', fullName: 'Carolina Panthers', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/car.png' },
+        'panthers': { abbr: 'CAR', fullName: 'Carolina Panthers', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/car.png' },
+        'carolina': { abbr: 'CAR', fullName: 'Carolina Panthers', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/car.png' },
+        'atlanta falcons': { abbr: 'ATL', fullName: 'Atlanta Falcons', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/atl.png' },
+        'falcons': { abbr: 'ATL', fullName: 'Atlanta Falcons', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/atl.png' },
+        'new orleans saints': { abbr: 'NO', fullName: 'New Orleans Saints', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/no.png' },
+        'saints': { abbr: 'NO', fullName: 'New Orleans Saints', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/no.png' },
+        'new orleans': { abbr: 'NO', fullName: 'New Orleans Saints', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/no.png' },
+        'chicago bears': { abbr: 'CHI', fullName: 'Chicago Bears', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/chi.png' },
+        'bears': { abbr: 'CHI', fullName: 'Chicago Bears', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/chi.png' },
+        'las vegas raiders': { abbr: 'LV', fullName: 'Las Vegas Raiders', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/lv.png' },
+        'raiders': { abbr: 'LV', fullName: 'Las Vegas Raiders', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/lv.png' },
+        'las vegas': { abbr: 'LV', fullName: 'Las Vegas Raiders', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/lv.png' },
+        'vegas': { abbr: 'LV', fullName: 'Las Vegas Raiders', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/lv.png' }
     };
 
     function getTeamInfo(teamName) {
@@ -297,7 +390,7 @@
 
     // ========== PARSE AND ADD PICKS ==========
 
-    async function parseAndAddPicks(content) {
+    async function parseAndAddPicks(content, sportsbook = '') {
         if (!window.PickStandardizer) {
             console.error('PickStandardizer not loaded');
             return [];
@@ -314,8 +407,35 @@
             return [];
         }
 
+        // Add sportsbook and default values to each pick
+        const defaultRisk = getUnitMultiplier(); // 1 unit = $1000 default
+        const picksWithBook = picks.map(pick => {
+            // Set default risk if not provided
+            const risk = pick.risk || defaultRisk;
+
+            // Calculate win from odds if not provided
+            let win = pick.win;
+            if (!win && pick.odds && risk) {
+                const oddsNum = parseInt(pick.odds);
+                if (oddsNum > 0) {
+                    win = risk * (oddsNum / 100);
+                } else if (oddsNum < 0) {
+                    win = risk / (Math.abs(oddsNum) / 100);
+                }
+            }
+
+            return {
+                ...pick,
+                sportsbook: sportsbook || pick.sportsbook || 'Manual Upload',
+                risk: Math.round(risk),
+                win: Math.round(win || risk * 0.91), // Default to -110 odds if no odds
+                gameDate: pick.gameDate || new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }),
+                gameTime: pick.gameTime || 'TBD'
+            };
+        });
+
         // Try to enrich picks with game data from ESPN
-        const enrichedPicks = await enrichPicksWithGameData(picks);
+        const enrichedPicks = await enrichPicksWithGameData(picksWithBook);
 
         // Add to storage
         const added = addPicks(enrichedPicks);
@@ -865,10 +985,55 @@
     // Demo picks functionality has been completely removed for production.
     // Real picks come from weekly-lineup page and model APIs only.
 
+    // ========== CLEANUP SAMPLE DATA ==========
+    
+    function cleanupSampleData() {
+        const CLEANUP_VERSION_KEY = 'gbsv_cleanup_v1';
+        
+        // Only run cleanup once per browser
+        if (localStorage.getItem(CLEANUP_VERSION_KEY)) {
+            return;
+        }
+        
+        const picks = getAllPicks();
+        if (picks.length === 0) {
+            localStorage.setItem(CLEANUP_VERSION_KEY, 'done');
+            return;
+        }
+        
+        // Filter out any sample/demo picks (picks without a sportsbook or with demo markers)
+        const realPicks = picks.filter(pick => {
+            // Remove if it has demo/sample markers
+            if (pick.isDemo || pick.isSample || pick.source === 'demo') {
+                return false;
+            }
+            // Keep picks that have a valid sportsbook
+            if (pick.sportsbook && pick.sportsbook !== 'unknown') {
+                return true;
+            }
+            // Keep picks with valid IDs that look like user-added picks
+            if (pick.id && pick.id.startsWith('pick_')) {
+                return true;
+            }
+            // Default: remove as potential sample data
+            return false;
+        });
+        
+        if (realPicks.length < picks.length) {
+            console.log(`🧹 Cleaned up ${picks.length - realPicks.length} sample/demo picks`);
+            savePicks(realPicks);
+        }
+        
+        localStorage.setItem(CLEANUP_VERSION_KEY, 'done');
+    }
+
     // ========== INITIALIZE ==========
 
     function initialize() {
-        console.log('🏠 LocalPicksManager v33.00.0 initialized (real data only)');
+        console.log('🏠 LocalPicksManager v33.01.0 initialized (real data only)');
+        
+        // Clean up any legacy sample/demo data
+        cleanupSampleData();
         
         // NO DEMO DATA: Production version uses only real picks from weekly-lineup
         // importTodaysPicks(); -- DISABLED: No sample/placeholder data in production

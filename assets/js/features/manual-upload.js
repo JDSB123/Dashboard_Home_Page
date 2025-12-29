@@ -14,6 +14,7 @@
             this.textArea = document.querySelector('.manual-picks-input');
             this.submitBtn = document.querySelector('.manual-submit-btn-header');
             this.clearBtn = document.querySelector('.manual-clear-btn-header');
+            this.sportsbookSelect = document.getElementById('manual-sportsbook-select');
             
             if (this.dropZone) {
                 this.init();
@@ -107,7 +108,20 @@
                 this.clearBtn.addEventListener('click', (e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    this.resetForm();
+                    
+                    // If there's content in the form, just clear the form
+                    if (this.textArea.value.trim() || this.selectedFile) {
+                        this.resetForm();
+                        return;
+                    }
+                    
+                    // Otherwise, offer to clear all picks
+                    if (confirm('Clear ALL saved picks from the dashboard?')) {
+                        if (window.LocalPicksManager?.clear) {
+                            window.LocalPicksManager.clear();
+                            console.log('✅ Cleared all picks');
+                        }
+                    }
                 });
             }
         }
@@ -128,36 +142,73 @@
         async uploadPicks() {
             const textPicks = this.textArea.value.trim();
             const file = this.selectedFile;
+            const sportsbook = this.sportsbookSelect?.value || '';
+
+            if (!sportsbook) {
+                alert('Please select a sportsbook first.');
+                this.sportsbookSelect?.focus();
+                return;
+            }
 
             if (!textPicks && !file) {
                 alert('Please enter picks or upload a file.');
                 return;
             }
 
-            // Simulate upload process
             const originalText = this.submitBtn.textContent;
-            this.submitBtn.textContent = 'Uploading...';
+            this.submitBtn.textContent = 'Processing...';
             this.submitBtn.disabled = true;
 
             try {
-                // TODO: Implement actual API call here
-                // For now, just simulate a delay
-                await new Promise(resolve => setTimeout(resolve, 1500));
+                let content = textPicks;
                 
-                console.log('Uploading picks:', { text: textPicks, file: file ? file.name : null });
+                // If a file was selected, read its contents
+                if (file && !textPicks) {
+                    content = await this.readFileContent(file);
+                }
+                
+                console.log('Processing picks:', { content: content.substring(0, 200), file: file ? file.name : null });
+                
+                // Use LocalPicksManager to parse and save picks with sportsbook
+                const selectedBookMeta = {
+                    value: sportsbook,
+                    label: this.sportsbookSelect?.options[this.sportsbookSelect.selectedIndex]?.textContent?.trim() || sportsbook
+                };
+
+                const addedPicks = window.LocalPicksManager?.parseAndAdd
+                    ? await window.LocalPicksManager.parseAndAdd(content, selectedBookMeta.label)
+                    : window.processAndSavePicks
+                        ? await window.processAndSavePicks(content, false, selectedBookMeta)
+                        : null;
+                
+                if (!addedPicks) {
+                    throw new Error('Pick processing not available. Please refresh the page.');
+                }
+                
+                if (!addedPicks || addedPicks.length === 0) {
+                    throw new Error('No picks could be parsed from the input. Please check the format.');
+                }
+                
+                console.log(`✅ Successfully added ${addedPicks.length} picks`);
                 
                 // Success feedback
-                this.submitBtn.textContent = 'Success!';
+                this.submitBtn.textContent = `Added ${addedPicks.length} picks!`;
                 this.submitBtn.style.background = '#00ffaa';
                 
                 setTimeout(() => {
                     this.resetForm();
                 }, 2000);
+                
+                // Clear sportsbook selection after successful upload
+                if (this.sportsbookSelect) {
+                    this.sportsbookSelect.value = '';
+                }
 
             } catch (error) {
                 console.error('Upload failed:', error);
                 this.submitBtn.textContent = 'Error';
                 this.submitBtn.style.background = '#ff5570';
+                alert(error.message || 'Failed to process picks. Please try again.');
                 
                 setTimeout(() => {
                     this.submitBtn.textContent = originalText;
@@ -165,6 +216,15 @@
                     this.submitBtn.style.background = ''; // Reset to CSS default
                 }, 2000);
             }
+        }
+        
+        readFileContent(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => resolve(e.target.result);
+                reader.onerror = (e) => reject(new Error('Failed to read file'));
+                reader.readAsText(file);
+            });
         }
 
         resetForm() {
