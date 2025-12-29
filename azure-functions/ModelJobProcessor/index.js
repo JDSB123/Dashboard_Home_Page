@@ -23,10 +23,10 @@ function getModelApiConfig(modelType, endpoint, params) {
             };
 
         case 'ncaam':
-            // NCAAM uses /slate/{date} similar to NBA
+            // NCAAM uses /api/picks/{date} for predictions
             const ncaamDate = params.date || today;
             return {
-                url: `${endpoint}/slate/${ncaamDate}`,
+                url: `${endpoint}/api/picks/${ncaamDate}`,
                 method: 'GET',
                 data: null
             };
