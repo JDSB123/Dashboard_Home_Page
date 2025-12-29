@@ -11,7 +11,7 @@ const MODEL_CONFIG = {
         resourceGroup: 'nba-gbsv-model-rg'
     },
     ncaam: {
-        endpoint: process.env.NCAAM_API_URL || 'https://ncaam-stable-prediction.blackglacier-5fab3573.centralus.azurecontainerapps.io',
+        endpoint: process.env.NCAAM_API_URL || 'https://ncaam-stable-prediction.wonderfulforest-c2d7d49a.centralus.azurecontainerapps.io',
         resourceGroup: 'ncaam-gbsv-model-rg'
     },
     nfl: {
