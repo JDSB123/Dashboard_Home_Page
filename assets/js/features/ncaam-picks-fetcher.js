@@ -131,7 +131,10 @@
             market: marketType,
             period: pick.period || 'FG',
             line: pick.market_line || '',
-            modelPrice: pick.model_line || ''
+            modelPrice: pick.model_line || '',
+            fire_rating: pick.fire_rating || '',
+            rationale: pick.rationale || pick.reason || pick.analysis || pick.notes || pick.executive_summary || '',
+            modelVersion: pick.model_version || pick.modelVersion || pick.model_tag || pick.modelTag || ''
         };
     };
 

@@ -147,7 +147,10 @@
             market: marketType,
             period: play.period || 'FG',
             line: play.market_line || '',
-            modelPrice: play.model_prediction || ''
+            modelPrice: play.model_prediction || '',
+            fire_rating: play.fire_rating || '',
+            rationale: play.rationale || play.reason || play.analysis || play.notes || play.executive_summary || '',
+            modelVersion: play.model_version || play.modelVersion || play.model_tag || play.modelTag || ''
         };
     }
 

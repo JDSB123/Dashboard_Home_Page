@@ -947,6 +947,66 @@ body.page-weekly-lineup .picks-table tbody tr:hover,
     line-height: 1.4;
 }
 
+/* Weekly Lineup - Rationale expand/collapse */
+.page-weekly-lineup .pick-cell-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.page-weekly-lineup .rationale-toggle {
+    align-self: flex-start;
+    background: rgba(16, 185, 129, 0.10);
+    border: 1px solid rgba(16, 185, 129, 0.28);
+    color: var(--neutral-100);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    padding: 4px 10px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
+}
+
+.page-weekly-lineup .rationale-toggle:hover {
+    background: rgba(16, 185, 129, 0.16);
+    border-color: rgba(16, 185, 129, 0.40);
+    transform: translateY(-1px);
+}
+
+.page-weekly-lineup .rationale-panel {
+    background: rgba(10, 16, 28, 0.60);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 12px;
+    padding: 10px 12px;
+}
+
+.page-weekly-lineup .rationale-meta {
+    font-size: 0.78rem;
+    color: var(--neutral-300);
+    margin-bottom: 8px;
+}
+
+.page-weekly-lineup .rationale-meta-label {
+    color: var(--neutral-400);
+    font-weight: 600;
+}
+
+.page-weekly-lineup .rationale-meta-value {
+    color: var(--neutral-200);
+}
+
+.page-weekly-lineup .rationale-body {
+    font-size: 0.86rem;
+    color: var(--neutral-200);
+    line-height: 1.35;
+}
+
+.page-weekly-lineup .rationale-empty {
+    color: var(--neutral-400);
+    font-style: italic;
+}
+
 /* ===== ANIMATIONS ===== */
 @keyframes slideIn {
     from {
@@ -4732,6 +4792,19 @@ body.page-weekly-lineup .th-filter-dropdown.weekly-lineup-filter-dropdown .team-
 .ft-last-refreshed .sync-time {
     color: rgba(200, 215, 225, 0.75);
     font-weight: 600;
+}
+
+.ft-model-stamp {
+    font-family: var(--font-body), 'Cormorant Garamond', Georgia, serif;
+    font-size: 0.62rem;
+    color: rgba(200, 215, 225, 0.55);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    line-height: 1;
+    max-width: 340px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .ft-fetch-buttons {
     display: flex;

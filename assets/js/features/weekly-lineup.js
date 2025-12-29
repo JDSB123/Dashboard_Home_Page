@@ -237,6 +237,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         initializeTimeSlots();
         initializeDateRangeSelector();
         initializeTrackerButtons();
+        initializeRationaleToggles();
 
         try {
             log('[Weekly Lineup] Starting initialization...');
@@ -347,33 +348,42 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                 console.log(`[Weekly Lineup] ✅ Fetched ${result.picks.length} real picks from APIs`);
                     
                     // Transform picks to table format and sort by edge
-                    const formattedPicks = result.picks.map(pick => ({
-                        date: pick.date || getTodayDateString(),
-                        time: pick.time || 'TBD',
-                        sport: pick.sport || pick.league || 'NBA',
-                        awayTeam: pick.awayTeam || (pick.game ? pick.game.split(' @ ')[0] : ''),
-                        homeTeam: pick.homeTeam || (pick.game ? pick.game.split(' @ ')[1] : ''),
-                        segment: pick.segment || pick.period || 'FG',
-                        pickTeam: pick.pickTeam || pick.pick || '',
-                        pickType: pick.pickType || pick.market || 'spread',
-                        line: pick.line || '',
-                        odds: pick.odds || '-110',
-                        modelPrice: pick.modelPrice || pick.model_price || '',
-                        edge: parseFloat(pick.edge) || 0,
-                        fire: parseInt(pick.fire || pick.confidence) || Math.min(5, Math.ceil((parseFloat(pick.edge) || 0) / 1.5)),
-                        fireLabel: (parseFloat(pick.edge) >= 6) ? 'MAX' : '',
-                        status: pick.status || 'pending'
-                    }));
+                    const formattedPicks = result.picks.map(pick => {
+                        const edge = parseFloat(pick.edge) || 0;
+                        const fireMeta = normalizeFireRating(pick.fire ?? pick.confidence ?? pick.fire_rating ?? pick.fireRating, edge);
+
+                        return {
+                            date: pick.date || getTodayDateString(),
+                            time: pick.time || 'TBD',
+                            sport: pick.sport || pick.league || 'NBA',
+                            awayTeam: pick.awayTeam || (pick.game ? pick.game.split(' @ ')[0] : ''),
+                            homeTeam: pick.homeTeam || (pick.game ? pick.game.split(' @ ')[1] : ''),
+                            segment: normalizeSegment(pick.segment || pick.period || 'FG'),
+                            pickTeam: pick.pickTeam || pick.pick || '',
+                            pickType: normalizePickType(pick.pickType || pick.market || 'spread'),
+                            line: pick.line || '',
+                            odds: pick.odds || '-110',
+                            modelPrice: pick.modelPrice || pick.model_price || '',
+                            edge: edge,
+                            fire: fireMeta.fire,
+                            fireLabel: pick.fireLabel || fireMeta.fireLabel,
+                            rationale: pick.rationale || pick.reason || pick.notes || pick.explanation || '',
+                            modelStamp: pick.modelStamp || pick.model_version || pick.modelVersion || pick.modelTag || '',
+                            status: pick.status || 'pending'
+                        };
+                    });
 
                     // Sort by edge (highest first)
                     formattedPicks.sort((a, b) => b.edge - a.edge);
                     populateWeeklyLineupTable(formattedPicks);
+                    updateModelStamp(formattedPicks);
                     
                     // Update last fetched timestamp
                     updateLastFetchedTime();
                 } else {
                     console.log('[Weekly Lineup] ⚠️ No picks returned from APIs');
                     showNoPicks('No picks available for today. Check back later or fetch manually.');
+                    updateModelStamp([]);
                 }
 
                 // Log any errors
@@ -385,6 +395,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         } catch (error) {
             console.error('[Weekly Lineup] ❌ Error fetching picks:', error);
             showNoPicks('Error loading picks. Please try the Fetch button to retry.');
+            updateModelStamp([]);
         }
     }
 
@@ -402,6 +413,43 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         }
     }
 
+    function updateModelStamp(picks) {
+        const el = document.getElementById('ft-model-stamp');
+        if (!el) return;
+
+        if (!Array.isArray(picks) || picks.length === 0) {
+            el.textContent = 'Models: --';
+            el.title = 'Model build/tag used for the currently displayed picks';
+            return;
+        }
+
+        const stampsBySport = new Map();
+        picks.forEach((pick) => {
+            const sport = (pick.sport || '').toString().toUpperCase().trim();
+            const stamp = (pick.modelStamp || pick.modelVersion || pick.modelTag || '').toString().trim();
+            if (!sport || !stamp) return;
+
+            if (!stampsBySport.has(sport)) stampsBySport.set(sport, new Set());
+            stampsBySport.get(sport).add(stamp);
+        });
+
+        const parts = Array.from(stampsBySport.entries())
+            .sort((a, b) => a[0].localeCompare(b[0]))
+            .map(([sport, stamps]) => {
+                const list = Array.from(stamps);
+                return `${sport}: ${list.length === 1 ? list[0] : 'mixed'}`;
+            });
+
+        el.textContent = parts.length ? `Models: ${parts.join(' | ')}` : 'Models: unknown';
+
+        const titleLines = Array.from(stampsBySport.entries())
+            .sort((a, b) => a[0].localeCompare(b[0]))
+            .map(([sport, stamps]) => `${sport}: ${Array.from(stamps).join(', ')}`);
+        el.title = titleLines.length
+            ? `Model build/tag used for the currently displayed picks\n${titleLines.join('\n')}`
+            : 'Model build/tag used for the currently displayed picks';
+    }
+
     function showNoPicks(message) {
         const tbody = document.querySelector('.weekly-lineup-table tbody');
         if (tbody) {
@@ -415,13 +463,61 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
     }
 
     // ===== HELPER FUNCTIONS =====
+    function normalizePickType(raw) {
+        const value = (raw ?? '').toString().trim().toLowerCase();
+        if (!value) return 'spread';
+        if (value === 'moneyline' || value === 'ml' || value === 'money line') return 'ml';
+        if (value === 'team total' || value === 'team-total' || value === 'team_total' || value === 'tt') return 'tt';
+        if (value === 'total' || value === 'ou' || value === 'over/under') return 'total';
+        if (value === 'spread' || value === 'spreads') return 'spread';
+        return value;
+    }
+
+    function normalizeSegment(raw) {
+        const value = (raw ?? '').toString().trim().toLowerCase();
+        if (!value) return 'full';
+        if (value === 'fg' || value === 'full' || value === 'full game' || value === 'full-game') return 'full';
+        if (value === '1h' || value === '1st half' || value === 'first half') return '1h';
+        if (value === '2h' || value === '2nd half' || value === 'second half') return '2h';
+        return value;
+    }
+
+    function normalizeFireRating(rawFire, edgeValue = 0) {
+        const clamp = (n) => Math.max(0, Math.min(5, n));
+
+        if (typeof rawFire === 'number' && Number.isFinite(rawFire)) {
+            const fire = clamp(Math.round(rawFire));
+            return { fire, fireLabel: fire === 5 ? 'MAX' : '' };
+        }
+
+        const str = (rawFire ?? '').toString().trim();
+        if (str) {
+            const asNum = parseInt(str, 10);
+            if (!Number.isNaN(asNum)) {
+                const fire = clamp(asNum);
+                return { fire, fireLabel: fire === 5 ? 'MAX' : '' };
+            }
+
+            const upper = str.toUpperCase();
+            const map = { MAX: 5, ELITE: 5, STRONG: 4, GOOD: 3, STANDARD: 2, LOW: 1 };
+            if (upper in map) {
+                const fire = map[upper];
+                return { fire, fireLabel: fire === 5 ? 'MAX' : '' };
+            }
+        }
+
+        const computed = clamp(Math.ceil((parseFloat(edgeValue) || 0) / 1.5));
+        return { fire: computed, fireLabel: computed === 5 ? 'MAX' : '' };
+    }
+
     function buildPickLabel(pick) {
-        if (pick.pickType === 'spread') {
+        const pickType = normalizePickType(pick.pickType);
+        if (pickType === 'spread') {
             const line = pick.line || '';
             return line.startsWith('+') || line.startsWith('-') ? line : `${line}`;
-        } else if (pick.pickType === 'moneyline') {
+        } else if (pickType === 'ml') {
             return 'ML';
-        } else if (pick.pickType === 'total' || pick.pickType === 'team-total') {
+        } else if (pickType === 'total' || pickType === 'tt') {
             return pick.line || '';
         }
         return '';
@@ -470,7 +566,8 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
     function applyZebraStripes() {
         const tbody = document.querySelector('.weekly-lineup-table tbody');
         if (!tbody) return;
-        const rows = tbody.querySelectorAll('tr');
+        const rows = Array.from(tbody.querySelectorAll('tr'))
+            .filter((row) => row.style.display !== 'none' && !row.classList.contains('empty-state-row'));
         rows.forEach((row, idx) => {
             row.classList.remove('even', 'odd');
             row.classList.add(idx % 2 === 0 ? 'even' : 'odd');
@@ -522,6 +619,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         // Build pick display (escape the label)
         const pickLabel = escapeHtml(buildPickLabel(pick));
         const isTeamPick = pickTeamName !== 'Over' && pickTeamName !== 'Under';
+        const pickType = normalizePickType(pick.pickType || pick.market || 'spread');
 
         // Create logo HTML
         const awayLogoHtml = awayInfo.logo
@@ -564,7 +662,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         // Pick cell - unified structure: [Logo] Subject Value (Juice)
         let pickCellHtml;
         if (isTeamPick) {
-            if (pick.pickType === 'moneyline') {
+            if (pickType === 'ml') {
                 // Moneyline: [Logo] DEN ML -260
                 pickCellHtml = `<div class="pick-cell">${pickLogoHtml}<span class="pick-subject">${pickInfo.abbr}</span><span class="pick-label">ML</span><span class="pick-value">${pickOdds}</span></div>`;
             } else {
@@ -585,13 +683,13 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                 ? `<img src="${pickInfo.logo}" class="prediction-logo" loading="eager" alt="${teamAbbrev}" onerror="this.style.display='none'">`
                 : '';
 
-            if (pick.pickType === 'moneyline') {
+            if (pickType === 'ml') {
                 // ML: [Logo] DEN [ML] -180
                 return `<div class="prediction-cell">${logoHtml}<span class="pred-team">${teamAbbrev}</span><span class="pred-type-badge">ML</span><span class="pred-odds">${modelPrice}</span></div>`;
-            } else if (pick.pickType === 'spread') {
+            } else if (pickType === 'spread') {
                 // Spread: [Logo] DEN -3.5 (-108)
                 return `<div class="prediction-cell">${logoHtml}<span class="pred-team">${teamAbbrev}</span><span class="pred-line">${modelSpread}</span><span class="pred-odds-muted">(${modelPrice})</span></div>`;
-            } else if (pick.pickType === 'total' || pick.pickType === 'team-total') {
+            } else if (pickType === 'total' || pickType === 'tt') {
                 // Total: Over 221.5 (-110)
                 return `<div class="prediction-cell"><span class="pred-direction">${teamAbbrev}</span><span class="pred-line">${modelSpread}</span><span class="pred-odds-muted">(${modelPrice})</span></div>`;
             }
@@ -607,13 +705,13 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                 ? `<img src="${pickInfo.logo}" class="prediction-logo" loading="eager" alt="${teamAbbrev}" onerror="this.style.display='none'">`
                 : '';
 
-            if (pick.pickType === 'moneyline') {
+            if (pickType === 'ml') {
                 // ML: [Logo] DEN [ML] -260
                 return `<div class="prediction-cell">${logoHtml}<span class="pred-team">${teamAbbrev}</span><span class="pred-type-badge">ML</span><span class="pred-odds">${pickOdds}</span></div>`;
-            } else if (pick.pickType === 'spread') {
+            } else if (pickType === 'spread') {
                 // Spread: [Logo] DEN -5.5 (-110)
                 return `<div class="prediction-cell">${logoHtml}<span class="pred-team">${teamAbbrev}</span><span class="pred-line">${pickLabel}</span><span class="pred-odds-muted">(${pickOdds})</span></div>`;
-            } else if (pick.pickType === 'total' || pick.pickType === 'team-total') {
+            } else if (pickType === 'total' || pickType === 'tt') {
                 // Total: Over 221.5 (-110)
                 return `<div class="prediction-cell"><span class="pred-direction">${teamAbbrev}</span><span class="pred-line">${pickLabel}</span><span class="pred-odds-muted">(${pickOdds})</span></div>`;
             }
@@ -624,8 +722,9 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
         // Edge and Fire rating
         const edge = parseFloat(pick.edge) || 0;
-        const fire = parseInt(pick.fire) || 0;
-        const fireLabel = escapeHtml(pick.fireLabel) || '';
+        const normalizedFire = normalizeFireRating(pick.fire ?? pick.confidence ?? pick.fire_rating ?? pick.fireRating, edge);
+        const fire = normalizedFire.fire;
+        const fireLabel = escapeHtml(pick.fireLabel || normalizedFire.fireLabel) || '';
 
         // Generate fire emoji display with styled MAX badge
         const fireEmojis = '🔥'.repeat(fire);
@@ -643,26 +742,34 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         const gameDate = pick.date || pick.gameDate;
         const gameTime = escapeHtml(pick.time || pick.gameTime) || 'TBD';
 
-        // Segment display (FG = Full Game, 1H = First Half, 2H = Second Half)
-        const segment = escapeHtml(pick.segment) || 'FG';
+        // Segment display
+        const rawSegment = escapeHtml(pick.segment) || 'FG';
+        const segment = normalizeSegment(rawSegment);
         const getSegmentDisplay = (seg) => {
             const segmentMap = {
-                'FG': 'Full Game',
-                '1H': '1st Half',
-                '2H': '2nd Half',
-                '1Q': '1st Qtr',
-                '2Q': '2nd Qtr',
-                '3Q': '3rd Qtr',
-                '4Q': '4th Qtr'
+                'full': 'Full Game',
+                '1h': '1st Half',
+                '2h': '2nd Half'
             };
-            return segmentMap[seg] || seg;
+            return segmentMap[seg] || rawSegment;
         };
+
+        // Rationale + model version stamp (when provided by APIs)
+        const rationaleId = `wl-rationale-${idx}`;
+        const rationaleRaw = (pick.rationale ?? pick.reason ?? pick.notes ?? pick.explanation ?? '').toString().trim();
+        const modelStampRaw = (pick.modelStamp ?? pick.modelVersion ?? pick.modelTag ?? '').toString().trim();
+        const rationaleHtml = rationaleRaw
+            ? escapeHtml(rationaleRaw).replace(/\n/g, '<br>')
+            : '<span class="rationale-empty">No rationale provided for this pick.</span>';
+        const modelStampHtml = modelStampRaw
+            ? `<div class="rationale-meta"><span class="rationale-meta-label">Model:</span> <span class="rationale-meta-value">${escapeHtml(modelStampRaw)}</span></div>`
+            : '';
 
         // Set data attributes for sorting and filtering
         row.setAttribute('data-edge', edge);
         row.setAttribute('data-fire', fire);
         row.setAttribute('data-time', gameTime);
-        row.setAttribute('data-pick-type', pick.pickType || 'spread');
+        row.setAttribute('data-pick-type', pickType);
         row.setAttribute('data-league', sport);
         row.setAttribute('data-segment', segment);
         row.setAttribute('data-matchup', `${awayTeamName} @ ${homeTeamName}`);
@@ -697,10 +804,17 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                 ${matchupHtml}
             </td>
             <td data-label="Segment" class="center">
-                <span class="segment-value">${getSegmentDisplay(segment)}</span>
+                <span class="segment-value game-segment">${getSegmentDisplay(segment)}</span>
             </td>
             <td data-label="Recommended Pick">
-                ${pickCellHtml}
+                <div class="pick-cell-wrapper">
+                    ${pickCellHtml}
+                    <button class="rationale-toggle" type="button" aria-expanded="false" aria-controls="${rationaleId}">Details</button>
+                    <div class="rationale-panel" id="${rationaleId}" hidden>
+                        ${modelStampHtml}
+                        <div class="rationale-body">${rationaleHtml}</div>
+                    </div>
+                </div>
             </td>
             <td data-label="Edge" class="center">
                 <span class="edge-value ${getEdgeClass(edge)}">+${edge.toFixed(1)}</span>
@@ -1043,15 +1157,20 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             const dropdownId = btn.getAttribute('aria-controls');
             console.log(`  → Button ${index}: ${btn.dataset.filter} -> ${dropdownId}`);
 
-            // Disable the header filter dropdown arrow so it no longer opens a panel
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                e.stopImmediatePropagation();
 
-                console.log('🚫 [Weekly Lineup] Filter dropdown disabled for arrow click:', this.dataset.filter);
-                this.setAttribute('aria-expanded', 'false');
-                closeAllDropdowns();
+                const dropdown = dropdownId ? document.getElementById(dropdownId) : null;
+                if (!dropdown) return;
+
+                const isOpen = activeDropdown === dropdown && this.getAttribute('aria-expanded') === 'true' && dropdown.hidden === false;
+                if (isOpen) {
+                    closeAllDropdowns();
+                    return;
+                }
+
+                openDropdown(dropdown, this);
             });
         });
 
@@ -1185,22 +1304,73 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
                 if (action === 'select-all') {
                     // Find and activate the "all" option
-                    const allChip = dropdown.querySelector('[data-league="all"], [data-market="all"], [data-segment="all"], [data-edge="all"], [data-fire="all"]');
+                    const allChip = dropdown.querySelector(
+                        '.league-pill[data-league=\"all\"], .segment-pill[data-segment=\"all\"], .pick-pill[data-pick=\"all\"], .edge-pill[data-edge=\"all\"], .fire-pill[data-fire=\"all\"], [data-league=\"all\"], [data-market=\"all\"], [data-segment=\"all\"], [data-edge=\"all\"], [data-fire=\"all\"]'
+                    );
                     if (allChip) {
                         allChip.click();
                     }
                 } else if (action === 'clear') {
                     // Clear all active states and show all rows
-                    dropdown.querySelectorAll('.league-chip, .filter-opt[data-market], .filter-opt[data-segment], .filter-opt[data-edge], .filter-opt[data-fire]').forEach(chip => {
+                    dropdown.querySelectorAll('.league-pill, .segment-pill, .pick-pill, .edge-pill, .fire-pill, .league-chip, .filter-opt[data-market], .filter-opt[data-segment], .filter-opt[data-edge], .filter-opt[data-fire]').forEach(chip => {
                         chip.classList.remove('active');
                     });
                     // Activate "all" option if exists
-                    const allChip = dropdown.querySelector('[data-league="all"], [data-market="all"], [data-segment="all"], [data-edge="all"], [data-fire="all"]');
+                    const allChip = dropdown.querySelector(
+                        '.league-pill[data-league=\"all\"], .segment-pill[data-segment=\"all\"], .pick-pill[data-pick=\"all\"], .edge-pill[data-edge=\"all\"], .fire-pill[data-fire=\"all\"], [data-league=\"all\"], [data-market=\"all\"], [data-segment=\"all\"], [data-edge=\"all\"], [data-fire=\"all\"]'
+                    );
                     if (allChip) {
                         allChip.classList.add('active');
                     }
                     applyTableFilter('reset', '');
                 }
+            });
+        });
+
+        // Weekly Lineup header pill filters (league/segment/pick/edge/fire)
+        const setExclusiveActive = (btn, selector) => {
+            const parent = btn.parentElement;
+            parent?.querySelectorAll(selector)?.forEach((el) => el.classList.remove('active'));
+            btn.classList.add('active');
+        };
+
+        document.querySelectorAll('.league-pill[data-league]').forEach((pill) => {
+            pill.addEventListener('click', (e) => {
+                e.stopPropagation();
+                setExclusiveActive(pill, '.league-pill[data-league]');
+                applyTableFilter();
+            });
+        });
+
+        document.querySelectorAll('.segment-pill[data-segment]').forEach((pill) => {
+            pill.addEventListener('click', (e) => {
+                e.stopPropagation();
+                setExclusiveActive(pill, '.segment-pill[data-segment]');
+                applyTableFilter();
+            });
+        });
+
+        document.querySelectorAll('.pick-pill[data-pick]').forEach((pill) => {
+            pill.addEventListener('click', (e) => {
+                e.stopPropagation();
+                setExclusiveActive(pill, '.pick-pill[data-pick]');
+                applyTableFilter();
+            });
+        });
+
+        document.querySelectorAll('.edge-pill[data-edge]').forEach((pill) => {
+            pill.addEventListener('click', (e) => {
+                e.stopPropagation();
+                setExclusiveActive(pill, '.edge-pill[data-edge]');
+                applyTableFilter();
+            });
+        });
+
+        document.querySelectorAll('.fire-pill[data-fire]').forEach((pill) => {
+            pill.addEventListener('click', (e) => {
+                e.stopPropagation();
+                setExclusiveActive(pill, '.fire-pill[data-fire]');
+                applyTableFilter();
             });
         });
 
@@ -1218,16 +1388,19 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         rows.forEach(row => {
             let show = true;
 
-            // Get active filter values from UI
-            const activeLeague = document.querySelector('.league-chip.active')?.getAttribute('data-league') || 'all';
-            const activeSegment = document.querySelector('.filter-opt[data-segment].active')?.getAttribute('data-segment') || 'all';
-            const activeEdge = document.querySelector('.filter-opt[data-edge].active')?.getAttribute('data-edge') || 'all';
-            const activeFire = document.querySelector('.filter-opt[data-fire].active')?.getAttribute('data-fire') || 'all';
+            // Get active filter values from UI (weekly lineup pills)
+            const normalizeLeagueKey = (raw) => (raw ?? '').toString().trim().toLowerCase().replace('ncaam', 'ncaab');
+
+            const activeLeague = normalizeLeagueKey(document.querySelector('.league-pill.active')?.getAttribute('data-league') || 'all');
+            const activeSegment = (document.querySelector('.segment-pill.active')?.getAttribute('data-segment') || 'all').toString().trim().toLowerCase();
+            const activePickType = (document.querySelector('.pick-pill.active')?.getAttribute('data-pick') || 'all').toString().trim().toLowerCase();
+            const activeEdge = (document.querySelector('.edge-pill.active')?.getAttribute('data-edge') || 'all').toString().trim().toLowerCase();
+            const activeFire = (document.querySelector('.fire-pill.active')?.getAttribute('data-fire') || 'all').toString().trim().toLowerCase();
 
             // League filter
             if (activeLeague && activeLeague !== 'all') {
-                const rowLeague = (row.getAttribute('data-league') || '').toLowerCase();
-                if (rowLeague !== activeLeague.toLowerCase()) {
+                const rowLeague = normalizeLeagueKey(row.getAttribute('data-league'));
+                if (rowLeague !== activeLeague) {
                     show = false;
                 }
             }
@@ -1235,30 +1408,32 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             // Segment filter
             if (show && activeSegment && activeSegment !== 'all') {
                 const rowSegment = (row.getAttribute('data-segment') || '').toLowerCase();
-                if (rowSegment !== activeSegment.toLowerCase() && 
-                    rowSegment !== activeSegment.replace('full', 'fg').toLowerCase()) {
+                if (rowSegment !== activeSegment) {
                     show = false;
                 }
             }
 
-            // Edge filter (e.g., "3+", "5+", "10+")
+            // Pick type filter
+            if (show && activePickType && activePickType !== 'all') {
+                const rowPickType = (row.getAttribute('data-pick-type') || '').toString().trim().toLowerCase();
+                if (rowPickType !== activePickType) {
+                    show = false;
+                }
+            }
+
+            // Edge filter (high/medium/low)
             if (show && activeEdge && activeEdge !== 'all') {
                 const rowEdge = parseFloat(row.getAttribute('data-edge')) || 0;
-                const minEdge = parseFloat(activeEdge.replace('+', '')) || 0;
-                if (rowEdge < minEdge) {
-                    show = false;
-                }
+                if (activeEdge === 'high' && rowEdge < 5) show = false;
+                else if (activeEdge === 'medium' && (rowEdge < 2 || rowEdge >= 5)) show = false;
+                else if (activeEdge === 'low' && rowEdge >= 2) show = false;
             }
 
-            // Fire filter (e.g., "3+", "5")
+            // Fire filter (exact 1-5)
             if (show && activeFire && activeFire !== 'all') {
-                const rowFire = parseInt(row.getAttribute('data-fire')) || 0;
-                const minFire = parseInt(activeFire.replace('+', '')) || 0;
-                if (activeFire.includes('+')) {
-                    if (rowFire < minFire) show = false;
-                } else {
-                    if (rowFire !== minFire) show = false;
-                }
+                const rowFire = parseInt(row.getAttribute('data-fire'), 10) || 0;
+                const selectedFire = parseInt(activeFire, 10) || 0;
+                if (selectedFire && rowFire !== selectedFire) show = false;
             }
 
             row.style.display = show ? '' : 'none';
@@ -1396,29 +1571,38 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                     if (result.picks && result.picks.length > 0) {
                         pickCount = result.picks.length;
                         // Add fetched picks to table
-                        const formattedPicks = result.picks.map(pick => ({
-                            date: pick.date || getTodayDateString(),
-                            time: pick.time || 'TBD',
-                            sport: pick.sport || pick.league || 'NBA',
-                            awayTeam: pick.awayTeam || (pick.game ? pick.game.split(' @ ')[0] : ''),
-                            homeTeam: pick.homeTeam || (pick.game ? pick.game.split(' @ ')[1] : ''),
-                            segment: pick.segment || pick.period || 'FG',
-                            pickTeam: pick.pickTeam || pick.pick || '',
-                            pickType: pick.pickType || pick.market || 'spread',
-                            line: pick.line || '',
-                            odds: pick.odds || '-110',
-                            modelPrice: pick.modelPrice || pick.model_price || '',
-                            edge: parseFloat(pick.edge) || 0,
-                            fire: parseInt(pick.fire || pick.confidence) || Math.min(5, Math.ceil((parseFloat(pick.edge) || 0) / 1.5)),
-                            fireLabel: (parseFloat(pick.edge) >= 6) ? 'MAX' : '',
-                            status: pick.status || 'pending'
-                        }));
+                        const formattedPicks = result.picks.map(pick => {
+                            const edge = parseFloat(pick.edge) || 0;
+                            const fireMeta = normalizeFireRating(pick.fire ?? pick.confidence ?? pick.fire_rating ?? pick.fireRating, edge);
+
+                            return {
+                                date: pick.date || getTodayDateString(),
+                                time: pick.time || 'TBD',
+                                sport: pick.sport || pick.league || 'NBA',
+                                awayTeam: pick.awayTeam || (pick.game ? pick.game.split(' @ ')[0] : ''),
+                                homeTeam: pick.homeTeam || (pick.game ? pick.game.split(' @ ')[1] : ''),
+                                segment: normalizeSegment(pick.segment || pick.period || 'FG'),
+                                pickTeam: pick.pickTeam || pick.pick || '',
+                                pickType: normalizePickType(pick.pickType || pick.market || 'spread'),
+                                line: pick.line || '',
+                                odds: pick.odds || '-110',
+                                modelPrice: pick.modelPrice || pick.model_price || '',
+                                edge: edge,
+                                fire: fireMeta.fire,
+                                fireLabel: pick.fireLabel || fireMeta.fireLabel,
+                                rationale: pick.rationale || pick.reason || pick.notes || pick.explanation || '',
+                                modelStamp: pick.modelStamp || pick.model_version || pick.modelVersion || pick.modelTag || '',
+                                status: pick.status || 'pending'
+                            };
+                        });
                         formattedPicks.sort((a, b) => b.edge - a.edge);
                         populateWeeklyLineupTable(formattedPicks);
+                        updateModelStamp(formattedPicks);
                         console.log(`[Weekly Lineup] ✅ Fetched ${result.picks.length} picks for ${fetchType}`);
                     } else {
                         // Show empty state when no picks returned
                         populateWeeklyLineupTable([]);
+                        updateModelStamp([]);
                         console.log(`[Weekly Lineup] ⚠️ No picks returned for ${fetchType}`);
                     }
 
@@ -1517,9 +1701,8 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
             // Fire filter
             if (show && activeFires.length > 0) {
-                const fireCell = row.cells[6];
-                const cnt = (fireCell?.textContent.match(/🔥/g) || []).length;
-                if (!activeFires.includes(String(cnt))) show = false;
+                const rowFire = parseInt(row.getAttribute('data-fire') || '0', 10) || 0;
+                if (!activeFires.includes(String(rowFire))) show = false;
             }
 
             row.style.display = show ? '' : 'none';
@@ -1591,30 +1774,56 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
     // ===== SORT TABLE =====
     function sortTable(sortKey, direction) {
         const tbody = document.querySelector('.weekly-lineup-table tbody');
-        const rows = Array.from(tbody.querySelectorAll('tr'));
+        if (!tbody) return;
+
+        const rows = Array.from(tbody.querySelectorAll('tr'))
+            .filter((row) => !row.classList.contains('empty-state-row'));
 
         // Update current sort state
         currentSort = { column: sortKey, direction };
 
-        rows.sort((a, b) => {
-            let aValue = getCellValue(a, sortKey);
-            let bValue = getCellValue(b, sortKey);
+        const indexed = rows.map((row, idx) => ({ row, idx }));
 
-            // Handle numeric values
-            if (!isNaN(aValue) && !isNaN(bValue)) {
-                aValue = parseFloat(aValue);
-                bValue = parseFloat(bValue);
+        const compareValues = (a, b, dir) => {
+            const directionMultiplier = dir === 'desc' ? -1 : 1;
+
+            if (typeof a === 'number' && typeof b === 'number') {
+                if (a === b) return 0;
+                return (a - b) * directionMultiplier;
             }
 
-            if (direction === 'asc') {
-                return aValue > bValue ? 1 : -1;
-            } else {
-                return aValue < bValue ? 1 : -1;
-            }
+            const aStr = (a ?? '').toString();
+            const bStr = (b ?? '').toString();
+            const cmp = aStr.localeCompare(bStr, undefined, { numeric: true, sensitivity: 'base' });
+            return cmp * directionMultiplier;
+        };
+
+        indexed.sort((a, b) => {
+            const aRow = a.row;
+            const bRow = b.row;
+
+            const primary = compareValues(getCellValue(aRow, sortKey), getCellValue(bRow, sortKey), direction);
+            if (primary !== 0) return primary;
+
+            // Secondary: matchup time/date (always ascending unless the primary is date)
+            const timeDir = sortKey === 'date' ? direction : 'asc';
+            const secondary = compareValues(getCellValue(aRow, 'date'), getCellValue(bRow, 'date'), timeDir);
+            if (secondary !== 0) return secondary;
+
+            // Tertiary: like matchups together
+            const matchup = compareValues(getCellValue(aRow, 'matchup'), getCellValue(bRow, 'matchup'), 'asc');
+            if (matchup !== 0) return matchup;
+
+            // Quaternary: pick text for deterministic ordering
+            const pick = compareValues(getCellValue(aRow, 'pick'), getCellValue(bRow, 'pick'), 'asc');
+            if (pick !== 0) return pick;
+
+            // Stable fallback
+            return a.idx - b.idx;
         });
 
         // Re-append sorted rows
-        rows.forEach(row => tbody.appendChild(row));
+        indexed.forEach(({ row }) => tbody.appendChild(row));
 
         // Re-apply zebra stripes
         applyZebraStripes();
@@ -1726,6 +1935,27 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         });
 
         console.log('[Weekly Lineup] Tracker buttons initialized');
+    }
+
+    function initializeRationaleToggles() {
+        const tbody = document.getElementById('picks-tbody') || document.querySelector('.weekly-lineup-table tbody');
+        if (!tbody) return;
+
+        tbody.addEventListener('click', function(e) {
+            const btn = e.target.closest('.rationale-toggle');
+            if (!btn) return;
+
+            const panelId = btn.getAttribute('aria-controls');
+            if (!panelId) return;
+
+            const panel = document.getElementById(panelId);
+            if (!panel) return;
+
+            const isOpen = btn.getAttribute('aria-expanded') === 'true';
+            btn.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+            panel.hidden = isOpen;
+            btn.textContent = isOpen ? 'Details' : 'Hide';
+        });
     }
 
     function extractPickFromRow(row) {

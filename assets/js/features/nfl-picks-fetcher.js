@@ -67,16 +67,41 @@
      * @returns {Object} Formatted pick
      */
     const formatPickForTable = function(pick) {
+        const rawFire = (pick.fire_rating ?? pick.confidence ?? '').toString().trim();
+        const upperFire = rawFire.toUpperCase();
+        const fireMap = { MAX: 5, ELITE: 5, STRONG: 4, GOOD: 3, STANDARD: 2, LOW: 1 };
+        let fireNum = 3;
+
+        if (upperFire in fireMap) {
+            fireNum = fireMap[upperFire];
+        } else if (rawFire.includes('%')) {
+            const pct = parseFloat(rawFire.replace('%', ''));
+            if (!Number.isNaN(pct)) {
+                if (pct >= 80) fireNum = 5;
+                else if (pct >= 65) fireNum = 4;
+                else if (pct >= 50) fireNum = 3;
+                else if (pct >= 35) fireNum = 2;
+                else fireNum = 1;
+            }
+        } else {
+            const asNum = parseInt(rawFire, 10);
+            if (!Number.isNaN(asNum)) fireNum = Math.max(1, Math.min(5, asNum));
+        }
+
         return {
             sport: 'NFL',
             game: `${pick.away_team || pick.awayTeam} @ ${pick.home_team || pick.homeTeam}`,
             pick: pick.pick_display || pick.pick || pick.recommendation,
             odds: pick.odds || pick.market_odds || '',
             edge: pick.edge ? `${(pick.edge * 100).toFixed(1)}%` : '',
-            confidence: pick.fire_rating || pick.confidence || '',
+            confidence: fireNum,
             time: pick.game_time || pick.time || '',
             market: pick.market_type || pick.market || '',
-            period: pick.period || 'FG'
+            period: pick.period || 'FG',
+            fire_rating: pick.fire_rating || '',
+            fireLabel: fireNum === 5 ? 'MAX' : '',
+            rationale: pick.rationale || pick.reason || pick.analysis || pick.notes || pick.executive_summary || '',
+            modelVersion: pick.model_version || pick.modelVersion || pick.model_tag || pick.modelTag || ''
         };
     };
 

@@ -31,6 +31,79 @@
     // Request timeout in milliseconds (15 seconds)
     const REQUEST_TIMEOUT_MS = 15000;
 
+    const extractModelStampFromResponse = (data) => {
+        if (!data || typeof data !== 'object') return '';
+
+        const read = (obj, path) => path.split('.').reduce((acc, key) => (acc && acc[key] !== undefined ? acc[key] : undefined), obj);
+        const pickFirstString = (...paths) => {
+            for (const path of paths) {
+                const value = read(data, path);
+                if (typeof value === 'string' && value.trim()) return value.trim();
+            }
+            return '';
+        };
+
+        const tag = pickFirstString(
+            'model_tag', 'modelTag',
+            'model_version', 'modelVersion',
+            'version', 'build', 'build_version',
+            'meta.model_tag', 'meta.modelTag',
+            'meta.model_version', 'meta.modelVersion',
+            'meta.version', 'meta.build',
+            'metadata.model_tag', 'metadata.modelTag',
+            'metadata.model_version', 'metadata.modelVersion',
+            'metadata.version', 'metadata.build'
+        );
+
+        const sha = pickFirstString(
+            'git_sha', 'gitSha', 'commit', 'commit_sha', 'commitSha',
+            'meta.git_sha', 'meta.gitSha', 'meta.commit', 'meta.commit_sha', 'meta.commitSha',
+            'metadata.git_sha', 'metadata.gitSha', 'metadata.commit', 'metadata.commit_sha', 'metadata.commitSha'
+        );
+
+        if (tag && sha) return `${tag} (${sha.slice(0, 8)})`;
+        return tag || (sha ? sha.slice(0, 12) : '');
+    };
+
+    const normalizeFireRating = (rawFire, edgeValue = 0) => {
+        const clamp = (n) => Math.max(0, Math.min(5, n));
+
+        if (typeof rawFire === 'number' && Number.isFinite(rawFire)) {
+            const fire = clamp(Math.round(rawFire));
+            return { fire, fireLabel: fire === 5 ? 'MAX' : '' };
+        }
+
+        const str = (rawFire ?? '').toString().trim();
+        if (str) {
+            const asNum = parseInt(str, 10);
+            if (!Number.isNaN(asNum)) {
+                const fire = clamp(asNum);
+                return { fire, fireLabel: fire === 5 ? 'MAX' : '' };
+            }
+
+            const upper = str.toUpperCase();
+            const map = { MAX: 5, ELITE: 5, STRONG: 4, GOOD: 3, STANDARD: 2, LOW: 1 };
+            if (upper in map) {
+                const fire = map[upper];
+                return { fire, fireLabel: fire === 5 ? 'MAX' : '' };
+            }
+
+            if (str.includes('%')) {
+                const pct = parseFloat(str.replace('%', ''));
+                if (!Number.isNaN(pct)) {
+                    if (pct >= 80) return { fire: 5, fireLabel: 'MAX' };
+                    if (pct >= 65) return { fire: 4, fireLabel: '' };
+                    if (pct >= 50) return { fire: 3, fireLabel: '' };
+                    if (pct >= 35) return { fire: 2, fireLabel: '' };
+                    return { fire: 1, fireLabel: '' };
+                }
+            }
+        }
+
+        const computed = clamp(Math.ceil((parseFloat(edgeValue) || 0) / 1.5));
+        return { fire: computed, fireLabel: computed === 5 ? 'MAX' : '' };
+    };
+
     /**
      * Fetch with timeout using AbortController
      * @param {string} url - URL to fetch
@@ -76,10 +149,13 @@
             try {
                 if (window.NBAPicksFetcher) {
                     const data = await window.NBAPicksFetcher.fetchPicks(date);
+                    const modelStamp = extractModelStampFromResponse(data);
                     // API returns { plays: [...] } not { picks: [...] }
                     const plays = data.plays || data.picks || data.recommendations || [];
                     plays.forEach(play => {
-                        allPicks.push(window.NBAPicksFetcher.formatPickForTable(play));
+                        const formatted = window.NBAPicksFetcher.formatPickForTable(play);
+                        if (modelStamp && !formatted.modelStamp) formatted.modelStamp = modelStamp;
+                        allPicks.push(formatted);
                     });
                     debugLog(`[UNIFIED-FETCHER] NBA: ${plays.length} picks`);
                 }
@@ -105,9 +181,12 @@
                         data = await response.json();
                     }
 
+                    const modelStamp = extractModelStampFromResponse(data);
                     const picks = data.picks || data.plays || data.recommendations || [];
                     picks.forEach(pick => {
-                        allPicks.push(window.NCAAMPicksFetcher.formatPickForTable(pick));
+                        const formatted = window.NCAAMPicksFetcher.formatPickForTable(pick);
+                        if (modelStamp && !formatted.modelStamp) formatted.modelStamp = modelStamp;
+                        allPicks.push(formatted);
                     });
                     debugLog(`[UNIFIED-FETCHER] NCAAM: ${picks.length} picks`);
                 }
@@ -133,9 +212,12 @@
                         data = await response.json();
                     }
 
+                    const modelStamp = extractModelStampFromResponse(data);
                     const picks = data.picks || data.plays || data.recommendations || [];
                     picks.forEach(pick => {
-                        allPicks.push(window.NFLPicksFetcher.formatPickForTable(pick));
+                        const formatted = window.NFLPicksFetcher.formatPickForTable(pick);
+                        if (modelStamp && !formatted.modelStamp) formatted.modelStamp = modelStamp;
+                        allPicks.push(formatted);
                     });
                     debugLog(`[UNIFIED-FETCHER] NFL: ${picks.length} picks`);
                 }
@@ -161,9 +243,12 @@
                         data = await response.json();
                     }
 
+                    const modelStamp = extractModelStampFromResponse(data);
                     const predictions = data.predictions || data.picks || data.plays || [];
                     predictions.forEach(pick => {
-                        allPicks.push(window.NCAAFPicksFetcher.formatPickForTable(pick));
+                        const formatted = window.NCAAFPicksFetcher.formatPickForTable(pick);
+                        if (modelStamp && !formatted.modelStamp) formatted.modelStamp = modelStamp;
+                        allPicks.push(formatted);
                     });
                     debugLog(`[UNIFIED-FETCHER] NCAAF: ${predictions.length} picks`);
                 }
@@ -240,6 +325,11 @@
                     edgeNum = pick.edge;
                 }
 
+                const fireMeta = normalizeFireRating(
+                    pick.fire ?? pick.confidence ?? pick.fire_rating ?? pick.fireRating,
+                    edgeNum
+                );
+
                 return {
                     date: new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }),
                     time: pick.time || '',
@@ -253,8 +343,10 @@
                     odds: pick.odds || '-110',
                     modelPrice: pick.modelPrice || '',
                     edge: edgeNum,
-                    fire: parseInt(pick.confidence) || 3,
-                    fireLabel: edgeNum >= 6 ? 'MAX' : '',
+                    fire: fireMeta.fire,
+                    fireLabel: pick.fireLabel || fireMeta.fireLabel,
+                    rationale: pick.rationale || pick.reason || pick.notes || pick.explanation || '',
+                    modelStamp: pick.modelStamp || pick.model_version || pick.modelVersion || pick.modelTag || '',
                     status: 'pending'
                 };
             });
