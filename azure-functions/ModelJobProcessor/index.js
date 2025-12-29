@@ -3,9 +3,67 @@ const { BlobServiceClient } = require('@azure/storage-blob');
 const { DefaultAzureCredential } = require('@azure/identity');
 const axios = require('axios');
 
+// Model-specific endpoint paths and configurations
+function getModelApiConfig(modelType, endpoint, params) {
+    const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+    const currentYear = new Date().getFullYear();
+
+    // Calculate current week (approximate NFL/NCAAF week)
+    const startOfYear = new Date(currentYear, 0, 1);
+    const currentWeek = Math.ceil((new Date() - startOfYear) / (7 * 24 * 60 * 60 * 1000));
+
+    switch (modelType.toLowerCase()) {
+        case 'nba':
+            // NBA uses /slate/{date} for daily predictions
+            const nbaDate = params.date || today;
+            return {
+                url: `${endpoint}/slate/${nbaDate}`,
+                method: 'GET',
+                data: null
+            };
+
+        case 'ncaam':
+            // NCAAM uses /slate/{date} similar to NBA
+            const ncaamDate = params.date || today;
+            return {
+                url: `${endpoint}/slate/${ncaamDate}`,
+                method: 'GET',
+                data: null
+            };
+
+        case 'nfl':
+            // NFL uses /api/v1/predictions/week/{season}/{week}
+            const nflSeason = params.season || currentYear;
+            const nflWeek = params.week || Math.min(currentWeek - 35, 18); // NFL starts ~week 36
+            return {
+                url: `${endpoint}/api/v1/predictions/week/${nflSeason}/${nflWeek}`,
+                method: 'GET',
+                data: null
+            };
+
+        case 'ncaaf':
+            // NCAAF uses /api/v1/predictions/week/{season}/{week}
+            const ncaafSeason = params.season || currentYear;
+            const ncaafWeek = params.week || Math.min(currentWeek - 35, 15); // NCAAF starts ~week 35
+            return {
+                url: `${endpoint}/api/v1/predictions/week/${ncaafSeason}/${ncaafWeek}`,
+                method: 'GET',
+                data: null
+            };
+
+        default:
+            // Fallback to generic /execute endpoint
+            return {
+                url: `${endpoint}/execute`,
+                method: 'POST',
+                data: { ...params }
+            };
+    }
+}
+
 module.exports = async function (context, jobMessage) {
     const { jobId, modelType, params, endpoint, timestamp } = jobMessage;
-    
+
     context.log(`Processing job ${jobId} for model ${modelType}`);
 
     // Initialize Table Storage client
@@ -23,33 +81,28 @@ module.exports = async function (context, jobMessage) {
     try {
         // Update job status to 'running'
         await updateJobStatus(tableClient, modelType, jobId, 'running');
-        
+
         // Send SignalR update
         context.bindings.signalRMessages = [{
             target: 'modelStatusUpdate',
             arguments: [{ jobId, status: 'running', modelType, progress: 10 }]
         }];
 
-        // Get managed identity token for authentication
-        const credential = new DefaultAzureCredential();
-        
-        // Call the model API
-        context.log(`Calling model API at ${endpoint}/execute`);
-        
-        const response = await axios.post(
-            `${endpoint}/execute`,
-            {
-                ...params,
-                requestId: jobId
+        // Get model-specific API configuration
+        const apiConfig = getModelApiConfig(modelType, endpoint, params);
+        context.log(`Calling model API: ${apiConfig.method} ${apiConfig.url}`);
+
+        // Call the model API with correct method and endpoint
+        const response = await axios({
+            method: apiConfig.method,
+            url: apiConfig.url,
+            data: apiConfig.data,
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Request-ID': jobId
             },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Request-ID': jobId
-                },
-                timeout: 300000 // 5 minutes timeout
-            }
-        );
+            timeout: 300000 // 5 minutes timeout
+        });
 
         // Store results
         const results = response.data;
