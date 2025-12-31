@@ -880,6 +880,112 @@ body.page-weekly-lineup .picks-table tbody tr:hover,
     content: '✓';
 }
 
+/* ===== TRACKING STATUS INDICATORS ===== */
+.weekly-lineup-table .tracking-status {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    min-width: 60px;
+}
+
+.weekly-lineup-table .tracked-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.15rem;
+    padding: 0.25rem 0.5rem;
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.4);
+    border-radius: 4px;
+    font-size: 0.75rem;
+    color: var(--emerald-400);
+}
+
+.weekly-lineup-table .tracked-icon {
+    font-size: 0.875rem;
+    font-weight: bold;
+    color: var(--emerald-400);
+}
+
+.weekly-lineup-table .tracked-time {
+    font-size: 0.65rem;
+    color: var(--emerald-300);
+    white-space: nowrap;
+}
+
+/* Change alert indicator */
+.weekly-lineup-table .pick-change-alert {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.2rem 0.4rem;
+    background: rgba(251, 191, 36, 0.2);
+    border: 1px solid rgba(251, 191, 36, 0.5);
+    border-radius: 4px;
+    font-size: 0.7rem;
+    color: var(--gold-400);
+    white-space: nowrap;
+    margin-top: 0.15rem;
+}
+
+.weekly-lineup-table .change-icon {
+    font-size: 0.75rem;
+}
+
+.weekly-lineup-table .change-text {
+    font-weight: 600;
+}
+
+/* Row highlighting for tracked picks */
+.weekly-lineup-table tr.pick-tracked {
+    background: rgba(16, 185, 129, 0.05) !important;
+    border-left: 2px solid rgba(16, 185, 129, 0.3);
+}
+
+.weekly-lineup-table tr.pick-tracked:hover {
+    background: rgba(16, 185, 129, 0.1) !important;
+}
+
+/* Row highlighting for changed picks */
+.weekly-lineup-table tr.pick-changed {
+    border-left-color: rgba(251, 191, 36, 0.5);
+    background: rgba(251, 191, 36, 0.03) !important;
+}
+
+.weekly-lineup-table tr.pick-changed:hover {
+    background: rgba(251, 191, 36, 0.08) !important;
+}
+
+/* Changed value indicators */
+.weekly-lineup-table .value-changed {
+    position: relative;
+    color: var(--gold-400);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-style: wavy;
+    text-decoration-color: var(--gold-400);
+    text-underline-offset: 2px;
+}
+
+.weekly-lineup-table .edge-value-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    justify-content: center;
+}
+
+.weekly-lineup-table .edge-change-indicator {
+    font-size: 0.75rem;
+    opacity: 0.8;
+}
+
+/* Pick value changed styling */
+.weekly-lineup-table .pick-value-changed {
+    color: var(--gold-400);
+    font-weight: 600;
+}
+
 .weekly-lineup-table .matchup-stack .versus {
     color: var(--neutral-400);
     font-size: 0.875rem;
@@ -949,22 +1055,38 @@ body.page-weekly-lineup .picks-table tbody tr:hover,
 
 /* Weekly Lineup - Rationale expand/collapse */
 .page-weekly-lineup .pick-cell-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.page-weekly-lineup .pick-cell-content {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: nowrap;
+    width: 100%;
+}
+
+.page-weekly-lineup .pick-cell-content .pick-cell {
+    flex: 1;
+    min-width: 0;
 }
 
 .page-weekly-lineup .rationale-toggle {
-    align-self: flex-start;
+    flex-shrink: 0;
     background: rgba(16, 185, 129, 0.10);
     border: 1px solid rgba(16, 185, 129, 0.28);
     color: var(--neutral-100);
-    font-size: 0.78rem;
+    font-size: 0.7rem;
     font-weight: 600;
     letter-spacing: 0.02em;
-    padding: 4px 10px;
-    border-radius: 999px;
+    padding: 3px 8px;
+    border-radius: 4px;
     cursor: pointer;
+    white-space: nowrap;
+    height: fit-content;
+    line-height: 1.2;
     transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
 }
 
@@ -975,16 +1097,72 @@ body.page-weekly-lineup .picks-table tbody tr:hover,
 }
 
 .page-weekly-lineup .rationale-panel {
-    background: rgba(10, 16, 28, 0.60);
-    border: 1px solid rgba(255, 255, 255, 0.10);
-    border-radius: 12px;
-    padding: 10px 12px;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(10, 16, 28, 0.95);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    min-width: 300px;
+    max-width: 500px;
+}
+
+/* Comparison section - first in rationale panel */
+.page-weekly-lineup .rationale-comparison {
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.page-weekly-lineup .comparison-header {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--emerald-400);
+    margin-bottom: 8px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+
+.page-weekly-lineup .comparison-row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.page-weekly-lineup .comparison-item {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-size: 0.8rem;
+}
+
+.page-weekly-lineup .comparison-label {
+    font-weight: 600;
+    color: var(--neutral-300);
+    min-width: 60px;
+}
+
+.page-weekly-lineup .comparison-value {
+    color: var(--neutral-100);
+    font-weight: 500;
+}
+
+.page-weekly-lineup .comparison-value.edge-highlight {
+    color: var(--emerald-400);
+    font-weight: 700;
 }
 
 .page-weekly-lineup .rationale-meta {
-    font-size: 0.78rem;
-    color: var(--neutral-300);
+    font-size: 0.75rem;
+    color: var(--neutral-400);
     margin-bottom: 8px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .page-weekly-lineup .rationale-meta-label {
@@ -1000,6 +1178,16 @@ body.page-weekly-lineup .picks-table tbody tr:hover,
     font-size: 0.86rem;
     color: var(--neutral-200);
     line-height: 1.35;
+    margin-top: 8px;
+}
+
+.page-weekly-lineup .rationale-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--neutral-300);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
 }
 
 .page-weekly-lineup .rationale-empty {

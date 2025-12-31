@@ -17,6 +17,10 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
     let filterInitAttempts = 0;
     const MAX_FILTER_INIT_ATTEMPTS = 10;
 
+    // ===== STORAGE FOR WEEKLY LINEUP PICKS =====
+    const WEEKLY_LINEUP_STORAGE_KEY = 'gbsv_weekly_lineup_picks';
+    const TRACKED_PICKS_STORAGE_KEY = 'gbsv_tracked_weekly_picks';
+
     // ===== SCRIPT LOADING VERIFICATION =====
 
     // debug-config.js normalizes window.DEBUG to a boolean. Support both boolean and object-based flags.
@@ -242,8 +246,18 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         try {
             log('[Weekly Lineup] Starting initialization...');
 
-            // Don't auto-load picks - user must click Fetch button
-            // Picks will only load when user triggers fetch via toolbar buttons
+            // Load saved picks from localStorage on page load (persist across refreshes)
+            const savedPicks = loadWeeklyLineupPicks();
+            if (savedPicks && savedPicks.length > 0) {
+                log(`📂 Restoring ${savedPicks.length} saved picks from previous session`);
+                // Use requestAnimationFrame to ensure DOM is ready
+                requestAnimationFrame(() => {
+                    populateWeeklyLineupTable(savedPicks);
+                });
+            }
+
+            // Don't auto-fetch picks - user must click Fetch button
+            // Picks will only fetch when user triggers fetch via toolbar buttons
 
             // Initialize filter system
             requestAnimationFrame(() => {
@@ -539,6 +553,40 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         `;
     }
 
+    // ===== STORAGE FUNCTIONS FOR WEEKLY LINEUP PICKS =====
+    function saveWeeklyLineupPicks(picks) {
+        try {
+            if (picks && picks.length > 0) {
+                localStorage.setItem(WEEKLY_LINEUP_STORAGE_KEY, JSON.stringify({
+                    picks: picks,
+                    timestamp: new Date().toISOString()
+                }));
+                log(`💾 Saved ${picks.length} weekly lineup picks to localStorage`);
+            } else {
+                // Don't save empty arrays - keep previous picks
+                log('💾 Skipping save - no picks to save');
+            }
+        } catch (e) {
+            console.error('Error saving weekly lineup picks:', e);
+        }
+    }
+
+    function loadWeeklyLineupPicks() {
+        try {
+            const data = localStorage.getItem(WEEKLY_LINEUP_STORAGE_KEY);
+            if (data) {
+                const parsed = JSON.parse(data);
+                if (parsed.picks && Array.isArray(parsed.picks) && parsed.picks.length > 0) {
+                    log(`📂 Loaded ${parsed.picks.length} weekly lineup picks from localStorage`);
+                    return parsed.picks;
+                }
+            }
+        } catch (e) {
+            console.error('Error loading weekly lineup picks:', e);
+        }
+        return null;
+    }
+
     // ===== POPULATE WEEKLY LINEUP TABLE =====
     function populateWeeklyLineupTable(picks) {
         const tbody = document.querySelector('.weekly-lineup-table tbody');
@@ -546,6 +594,9 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
         // Store picks for sorting
         allPicks = picks;
+
+        // Save picks to localStorage for persistence across page refreshes
+        saveWeeklyLineupPicks(picks);
 
         // Clear placeholder/stale rows
         tbody.innerHTML = '';
@@ -624,8 +675,17 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
         // Build pick display (escape the label)
         const pickLabel = escapeHtml(buildPickLabel(pick));
-        const isTeamPick = pickTeamName !== 'Over' && pickTeamName !== 'Under';
+        // Normalize pickTeamName - ensure "Under" is spelled correctly (not "UNDE")
+        const normalizedPickTeamName = pickTeamName === 'UNDE' || pickTeamName === 'unde' || (pickTeamName && pickTeamName.toUpperCase().startsWith('UNDE') && !pickTeamName.toUpperCase().startsWith('UNDER'))
+            ? 'UNDER'
+            : pickTeamName;
+        const isTeamPick = normalizedPickTeamName !== 'Over' && normalizedPickTeamName !== 'Under' && normalizedPickTeamName !== 'OVER' && normalizedPickTeamName !== 'UNDER';
         const pickType = normalizePickType(pick.pickType || pick.market || 'spread');
+
+        // Helper function to escape regex metacharacters
+        const escapeRegex = (str) => {
+            return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        };
 
         // Create logo HTML
         const awayLogoHtml = awayInfo.logo
@@ -677,10 +737,23 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             }
         } else {
             // Over/Under: OVER 218.5 (-110) or UNDER 261.5 (-110)
-            // If pickLabel already contains OVER/UNDER, don't duplicate pickTeamName
-            const displayLabel = pickLabel.toUpperCase().startsWith('OVER') || pickLabel.toUpperCase().startsWith('UNDER')
-                ? pickLabel
-                : `${pickTeamName} ${pickLabel}`;
+            // Ensure proper capitalization and fix "UNDE" typo
+            let directionText = '';
+            if (normalizedPickTeamName && (normalizedPickTeamName.toUpperCase() === 'OVER' || normalizedPickTeamName.toUpperCase() === 'UNDER')) {
+                directionText = normalizedPickTeamName.toUpperCase();
+            } else if (pickLabel.toUpperCase().startsWith('OVER')) {
+                directionText = 'OVER';
+            } else if (pickLabel.toUpperCase().startsWith('UNDER') || pickLabel.toUpperCase().startsWith('UNDE')) {
+                directionText = 'UNDER';
+            } else if (pick.pickDirection) {
+                directionText = pick.pickDirection.toUpperCase();
+            }
+            
+            // If pickLabel already contains OVER/UNDER, use it directly; otherwise prepend direction
+            // Note: pickLabel is already HTML-escaped, so we don't escape again
+            const displayLabel = pickLabel.toUpperCase().startsWith('OVER') || pickLabel.toUpperCase().startsWith('UNDER') || pickLabel.toUpperCase().startsWith('UNDE')
+                ? pickLabel.replace(/^UNDE\s/i, 'UNDER ').replace(/^unde\s/i, 'UNDER ')
+                : directionText ? `${escapeHtml(directionText)} ${pickLabel}` : pickLabel;
             pickCellHtml = `<div class="pick-cell"><span class="pick-value">${displayLabel}</span><span class="pick-juice">(${pickOdds})</span></div>`;
         }
 
@@ -768,11 +841,39 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         const rationaleId = `wl-rationale-${idx}`;
         const rationaleRaw = (pick.rationale ?? pick.reason ?? pick.notes ?? pick.explanation ?? '').toString().trim();
         const modelStampRaw = (pick.modelStamp ?? pick.modelVersion ?? pick.modelTag ?? '').toString().trim();
+        
+        // Build model prediction vs market comparison
+        const modelPrice = escapeHtml(pick.modelPrice) || '-';
+        const modelLine = escapeHtml(pick.modelSpread || pick.predictedSpread || pickLabel) || '-';
+        const marketOdds = escapeHtml(pickOdds) || '-110';
+        const marketLine = escapeHtml(pickLabel) || '-';
+        const edgeValue = edge.toFixed(1);
+        
+        const comparisonHtml = `
+            <div class="rationale-comparison">
+                <div class="comparison-header">Model Prediction vs. Market</div>
+                <div class="comparison-row">
+                    <div class="comparison-item">
+                        <span class="comparison-label">Model:</span>
+                        <span class="comparison-value">${modelLine} (${modelPrice})</span>
+                    </div>
+                    <div class="comparison-item">
+                        <span class="comparison-label">Market:</span>
+                        <span class="comparison-value">${marketLine} (${marketOdds})</span>
+                    </div>
+                    <div class="comparison-item">
+                        <span class="comparison-label">Edge:</span>
+                        <span class="comparison-value edge-highlight">+${edgeValue}%</span>
+                    </div>
+                </div>
+            </div>
+        `;
+        
         const rationaleHtml = rationaleRaw
             ? escapeHtml(rationaleRaw).replace(/\n/g, '<br>')
             : '<span class="rationale-empty">No rationale provided for this pick.</span>';
         const modelStampHtml = modelStampRaw
-            ? `<div class="rationale-meta"><span class="rationale-meta-label">Model:</span> <span class="rationale-meta-value">${escapeHtml(modelStampRaw)}</span></div>`
+            ? `<div class="rationale-meta"><span class="rationale-meta-label">Model Version:</span> <span class="rationale-meta-value">${escapeHtml(modelStampRaw)}</span></div>`
             : '';
 
         // Set data attributes for sorting and filtering
@@ -791,6 +892,98 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         row.setAttribute('data-away', awayTeamName);
         row.setAttribute('data-home', homeTeamName);
         row.setAttribute('data-status', pick.status || 'pending');
+
+        // Check if this pick is tracked and detect changes
+        const tracked = getTrackingMetadata(pick);
+        const changes = tracked ? detectPickChanges(pick, tracked) : null;
+        const isTracked = !!tracked;
+        const trackedTime = tracked ? formatTrackedTime(tracked.trackedAt) : '';
+
+        // Add tracking indicator class
+        if (isTracked) {
+            row.classList.add('pick-tracked');
+        }
+        if (changes) {
+            row.classList.add('pick-changed');
+        }
+
+        // Build change indicators HTML
+        let changeIndicatorsHtml = '';
+        if (changes) {
+            const changeItems = [];
+            if (changes.line) {
+                changeItems.push(`Line: ${changes.line.from} → ${changes.line.to}`);
+            }
+            if (changes.odds) {
+                changeItems.push(`Odds: ${changes.odds.from} → ${changes.odds.to}`);
+            }
+            if (changes.edge) {
+                changeItems.push(`Edge: ${changes.edge.from.toFixed(1)}% → ${changes.edge.to.toFixed(1)}%`);
+            }
+            if (changes.fire) {
+                changeItems.push(`Fire: ${changes.fire.from} → ${changes.fire.to}`);
+            }
+            
+            changeIndicatorsHtml = `
+                <div class="pick-change-alert" title="${changeItems.join(', ')}">
+                    <span class="change-icon">⚠️</span>
+                    <span class="change-text">Changed</span>
+                </div>
+            `;
+        }
+
+        // Build tracking status HTML for Track column
+        let trackingStatusHtml = '';
+        if (isTracked) {
+            trackingStatusHtml = `
+                <div class="tracking-status">
+                    <div class="tracked-badge" title="Tracked ${trackedTime}">
+                        <span class="tracked-icon">✓</span>
+                        <span class="tracked-time">${trackedTime}</span>
+                    </div>
+                    ${changeIndicatorsHtml}
+                </div>
+            `;
+        }
+
+        // Update pick cell to show changes if line/odds changed
+        let updatedPickCellHtml = pickCellHtml;
+        if (changes && (changes.line || changes.odds)) {
+            const changeClass = changes.line || changes.odds ? 'pick-value-changed' : '';
+            // Wrap the changed values with indicators
+            // Note: pickCellHtml contains HTML-escaped values, so we need to escape the search value too
+            if (changes.line) {
+                // Escape the value for HTML (to match what's in the HTML) and escape regex metacharacters
+                const escapedLineTo = escapeHtml(changes.line.to);
+                const escapedLineFrom = escapeHtml(changes.line.from);
+                const regexPattern = escapeRegex(escapedLineTo);
+                updatedPickCellHtml = updatedPickCellHtml.replace(
+                    new RegExp(`(${regexPattern})`, 'g'),
+                    `<span class="value-changed ${changeClass}" title="Was: ${escapedLineFrom}">$1</span>`
+                );
+            }
+            if (changes.odds) {
+                // Escape the value for HTML (to match what's in the HTML) and escape regex metacharacters
+                const escapedOddsTo = escapeHtml(changes.odds.to);
+                const escapedOddsFrom = escapeHtml(changes.odds.from);
+                const regexPattern = escapeRegex(escapedOddsTo);
+                updatedPickCellHtml = updatedPickCellHtml.replace(
+                    new RegExp(`\\(${regexPattern}\\)`, 'g'),
+                    `<span class="value-changed ${changeClass}" title="Was: ${escapedOddsFrom}">(${escapedOddsTo})</span>`
+                );
+            }
+        }
+
+        // Update edge display if changed
+        let edgeDisplayHtml = `<span class="edge-value ${getEdgeClass(edge)}">+${edge.toFixed(1)}</span>`;
+        if (changes && changes.edge) {
+            edgeDisplayHtml = `
+                <div class="edge-value-wrapper">
+                    <span class="edge-value ${getEdgeClass(edge)} value-changed" title="Was: ${changes.edge.from.toFixed(1)}%">+${edge.toFixed(1)}</span>
+                    <span class="edge-change-indicator">⚠️</span>
+                </div>
+            `;
+        }
 
         // League cell HTML with logo
         const leagueLogo = LEAGUE_LOGOS[sport] || '';
@@ -818,22 +1011,28 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             </td>
             <td data-label="Recommended Pick">
                 <div class="pick-cell-wrapper">
-                    ${pickCellHtml}
-                    <button class="rationale-toggle" type="button" aria-expanded="false" aria-controls="${rationaleId}">Details</button>
+                    <div class="pick-cell-content">
+                        ${updatedPickCellHtml}
+                        <button class="rationale-toggle" type="button" aria-expanded="false" aria-controls="${rationaleId}" title="Show details">Details</button>
+                    </div>
                     <div class="rationale-panel" id="${rationaleId}" hidden>
+                        ${comparisonHtml}
                         ${modelStampHtml}
-                        <div class="rationale-body">${rationaleHtml}</div>
+                        <div class="rationale-body">
+                            <div class="rationale-label">Rationale:</div>
+                            ${rationaleHtml}
+                        </div>
                     </div>
                 </div>
             </td>
             <td data-label="Edge" class="center">
-                <span class="edge-value ${getEdgeClass(edge)}">+${edge.toFixed(1)}</span>
+                ${edgeDisplayHtml}
             </td>
             <td data-label="Fire" class="center">
                 <span class="fire-rating">${fireDisplay}</span>
             </td>
             <td data-label="Track" class="center">
-                <button class="tracker-btn" type="button">+</button>
+                ${isTracked ? trackingStatusHtml : '<button class="tracker-btn" type="button">+</button>'}
             </td>
         `;
 
@@ -1936,8 +2135,17 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             const row = btn.closest('tr');
             if (!row) return;
 
-            // Extract pick data from the row
-            const pickData = extractPickFromRow(row);
+            // Get pick index from row position
+            const rowIndex = Array.from(row.parentNode.children).indexOf(row);
+            
+            // Get pick data from stored picks array (more reliable than DOM parsing)
+            let pickData = null;
+            if (rowIndex >= 0 && allPicks && allPicks[rowIndex]) {
+                pickData = allPicks[rowIndex];
+            } else {
+                // Fallback to DOM extraction if array not available
+                pickData = extractPickFromRow(row);
+            }
 
             if (pickData) {
                 addPickToDashboard(pickData, btn);
@@ -2092,9 +2300,129 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         }
     }
 
+    // ===== TRACKING FUNCTIONS =====
+    /**
+     * Generate a unique ID for a pick based on its key attributes
+     */
+    function generatePickId(pick) {
+        const key = `${pick.sport || ''}_${pick.awayTeam || ''}_${pick.homeTeam || ''}_${pick.pickTeam || ''}_${pick.line || ''}_${pick.odds || ''}_${pick.segment || 'FG'}_${pick.pickType || 'spread'}`;
+        // Simple hash function
+        let hash = 0;
+        for (let i = 0; i < key.length; i++) {
+            const char = key.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash = hash & hash; // Convert to 32bit integer
+        }
+        return `wl_${Math.abs(hash)}`;
+    }
+
+    /**
+     * Save tracking metadata when a pick is added to dashboard
+     */
+    function saveTrackingMetadata(pick, trackedAt) {
+        try {
+            const pickId = generatePickId(pick);
+            // Normalize fire rating (could be fire or fireRating)
+            const fireValue = pick.fire !== undefined ? pick.fire : (pick.fireRating || 0);
+            const tracked = {
+                pickId: pickId,
+                trackedAt: trackedAt || new Date().toISOString(),
+                originalLine: (pick.line || '').trim(),
+                originalOdds: (pick.odds || '').trim(),
+                originalEdge: parseFloat(pick.edge) || 0,
+                originalFire: fireValue,
+                matchup: `${pick.awayTeam || ''} @ ${pick.homeTeam || ''}`,
+                pickTeam: pick.pickTeam || '',
+                segment: pick.segment || 'FG',
+                sport: pick.sport || ''
+            };
+
+            const existing = localStorage.getItem(TRACKED_PICKS_STORAGE_KEY);
+            const trackedPicks = existing ? JSON.parse(existing) : {};
+            trackedPicks[pickId] = tracked;
+            localStorage.setItem(TRACKED_PICKS_STORAGE_KEY, JSON.stringify(trackedPicks));
+            
+            log(`📌 Saved tracking metadata for pick: ${pickId}`);
+            return tracked;
+        } catch (e) {
+            console.error('Error saving tracking metadata:', e);
+            return null;
+        }
+    }
+
+    /**
+     * Get tracking metadata for a pick
+     */
+    function getTrackingMetadata(pick) {
+        try {
+            const pickId = generatePickId(pick);
+            const existing = localStorage.getItem(TRACKED_PICKS_STORAGE_KEY);
+            if (!existing) return null;
+            
+            const trackedPicks = JSON.parse(existing);
+            return trackedPicks[pickId] || null;
+        } catch (e) {
+            console.error('Error getting tracking metadata:', e);
+            return null;
+        }
+    }
+
+    /**
+     * Compare current pick values with tracked values and return changes
+     */
+    function detectPickChanges(pick, tracked) {
+        if (!tracked) return null;
+
+        const changes = {};
+        const currentLine = (pick.line || '').trim();
+        const currentOdds = (pick.odds || '').trim();
+        const currentEdge = parseFloat(pick.edge) || 0;
+        // Normalize fire rating (could be fire or fireRating)
+        const currentFire = pick.fire !== undefined ? pick.fire : (pick.fireRating || 0);
+
+        if (currentLine !== tracked.originalLine && currentLine && tracked.originalLine) {
+            changes.line = { from: tracked.originalLine, to: currentLine };
+        }
+        if (currentOdds !== tracked.originalOdds && currentOdds && tracked.originalOdds) {
+            changes.odds = { from: tracked.originalOdds, to: currentOdds };
+        }
+        if (Math.abs(currentEdge - tracked.originalEdge) > 0.1) {
+            changes.edge = { from: tracked.originalEdge, to: currentEdge };
+        }
+        if (currentFire !== tracked.originalFire) {
+            changes.fire = { from: tracked.originalFire, to: currentFire };
+        }
+
+        return Object.keys(changes).length > 0 ? changes : null;
+    }
+
+    /**
+     * Format timestamp for display
+     */
+    function formatTrackedTime(isoString) {
+        try {
+            const date = new Date(isoString);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+
+            if (diffMins < 1) return 'Just now';
+            if (diffMins < 60) return `${diffMins}m ago`;
+            if (diffHours < 24) return `${diffHours}h ago`;
+            if (diffDays < 7) return `${diffDays}d ago`;
+            
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+        } catch (e) {
+            return 'Unknown';
+        }
+    }
+
     function addPickToDashboard(pickData, btn) {
         // Save directly to localStorage (same key as LocalPicksManager)
         const STORAGE_KEY = 'gbsv_picks';
+        const trackedAt = new Date().toISOString();
 
         try {
             // Get existing picks
@@ -2103,13 +2431,16 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
             // Add ID and timestamp
             pickData.id = `pick_${Date.now()}_${Math.random().toString(36).substring(7)}`;
-            pickData.createdAt = new Date().toISOString();
+            pickData.createdAt = trackedAt;
 
             // Add to array
             existingPicks.push(pickData);
 
             // Save back
             localStorage.setItem(STORAGE_KEY, JSON.stringify(existingPicks));
+
+            // Save tracking metadata for weekly lineup display
+            saveTrackingMetadata(pickData, trackedAt);
 
             // Visual feedback
             btn.textContent = '✓';
@@ -2118,6 +2449,16 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
             showNotification(`Added ${pickData.pickTeam} ${pickData.line} to Dashboard`, 'success');
             console.log('[Weekly Lineup] Pick saved to localStorage:', pickData);
+            
+            // Refresh the row to show tracking indicators
+            const row = btn.closest('tr');
+            if (row) {
+                const rowIndex = Array.from(row.parentNode.children).indexOf(row);
+                if (rowIndex >= 0 && allPicks[rowIndex]) {
+                    const updatedRow = createWeeklyLineupRow(allPicks[rowIndex], rowIndex);
+                    row.replaceWith(updatedRow);
+                }
+            }
         } catch (err) {
             console.error('[Weekly Lineup] Failed to save pick:', err);
             showNotification('Failed to add pick', 'error');
