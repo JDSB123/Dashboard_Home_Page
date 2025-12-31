@@ -19,14 +19,14 @@ window.APP_CONFIG = Object.freeze({
   AZURE_RESOURCE_GROUP: 'Dashboard_Home_Page',
   AZURE_REGION: 'eastus',
 
-  // API Configuration
-  API_BASE_URL: 'https://gbsv-orchestrator.wittypebble-41c11c65.eastus.azurecontainerapps.io/api',
+  // API Configuration - All routed through main domain
+  API_BASE_URL: 'https://www.greenbiersportventures.com/api',
 
-  // Model API Endpoints
-  NBA_API_URL: 'https://nba-gbsv-api.livelycoast-b48c3cb0.eastus.azurecontainerapps.io',
-  NCAAM_API_URL: 'https://ncaam-stable-prediction.wonderfulforest-c2d7d49a.centralus.azurecontainerapps.io',
-  NFL_API_URL: 'https://nfl-api.purplegrass-5889a981.eastus.azurecontainerapps.io',
-  NCAAF_API_URL: 'https://ncaaf-v5-prod.salmonwave-314d4ffe.eastus.azurecontainerapps.io',
+  // Model API Endpoints - Proxied through main domain
+  NBA_API_URL: 'https://www.greenbiersportventures.com/nba',
+  NCAAM_API_URL: 'https://www.greenbiersportventures.com/ncaam',
+  NFL_API_URL: 'https://www.greenbiersportventures.com/nfl',
+  NCAAF_API_URL: 'https://www.greenbiersportventures.com/ncaaf',
 
   // Feature Flags
   AUTH_ENABLED: false,
