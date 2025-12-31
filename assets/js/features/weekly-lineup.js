@@ -368,22 +368,27 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
                         return {
                             date: pick.date || getTodayDateString(),
-                            time: pick.time || 'TBD',
+                            time: pick.time || pick.gameTime || 'TBD',
                             sport: pick.sport || pick.league || 'NBA',
                             awayTeam: pick.awayTeam || (pick.game ? pick.game.split(' @ ')[0] : ''),
                             homeTeam: pick.homeTeam || (pick.game ? pick.game.split(' @ ')[1] : ''),
+                            awayRecord: pick.awayRecord || pick.away_record || '',
+                            homeRecord: pick.homeRecord || pick.home_record || '',
                             segment: normalizeSegment(pick.segment || pick.period || 'FG'),
                             pickTeam: pick.pickTeam || pick.pick || '',
                             pickType: normalizePickType(pick.pickType || pick.market || 'spread'),
+                            pickDirection: pick.pickDirection || pick.pick_direction || '',
                             line: pick.line || '',
                             odds: pick.odds || '-110',
                             modelPrice: pick.modelPrice || pick.model_price || '',
+                            modelSpread: pick.modelSpread || pick.model_spread || pick.predictedSpread || '',
                             edge: edge,
                             fire: fireMeta.fire,
                             fireLabel: pick.fireLabel || fireMeta.fireLabel,
                             rationale: pick.rationale || pick.reason || pick.notes || pick.explanation || '',
                             modelStamp: pick.modelStamp || pick.model_version || pick.modelVersion || pick.modelTag || '',
-                            status: pick.status || 'pending'
+                            status: pick.status || 'pending',
+                            sportsbook: pick.sportsbook || pick.book || ''
                         };
                     });
 
@@ -527,7 +532,10 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
     function buildPickLabel(pick) {
         // Use the full pick text from API if available (e.g., "OVER 218.5", "Utah Jazz +4.0")
         if (pick.pick && typeof pick.pick === 'string' && pick.pick.trim()) {
-            return pick.pick.trim();
+            let label = pick.pick.trim();
+            // Fix "UNDE" typo → "UNDER"
+            label = label.replace(/^UNDE\s/i, 'UNDER ').replace(/^Unde\s/i, 'Under ');
+            return label;
         }
 
         // Fallback to constructing from components
@@ -842,29 +850,41 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         const rationaleRaw = (pick.rationale ?? pick.reason ?? pick.notes ?? pick.explanation ?? '').toString().trim();
         const modelStampRaw = (pick.modelStamp ?? pick.modelVersion ?? pick.modelTag ?? '').toString().trim();
         
-        // Build model prediction vs market comparison
+        // Build model prediction vs market comparison - better organized
         const modelPrice = escapeHtml(pick.modelPrice) || '-';
-        const modelLine = escapeHtml(pick.modelSpread || pick.predictedSpread || pickLabel) || '-';
+        const modelLine = escapeHtml(pick.modelSpread || pick.predictedSpread) || '-';
         const marketOdds = escapeHtml(pickOdds) || '-110';
         const marketLine = escapeHtml(pickLabel) || '-';
         const edgeValue = edge.toFixed(1);
+        const pickSubject = isTeamPick ? escapeHtml(pickInfo.abbr) : escapeHtml(normalizedPickTeamName);
         
         const comparisonHtml = `
             <div class="rationale-comparison">
-                <div class="comparison-header">Model Prediction vs. Market</div>
-                <div class="comparison-row">
-                    <div class="comparison-item">
-                        <span class="comparison-label">Model:</span>
-                        <span class="comparison-value">${modelLine} (${modelPrice})</span>
-                    </div>
-                    <div class="comparison-item">
-                        <span class="comparison-label">Market:</span>
-                        <span class="comparison-value">${marketLine} (${marketOdds})</span>
-                    </div>
-                    <div class="comparison-item">
-                        <span class="comparison-label">Edge:</span>
-                        <span class="comparison-value edge-highlight">+${edgeValue}%</span>
-                    </div>
+                <div class="comparison-header">📊 Model vs. Market Analysis</div>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Line</th>
+                            <th>Odds</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="model-row">
+                            <td class="row-label">Model</td>
+                            <td class="row-value">${pickSubject} ${modelLine}</td>
+                            <td class="row-value">${modelPrice}</td>
+                        </tr>
+                        <tr class="market-row">
+                            <td class="row-label">Market</td>
+                            <td class="row-value">${pickSubject} ${marketLine}</td>
+                            <td class="row-value">${marketOdds}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="edge-summary">
+                    <span class="edge-label">Calculated Edge:</span>
+                    <span class="edge-value-large">+${edgeValue}%</span>
                 </div>
             </div>
         `;
@@ -942,6 +962,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                         <span class="tracked-time">${trackedTime}</span>
                     </div>
                     ${changeIndicatorsHtml}
+                    <button class="remove-tracked-btn" type="button" title="Remove from Dashboard">✕</button>
                 </div>
             `;
         }
@@ -2129,26 +2150,46 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         }
 
         tbody.addEventListener('click', function(e) {
-            const btn = e.target.closest('.tracker-btn');
-            if (!btn) return;
+            // Handle tracker button click (add to dashboard)
+            const trackerBtn = e.target.closest('.tracker-btn');
+            if (trackerBtn) {
+                const row = trackerBtn.closest('tr');
+                if (!row) return;
 
-            const row = btn.closest('tr');
-            if (!row) return;
+                // Get pick index from row position
+                const rowIndex = Array.from(row.parentNode.children).indexOf(row);
+                
+                // Get pick data from stored picks array (more reliable than DOM parsing)
+                let pickData = null;
+                if (rowIndex >= 0 && allPicks && allPicks[rowIndex]) {
+                    pickData = allPicks[rowIndex];
+                } else {
+                    // Fallback to DOM extraction if array not available
+                    pickData = extractPickFromRow(row);
+                }
 
-            // Get pick index from row position
-            const rowIndex = Array.from(row.parentNode.children).indexOf(row);
-            
-            // Get pick data from stored picks array (more reliable than DOM parsing)
-            let pickData = null;
-            if (rowIndex >= 0 && allPicks && allPicks[rowIndex]) {
-                pickData = allPicks[rowIndex];
-            } else {
-                // Fallback to DOM extraction if array not available
-                pickData = extractPickFromRow(row);
+                if (pickData) {
+                    addPickToDashboard(pickData, trackerBtn);
+                }
+                return;
             }
 
-            if (pickData) {
-                addPickToDashboard(pickData, btn);
+            // Handle remove button click (remove from dashboard)
+            const removeBtn = e.target.closest('.remove-tracked-btn');
+            if (removeBtn) {
+                const row = removeBtn.closest('tr');
+                if (!row) return;
+
+                const rowIndex = Array.from(row.parentNode.children).indexOf(row);
+                let pickData = null;
+                if (rowIndex >= 0 && allPicks && allPicks[rowIndex]) {
+                    pickData = allPicks[rowIndex];
+                }
+
+                if (pickData) {
+                    removePickFromDashboard(pickData, row, rowIndex);
+                }
+                return;
             }
         });
 
@@ -2397,6 +2438,45 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
     }
 
     /**
+     * Format game time from pick data
+     */
+    function formatGameTime(pick) {
+        // Try to get time from various sources
+        if (pick.time && pick.time !== 'TBD') return pick.time;
+        if (pick.gameTime) return pick.gameTime;
+        
+        // Try to parse from date string
+        if (pick.date && pick.date.includes(' ')) {
+            const parts = pick.date.split(' ');
+            if (parts.length > 1) {
+                return parts.slice(1).join(' ');
+            }
+        }
+        
+        // Default to current time + 1 hour as estimate
+        const now = new Date();
+        now.setHours(now.getHours() + 1);
+        return now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    }
+
+    /**
+     * Determine pick direction (OVER/UNDER) from pick data
+     */
+    function determinePickDirection(pick) {
+        if (pick.pickDirection) return pick.pickDirection;
+        
+        const pickTeam = (pick.pickTeam || '').toUpperCase();
+        const pickLabel = (pick.pick || '').toUpperCase();
+        
+        if (pickTeam === 'OVER' || pickTeam === 'UNDER' || pickLabel.startsWith('OVER') || pickLabel.startsWith('UNDER')) {
+            if (pickTeam === 'OVER' || pickLabel.startsWith('OVER')) return 'OVER';
+            if (pickTeam === 'UNDER' || pickLabel.startsWith('UNDER')) return 'UNDER';
+        }
+        
+        return '';
+    }
+
+    /**
      * Format timestamp for display
      */
     function formatTrackedTime(isoString) {
@@ -2429,12 +2509,44 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             const existingData = localStorage.getItem(STORAGE_KEY);
             const existingPicks = existingData ? JSON.parse(existingData) : [];
 
-            // Add ID and timestamp
-            pickData.id = `pick_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+            // Transform data to match dashboard expected format
+            const dashboardPick = {
+                id: `pick_${Date.now()}_${Math.random().toString(36).substring(7)}`,
+                createdAt: trackedAt,
+                // Date/Time - dashboard expects gameDate and gameTime
+                gameDate: pickData.date || getTodayDateString(),
+                gameTime: pickData.time && pickData.time !== 'TBD' ? pickData.time : formatGameTime(pickData),
+                // Teams
+                awayTeam: pickData.awayTeam || '',
+                homeTeam: pickData.homeTeam || '',
+                awayRecord: pickData.awayRecord || '',
+                homeRecord: pickData.homeRecord || '',
+                // Pick details
+                pickTeam: pickData.pickTeam || '',
+                pickType: pickData.pickType || 'spread',
+                pickDirection: pickData.pickDirection || determinePickDirection(pickData),
+                line: pickData.line || '',
+                odds: pickData.odds || '-110',
+                // Model info
+                edge: pickData.edge || 0,
+                fire: pickData.fire || 0,
+                fireLabel: pickData.fireLabel || '',
+                modelPrice: pickData.modelPrice || '',
+                rationale: pickData.rationale || '',
+                modelStamp: pickData.modelStamp || '',
+                // Metadata
+                sport: pickData.sport || 'NBA',
+                segment: pickData.segment || 'FG',
+                status: 'pending',
+                sportsbook: pickData.sportsbook || ''
+            };
+
+            // Copy over for tracking purposes
+            pickData.id = dashboardPick.id;
             pickData.createdAt = trackedAt;
 
             // Add to array
-            existingPicks.push(pickData);
+            existingPicks.push(dashboardPick);
 
             // Save back
             localStorage.setItem(STORAGE_KEY, JSON.stringify(existingPicks));
@@ -2465,6 +2577,63 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         }
     }
 
+    /**
+     * Remove a pick from the dashboard and clear tracking metadata
+     */
+    function removePickFromDashboard(pickData, row, rowIndex) {
+        const STORAGE_KEY = 'gbsv_picks';
+
+        try {
+            const pickId = generatePickId(pickData);
+            
+            // Remove from dashboard picks
+            const existingData = localStorage.getItem(STORAGE_KEY);
+            if (existingData) {
+                const existingPicks = JSON.parse(existingData);
+                // Find and remove the pick - match by key attributes
+                const filtered = existingPicks.filter(p => {
+                    const pId = generatePickId(p);
+                    return pId !== pickId;
+                });
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
+                console.log(`[Weekly Lineup] Removed pick from dashboard. ${existingPicks.length} → ${filtered.length} picks`);
+            }
+
+            // Remove tracking metadata
+            removeTrackingMetadata(pickData);
+
+            showNotification(`Removed ${pickData.pickTeam} ${pickData.line} from Dashboard`, 'info');
+
+            // Refresh the row to show tracker button again
+            if (rowIndex >= 0 && allPicks[rowIndex]) {
+                const updatedRow = createWeeklyLineupRow(allPicks[rowIndex], rowIndex);
+                row.replaceWith(updatedRow);
+            }
+        } catch (err) {
+            console.error('[Weekly Lineup] Failed to remove pick:', err);
+            showNotification('Failed to remove pick', 'error');
+        }
+    }
+
+    /**
+     * Remove tracking metadata for a pick
+     */
+    function removeTrackingMetadata(pick) {
+        try {
+            const pickId = generatePickId(pick);
+            const existing = localStorage.getItem(TRACKED_PICKS_STORAGE_KEY);
+            if (!existing) return;
+
+            const trackedPicks = JSON.parse(existing);
+            delete trackedPicks[pickId];
+            localStorage.setItem(TRACKED_PICKS_STORAGE_KEY, JSON.stringify(trackedPicks));
+            
+            log(`🗑️ Removed tracking metadata for pick: ${pickId}`);
+        } catch (e) {
+            console.error('Error removing tracking metadata:', e);
+        }
+    }
+
     // Export for external use
     window.WeeklyLineup = {
         loadModelOutputs,
@@ -2472,7 +2641,8 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         showNotification,
         showEmptyState,
         showNoPicks,
-        addPickToDashboard
+        addPickToDashboard,
+        removePickFromDashboard
     };
 
     log('✅ Weekly Lineup v2.0 loaded');

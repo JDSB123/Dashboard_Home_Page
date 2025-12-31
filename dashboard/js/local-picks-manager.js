@@ -652,11 +652,16 @@
         let selection = '';
         if (pick.pickType === 'spread') {
             const line = pick.line || '';
-            selection = line.startsWith('+') || line.startsWith('-') ? line : `+${line}`;
-        } else if (pick.pickType === 'moneyline') {
+            selection = line.startsWith('+') || line.startsWith('-') ? line : (line ? `+${line}` : '');
+        } else if (pick.pickType === 'moneyline' || pick.pickType === 'ml') {
             selection = 'ML';
-        } else if (pick.pickType === 'total' || pick.pickType === 'team-total') {
-            selection = `${pick.pickDirection || 'Over'} ${pick.line || ''}`;
+        } else if (pick.pickType === 'total' || pick.pickType === 'team-total' || pick.pickType === 'tt') {
+            // Normalize pickDirection - fix "UNDE" typo
+            let direction = (pick.pickDirection || 'Over').toUpperCase();
+            if (direction === 'UNDE' || direction.startsWith('UNDE')) {
+                direction = 'UNDER';
+            }
+            selection = `${direction} ${pick.line || ''}`.trim();
         }
 
         const status = pick.status || 'pending';
@@ -873,12 +878,13 @@
                 <div class="pick-cell">
                     <div class="pick-team-info">
                         ${pickLogoHtml}
-                        <span class="pick-team-abbr">${pickTeamInfo.abbr}</span>
+                        <span class="pick-team-abbr">${pickTeamInfo.abbr || pick.pickTeam}</span>
                     </div>
                     <div class="pick-details">
-                        <span class="pick-line">${selection}</span>
+                        <span class="pick-line">${selection || pick.line || ''}</span>
                         <span class="pick-odds">(${pick.odds || '-110'})</span>
                     </div>
+                    ${pick.edge ? `<div class="pick-edge"><span class="edge-badge">+${parseFloat(pick.edge).toFixed(1)}%</span></div>` : ''}
                 </div>
             </td>
             <td class="center">

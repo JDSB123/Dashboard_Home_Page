@@ -917,6 +917,24 @@ body.page-active-picks .picks-table tbody td .pick-odds {
     color: var(--color-text-secondary, rgba(200, 215, 230, 0.85));
 }
 
+body.page-active-picks .picks-table tbody td .pick-edge {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 0.5rem;
+}
+
+body.page-active-picks .picks-table tbody td .edge-badge {
+    display: inline-block;
+    padding: 0.15rem 0.4rem;
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.4);
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--emerald-400, #10b981);
+    font-family: 'JetBrains Mono', monospace;
+}
+
 /* Currency combined - centered stacked layout */
 body.page-active-picks .picks-table tbody td .currency-combined {
     display: flex;
