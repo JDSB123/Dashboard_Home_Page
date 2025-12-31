@@ -9,7 +9,8 @@
  * ═══════════════════════════════════════════════════════════════════════════
  */
 
-window.APP_CONFIG = Object.freeze({
+// Note: Object NOT frozen to allow dynamic endpoint updates from registry
+window.APP_CONFIG = {
   // Project Identification
   PROJECT_NAME: 'Dashboard_Home_Page',
   VERSION: '33.01.0',
@@ -22,7 +23,7 @@ window.APP_CONFIG = Object.freeze({
   // API Configuration
   API_BASE_URL: 'https://gbsv-orchestrator.wittypebble-41c11c65.eastus.azurecontainerapps.io/api',
 
-  // Model API Endpoints
+  // Model API Endpoints (can be dynamically updated by model-endpoints-bootstrap.js)
   NBA_API_URL: 'https://nba-gbsv-api.livelycoast-b48c3cb0.eastus.azurecontainerapps.io',
   NCAAM_API_URL: 'https://ncaam-stable-prediction.wonderfulforest-c2d7d49a.centralus.azurecontainerapps.io',
   NFL_API_URL: 'https://nfl-api.purplegrass-5889a981.eastus.azurecontainerapps.io',
@@ -38,7 +39,7 @@ window.APP_CONFIG = Object.freeze({
 
   // Note: External API keys (SportsDataIO, TheOddsAPI) are configured in Azure Function App Settings
   // All external API calls are proxied through Azure Functions for security
-});
+};
 
 // Export for module usage if needed
 if (typeof module !== 'undefined' && module.exports) {
