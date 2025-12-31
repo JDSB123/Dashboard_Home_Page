@@ -652,6 +652,12 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             div.textContent = str;
             return div.innerHTML;
         };
+        
+        // Fix UNDE typo globally - applies to any string
+        const fixUnde = (str) => {
+            if (!str || typeof str !== 'string') return str;
+            return str.replace(/\bUNDE\b/gi, 'UNDER');
+        };
 
         // Format date - handle both date string and pre-formatted date
         const formatDate = (dateStr) => {
@@ -665,7 +671,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         // Get team info with logos (escape for XSS protection)
         const awayTeamName = escapeHtml(pick.awayTeam) || 'TBD';
         const homeTeamName = escapeHtml(pick.homeTeam) || 'TBD';
-        const pickTeamName = escapeHtml(pick.pickTeam) || 'Unknown';
+        const pickTeamName = fixUnde(escapeHtml(pick.pickTeam)) || 'Unknown';
 
         const awayInfo = getTeamInfo(awayTeamName);
         const homeInfo = getTeamInfo(homeTeamName);
@@ -682,9 +688,9 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         const homeRecord = escapeHtml(pick.homeRecord || getRecord(homeTeamName));
 
         // Build pick display (escape the label)
-        const pickLabel = escapeHtml(buildPickLabel(pick));
+        const pickLabel = fixUnde(escapeHtml(buildPickLabel(pick)));
         // Normalize pickTeamName - ensure "Under" is spelled correctly (not "UNDE")
-        const normalizedPickTeamName = pickTeamName === 'UNDE' || pickTeamName === 'unde' || (pickTeamName && pickTeamName.toUpperCase().startsWith('UNDE') && !pickTeamName.toUpperCase().startsWith('UNDER'))
+        const normalizedPickTeamName = (pickTeamName.toUpperCase() === 'UNDE' || pickTeamName.toUpperCase().startsWith('UNDE'))
             ? 'UNDER'
             : pickTeamName;
         const isTeamPick = normalizedPickTeamName !== 'Over' && normalizedPickTeamName !== 'Under' && normalizedPickTeamName !== 'OVER' && normalizedPickTeamName !== 'UNDER';
@@ -876,24 +882,25 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             marketDisplay = `${teamAbbr} ${escapeHtml(pick.line || '')}`;
         }
         
+        // Simpler, more reliable comparison HTML
         const comparisonHtml = `
-            <div class="rationale-comparison">
-                <div class="comparison-header">📊 Model vs. Market</div>
-                <div class="comparison-grid">
-                    <div class="comparison-block model-block">
-                        <div class="block-label">Model Prediction</div>
-                        <div class="block-value">${escapeHtml(modelDisplay)}</div>
-                        <div class="block-odds">${escapeHtml(modelPriceRaw || 'N/A')}</div>
+            <div class="details-section">
+                <h4 style="color:#10b981;margin:0 0 12px;font-size:14px;">📊 Model vs. Market</h4>
+                <div style="display:flex;gap:10px;margin-bottom:12px;">
+                    <div style="flex:1;background:rgba(16,185,129,0.15);padding:10px;border-radius:6px;text-align:center;">
+                        <div style="color:#10b981;font-size:11px;font-weight:600;text-transform:uppercase;margin-bottom:4px;">Model</div>
+                        <div style="color:#fff;font-size:14px;font-weight:700;">${modelDisplay}</div>
+                        <div style="color:#888;font-size:12px;">${modelPriceRaw || 'N/A'}</div>
                     </div>
-                    <div class="comparison-block market-block">
-                        <div class="block-label">Market Line</div>
-                        <div class="block-value">${escapeHtml(marketDisplay)}</div>
-                        <div class="block-odds">${escapeHtml(pickOdds)}</div>
+                    <div style="flex:1;background:rgba(99,102,241,0.15);padding:10px;border-radius:6px;text-align:center;">
+                        <div style="color:#818cf8;font-size:11px;font-weight:600;text-transform:uppercase;margin-bottom:4px;">Market</div>
+                        <div style="color:#fff;font-size:14px;font-weight:700;">${marketDisplay}</div>
+                        <div style="color:#888;font-size:12px;">${pickOdds}</div>
                     </div>
                 </div>
-                <div class="edge-summary">
-                    <span class="edge-label">Edge:</span>
-                    <span class="edge-value-large ${edge >= 5 ? 'edge-high' : edge >= 2 ? 'edge-medium' : ''}">+${edgeValue}%</span>
+                <div style="background:rgba(16,185,129,0.2);padding:8px 12px;border-radius:6px;text-align:center;">
+                    <span style="color:#ccc;font-size:12px;">Edge:</span>
+                    <span style="color:#22c55e;font-size:16px;font-weight:700;margin-left:6px;">+${edgeValue}%</span>
                 </div>
             </div>
         `;
