@@ -1,11 +1,17 @@
 /**
  * Fetch model endpoints from the orchestrator registry so front-end stays in sync
  * with updated Azure Container App URLs without redeploying static assets.
+ *
+ * Supports dynamic discovery of new leagues - any key in the registry with an
+ * 'endpoint' property will be added to APP_CONFIG as {KEY}_API_URL.
  */
 (function() {
     'use strict';
 
     const REGISTRY_TIMEOUT_MS = 6000;
+
+    // Known leagues to look for (can be extended by registry response)
+    const KNOWN_LEAGUES = ['nba', 'ncaam', 'nfl', 'ncaaf', 'nhl', 'mlb'];
 
     const fetchWithTimeout = async (url, timeoutMs = REGISTRY_TIMEOUT_MS) => {
         const controller = new AbortController();
@@ -31,14 +37,28 @@
             if (!res.ok) throw new Error(`Registry request failed: ${res.status}`);
             const registry = await res.json();
 
-            ['nba', 'ncaam', 'nfl', 'ncaaf'].forEach((key) => {
+            // Dynamically iterate over ALL keys in registry response
+            // This allows new leagues/models to be added without code changes
+            const registryKeys = Object.keys(registry || {});
+            const allLeagues = [...new Set([...KNOWN_LEAGUES, ...registryKeys])];
+
+            let updatedCount = 0;
+            allLeagues.forEach((key) => {
                 const entry = registry?.[key];
                 if (entry?.endpoint) {
-                    window.APP_CONFIG[`${key.toUpperCase()}_API_URL`] = entry.endpoint;
+                    const configKey = `${key.toUpperCase()}_API_URL`;
+                    window.APP_CONFIG[configKey] = entry.endpoint;
+                    updatedCount++;
+                    console.log(`[MODEL-ENDPOINTS] Updated ${configKey}: ${entry.endpoint}`);
                 }
             });
 
             window.APP_CONFIG.MODEL_ENDPOINTS_LAST_UPDATED = new Date().toISOString();
+            window.APP_CONFIG.MODEL_ENDPOINTS_COUNT = updatedCount;
+
+            if (updatedCount > 0) {
+                console.log(`[MODEL-ENDPOINTS] Hydrated ${updatedCount} endpoints from registry`);
+            }
         } catch (err) {
             // Safe to continue; pick fetchers will fall back to current APP_CONFIG values
             console.warn('[MODEL-ENDPOINTS] Unable to refresh endpoints from registry:', err.message);
@@ -50,6 +70,7 @@
 
     // Expose for optional manual refresh/debug
     window.ModelEndpointBootstrap = {
-        hydrate: hydrateEndpoints
+        hydrate: hydrateEndpoints,
+        getKnownLeagues: () => KNOWN_LEAGUES
     };
 })();

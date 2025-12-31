@@ -8,7 +8,7 @@
 (function() {
     'use strict';
 
-    const NCAAM_API_URL = window.APP_CONFIG?.NCAAM_API_URL || 'https://ncaam-stable-prediction.blackglacier-5fab3573.centralus.azurecontainerapps.io';
+    const NCAAM_API_URL = window.APP_CONFIG?.NCAAM_API_URL || 'https://ncaam-stable-prediction.wonderfulforest-c2d7d49a.centralus.azurecontainerapps.io';
 
     // Date-aware cache: { date: { data, timestamp } }
     const picksCache = {};

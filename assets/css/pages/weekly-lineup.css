@@ -4787,6 +4787,152 @@ body.page-weekly-lineup .th-filter-dropdown.weekly-lineup-filter-dropdown .team-
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35), 0 0 12px rgba(0, 214, 137, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
+/* View Toggle (Active/History) */
+.ft-view-toggle {
+    display: flex;
+    gap: 2px;
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 16px;
+    padding: 2px;
+    border: 1px solid rgba(100, 130, 170, 0.25);
+}
+
+.ft-view-btn {
+    padding: 5px 14px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    font-family: inherit;
+    color: rgba(180, 195, 210, 0.7);
+    background: transparent;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.ft-view-btn:hover {
+    color: rgba(200, 215, 230, 0.95);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.ft-view-btn.active {
+    color: #fff;
+    background: linear-gradient(135deg, rgba(0, 80, 70, 0.9) 0%, rgba(0, 60, 55, 0.95) 100%);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 8px rgba(0, 214, 137, 0.2);
+}
+
+.ft-divider {
+    width: 1px;
+    height: 20px;
+    background: rgba(100, 130, 170, 0.3);
+    margin: 0 6px;
+    align-self: center;
+}
+
+/* Outcome Badges for History View */
+.outcome-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 10px;
+    margin-left: 6px;
+}
+
+.outcome-badge.win {
+    color: #00ff88;
+    background: rgba(0, 255, 136, 0.15);
+    border: 1px solid rgba(0, 255, 136, 0.4);
+    text-shadow: 0 0 6px rgba(0, 255, 136, 0.4);
+}
+
+.outcome-badge.loss {
+    color: #ff6b6b;
+    background: rgba(255, 107, 107, 0.15);
+    border: 1px solid rgba(255, 107, 107, 0.4);
+    text-shadow: 0 0 6px rgba(255, 107, 107, 0.4);
+}
+
+.outcome-badge.push {
+    color: #ffd93d;
+    background: rgba(255, 217, 61, 0.15);
+    border: 1px solid rgba(255, 217, 61, 0.4);
+    text-shadow: 0 0 6px rgba(255, 217, 61, 0.4);
+}
+
+.outcome-badge.no-action {
+    color: rgba(180, 195, 210, 0.6);
+    background: rgba(100, 130, 170, 0.1);
+    border: 1px solid rgba(100, 130, 170, 0.25);
+}
+
+/* Tracked indicator for history */
+.tracked-indicator {
+    font-size: 0.65rem;
+    color: rgba(0, 214, 137, 0.8);
+    margin-left: 4px;
+}
+
+/* History Stats Summary */
+.history-stats-bar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 16px;
+    background: linear-gradient(135deg, rgba(20, 35, 60, 0.6) 0%, rgba(15, 28, 50, 0.7) 100%);
+    border: 1px solid rgba(100, 130, 170, 0.2);
+    border-radius: 10px;
+    margin-bottom: 12px;
+}
+
+.history-stats-bar .stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.history-stats-bar .stat-value {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.history-stats-bar .stat-label {
+    font-size: 0.65rem;
+    color: rgba(180, 195, 210, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.history-stats-bar .stat-value.wins { color: #00ff88; }
+.history-stats-bar .stat-value.losses { color: #ff6b6b; }
+.history-stats-bar .stat-value.pushes { color: #ffd93d; }
+.history-stats-bar .stat-value.win-rate { color: #00d4ff; }
+
+.history-week-selector {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.history-week-selector select {
+    padding: 5px 10px;
+    font-size: 0.75rem;
+    color: rgba(200, 215, 230, 0.95);
+    background: rgba(15, 28, 50, 0.9);
+    border: 1px solid rgba(100, 130, 170, 0.35);
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.history-week-selector label {
+    font-size: 0.72rem;
+    color: rgba(180, 195, 210, 0.7);
+}
+
 /* Dropdown */
 .ft-dropdown {
     position: relative;

@@ -1,13 +1,20 @@
 /* ==========================================================================
-   WEEKLY LINEUP PAGE JAVASCRIPT v33.00.4
+   WEEKLY LINEUP PAGE JAVASCRIPT v33.01.0
    ==========================================================================
    Production release - Real API data only, no mock data
    Today's Picks - Model outputs with Edge/Fire ratings
    Matches dashboard styling with team logos and sorting
+
+   v33.01.0 - Added Archive/History feature:
+   - Auto-archives picks when games are completed
+   - Tracks outcomes (W/L/P) for all picks including non-dashboard ones
+   - Active/History view toggle
+   - Weekly stats summary with win rate
+   - Filter by week in history view
    ========================================================================== */
 
 // Build version tracking
-const WL_BUILD = '33.00.5';
+const WL_BUILD = '33.01.0';
 window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
 (function() {
@@ -20,6 +27,10 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
     // ===== STORAGE FOR WEEKLY LINEUP PICKS =====
     const WEEKLY_LINEUP_STORAGE_KEY = 'gbsv_weekly_lineup_picks';
     const TRACKED_PICKS_STORAGE_KEY = 'gbsv_tracked_weekly_picks';
+    const ARCHIVED_PICKS_STORAGE_KEY = 'gbsv_archived_weekly_picks';
+
+    // ===== VIEW STATE =====
+    let currentView = 'active'; // 'active' or 'history'
 
     // ===== SCRIPT LOADING VERIFICATION =====
 
@@ -242,9 +253,13 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         initializeDateRangeSelector();
         initializeTrackerButtons();
         initializeRationaleToggles();
+        initializeViewToggle(); // Active/History toggle
 
         try {
             log('[Weekly Lineup] Starting initialization...');
+
+            // Archive expired picks on page load
+            archiveExpiredPicks();
 
             // Load saved picks from localStorage on page load (persist across refreshes)
             const savedPicks = loadWeeklyLineupPicks();
@@ -593,6 +608,601 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             console.error('Error loading weekly lineup picks:', e);
         }
         return null;
+    }
+
+    // ===== ARCHIVE FUNCTIONS FOR WEEKLY LINEUP PICKS =====
+
+    /**
+     * Get the week identifier string (e.g., "Dec 23-29, 2025")
+     */
+    function getWeekIdentifier(date = new Date()) {
+        const d = new Date(date);
+        const dayOfWeek = d.getDay();
+        // Get start of week (Sunday)
+        const startOfWeek = new Date(d);
+        startOfWeek.setDate(d.getDate() - dayOfWeek);
+        // Get end of week (Saturday)
+        const endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(startOfWeek.getDate() + 6);
+
+        const options = { month: 'short', day: 'numeric' };
+        const startStr = startOfWeek.toLocaleDateString('en-US', options);
+        const endStr = endOfWeek.toLocaleDateString('en-US', { day: 'numeric' });
+        const year = endOfWeek.getFullYear();
+
+        return `${startStr}-${endStr}, ${year}`;
+    }
+
+    /**
+     * Load archived picks from localStorage
+     */
+    function loadArchivedPicks() {
+        try {
+            const data = localStorage.getItem(ARCHIVED_PICKS_STORAGE_KEY);
+            if (data) {
+                const parsed = JSON.parse(data);
+                return {
+                    picks: parsed.picks || [],
+                    weeklyStats: parsed.weeklyStats || {}
+                };
+            }
+        } catch (e) {
+            console.error('Error loading archived picks:', e);
+        }
+        return { picks: [], weeklyStats: {} };
+    }
+
+    /**
+     * Save archived picks to localStorage
+     */
+    function saveArchivedPicks(archiveData) {
+        try {
+            localStorage.setItem(ARCHIVED_PICKS_STORAGE_KEY, JSON.stringify(archiveData));
+            log(`📦 Saved ${archiveData.picks.length} archived picks`);
+        } catch (e) {
+            console.error('Error saving archived picks:', e);
+        }
+    }
+
+    /**
+     * Check if a pick's game has passed (game time is in the past)
+     */
+    function isGamePassed(pick) {
+        try {
+            // Parse date and time
+            const dateStr = pick.date || '';
+            const timeStr = pick.time || '';
+
+            // Try to construct a date object
+            let gameDate;
+
+            // Handle formats like "Mon, Dec 23" or "Dec 23"
+            const currentYear = new Date().getFullYear();
+            const monthDayMatch = dateStr.match(/(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2})/i);
+
+            if (monthDayMatch) {
+                const monthStr = monthDayMatch[1];
+                const day = parseInt(monthDayMatch[2]);
+                const monthMap = { jan: 0, feb: 1, mar: 2, apr: 3, may: 4, jun: 5, jul: 6, aug: 7, sep: 8, oct: 9, nov: 10, dec: 11 };
+                const month = monthMap[monthStr.toLowerCase()];
+
+                // Parse time (e.g., "6:10 PM")
+                let hours = 23, minutes = 59;
+                const timeMatch = timeStr.match(/(\d{1,2}):(\d{2})\s*(AM|PM)?/i);
+                if (timeMatch) {
+                    hours = parseInt(timeMatch[1]);
+                    minutes = parseInt(timeMatch[2]);
+                    const period = (timeMatch[3] || '').toUpperCase();
+                    if (period === 'PM' && hours < 12) hours += 12;
+                    if (period === 'AM' && hours === 12) hours = 0;
+                }
+
+                gameDate = new Date(currentYear, month, day, hours, minutes);
+
+                // If the date is in the past by more than 6 months, it's probably next year
+                const now = new Date();
+                const sixMonthsAgo = new Date();
+                sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+                if (gameDate < sixMonthsAgo) {
+                    gameDate.setFullYear(currentYear + 1);
+                }
+            } else {
+                // Fallback: try direct parsing
+                gameDate = new Date(dateStr);
+                if (isNaN(gameDate.getTime())) {
+                    return false; // Can't parse, assume not passed
+                }
+            }
+
+            // Add 3 hours buffer after game start to ensure game is finished
+            const gameEndEstimate = new Date(gameDate.getTime() + 3 * 60 * 60 * 1000);
+            return new Date() > gameEndEstimate;
+        } catch (e) {
+            log('Error checking if game passed:', e);
+            return false;
+        }
+    }
+
+    /**
+     * Get outcome for a pick from dashboard data
+     */
+    function getPickOutcome(pick) {
+        try {
+            const dashboardPicks = JSON.parse(localStorage.getItem('gbsv_picks') || '[]');
+            const pickId = generatePickId(pick);
+
+            // Find matching dashboard pick by comparing key fields
+            const matched = dashboardPicks.find(dp => {
+                // Match by pickTeam, line, date, and teams
+                const sameTeam = dp.pickTeam === pick.pickTeam;
+                const sameLine = dp.line === pick.line;
+                const sameMatchup = (dp.awayTeam === pick.awayTeam && dp.homeTeam === pick.homeTeam);
+                return sameTeam && sameLine && sameMatchup;
+            });
+
+            if (matched && matched.status) {
+                // Return status: win, loss, push
+                if (['win', 'loss', 'push'].includes(matched.status.toLowerCase())) {
+                    return matched.status.toLowerCase();
+                }
+            }
+            return 'no_action'; // Not tracked or no result yet
+        } catch (e) {
+            return 'no_action';
+        }
+    }
+
+    /**
+     * Archive expired picks (games that have passed)
+     */
+    function archiveExpiredPicks() {
+        const currentPicks = loadWeeklyLineupPicks() || [];
+        if (currentPicks.length === 0) return;
+
+        const archiveData = loadArchivedPicks();
+        const now = new Date();
+        const activePicks = [];
+        let archivedCount = 0;
+
+        currentPicks.forEach(pick => {
+            if (isGamePassed(pick)) {
+                // This pick's game has passed - archive it
+                const weekId = getWeekIdentifier(now);
+                const pickId = generatePickId(pick);
+
+                // Check if already archived (avoid duplicates)
+                const alreadyArchived = archiveData.picks.some(ap =>
+                    generatePickId(ap) === pickId
+                );
+
+                if (!alreadyArchived) {
+                    // Get outcome from dashboard if available
+                    const outcome = getPickOutcome(pick);
+
+                    // Check if it was sent to dashboard
+                    const trackedData = getTrackingMetadata(pick);
+                    const sentToDashboard = !!trackedData;
+
+                    const archivedPick = {
+                        ...pick,
+                        archivedAt: now.toISOString(),
+                        weekOf: weekId,
+                        outcome: outcome,
+                        sentToDashboard: sentToDashboard,
+                        dashboardPickId: trackedData?.pickId || null
+                    };
+
+                    archiveData.picks.push(archivedPick);
+
+                    // Update weekly stats
+                    if (!archiveData.weeklyStats[weekId]) {
+                        archiveData.weeklyStats[weekId] = {
+                            total: 0,
+                            tracked: 0,
+                            wins: 0,
+                            losses: 0,
+                            pushes: 0,
+                            noAction: 0
+                        };
+                    }
+
+                    archiveData.weeklyStats[weekId].total++;
+                    if (sentToDashboard) archiveData.weeklyStats[weekId].tracked++;
+                    if (outcome === 'win') archiveData.weeklyStats[weekId].wins++;
+                    else if (outcome === 'loss') archiveData.weeklyStats[weekId].losses++;
+                    else if (outcome === 'push') archiveData.weeklyStats[weekId].pushes++;
+                    else archiveData.weeklyStats[weekId].noAction++;
+
+                    archivedCount++;
+                }
+            } else {
+                // Game hasn't passed - keep in active list
+                activePicks.push(pick);
+            }
+        });
+
+        if (archivedCount > 0) {
+            // Save archive
+            saveArchivedPicks(archiveData);
+
+            // Update active picks (remove archived ones)
+            saveWeeklyLineupPicks(activePicks);
+
+            log(`📦 Archived ${archivedCount} expired picks`);
+            showNotification(`Archived ${archivedCount} completed picks`, 'info');
+        }
+    }
+
+    /**
+     * Manually archive a specific pick (for testing or manual control)
+     */
+    function archivePick(pick, outcome = 'no_action') {
+        const archiveData = loadArchivedPicks();
+        const now = new Date();
+        const weekId = getWeekIdentifier(now);
+
+        const trackedData = getTrackingMetadata(pick);
+
+        const archivedPick = {
+            ...pick,
+            archivedAt: now.toISOString(),
+            weekOf: weekId,
+            outcome: outcome,
+            sentToDashboard: !!trackedData,
+            dashboardPickId: trackedData?.pickId || null
+        };
+
+        archiveData.picks.push(archivedPick);
+
+        // Update weekly stats
+        if (!archiveData.weeklyStats[weekId]) {
+            archiveData.weeklyStats[weekId] = {
+                total: 0, tracked: 0, wins: 0, losses: 0, pushes: 0, noAction: 0
+            };
+        }
+        archiveData.weeklyStats[weekId].total++;
+        if (trackedData) archiveData.weeklyStats[weekId].tracked++;
+        if (outcome === 'win') archiveData.weeklyStats[weekId].wins++;
+        else if (outcome === 'loss') archiveData.weeklyStats[weekId].losses++;
+        else if (outcome === 'push') archiveData.weeklyStats[weekId].pushes++;
+        else archiveData.weeklyStats[weekId].noAction++;
+
+        saveArchivedPicks(archiveData);
+
+        // Remove from active picks
+        const currentPicks = loadWeeklyLineupPicks() || [];
+        const pickId = generatePickId(pick);
+        const filtered = currentPicks.filter(p => generatePickId(p) !== pickId);
+        saveWeeklyLineupPicks(filtered);
+
+        log(`📦 Manually archived pick: ${pick.pickTeam} ${pick.line}`);
+    }
+
+    /**
+     * Update outcome for an archived pick
+     */
+    function updateArchivedPickOutcome(pickId, newOutcome) {
+        const archiveData = loadArchivedPicks();
+        const pickIndex = archiveData.picks.findIndex(p => generatePickId(p) === pickId);
+
+        if (pickIndex >= 0) {
+            const oldOutcome = archiveData.picks[pickIndex].outcome;
+            const weekId = archiveData.picks[pickIndex].weekOf;
+
+            // Update pick
+            archiveData.picks[pickIndex].outcome = newOutcome;
+
+            // Update stats
+            if (archiveData.weeklyStats[weekId]) {
+                // Decrement old outcome
+                if (oldOutcome === 'win') archiveData.weeklyStats[weekId].wins--;
+                else if (oldOutcome === 'loss') archiveData.weeklyStats[weekId].losses--;
+                else if (oldOutcome === 'push') archiveData.weeklyStats[weekId].pushes--;
+                else archiveData.weeklyStats[weekId].noAction--;
+
+                // Increment new outcome
+                if (newOutcome === 'win') archiveData.weeklyStats[weekId].wins++;
+                else if (newOutcome === 'loss') archiveData.weeklyStats[weekId].losses++;
+                else if (newOutcome === 'push') archiveData.weeklyStats[weekId].pushes++;
+                else archiveData.weeklyStats[weekId].noAction++;
+            }
+
+            saveArchivedPicks(archiveData);
+            log(`📦 Updated outcome for archived pick to: ${newOutcome}`);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Get weekly stats summary
+     */
+    function getWeeklyStatsSummary() {
+        const archiveData = loadArchivedPicks();
+        const weeks = Object.keys(archiveData.weeklyStats).sort().reverse();
+
+        return weeks.map(weekId => ({
+            week: weekId,
+            ...archiveData.weeklyStats[weekId],
+            winRate: archiveData.weeklyStats[weekId].total > 0
+                ? ((archiveData.weeklyStats[weekId].wins / (archiveData.weeklyStats[weekId].wins + archiveData.weeklyStats[weekId].losses)) * 100).toFixed(1)
+                : '0.0'
+        }));
+    }
+
+    // ===== VIEW TOGGLE (Active/History) =====
+
+    /**
+     * Initialize the Active/History view toggle
+     */
+    function initializeViewToggle() {
+        const viewToggle = document.getElementById('view-toggle');
+        if (!viewToggle) return;
+
+        const viewBtns = viewToggle.querySelectorAll('.ft-view-btn');
+        viewBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Update active state
+                viewBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                // Switch view
+                const view = btn.dataset.view;
+                currentView = view;
+
+                if (view === 'active') {
+                    showActiveView();
+                } else {
+                    showHistoryView();
+                }
+            });
+        });
+
+        log('📌 View toggle initialized');
+    }
+
+    /**
+     * Switch to active picks view
+     */
+    function showActiveView() {
+        log('📌 Switching to Active view');
+
+        // Remove history stats bar if present
+        const existingStatsBar = document.querySelector('.history-stats-bar');
+        if (existingStatsBar) existingStatsBar.remove();
+
+        // Show fetch controls
+        const fetchControls = document.querySelector('.fetch-controls-wrapper');
+        if (fetchControls) fetchControls.style.display = '';
+
+        // Restore active picks
+        const savedPicks = loadWeeklyLineupPicks();
+        if (savedPicks && savedPicks.length > 0) {
+            populateWeeklyLineupTable(savedPicks);
+        } else {
+            const tbody = document.querySelector('.weekly-lineup-table tbody');
+            if (tbody) {
+                tbody.innerHTML = '<tr class="empty-state-row"><td colspan="8" class="empty-state-cell"><div class="empty-state"><span class="empty-icon">📊</span><span class="empty-message">No picks fetched yet. Click Fetch to load picks.</span></div></td></tr>';
+            }
+        }
+    }
+
+    /**
+     * Switch to history/archived picks view
+     */
+    function showHistoryView() {
+        log('📌 Switching to History view');
+
+        // Hide fetch controls (not needed for history)
+        const fetchControls = document.querySelector('.fetch-controls-wrapper');
+        if (fetchControls) fetchControls.style.display = 'none';
+
+        // Load and display archived picks
+        populateArchivedPicks();
+    }
+
+    /**
+     * Populate table with archived picks
+     */
+    function populateArchivedPicks(weekFilter = null) {
+        const archiveData = loadArchivedPicks();
+        const tbody = document.querySelector('.weekly-lineup-table tbody');
+        const tableContainer = document.querySelector('.weekly-lineup-table-wrapper');
+
+        if (!tbody || !tableContainer) return;
+
+        // Get available weeks for dropdown
+        const weeks = Object.keys(archiveData.weeklyStats).sort().reverse();
+
+        // Create or update stats bar
+        let statsBar = document.querySelector('.history-stats-bar');
+        if (!statsBar) {
+            statsBar = document.createElement('div');
+            statsBar.className = 'history-stats-bar';
+            tableContainer.parentNode.insertBefore(statsBar, tableContainer);
+        }
+
+        // Calculate stats for selected week or all time
+        let stats;
+        let filteredPicks;
+
+        if (weekFilter) {
+            stats = archiveData.weeklyStats[weekFilter] || { total: 0, tracked: 0, wins: 0, losses: 0, pushes: 0, noAction: 0 };
+            filteredPicks = archiveData.picks.filter(p => p.weekOf === weekFilter);
+        } else {
+            // All time stats
+            stats = { total: 0, tracked: 0, wins: 0, losses: 0, pushes: 0, noAction: 0 };
+            weeks.forEach(w => {
+                const ws = archiveData.weeklyStats[w];
+                if (ws) {
+                    stats.total += ws.total;
+                    stats.tracked += ws.tracked;
+                    stats.wins += ws.wins;
+                    stats.losses += ws.losses;
+                    stats.pushes += ws.pushes;
+                    stats.noAction += ws.noAction;
+                }
+            });
+            filteredPicks = archiveData.picks;
+        }
+
+        const winRate = (stats.wins + stats.losses) > 0
+            ? ((stats.wins / (stats.wins + stats.losses)) * 100).toFixed(1)
+            : '0.0';
+
+        // Render stats bar
+        statsBar.innerHTML = `
+            <div class="history-week-selector">
+                <label>Week:</label>
+                <select id="week-filter">
+                    <option value="">All Time</option>
+                    ${weeks.map(w => `<option value="${w}" ${weekFilter === w ? 'selected' : ''}>${w}</option>`).join('')}
+                </select>
+            </div>
+            <div class="stat-item"><span class="stat-value">${stats.total}</span><span class="stat-label">Total Picks</span></div>
+            <div class="stat-item"><span class="stat-value">${stats.tracked}</span><span class="stat-label">Tracked</span></div>
+            <div class="stat-item"><span class="stat-value wins">${stats.wins}</span><span class="stat-label">Wins</span></div>
+            <div class="stat-item"><span class="stat-value losses">${stats.losses}</span><span class="stat-label">Losses</span></div>
+            <div class="stat-item"><span class="stat-value pushes">${stats.pushes}</span><span class="stat-label">Pushes</span></div>
+            <div class="stat-item"><span class="stat-value win-rate">${winRate}%</span><span class="stat-label">Win Rate</span></div>
+        `;
+
+        // Add week filter change handler
+        const weekSelect = statsBar.querySelector('#week-filter');
+        if (weekSelect) {
+            weekSelect.addEventListener('change', (e) => {
+                const selectedWeek = e.target.value || null;
+                populateArchivedPicks(selectedWeek);
+            });
+        }
+
+        // Clear table
+        tbody.innerHTML = '';
+
+        // Show empty state if no archived picks
+        if (!filteredPicks || filteredPicks.length === 0) {
+            tbody.innerHTML = '<tr class="empty-state-row"><td colspan="8" class="empty-state-cell"><div class="empty-state"><span class="empty-icon">📦</span><span class="empty-message">No archived picks yet. Completed games will appear here.</span></div></td></tr>';
+            return;
+        }
+
+        // Sort by archived date (most recent first)
+        filteredPicks.sort((a, b) => new Date(b.archivedAt) - new Date(a.archivedAt));
+
+        // Render archived picks
+        filteredPicks.forEach((pick, idx) => {
+            const row = createArchivedPickRow(pick, idx);
+            tbody.appendChild(row);
+        });
+
+        // Apply zebra striping
+        applyZebraStripes();
+
+        log(`📦 Displayed ${filteredPicks.length} archived picks`);
+    }
+
+    /**
+     * Create a table row for an archived pick
+     */
+    function createArchivedPickRow(pick, idx) {
+        const row = document.createElement('tr');
+        row.classList.add('archived-pick-row');
+
+        // XSS protection
+        const escapeHtml = (str) => {
+            if (!str) return '';
+            if (window.PicksDOMUtils?.escapeHtml) {
+                return window.PicksDOMUtils.escapeHtml(str);
+            }
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        };
+
+        // Get team info for logos
+        const awayInfo = getTeamInfo(pick.awayTeam);
+        const homeInfo = getTeamInfo(pick.homeTeam);
+        const leagueLogo = LEAGUE_LOGOS[pick.sport?.toUpperCase()] || '';
+
+        // Outcome badge
+        const outcomeClass = pick.outcome || 'no-action';
+        const outcomeLabel = pick.outcome === 'win' ? 'W'
+            : pick.outcome === 'loss' ? 'L'
+            : pick.outcome === 'push' ? 'P'
+            : '-';
+
+        // Tracked indicator
+        const trackedHtml = pick.sentToDashboard
+            ? '<span class="tracked-indicator" title="Sent to Dashboard">✓</span>'
+            : '';
+
+        // Fire display
+        const fireValue = pick.fire || pick.fireRating || 0;
+        const fireEmojis = '🔥'.repeat(Math.min(fireValue, 5));
+        const fireLabel = pick.fireLabel || ['', '', 'Warm', 'Warm', 'Hot', 'Max'][fireValue] || '';
+
+        // Edge class
+        const edgeValue = parseFloat(pick.edge) || 0;
+        const edgeClass = edgeValue >= 5 ? 'high' : edgeValue >= 2 ? 'medium' : 'low';
+
+        // Segment display
+        const segmentDisplay = pick.segment === '1H' ? '1st Half'
+            : pick.segment === '2H' ? '2nd Half'
+            : 'Full Game';
+
+        // Pick display
+        let pickDisplay = escapeHtml(pick.pickTeam || '');
+        if (pick.line) {
+            pickDisplay += ` <span class="line-value">${escapeHtml(pick.line)}</span>`;
+        }
+        if (pick.odds) {
+            pickDisplay += ` <span class="odds-value">(${escapeHtml(pick.odds)})</span>`;
+        }
+
+        row.innerHTML = `
+            <td class="col-datetime">
+                <div class="datetime-cell">
+                    <span class="date-text">${escapeHtml(pick.date || '')}</span>
+                    <span class="time-text">${escapeHtml(pick.time || '')}</span>
+                </div>
+            </td>
+            <td class="center col-league">
+                ${leagueLogo ? `<img src="${leagueLogo}" class="league-logo-sm" alt="${pick.sport}" onerror="this.style.display='none'">` : ''}
+                <span class="league-label-sm">${escapeHtml(pick.sport || '')}</span>
+            </td>
+            <td class="col-matchup">
+                <div class="matchup-cell">
+                    <div class="team-line away">
+                        ${awayInfo.logo ? `<img src="${awayInfo.logo}" class="team-logo-sm" alt="${awayInfo.abbr}" loading="lazy" onerror="this.style.display='none'">` : ''}
+                        <span class="team-name-full">${escapeHtml(pick.awayTeam || '')}</span>
+                    </div>
+                    <span class="vs-label">@</span>
+                    <div class="team-line home">
+                        ${homeInfo.logo ? `<img src="${homeInfo.logo}" class="team-logo-sm" alt="${homeInfo.abbr}" loading="lazy" onerror="this.style.display='none'">` : ''}
+                        <span class="team-name-full">${escapeHtml(pick.homeTeam || '')}</span>
+                    </div>
+                </div>
+            </td>
+            <td class="center col-segment">
+                <span class="segment-badge">${segmentDisplay}</span>
+            </td>
+            <td class="col-pick">
+                <div class="pick-cell">
+                    <span class="pick-display">${pickDisplay}</span>
+                </div>
+            </td>
+            <td class="center col-edge">
+                <span class="edge-value edge-${edgeClass}">${edgeValue.toFixed(1)}%</span>
+            </td>
+            <td class="center col-fire">
+                <span class="fire-display" title="${fireLabel}">${fireEmojis || '-'}</span>
+            </td>
+            <td class="center col-track">
+                <span class="outcome-badge ${outcomeClass}">${outcomeLabel}</span>
+                ${trackedHtml}
+            </td>
+        `;
+
+        return row;
     }
 
     // ===== POPULATE WEEKLY LINEUP TABLE =====
@@ -2643,10 +3253,120 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             const trackedPicks = JSON.parse(existing);
             delete trackedPicks[pickId];
             localStorage.setItem(TRACKED_PICKS_STORAGE_KEY, JSON.stringify(trackedPicks));
-            
+
             log(`🗑️ Removed tracking metadata for pick: ${pickId}`);
         } catch (e) {
             console.error('Error removing tracking metadata:', e);
+        }
+    }
+
+    /**
+     * Sync outcomes from dashboard to archived picks
+     * Call this to update archived pick outcomes based on dashboard status
+     */
+    function syncArchivedOutcomes() {
+        try {
+            const archiveData = loadArchivedPicks();
+            if (!archiveData.picks || archiveData.picks.length === 0) return;
+
+            const dashboardPicks = JSON.parse(localStorage.getItem('gbsv_picks') || '[]');
+            let updatedCount = 0;
+
+            archiveData.picks.forEach(archivedPick => {
+                // Find matching dashboard pick
+                const matched = dashboardPicks.find(dp => {
+                    const sameTeam = dp.pickTeam === archivedPick.pickTeam;
+                    const sameLine = dp.line === archivedPick.line;
+                    const sameMatchup = (dp.awayTeam === archivedPick.awayTeam && dp.homeTeam === archivedPick.homeTeam);
+                    return sameTeam && sameLine && sameMatchup;
+                });
+
+                if (matched && matched.status) {
+                    const newOutcome = ['win', 'loss', 'push'].includes(matched.status.toLowerCase())
+                        ? matched.status.toLowerCase()
+                        : 'no_action';
+
+                    if (archivedPick.outcome !== newOutcome) {
+                        // Update stats
+                        const weekId = archivedPick.weekOf;
+                        if (archiveData.weeklyStats[weekId]) {
+                            // Decrement old
+                            if (archivedPick.outcome === 'win') archiveData.weeklyStats[weekId].wins--;
+                            else if (archivedPick.outcome === 'loss') archiveData.weeklyStats[weekId].losses--;
+                            else if (archivedPick.outcome === 'push') archiveData.weeklyStats[weekId].pushes--;
+                            else archiveData.weeklyStats[weekId].noAction--;
+
+                            // Increment new
+                            if (newOutcome === 'win') archiveData.weeklyStats[weekId].wins++;
+                            else if (newOutcome === 'loss') archiveData.weeklyStats[weekId].losses++;
+                            else if (newOutcome === 'push') archiveData.weeklyStats[weekId].pushes++;
+                            else archiveData.weeklyStats[weekId].noAction++;
+                        }
+
+                        archivedPick.outcome = newOutcome;
+                        updatedCount++;
+                    }
+                }
+            });
+
+            if (updatedCount > 0) {
+                saveArchivedPicks(archiveData);
+                log(`📊 Synced ${updatedCount} archived pick outcomes from dashboard`);
+
+                // Refresh history view if currently active
+                if (currentView === 'history') {
+                    populateArchivedPicks();
+                }
+            }
+
+            return updatedCount;
+        } catch (e) {
+            console.error('Error syncing archived outcomes:', e);
+            return 0;
+        }
+    }
+
+    /**
+     * Force archive all current picks (for testing/manual use)
+     */
+    function forceArchiveAllPicks() {
+        const currentPicks = loadWeeklyLineupPicks() || [];
+        if (currentPicks.length === 0) {
+            log('📦 No picks to archive');
+            return 0;
+        }
+
+        let archivedCount = 0;
+        currentPicks.forEach(pick => {
+            archivePick(pick, getPickOutcome(pick));
+            archivedCount++;
+        });
+
+        // Clear current picks
+        saveWeeklyLineupPicks([]);
+
+        log(`📦 Force archived ${archivedCount} picks`);
+        showNotification(`Archived ${archivedCount} picks`, 'info');
+
+        // Refresh view
+        if (currentView === 'history') {
+            populateArchivedPicks();
+        } else {
+            showActiveView();
+        }
+
+        return archivedCount;
+    }
+
+    /**
+     * Clear all archived picks (for testing/reset)
+     */
+    function clearArchivedPicks() {
+        localStorage.removeItem(ARCHIVED_PICKS_STORAGE_KEY);
+        log('🗑️ Cleared all archived picks');
+
+        if (currentView === 'history') {
+            populateArchivedPicks();
         }
     }
 
@@ -2658,9 +3378,17 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         showEmptyState,
         showNoPicks,
         addPickToDashboard,
-        removePickFromDashboard
+        removePickFromDashboard,
+        // Archive functions
+        archiveExpiredPicks,
+        syncArchivedOutcomes,
+        forceArchiveAllPicks,
+        clearArchivedPicks,
+        getWeeklyStatsSummary,
+        loadArchivedPicks,
+        updateArchivedPickOutcome
     };
 
-    log('✅ Weekly Lineup v2.0 loaded');
+    log('✅ Weekly Lineup v33.01.0 loaded (with archive support)');
 })();
 

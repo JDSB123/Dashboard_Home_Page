@@ -133,7 +133,7 @@
 
     /**
      * Fetch picks from all or specific league APIs
-     * @param {string} league - 'all', 'nba', 'ncaam', 'nfl', 'ncaaf'
+     * @param {string} league - 'all', 'nba', 'ncaam', 'nfl', 'ncaaf', 'nhl', 'mlb'
      * @param {string} date - 'today', 'tomorrow', or 'YYYY-MM-DD' (default: 'today')
      * @returns {Promise<Object>} Object with picks array, errors, and metadata
      */
@@ -255,6 +255,66 @@
             } catch (e) {
                 debugError('[UNIFIED-FETCHER] NCAAF fetch error:', e.message);
                 errors.push({ league: 'NCAAF', error: e.message });
+            }
+        }
+
+        // NHL - Will activate when NHLPicksFetcher is created and loaded
+        if (league === 'all' || leagueUpper === 'NHL') {
+            try {
+                if (window.NHLPicksFetcher) {
+                    let data;
+                    try {
+                        data = await window.NHLPicksFetcher.fetchPicks(date);
+                    } catch (containerError) {
+                        debugWarn('[UNIFIED-FETCHER] NHL container app failed, trying main API:', containerError.message);
+                        const mainApiUrl = `${window.APP_CONFIG?.API_BASE_URL || 'https://green-bier-picks-api.azurewebsites.net/api'}/picks?league=nhl`;
+                        const response = await fetchWithTimeout(mainApiUrl);
+                        if (!response.ok) throw new Error(`Main API error: ${response.status}`);
+                        data = await response.json();
+                    }
+
+                    const modelStamp = extractModelStampFromResponse(data);
+                    const picks = data.picks || data.plays || data.predictions || [];
+                    picks.forEach(pick => {
+                        const formatted = window.NHLPicksFetcher.formatPickForTable(pick);
+                        if (modelStamp && !formatted.modelStamp) formatted.modelStamp = modelStamp;
+                        allPicks.push(formatted);
+                    });
+                    debugLog(`[UNIFIED-FETCHER] NHL: ${picks.length} picks`);
+                }
+            } catch (e) {
+                debugError('[UNIFIED-FETCHER] NHL fetch error:', e.message);
+                errors.push({ league: 'NHL', error: e.message });
+            }
+        }
+
+        // MLB - Will activate when MLBPicksFetcher is created and loaded
+        if (league === 'all' || leagueUpper === 'MLB') {
+            try {
+                if (window.MLBPicksFetcher) {
+                    let data;
+                    try {
+                        data = await window.MLBPicksFetcher.fetchPicks(date);
+                    } catch (containerError) {
+                        debugWarn('[UNIFIED-FETCHER] MLB container app failed, trying main API:', containerError.message);
+                        const mainApiUrl = `${window.APP_CONFIG?.API_BASE_URL || 'https://green-bier-picks-api.azurewebsites.net/api'}/picks?league=mlb`;
+                        const response = await fetchWithTimeout(mainApiUrl);
+                        if (!response.ok) throw new Error(`Main API error: ${response.status}`);
+                        data = await response.json();
+                    }
+
+                    const modelStamp = extractModelStampFromResponse(data);
+                    const picks = data.picks || data.plays || data.predictions || [];
+                    picks.forEach(pick => {
+                        const formatted = window.MLBPicksFetcher.formatPickForTable(pick);
+                        if (modelStamp && !formatted.modelStamp) formatted.modelStamp = modelStamp;
+                        allPicks.push(formatted);
+                    });
+                    debugLog(`[UNIFIED-FETCHER] MLB: ${picks.length} picks`);
+                }
+            } catch (e) {
+                debugError('[UNIFIED-FETCHER] MLB fetch error:', e.message);
+                errors.push({ league: 'MLB', error: e.message });
             }
         }
 
@@ -389,6 +449,12 @@
         }
         if (window.NCAAFPicksFetcher) {
             health.ncaaf = await window.NCAAFPicksFetcher.checkHealth();
+        }
+        if (window.NHLPicksFetcher) {
+            health.nhl = await window.NHLPicksFetcher.checkHealth();
+        }
+        if (window.MLBPicksFetcher) {
+            health.mlb = await window.MLBPicksFetcher.checkHealth();
         }
 
         return health;

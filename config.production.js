@@ -24,10 +24,13 @@ window.APP_CONFIG = {
   API_BASE_URL: 'https://gbsv-orchestrator.wittypebble-41c11c65.eastus.azurecontainerapps.io/api',
 
   // Model API Endpoints (can be dynamically updated by model-endpoints-bootstrap.js)
+  // New endpoints can be added to the orchestrator registry and will be auto-discovered
   NBA_API_URL: 'https://nba-gbsv-api.livelycoast-b48c3cb0.eastus.azurecontainerapps.io',
   NCAAM_API_URL: 'https://ncaam-stable-prediction.wonderfulforest-c2d7d49a.centralus.azurecontainerapps.io',
   NFL_API_URL: 'https://nfl-api.purplegrass-5889a981.eastus.azurecontainerapps.io',
   NCAAF_API_URL: 'https://ncaaf-v5-prod.salmonwave-314d4ffe.eastus.azurecontainerapps.io',
+  NHL_API_URL: '', // Placeholder - will be populated from registry when available
+  MLB_API_URL: '', // Placeholder - will be populated from registry when available
 
   // Feature Flags
   AUTH_ENABLED: false,
