@@ -511,6 +511,12 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
     }
 
     function buildPickLabel(pick) {
+        // Use the full pick text from API if available (e.g., "OVER 218.5", "Utah Jazz +4.0")
+        if (pick.pick && typeof pick.pick === 'string' && pick.pick.trim()) {
+            return pick.pick.trim();
+        }
+
+        // Fallback to constructing from components
         const pickType = normalizePickType(pick.pickType);
         if (pickType === 'spread') {
             const line = pick.line || '';
@@ -670,8 +676,12 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                 pickCellHtml = `<div class="pick-cell">${pickLogoHtml}<span class="pick-subject">${pickInfo.abbr}</span><span class="pick-value">${pickLabel}</span><span class="pick-juice">(${pickOdds})</span></div>`;
             }
         } else {
-            // Over/Under: Over 221.5 (-110)
-            pickCellHtml = `<div class="pick-cell"><span class="pick-subject">${pickTeamName}</span><span class="pick-value">${pickLabel}</span><span class="pick-juice">(${pickOdds})</span></div>`;
+            // Over/Under: OVER 218.5 (-110) or UNDER 261.5 (-110)
+            // If pickLabel already contains OVER/UNDER, don't duplicate pickTeamName
+            const displayLabel = pickLabel.toUpperCase().startsWith('OVER') || pickLabel.toUpperCase().startsWith('UNDER')
+                ? pickLabel
+                : `${pickTeamName} ${pickLabel}`;
+            pickCellHtml = `<div class="pick-cell"><span class="pick-value">${displayLabel}</span><span class="pick-juice">(${pickOdds})</span></div>`;
         }
 
         // Model Prediction - shows model's line/odds
