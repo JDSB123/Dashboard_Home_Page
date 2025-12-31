@@ -997,6 +997,10 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         const fetchControls = document.querySelector('.fetch-controls-wrapper');
         if (fetchControls) fetchControls.style.display = 'none';
 
+        // Sync outcomes from dashboard before displaying
+        // This ensures archived picks have latest win/loss/push status
+        syncArchivedOutcomes();
+
         // Load and display archived picks
         populateArchivedPicks();
     }
