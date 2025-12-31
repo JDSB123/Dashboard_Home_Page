@@ -341,19 +341,40 @@ function getTeamLogo(teamName, league = 'nfl') {
     }
 }
 
-function generatePickDisplay(parsedPick, teamLogo, teamAbbr, teamName) {
+function generatePickDisplay(parsedPick, teamLogo, teamAbbr, teamName, coverage = null, statusClass = 'pending') {
     /**
      * Generate pick display based on pick type
      * - Game Total: "Total O/U 51 (-110)"
      * - Team Total: Logo + "Raiders O 15 (-125)"
      * - Moneyline: Logo + "Raiders (-125)"
      * - Spread: Logo + "Raiders +2.7 (-110)"
+     * 
+     * Adds live status arrows (↑/↓) based on coverage for live picks
      */
+    
+    // Determine live status arrow
+    let liveArrow = '';
+    const isLive = statusClass === 'on-track' || statusClass === 'at-risk' || statusClass === 'live';
+    
+    if (isLive && coverage) {
+        if (typeof coverage.diff === 'number') {
+            if (coverage.diff > 0) {
+                liveArrow = '<span class="live-status-arrow up">↑</span>';
+            } else if (coverage.diff < 0) {
+                liveArrow = '<span class="live-status-arrow down">↓</span>';
+            }
+        } else if (coverage.coverageState === 'covering') {
+            liveArrow = '<span class="live-status-arrow up">↑</span>';
+        } else if (coverage.coverageState === 'trailing') {
+            liveArrow = '<span class="live-status-arrow down">↓</span>';
+        }
+    }
 
     // Game Total (O/U) - NO logo, clean line: "Over 51.5 (−110)" (no redundant "Total" prefix)
     if ((parsedPick.pickType === 'Over' || parsedPick.pickType === 'Under') && !parsedPick.isTeamTotal) {
         return `
             <div class="pick-details">
+                ${liveArrow}
                 <span class="pick-line">${parsedPick.pickType} ${parsedPick.line}</span>
                 ${parsedPick.odds ? `<span class="pick-odds">(${parsedPick.odds})</span>` : ''}
             </div>
@@ -368,6 +389,7 @@ function generatePickDisplay(parsedPick, teamLogo, teamAbbr, teamName) {
                 <span class="pick-team-abbr">${teamAbbr}</span>
             </div>
             <div class="pick-details">
+                ${liveArrow}
                 <span class="pick-line">${parsedPick.pickType} ${parsedPick.line}</span>
                 ${parsedPick.odds ? `<span class="pick-odds">(${parsedPick.odds})</span>` : ''}
             </div>
@@ -382,6 +404,7 @@ function generatePickDisplay(parsedPick, teamLogo, teamAbbr, teamName) {
                 <span class="pick-team-abbr">${teamAbbr}</span>
             </div>
             <div class="pick-details">
+                ${liveArrow}
                 ${parsedPick.odds ? `<span class="pick-odds">(${parsedPick.odds})</span>` : ''}
             </div>
         `;
@@ -395,6 +418,7 @@ function generatePickDisplay(parsedPick, teamLogo, teamAbbr, teamName) {
                 <span class="pick-team-abbr">${teamAbbr}</span>
             </div>
             <div class="pick-details">
+                ${liveArrow}
                 <span class="pick-line">${parsedPick.line}</span>
                 ${parsedPick.odds ? `<span class="pick-odds">(${parsedPick.odds})</span>` : ''}
             </div>
@@ -408,6 +432,7 @@ function generatePickDisplay(parsedPick, teamLogo, teamAbbr, teamName) {
             <span class="pick-team-abbr">${teamAbbr}</span>
         </div>
         <div class="pick-details">
+            ${liveArrow}
             ${parsedPick.pickType ? `<span class="pick-type">${parsedPick.pickType}</span>` : ''}
             ${parsedPick.line ? `<span class="pick-line">${parsedPick.line}</span>` : ''}
             ${parsedPick.odds ? `<span class="pick-odds">(${parsedPick.odds})</span>` : ''}
@@ -1731,7 +1756,7 @@ function buildPickRow(pick, index) {
         </td>
         <td>
             <div class="pick-cell">
-                ${generatePickDisplay(parsedPick, pickedTeamLogo, pickedTeamAbbr, pickedTeamName)}
+                ${generatePickDisplay(parsedPick, pickedTeamLogo, pickedTeamAbbr, pickedTeamName, statusMeta.coverage, statusClass)}
             </div>
         </td>
         <td class="center">

@@ -533,8 +533,8 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         // Use the full pick text from API if available (e.g., "OVER 218.5", "Utah Jazz +4.0")
         if (pick.pick && typeof pick.pick === 'string' && pick.pick.trim()) {
             let label = pick.pick.trim();
-            // Fix "UNDE" typo → "UNDER"
-            label = label.replace(/^UNDE\s/i, 'UNDER ').replace(/^Unde\s/i, 'Under ');
+            // Fix "UNDE" typo → "UNDER" (with or without space after)
+            label = label.replace(/^UNDE\b/i, 'UNDER');
             return label;
         }
 
@@ -759,9 +759,11 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             
             // If pickLabel already contains OVER/UNDER, use it directly; otherwise prepend direction
             // Note: pickLabel is already HTML-escaped, so we don't escape again
-            const displayLabel = pickLabel.toUpperCase().startsWith('OVER') || pickLabel.toUpperCase().startsWith('UNDER') || pickLabel.toUpperCase().startsWith('UNDE')
-                ? pickLabel.replace(/^UNDE\s/i, 'UNDER ').replace(/^unde\s/i, 'UNDER ')
-                : directionText ? `${escapeHtml(directionText)} ${pickLabel}` : pickLabel;
+            // Fix any remaining UNDE → UNDER (with or without space)
+            let displayLabel = pickLabel.replace(/^UNDE\b/gi, 'UNDER');
+            if (!displayLabel.toUpperCase().startsWith('OVER') && !displayLabel.toUpperCase().startsWith('UNDER')) {
+                displayLabel = directionText ? `${escapeHtml(directionText)} ${displayLabel}` : displayLabel;
+            }
             pickCellHtml = `<div class="pick-cell"><span class="pick-value">${displayLabel}</span><span class="pick-juice">(${pickOdds})</span></div>`;
         }
 
@@ -769,7 +771,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         const getModelPredictionHtml = () => {
             const modelPrice = escapeHtml(pick.modelPrice) || '-';
             const modelSpread = escapeHtml(pick.modelSpread || pick.predictedSpread) || pickLabel || '';
-            const teamAbbrev = isTeamPick ? pickInfo.abbr : pickTeamName;
+            const teamAbbrev = isTeamPick ? pickInfo.abbr : normalizedPickTeamName;
             const logoHtml = isTeamPick && pickInfo.logo
                 ? `<img src="${pickInfo.logo}" class="prediction-logo" loading="eager" alt="${teamAbbrev}" onerror="this.style.display='none'">`
                 : '';
@@ -791,7 +793,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
         // Market Odds - actual market line for comparison
         const getMarketHtml = () => {
-            const teamAbbrev = isTeamPick ? pickInfo.abbr : pickTeamName;
+            const teamAbbrev = isTeamPick ? pickInfo.abbr : normalizedPickTeamName;
             const logoHtml = isTeamPick && pickInfo.logo
                 ? `<img src="${pickInfo.logo}" class="prediction-logo" loading="eager" alt="${teamAbbrev}" onerror="this.style.display='none'">`
                 : '';
@@ -850,41 +852,48 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         const rationaleRaw = (pick.rationale ?? pick.reason ?? pick.notes ?? pick.explanation ?? '').toString().trim();
         const modelStampRaw = (pick.modelStamp ?? pick.modelVersion ?? pick.modelTag ?? '').toString().trim();
         
-        // Build model prediction vs market comparison - better organized
-        const modelPrice = escapeHtml(pick.modelPrice) || '-';
-        const modelLine = escapeHtml(pick.modelSpread || pick.predictedSpread) || '-';
-        const marketOdds = escapeHtml(pickOdds) || '-110';
-        const marketLine = escapeHtml(pickLabel) || '-';
+        // Build model prediction vs market comparison - cleaner format
+        const modelPriceRaw = pick.modelPrice || pick.model_price || '';
+        const modelLineRaw = pick.modelSpread || pick.predictedSpread || pick.modelLine || '';
+        const modelTotal = pick.modelTotal || pick.predicted_total || '';
         const edgeValue = edge.toFixed(1);
-        const pickSubject = isTeamPick ? escapeHtml(pickInfo.abbr) : escapeHtml(normalizedPickTeamName);
+        
+        // For totals, show the predicted total vs market total
+        // For spreads, show the predicted spread vs market spread
+        let modelDisplay = '-';
+        let marketDisplay = '-';
+        
+        if (!isTeamPick) {
+            // Total pick - show totals
+            const direction = normalizedPickTeamName.toUpperCase() === 'OVER' ? 'OVER' : 'UNDER';
+            const marketTotal = pick.line || '';
+            modelDisplay = modelTotal ? `${direction} ${modelTotal}` : `${direction} (model: ${modelPriceRaw || '-'})`;
+            marketDisplay = `${direction} ${marketTotal}`;
+        } else {
+            // Team pick - show spread/line
+            const teamAbbr = escapeHtml(pickInfo.abbr || pickTeamName);
+            modelDisplay = modelLineRaw ? `${teamAbbr} ${modelLineRaw}` : `${teamAbbr} (${modelPriceRaw || '-'})`;
+            marketDisplay = `${teamAbbr} ${escapeHtml(pick.line || '')}`;
+        }
         
         const comparisonHtml = `
             <div class="rationale-comparison">
-                <div class="comparison-header">📊 Model vs. Market Analysis</div>
-                <table class="comparison-table">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>Line</th>
-                            <th>Odds</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="model-row">
-                            <td class="row-label">Model</td>
-                            <td class="row-value">${pickSubject} ${modelLine}</td>
-                            <td class="row-value">${modelPrice}</td>
-                        </tr>
-                        <tr class="market-row">
-                            <td class="row-label">Market</td>
-                            <td class="row-value">${pickSubject} ${marketLine}</td>
-                            <td class="row-value">${marketOdds}</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="comparison-header">📊 Model vs. Market</div>
+                <div class="comparison-grid">
+                    <div class="comparison-block model-block">
+                        <div class="block-label">Model Prediction</div>
+                        <div class="block-value">${escapeHtml(modelDisplay)}</div>
+                        <div class="block-odds">${escapeHtml(modelPriceRaw || 'N/A')}</div>
+                    </div>
+                    <div class="comparison-block market-block">
+                        <div class="block-label">Market Line</div>
+                        <div class="block-value">${escapeHtml(marketDisplay)}</div>
+                        <div class="block-odds">${escapeHtml(pickOdds)}</div>
+                    </div>
+                </div>
                 <div class="edge-summary">
-                    <span class="edge-label">Calculated Edge:</span>
-                    <span class="edge-value-large">+${edgeValue}%</span>
+                    <span class="edge-label">Edge:</span>
+                    <span class="edge-value-large ${edge >= 5 ? 'edge-high' : edge >= 2 ? 'edge-medium' : ''}">+${edgeValue}%</span>
                 </div>
             </div>
         `;

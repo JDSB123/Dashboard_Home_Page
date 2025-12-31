@@ -1171,6 +1171,24 @@ tr[data-is-parlay="true"] {
 }
 
 /* Pick Cell - Stacked Layout for Elegance */
+/* Live Status Arrows */
+.live-status-arrow {
+    display: inline-block;
+    margin-right: 4px;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 1;
+    vertical-align: middle;
+}
+
+.live-status-arrow.up {
+    color: #22c55e; /* Green for winning/covering */
+}
+
+.live-status-arrow.down {
+    color: #ef4444; /* Red for losing/not covering */
+}
+
 .pick-cell {
     display: flex;
     flex-direction: column;
