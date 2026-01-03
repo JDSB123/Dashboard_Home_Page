@@ -5,42 +5,73 @@
   },
   "routes": [
     {
+      "route": "/",
+      "rewrite": "/index.html",
+      "headers": {
+        "Cache-Control": "no-cache, no-store, must-revalidate"
+      }
+    },
+    {
+      "route": "/index.html",
+      "headers": {
+        "Cache-Control": "no-cache, no-store, must-revalidate"
+      }
+    },
+    {
       "route": "/dashboard",
       "rewrite": "/index.html",
       "headers": {
-        "Cache-Control": "no-cache, must-revalidate"
+        "Cache-Control": "no-cache, no-store, must-revalidate"
       }
     },
     {
       "route": "/weekly-lineup",
       "rewrite": "/weekly-lineup.html",
       "headers": {
-        "Cache-Control": "no-cache, must-revalidate"
+        "Cache-Control": "no-cache, no-store, must-revalidate"
       }
     },
     {
       "route": "/odds-market",
       "rewrite": "/odds-market.html",
       "headers": {
-        "Cache-Control": "no-cache, must-revalidate"
+        "Cache-Control": "no-cache, no-store, must-revalidate"
       }
     },
     {
       "route": "/*.html",
       "headers": {
-        "Cache-Control": "no-cache, must-revalidate"
+        "Cache-Control": "no-cache, no-store, must-revalidate"
       }
     },
     {
       "route": "/assets/js/*",
       "headers": {
-        "Cache-Control": "no-cache, must-revalidate"
+        "Cache-Control": "no-cache, no-store, must-revalidate"
       }
     },
     {
       "route": "/*.js",
       "headers": {
-        "Cache-Control": "no-cache, must-revalidate"
+        "Cache-Control": "no-cache, no-store, must-revalidate"
+      }
+    },
+    {
+      "route": "/assets/data/*",
+      "headers": {
+        "Cache-Control": "no-cache, no-store, must-revalidate"
+      }
+    },
+    {
+      "route": "/assets/css/*",
+      "headers": {
+        "Cache-Control": "no-cache, no-store, must-revalidate"
+      }
+    },
+    {
+      "route": "/config.*.js",
+      "headers": {
+        "Cache-Control": "no-cache, no-store, must-revalidate"
       }
     }
   ],
@@ -50,7 +81,7 @@
     }
   },
   "globalHeaders": {
-    "Cache-Control": "public, max-age=3600",
+    "Cache-Control": "no-cache, no-store, must-revalidate",
     "X-Content-Type-Options": "nosniff",
     "X-Frame-Options": "DENY",
     "X-XSS-Protection": "1; mode=block",
