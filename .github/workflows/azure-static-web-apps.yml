@@ -27,8 +27,8 @@ jobs:
             echo "ERROR: staticwebapp.config.json not found"
             exit 1
           fi
-          if [ ! -f "dashboard.html" ]; then
-            echo "ERROR: dashboard.html not found"
+          if [ ! -f "index.html" ]; then
+            echo "ERROR: index.html not found"
             exit 1
           fi
           # Use Python for JSON validation
@@ -37,12 +37,6 @@ jobs:
             exit 1
           fi
           echo "✅ Configuration validation passed"
-
-      - name: Prepare default entrypoint
-        run: |
-          # The SWA action expects an index.html in the artifact root.
-          # We serve dashboard.html as the main entry; copy it to index.html for deployment.
-          cp dashboard.html index.html
 
       - name: Build and Deploy
         id: builddeploy
