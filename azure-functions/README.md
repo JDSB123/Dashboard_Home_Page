@@ -175,6 +175,18 @@ POST /api/execute
 }
 ```
 
+### Model-Specific Endpoints Called by JobProcessor
+Each model type calls its Container App with sport-specific endpoints:
+
+| Model | Endpoint Pattern | Example |
+|-------|------------------|---------|
+| NBA   | `/slate/{date}/executive` | `/slate/today/executive` |
+| NCAAM | `/api/picks/{date}` | `/api/picks/2026-01-03` |
+| NFL   | `/api/v1/predictions/week/{season}/{week}` | `/api/v1/predictions/week/2025/18` |
+| NCAAF | `/api/v1/predictions/week/{season}/{week}` | `/api/v1/predictions/week/2025/15` |
+
+These endpoints match the frontend fetchers (`nba-picks-fetcher.js`, etc.) for consistency.
+
 ### Check Status
 ```
 GET /api/status/{jobId}

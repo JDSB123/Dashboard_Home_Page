@@ -1,46 +1,96 @@
 /**
- * NBA Picks Fetcher v1.0
- * Fetches NBA model picks from the Azure Container App API
+ * NBA Picks Fetcher v1.1
+ * Fetches NBA model picks from Azure Function App (primary) or Container App (fallback)
+ * 
+ * Primary: nba-picks-trigger Function App (/api/weekly-lineup/nba)
+ * Fallback: nba-gbsv-api Container App (/slate/{date}/executive)
  */
 
 (function() {
     'use strict';
 
+    // Primary: Function App for Weekly Lineup picks
+    const NBA_FUNCTION_URL = window.APP_CONFIG?.NBA_FUNCTION_URL || 'https://nba-picks-trigger.azurewebsites.net';
+    // Fallback: Container App for model API
     const NBA_API_URL = window.APP_CONFIG?.NBA_API_URL || 'https://nba-gbsv-api.livelycoast-b48c3cb0.eastus.azurecontainerapps.io';
 
     let picksCache = null;
     let lastFetch = null;
+    let lastSource = null; // Track which source was used
     const CACHE_DURATION = 60000; // 1 minute
+    const REQUEST_TIMEOUT = 10000; // 10 seconds
+
+    /**
+     * Fetch with timeout
+     */
+    async function fetchWithTimeout(url, timeoutMs = REQUEST_TIMEOUT) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+        try {
+            const response = await fetch(url, { signal: controller.signal });
+            clearTimeout(timeoutId);
+            return response;
+        } catch (error) {
+            clearTimeout(timeoutId);
+            if (error.name === 'AbortError') {
+                throw new Error(`Request timed out after ${timeoutMs}ms`);
+            }
+            throw error;
+        }
+    }
 
     /**
      * Fetch NBA picks for a given date
+     * Tries Function App first, falls back to Container App
      * @param {string} date - Date in YYYY-MM-DD format, 'today', or 'tomorrow'
      * @returns {Promise<Object>} Picks data
      */
     async function fetchNBAPicks(date = 'today') {
         // Use cache if fresh
         if (picksCache && lastFetch && (Date.now() - lastFetch < CACHE_DURATION)) {
-            console.log('[NBA-PICKS] Using cached picks');
+            console.log(`[NBA-PICKS] Using cached picks (source: ${lastSource})`);
             return picksCache;
         }
 
-        const url = `${NBA_API_URL}/slate/${date}/executive`;
-        console.log(`[NBA-PICKS] Fetching picks from: ${url}`);
+        // Try Function App first (primary source for Weekly Lineup)
+        const functionUrl = `${NBA_FUNCTION_URL}/api/weekly-lineup/nba`;
+        console.log(`[NBA-PICKS] Trying Function App: ${functionUrl}`);
 
         try {
-            const response = await fetch(url);
+            const response = await fetchWithTimeout(functionUrl);
+            if (response.ok) {
+                const data = await response.json();
+                picksCache = data;
+                lastFetch = Date.now();
+                lastSource = 'function-app';
+                const pickCount = data.plays?.length || data.picks?.length || data.total_plays || 0;
+                console.log(`[NBA-PICKS] ✅ Function App returned ${pickCount} picks`);
+                return data;
+            }
+            console.warn(`[NBA-PICKS] Function App returned ${response.status}, trying Container App...`);
+        } catch (error) {
+            console.warn(`[NBA-PICKS] Function App failed: ${error.message}, trying Container App...`);
+        }
+
+        // Fallback to Container App
+        const containerUrl = `${NBA_API_URL}/slate/${date}/executive`;
+        console.log(`[NBA-PICKS] Falling back to Container App: ${containerUrl}`);
+
+        try {
+            const response = await fetchWithTimeout(containerUrl);
             if (!response.ok) {
-                throw new Error(`NBA API error: ${response.status}`);
+                throw new Error(`Container App error: ${response.status}`);
             }
 
             const data = await response.json();
             picksCache = data;
             lastFetch = Date.now();
+            lastSource = 'container-app';
 
-            console.log(`[NBA-PICKS] Fetched ${data.total_plays || 0} picks`);
+            console.log(`[NBA-PICKS] ✅ Container App returned ${data.total_plays || 0} picks`);
             return data;
         } catch (error) {
-            console.error('[NBA-PICKS] Error fetching picks:', error.message);
+            console.error('[NBA-PICKS] Both sources failed:', error.message);
             throw error;
         }
     }
@@ -68,18 +118,42 @@
     }
 
     /**
-     * Check API health
+     * Check API health for both sources
      * @returns {Promise<Object>} Health status
      */
     async function checkHealth() {
-        const url = `${NBA_API_URL}/health`;
+        const health = {
+            functionApp: { status: 'unknown' },
+            containerApp: { status: 'unknown' }
+        };
+
+        // Check Function App
         try {
-            const response = await fetch(url);
-            return await response.json();
+            const response = await fetchWithTimeout(`${NBA_FUNCTION_URL}/api/health`, 5000);
+            if (response.ok) {
+                health.functionApp = await response.json();
+                health.functionApp.status = 'healthy';
+            } else {
+                health.functionApp = { status: 'error', code: response.status };
+            }
         } catch (error) {
-            console.error('[NBA-PICKS] Health check failed:', error.message);
-            return { status: 'error', message: error.message };
+            health.functionApp = { status: 'error', message: error.message };
         }
+
+        // Check Container App
+        try {
+            const response = await fetchWithTimeout(`${NBA_API_URL}/health`, 5000);
+            if (response.ok) {
+                health.containerApp = await response.json();
+                health.containerApp.status = 'healthy';
+            } else {
+                health.containerApp = { status: 'error', code: response.status };
+            }
+        } catch (error) {
+            health.containerApp = { status: 'error', message: error.message };
+        }
+
+        return health;
     }
 
     /**
@@ -237,9 +311,10 @@
         checkHealth,
         formatPickForTable,
         getCache: () => picksCache,
-        clearCache: () => { picksCache = null; lastFetch = null; }
+        getLastSource: () => lastSource,
+        clearCache: () => { picksCache = null; lastFetch = null; lastSource = null; }
     };
 
-    console.log('✅ NBAPicksFetcher v1.0 loaded');
+    console.log('✅ NBAPicksFetcher v1.1 loaded (Function App + Container App fallback)');
 
 })();
