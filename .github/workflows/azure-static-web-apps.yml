@@ -21,12 +21,17 @@ jobs:
 
       - name: Validate configuration
         run: |
-          echo "Validating staticwebapp.config.json..."
+          echo "Validating configuration files..."
+          # Check if required files exist
           if [ ! -f "staticwebapp.config.json" ]; then
             echo "ERROR: staticwebapp.config.json not found"
             exit 1
           fi
-          # Use Python for JSON validation (more reliable than jq)
+          if [ ! -f "dashboard.html" ]; then
+            echo "ERROR: dashboard.html not found"
+            exit 1
+          fi
+          # Use Python for JSON validation
           if ! python3 -m json.tool staticwebapp.config.json > /dev/null 2>&1; then
             echo "ERROR: staticwebapp.config.json is not valid JSON"
             exit 1
@@ -34,6 +39,7 @@ jobs:
           echo "✅ Configuration validation passed"
 
       - name: Build and Deploy
+        id: builddeploy
         uses: Azure/static-web-apps-deploy@v2
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
