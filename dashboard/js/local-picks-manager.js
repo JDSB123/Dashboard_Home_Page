@@ -1,5 +1,5 @@
 /**
- * Local Picks Manager v33.00.0
+ * Local Picks Manager v33.01.0
  * Production version - Real data only, no sample data
  * Stores picks in localStorage, auto-fetches game data from ESPN
  */
@@ -18,6 +18,9 @@
             return data ? JSON.parse(data) : [];
         } catch (e) {
             console.error('Error reading picks from localStorage:', e);
+            if (window.ErrorHandler) {
+                window.ErrorHandler.handleStorage(e, 'read');
+            }
             return [];
         }
     }
@@ -29,6 +32,9 @@
             return true;
         } catch (e) {
             console.error('Error saving picks to localStorage:', e);
+            if (window.ErrorHandler) {
+                window.ErrorHandler.handleStorage(e, 'write');
+            }
             return false;
         }
     }
@@ -179,8 +185,10 @@
     }
 
     // ========== TEAM DATA ==========
+    // Team data is now loaded from assets/data/team-data.json via TeamDataLoader
+    // Fallback to hardcoded data for backward compatibility
 
-    const TEAM_DATA = {
+    const TEAM_DATA_FALLBACK = {
         // NBA Teams
         'san antonio spurs': { abbr: 'SAS', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/sa.png' },
         'spurs': { abbr: 'SAS', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/sa.png' },
@@ -378,10 +386,35 @@
         'vegas': { abbr: 'LV', fullName: 'Las Vegas Raiders', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/lv.png' }
     };
 
-    function getTeamInfo(teamName) {
+    async function getTeamInfo(teamName) {
+        if (!teamName) return { abbr: 'N/A', fullName: '', logo: '' };
+        
+        // Try to use TeamDataLoader if available
+        if (window.TeamDataLoader && typeof window.TeamDataLoader.getTeamInfo === 'function') {
+            try {
+                const info = await window.TeamDataLoader.getTeamInfo(teamName);
+                if (info && info.abbr !== 'N/A') {
+                    return info;
+                }
+            } catch (e) {
+                console.warn('[LocalPicksManager] TeamDataLoader failed, using fallback:', e);
+            }
+        }
+        
+        // Fallback to hardcoded data
+        const lower = teamName.toLowerCase().trim();
+        const data = TEAM_DATA_FALLBACK[lower];
+        if (data) {
+            return { abbr: data.abbr, fullName: data.fullName || teamName, logo: data.logo };
+        }
+        return { abbr: teamName.substring(0, 3).toUpperCase(), fullName: teamName, logo: '' };
+    }
+    
+    // Synchronous version for backward compatibility (uses fallback)
+    function getTeamInfoSync(teamName) {
         if (!teamName) return { abbr: 'N/A', fullName: '', logo: '' };
         const lower = teamName.toLowerCase().trim();
-        const data = TEAM_DATA[lower];
+        const data = TEAM_DATA_FALLBACK[lower];
         if (data) {
             return { abbr: data.abbr, fullName: data.fullName || teamName, logo: data.logo };
         }
@@ -592,7 +625,7 @@
             return;
         }
 
-        // Render each pick as a row
+        // Render each pick as a row (using sync version for immediate rendering)
         picks.forEach((pick, idx) => {
             const row = createPickRow(pick, idx);
             tbody.appendChild(row);
@@ -623,16 +656,18 @@
     }
 
     // ========== CREATE ROW (FULL TEMPLATE) ==========
+    // Note: Using synchronous version for immediate rendering
+    // Async team data loading happens in background via TeamDataLoader
 
     function createPickRow(pick, idx) {
         const row = document.createElement('tr');
-        const pickTeamInfo = getTeamInfo(pick.pickTeam);
+        const pickTeamInfo = getTeamInfoSync(pick.pickTeam);
         const awayTeam = pick.awayTeam || pick.pickTeam || 'TBD';
         const homeTeam = pick.homeTeam || 'TBD';
         const awayRecord = pick.awayRecord || '';
         const homeRecord = pick.homeRecord || '';
-        const awayInfo = getTeamInfo(awayTeam);
-        const homeInfo = getTeamInfo(homeTeam);
+        const awayInfo = getTeamInfoSync(awayTeam);
+        const homeInfo = getTeamInfoSync(homeTeam);
 
         const segment = pick.segment || 'Full Game';
         const segmentKey = segment.toLowerCase().includes('1h') || segment.toLowerCase().includes('1st') ? '1h' :
@@ -1076,5 +1111,5 @@
         setUnitMultiplier
     };
 
-    console.log('✅ LocalPicksManager v2.4 loaded');
+    console.log('✅ LocalPicksManager v33.01.0 loaded');
 })();

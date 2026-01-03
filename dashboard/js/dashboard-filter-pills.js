@@ -14,6 +14,13 @@
         status: ''
     };
 
+    // Expose activeFilters for external access (e.g., FilterStatePersistence)
+    window.DashboardFilterPills = window.DashboardFilterPills || {};
+    Object.defineProperty(window.DashboardFilterPills, 'activeFilters', {
+        get: () => activeFilters,
+        set: (value) => { activeFilters = value || { leagues: [], segment: '', pick: '', status: '' }; }
+    });
+
     /**
      * Initialize filter pill handlers
      */
@@ -253,9 +260,60 @@
     }
 
     /**
+     * Sync activeFilters with tableState for unified filter management
+     */
+    function syncFiltersToTableState() {
+        if (!window.tableState || !window.tableState.filters) {
+            return;
+        }
+
+        // Sync league filters
+        if (activeFilters.leagues.length > 0) {
+            window.tableState.filters.matchup.selectedLeagues = activeFilters.leagues;
+            window.tableState.filters.matchup.league = '';
+        } else {
+            window.tableState.filters.matchup.selectedLeagues = null;
+            window.tableState.filters.matchup.league = '';
+        }
+
+        // Sync segment filter
+        if (activeFilters.segment) {
+            window.tableState.filters.pick.segment = activeFilters.segment;
+            window.tableState.filters.pick.selectedSegments = null;
+        } else {
+            window.tableState.filters.pick.segment = '';
+            window.tableState.filters.pick.selectedSegments = null;
+        }
+
+        // Sync pick type filter (maps to betType)
+        if (activeFilters.pick) {
+            // Map pick type to betType
+            const betTypeMap = {
+                'spread': 'spread',
+                'ml': 'moneyline',
+                'total': 'total',
+                'tt': 'team-total'
+            };
+            window.tableState.filters.pick.betType = betTypeMap[activeFilters.pick] || '';
+        } else {
+            window.tableState.filters.pick.betType = '';
+        }
+
+        // Sync status filter
+        if (activeFilters.status) {
+            window.tableState.filters.status = [activeFilters.status];
+        } else {
+            window.tableState.filters.status = [];
+        }
+    }
+
+    /**
      * Apply filters to table rows
      */
     function applyFilters() {
+        // Sync with tableState first
+        syncFiltersToTableState();
+
         const table = document.getElementById('picks-table');
         if (!table) {
             console.warn('[DashboardFilterPills] Table #picks-table not found');
@@ -355,18 +413,32 @@
             window.recalculateKPIs();
         }
 
+        // Trigger table renderer update for consistency
+        if (window.PicksTableRenderer && typeof window.PicksTableRenderer.updateTable === 'function') {
+            window.PicksTableRenderer.updateTable();
+        }
     }
 
 
     /**
      * Check if a single row passes all active filters
      * Used by PicksTableRenderer for consistent filtering
+     * Syncs with tableState for unified filtering
      * @param {HTMLElement} row - Table row element
      * @returns {boolean} - Whether the row should be visible
      */
     function passesAllFilters(row) {
         if (!row) return true;
 
+        // Sync filters to tableState first
+        syncFiltersToTableState();
+
+        // Use PicksFilterManager if available for consistency
+        if (window.PicksFilterManager && typeof window.PicksFilterManager.passesAllFilters === 'function') {
+            return window.PicksFilterManager.passesAllFilters(row);
+        }
+
+        // Fallback to local filter logic
         // League filter (multi-select)
         if (activeFilters.leagues.length > 0) {
             const rowLeague = (row.getAttribute('data-league') || '').toLowerCase().trim();
@@ -476,12 +548,12 @@
         initializeFilterPills();
     }
 
-    // Export for external access
-    window.DashboardFilterPills = {
+    // Export for external access (preserve existing property descriptors)
+    Object.assign(window.DashboardFilterPills, {
         applyFilters,
         clearAllFilters,
         passesAllFilters
-    };
+    });
 
 })();
 
