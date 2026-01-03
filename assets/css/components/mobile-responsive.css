@@ -1,6 +1,7 @@
 /**
- * Mobile Responsiveness Enhancements
+ * Mobile Responsiveness Enhancements v2.0
  * Optimizes layout and interactions for mobile devices
+ * Includes: Hamburger menu, responsive tables, touch improvements
  */
 
 /* ===== MOBILE BREAKPOINTS ===== */
@@ -8,6 +9,82 @@
 /* Phones: 480px - 767px */
 /* Tablets: 768px - 1024px */
 /* Desktop: > 1024px */
+
+/* ===== HAMBURGER MENU ===== */
+.mobile-menu-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 10px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 10002;
+    position: relative;
+}
+
+.mobile-menu-toggle span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: #00ffaa;
+    border-radius: 2px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.mobile-menu-toggle span::before,
+.mobile-menu-toggle span::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 22px;
+    height: 2px;
+    background: #00ffaa;
+    border-radius: 2px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mobile-menu-toggle span::before {
+    top: -7px;
+}
+
+.mobile-menu-toggle span::after {
+    top: 7px;
+}
+
+/* Hamburger to X animation */
+.mobile-menu-toggle.active span {
+    background: transparent;
+}
+
+.mobile-menu-toggle.active span::before {
+    top: 0;
+    transform: rotate(45deg);
+}
+
+.mobile-menu-toggle.active span::after {
+    top: 0;
+    transform: rotate(-45deg);
+}
+
+/* Mobile menu overlay */
+.mobile-menu-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 9998;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.mobile-menu-overlay.active {
+    opacity: 1;
+}
 
 /* ===== CRITICAL MOBILE FIXES - PREVENT FRAGMENTATION ===== */
 
@@ -18,6 +95,13 @@
         width: 100% !important;
         max-width: 100vw !important;
         position: relative;
+    }
+    
+    /* Fix background attachment jank on mobile */
+    body.page-active-picks,
+    body.page-weekly-lineup,
+    body.page-odds-market {
+        background-attachment: scroll !important;
     }
     
     /* Constrain main container to viewport - OVERRIDE 0.75in padding */
@@ -76,6 +160,36 @@
         overflow-x: auto !important;
         -webkit-overflow-scrolling: touch;
         box-sizing: border-box !important;
+        position: relative;
+    }
+    
+    /* Add scroll shadow indicators for tables */
+    .table-container::before,
+    .table-container::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 20px;
+        pointer-events: none;
+        z-index: 10;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    
+    .table-container::before {
+        left: 0;
+        background: linear-gradient(to right, rgba(0, 0, 0, 0.3), transparent);
+    }
+    
+    .table-container::after {
+        right: 0;
+        background: linear-gradient(to left, rgba(0, 0, 0, 0.3), transparent);
+    }
+    
+    .table-container.scroll-right::after,
+    .table-container.scroll-left::before {
+        opacity: 1;
     }
     
     /* Fix dashboard topline */
@@ -110,6 +224,13 @@
     .picks-table {
         max-width: none !important;
     }
+    
+    /* Toolbar layout adjustments */
+    .toolbar-layout {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        width: 100% !important;
+    }
 }
 
 /* Additional fixes for small phones */
@@ -130,21 +251,136 @@
     }
 }
 
+/* ===== WEEKLY LINEUP PAGE MOBILE FIXES ===== */
+/* Reduce the large margin-top that shows the bear on desktop */
+@media (max-width: 1024px) {
+    body.page-weekly-lineup .main-container {
+        margin-top: 180px !important; /* Reduced from 376px */
+    }
+}
+
+@media (max-width: 767px) {
+    body.page-weekly-lineup .main-container {
+        margin-top: 100px !important; /* Much smaller on phones */
+    }
+    
+    /* Compact brand header on weekly lineup */
+    body.page-weekly-lineup .brand-header-inline {
+        gap: 10px;
+    }
+    
+    body.page-weekly-lineup .brand-logo-inline {
+        width: 50px !important;
+        height: 50px !important;
+    }
+    
+    body.page-weekly-lineup .brand-line-1 {
+        font-size: 1.25rem !important;
+    }
+    
+    body.page-weekly-lineup .brand-line-2 {
+        font-size: 0.875rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    body.page-weekly-lineup .main-container {
+        margin-top: 60px !important; /* Minimal on small phones */
+    }
+    
+    body.page-weekly-lineup .brand-logo-inline {
+        width: 40px !important;
+        height: 40px !important;
+    }
+}
+
 /* ===== NAVIGATION MOBILE ===== */
 
 @media (max-width: 767px) {
-    .brand-nav {
-        padding: 12px;
+    /* Show hamburger menu toggle */
+    .mobile-menu-toggle {
+        display: flex;
+        order: -1;
+        margin-right: auto;
     }
     
-    .nav-links {
+    .mobile-menu-overlay {
+        display: block;
+        pointer-events: none;
+    }
+    
+    .mobile-menu-overlay.active {
+        pointer-events: auto;
+    }
+    
+    .brand-nav {
+        padding: 12px;
         flex-wrap: wrap;
-        gap: 8px;
+    }
+    
+    /* Mobile nav drawer */
+    .nav-links {
+        position: fixed;
+        top: 0;
+        left: -280px;
+        width: 280px;
+        height: 100vh;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        padding: 80px 20px 20px;
+        background: rgba(8, 17, 33, 0.98);
+        -webkit-backdrop-filter: blur(20px);
+        backdrop-filter: blur(20px);
+        border-right: 1px solid rgba(0, 214, 137, 0.25);
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.5);
+        z-index: 9999;
+        gap: 0;
+        overflow-y: auto;
+        transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .nav-links.mobile-open {
+        left: 0;
+    }
+    
+    .nav-links li {
+        width: 100%;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    
+    .nav-links li:last-child {
+        border-bottom: none;
     }
     
     .nav-link {
-        padding: 8px 12px;
-        font-size: 13px;
+        display: block;
+        width: 100%;
+        padding: 16px 12px;
+        font-size: 14px !important;
+        text-align: left;
+    }
+    
+    /* Dropdown in mobile nav */
+    .nav-dropdown {
+        width: 100%;
+    }
+    
+    .nav-dropdown-trigger {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .nav-dropdown-menu {
+        position: static !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        background: rgba(0, 0, 0, 0.3) !important;
+        margin-top: 0;
+        border: none !important;
+        border-top: 1px solid rgba(0, 214, 137, 0.15) !important;
     }
     
     .nav-actions {
@@ -207,9 +443,9 @@
         padding: 10px 8px;
     }
     
-    /* Hide less critical columns on tablets */
-    .picks-table th:nth-child(7), /* Result */
-    .picks-table td:nth-child(7) {
+    /* Dashboard: Hide Box Score column (column 7) */
+    body.page-active-picks .picks-table th.col-boxscore,
+    body.page-active-picks .picks-table td:nth-child(7) {
         display: none;
     }
 }
@@ -222,7 +458,7 @@
     }
     
     .picks-table {
-        min-width: 600px; /* Allow horizontal scroll */
+        min-width: 550px; /* Allow horizontal scroll */
         font-size: 12px;
     }
     
@@ -231,11 +467,17 @@
         padding: 8px 6px;
     }
     
-    /* Hide more columns on mobile */
-    .picks-table th:nth-child(6), /* Boxscore */
-    .picks-table td:nth-child(6),
-    .picks-table th:nth-child(7), /* Result */
-    .picks-table td:nth-child(7) {
+    /* Dashboard (9 cols): Hide Box Score (7) and $ Won/Lost (9) */
+    body.page-active-picks .picks-table th:nth-child(7),
+    body.page-active-picks .picks-table td:nth-child(7),
+    body.page-active-picks .picks-table th:nth-child(9),
+    body.page-active-picks .picks-table td:nth-child(9) {
+        display: none;
+    }
+    
+    /* Weekly Lineup (8 cols): Hide Track (8) */
+    body.page-weekly-lineup .picks-table th:nth-child(8),
+    body.page-weekly-lineup .picks-table td:nth-child(8) {
         display: none;
     }
     
@@ -244,10 +486,18 @@
         padding: 4px 8px;
         font-size: 11px;
     }
+    
+    /* Smaller logos */
+    .league-logo,
+    .team-logo {
+        width: 20px !important;
+        height: 20px !important;
+    }
 }
 
 @media (max-width: 480px) {
     .picks-table {
+        min-width: 480px;
         font-size: 11px;
     }
     
@@ -257,10 +507,34 @@
         padding: 6px 4px;
     }
     
-    /* Hide segment column too */
-    .picks-table th:nth-child(5), /* Segment */
-    .picks-table td:nth-child(5) {
+    /* Dashboard: Also hide Segment (4) on small phones */
+    body.page-active-picks .picks-table th:nth-child(4),
+    body.page-active-picks .picks-table td:nth-child(4) {
         display: none;
+    }
+    
+    /* Weekly Lineup: Also hide Segment (4) and Fire (7) */
+    body.page-weekly-lineup .picks-table th:nth-child(4),
+    body.page-weekly-lineup .picks-table td:nth-child(4),
+    body.page-weekly-lineup .picks-table th:nth-child(7),
+    body.page-weekly-lineup .picks-table td:nth-child(7) {
+        display: none;
+    }
+    
+    /* Even smaller logos */
+    .league-logo,
+    .team-logo {
+        width: 16px !important;
+        height: 16px !important;
+    }
+    
+    /* Compact header text */
+    .header-main-text {
+        font-size: 0.7rem !important;
+    }
+    
+    .header-subtext {
+        display: none !important;
     }
 }
 
@@ -310,6 +584,37 @@
 
 /* ===== FILTERS MOBILE ===== */
 
+@media (max-width: 1024px) {
+    /* Horizontal scrollable filter toolbar */
+    .filter-toolbar {
+        flex-wrap: nowrap !important;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE/Edge */
+        padding-bottom: 8px;
+    }
+    
+    .filter-toolbar::-webkit-scrollbar {
+        display: none; /* Chrome/Safari */
+    }
+    
+    .ft-left {
+        flex-wrap: nowrap !important;
+        flex-shrink: 0;
+    }
+    
+    .ft-right {
+        flex-shrink: 0;
+    }
+    
+    .ft-pill,
+    .ft-dropdown-btn {
+        flex-shrink: 0;
+        white-space: nowrap;
+    }
+}
+
 @media (max-width: 767px) {
     .unified-filter {
         padding: 12px;
@@ -330,6 +635,40 @@
     .filter-checkbox-label {
         font-size: 13px;
         padding: 10px;
+    }
+    
+    /* Filter toolbar becomes single row scrollable */
+    .filter-toolbar {
+        gap: 6px;
+    }
+    
+    .ft-pill {
+        padding: 6px 10px;
+        font-size: 0.7rem;
+    }
+    
+    .ft-dropdown-btn {
+        padding: 6px 10px;
+        font-size: 0.7rem;
+    }
+    
+    /* Fetch buttons compact on mobile */
+    .ft-fetch-buttons {
+        gap: 4px;
+    }
+    
+    .ft-fetch-league-btn {
+        padding: 4px 6px;
+        min-width: 40px;
+    }
+    
+    .ft-fetch-league-btn .league-label {
+        display: none;
+    }
+    
+    .league-logo-sm {
+        width: 16px;
+        height: 16px;
     }
 }
 
