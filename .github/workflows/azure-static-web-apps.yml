@@ -26,7 +26,8 @@ jobs:
             echo "ERROR: staticwebapp.config.json not found"
             exit 1
           fi
-          if ! jq empty staticwebapp.config.json 2>/dev/null; then
+          # Use Python for JSON validation (more reliable than jq)
+          if ! python3 -m json.tool staticwebapp.config.json > /dev/null 2>&1; then
             echo "ERROR: staticwebapp.config.json is not valid JSON"
             exit 1
           fi
