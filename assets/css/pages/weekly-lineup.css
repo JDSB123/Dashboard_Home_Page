@@ -5396,3 +5396,267 @@ body.page-weekly-lineup .dashboard-topline {
 body.page-weekly-lineup .brand-header-inline {
     padding-left: 0;
 }
+
+/* ==========================================================================
+   MOBILE RESPONSIVENESS v33.02.0 - Added for proper mobile support
+   These must be at the END of the file to override earlier declarations
+   ========================================================================== */
+
+/* Tablet: 768px - 1024px */
+@media (max-width: 1024px) {
+    body.page-weekly-lineup {
+        background-attachment: scroll; /* Fix iOS Safari jank */
+    }
+
+    body.page-weekly-lineup .main-container {
+        margin-top: 140px;
+    }
+
+    body.page-weekly-lineup .weekly-lineup-table-wrapper {
+        margin-left: 24px;
+        margin-right: 24px;
+        width: calc(100% - 48px);
+    }
+
+    body.page-weekly-lineup .dashboard-topline {
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+
+    body.page-weekly-lineup .toolbar-layout {
+        margin-left: 24px;
+        margin-right: 24px;
+        width: calc(100% - 48px);
+    }
+
+    /* Allow table to scroll horizontally */
+    body.page-weekly-lineup .table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    body.page-weekly-lineup .weekly-lineup-table {
+        table-layout: auto;
+        min-width: 700px;
+    }
+
+    /* Remove fixed column widths */
+    body.page-weekly-lineup .weekly-lineup-table thead th,
+    body.page-weekly-lineup .weekly-lineup-table tbody td {
+        width: auto;
+        min-width: 0;
+        max-width: none;
+    }
+}
+
+/* Phone: 480px - 767px */
+@media (max-width: 767px) {
+    body.page-weekly-lineup .main-container {
+        margin-top: 80px;
+    }
+
+    body.page-weekly-lineup .weekly-lineup-table-wrapper,
+    body.page-weekly-lineup .table-container {
+        margin-left: 8px;
+        margin-right: 8px;
+        width: calc(100% - 16px);
+    }
+
+    body.page-weekly-lineup .dashboard-topline {
+        padding-left: 12px;
+        padding-right: 12px;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    body.page-weekly-lineup .toolbar-layout {
+        margin-left: 8px;
+        margin-right: 8px;
+        width: calc(100% - 16px);
+    }
+
+    body.page-weekly-lineup .weekly-lineup-table {
+        min-width: 550px;
+        font-size: 12px;
+    }
+
+    body.page-weekly-lineup .weekly-lineup-table td,
+    body.page-weekly-lineup .weekly-lineup-table th {
+        padding: 8px 6px;
+    }
+
+    /* Hide Track column on phones */
+    body.page-weekly-lineup .weekly-lineup-table th:nth-child(8),
+    body.page-weekly-lineup .weekly-lineup-table td:nth-child(8) {
+        display: none;
+    }
+
+    /* Compact brand header */
+    body.page-weekly-lineup .brand-header-inline {
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    body.page-weekly-lineup .brand-logo-inline {
+        width: 50px;
+        height: 50px;
+    }
+
+    body.page-weekly-lineup .brand-line-1 {
+        font-size: 1.25rem;
+    }
+
+    body.page-weekly-lineup .brand-line-2 {
+        font-size: 0.9rem;
+    }
+
+    /* Filter toolbar horizontal scroll */
+    body.page-weekly-lineup .filter-toolbar {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        gap: 8px;
+    }
+
+    body.page-weekly-lineup .filter-toolbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* KPI tiles grid */
+    body.page-weekly-lineup .kpi-tiles {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+        width: 100%;
+    }
+
+    body.page-weekly-lineup .kpi-tile {
+        width: 100%;
+        min-width: 0;
+        height: auto;
+        padding: 12px 10px;
+    }
+
+    /* Team logos smaller */
+    body.page-weekly-lineup .weekly-lineup-table .team-logo {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+/* Small Phone: < 480px */
+@media (max-width: 480px) {
+    body.page-weekly-lineup .main-container {
+        margin-top: 50px;
+    }
+
+    body.page-weekly-lineup .weekly-lineup-table-wrapper,
+    body.page-weekly-lineup .table-container {
+        margin-left: 4px;
+        margin-right: 4px;
+        width: calc(100% - 8px);
+    }
+
+    body.page-weekly-lineup .dashboard-topline {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    body.page-weekly-lineup .toolbar-layout {
+        margin-left: 4px;
+        margin-right: 4px;
+        width: calc(100% - 8px);
+    }
+
+    body.page-weekly-lineup .weekly-lineup-table {
+        min-width: 420px;
+        font-size: 11px;
+    }
+
+    body.page-weekly-lineup .weekly-lineup-table td,
+    body.page-weekly-lineup .weekly-lineup-table th {
+        padding: 6px 4px;
+    }
+
+    /* Hide Segment (4) and Fire (7) columns on small phones */
+    body.page-weekly-lineup .weekly-lineup-table th:nth-child(4),
+    body.page-weekly-lineup .weekly-lineup-table td:nth-child(4),
+    body.page-weekly-lineup .weekly-lineup-table th:nth-child(7),
+    body.page-weekly-lineup .weekly-lineup-table td:nth-child(7) {
+        display: none;
+    }
+
+    /* Smaller header text */
+    body.page-weekly-lineup .weekly-lineup-table .header-main-text {
+        font-size: 0.65rem;
+    }
+
+    body.page-weekly-lineup .weekly-lineup-table .header-subtext {
+        display: none;
+    }
+
+    /* Smaller brand */
+    body.page-weekly-lineup .brand-logo-inline {
+        width: 38px;
+        height: 38px;
+    }
+
+    body.page-weekly-lineup .brand-line-1 {
+        font-size: 1rem;
+    }
+
+    body.page-weekly-lineup .brand-line-2 {
+        font-size: 0.75rem;
+    }
+
+    /* Even smaller logos */
+    body.page-weekly-lineup .weekly-lineup-table .team-logo {
+        width: 14px;
+        height: 14px;
+    }
+
+    /* Single column KPI tiles */
+    body.page-weekly-lineup .kpi-tiles {
+        grid-template-columns: 1fr;
+    }
+
+    /* Compact KPI text */
+    body.page-weekly-lineup .kpi-label {
+        font-size: 0.65rem;
+    }
+
+    body.page-weekly-lineup .kpi-value {
+        font-size: 1rem;
+    }
+
+    /* Import dropdown full-width bottom sheet */
+    body.page-weekly-lineup .import-tile .import-dropdown-panel {
+        position: fixed;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        max-width: 100%;
+        border-radius: 16px 16px 0 0;
+        max-height: 70vh;
+        overflow-y: auto;
+    }
+
+    /* Rationale panel mobile */
+    body.page-weekly-lineup .rationale-panel {
+        position: fixed;
+        left: 8px;
+        right: 8px;
+        top: auto;
+        bottom: 60px;
+        transform: none;
+        width: auto;
+        max-width: calc(100vw - 16px);
+        max-height: 50vh;
+        overflow-y: auto;
+    }
+}
