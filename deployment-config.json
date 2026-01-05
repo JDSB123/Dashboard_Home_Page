@@ -1,5 +1,5 @@
 {
-  "subscriptionId": "YOUR_SUBSCRIPTION_ID",
+  "subscriptionId": "3a1a4a94-45a5-4f7c-8ada-97978221052c",
   "resourceGroup": "dashboard-gbsv-main-rg",
   "environment": "production",
   "location": "eastus",
