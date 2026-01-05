@@ -77,7 +77,7 @@ jobs:
     needs: validate
     if: github.event_name == 'workflow_dispatch' && needs.validate.outputs.config_valid == 'true'
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment || 'production' }}
+    
     
     steps:
       - name: Checkout code
@@ -152,7 +152,7 @@ jobs:
     needs: setup-infrastructure
     if: github.event_name == 'workflow_dispatch' && inputs.deploy_monitoring
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment || 'production' }}
+    
     outputs:
       app_insights_key: ${{ steps.appinsights.outputs.instrumentation_key }}
       app_insights_connection: ${{ steps.appinsights.outputs.connection_string }}
@@ -217,7 +217,7 @@ jobs:
     needs: setup-infrastructure
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment || 'production' }}
+    
     outputs:
       signalr_connection: ${{ steps.signalr.outputs.connection_string }}
       
@@ -266,7 +266,7 @@ jobs:
     needs: [deploy-monitoring, deploy-signalr]
     if: github.event_name == 'workflow_dispatch' && inputs.deploy_orchestrator
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment || 'production' }}
+    
     
     steps:
       - name: Checkout code
@@ -349,7 +349,7 @@ EOF
     needs: build-orchestrator
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment || 'production' }}
+    
     outputs:
       orchestrator_url: ${{ steps.deploy.outputs.url }}
       
@@ -470,7 +470,7 @@ EOF
     needs: deploy-orchestrator
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment || 'production' }}
+    
     
     steps:
       - name: Checkout code
@@ -519,7 +519,7 @@ EOF
     needs: deploy-orchestrator
     if: github.event_name == 'workflow_dispatch' && inputs.initialize_registry
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment || 'production' }}
+    
     
     steps:
       - name: Checkout code
@@ -561,7 +561,7 @@ EOF
     needs: [deploy-orchestrator, initialize-registry]
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment || 'production' }}
+    
     
     steps:
       - name: Test Health Endpoint
@@ -612,7 +612,7 @@ EOF
           cat >> $GITHUB_STEP_SUMMARY << EOF
           # 🚀 GBSV Model System Deployment Summary
           
-          ## Environment: ${{ inputs.environment || 'production' }}
+          ## 
           
           ### ✅ Deployed Resources
           
