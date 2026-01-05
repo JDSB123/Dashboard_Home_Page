@@ -882,34 +882,40 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             marketDisplay = `${teamAbbr} ${escapeHtml(pick.line || '')}`;
         }
         
-        // Simpler, more reliable comparison HTML
+        // Compact comparison HTML - single row, no redundant pick info
         const comparisonHtml = `
-            <div class="details-section">
-                <h4 style="color:#10b981;margin:0 0 12px;font-size:14px;">📊 Model vs. Market</h4>
-                <div style="display:flex;gap:10px;margin-bottom:12px;">
-                    <div style="flex:1;background:rgba(16,185,129,0.15);padding:10px;border-radius:6px;text-align:center;">
-                        <div style="color:#10b981;font-size:11px;font-weight:600;text-transform:uppercase;margin-bottom:4px;">Model</div>
-                        <div style="color:#fff;font-size:14px;font-weight:700;">${modelDisplay}</div>
-                        <div style="color:#888;font-size:12px;">${modelPriceRaw || 'N/A'}</div>
-                    </div>
-                    <div style="flex:1;background:rgba(99,102,241,0.15);padding:10px;border-radius:6px;text-align:center;">
-                        <div style="color:#818cf8;font-size:11px;font-weight:600;text-transform:uppercase;margin-bottom:4px;">Market</div>
-                        <div style="color:#fff;font-size:14px;font-weight:700;">${marketDisplay}</div>
-                        <div style="color:#888;font-size:12px;">${pickOdds}</div>
-                    </div>
-                </div>
-                <div style="background:rgba(16,185,129,0.2);padding:8px 12px;border-radius:6px;text-align:center;">
-                    <span style="color:#ccc;font-size:12px;">Edge:</span>
-                    <span style="color:#22c55e;font-size:16px;font-weight:700;margin-left:6px;">+${edgeValue}%</span>
+            <div class="details-compact">
+                <div class="details-row">
+                    <span class="details-label">Model:</span>
+                    <span class="details-value model">${modelLineRaw || modelTotal || modelPriceRaw || '-'}</span>
+                    <span class="details-label" style="margin-left:12px;">Market:</span>
+                    <span class="details-value market">${pick.line || '-'} (${pickOdds})</span>
+                    <span class="details-edge">+${edgeValue}%</span>
                 </div>
             </div>
         `;
         
-        const rationaleHtml = rationaleRaw
-            ? escapeHtml(rationaleRaw).replace(/\n/g, '<br>')
-            : '<span class="rationale-empty">No rationale provided for this pick.</span>';
+        // Convert rationale to bullet points for easier reading
+        const formatRationale = (text) => {
+            if (!text) return '<span class="rationale-empty">No rationale provided.</span>';
+            
+            // Split by sentences or common delimiters
+            const escaped = escapeHtml(text);
+            const sentences = escaped
+                .split(/(?<=[.!?])\s+|(?:\n)|(?:;\s*)/)
+                .map(s => s.trim())
+                .filter(s => s.length > 3);
+            
+            if (sentences.length <= 1) {
+                return `<p class="rationale-text">${escaped}</p>`;
+            }
+            
+            return `<ul class="rationale-bullets">${sentences.map(s => `<li>${s}</li>`).join('')}</ul>`;
+        };
+        
+        const rationaleHtml = formatRationale(rationaleRaw);
         const modelStampHtml = modelStampRaw
-            ? `<div class="rationale-meta"><span class="rationale-meta-label">Model Version:</span> <span class="rationale-meta-value">${escapeHtml(modelStampRaw)}</span></div>`
+            ? `<div class="details-meta">${escapeHtml(modelStampRaw)}</div>`
             : '';
 
         // Set data attributes for sorting and filtering
@@ -1054,11 +1060,10 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                     </div>
                     <div class="rationale-panel" id="${rationaleId}" hidden>
                         ${comparisonHtml}
-                        ${modelStampHtml}
                         <div class="rationale-body">
-                            <div class="rationale-label">Rationale:</div>
                             ${rationaleHtml}
                         </div>
+                        ${modelStampHtml}
                     </div>
                 </div>
             </td>
