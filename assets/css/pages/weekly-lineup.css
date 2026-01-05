@@ -1178,18 +1178,18 @@ body.page-weekly-lineup .picks-table tbody tr {
 }
 
 .page-weekly-lineup .details-label {
-    color: #9ca3af;
-    font-size: 10px;
+    color: #d1d5db;
+    font-size: 12px;
     font-weight: 600;
     font-family: 'Cormorant Garamond', 'Garamond', Georgia, serif;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.04em;
     margin-bottom: 4px;
 }
 
 .page-weekly-lineup .details-val {
     font-weight: 700;
-    font-size: 15px;
+    font-size: 18px;
     font-family: 'Cormorant Garamond', 'Garamond', Georgia, serif;
     color: #ffffff;
 }
@@ -1204,15 +1204,15 @@ body.page-weekly-lineup .picks-table tbody tr {
 }
 
 .page-weekly-lineup .odds-tag {
-    color: #9ca3af;
-    font-size: 11px;
+    color: #d1d5db;
+    font-size: 13px;
     font-weight: 600;
     margin-left: 2px;
 }
 
 .page-weekly-lineup .edge-val {
     color: #4ade80;
-    font-size: 16px;
+    font-size: 20px;
     font-weight: 800;
     text-shadow: 0 0 12px rgba(74, 222, 128, 0.5);
 }
@@ -1230,19 +1230,20 @@ body.page-weekly-lineup .picks-table tbody tr {
 
 .page-weekly-lineup .rationale-list li {
     position: relative;
-    padding-left: 6px;
-    margin-bottom: 5px;
-    color: #d1d5db;
-    font-size: 11px;
-    line-height: 1.45;
+    padding-left: 8px;
+    margin-bottom: 6px;
+    color: #e5e7eb;
+    font-size: 13px;
+    line-height: 1.5;
     text-align: left;
+    font-family: 'Cormorant Garamond', 'Garamond', Georgia, serif;
 }
 
 .page-weekly-lineup .rationale-list li::before {
     content: "•";
     position: absolute;
     left: -6px;
-    color: #10b981;
+    color: #4ade80;
     font-weight: bold;
 }
 
@@ -1252,10 +1253,11 @@ body.page-weekly-lineup .picks-table tbody tr {
 
 .page-weekly-lineup .rationale-text {
     margin: 0;
-    color: #d1d5db;
-    font-size: 11px;
-    line-height: 1.45;
+    color: #e5e7eb;
+    font-size: 13px;
+    line-height: 1.5;
     text-align: left;
+    font-family: 'Cormorant Garamond', 'Garamond', Georgia, serif;
 }
 
 /* Model version footer */
