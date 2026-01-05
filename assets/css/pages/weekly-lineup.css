@@ -1180,7 +1180,8 @@ body.page-weekly-lineup .picks-table tbody tr {
 .page-weekly-lineup .details-label {
     color: #9ca3af;
     font-size: 10px;
-    font-weight: 700;
+    font-weight: 600;
+    font-family: 'Cormorant Garamond', 'Garamond', Georgia, serif;
     text-transform: uppercase;
     letter-spacing: 0.06em;
     margin-bottom: 4px;
@@ -1189,7 +1190,7 @@ body.page-weekly-lineup .picks-table tbody tr {
 .page-weekly-lineup .details-val {
     font-weight: 700;
     font-size: 15px;
-    font-family: 'Inter', 'Segoe UI', sans-serif;
+    font-family: 'Cormorant Garamond', 'Garamond', Georgia, serif;
     color: #ffffff;
 }
 
