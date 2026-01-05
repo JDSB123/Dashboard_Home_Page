@@ -1165,10 +1165,10 @@ body.page-weekly-lineup .picks-table tbody tr {
 .page-weekly-lineup .details-header {
     display: flex;
     justify-content: space-between;
-    gap: 8px;
+    gap: 12px;
     margin-bottom: 10px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .page-weekly-lineup .details-col {
@@ -1178,38 +1178,42 @@ body.page-weekly-lineup .picks-table tbody tr {
 }
 
 .page-weekly-lineup .details-label {
-    color: #6b7280;
-    font-size: 9px;
-    font-weight: 600;
+    color: #9ca3af;
+    font-size: 10px;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 2px;
+    letter-spacing: 0.06em;
+    margin-bottom: 4px;
 }
 
 .page-weekly-lineup .details-val {
-    font-weight: 600;
-    font-size: 12px;
-    color: #e5e7eb;
+    font-weight: 700;
+    font-size: 15px;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    color: #ffffff;
 }
 
 .page-weekly-lineup .model-val {
-    color: #10b981;
+    color: #4ade80;
+    text-shadow: 0 0 10px rgba(74, 222, 128, 0.4);
 }
 
 .page-weekly-lineup .market-val {
-    color: #a5b4fc;
+    color: #c4b5fd;
 }
 
 .page-weekly-lineup .odds-tag {
-    color: #6b7280;
-    font-size: 10px;
-    font-weight: 500;
+    color: #9ca3af;
+    font-size: 11px;
+    font-weight: 600;
+    margin-left: 2px;
 }
 
 .page-weekly-lineup .edge-val {
-    color: #22c55e;
-    font-size: 13px;
-    font-weight: 700;
+    color: #4ade80;
+    font-size: 16px;
+    font-weight: 800;
+    text-shadow: 0 0 12px rgba(74, 222, 128, 0.5);
 }
 
 /* Rationale - left-aligned, clean bullets */
