@@ -1,5 +1,7 @@
 name: Deploy Complete Model System
 
+# This workflow should ONLY be triggered manually via workflow_dispatch
+# It requires input parameters and should not run on push
 on:
   workflow_dispatch:
     inputs:
@@ -25,6 +27,11 @@ on:
         type: boolean
         default: true
 
+# Prevent any accidental triggers - only run on manual dispatch
+concurrency:
+  group: deploy-complete-system
+  cancel-in-progress: false
+
 env:
   AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
   RESOURCE_GROUP: dashboard-gbsv-main-rg
@@ -36,6 +43,8 @@ jobs:
   validate:
     name: Validate Configuration
     runs-on: ubuntu-latest
+    # Only run on manual workflow_dispatch - never on push
+    if: github.event_name == 'workflow_dispatch'
     outputs:
       config_valid: ${{ steps.validate.outputs.valid }}
       
