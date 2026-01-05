@@ -1789,6 +1789,30 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             });
         });
 
+        // Segment dropdown items (multi-select)
+        toolbar.querySelectorAll('#segment-dropdown-menu .ft-dropdown-item').forEach(item => {
+            item.addEventListener('click', () => {
+                item.classList.toggle('active');
+                const menu = item.closest('.ft-dropdown-menu');
+                const btn = menu.previousElementSibling;
+                const activeCount = menu.querySelectorAll('.ft-dropdown-item.active').length;
+                btn.textContent = activeCount > 0 ? `⏱ Segment (${activeCount}) ▾` : '⏱ Segment ▾';
+                applyToolbarFilters();
+            });
+        });
+
+        // Pick Type dropdown items (multi-select)
+        toolbar.querySelectorAll('#picktype-dropdown-menu .ft-dropdown-item').forEach(item => {
+            item.addEventListener('click', () => {
+                item.classList.toggle('active');
+                const menu = item.closest('.ft-dropdown-menu');
+                const btn = menu.previousElementSibling;
+                const activeCount = menu.querySelectorAll('.ft-dropdown-item.active').length;
+                btn.textContent = activeCount > 0 ? `📋 Pick (${activeCount}) ▾` : '📋 Pick ▾';
+                applyToolbarFilters();
+            });
+        });
+
         // Clear button
         const clearBtn = document.getElementById('ft-clear');
         clearBtn?.addEventListener('click', () => {
@@ -1800,6 +1824,12 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             // Clear fire dropdown
             toolbar.querySelectorAll('#fire-dropdown-menu .ft-dropdown-item').forEach(i => i.classList.remove('active'));
             document.getElementById('fire-dropdown-btn').textContent = '🔥 Fire ▾';
+            // Clear segment dropdown
+            toolbar.querySelectorAll('#segment-dropdown-menu .ft-dropdown-item').forEach(i => i.classList.remove('active'));
+            document.getElementById('segment-dropdown-btn').textContent = '⏱ Segment ▾';
+            // Clear pick type dropdown
+            toolbar.querySelectorAll('#picktype-dropdown-menu .ft-dropdown-item').forEach(i => i.classList.remove('active'));
+            document.getElementById('picktype-dropdown-btn').textContent = '📋 Pick ▾';
             applyToolbarFilters();
         });
 
@@ -1938,7 +1968,17 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             activeFires.push(i.dataset.v);
         });
 
-        console.log(`🔍 [Toolbar Filter] Leagues: ${activeLeagues.join(',')||'all'}, Edges: ${activeEdges.join(',')||'all'}, Fires: ${activeFires.join(',')||'all'}`);
+        const activeSegments = [];
+        toolbar.querySelectorAll('#segment-dropdown-menu .ft-dropdown-item.active').forEach(i => {
+            activeSegments.push(i.dataset.v.toUpperCase());
+        });
+
+        const activePickTypes = [];
+        toolbar.querySelectorAll('#picktype-dropdown-menu .ft-dropdown-item.active').forEach(i => {
+            activePickTypes.push(i.dataset.v.toLowerCase());
+        });
+
+        console.log(`🔍 [Toolbar Filter] Leagues: ${activeLeagues.join(',')||'all'}, Edges: ${activeEdges.join(',')||'all'}, Fires: ${activeFires.join(',')||'all'}, Segments: ${activeSegments.join(',')||'all'}, PickTypes: ${activePickTypes.join(',')||'all'}`);
 
         // Filter rows
         let visibleCount = 0;
@@ -1974,6 +2014,26 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             if (show && activeFires.length > 0) {
                 const rowFire = parseInt(row.getAttribute('data-fire') || '0', 10) || 0;
                 if (!activeFires.includes(String(rowFire))) show = false;
+            }
+
+            // Segment filter
+            if (show && activeSegments.length > 0) {
+                const rowSegment = (row.getAttribute('data-segment') || 'FG').toUpperCase();
+                if (!activeSegments.includes(rowSegment)) show = false;
+            }
+
+            // Pick Type filter
+            if (show && activePickTypes.length > 0) {
+                const rowPickType = (row.getAttribute('data-pick-type') || 'spread').toLowerCase();
+                // Handle variations: "total" matches "total", "ou", "over", "under"
+                const match = activePickTypes.some(pt => {
+                    if (pt === 'total' && (rowPickType === 'total' || rowPickType === 'ou' || rowPickType === 'over/under')) return true;
+                    if (pt === 'team-total' && (rowPickType === 'team-total' || rowPickType === 'team total' || rowPickType === 'tt')) return true;
+                    if (pt === 'moneyline' && (rowPickType === 'moneyline' || rowPickType === 'ml')) return true;
+                    if (pt === 'spread' && rowPickType === 'spread') return true;
+                    return rowPickType === pt;
+                });
+                if (!match) show = false;
             }
 
             row.style.display = show ? '' : 'none';

@@ -15,7 +15,7 @@
     <!-- CSS: Bundled for performance -->
     <link rel="stylesheet" href="dist/bundle.min.css?v=33.00.4">
     <!-- CSS: Page specific overrides (Hotfix for UI) -->
-    <link rel="stylesheet" href="assets/css/pages/weekly-lineup.css?v=33.02.3">
+    <link rel="stylesheet" href="assets/css/pages/weekly-lineup.css?v=33.02.4">
     <!-- Mobile Responsive Styles -->
     <link rel="stylesheet" href="assets/css/components/mobile-responsive.css?v=33.02.0">
     <!-- COMPLETE MOBILE OVERHAUL - This MUST be loaded LAST to override everything -->
@@ -257,7 +257,7 @@
                             <button class="ft-dropdown-item edge-item edge-low" data-f="edge" data-v="low">Low (&lt;2%)</button>
                         </div>
                     </div>
-                    <!-- Fire dropdown - Original emoji version -->
+                    <!-- Fire dropdown -->
                     <div class="ft-dropdown">
                         <button class="ft-dropdown-btn" id="fire-dropdown-btn">🔥 Fire ▾</button>
                         <div class="ft-dropdown-menu" id="fire-dropdown-menu">
@@ -266,6 +266,27 @@
                             <button class="ft-dropdown-item" data-f="fire" data-v="3">🔥🔥🔥 Warm</button>
                             <button class="ft-dropdown-item" data-f="fire" data-v="2">🔥🔥</button>
                             <button class="ft-dropdown-item" data-f="fire" data-v="1">🔥</button>
+                        </div>
+                    </div>
+                    <!-- Segment dropdown -->
+                    <div class="ft-dropdown">
+                        <button class="ft-dropdown-btn" id="segment-dropdown-btn">⏱ Segment ▾</button>
+                        <div class="ft-dropdown-menu" id="segment-dropdown-menu">
+                            <button class="ft-dropdown-item" data-f="segment" data-v="FG">Full Game</button>
+                            <button class="ft-dropdown-item" data-f="segment" data-v="1H">1st Half</button>
+                            <button class="ft-dropdown-item" data-f="segment" data-v="2H">2nd Half</button>
+                            <button class="ft-dropdown-item" data-f="segment" data-v="1Q">1st Quarter</button>
+                            <button class="ft-dropdown-item" data-f="segment" data-v="2Q">2nd Quarter</button>
+                        </div>
+                    </div>
+                    <!-- Pick Type dropdown -->
+                    <div class="ft-dropdown">
+                        <button class="ft-dropdown-btn" id="picktype-dropdown-btn">📋 Pick ▾</button>
+                        <div class="ft-dropdown-menu" id="picktype-dropdown-menu">
+                            <button class="ft-dropdown-item" data-f="pick-type" data-v="spread">Spread</button>
+                            <button class="ft-dropdown-item" data-f="pick-type" data-v="moneyline">Moneyline</button>
+                            <button class="ft-dropdown-item" data-f="pick-type" data-v="total">Total (O/U)</button>
+                            <button class="ft-dropdown-item" data-f="pick-type" data-v="team-total">Team Total</button>
                         </div>
                     </div>
                     <button class="ft-clear" id="ft-clear">✕ Clear</button>
@@ -427,7 +448,7 @@
 <script src="assets/js/modules/picks-dom-utils.js?v=33.00.4" defer></script>
 <script src="assets/js/utils/logo-cache.js?v=33.00.4" defer></script>
 <script src="assets/js/features/live-scores.js?v=33.00.4" defer></script>
-<script src="assets/js/features/weekly-lineup.js?v=33.02.3" defer></script>
+<script src="assets/js/features/weekly-lineup.js?v=33.02.4" defer></script>
 <script src="assets/js/modules/picks-state-manager.js?v=33.00.4" defer></script>
 <script src="assets/js/modules/picks-table-renderer.js?v=33.00.4" defer></script>
 <script src="assets/js/modules/picks-filter-manager.js?v=33.00.4" defer></script>
