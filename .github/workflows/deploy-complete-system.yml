@@ -75,9 +75,9 @@ jobs:
   setup-infrastructure:
     name: Setup Azure Infrastructure
     needs: validate
-    if: needs.validate.outputs.config_valid == 'true'
+    if: github.event_name == 'workflow_dispatch' && needs.validate.outputs.config_valid == 'true'
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
+    environment: ${{ inputs.environment || 'production' }}
     
     steps:
       - name: Checkout code
@@ -95,7 +95,7 @@ jobs:
           az group create \
             --name ${{ env.RESOURCE_GROUP }} \
             --location eastus \
-            --tags Environment=${{ inputs.environment }} Project=GBSV
+            --tags Environment=${{ inputs.environment || 'production' }} Project=GBSV
             
       - name: Create Storage Account
         run: |
@@ -150,9 +150,9 @@ jobs:
   deploy-monitoring:
     name: Deploy Monitoring Resources
     needs: setup-infrastructure
-    if: inputs.deploy_monitoring
+    if: github.event_name == 'workflow_dispatch' && inputs.deploy_monitoring
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
+    environment: ${{ inputs.environment || 'production' }}
     outputs:
       app_insights_key: ${{ steps.appinsights.outputs.instrumentation_key }}
       app_insights_connection: ${{ steps.appinsights.outputs.connection_string }}
@@ -215,8 +215,9 @@ jobs:
   deploy-signalr:
     name: Deploy SignalR Service
     needs: setup-infrastructure
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
+    environment: ${{ inputs.environment || 'production' }}
     outputs:
       signalr_connection: ${{ steps.signalr.outputs.connection_string }}
       
@@ -263,9 +264,9 @@ jobs:
   build-orchestrator:
     name: Build Orchestrator Image
     needs: [deploy-monitoring, deploy-signalr]
-    if: inputs.deploy_orchestrator
+    if: github.event_name == 'workflow_dispatch' && inputs.deploy_orchestrator
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
+    environment: ${{ inputs.environment || 'production' }}
     
     steps:
       - name: Checkout code
@@ -329,7 +330,7 @@ EOF
           fi
           
           # Build image
-          IMAGE_TAG="${{ inputs.environment }}-$(date +%Y%m%d-%H%M%S)"
+          IMAGE_TAG="${{ inputs.environment || 'production' }}-$(date +%Y%m%d-%H%M%S)"
           docker build -t ${{ env.ORCHESTRATOR_NAME }}:$IMAGE_TAG .
           
           # Tag and push
@@ -346,8 +347,9 @@ EOF
   deploy-orchestrator:
     name: Deploy Orchestrator Container App
     needs: build-orchestrator
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
+    environment: ${{ inputs.environment || 'production' }}
     outputs:
       orchestrator_url: ${{ steps.deploy.outputs.url }}
       
@@ -438,7 +440,7 @@ EOF
                 "NFL_API_URL=$NFL_URL" \
                 "NCAAF_API_URL=$NCAAF_URL" \
                 "CORS_ALLOWED_ORIGINS=$DASHBOARD_URL" \
-                "ENVIRONMENT=${{ inputs.environment }}"
+                "ENVIRONMENT=${{ inputs.environment || 'production' }}"
           else
             echo "Updating Container App..."
             
@@ -466,8 +468,9 @@ EOF
   setup-rbac:
     name: Setup RBAC Permissions
     needs: deploy-orchestrator
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
+    environment: ${{ inputs.environment || 'production' }}
     
     steps:
       - name: Checkout code
@@ -514,9 +517,9 @@ EOF
   initialize-registry:
     name: Initialize Model Registry
     needs: deploy-orchestrator
-    if: inputs.initialize_registry
+    if: github.event_name == 'workflow_dispatch' && inputs.initialize_registry
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
+    environment: ${{ inputs.environment || 'production' }}
     
     steps:
       - name: Checkout code
@@ -556,8 +559,9 @@ EOF
   test-deployment:
     name: Test Deployment
     needs: [deploy-orchestrator, initialize-registry]
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
+    environment: ${{ inputs.environment || 'production' }}
     
     steps:
       - name: Test Health Endpoint
@@ -608,7 +612,7 @@ EOF
           cat >> $GITHUB_STEP_SUMMARY << EOF
           # 🚀 GBSV Model System Deployment Summary
           
-          ## Environment: ${{ inputs.environment }}
+          ## Environment: ${{ inputs.environment || 'production' }}
           
           ### ✅ Deployed Resources
           
