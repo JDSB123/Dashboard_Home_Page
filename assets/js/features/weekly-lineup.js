@@ -882,40 +882,62 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             marketDisplay = `${teamAbbr} ${escapeHtml(pick.line || '')}`;
         }
         
-        // Compact comparison HTML - single row, no redundant pick info
-        const comparisonHtml = `
-            <div class="details-compact">
-                <div class="details-row">
-                    <span class="details-label">Model:</span>
-                    <span class="details-value model">${modelLineRaw || modelTotal || modelPriceRaw || '-'}</span>
-                    <span class="details-label" style="margin-left:12px;">Market:</span>
-                    <span class="details-value market">${pick.line || '-'} (${pickOdds})</span>
-                    <span class="details-edge">+${edgeValue}%</span>
-                </div>
-            </div>
-        `;
+        // Build comparison section - only show real data, no placeholders
+        const hasModelLine = modelLineRaw || modelTotal;
+        const hasMarketLine = pick.line;
         
-        // Convert rationale to bullet points for easier reading
+        // Clean, vertical layout for Model/Market/Edge
+        let comparisonHtml = '<div class="details-grid">';
+        
+        // Model prediction row - only if we have real data
+        if (hasModelLine) {
+            comparisonHtml += `
+                <div class="details-item">
+                    <span class="details-key">Model</span>
+                    <span class="details-val model-val">${modelLineRaw || modelTotal}</span>
+                </div>`;
+        }
+        
+        // Market line row - only if we have real data
+        if (hasMarketLine) {
+            comparisonHtml += `
+                <div class="details-item">
+                    <span class="details-key">Market</span>
+                    <span class="details-val market-val">${pick.line} <span class="odds-tag">${pickOdds}</span></span>
+                </div>`;
+        }
+        
+        // Edge - always show since it's the key metric
+        comparisonHtml += `
+            <div class="details-item edge-item">
+                <span class="details-key">Edge</span>
+                <span class="details-val edge-val">+${edgeValue}%</span>
+            </div>`;
+        
+        comparisonHtml += '</div>';
+        
+        // Format rationale - clean bullet points, left-aligned
         const formatRationale = (text) => {
-            if (!text) return '<span class="rationale-empty">No rationale provided.</span>';
+            if (!text) return '';
             
-            // Split by sentences or common delimiters
             const escaped = escapeHtml(text);
-            const sentences = escaped
-                .split(/(?<=[.!?])\s+|(?:\n)|(?:;\s*)/)
+            // Split on periods followed by space, newlines, or semicolons
+            const points = escaped
+                .split(/(?<=[.!?])\s+|\n|;\s*/)
                 .map(s => s.trim())
-                .filter(s => s.length > 3);
+                .filter(s => s.length > 5 && !s.match(/^[A-Z]{2,4}$/)); // Filter out tiny fragments
             
-            if (sentences.length <= 1) {
-                return `<p class="rationale-text">${escaped}</p>`;
+            if (points.length === 0) return '';
+            if (points.length === 1) {
+                return `<div class="rationale-text">${points[0]}</div>`;
             }
             
-            return `<ul class="rationale-bullets">${sentences.map(s => `<li>${s}</li>`).join('')}</ul>`;
+            return `<ul class="rationale-list">${points.map(p => `<li>${p}</li>`).join('')}</ul>`;
         };
         
         const rationaleHtml = formatRationale(rationaleRaw);
         const modelStampHtml = modelStampRaw
-            ? `<div class="details-meta">${escapeHtml(modelStampRaw)}</div>`
+            ? `<div class="details-footer">${escapeHtml(modelStampRaw)}</div>`
             : '';
 
         // Set data attributes for sorting and filtering
@@ -1060,9 +1082,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                     </div>
                     <div class="rationale-panel" id="${rationaleId}" hidden>
                         ${comparisonHtml}
-                        <div class="rationale-body">
-                            ${rationaleHtml}
-                        </div>
+                        ${rationaleHtml ? `<div class="rationale-body">${rationaleHtml}</div>` : ''}
                         ${modelStampHtml}
                     </div>
                 </div>

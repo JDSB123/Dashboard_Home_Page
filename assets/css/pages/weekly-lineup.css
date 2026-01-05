@@ -1148,100 +1148,121 @@ body.page-weekly-lineup .picks-table tbody tr {
     left: 50%;
     transform: translateX(-50%);
     z-index: 1000;
-    background: #0a101c;
-    border: 1px solid rgba(16, 185, 129, 0.4);
+    background: #080c14;
+    border: 1px solid rgba(16, 185, 129, 0.35);
     border-radius: 6px;
-    padding: 10px 12px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
-    width: 280px;
+    padding: 10px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8);
+    width: 240px;
     max-width: 90vw;
     text-align: left;
-    color: #ffffff;
-    font-size: 12px;
-    line-height: 1.35;
-}
-
-/* Compact details row - Model vs Market on one line */
-.page-weekly-lineup .details-compact {
-    margin-bottom: 8px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.page-weekly-lineup .details-row {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 4px;
+    color: #e5e7eb;
     font-size: 11px;
-}
-
-.page-weekly-lineup .details-label {
-    color: #888;
-    font-weight: 500;
-}
-
-.page-weekly-lineup .details-value {
-    font-weight: 600;
-}
-
-.page-weekly-lineup .details-value.model {
-    color: #10b981;
-}
-
-.page-weekly-lineup .details-value.market {
-    color: #818cf8;
-}
-
-.page-weekly-lineup .details-edge {
-    margin-left: auto;
-    background: rgba(16, 185, 129, 0.2);
-    color: #22c55e;
-    font-weight: 700;
-    font-size: 12px;
-    padding: 2px 6px;
-    border-radius: 4px;
-}
-
-/* Compact rationale with bullets */
-.page-weekly-lineup .rationale-body {
-    font-size: 11px;
-    color: #d1d5db;
     line-height: 1.4;
 }
 
-.page-weekly-lineup .rationale-bullets {
+/* Clean vertical grid for Model/Market/Edge */
+.page-weekly-lineup .details-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.page-weekly-lineup .details-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.page-weekly-lineup .details-key {
+    color: #9ca3af;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.page-weekly-lineup .details-val {
+    font-weight: 600;
+    font-size: 12px;
+}
+
+.page-weekly-lineup .model-val {
+    color: #10b981;
+}
+
+.page-weekly-lineup .market-val {
+    color: #a5b4fc;
+}
+
+.page-weekly-lineup .odds-tag {
+    color: #6b7280;
+    font-size: 10px;
+    font-weight: 500;
+    margin-left: 4px;
+}
+
+.page-weekly-lineup .edge-item {
+    margin-top: 2px;
+    padding-top: 6px;
+    border-top: 1px dashed rgba(255, 255, 255, 0.06);
+}
+
+.page-weekly-lineup .edge-val {
+    color: #22c55e;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+/* Rationale - left-aligned, clean bullets */
+.page-weekly-lineup .rationale-body {
+    text-align: left;
+}
+
+.page-weekly-lineup .rationale-list {
     margin: 0;
-    padding-left: 14px;
-    list-style-type: disc;
+    padding-left: 12px;
+    list-style: none;
 }
 
-.page-weekly-lineup .rationale-bullets li {
-    margin-bottom: 4px;
-    padding-left: 2px;
+.page-weekly-lineup .rationale-list li {
+    position: relative;
+    padding-left: 8px;
+    margin-bottom: 5px;
+    color: #d1d5db;
+    font-size: 11px;
+    line-height: 1.45;
 }
 
-.page-weekly-lineup .rationale-bullets li:last-child {
+.page-weekly-lineup .rationale-list li::before {
+    content: "•";
+    position: absolute;
+    left: -4px;
+    color: #10b981;
+    font-weight: bold;
+}
+
+.page-weekly-lineup .rationale-list li:last-child {
     margin-bottom: 0;
 }
 
 .page-weekly-lineup .rationale-text {
     margin: 0;
-}
-
-.page-weekly-lineup .rationale-empty {
-    color: #6b7280;
-    font-style: italic;
+    color: #d1d5db;
     font-size: 11px;
+    line-height: 1.45;
 }
 
-/* Model version - subtle footer */
-.page-weekly-lineup .details-meta {
+/* Model version footer */
+.page-weekly-lineup .details-footer {
     margin-top: 8px;
     padding-top: 6px;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
     font-size: 9px;
-    color: #6b7280;
+    color: #4b5563;
     text-align: right;
 }
 
