@@ -1,0 +1,476 @@
+/**
+ * Complete Mobile Overhaul for Weekly Lineup Page
+ * This file MUST be loaded LAST to override all other styles
+ */
+
+/* ============================================
+   MOBILE RESET - OVERRIDE EVERYTHING
+   ============================================ */
+
+@media (max-width: 767px) {
+    /* Reset the entire page layout */
+    body.page-weekly-lineup {
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow-x: hidden !important;
+        background: #081121 !important;
+        padding-top: 48px !important; /* Only for fixed header */
+    }
+    
+    /* Override main container margins from weekly-lineup.css */
+    body.page-weekly-lineup .main-container {
+        margin: 0 !important;
+        padding: 0 !important;
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+    
+    /* Kill all the dashboard layout nonsense */
+    .main-dashboard-layout {
+        display: block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: transparent !important;
+    }
+}
+
+/* ============================================
+   HEADER - SIMPLE MOBILE HEADER
+   ============================================ */
+
+@media (max-width: 767px) {
+    /* Fixed simple header */
+    body.page-weekly-lineup .brand-nav {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        height: 48px !important;
+        padding: 0 12px !important;
+        background: rgba(8, 17, 33, 0.98) !important;
+        backdrop-filter: blur(10px) !important;
+        border-bottom: 1px solid rgba(0, 255, 170, 0.1) !important;
+        z-index: 1000 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    
+    /* Hide desktop nav elements */
+    body.page-weekly-lineup .nav-links,
+    body.page-weekly-lineup .nav-actions,
+    body.page-weekly-lineup .nav-dropdown {
+        display: none !important;
+    }
+    
+    /* Simple title */
+    body.page-weekly-lineup .brand-nav::before {
+        content: 'Weekly Lineup' !important;
+        font-size: 16px !important;
+        font-weight: 600 !important;
+        color: #fff !important;
+    }
+}
+
+/* ============================================
+   HIDE ALL DESKTOP CLUTTER
+   ============================================ */
+
+@media (max-width: 767px) {
+    /* Hide everything that clutters mobile */
+    body.page-weekly-lineup .dashboard-topline,
+    body.page-weekly-lineup .brand-header-inline,
+    body.page-weekly-lineup .filter-toolbar,
+    body.page-weekly-lineup .toolbar-layout,
+    body.page-weekly-lineup .ft-left,
+    body.page-weekly-lineup .ft-right,
+    body.page-weekly-lineup .ft-fetch-buttons,
+    body.page-weekly-lineup .date-toggle-group,
+    body.page-weekly-lineup .segment-filters,
+    body.page-weekly-lineup .export-import-controls,
+    body.page-weekly-lineup .sportsbook-dropdown,
+    body.page-weekly-lineup .nav-actions,
+    body.page-weekly-lineup .unified-filter,
+    body.page-weekly-lineup .ft-pill {
+        display: none !important;
+    }
+}
+
+/* ============================================
+   KPI TILES - MINIMAL MOBILE VERSION
+   ============================================ */
+
+@media (max-width: 767px) {
+    /* Compact KPI section */
+    body.page-weekly-lineup .kpi-tiles {
+        display: flex !important;
+        gap: 8px !important;
+        padding: 12px !important;
+        margin: 0 !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        background: rgba(0, 0, 0, 0.3) !important;
+    }
+    
+    body.page-weekly-lineup .kpi-tiles::-webkit-scrollbar {
+        display: none !important;
+    }
+    
+    body.page-weekly-lineup .kpi-tile {
+        flex: 0 0 100px !important;
+        min-width: 100px !important;
+        height: 60px !important;
+        padding: 8px !important;
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 8px !important;
+        margin: 0 !important;
+    }
+    
+    body.page-weekly-lineup .kpi-value {
+        font-size: 18px !important;
+        font-weight: 600 !important;
+        margin-bottom: 2px !important;
+    }
+    
+    body.page-weekly-lineup .kpi-label {
+        font-size: 10px !important;
+        color: rgba(255, 255, 255, 0.6) !important;
+    }
+    
+    /* Show only first 4 KPIs */
+    body.page-weekly-lineup .kpi-tile:nth-child(n+5) {
+        display: none !important;
+    }
+}
+
+/* ============================================
+   TABLE TO CARDS - COMPLETE TRANSFORMATION
+   ============================================ */
+
+@media (max-width: 767px) {
+    /* Remove all table styling */
+    body.page-weekly-lineup .table-container {
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        background: transparent !important;
+        overflow: visible !important;
+    }
+    
+    body.page-weekly-lineup .weekly-lineup-table {
+        display: block !important;
+        width: 100% !important;
+        border: none !important;
+        background: transparent !important;
+    }
+    
+    /* Hide table header completely */
+    body.page-weekly-lineup .weekly-lineup-table thead {
+        display: none !important;
+    }
+    
+    /* Remove colgroup */
+    body.page-weekly-lineup .weekly-lineup-table colgroup {
+        display: none !important;
+    }
+    
+    /* Cards layout for tbody */
+    body.page-weekly-lineup .weekly-lineup-table tbody {
+        display: block !important;
+        padding: 8px !important;
+        background: transparent !important;
+    }
+    
+    /* Each row becomes a card */
+    body.page-weekly-lineup .weekly-lineup-table tbody tr {
+        display: block !important;
+        margin-bottom: 12px !important;
+        padding: 14px !important;
+        background: rgba(12, 25, 48, 0.95) !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        border-radius: 12px !important;
+        position: relative !important;
+        overflow: hidden !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+    }
+    
+    /* Cell as grid item */
+    body.page-weekly-lineup .weekly-lineup-table tbody td {
+        display: grid !important;
+        grid-template-columns: 100px 1fr !important;
+        align-items: center !important;
+        padding: 6px 0 !important;
+        border: none !important;
+        background: transparent !important;
+        font-size: 13px !important;
+        min-height: auto !important;
+        text-align: left !important;
+        overflow: visible !important;
+    }
+    
+    /* Labels for each cell */
+    body.page-weekly-lineup .weekly-lineup-table tbody td::before {
+        content: attr(data-label) !important;
+        font-size: 11px !important;
+        color: rgba(255, 255, 255, 0.5) !important;
+        font-weight: 400 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
+    }
+    
+    /* Hide specific columns entirely on mobile */
+    body.page-weekly-lineup .weekly-lineup-table tbody td:nth-child(1), /* Status icon */
+    body.page-weekly-lineup .weekly-lineup-table tbody td:nth-child(7), /* Sportsbook */
+    body.page-weekly-lineup .weekly-lineup-table tbody td:nth-child(8), /* Amount */
+    body.page-weekly-lineup .weekly-lineup-table tbody td:nth-child(9)  /* Payout */
+    {
+        display: none !important;
+    }
+    
+    /* Special styling for important cells */
+    
+    /* League (2nd) */
+    body.page-weekly-lineup .weekly-lineup-table tbody td:nth-child(2) {
+        grid-column: 1 / -1 !important;
+        font-size: 11px !important;
+        text-transform: uppercase !important;
+        opacity: 0.7 !important;
+        padding-bottom: 8px !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+    }
+    
+    /* Teams (3rd) */
+    body.page-weekly-lineup .weekly-lineup-table tbody td:nth-child(3) {
+        grid-column: 1 / -1 !important;
+        font-size: 14px !important;
+        font-weight: 600 !important;
+        color: #fff !important;
+        padding: 8px 0 !important;
+    }
+    
+    /* Pick (5th) - Make prominent */
+    body.page-weekly-lineup .weekly-lineup-table tbody td:nth-child(5) {
+        grid-column: 1 / -1 !important;
+        padding: 10px !important;
+        margin: 8px 0 !important;
+        background: rgba(0, 255, 170, 0.08) !important;
+        border: 1px solid rgba(0, 255, 170, 0.2) !important;
+        border-radius: 8px !important;
+        font-size: 14px !important;
+        font-weight: 500 !important;
+    }
+    
+    /* Odds (6th) */
+    body.page-weekly-lineup .weekly-lineup-table tbody td:nth-child(6) {
+        font-family: 'Roboto Mono', monospace !important;
+        font-weight: 600 !important;
+        color: #00ffaa !important;
+    }
+    
+    /* Status (10th) */
+    body.page-weekly-lineup .weekly-lineup-table tbody td:nth-child(10) {
+        grid-column: 1 / -1 !important;
+        padding-top: 8px !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.05) !important;
+    }
+    
+    /* Status pill styling */
+    body.page-weekly-lineup .status-pill {
+        display: inline-block !important;
+        padding: 4px 12px !important;
+        border-radius: 12px !important;
+        font-size: 11px !important;
+        font-weight: 600 !important;
+        text-transform: uppercase !important;
+    }
+}
+
+/* ============================================
+   MOBILE-SPECIFIC STATUS COLORS
+   ============================================ */
+
+@media (max-width: 767px) {
+    /* Status-based card borders */
+    body.page-weekly-lineup tr[data-status="won"] {
+        border-left: 3px solid #22c55e !important;
+        background: linear-gradient(90deg, rgba(34, 197, 94, 0.05) 0%, rgba(12, 25, 48, 0.95) 100%) !important;
+    }
+    
+    body.page-weekly-lineup tr[data-status="lost"] {
+        border-left: 3px solid #ef4444 !important;
+        background: linear-gradient(90deg, rgba(239, 68, 68, 0.05) 0%, rgba(12, 25, 48, 0.95) 100%) !important;
+    }
+    
+    body.page-weekly-lineup tr[data-status="pending"] {
+        border-left: 3px solid #6b7280 !important;
+    }
+    
+    body.page-weekly-lineup tr[data-status="on-track"],
+    body.page-weekly-lineup tr[data-status="live"] {
+        border-left: 3px solid #00ffaa !important;
+        animation: pulse-border 2s infinite !important;
+    }
+    
+    @keyframes pulse-border {
+        0%, 100% { border-left-color: #00ffaa; }
+        50% { border-left-color: rgba(0, 255, 170, 0.3); }
+    }
+}
+
+/* ============================================
+   FLOATING ACTION BUTTON
+   ============================================ */
+
+@media (max-width: 767px) {
+    /* Main floating action button */
+    .mobile-fab {
+        position: fixed !important;
+        bottom: 20px !important;
+        right: 20px !important;
+        width: 56px !important;
+        height: 56px !important;
+        border-radius: 50% !important;
+        background: linear-gradient(135deg, #00ffaa 0%, #00d689 100%) !important;
+        border: none !important;
+        box-shadow: 0 4px 12px rgba(0, 255, 170, 0.3) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+        z-index: 500 !important;
+        color: #081121 !important;
+        font-size: 24px !important;
+    }
+    
+    .mobile-fab:active {
+        transform: scale(0.9) !important;
+    }
+}
+
+/* ============================================
+   SIMPLE MOBILE NAVIGATION
+   ============================================ */
+
+@media (max-width: 767px) {
+    /* Bottom navigation bar */
+    .mobile-bottom-nav {
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        height: 56px !important;
+        background: rgba(8, 17, 33, 0.98) !important;
+        border-top: 1px solid rgba(0, 255, 170, 0.1) !important;
+        display: flex !important;
+        justify-content: space-around !important;
+        align-items: center !important;
+        z-index: 400 !important;
+    }
+    
+    .mobile-nav-item {
+        flex: 1 !important;
+        height: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        color: rgba(255, 255, 255, 0.5) !important;
+        text-decoration: none !important;
+        font-size: 10px !important;
+        gap: 4px !important;
+        cursor: pointer !important;
+    }
+    
+    .mobile-nav-item.active {
+        color: #00ffaa !important;
+    }
+    
+    .mobile-nav-item svg,
+    .mobile-nav-item::before {
+        font-size: 20px !important;
+    }
+    
+    /* Add padding to body for bottom nav */
+    body.page-weekly-lineup {
+        padding-bottom: 56px !important;
+    }
+}
+
+/* ============================================
+   TOUCH OPTIMIZATIONS
+   ============================================ */
+
+@media (max-width: 767px) {
+    /* Larger touch targets */
+    body.page-weekly-lineup button,
+    body.page-weekly-lineup a,
+    body.page-weekly-lineup .clickable {
+        min-height: 44px !important;
+        min-width: 44px !important;
+    }
+    
+    /* Remove hover effects on mobile */
+    body.page-weekly-lineup tbody tr:hover {
+        background: inherit !important;
+    }
+    
+    /* Add touch feedback */
+    body.page-weekly-lineup tbody tr:active {
+        transform: scale(0.98) !important;
+        opacity: 0.9 !important;
+    }
+}
+
+/* ============================================
+   PERFORMANCE OPTIMIZATIONS
+   ============================================ */
+
+@media (max-width: 767px) {
+    /* Use GPU acceleration */
+    body.page-weekly-lineup .weekly-lineup-table tbody tr {
+        will-change: transform !important;
+        transform: translateZ(0) !important;
+    }
+    
+    /* Reduce animations on low-end devices */
+    @media (prefers-reduced-motion: reduce) {
+        body.page-weekly-lineup * {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+}
+
+/* ============================================
+   ABSOLUTELY ENSURE MOBILE STYLES WIN
+   ============================================ */
+
+@media (max-width: 767px) {
+    /* Nuclear option - override any conflicting styles */
+    body.page-weekly-lineup * {
+        max-width: 100vw !important;
+    }
+    
+    /* Ensure no horizontal scroll */
+    body.page-weekly-lineup,
+    body.page-weekly-lineup .main-container,
+    body.page-weekly-lineup .main-dashboard-layout {
+        overflow-x: hidden !important;
+    }
+    
+    /* Force mobile layout */
+    body.page-weekly-lineup .weekly-lineup-table,
+    body.page-weekly-lineup .weekly-lineup-table * {
+        display: revert !important;
+    }
+    
+    body.page-weekly-lineup .weekly-lineup-table tbody tr {
+        display: block !important;
+    }
+    
+    body.page-weekly-lineup .weekly-lineup-table tbody td {
+        display: grid !important;
+    }
+}

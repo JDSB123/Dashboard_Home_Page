@@ -1080,6 +1080,26 @@ body.page-weekly-lineup .picks-table tbody tr:hover,
 }
 
 /* Weekly Lineup - Rationale expand/collapse */
+/* CRITICAL: Override overflow:hidden on Pick cell to allow rationale dropdown to display */
+/* Use :has() selector to target TD containing the rationale panel */
+.page-weekly-lineup .weekly-lineup-table td:has(.rationale-panel),
+.page-weekly-lineup .weekly-lineup-table td:has(.pick-cell-wrapper),
+.page-weekly-lineup .weekly-lineup-table tbody td:nth-child(5),
+.page-weekly-lineup .picks-table tbody td:nth-child(5),
+body.page-weekly-lineup .weekly-lineup-table td[data-label="Pick"],
+body.page-weekly-lineup .weekly-lineup-table td[data-label="Recommended Pick"],
+body.page-weekly-lineup td[data-label="Recommended Pick"],
+body.page-weekly-lineup td[data-label="Pick"] {
+    overflow: visible !important;
+}
+
+/* Also ensure table rows don't clip the dropdown */
+.page-weekly-lineup .weekly-lineup-table tbody tr,
+body.page-weekly-lineup .weekly-lineup-table tbody tr,
+body.page-weekly-lineup .picks-table tbody tr {
+    overflow: visible !important;
+}
+
 .page-weekly-lineup .pick-cell-wrapper {
     position: relative;
     display: inline-block;

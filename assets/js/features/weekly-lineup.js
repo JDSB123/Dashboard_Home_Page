@@ -2230,6 +2230,28 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             btn.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
             panel.hidden = isOpen;
             btn.textContent = isOpen ? 'Details' : 'Hide';
+
+            // CRITICAL FIX: Force overflow visible on parent TD and TR when panel is open
+            // This overrides any CSS that might be clipping the dropdown
+            const parentTd = panel.closest('td');
+            const parentTr = panel.closest('tr');
+            if (!isOpen) {
+                // Opening the panel - force overflow visible
+                if (parentTd) {
+                    parentTd.style.overflow = 'visible';
+                }
+                if (parentTr) {
+                    parentTr.style.overflow = 'visible';
+                }
+            } else {
+                // Closing the panel - restore default (let CSS handle it)
+                if (parentTd) {
+                    parentTd.style.overflow = '';
+                }
+                if (parentTr) {
+                    parentTr.style.overflow = '';
+                }
+            }
         });
     }
 
