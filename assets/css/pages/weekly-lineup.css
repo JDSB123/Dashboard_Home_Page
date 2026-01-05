@@ -5447,6 +5447,11 @@ body.page-weekly-lineup .brand-header-inline {
         min-width: 0;
         max-width: none;
     }
+
+    /* Drop hard colgroup widths on tablet to avoid squeezing columns */
+    body.page-weekly-lineup .weekly-lineup-table col {
+        width: auto !important;
+    }
 }
 
 /* Phone: 480px - 767px */
@@ -5488,6 +5493,15 @@ body.page-weekly-lineup .brand-header-inline {
     /* Hide Track column on phones */
     body.page-weekly-lineup .weekly-lineup-table th:nth-child(8),
     body.page-weekly-lineup .weekly-lineup-table td:nth-child(8) {
+        display: none;
+    }
+
+    /* Remove colgroup widths and hide Track col element */
+    body.page-weekly-lineup .weekly-lineup-table col {
+        width: auto !important;
+    }
+
+    body.page-weekly-lineup .weekly-lineup-table col:nth-child(8) {
         display: none;
     }
 
@@ -5588,6 +5602,67 @@ body.page-weekly-lineup .brand-header-inline {
     body.page-weekly-lineup .weekly-lineup-table td:nth-child(7) {
         display: none;
     }
+
+    /* Ensure colgroup matches hidden columns */
+    body.page-weekly-lineup .weekly-lineup-table col:nth-child(4),
+    body.page-weekly-lineup .weekly-lineup-table col:nth-child(7),
+    body.page-weekly-lineup .weekly-lineup-table col:nth-child(8) {
+        display: none;
+    }
+
+    body.page-weekly-lineup .weekly-lineup-table col {
+        width: auto !important;
+    }
+
+    /* Card-style rows for very small screens */
+    body.page-weekly-lineup .weekly-lineup-table {
+        min-width: 0;
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+    body.page-weekly-lineup .weekly-lineup-table thead {
+        display: none;
+    }
+
+    body.page-weekly-lineup .weekly-lineup-table tbody tr {
+        display: block;
+        margin-bottom: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        background: rgba(0, 0, 0, 0.28);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
+        overflow: hidden;
+    }
+
+    body.page-weekly-lineup .weekly-lineup-table tbody td {
+        display: grid;
+        grid-template-columns: 110px 1fr;
+        gap: 8px;
+        align-items: start;
+        padding: 10px 12px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        line-height: 1.3;
+    }
+
+    body.page-weekly-lineup .weekly-lineup-table tbody td:last-child {
+        border-bottom: none;
+    }
+
+    body.page-weekly-lineup .weekly-lineup-table tbody td::before {
+        font-weight: 600;
+        font-size: 10px;
+        letter-spacing: 0.03em;
+        color: #8fd8ff;
+        text-transform: uppercase;
+    }
+
+    body.page-weekly-lineup .weekly-lineup-table tbody td:nth-child(1)::before { content: 'Date/Time'; }
+    body.page-weekly-lineup .weekly-lineup-table tbody td:nth-child(2)::before { content: 'League'; }
+    body.page-weekly-lineup .weekly-lineup-table tbody td:nth-child(3)::before { content: 'Matchup'; }
+    body.page-weekly-lineup .weekly-lineup-table tbody td:nth-child(5)::before { content: 'Pick'; }
+    body.page-weekly-lineup .weekly-lineup-table tbody td:nth-child(6)::before { content: 'Edge'; }
 
     /* Smaller header text */
     body.page-weekly-lineup .weekly-lineup-table .header-main-text {

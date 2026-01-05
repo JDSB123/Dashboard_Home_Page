@@ -1,0 +1,49 @@
+{
+  "subscriptionId": "YOUR_SUBSCRIPTION_ID",
+  "resourceGroup": "dashboard-gbsv-main-rg",
+  "environment": "production",
+  "location": "eastus",
+  "orchestrator": {
+    "name": "gbsv-orchestrator",
+    "containerAppEnvironment": "gbsv-aca-env",
+    "storageAccount": "gbsvorchestratorstorage",
+    "registryTable": "modelregistry",
+    "executionsTable": "modelexecutions"
+  },
+  "signalr": {
+    "name": "gbsv-signalr",
+    "sku": "Free_F1",
+    "serviceMode": "Serverless"
+  },
+  "monitoring": {
+    "appInsights": "gbsv-orchestrator-insights",
+    "logAnalytics": "gbsv-logs",
+    "alertActionGroup": "gbsv-alerts"
+  },
+  "models": {
+    "nba": {
+      "resourceGroup": "nba-gbsv-model-rg",
+      "containerApp": "nba-gbsv-api",
+      "endpoint": "https://nba-gbsv-api.livelycoast-b48c3cb0.eastus.azurecontainerapps.io"
+    },
+    "ncaam": {
+      "resourceGroup": "ncaam-gbsv-model-rg",
+      "containerApp": "ncaam-stable-prediction",
+      "endpoint": "https://ncaam-stable-prediction.wonderfulforest-c2d7d49a.centralus.azurecontainerapps.io"
+    },
+    "nfl": {
+      "resourceGroup": "nfl-gbsv-model-rg",
+      "containerApp": "nfl-api",
+      "endpoint": "https://nfl-api.purplegrass-5889a981.eastus.azurecontainerapps.io"
+    },
+    "ncaaf": {
+      "resourceGroup": "ncaaf-gbsv-model-rg",
+      "containerApp": "ncaaf-v5-prod",
+      "endpoint": "https://ncaaf-v5-prod.salmonwave-314d4ffe.eastus.azurecontainerapps.io"
+    }
+  },
+  "dashboard": {
+    "url": "https://wittypebble-41c11c65.eastus.azurestaticapps.net",
+    "staticWebApp": "Dashboard-Home-Page"
+  }
+}
