@@ -882,39 +882,26 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             marketDisplay = `${teamAbbr} ${escapeHtml(pick.line || '')}`;
         }
         
-        // Build comparison section - only show real data, no placeholders
+        // Build comparison section - horizontal header row
         const hasModelLine = modelLineRaw || modelTotal;
         const hasMarketLine = pick.line;
         
-        // Clean, vertical layout for Model/Market/Edge
-        let comparisonHtml = '<div class="details-grid">';
-        
-        // Model prediction row - only if we have real data
-        if (hasModelLine) {
-            comparisonHtml += `
-                <div class="details-item">
-                    <span class="details-key">Model</span>
-                    <span class="details-val model-val">${modelLineRaw || modelTotal}</span>
-                </div>`;
-        }
-        
-        // Market line row - only if we have real data
-        if (hasMarketLine) {
-            comparisonHtml += `
-                <div class="details-item">
-                    <span class="details-key">Market</span>
-                    <span class="details-val market-val">${pick.line} <span class="odds-tag">${pickOdds}</span></span>
-                </div>`;
-        }
-        
-        // Edge - always show since it's the key metric
-        comparisonHtml += `
-            <div class="details-item edge-item">
-                <span class="details-key">Edge</span>
-                <span class="details-val edge-val">+${edgeValue}%</span>
+        // Single row: Model vs Market vs Edge
+        let comparisonHtml = `
+            <div class="details-header">
+                <div class="details-col">
+                    <span class="details-label">Model</span>
+                    <span class="details-val model-val">${hasModelLine ? (modelLineRaw || modelTotal) : '-'}</span>
+                </div>
+                <div class="details-col">
+                    <span class="details-label">Market</span>
+                    <span class="details-val market-val">${hasMarketLine ? pick.line : '-'} <span class="odds-tag">${pickOdds}</span></span>
+                </div>
+                <div class="details-col">
+                    <span class="details-label">Edge</span>
+                    <span class="details-val edge-val">+${edgeValue}%</span>
+                </div>
             </div>`;
-        
-        comparisonHtml += '</div>';
         
         // Format rationale - clean bullet points, left-aligned
         const formatRationale = (text) => {
