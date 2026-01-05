@@ -1775,25 +1775,31 @@ body.page-active-picks .toolbar-container.toolbar-layout {
 
 /* Delete Pick Button */
 .delete-pick-btn {
-    background: rgba(255, 107, 107, 0.1);
-    border: 1px solid rgba(255, 107, 107, 0.3);
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 71, 87, 0.15);
+    border: 1px solid rgba(255, 71, 87, 0.4);
     border-radius: 4px;
-    color: rgba(255, 107, 107, 0.7);
-    font-size: 0.75rem;
-    font-weight: 600;
+    color: #ff6b6b;
+    font-size: 14px;
+    font-weight: 700;
     cursor: pointer;
-    padding: 3px 8px;
-    margin-left: 8px;
+    padding: 4px 10px;
+    margin-left: 10px;
     transition: all 0.2s ease;
     line-height: 1;
     vertical-align: middle;
+    min-width: 24px;
+    min-height: 24px;
 }
 
 .delete-pick-btn:hover {
-    background: rgba(255, 107, 107, 0.2);
-    border-color: rgba(255, 107, 107, 0.6);
-    color: #ff6b6b;
-    transform: scale(1.05);
+    background: rgba(255, 71, 87, 0.3);
+    border-color: rgba(255, 71, 87, 0.8);
+    color: #ff4757;
+    transform: scale(1.1);
+    box-shadow: 0 0 8px rgba(255, 71, 87, 0.4);
 }
 
 .delete-pick-btn:active {
