@@ -1797,10 +1797,13 @@ function buildPickRow(pick, index) {
             <span class="hitmiss-badge hitmiss-${outcome.key}">${outcome.label}</span>
         </td>
         <td class="center">
-            ${outcome.amount === null
-                ? '<span class="profit-amount profit-neutral">—</span>'
-                : `<span class="profit-amount ${outcome.amountClass}">${formatSignedCurrency(outcome.amount)}</span>`
-            }
+            <div class="won-lost-cell">
+                ${outcome.amount === null
+                    ? '<span class="profit-amount profit-neutral">—</span>'
+                    : `<span class="profit-amount ${outcome.amountClass}">${formatSignedCurrency(outcome.amount)}</span>`
+                }
+                <button class="delete-pick-btn" data-pick-index="${index}" title="Remove pick">✕</button>
+            </div>
         </td>
     `;
 
@@ -2119,12 +2122,54 @@ if (document.readyState === 'loading') {
         if (recordsPromise && typeof recordsPromise.catch === 'function') {
             recordsPromise.catch(error => console.warn('[RECORDS] Initial team records load failed:', error));
         }
+        initializeDeleteButtons();
     });
 } else {
     const recordsPromise = loadTeamRecords();
     if (recordsPromise && typeof recordsPromise.catch === 'function') {
         recordsPromise.catch(error => console.warn('[RECORDS] Initial team records load failed:', error));
     }
+    initializeDeleteButtons();
+}
+
+// Initialize delete button handlers using event delegation
+function initializeDeleteButtons() {
+    const tbody = document.getElementById('picks-tbody');
+    if (!tbody) return;
+    
+    tbody.addEventListener('click', (e) => {
+        const deleteBtn = e.target.closest('.delete-pick-btn');
+        if (!deleteBtn) return;
+        
+        e.stopPropagation();
+        
+        const row = deleteBtn.closest('tr');
+        if (!row) return;
+        
+        // Confirm deletion
+        if (confirm('Remove this pick from the dashboard?')) {
+            // Try LocalPicksManager first
+            const pickIndex = deleteBtn.dataset.pickIndex;
+            if (window.LocalPicksManager && pickIndex !== undefined) {
+                // Get pick ID from row or index
+                const picks = window.LocalPicksManager.getAll ? window.LocalPicksManager.getAll() : [];
+                if (picks[pickIndex] && picks[pickIndex].id) {
+                    window.LocalPicksManager.delete(picks[pickIndex].id);
+                }
+            }
+            
+            // Remove row from DOM
+            row.remove();
+            console.log('[PICKS] Removed pick at index:', pickIndex);
+            
+            // Update KPI tiles if available
+            if (window.KPICalculator && window.KPICalculator.recalculateLiveKPI) {
+                window.KPICalculator.recalculateLiveKPI();
+            }
+        }
+    });
+    
+    console.log('[PICKS] Delete button handlers initialized');
 }
 
 if (globalScope) {

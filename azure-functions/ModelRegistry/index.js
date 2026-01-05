@@ -63,14 +63,22 @@ module.exports = async function (context, req) {
             // Return current model registry
             const registry = {};
             
-            const entities = tableClient.listEntities();
-            for await (const entity of entities) {
-                registry[entity.partitionKey] = {
-                    version: entity.version,
-                    endpoint: entity.endpoint,
-                    lastUpdated: entity.lastUpdated,
-                    healthy: entity.healthy !== false
-                };
+            try {
+                const entities = tableClient.listEntities();
+                for await (const entity of entities) {
+                    const modelKey = entity.partitionKey?.toLowerCase();
+                    if (modelKey && entity.endpoint) {
+                        registry[modelKey] = {
+                            version: entity.version || '1.0.0',
+                            endpoint: entity.endpoint,
+                            lastUpdated: entity.lastUpdated || entity.Timestamp || new Date().toISOString(),
+                            healthy: entity.healthy !== false
+                        };
+                        context.log(`[ModelRegistry] Found registry entry for ${modelKey}: ${entity.endpoint}`);
+                    }
+                }
+            } catch (err) {
+                context.log.warn('[ModelRegistry] Error reading from table, using defaults:', err.message);
             }
 
             // Include default endpoints for models not in registry
@@ -80,8 +88,12 @@ module.exports = async function (context, req) {
                         version: '1.0.0',
                         endpoint: endpoint,
                         lastUpdated: new Date().toISOString(),
-                        healthy: true
+                        healthy: true,
+                        source: 'default'
                     };
+                    context.log(`[ModelRegistry] Using default endpoint for ${model}: ${endpoint}`);
+                } else {
+                    registry[model].source = 'registry';
                 }
             }
 
