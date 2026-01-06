@@ -137,11 +137,15 @@ function calculateKPIs(picks) {
     const totalDecided = kpis.wins + kpis.losses;
     if (totalDecided > 0) {
         kpis.winPercentage = ((kpis.wins / totalDecided) * 100).toFixed(1);
+    } else {
+        kpis.winPercentage = '0.0';
     }
 
     // Calculate ROE (Return on Equity)
     if (kpis.totalRisk > 0) {
         kpis.roePercentage = ((kpis.netProfit / kpis.totalRisk) * 100).toFixed(1);
+    } else {
+        kpis.roePercentage = '0.0';
     }
 
     // Calculate streak

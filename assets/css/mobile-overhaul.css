@@ -1,0 +1,714 @@
+/**
+ * Mobile Experience Overhaul v1.0
+ * Complete redesign for mobile devices
+ * Priority: User experience, readability, and touch interaction
+ */
+
+/* ============================================
+   MOBILE-FIRST RESET & FOUNDATION
+   ============================================ */
+
+/* Prevent all horizontal overflow issues */
+@media (max-width: 1024px) {
+    html {
+        overflow-x: hidden !important;
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+    }
+    
+    body {
+        overflow-x: hidden !important;
+        width: 100vw !important;
+        position: relative;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+    
+    /* Remove all excessive padding/margins */
+    * {
+        max-width: 100vw !important;
+    }
+    
+    /* Exception for scrollable tables */
+    .table-scroll-wrapper {
+        max-width: none !important;
+    }
+}
+
+/* ============================================
+   MOBILE NAVIGATION REDESIGN
+   ============================================ */
+
+@media (max-width: 767px) {
+    /* Fixed mobile header */
+    .brand-nav {
+        position: fixed !important;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 56px;
+        background: linear-gradient(180deg, 
+            rgba(8, 17, 33, 0.98) 0%, 
+            rgba(8, 17, 33, 0.95) 100%);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(0, 255, 170, 0.15);
+        z-index: 1000;
+        padding: 0 16px !important;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    /* Hamburger menu button */
+    .mobile-nav-toggle {
+        display: flex !important;
+        width: 40px;
+        height: 40px;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        position: relative;
+    }
+    
+    .mobile-nav-toggle::before {
+        content: '☰';
+        font-size: 24px;
+        color: #00ffaa;
+    }
+    
+    /* Mobile slide-out menu */
+    .nav-links {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 85%;
+        max-width: 320px;
+        height: 100vh;
+        background: linear-gradient(135deg, 
+            rgba(8, 17, 33, 0.99) 0%, 
+            rgba(12, 25, 48, 0.97) 100%);
+        backdrop-filter: blur(30px);
+        z-index: 1001;
+        padding: 80px 0 20px;
+        overflow-y: auto;
+        transition: left 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        box-shadow: 2px 0 25px rgba(0, 0, 0, 0.5);
+    }
+    
+    .nav-links.active {
+        left: 0;
+    }
+    
+    /* Mobile menu overlay */
+    .nav-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.6);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        z-index: 999;
+    }
+    
+    .nav-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+    
+    /* Mobile nav items */
+    .nav-links li {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    
+    .nav-link {
+        display: block;
+        padding: 18px 24px;
+        font-size: 16px;
+        color: #fff;
+        transition: all 0.2s ease;
+    }
+    
+    .nav-link:active {
+        background: rgba(0, 255, 170, 0.1);
+        transform: scale(0.98);
+    }
+}
+
+/* ============================================
+   CONTENT SPACING FOR FIXED HEADER
+   ============================================ */
+
+@media (max-width: 767px) {
+    body.page-weekly-lineup .main-container,
+    body.page-active-picks .main-container {
+        margin-top: 72px !important; /* Account for fixed header */
+        padding: 0 !important;
+    }
+}
+
+/* ============================================
+   MOBILE-OPTIMIZED CARD LAYOUT
+   ============================================ */
+
+@media (max-width: 640px) {
+    /* Remove table layout completely on mobile */
+    .weekly-lineup-table {
+        display: block !important;
+        width: 100% !important;
+        background: transparent !important;
+    }
+    
+    .weekly-lineup-table thead {
+        display: none !important;
+    }
+    
+    .weekly-lineup-table tbody {
+        display: block !important;
+        padding: 12px;
+    }
+    
+    /* Transform rows into cards */
+    .weekly-lineup-table tbody tr {
+        display: block !important;
+        margin-bottom: 16px !important;
+        background: linear-gradient(135deg, 
+            rgba(20, 30, 50, 0.95) 0%, 
+            rgba(15, 25, 40, 0.92) 100%);
+        border: 1px solid rgba(0, 255, 170, 0.2);
+        border-radius: 16px !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+        position: relative;
+        padding: 0 !important;
+    }
+    
+    /* Status indicator bar at top of card */
+    .weekly-lineup-table tbody tr::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #00ffaa, #00d689);
+    }
+    
+    .weekly-lineup-table tbody tr[data-status="win"]::before {
+        background: linear-gradient(90deg, #00ff88, #00cc66);
+    }
+    
+    .weekly-lineup-table tbody tr[data-status="loss"]::before,
+    .weekly-lineup-table tbody tr[data-status="lost"]::before {
+        background: linear-gradient(90deg, #ff4444, #cc3333);
+    }
+    
+    .weekly-lineup-table tbody tr[data-status="pending"]::before {
+        background: linear-gradient(90deg, #888, #666);
+    }
+    
+    .weekly-lineup-table tbody tr[data-status="on-track"]::before {
+        background: linear-gradient(90deg, #00aaff, #0088cc);
+        animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.6; }
+    }
+    
+    /* Remove all table cell styles */
+    .weekly-lineup-table tbody td {
+        display: block !important;
+        border: none !important;
+        padding: 0 !important;
+        background: transparent !important;
+        width: 100% !important;
+    }
+    
+    /* Hide less important cells on mobile */
+    .weekly-lineup-table tbody td:nth-child(4), /* Segment */
+    .weekly-lineup-table tbody td:nth-child(7), /* Fire */
+    .weekly-lineup-table tbody td:nth-child(8), /* Track */
+    .weekly-lineup-table tbody td:nth-child(10) /* H/M */
+    {
+        display: none !important;
+    }
+}
+
+/* ============================================
+   MOBILE CARD CONTENT LAYOUT
+   ============================================ */
+
+@media (max-width: 640px) {
+    /* Card header: Date/Time + League */
+    .weekly-lineup-table tbody td:nth-child(1) {
+        padding: 12px 16px 8px !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    }
+    
+    .weekly-lineup-table tbody td:nth-child(1) .datetime-cell {
+        display: flex;
+        flex-direction: row;
+        gap: 12px;
+        align-items: center;
+    }
+    
+    .weekly-lineup-table tbody td:nth-child(1) .cell-date {
+        font-size: 13px;
+        font-weight: 600;
+        color: #00ffaa;
+    }
+    
+    .weekly-lineup-table tbody td:nth-child(1) .cell-time {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.7);
+    }
+    
+    /* League badge */
+    .weekly-lineup-table tbody td:nth-child(2) {
+        position: absolute !important;
+        top: 12px;
+        right: 16px;
+        padding: 0 !important;
+        width: auto !important;
+    }
+    
+    .weekly-lineup-table tbody td:nth-child(2) .league-cell {
+        background: rgba(0, 255, 170, 0.15);
+        padding: 4px 10px;
+        border-radius: 12px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+    
+    .weekly-lineup-table tbody td:nth-child(2) .league-logo {
+        width: 16px !important;
+        height: 16px !important;
+    }
+    
+    .weekly-lineup-table tbody td:nth-child(2) .league-text {
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+    
+    /* Matchup section */
+    .weekly-lineup-table tbody td:nth-child(3) {
+        padding: 12px 16px !important;
+    }
+    
+    .weekly-lineup-table tbody td:nth-child(3) .matchup-cell {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 8px !important;
+    }
+    
+    .weekly-lineup-table tbody td:nth-child(3) .team-line {
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+    }
+    
+    .weekly-lineup-table tbody td:nth-child(3) .team-logo {
+        width: 32px !important;
+        height: 32px !important;
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    }
+    
+    .weekly-lineup-table tbody td:nth-child(3) .team-name-full {
+        font-size: 14px;
+        font-weight: 500;
+    }
+    
+    .weekly-lineup-table tbody td:nth-child(3) .vs-divider {
+        text-align: center;
+        color: rgba(255, 255, 255, 0.4);
+        font-size: 11px;
+        margin: 2px 0;
+    }
+    
+    /* Pick section */
+    .weekly-lineup-table tbody td:nth-child(5) {
+        padding: 12px 16px !important;
+        background: rgba(0, 0, 0, 0.2);
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    
+    .weekly-lineup-table tbody td:nth-child(5) .pick-cell {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+    }
+    
+    .weekly-lineup-table tbody td:nth-child(5) .pick-team-info {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .weekly-lineup-table tbody td:nth-child(5) .pick-team-logo {
+        width: 24px !important;
+        height: 24px !important;
+    }
+    
+    .weekly-lineup-table tbody td:nth-child(5) .pick-details {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 14px;
+        font-weight: 600;
+    }
+    
+    /* Edge/Risk section */
+    .weekly-lineup-table tbody td:nth-child(6) {
+        padding: 8px 16px !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        background: rgba(0, 255, 170, 0.05);
+    }
+    
+    .weekly-lineup-table tbody td:nth-child(6)::before {
+        content: 'Risk/Win:';
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.5);
+        text-transform: uppercase;
+    }
+    
+    /* Status section */
+    .weekly-lineup-table tbody td:nth-child(9) {
+        padding: 12px 16px !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    
+    /* PnL section */
+    .weekly-lineup-table tbody td:nth-child(11) {
+        padding: 12px 16px !important;
+        background: rgba(0, 0, 0, 0.3);
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        font-size: 16px;
+        font-weight: 700;
+    }
+    
+    .weekly-lineup-table tbody td:nth-child(11)::before {
+        content: 'P/L:';
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.5);
+        font-weight: 400;
+    }
+    
+    .weekly-lineup-table tbody td:nth-child(11) .profit-positive {
+        color: #00ff88;
+    }
+    
+    .weekly-lineup-table tbody td:nth-child(11) .profit-negative {
+        color: #ff4466;
+    }
+}
+
+/* ============================================
+   MOBILE FILTER BAR
+   ============================================ */
+
+@media (max-width: 767px) {
+    .filter-toolbar {
+        position: sticky;
+        top: 56px; /* Below fixed header */
+        background: linear-gradient(180deg, 
+            rgba(8, 17, 33, 0.98) 0%, 
+            rgba(8, 17, 33, 0.95) 100%);
+        backdrop-filter: blur(20px);
+        z-index: 100;
+        padding: 8px !important;
+        margin: 0 !important;
+        border-bottom: 1px solid rgba(0, 255, 170, 0.1);
+        display: flex !important;
+        gap: 8px !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+    
+    .filter-toolbar::-webkit-scrollbar {
+        display: none;
+    }
+    
+    /* Compact filter pills */
+    .ft-pill {
+        padding: 8px 14px !important;
+        font-size: 12px !important;
+        white-space: nowrap !important;
+        border-radius: 20px !important;
+        background: rgba(0, 255, 170, 0.1) !important;
+        border: 1px solid rgba(0, 255, 170, 0.3) !important;
+        min-height: 36px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        flex-shrink: 0 !important;
+    }
+    
+    .ft-pill.active {
+        background: rgba(0, 255, 170, 0.25) !important;
+        border-color: #00ffaa !important;
+    }
+    
+    /* Dropdown buttons */
+    .ft-dropdown-btn {
+        padding: 8px 12px !important;
+        font-size: 12px !important;
+        min-height: 36px !important;
+    }
+}
+
+/* ============================================
+   MOBILE KPI TILES
+   ============================================ */
+
+@media (max-width: 640px) {
+    .kpi-tiles {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px !important;
+        padding: 12px !important;
+        margin: 0 !important;
+    }
+    
+    .kpi-tile {
+        background: linear-gradient(135deg, 
+            rgba(20, 30, 50, 0.9) 0%, 
+            rgba(15, 25, 40, 0.85) 100%);
+        border: 1px solid rgba(0, 255, 170, 0.2);
+        border-radius: 12px !important;
+        padding: 12px !important;
+        min-height: 70px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
+    }
+    
+    .kpi-label {
+        font-size: 10px !important;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: rgba(255, 255, 255, 0.6);
+        margin-bottom: 4px;
+    }
+    
+    .kpi-value {
+        font-size: 20px !important;
+        font-weight: 700;
+        color: #00ffaa;
+    }
+    
+    .kpi-subtext {
+        font-size: 10px !important;
+        color: rgba(255, 255, 255, 0.4);
+        margin-top: 2px;
+    }
+}
+
+/* ============================================
+   MOBILE TOUCH ENHANCEMENTS
+   ============================================ */
+
+@media (hover: none) and (pointer: coarse) {
+    /* Larger touch targets */
+    button, .btn, a {
+        min-height: 44px !important;
+        min-width: 44px !important;
+    }
+    
+    /* Better touch feedback */
+    button:active, .btn:active, a:active {
+        transform: scale(0.95);
+        opacity: 0.8;
+    }
+    
+    /* Disable hover effects on touch */
+    *:hover {
+        transform: none !important;
+    }
+    
+    /* Smooth scrolling */
+    * {
+        -webkit-overflow-scrolling: touch !important;
+    }
+    
+    /* Prevent text selection on UI elements */
+    button, .btn, .nav-link, .kpi-tile, .ft-pill {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+}
+
+/* ============================================
+   MOBILE LOADING STATES
+   ============================================ */
+
+@media (max-width: 640px) {
+    /* Loading skeleton for cards */
+    .weekly-lineup-table tbody tr.loading {
+        min-height: 180px;
+        background: linear-gradient(90deg, 
+            rgba(20, 30, 50, 0.9) 0%, 
+            rgba(25, 35, 55, 0.9) 50%, 
+            rgba(20, 30, 50, 0.9) 100%);
+        background-size: 200% 100%;
+        animation: shimmer 1.5s infinite;
+    }
+    
+    @keyframes shimmer {
+        0% { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
+    }
+}
+
+/* ============================================
+   MOBILE BOTTOM NAVIGATION (Optional)
+   ============================================ */
+
+@media (max-width: 640px) {
+    /* Fixed bottom nav for key actions */
+    .mobile-bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 56px;
+        background: linear-gradient(180deg, 
+            rgba(8, 17, 33, 0.95) 0%, 
+            rgba(8, 17, 33, 0.98) 100%);
+        border-top: 1px solid rgba(0, 255, 170, 0.15);
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        z-index: 900;
+        padding: 0 8px;
+    }
+    
+    .mobile-bottom-nav .nav-item {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 10px;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+    
+    .mobile-bottom-nav .nav-item.active {
+        color: #00ffaa;
+    }
+    
+    .mobile-bottom-nav .nav-item:active {
+        transform: scale(0.95);
+    }
+    
+    /* Add padding to account for bottom nav */
+    .main-container {
+        padding-bottom: 72px !important;
+    }
+}
+
+/* ============================================
+   MOBILE PERFORMANCE OPTIMIZATIONS
+   ============================================ */
+
+@media (max-width: 640px) {
+    /* Reduce shadows and effects for better performance */
+    * {
+        text-shadow: none !important;
+    }
+    
+    /* Optimize animations */
+    * {
+        animation-duration: 0.3s !important;
+        transition-duration: 0.2s !important;
+    }
+    
+    /* Reduce backdrop blur on low-end devices */
+    @supports not (backdrop-filter: blur(10px)) {
+        .brand-nav,
+        .filter-toolbar,
+        .nav-links {
+            background: rgba(8, 17, 33, 0.98) !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+        }
+    }
+}
+
+/* ============================================
+   IOS SAFE AREAS
+   ============================================ */
+
+@supports (padding: env(safe-area-inset-top)) {
+    .brand-nav {
+        padding-top: env(safe-area-inset-top);
+        height: calc(56px + env(safe-area-inset-top));
+    }
+    
+    .filter-toolbar {
+        top: calc(56px + env(safe-area-inset-top));
+    }
+    
+    body.page-weekly-lineup .main-container,
+    body.page-active-picks .main-container {
+        margin-top: calc(72px + env(safe-area-inset-top)) !important;
+    }
+    
+    .mobile-bottom-nav {
+        padding-bottom: env(safe-area-inset-bottom);
+        height: calc(56px + env(safe-area-inset-bottom));
+    }
+}
+
+/* ============================================
+   LANDSCAPE MOBILE ADJUSTMENTS
+   ============================================ */
+
+@media (max-width: 767px) and (orientation: landscape) {
+    .brand-nav {
+        height: 48px;
+    }
+    
+    .filter-toolbar {
+        top: 48px;
+    }
+    
+    body.page-weekly-lineup .main-container,
+    body.page-active-picks .main-container {
+        margin-top: 60px !important;
+    }
+    
+    .kpi-tiles {
+        grid-template-columns: repeat(4, 1fr) !important;
+    }
+    
+    .weekly-lineup-table tbody td:nth-child(3) .team-logo {
+        width: 28px !important;
+        height: 28px !important;
+    }
+}

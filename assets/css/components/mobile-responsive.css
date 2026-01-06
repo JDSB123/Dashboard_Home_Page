@@ -1,6 +1,7 @@
 /**
- * Mobile Responsiveness Enhancements
+ * Mobile Responsiveness Enhancements v2.0
  * Optimizes layout and interactions for mobile devices
+ * Includes: Hamburger menu, responsive tables, touch improvements
  */
 
 /* ===== MOBILE BREAKPOINTS ===== */
@@ -8,6 +9,82 @@
 /* Phones: 480px - 767px */
 /* Tablets: 768px - 1024px */
 /* Desktop: > 1024px */
+
+/* ===== HAMBURGER MENU ===== */
+.mobile-menu-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 10px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 10002;
+    position: relative;
+}
+
+.mobile-menu-toggle span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: #00ffaa;
+    border-radius: 2px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.mobile-menu-toggle span::before,
+.mobile-menu-toggle span::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 22px;
+    height: 2px;
+    background: #00ffaa;
+    border-radius: 2px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mobile-menu-toggle span::before {
+    top: -7px;
+}
+
+.mobile-menu-toggle span::after {
+    top: 7px;
+}
+
+/* Hamburger to X animation */
+.mobile-menu-toggle.active span {
+    background: transparent;
+}
+
+.mobile-menu-toggle.active span::before {
+    top: 0;
+    transform: rotate(45deg);
+}
+
+.mobile-menu-toggle.active span::after {
+    top: 0;
+    transform: rotate(-45deg);
+}
+
+/* Mobile menu overlay */
+.mobile-menu-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 9998;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.mobile-menu-overlay.active {
+    opacity: 1;
+}
 
 /* ===== CRITICAL MOBILE FIXES - PREVENT FRAGMENTATION ===== */
 
@@ -18,6 +95,13 @@
         width: 100% !important;
         max-width: 100vw !important;
         position: relative;
+    }
+    
+    /* Fix background attachment jank on mobile */
+    body.page-active-picks,
+    body.page-weekly-lineup,
+    body.page-odds-market {
+        background-attachment: scroll !important;
     }
     
     /* Constrain main container to viewport - OVERRIDE 0.75in padding */
@@ -76,6 +160,36 @@
         overflow-x: auto !important;
         -webkit-overflow-scrolling: touch;
         box-sizing: border-box !important;
+        position: relative;
+    }
+    
+    /* Add scroll shadow indicators for tables */
+    .table-container::before,
+    .table-container::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 20px;
+        pointer-events: none;
+        z-index: 10;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    
+    .table-container::before {
+        left: 0;
+        background: linear-gradient(to right, rgba(0, 0, 0, 0.3), transparent);
+    }
+    
+    .table-container::after {
+        right: 0;
+        background: linear-gradient(to left, rgba(0, 0, 0, 0.3), transparent);
+    }
+    
+    .table-container.scroll-right::after,
+    .table-container.scroll-left::before {
+        opacity: 1;
     }
     
     /* Fix dashboard topline */
@@ -110,6 +224,13 @@
     .picks-table {
         max-width: none !important;
     }
+    
+    /* Toolbar layout adjustments */
+    .toolbar-layout {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        width: 100% !important;
+    }
 }
 
 /* Additional fixes for small phones */
@@ -130,21 +251,136 @@
     }
 }
 
+/* ===== WEEKLY LINEUP PAGE MOBILE FIXES ===== */
+/* Reduce the large margin-top that shows the bear on desktop */
+@media (max-width: 1024px) {
+    body.page-weekly-lineup .main-container {
+        margin-top: 180px !important; /* Reduced from 376px */
+    }
+}
+
+@media (max-width: 767px) {
+    body.page-weekly-lineup .main-container {
+        margin-top: 100px !important; /* Much smaller on phones */
+    }
+    
+    /* Compact brand header on weekly lineup */
+    body.page-weekly-lineup .brand-header-inline {
+        gap: 10px;
+    }
+    
+    body.page-weekly-lineup .brand-logo-inline {
+        width: 50px !important;
+        height: 50px !important;
+    }
+    
+    body.page-weekly-lineup .brand-line-1 {
+        font-size: 1.25rem !important;
+    }
+    
+    body.page-weekly-lineup .brand-line-2 {
+        font-size: 0.875rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    body.page-weekly-lineup .main-container {
+        margin-top: 60px !important; /* Minimal on small phones */
+    }
+    
+    body.page-weekly-lineup .brand-logo-inline {
+        width: 40px !important;
+        height: 40px !important;
+    }
+}
+
 /* ===== NAVIGATION MOBILE ===== */
 
 @media (max-width: 767px) {
-    .brand-nav {
-        padding: 12px;
+    /* Show hamburger menu toggle */
+    .mobile-menu-toggle {
+        display: flex;
+        order: -1;
+        margin-right: auto;
     }
     
-    .nav-links {
+    .mobile-menu-overlay {
+        display: block;
+        pointer-events: none;
+    }
+    
+    .mobile-menu-overlay.active {
+        pointer-events: auto;
+    }
+    
+    .brand-nav {
+        padding: 12px;
         flex-wrap: wrap;
-        gap: 8px;
+    }
+    
+    /* Mobile nav drawer */
+    .nav-links {
+        position: fixed;
+        top: 0;
+        left: -280px;
+        width: 280px;
+        height: 100vh;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        padding: 80px 20px 20px;
+        background: rgba(8, 17, 33, 0.98);
+        -webkit-backdrop-filter: blur(20px);
+        backdrop-filter: blur(20px);
+        border-right: 1px solid rgba(0, 214, 137, 0.25);
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.5);
+        z-index: 9999;
+        gap: 0;
+        overflow-y: auto;
+        transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .nav-links.mobile-open {
+        left: 0;
+    }
+    
+    .nav-links li {
+        width: 100%;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    
+    .nav-links li:last-child {
+        border-bottom: none;
     }
     
     .nav-link {
-        padding: 8px 12px;
-        font-size: 13px;
+        display: block;
+        width: 100%;
+        padding: 16px 12px;
+        font-size: 14px !important;
+        text-align: left;
+    }
+    
+    /* Dropdown in mobile nav */
+    .nav-dropdown {
+        width: 100%;
+    }
+    
+    .nav-dropdown-trigger {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .nav-dropdown-menu {
+        position: static !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        background: rgba(0, 0, 0, 0.3) !important;
+        margin-top: 0;
+        border: none !important;
+        border-top: 1px solid rgba(0, 214, 137, 0.15) !important;
     }
     
     .nav-actions {
@@ -207,9 +443,9 @@
         padding: 10px 8px;
     }
     
-    /* Hide less critical columns on tablets */
-    .picks-table th:nth-child(7), /* Result */
-    .picks-table td:nth-child(7) {
+    /* Dashboard: Hide Box Score column (column 7) */
+    body.page-active-picks .picks-table th.col-boxscore,
+    body.page-active-picks .picks-table td:nth-child(7) {
         display: none;
     }
 }
@@ -222,7 +458,7 @@
     }
     
     .picks-table {
-        min-width: 600px; /* Allow horizontal scroll */
+        min-width: 550px; /* Allow horizontal scroll */
         font-size: 12px;
     }
     
@@ -231,11 +467,17 @@
         padding: 8px 6px;
     }
     
-    /* Hide more columns on mobile */
-    .picks-table th:nth-child(6), /* Boxscore */
-    .picks-table td:nth-child(6),
-    .picks-table th:nth-child(7), /* Result */
-    .picks-table td:nth-child(7) {
+    /* Dashboard (9 cols): Hide Box Score (7) and $ Won/Lost (9) */
+    body.page-active-picks .picks-table th:nth-child(7),
+    body.page-active-picks .picks-table td:nth-child(7),
+    body.page-active-picks .picks-table th:nth-child(9),
+    body.page-active-picks .picks-table td:nth-child(9) {
+        display: none;
+    }
+    
+    /* Weekly Lineup (8 cols): Hide Track (8) */
+    body.page-weekly-lineup .picks-table th:nth-child(8),
+    body.page-weekly-lineup .picks-table td:nth-child(8) {
         display: none;
     }
     
@@ -244,10 +486,18 @@
         padding: 4px 8px;
         font-size: 11px;
     }
+    
+    /* Smaller logos */
+    .league-logo,
+    .team-logo {
+        width: 20px !important;
+        height: 20px !important;
+    }
 }
 
 @media (max-width: 480px) {
     .picks-table {
+        min-width: 480px;
         font-size: 11px;
     }
     
@@ -257,10 +507,34 @@
         padding: 6px 4px;
     }
     
-    /* Hide segment column too */
-    .picks-table th:nth-child(5), /* Segment */
-    .picks-table td:nth-child(5) {
+    /* Dashboard: Also hide Segment (4) on small phones */
+    body.page-active-picks .picks-table th:nth-child(4),
+    body.page-active-picks .picks-table td:nth-child(4) {
         display: none;
+    }
+    
+    /* Weekly Lineup: Also hide Segment (4) and Fire (7) */
+    body.page-weekly-lineup .picks-table th:nth-child(4),
+    body.page-weekly-lineup .picks-table td:nth-child(4),
+    body.page-weekly-lineup .picks-table th:nth-child(7),
+    body.page-weekly-lineup .picks-table td:nth-child(7) {
+        display: none;
+    }
+    
+    /* Even smaller logos */
+    .league-logo,
+    .team-logo {
+        width: 16px !important;
+        height: 16px !important;
+    }
+    
+    /* Compact header text */
+    .header-main-text {
+        font-size: 0.7rem !important;
+    }
+    
+    .header-subtext {
+        display: none !important;
     }
 }
 
@@ -310,6 +584,37 @@
 
 /* ===== FILTERS MOBILE ===== */
 
+@media (max-width: 1024px) {
+    /* Horizontal scrollable filter toolbar */
+    .filter-toolbar {
+        flex-wrap: nowrap !important;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE/Edge */
+        padding-bottom: 8px;
+    }
+    
+    .filter-toolbar::-webkit-scrollbar {
+        display: none; /* Chrome/Safari */
+    }
+    
+    .ft-left {
+        flex-wrap: nowrap !important;
+        flex-shrink: 0;
+    }
+    
+    .ft-right {
+        flex-shrink: 0;
+    }
+    
+    .ft-pill,
+    .ft-dropdown-btn {
+        flex-shrink: 0;
+        white-space: nowrap;
+    }
+}
+
 @media (max-width: 767px) {
     .unified-filter {
         padding: 12px;
@@ -330,6 +635,40 @@
     .filter-checkbox-label {
         font-size: 13px;
         padding: 10px;
+    }
+    
+    /* Filter toolbar becomes single row scrollable */
+    .filter-toolbar {
+        gap: 6px;
+    }
+    
+    .ft-pill {
+        padding: 6px 10px;
+        font-size: 0.7rem;
+    }
+    
+    .ft-dropdown-btn {
+        padding: 6px 10px;
+        font-size: 0.7rem;
+    }
+    
+    /* Fetch buttons compact on mobile */
+    .ft-fetch-buttons {
+        gap: 4px;
+    }
+    
+    .ft-fetch-league-btn {
+        padding: 4px 6px;
+        min-width: 40px;
+    }
+    
+    .ft-fetch-league-btn .league-label {
+        display: none;
+    }
+    
+    .league-logo-sm {
+        width: 16px;
+        height: 16px;
     }
 }
 
@@ -540,13 +879,539 @@
     .brand-nav {
         padding-top: env(safe-area-inset-top);
     }
-    
+
     .notification-container {
         top: calc(20px + env(safe-area-inset-top));
         right: calc(20px + env(safe-area-inset-right));
     }
-    
+
     .main-container {
         padding-bottom: calc(20px + env(safe-area-inset-bottom));
+    }
+}
+
+/* ==========================================================================
+   HIGH-SPECIFICITY MOBILE OVERRIDES v3.0
+   These overrides fix page-specific CSS that uses fixed margins and widths.
+   Must be at the END of this file to take precedence.
+   ========================================================================== */
+
+/* ===== 1. RESPONSIVE MARGINS - Override fixed 0.75in/0.5in values ===== */
+
+/* Tablet breakpoint: 768px - 1024px */
+@media (max-width: 1024px) {
+    /* Dashboard page margin fixes */
+    body.page-active-picks .main-container,
+    body.page-active-picks .picks-table-container,
+    body.page-active-picks .table-container {
+        padding-left: clamp(16px, 3vw, 48px) !important;
+        padding-right: clamp(16px, 3vw, 48px) !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Weekly lineup page margin fixes */
+    body.page-weekly-lineup .table-container,
+    body.page-weekly-lineup .weekly-lineup-table-wrapper,
+    body.page-weekly-lineup .toolbar-layout {
+        margin-left: clamp(12px, 2vw, 32px) !important;
+        margin-right: clamp(12px, 2vw, 32px) !important;
+        width: calc(100% - clamp(24px, 4vw, 64px)) !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Dashboard topline */
+    body.page-active-picks .dashboard-topline,
+    body.page-weekly-lineup .dashboard-topline {
+        padding-left: clamp(12px, 2vw, 24px) !important;
+        padding-right: clamp(12px, 2vw, 24px) !important;
+    }
+}
+
+/* Phone breakpoint: 480px - 767px */
+@media (max-width: 767px) {
+    /* Dashboard page - tighter margins */
+    body.page-active-picks .main-container,
+    body.page-active-picks .picks-table-container,
+    body.page-active-picks .table-container {
+        padding-left: 12px !important;
+        padding-right: 12px !important;
+    }
+
+    /* Weekly lineup page - tighter margins */
+    body.page-weekly-lineup .table-container,
+    body.page-weekly-lineup .weekly-lineup-table-wrapper,
+    body.page-weekly-lineup .toolbar-layout {
+        margin-left: 8px !important;
+        margin-right: 8px !important;
+        width: calc(100% - 16px) !important;
+    }
+
+    body.page-active-picks .dashboard-topline,
+    body.page-weekly-lineup .dashboard-topline {
+        padding-left: 12px !important;
+        padding-right: 12px !important;
+    }
+}
+
+/* Small phone breakpoint: < 480px */
+@media (max-width: 480px) {
+    body.page-active-picks .main-container,
+    body.page-weekly-lineup .main-container {
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+    }
+
+    body.page-weekly-lineup .table-container,
+    body.page-weekly-lineup .weekly-lineup-table-wrapper,
+    body.page-weekly-lineup .toolbar-layout {
+        margin-left: 4px !important;
+        margin-right: 4px !important;
+        width: calc(100% - 8px) !important;
+    }
+
+    body.page-active-picks .dashboard-topline,
+    body.page-weekly-lineup .dashboard-topline {
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+    }
+}
+
+/* ===== 2. WEEKLY LINEUP - Fix excessive 376px top margin ===== */
+
+@media (max-width: 1024px) {
+    body.page-weekly-lineup .main-container {
+        margin-top: 160px !important;
+    }
+}
+
+@media (max-width: 767px) {
+    body.page-weekly-lineup .main-container {
+        margin-top: 80px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    body.page-weekly-lineup .main-container {
+        margin-top: 50px !important;
+    }
+}
+
+/* ===== 3. TABLE COLUMN WIDTH FIXES - Remove fixed min-widths on mobile ===== */
+
+@media (max-width: 1024px) {
+    /* Weekly Lineup table - allow columns to shrink */
+    body.page-weekly-lineup .weekly-lineup-table thead th,
+    body.page-weekly-lineup .weekly-lineup-table tbody td,
+    .page-weekly-lineup .weekly-lineup-table thead th,
+    .page-weekly-lineup .weekly-lineup-table tbody td {
+        width: auto !important;
+        min-width: 0 !important;
+        max-width: none !important;
+    }
+
+    /* Dashboard picks table */
+    body.page-active-picks .picks-table thead th,
+    body.page-active-picks .picks-table tbody td {
+        min-width: 0 !important;
+    }
+
+    /* Allow table to scroll horizontally */
+    body.page-weekly-lineup .weekly-lineup-table,
+    body.page-active-picks .picks-table {
+        table-layout: auto !important;
+        min-width: 700px !important;
+    }
+}
+
+@media (max-width: 767px) {
+    /* Reduce table min-width for smaller screens */
+    body.page-weekly-lineup .weekly-lineup-table,
+    body.page-active-picks .picks-table {
+        min-width: 550px !important;
+    }
+
+    /* Compact cell padding */
+    body.page-weekly-lineup .weekly-lineup-table td,
+    body.page-weekly-lineup .weekly-lineup-table th {
+        padding: 8px 6px !important;
+    }
+
+    /* Hide less important columns on mobile */
+    /* Weekly Lineup: Hide Track column (8) */
+    body.page-weekly-lineup .weekly-lineup-table th:nth-child(8),
+    body.page-weekly-lineup .weekly-lineup-table td:nth-child(8),
+    .page-weekly-lineup .weekly-lineup-table th:nth-child(8),
+    .page-weekly-lineup .weekly-lineup-table td:nth-child(8) {
+        display: none !important;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Even smaller table for tiny screens */
+    body.page-weekly-lineup .weekly-lineup-table,
+    body.page-active-picks .picks-table {
+        min-width: 450px !important;
+        font-size: 11px !important;
+    }
+
+    /* Ultra compact padding */
+    body.page-weekly-lineup .weekly-lineup-table td,
+    body.page-weekly-lineup .weekly-lineup-table th {
+        padding: 6px 4px !important;
+    }
+
+    /* Weekly Lineup: Also hide Segment (4) and Fire (7) on small phones */
+    body.page-weekly-lineup .weekly-lineup-table th:nth-child(4),
+    body.page-weekly-lineup .weekly-lineup-table td:nth-child(4),
+    body.page-weekly-lineup .weekly-lineup-table th:nth-child(7),
+    body.page-weekly-lineup .weekly-lineup-table td:nth-child(7),
+    .page-weekly-lineup .weekly-lineup-table th:nth-child(4),
+    .page-weekly-lineup .weekly-lineup-table td:nth-child(4),
+    .page-weekly-lineup .weekly-lineup-table th:nth-child(7),
+    .page-weekly-lineup .weekly-lineup-table td:nth-child(7) {
+        display: none !important;
+    }
+
+    /* Smaller header text */
+    body.page-weekly-lineup .weekly-lineup-table .header-main-text,
+    .page-weekly-lineup .weekly-lineup-table .header-main-text {
+        font-size: 0.65rem !important;
+    }
+
+    /* Hide header subtext */
+    body.page-weekly-lineup .weekly-lineup-table .header-subtext,
+    .page-weekly-lineup .weekly-lineup-table .header-subtext {
+        display: none !important;
+    }
+
+    /* Smaller team logos */
+    body.page-weekly-lineup .weekly-lineup-table .team-logo,
+    .page-weekly-lineup .weekly-lineup-table .team-logo {
+        width: 16px !important;
+        height: 16px !important;
+    }
+}
+
+/* ===== 4. FILTER TOOLBAR MOBILE FIXES ===== */
+
+@media (max-width: 1024px) {
+    /* Filter toolbar horizontal scroll */
+    body.page-active-picks .filter-toolbar,
+    body.page-weekly-lineup .filter-toolbar,
+    .filter-toolbar {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        scrollbar-width: none !important;
+        padding: 8px 0 !important;
+        gap: 8px !important;
+    }
+
+    body.page-active-picks .filter-toolbar::-webkit-scrollbar,
+    body.page-weekly-lineup .filter-toolbar::-webkit-scrollbar,
+    .filter-toolbar::-webkit-scrollbar {
+        display: none !important;
+    }
+
+    /* Prevent pills from wrapping */
+    .ft-left,
+    .ft-right {
+        flex-wrap: nowrap !important;
+        flex-shrink: 0 !important;
+    }
+
+    .ft-pill,
+    .ft-dropdown-btn,
+    .ft-league {
+        flex-shrink: 0 !important;
+        white-space: nowrap !important;
+    }
+}
+
+@media (max-width: 767px) {
+    /* Compact filter pills */
+    body.page-active-picks .filter-toolbar .ft-pill,
+    body.page-weekly-lineup .filter-toolbar .ft-pill,
+    .filter-toolbar .ft-pill {
+        padding: 6px 10px !important;
+        font-size: 0.7rem !important;
+        min-height: 32px !important;
+    }
+
+    body.page-active-picks .filter-toolbar .ft-dropdown-btn,
+    body.page-weekly-lineup .filter-toolbar .ft-dropdown-btn,
+    .filter-toolbar .ft-dropdown-btn {
+        padding: 6px 10px !important;
+        font-size: 0.7rem !important;
+        min-height: 32px !important;
+    }
+
+    /* Compact fetch buttons */
+    .ft-fetch-buttons {
+        gap: 4px !important;
+    }
+
+    .ft-fetch-league-btn {
+        padding: 4px 6px !important;
+        min-width: 36px !important;
+    }
+
+    /* Hide league label on mobile, show only logo */
+    .ft-fetch-league-btn .league-label {
+        display: none !important;
+    }
+
+    .ft-fetch-league-btn .league-logo-sm {
+        width: 18px !important;
+        height: 18px !important;
+    }
+}
+
+/* ===== 5. KPI TILES GRID FIXES ===== */
+
+@media (max-width: 1024px) {
+    /* Override fixed dimensions on KPI tiles */
+    body.page-active-picks .kpi-tiles,
+    body.page-weekly-lineup .kpi-tiles {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)) !important;
+        gap: 10px !important;
+        width: 100% !important;
+    }
+
+    body.page-active-picks .kpi-tile,
+    body.page-weekly-lineup .kpi-tile {
+        width: 100% !important;
+        min-width: 0 !important;
+        height: auto !important;
+        min-height: 60px !important;
+    }
+}
+
+@media (max-width: 767px) {
+    /* 2 columns on phone */
+    body.page-active-picks .kpi-tiles,
+    body.page-weekly-lineup .kpi-tiles {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
+    }
+
+    body.page-active-picks .kpi-tile,
+    body.page-weekly-lineup .kpi-tile {
+        padding: 12px 10px !important;
+        min-height: 55px !important;
+    }
+
+    /* Compact KPI text */
+    body.page-active-picks .kpi-label,
+    body.page-weekly-lineup .kpi-label {
+        font-size: 0.65rem !important;
+    }
+
+    body.page-active-picks .kpi-value,
+    body.page-weekly-lineup .kpi-value {
+        font-size: 1.1rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Single column on small phones */
+    body.page-active-picks .kpi-tiles,
+    body.page-weekly-lineup .kpi-tiles {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* ===== 6. BACKGROUND ATTACHMENT FIX FOR iOS ===== */
+
+@media (max-width: 1024px) {
+    /* Fix background-attachment: fixed causing jank on iOS Safari */
+    body.page-active-picks,
+    body.page-weekly-lineup,
+    body.page-odds-market {
+        background-attachment: scroll !important;
+    }
+}
+
+/* Also fix for touch devices regardless of screen size */
+@media (hover: none) and (pointer: coarse) {
+    body.page-active-picks,
+    body.page-weekly-lineup,
+    body.page-odds-market {
+        background-attachment: scroll !important;
+    }
+}
+
+/* ===== 7. NAVIGATION MOBILE ENHANCEMENTS ===== */
+
+@media (max-width: 767px) {
+    /* Ensure nav works properly on all pages */
+    body.page-active-picks .brand-nav,
+    body.page-weekly-lineup .brand-nav,
+    body.page-odds-market .brand-nav {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        z-index: 10000 !important;
+        padding: 10px 12px !important;
+        background: rgba(8, 17, 33, 0.95) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
+        backdrop-filter: blur(12px) !important;
+    }
+
+    /* Offset content for fixed nav */
+    body.page-active-picks .main-container {
+        margin-top: 60px !important;
+    }
+
+    /* Weekly lineup already has reduced margin-top, so don't override further */
+}
+
+/* ===== 8. BRAND HEADER MOBILE FIXES ===== */
+
+@media (max-width: 767px) {
+    body.page-active-picks .brand-header-inline,
+    body.page-weekly-lineup .brand-header-inline {
+        gap: 10px !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+    }
+
+    body.page-active-picks .brand-logo-inline,
+    body.page-active-picks .brand-logo-small,
+    body.page-weekly-lineup .brand-logo-inline,
+    body.page-weekly-lineup .brand-logo-small {
+        width: 45px !important;
+        height: 45px !important;
+    }
+
+    body.page-active-picks .brand-line-1,
+    body.page-weekly-lineup .brand-line-1 {
+        font-size: 1.2rem !important;
+    }
+
+    body.page-active-picks .brand-line-2,
+    body.page-weekly-lineup .brand-line-2 {
+        font-size: 0.85rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    body.page-active-picks .brand-logo-inline,
+    body.page-active-picks .brand-logo-small,
+    body.page-weekly-lineup .brand-logo-inline,
+    body.page-weekly-lineup .brand-logo-small {
+        width: 36px !important;
+        height: 36px !important;
+    }
+
+    body.page-active-picks .brand-line-1,
+    body.page-weekly-lineup .brand-line-1 {
+        font-size: 1rem !important;
+    }
+
+    body.page-active-picks .brand-line-2,
+    body.page-weekly-lineup .brand-line-2 {
+        font-size: 0.75rem !important;
+    }
+}
+
+/* ===== 9. TABLE CONTAINER SCROLL INDICATOR VISUAL ENHANCEMENT ===== */
+
+@media (max-width: 1024px) {
+    /* Enhanced scroll indicators for table containers */
+    body.page-weekly-lineup .table-container,
+    body.page-active-picks .table-container {
+        position: relative !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+
+    /* Scroll hint fade on right edge */
+    body.page-weekly-lineup .table-container::after,
+    body.page-active-picks .table-container::after {
+        content: '' !important;
+        position: absolute !important;
+        top: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        width: 30px !important;
+        background: linear-gradient(to left, rgba(8, 17, 33, 0.8), transparent) !important;
+        pointer-events: none !important;
+        z-index: 5 !important;
+        opacity: 1 !important;
+        transition: opacity 0.3s ease !important;
+    }
+
+    /* Hide right indicator when scrolled to end */
+    body.page-weekly-lineup .table-container.scroll-end::after,
+    body.page-active-picks .table-container.scroll-end::after {
+        opacity: 0 !important;
+    }
+}
+
+/* ===== 10. IMPORT DROPDOWN MOBILE FIX ===== */
+
+@media (max-width: 767px) {
+    body.page-weekly-lineup .import-tile .import-dropdown-panel,
+    .page-weekly-lineup .import-tile .import-dropdown-panel {
+        position: fixed !important;
+        top: auto !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        border-radius: 16px 16px 0 0 !important;
+        max-height: 70vh !important;
+        overflow-y: auto !important;
+    }
+}
+
+/* ===== 11. RATIONALE PANEL MOBILE FIX ===== */
+
+@media (max-width: 767px) {
+    body.page-weekly-lineup .rationale-panel,
+    .page-weekly-lineup .rationale-panel {
+        position: fixed !important;
+        left: 10px !important;
+        right: 10px !important;
+        top: auto !important;
+        bottom: 60px !important;
+        transform: none !important;
+        width: auto !important;
+        max-width: calc(100vw - 20px) !important;
+        max-height: 50vh !important;
+        overflow-y: auto !important;
+        z-index: 10001 !important;
+    }
+}
+
+/* ===== 12. GENERAL TOUCH IMPROVEMENTS ===== */
+
+@media (hover: none) and (pointer: coarse) {
+    /* Increase touch targets for interactive elements */
+    body.page-active-picks .tracker-btn,
+    body.page-weekly-lineup .tracker-btn {
+        min-width: 44px !important;
+        min-height: 44px !important;
+    }
+
+    body.page-active-picks .rationale-toggle,
+    body.page-weekly-lineup .rationale-toggle {
+        min-height: 36px !important;
+        padding: 8px 12px !important;
+    }
+
+    /* Larger sort icons for touch */
+    body.page-weekly-lineup .weekly-lineup-table .th-sort-btn,
+    body.page-active-picks .picks-table .th-sort-btn {
+        min-height: 40px !important;
     }
 }

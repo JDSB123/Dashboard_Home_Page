@@ -1773,27 +1773,39 @@ body.page-active-picks .toolbar-container.toolbar-layout {
     border: 1px solid rgba(108, 117, 125, 0.3);
 }
 
+/* Won/Lost Cell Layout */
+.won-lost-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
 /* Delete Pick Button */
 .delete-pick-btn {
-    background: rgba(255, 107, 107, 0.1);
-    border: 1px solid rgba(255, 107, 107, 0.3);
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 71, 87, 0.2);
+    border: 1px solid rgba(255, 71, 87, 0.5);
     border-radius: 4px;
-    color: rgba(255, 107, 107, 0.7);
-    font-size: 0.75rem;
-    font-weight: 600;
+    color: #ff6b6b;
+    font-size: 14px;
+    font-weight: 700;
     cursor: pointer;
-    padding: 3px 8px;
-    margin-left: 8px;
+    padding: 4px 8px;
     transition: all 0.2s ease;
     line-height: 1;
-    vertical-align: middle;
+    min-width: 26px;
+    min-height: 26px;
 }
 
 .delete-pick-btn:hover {
-    background: rgba(255, 107, 107, 0.2);
-    border-color: rgba(255, 107, 107, 0.6);
-    color: #ff6b6b;
-    transform: scale(1.05);
+    background: rgba(255, 71, 87, 0.4);
+    border-color: #ff6b6b;
+    color: #ff4757;
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(255, 71, 87, 0.5);
 }
 
 .delete-pick-btn:active {
@@ -2398,4 +2410,236 @@ body.page-active-picks .filter-chip .chip-remove {
 
 body.page-active-picks .filter-chip .chip-remove:hover {
     opacity: 1;
+}
+
+/* ==========================================================================
+   MOBILE RESPONSIVENESS v5.2 - Added for proper mobile support
+   These must be at the END of the file to override earlier declarations
+   ========================================================================== */
+
+/* Tablet: 768px - 1024px */
+@media (max-width: 1024px) {
+    body.page-active-picks {
+        background-attachment: scroll; /* Fix iOS Safari jank */
+    }
+
+    body.page-active-picks .main-container {
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+
+    body.page-active-picks .dashboard-topline {
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+
+    body.page-active-picks .table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    body.page-active-picks .picks-table {
+        table-layout: auto;
+        min-width: 700px;
+    }
+
+    body.page-active-picks .picks-table thead th,
+    body.page-active-picks .picks-table tbody td {
+        min-width: 0;
+    }
+
+    /* KPI tiles responsive grid */
+    body.page-active-picks .kpi-tiles {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: 10px;
+        width: 100%;
+    }
+
+    body.page-active-picks .kpi-tile {
+        width: 100%;
+        min-width: 0;
+        height: auto;
+        min-height: 60px;
+    }
+}
+
+/* Phone: 480px - 767px */
+@media (max-width: 767px) {
+    body.page-active-picks .main-container {
+        padding-left: 12px;
+        padding-right: 12px;
+        margin-top: 60px;
+    }
+
+    body.page-active-picks .dashboard-topline {
+        padding-left: 12px;
+        padding-right: 12px;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    body.page-active-picks .picks-table {
+        min-width: 550px;
+        font-size: 12px;
+    }
+
+    body.page-active-picks .picks-table td,
+    body.page-active-picks .picks-table th {
+        padding: 8px 6px;
+    }
+
+    /* Hide Box Score and $ Won/Lost columns on phones */
+    body.page-active-picks .picks-table th:nth-child(7),
+    body.page-active-picks .picks-table td:nth-child(7),
+    body.page-active-picks .picks-table th:nth-child(9),
+    body.page-active-picks .picks-table td:nth-child(9) {
+        display: none;
+    }
+
+    /* Compact brand header */
+    body.page-active-picks .brand-header-inline {
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    body.page-active-picks .brand-logo-small {
+        width: 45px;
+        height: 45px;
+    }
+
+    body.page-active-picks .brand-line-1 {
+        font-size: 1.2rem;
+    }
+
+    body.page-active-picks .brand-line-2 {
+        font-size: 0.85rem;
+    }
+
+    /* Filter toolbar horizontal scroll */
+    body.page-active-picks .filter-toolbar {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        gap: 8px;
+    }
+
+    body.page-active-picks .filter-toolbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* KPI tiles 2 columns */
+    body.page-active-picks .kpi-tiles {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    body.page-active-picks .kpi-tile {
+        padding: 12px 10px;
+        min-height: 55px;
+    }
+
+    /* Compact KPI text */
+    body.page-active-picks .kpi-label {
+        font-size: 0.65rem;
+    }
+
+    body.page-active-picks .kpi-value {
+        font-size: 1.1rem;
+    }
+
+    /* Smaller logos */
+    body.page-active-picks .picks-table .team-logo,
+    body.page-active-picks .picks-table .league-logo {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+/* Small Phone: < 480px */
+@media (max-width: 480px) {
+    body.page-active-picks .main-container {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    body.page-active-picks .dashboard-topline {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    body.page-active-picks .picks-table {
+        min-width: 450px;
+        font-size: 11px;
+    }
+
+    body.page-active-picks .picks-table td,
+    body.page-active-picks .picks-table th {
+        padding: 6px 4px;
+    }
+
+    /* Also hide Segment column on small phones */
+    body.page-active-picks .picks-table th:nth-child(4),
+    body.page-active-picks .picks-table td:nth-child(4) {
+        display: none;
+    }
+
+    /* Smaller header text */
+    body.page-active-picks .picks-table .header-main-text {
+        font-size: 0.65rem;
+    }
+
+    body.page-active-picks .picks-table .header-subtext {
+        display: none;
+    }
+
+    /* Smaller brand */
+    body.page-active-picks .brand-logo-small {
+        width: 36px;
+        height: 36px;
+    }
+
+    body.page-active-picks .brand-line-1 {
+        font-size: 1rem;
+    }
+
+    body.page-active-picks .brand-line-2 {
+        font-size: 0.75rem;
+    }
+
+    /* Even smaller logos */
+    body.page-active-picks .picks-table .team-logo,
+    body.page-active-picks .picks-table .league-logo {
+        width: 16px;
+        height: 16px;
+    }
+
+    /* Single column KPI tiles */
+    body.page-active-picks .kpi-tiles {
+        grid-template-columns: 1fr;
+    }
+
+    /* Compact KPI text */
+    body.page-active-picks .kpi-label {
+        font-size: 0.6rem;
+    }
+
+    body.page-active-picks .kpi-value {
+        font-size: 0.95rem;
+    }
+
+    /* Filter pills smaller */
+    body.page-active-picks .filter-toolbar .ft-pill {
+        padding: 5px 8px;
+        font-size: 0.65rem;
+    }
+
+    /* Compact status badges */
+    body.page-active-picks .status-badge {
+        padding: 3px 6px;
+        font-size: 0.6rem;
+    }
 }

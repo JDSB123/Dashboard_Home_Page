@@ -28,9 +28,13 @@
 
     const hydrateEndpoints = async () => {
         const baseUrl = window.APP_CONFIG?.API_BASE_URL;
-        if (!baseUrl) return;
+        if (!baseUrl) {
+            console.warn('[MODEL-ENDPOINTS] API_BASE_URL not configured, skipping registry fetch');
+            return;
+        }
 
         const url = `${baseUrl}/registry`;
+        console.log('[MODEL-ENDPOINTS] Fetching model endpoints from registry:', url);
 
         try {
             const res = await fetchWithTimeout(url);
@@ -47,9 +51,12 @@
                 const entry = registry?.[key];
                 if (entry?.endpoint) {
                     const configKey = `${key.toUpperCase()}_API_URL`;
+                    const oldEndpoint = window.APP_CONFIG[configKey];
                     window.APP_CONFIG[configKey] = entry.endpoint;
                     updatedCount++;
-                    console.log(`[MODEL-ENDPOINTS] Updated ${configKey}: ${entry.endpoint}`);
+                    if (oldEndpoint !== entry.endpoint) {
+                        console.log(`[MODEL-ENDPOINTS] Updated ${key.toUpperCase()} endpoint: ${entry.endpoint}`);
+                    }
                 }
             });
 
@@ -59,9 +66,11 @@
             if (updatedCount > 0) {
                 console.log(`[MODEL-ENDPOINTS] Hydrated ${updatedCount} endpoints from registry`);
             }
+            console.log(`[MODEL-ENDPOINTS] ✅ Registry hydration complete - ${updatedCount} endpoints updated`);
         } catch (err) {
             // Safe to continue; pick fetchers will fall back to current APP_CONFIG values
             console.warn('[MODEL-ENDPOINTS] Unable to refresh endpoints from registry:', err.message);
+            console.warn('[MODEL-ENDPOINTS] Fetchers will use fallback endpoints from config.production.js');
         }
     };
 

@@ -1797,10 +1797,13 @@ function buildPickRow(pick, index) {
             <span class="hitmiss-badge hitmiss-${outcome.key}">${outcome.label}</span>
         </td>
         <td class="center">
-            ${outcome.amount === null
-                ? '<span class="profit-amount profit-neutral">—</span>'
-                : `<span class="profit-amount ${outcome.amountClass}">${formatSignedCurrency(outcome.amount)}</span>`
-            }
+            <div class="won-lost-cell">
+                ${outcome.amount === null
+                    ? '<span class="profit-amount profit-neutral">—</span>'
+                    : `<span class="profit-amount ${outcome.amountClass}">${formatSignedCurrency(outcome.amount)}</span>`
+                }
+                <button class="delete-pick-btn" data-pick-index="${index}" title="Remove pick">✕</button>
+            </div>
         </td>
     `;
 
@@ -1819,10 +1822,21 @@ async function loadAndAppendPicks() {
 
         if (!response.ok) {
             console.log('[PICKS LOADER] API not available, using static HTML picks');
+            if (window.ErrorHandler && response.status !== 404) {
+                window.ErrorHandler.handleApi(response, 'Load picks');
+            }
             return;
         }
 
-        const data = await response.json();
+        let data;
+        try {
+            data = await response.json();
+        } catch (e) {
+            if (window.ErrorHandler) {
+                window.ErrorHandler.handleParse(e, 'API response');
+            }
+            return;
+        }
         const picks = data.picks || [];
         console.log('[PICKS LOADER] Received picks:', picks.length, picks);
 
@@ -1906,7 +1920,10 @@ async function loadAndAppendPicks() {
 
     } catch (error) {
         console.log('[PICKS LOADER] API not available, using static HTML picks');
-        // Silently fail - this is expected when viewing static HTML without Flask server
+        // Only show error if it's not a network/CORS error (expected in dev)
+        if (window.ErrorHandler && !error.message?.includes('Failed to fetch') && !error.message?.includes('CORS')) {
+            window.ErrorHandler.handleApi(error, 'Load picks');
+        }
     }
 }
 
@@ -1925,63 +1942,69 @@ async function loadTeamRecords(options = {}) {
 
     const loaderPromise = (async () => {
         try {
-            // Hardcoded records for now - will fetch from API later
-            const records = {
-                'ARI': '5-5',
-                'ATL': '6-4',
-                'BAL': '7-3',
-                'BUF': '8-2',
-                'CAR': '3-7',
-                'CHI': '4-6',
-                'CIN': '5-5',
-                'CLE': '3-7',
-                'DAL': '7-3',
-                'DEN': '5-4',
-                'DET': '9-1',
-                'GB': '6-4',
-                'HOU': '7-3',
-                'IND': '6-4',
-                'JAX': '2-8',
-                'KC': '9-1',
-                'LAC': '6-4',
-                'LAR': '5-5',
-                'LV': '2-6',
-                'MIA': '6-4',
-                'MIN': '6-4',
-                'NE': '2-8',
-                'NO': '5-5',
-                'NYG': '3-7',
-                'NYJ': '4-6',
-                'PHI': '9-1',
-                'PIT': '6-4',
-                'SEA': '5-5',
-                'SF': '7-3',
-                'TB': '5-5',
-                'TEN': '3-7',
-                'WAS': '6-4',
-                'PHX': '8-1',
-                'LAC': '6-4',
-                'GASO': '6-3',
-                'APP': '5-4',
-                'UTSA': '3-6',
-                'USF': '4-5'
-            };
-
-            const normalized = {};
-            Object.keys(records).forEach(key => {
-                normalized[key.toUpperCase()] = records[key];
-            });
-            teamRecordsCache = normalized;
-            if (globalScope) {
-                globalScope.__TEAM_RECORDS_CACHE__ = normalized;
-                globalScope.teamRecordsCache = normalized;
+            // Try to load from API first
+            if (window.APP_CONFIG?.API_BASE_URL) {
+                try {
+                    const apiUrl = window.APP_CONFIG.API_BASE_URL;
+                    const response = await fetch(`${apiUrl}/team-records`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.records) {
+                            const normalized = {};
+                            Object.keys(data.records).forEach(key => {
+                                normalized[key.toUpperCase()] = data.records[key];
+                            });
+                            teamRecordsCache = normalized;
+                            if (globalScope) {
+                                globalScope.__TEAM_RECORDS_CACHE__ = normalized;
+                                globalScope.teamRecordsCache = normalized;
+                            }
+                            populateTeamRecords(document, { force: true });
+                            return normalized;
+                        }
+                    }
+                } catch (apiError) {
+                    console.log('[RECORDS] API not available, trying config file');
+                }
             }
 
-            populateTeamRecords(document, { force: true });
+            // Fallback: Load from config file
+            try {
+                const response = await fetch('assets/data/team-records.json?v=20250101');
+                if (response.ok) {
+                    const data = await response.json();
+                    // Flatten league-specific records
+                    const records = {};
+                    Object.keys(data).forEach(league => {
+                        Object.assign(records, data[league]);
+                    });
+                    
+                    const normalized = {};
+                    Object.keys(records).forEach(key => {
+                        normalized[key.toUpperCase()] = records[key];
+                    });
+                    teamRecordsCache = normalized;
+                    if (globalScope) {
+                        globalScope.__TEAM_RECORDS_CACHE__ = normalized;
+                        globalScope.teamRecordsCache = normalized;
+                    }
+                    populateTeamRecords(document, { force: true });
+                    return normalized;
+                }
+            } catch (fileError) {
+                console.warn('[RECORDS] Config file not available:', fileError);
+            }
 
-            return normalized;
+            // Final fallback: Empty records (will be populated by API later)
+            console.warn('[RECORDS] No team records available, using empty cache');
+            teamRecordsCache = {};
+            return {};
+
         } catch (error) {
             console.warn('[RECORDS] Could not load team records:', error);
+            if (window.ErrorHandler) {
+                window.ErrorHandler.handleApi(error, 'Load team records');
+            }
             throw error;
         }
     })();
@@ -2018,10 +2041,21 @@ async function loadPicksFromDatabase() {
         const response = await fetch(`${apiUrl}/get-picks?limit=100`);
 
         if (!response.ok) {
+            if (window.ErrorHandler && response.status !== 404) {
+                window.ErrorHandler.handleApi(response, 'Load picks from database');
+            }
             throw new Error(`HTTP ${response.status}`);
         }
 
-        const data = await response.json();
+        let data;
+        try {
+            data = await response.json();
+        } catch (e) {
+            if (window.ErrorHandler) {
+                window.ErrorHandler.handleParse(e, 'Database response');
+            }
+            throw e;
+        }
         const picks = data.picks || [];
 
         console.log(`Loaded ${picks.length} picks from database`);
@@ -2034,6 +2068,10 @@ async function loadPicksFromDatabase() {
         }));
     } catch (error) {
         console.warn('Failed to load picks from database:', error);
+        // Don't show error for expected failures (network/CORS)
+        if (window.ErrorHandler && !error.message?.includes('Failed to fetch') && !error.message?.includes('CORS')) {
+            window.ErrorHandler.handleApi(error, 'Load picks from database');
+        }
         return null;
     }
 }
@@ -2084,12 +2122,54 @@ if (document.readyState === 'loading') {
         if (recordsPromise && typeof recordsPromise.catch === 'function') {
             recordsPromise.catch(error => console.warn('[RECORDS] Initial team records load failed:', error));
         }
+        initializeDeleteButtons();
     });
 } else {
     const recordsPromise = loadTeamRecords();
     if (recordsPromise && typeof recordsPromise.catch === 'function') {
         recordsPromise.catch(error => console.warn('[RECORDS] Initial team records load failed:', error));
     }
+    initializeDeleteButtons();
+}
+
+// Initialize delete button handlers using event delegation
+function initializeDeleteButtons() {
+    const tbody = document.getElementById('picks-tbody');
+    if (!tbody) return;
+    
+    tbody.addEventListener('click', (e) => {
+        const deleteBtn = e.target.closest('.delete-pick-btn');
+        if (!deleteBtn) return;
+        
+        e.stopPropagation();
+        
+        const row = deleteBtn.closest('tr');
+        if (!row) return;
+        
+        // Confirm deletion
+        if (confirm('Remove this pick from the dashboard?')) {
+            // Try LocalPicksManager first
+            const pickIndex = deleteBtn.dataset.pickIndex;
+            if (window.LocalPicksManager && pickIndex !== undefined) {
+                // Get pick ID from row or index
+                const picks = window.LocalPicksManager.getAll ? window.LocalPicksManager.getAll() : [];
+                if (picks[pickIndex] && picks[pickIndex].id) {
+                    window.LocalPicksManager.delete(picks[pickIndex].id);
+                }
+            }
+            
+            // Remove row from DOM
+            row.remove();
+            console.log('[PICKS] Removed pick at index:', pickIndex);
+            
+            // Update KPI tiles if available
+            if (window.KPICalculator && window.KPICalculator.recalculateLiveKPI) {
+                window.KPICalculator.recalculateLiveKPI();
+            }
+        }
+    });
+    
+    console.log('[PICKS] Delete button handlers initialized');
 }
 
 if (globalScope) {

@@ -8,12 +8,18 @@ class NavigationManager {
         this.dropdowns = [];
         this.navLinks = null;
         this.isInitialized = false;
+        this.mobileMenuOpen = false;
+        this.mobileMenuToggle = null;
+        this.mobileMenuOverlay = null;
         
         this.init();
     }
     
     init() {
         if (this.isInitialized) return;
+        
+        // Setup mobile menu first
+        this.setupMobileMenu();
         
         // Handle multiple dropdowns
         const dropdownElements = document.querySelectorAll('.nav-dropdown');
@@ -33,8 +39,129 @@ class NavigationManager {
         this.setupResponsiveBehavior();
         this.setupAccessibility();
         this.setupNavState();
+        this.setupTableScrollIndicators();
 
         this.isInitialized = true;
+    }
+    
+    setupMobileMenu() {
+        const brandNav = document.querySelector('.brand-nav');
+        const navLinks = document.querySelector('.nav-links');
+        
+        if (!brandNav || !navLinks) return;
+        
+        // Create hamburger toggle button if it doesn't exist
+        if (!document.querySelector('.mobile-menu-toggle')) {
+            this.mobileMenuToggle = document.createElement('button');
+            this.mobileMenuToggle.className = 'mobile-menu-toggle';
+            this.mobileMenuToggle.setAttribute('aria-label', 'Toggle navigation menu');
+            this.mobileMenuToggle.setAttribute('aria-expanded', 'false');
+            this.mobileMenuToggle.innerHTML = '<span></span>';
+            
+            // Insert at the beginning of nav
+            brandNav.insertBefore(this.mobileMenuToggle, brandNav.firstChild);
+        } else {
+            this.mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+        }
+        
+        // Create overlay if it doesn't exist
+        if (!document.querySelector('.mobile-menu-overlay')) {
+            this.mobileMenuOverlay = document.createElement('div');
+            this.mobileMenuOverlay.className = 'mobile-menu-overlay';
+            document.body.appendChild(this.mobileMenuOverlay);
+        } else {
+            this.mobileMenuOverlay = document.querySelector('.mobile-menu-overlay');
+        }
+        
+        // Toggle menu on hamburger click
+        this.mobileMenuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.toggleMobileMenu();
+        });
+        
+        // Close menu on overlay click
+        this.mobileMenuOverlay.addEventListener('click', () => {
+            this.closeMobileMenu();
+        });
+        
+        // Close menu on nav link click (for navigation)
+        navLinks.querySelectorAll('.nav-link:not(.nav-dropdown-trigger)').forEach(link => {
+            link.addEventListener('click', () => {
+                this.closeMobileMenu();
+            });
+        });
+        
+        // Close menu on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.mobileMenuOpen) {
+                this.closeMobileMenu();
+            }
+        });
+    }
+    
+    toggleMobileMenu() {
+        this.mobileMenuOpen = !this.mobileMenuOpen;
+        
+        const navLinks = document.querySelector('.nav-links');
+        
+        if (this.mobileMenuOpen) {
+            navLinks?.classList.add('mobile-open');
+            this.mobileMenuToggle?.classList.add('active');
+            this.mobileMenuOverlay?.classList.add('active');
+            this.mobileMenuToggle?.setAttribute('aria-expanded', 'true');
+            document.body.style.overflow = 'hidden'; // Prevent background scroll
+        } else {
+            navLinks?.classList.remove('mobile-open');
+            this.mobileMenuToggle?.classList.remove('active');
+            this.mobileMenuOverlay?.classList.remove('active');
+            this.mobileMenuToggle?.setAttribute('aria-expanded', 'false');
+            document.body.style.overflow = '';
+        }
+    }
+    
+    closeMobileMenu() {
+        if (this.mobileMenuOpen) {
+            this.mobileMenuOpen = false;
+            const navLinks = document.querySelector('.nav-links');
+            navLinks?.classList.remove('mobile-open');
+            this.mobileMenuToggle?.classList.remove('active');
+            this.mobileMenuOverlay?.classList.remove('active');
+            this.mobileMenuToggle?.setAttribute('aria-expanded', 'false');
+            document.body.style.overflow = '';
+        }
+    }
+    
+    setupTableScrollIndicators() {
+        // Add scroll indicators to table containers
+        const tableContainers = document.querySelectorAll('.table-container');
+        
+        tableContainers.forEach(container => {
+            const updateScrollIndicators = () => {
+                const scrollLeft = container.scrollLeft;
+                const scrollWidth = container.scrollWidth;
+                const clientWidth = container.clientWidth;
+                
+                // Can scroll right
+                if (scrollLeft < scrollWidth - clientWidth - 5) {
+                    container.classList.add('scroll-right');
+                } else {
+                    container.classList.remove('scroll-right');
+                }
+                
+                // Can scroll left
+                if (scrollLeft > 5) {
+                    container.classList.add('scroll-left');
+                } else {
+                    container.classList.remove('scroll-left');
+                }
+            };
+            
+            container.addEventListener('scroll', updateScrollIndicators);
+            window.addEventListener('resize', updateScrollIndicators);
+            
+            // Initial check
+            setTimeout(updateScrollIndicators, 100);
+        });
     }
     
     setupDropdown(dropdown, trigger, menu) {
@@ -243,6 +370,11 @@ class NavigationManager {
     handleResize() {
         if (window.innerWidth <= 768) {
             this.closeAllDropdowns();
+        }
+        
+        // Close mobile menu when resizing to desktop
+        if (window.innerWidth > 767 && this.mobileMenuOpen) {
+            this.closeMobileMenu();
         }
     }
     

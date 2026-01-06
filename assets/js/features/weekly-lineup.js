@@ -1496,34 +1496,49 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             marketDisplay = `${teamAbbr} ${escapeHtml(pick.line || '')}`;
         }
         
-        // Simpler, more reliable comparison HTML
-        const comparisonHtml = `
-            <div class="details-section">
-                <h4 style="color:#10b981;margin:0 0 12px;font-size:14px;">📊 Model vs. Market</h4>
-                <div style="display:flex;gap:10px;margin-bottom:12px;">
-                    <div style="flex:1;background:rgba(16,185,129,0.15);padding:10px;border-radius:6px;text-align:center;">
-                        <div style="color:#10b981;font-size:11px;font-weight:600;text-transform:uppercase;margin-bottom:4px;">Model</div>
-                        <div style="color:#fff;font-size:14px;font-weight:700;">${modelDisplay}</div>
-                        <div style="color:#888;font-size:12px;">${modelPriceRaw || 'N/A'}</div>
-                    </div>
-                    <div style="flex:1;background:rgba(99,102,241,0.15);padding:10px;border-radius:6px;text-align:center;">
-                        <div style="color:#818cf8;font-size:11px;font-weight:600;text-transform:uppercase;margin-bottom:4px;">Market</div>
-                        <div style="color:#fff;font-size:14px;font-weight:700;">${marketDisplay}</div>
-                        <div style="color:#888;font-size:12px;">${pickOdds}</div>
-                    </div>
-                </div>
-                <div style="background:rgba(16,185,129,0.2);padding:8px 12px;border-radius:6px;text-align:center;">
-                    <span style="color:#ccc;font-size:12px;">Edge:</span>
-                    <span style="color:#22c55e;font-size:16px;font-weight:700;margin-left:6px;">+${edgeValue}%</span>
-                </div>
-            </div>
-        `;
+        // Build comparison section - horizontal header row
+        const hasModelLine = modelLineRaw || modelTotal;
+        const hasMarketLine = pick.line;
         
-        const rationaleHtml = rationaleRaw
-            ? escapeHtml(rationaleRaw).replace(/\n/g, '<br>')
-            : '<span class="rationale-empty">No rationale provided for this pick.</span>';
+        // Single row: Model vs Market vs Edge
+        let comparisonHtml = `
+            <div class="details-header">
+                <div class="details-col">
+                    <span class="details-label">Model</span>
+                    <span class="details-val model-val">${hasModelLine ? (modelLineRaw || modelTotal) : '-'}</span>
+                </div>
+                <div class="details-col">
+                    <span class="details-label">Market</span>
+                    <span class="details-val market-val">${hasMarketLine ? pick.line : '-'} <span class="odds-tag">${pickOdds}</span></span>
+                </div>
+                <div class="details-col">
+                    <span class="details-label">Edge</span>
+                    <span class="details-val edge-val">+${edgeValue}%</span>
+                </div>
+            </div>`;
+        
+        // Format rationale - clean bullet points, left-aligned
+        const formatRationale = (text) => {
+            if (!text) return '';
+            
+            const escaped = escapeHtml(text);
+            // Split on periods followed by space, newlines, or semicolons
+            const points = escaped
+                .split(/(?<=[.!?])\s+|\n|;\s*/)
+                .map(s => s.trim())
+                .filter(s => s.length > 5 && !s.match(/^[A-Z]{2,4}$/)); // Filter out tiny fragments
+            
+            if (points.length === 0) return '';
+            if (points.length === 1) {
+                return `<div class="rationale-text">${points[0]}</div>`;
+            }
+            
+            return `<ul class="rationale-list">${points.map(p => `<li>${p}</li>`).join('')}</ul>`;
+        };
+        
+        const rationaleHtml = formatRationale(rationaleRaw);
         const modelStampHtml = modelStampRaw
-            ? `<div class="rationale-meta"><span class="rationale-meta-label">Model Version:</span> <span class="rationale-meta-value">${escapeHtml(modelStampRaw)}</span></div>`
+            ? `<div class="details-footer">${escapeHtml(modelStampRaw)}</div>`
             : '';
 
         // Set data attributes for sorting and filtering
@@ -1668,11 +1683,8 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                     </div>
                     <div class="rationale-panel" id="${rationaleId}" hidden>
                         ${comparisonHtml}
+                        ${rationaleHtml ? `<div class="rationale-body">${rationaleHtml}</div>` : ''}
                         ${modelStampHtml}
-                        <div class="rationale-body">
-                            <div class="rationale-label">Rationale:</div>
-                            ${rationaleHtml}
-                        </div>
                     </div>
                 </div>
             </td>
@@ -2378,6 +2390,30 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             });
         });
 
+        // Segment dropdown items (multi-select)
+        toolbar.querySelectorAll('#segment-dropdown-menu .ft-dropdown-item').forEach(item => {
+            item.addEventListener('click', () => {
+                item.classList.toggle('active');
+                const menu = item.closest('.ft-dropdown-menu');
+                const btn = menu.previousElementSibling;
+                const activeCount = menu.querySelectorAll('.ft-dropdown-item.active').length;
+                btn.textContent = activeCount > 0 ? `⏱ Segment (${activeCount}) ▾` : '⏱ Segment ▾';
+                applyToolbarFilters();
+            });
+        });
+
+        // Pick Type dropdown items (multi-select)
+        toolbar.querySelectorAll('#picktype-dropdown-menu .ft-dropdown-item').forEach(item => {
+            item.addEventListener('click', () => {
+                item.classList.toggle('active');
+                const menu = item.closest('.ft-dropdown-menu');
+                const btn = menu.previousElementSibling;
+                const activeCount = menu.querySelectorAll('.ft-dropdown-item.active').length;
+                btn.textContent = activeCount > 0 ? `📋 Pick (${activeCount}) ▾` : '📋 Pick ▾';
+                applyToolbarFilters();
+            });
+        });
+
         // Clear button
         const clearBtn = document.getElementById('ft-clear');
         clearBtn?.addEventListener('click', () => {
@@ -2389,6 +2425,12 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             // Clear fire dropdown
             toolbar.querySelectorAll('#fire-dropdown-menu .ft-dropdown-item').forEach(i => i.classList.remove('active'));
             document.getElementById('fire-dropdown-btn').textContent = '🔥 Fire ▾';
+            // Clear segment dropdown
+            toolbar.querySelectorAll('#segment-dropdown-menu .ft-dropdown-item').forEach(i => i.classList.remove('active'));
+            document.getElementById('segment-dropdown-btn').textContent = '⏱ Segment ▾';
+            // Clear pick type dropdown
+            toolbar.querySelectorAll('#picktype-dropdown-menu .ft-dropdown-item').forEach(i => i.classList.remove('active'));
+            document.getElementById('picktype-dropdown-btn').textContent = '📋 Pick ▾';
             applyToolbarFilters();
         });
 
@@ -2527,7 +2569,17 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             activeFires.push(i.dataset.v);
         });
 
-        console.log(`🔍 [Toolbar Filter] Leagues: ${activeLeagues.join(',')||'all'}, Edges: ${activeEdges.join(',')||'all'}, Fires: ${activeFires.join(',')||'all'}`);
+        const activeSegments = [];
+        toolbar.querySelectorAll('#segment-dropdown-menu .ft-dropdown-item.active').forEach(i => {
+            activeSegments.push(i.dataset.v.toUpperCase());
+        });
+
+        const activePickTypes = [];
+        toolbar.querySelectorAll('#picktype-dropdown-menu .ft-dropdown-item.active').forEach(i => {
+            activePickTypes.push(i.dataset.v.toLowerCase());
+        });
+
+        console.log(`🔍 [Toolbar Filter] Leagues: ${activeLeagues.join(',')||'all'}, Edges: ${activeEdges.join(',')||'all'}, Fires: ${activeFires.join(',')||'all'}, Segments: ${activeSegments.join(',')||'all'}, PickTypes: ${activePickTypes.join(',')||'all'}`);
 
         // Filter rows
         let visibleCount = 0;
@@ -2563,6 +2615,26 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             if (show && activeFires.length > 0) {
                 const rowFire = parseInt(row.getAttribute('data-fire') || '0', 10) || 0;
                 if (!activeFires.includes(String(rowFire))) show = false;
+            }
+
+            // Segment filter
+            if (show && activeSegments.length > 0) {
+                const rowSegment = (row.getAttribute('data-segment') || 'FG').toUpperCase();
+                if (!activeSegments.includes(rowSegment)) show = false;
+            }
+
+            // Pick Type filter
+            if (show && activePickTypes.length > 0) {
+                const rowPickType = (row.getAttribute('data-pick-type') || 'spread').toLowerCase();
+                // Handle variations: "total" matches "total", "ou", "over", "under"
+                const match = activePickTypes.some(pt => {
+                    if (pt === 'total' && (rowPickType === 'total' || rowPickType === 'ou' || rowPickType === 'over/under')) return true;
+                    if (pt === 'team-total' && (rowPickType === 'team-total' || rowPickType === 'team total' || rowPickType === 'tt')) return true;
+                    if (pt === 'moneyline' && (rowPickType === 'moneyline' || rowPickType === 'ml')) return true;
+                    if (pt === 'spread' && rowPickType === 'spread') return true;
+                    return rowPickType === pt;
+                });
+                if (!match) show = false;
             }
 
             row.style.display = show ? '' : 'none';
@@ -2844,6 +2916,28 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             btn.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
             panel.hidden = isOpen;
             btn.textContent = isOpen ? 'Details' : 'Hide';
+
+            // CRITICAL FIX: Force overflow visible on parent TD and TR when panel is open
+            // This overrides any CSS that might be clipping the dropdown
+            const parentTd = panel.closest('td');
+            const parentTr = panel.closest('tr');
+            if (!isOpen) {
+                // Opening the panel - force overflow visible
+                if (parentTd) {
+                    parentTd.style.overflow = 'visible';
+                }
+                if (parentTr) {
+                    parentTr.style.overflow = 'visible';
+                }
+            } else {
+                // Closing the panel - restore default (let CSS handle it)
+                if (parentTd) {
+                    parentTd.style.overflow = '';
+                }
+                if (parentTr) {
+                    parentTr.style.overflow = '';
+                }
+            }
         });
     }
 
