@@ -4,9 +4,8 @@ This repo is a **static HTML/CSS/JS dashboard** hosted on **Azure Static Web App
 
 ## Entry pages
 
-- `index.html` → redirects to `weekly-lineup.html`
+- `index.html` → Dashboard / Active Picks page (uses API) - **Main entry point**
 - `weekly-lineup.html` → Weekly Lineup page
-- `dashboard.html` → Dashboard / Active Picks page (uses API)
 - `odds-market.html` → Odds Market page
 
 ## Runtime configuration

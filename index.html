@@ -45,10 +45,10 @@
     <link rel="stylesheet" href="assets/css/components/segment-colors.css?v=20251225-99">
 
     <!-- 8. Dashboard-specific styles (self-contained) -->
-    <link rel="stylesheet" href="assets/css/pages/dashboard.css?v=33.01.3">
+    <link rel="stylesheet" href="assets/css/pages/dashboard.css?v=33.02.10">
 
     <!-- 9. Mobile Responsive Styles -->
-    <link rel="stylesheet" href="assets/css/components/mobile-responsive.css?v=20251225-99">
+    <link rel="stylesheet" href="assets/css/components/mobile-responsive.css?v=33.02.0">
 
     <!-- Dashboard styles consolidated in assets/css/pages/dashboard.css v5.1 -->
 
@@ -56,6 +56,15 @@
     <script src="config.production.js" defer></script>
     <script src="assets/js/utils/shared-utils.js?v=20251224-3" defer></script>
     <script src="assets/js/utils/notifications.js?v=20251224-3" defer></script>
+    
+    <!-- Error Handler (must load early for global error handling) -->
+    <script src="assets/js/utils/error-handler.js?v=20250101-1" defer></script>
+    
+    <!-- Team Data Loader (loads external team data) -->
+    <script src="assets/js/utils/team-data-loader.js?v=20250101-1" defer></script>
+    
+    <!-- Filter State Persistence (saves/restores filter state) -->
+    <script src="assets/js/utils/filter-state-persistence.js?v=20250101-1" defer></script>
 
     <!-- Core dashboard interactions: KPI tiles, sorting -->
     <script src="assets/js/core/debug-config.js?v=20251224-3" defer></script>
@@ -71,7 +80,7 @@
 <nav class="brand-nav" role="navigation" aria-label="Main navigation">
     <ul class="nav-links" aria-label="Primary">
         <li>
-            <a href="dashboard.html" class="nav-link active" aria-current="page">Dashboard</a>
+            <a href="index.html" class="nav-link active" aria-current="page">Dashboard</a>
         </li>
         <li>
             <a href="weekly-lineup.html" class="nav-link">Weekly Lineup</a>
@@ -87,11 +96,11 @@
                 <section class="sportsbook-card" data-book="hulkwager" aria-labelledby="sportsbook-hulkwager-name">
                     <div class="sportsbook-card-header">
                         <div class="sportsbook-name-group" id="sportsbook-hulkwager-name">
-                            <span class="connection-status connected"></span>
+                            <span class="connection-status disconnected"></span>
                             <span class="sportsbook-name">Hulk Wager</span>
                         </div>
                         <div class="sportsbook-meta-compact">
-                            <span class="sportsbook-last-sync">Last: <span class="sync-time">5m ago</span></span>
+                            <span class="sportsbook-last-sync">Last: <span class="sync-time">--</span></span>
                             <button type="button" class="sportsbook-fetch-compact" data-book="hulkwager" aria-label="Fetch picks from Hulk Wager">
                                 <span class="fetch-icon">↻</span>
                             </button>
@@ -108,11 +117,11 @@
                 <section class="sportsbook-card" data-book="bombay711" aria-labelledby="sportsbook-bombay711-name">
                     <div class="sportsbook-card-header">
                         <div class="sportsbook-name-group" id="sportsbook-bombay711-name">
-                            <span class="connection-status connected"></span>
+                            <span class="connection-status disconnected"></span>
                             <span class="sportsbook-name">Bombay 711</span>
                         </div>
                         <div class="sportsbook-meta-compact">
-                            <span class="sportsbook-last-sync">Last: <span class="sync-time">12m ago</span></span>
+                            <span class="sportsbook-last-sync">Last: <span class="sync-time">--</span></span>
                             <button type="button" class="sportsbook-fetch-compact" data-book="bombay711" aria-label="Fetch picks from Bombay 711">
                                 <span class="fetch-icon">↻</span>
                             </button>
@@ -129,11 +138,11 @@
                 <section class="sportsbook-card" data-book="kingofsports" aria-labelledby="sportsbook-kingofsports-name">
                     <div class="sportsbook-card-header">
                         <div class="sportsbook-name-group" id="sportsbook-kingofsports-name">
-                            <span class="connection-status connected"></span>
+                            <span class="connection-status disconnected"></span>
                             <span class="sportsbook-name">King of Sports</span>
                         </div>
                         <div class="sportsbook-meta-compact">
-                            <span class="sportsbook-last-sync">Last: <span class="sync-time">2m ago</span></span>
+                            <span class="sportsbook-last-sync">Last: <span class="sync-time">--</span></span>
                             <button type="button" class="sportsbook-fetch-compact" data-book="kingofsports" aria-label="Fetch picks from King of Sports">
                                 <span class="fetch-icon">↻</span>
                             </button>
@@ -167,33 +176,36 @@
                         </div>
                     </form>
                 </section>
+
+                <!-- Upload Section Divider -->
+                <div class="dropdown-section-divider">
+                    <span class="divider-label">Upload Picks</span>
+                </div>
+
                 <!-- Manual Upload -->
-                <section class="sportsbook-card manual-upload-card" aria-labelledby="manual-upload-name">
-                    <div class="sportsbook-card-header">
-                        <div class="sportsbook-name-group" id="manual-upload-name">
-                            <span class="connection-status connected" style="background: #00d689; box-shadow: 0 0 8px rgba(0, 214, 137, 0.6);"></span>
-                            <span class="sportsbook-name">Manual Upload</span>
-                        </div>
-                        <div class="manual-header-actions">
-                            <select id="manual-sportsbook-select" class="sportsbook-select" aria-label="Select sportsbook">
-                                <option value="">Select Book...</option>
-                                <option value="hulkwager">Hulk Wager</option>
-                                <option value="bombay711">Bombay 711</option>
-                                <option value="kingofsports">King of Sports</option>
-                                <option value="primetimeaction">Prime Time Action</option>
-                                <option value="other">Other</option>
-                            </select>
-                            <button type="button" class="manual-clear-btn-header">Clear</button>
-                            <button type="button" class="manual-submit-btn-header">Upload</button>
-                        </div>
+                <section class="manual-upload-section" aria-labelledby="manual-upload-name">
+                    <div class="manual-upload-header" id="manual-upload-name">
+                        <select id="manual-sportsbook-select" class="sportsbook-select-large" aria-label="Select sportsbook">
+                            <option value="">Select Sportsbook...</option>
+                            <option value="hulkwager">Hulk Wager</option>
+                            <option value="bombay711">Bombay 711</option>
+                            <option value="kingofsports">King of Sports</option>
+                            <option value="primetimeaction">Prime Time Action</option>
+                            <option value="other">Other</option>
+                        </select>
                     </div>
-                    <div class="manual-upload-content">
+                    <div class="manual-upload-body">
                         <div class="upload-drop-zone" id="manual-upload-drop-zone">
+                            <span class="drop-zone-icon">📄</span>
                             <span class="drop-zone-text">Drag & Drop or Paste Image</span>
                             <input type="file" id="manual-upload-file" class="hidden-file-input" accept=".pdf,.html,.txt,.doc,.docx,.png,.jpg,.jpeg">
                             <button type="button" class="upload-browse-btn">Browse</button>
                         </div>
-                        <textarea class="manual-picks-input" placeholder="Or paste picks here (e.g. Bills -3, Eagles ML)..." rows="2"></textarea>
+                        <textarea class="manual-picks-input" placeholder="Or paste picks text here...&#10;Example: Bills -3 -110, Eagles ML +150" rows="3"></textarea>
+                        <div class="manual-upload-actions">
+                            <button type="button" class="manual-clear-btn-header">Clear</button>
+                            <button type="button" class="manual-submit-btn-header">Upload Picks</button>
+                        </div>
                     </div>
                 </section>
             </div>
@@ -389,8 +401,7 @@
                         <col style="width: 10%;"><!-- Risk/Win -->
                         <col style="width: 17%;"><!-- Box Score -->
                         <col style="width: 8%;"><!-- Status -->
-                        <col style="width: 8%;"><!-- $ Won / $ Lost -->
-                        <col style="width: 4%;"><!-- Remove -->
+                        <col style="width: 12%;"><!-- $ Won / $ Lost -->
                     </colgroup>
                     <thead>
                         <tr>
@@ -468,11 +479,6 @@
                                     </button>
                                 </div>
                             </th>
-                            <th scope="col" class="center col-remove">
-                                <div class="th-header-shell">
-                                    <span class="header-main-text">Remove</span>
-                                </div>
-                            </th>
                         </tr>
                     </thead>
                     <tbody id="picks-tbody">
@@ -505,7 +511,7 @@
     <script src="assets/js/modules/picks-table-renderer.js?v=20251224-3" defer></script>
     <script src="assets/js/features/active-picks-modular.js?v=20251225-8" defer></script>
     <script src="dashboard/js/kpi-calculator.js?v=20251227-1" defer></script>
-    <script src="dashboard/js/smart-load-picks.js?v=20251225-4" defer></script>
+    <script src="dashboard/js/smart-load-picks.js?v=20260105-1" defer></script>
     <script src="assets/js/core/navigation.js?v=20251224-3" defer></script>
     <script src="dashboard/js/status-logic.js?v=20251224-3" defer></script>
     <script src="dashboard/js/status-tooltip.js?v=20251225-3" defer></script>
@@ -519,11 +525,11 @@
     <script src="assets/js/features/nfl-picks-fetcher.js?v=20251225" defer></script>
     <script src="assets/js/features/ncaaf-picks-fetcher.js?v=20251225" defer></script>
     <script src="assets/js/features/unified-picks-fetcher.js?v=20251225" defer></script>
-    <script src="assets/js/features/pick-standardizer.js?v=20251224-3" defer></script>
+    <script src="assets/js/features/pick-standardizer.js?v=20251228-2" defer></script>
     <script src="assets/js/features/import-options.js?v=20251224-3" defer></script>
 
     <!-- Dashboard-specific: Picks Manager for local development -->
-    <script src="dashboard/js/local-picks-manager.js?v=20251227-1" defer></script>
+    <script src="dashboard/js/local-picks-manager.js?v=20251228-4" defer></script>
 
     <!-- Dashboard Initialization (KPI tiles, flip, refresh) -->
     <script src="dashboard/js/dashboard-init.js?v=20251224-3" defer></script>

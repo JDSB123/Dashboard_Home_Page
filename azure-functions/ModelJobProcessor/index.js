@@ -14,10 +14,10 @@ function getModelApiConfig(modelType, endpoint, params) {
 
     switch (modelType.toLowerCase()) {
         case 'nba':
-            // NBA uses /slate/{date} for daily predictions
+            // NBA uses /slate/{date}/executive for daily picks (matching frontend fetcher)
             const nbaDate = params.date || today;
             return {
-                url: `${endpoint}/slate/${nbaDate}`,
+                url: `${endpoint}/slate/${nbaDate}/executive`,
                 method: 'GET',
                 data: null
             };

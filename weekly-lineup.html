@@ -15,10 +15,11 @@
     <!-- CSS: Bundled for performance -->
     <link rel="stylesheet" href="dist/bundle.min.css?v=33.00.4">
     <!-- CSS: Page specific overrides (Hotfix for UI) -->
-    <link rel="stylesheet" href="assets/css/pages/weekly-lineup.css?v=33.01.5">
+    <link rel="stylesheet" href="assets/css/pages/weekly-lineup.css?v=33.02.8">
     <!-- Mobile Responsive Styles -->
-    <link rel="stylesheet" href="assets/css/components/mobile-responsive.css?v=20251225-99">
-    <!-- Styles consolidated in weekly-lineup.css v33.01.0 -->
+    <link rel="stylesheet" href="assets/css/components/mobile-responsive.css?v=33.02.0">
+    <!-- COMPLETE MOBILE OVERHAUL - This MUST be loaded LAST to override everything -->
+    <link rel="stylesheet" href="assets/css/weekly-lineup-mobile-complete.css?v=2.0.0">
     
     <!-- Silence console output in production BEFORE any other deferred scripts run -->
     <script src="assets/js/core/debug-config.js?v=33.00.0" defer></script>
@@ -32,6 +33,32 @@
     <script src="assets/js/features/nfl-picks-fetcher.js?v=33.00.0" defer></script>
     <script src="assets/js/features/ncaaf-picks-fetcher.js?v=33.00.0" defer></script>
     <script src="assets/js/features/unified-picks-fetcher.js?v=33.01.0" defer></script>
+    <!-- Complete Mobile Experience -->
+    <script src="assets/js/weekly-lineup-mobile.js?v=2.0.0" defer></script>
+    
+    <!-- Critical Mobile Styles - Inline for immediate effect -->
+    <style>
+        @media (max-width: 767px) {
+            /* Immediate mobile overrides */
+            body.page-weekly-lineup .filter-toolbar,
+            body.page-weekly-lineup .toolbar-layout,
+            body.page-weekly-lineup .dashboard-topline,
+            body.page-weekly-lineup .unified-filter,
+            body.page-weekly-lineup .date-toggle-group,
+            body.page-weekly-lineup .export-import-controls {
+                display: none !important;
+            }
+            
+            body.page-weekly-lineup {
+                padding-top: 48px !important;
+            }
+            
+            body.page-weekly-lineup .main-container {
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+        }
+    </style>
 </head>
 <body class="page-glow page-weekly-lineup">
 <noscript>
@@ -42,7 +69,7 @@
 
 <nav class="brand-nav" role="navigation" aria-label="Main navigation">
     <ul class="nav-links" aria-label="Primary">
-        <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+        <li><a href="index.html" class="nav-link">Dashboard</a></li>
         <li><a href="weekly-lineup.html" class="nav-link active" aria-current="page">Weekly Lineup</a></li>
         <li><a href="odds-market.html" class="nav-link">Odds Market</a></li>
         <li class="nav-dropdown">
@@ -62,10 +89,10 @@
                         </div>
                     </div>
                     <div class="sportsbook-actions-row">
-                        <div class="sportsbook-credentials-group">
-                            <input type="text" id="hulk-username" class="credential-input-compact" placeholder="Username" aria-label="Hulk Wager username">
-                            <input type="password" id="hulk-password" class="credential-input-compact" placeholder="Password" aria-label="Hulk Wager password">
-                        </div>
+                        <form class="sportsbook-credentials-group" autocomplete="off" onsubmit="return false;">
+                            <input type="text" id="hulk-username" class="credential-input-compact" placeholder="Username" aria-label="Hulk Wager username" autocomplete="username">
+                            <input type="password" id="hulk-password" class="credential-input-compact" placeholder="Password" aria-label="Hulk Wager password" autocomplete="current-password">
+                        </form>
                     </div>
                 </section>
                 <section class="sportsbook-card" data-book="bombay711">
@@ -82,10 +109,10 @@
                         </div>
                     </div>
                     <div class="sportsbook-actions-row">
-                        <div class="sportsbook-credentials-group">
-                            <input type="text" id="bombay-username" class="credential-input-compact" placeholder="Username" aria-label="Bombay 711 username">
-                            <input type="password" id="bombay-password" class="credential-input-compact" placeholder="Password" aria-label="Bombay 711 password">
-                        </div>
+                        <form class="sportsbook-credentials-group" autocomplete="off" onsubmit="return false;">
+                            <input type="text" id="bombay-username" class="credential-input-compact" placeholder="Username" aria-label="Bombay 711 username" autocomplete="username">
+                            <input type="password" id="bombay-password" class="credential-input-compact" placeholder="Password" aria-label="Bombay 711 password" autocomplete="current-password">
+                        </form>
                     </div>
                 </section>
                 <section class="sportsbook-card" data-book="kingofsports">
@@ -102,10 +129,10 @@
                         </div>
                     </div>
                     <div class="sportsbook-actions-row">
-                        <div class="sportsbook-credentials-group">
-                            <input type="text" id="kingofsports-username" class="credential-input-compact" placeholder="Username" aria-label="King of Sports username">
-                            <input type="password" id="kingofsports-password" class="credential-input-compact" placeholder="Password" aria-label="King of Sports password">
-                        </div>
+                        <form class="sportsbook-credentials-group" autocomplete="off" onsubmit="return false;">
+                            <input type="text" id="kingofsports-username" class="credential-input-compact" placeholder="Username" aria-label="King of Sports username" autocomplete="username">
+                            <input type="password" id="kingofsports-password" class="credential-input-compact" placeholder="Password" aria-label="King of Sports password" autocomplete="current-password">
+                        </form>
                     </div>
                 </section>
                 <section class="sportsbook-card" data-book="primetimeaction">
@@ -122,10 +149,10 @@
                         </div>
                     </div>
                     <div class="sportsbook-actions-row">
-                        <div class="sportsbook-credentials-group">
-                            <input type="text" id="primetimeaction-username" class="credential-input-compact" placeholder="Username" aria-label="Prime Time Action username">
-                            <input type="password" id="primetimeaction-password" class="credential-input-compact" placeholder="Password" aria-label="Prime Time Action password">
-                        </div>
+                        <form class="sportsbook-credentials-group" autocomplete="off" onsubmit="return false;">
+                            <input type="text" id="primetimeaction-username" class="credential-input-compact" placeholder="Username" aria-label="Prime Time Action username" autocomplete="username">
+                            <input type="password" id="primetimeaction-password" class="credential-input-compact" placeholder="Password" aria-label="Prime Time Action password" autocomplete="current-password">
+                        </form>
                     </div>
                 </section>
                 <section class="sportsbook-card upload-picks-card" aria-labelledby="upload-picks-title">
@@ -215,6 +242,12 @@
         <div class="toolbar-container toolbar-layout">
             <div class="filter-toolbar" id="filter-toolbar">
                 <div class="ft-left">
+                    <!-- View Toggle: Active/History -->
+                    <div class="ft-view-toggle" id="view-toggle">
+                        <button class="ft-view-btn active" data-view="active" title="Today's active picks">Active</button>
+                        <button class="ft-view-btn" data-view="history" title="Archived picks history">History</button>
+                    </div>
+                    <span class="ft-divider"></span>
                     <!-- League pills -->
                     <button class="ft-pill ft-league" data-league="nba">NBA</button>
                     <button class="ft-pill ft-league" data-league="ncaab">NCAAM</button>
@@ -230,7 +263,7 @@
                             <button class="ft-dropdown-item edge-item edge-low" data-f="edge" data-v="low">Low (&lt;2%)</button>
                         </div>
                     </div>
-                    <!-- Fire dropdown - Original emoji version -->
+                    <!-- Fire dropdown -->
                     <div class="ft-dropdown">
                         <button class="ft-dropdown-btn" id="fire-dropdown-btn">🔥 Fire ▾</button>
                         <div class="ft-dropdown-menu" id="fire-dropdown-menu">
@@ -239,6 +272,27 @@
                             <button class="ft-dropdown-item" data-f="fire" data-v="3">🔥🔥🔥 Warm</button>
                             <button class="ft-dropdown-item" data-f="fire" data-v="2">🔥🔥</button>
                             <button class="ft-dropdown-item" data-f="fire" data-v="1">🔥</button>
+                        </div>
+                    </div>
+                    <!-- Segment dropdown -->
+                    <div class="ft-dropdown">
+                        <button class="ft-dropdown-btn" id="segment-dropdown-btn">⏱ Segment ▾</button>
+                        <div class="ft-dropdown-menu" id="segment-dropdown-menu">
+                            <button class="ft-dropdown-item" data-f="segment" data-v="FG">Full Game</button>
+                            <button class="ft-dropdown-item" data-f="segment" data-v="1H">1st Half</button>
+                            <button class="ft-dropdown-item" data-f="segment" data-v="2H">2nd Half</button>
+                            <button class="ft-dropdown-item" data-f="segment" data-v="1Q">1st Quarter</button>
+                            <button class="ft-dropdown-item" data-f="segment" data-v="2Q">2nd Quarter</button>
+                        </div>
+                    </div>
+                    <!-- Pick Type dropdown -->
+                    <div class="ft-dropdown">
+                        <button class="ft-dropdown-btn" id="picktype-dropdown-btn">📋 Pick ▾</button>
+                        <div class="ft-dropdown-menu" id="picktype-dropdown-menu">
+                            <button class="ft-dropdown-item" data-f="pick-type" data-v="spread">Spread</button>
+                            <button class="ft-dropdown-item" data-f="pick-type" data-v="moneyline">Moneyline</button>
+                            <button class="ft-dropdown-item" data-f="pick-type" data-v="total">Total (O/U)</button>
+                            <button class="ft-dropdown-item" data-f="pick-type" data-v="team-total">Team Total</button>
                         </div>
                     </div>
                     <button class="ft-clear" id="ft-clear">✕ Clear</button>
@@ -400,7 +454,7 @@
 <script src="assets/js/modules/picks-dom-utils.js?v=33.00.4" defer></script>
 <script src="assets/js/utils/logo-cache.js?v=33.00.4" defer></script>
 <script src="assets/js/features/live-scores.js?v=33.00.4" defer></script>
-<script src="assets/js/features/weekly-lineup.js?v=33.00.4" defer></script>
+<script src="assets/js/features/weekly-lineup.js?v=33.02.5" defer></script>
 <script src="assets/js/modules/picks-state-manager.js?v=33.00.4" defer></script>
 <script src="assets/js/modules/picks-table-renderer.js?v=33.00.4" defer></script>
 <script src="assets/js/modules/picks-filter-manager.js?v=33.00.4" defer></script>

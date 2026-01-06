@@ -1,16 +1,43 @@
 /**
- * NBA Picks Fetcher v1.0
- * Fetches NBA model picks from the Azure Container App API
+ * NBA Picks Fetcher v1.1
+ * Fetches NBA model picks from Azure Function App (primary) or Container App (fallback)
+ * 
+ * Primary: nba-picks-trigger Function App (/api/weekly-lineup/nba)
+ * Fallback: nba-gbsv-api Container App (/slate/{date}/executive)
  */
 
 (function() {
     'use strict';
 
-    const DEFAULT_NBA_API_URL = 'https://nba-gbsv-api.livelycoast-b48c3cb0.eastus.azurecontainerapps.io';
+    // Primary: Function App for Weekly Lineup picks
+    const NBA_FUNCTION_URL = window.APP_CONFIG?.NBA_FUNCTION_URL || 'https://nba-picks-trigger.azurewebsites.net';
+    // Fallback: Container App for model API
+    const NBA_API_URL = window.APP_CONFIG?.NBA_API_URL || 'https://nba-gbsv-api.livelycoast-b48c3cb0.eastus.azurecontainerapps.io';
 
-    // Date-aware cache: { dateKey: { data, timestamp } }
-    const picksCache = {};
+    let picksCache = null;
+    let lastFetch = null;
+    let lastSource = null; // Track which source was used
     const CACHE_DURATION = 60000; // 1 minute
+    const REQUEST_TIMEOUT = 10000; // 10 seconds
+
+    /**
+     * Fetch with timeout
+     */
+    async function fetchWithTimeout(url, timeoutMs = REQUEST_TIMEOUT) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+        try {
+            const response = await fetch(url, { signal: controller.signal });
+            clearTimeout(timeoutId);
+            return response;
+        } catch (error) {
+            clearTimeout(timeoutId);
+            if (error.name === 'AbortError') {
+                throw new Error(`Request timed out after ${timeoutMs}ms`);
+            }
+            throw error;
+        }
+    }
 
     const getApiUrl = () => window.APP_CONFIG?.NBA_API_URL || DEFAULT_NBA_API_URL;
 
@@ -166,10 +193,12 @@
 
     /**
      * Fetch NBA picks for a given date
+     * Tries Function App first, falls back to Container App
      * @param {string} date - Date in YYYY-MM-DD format, 'today', or 'tomorrow'
      * @returns {Promise<Object>} Picks data
      */
     async function fetchNBAPicks(date = 'today') {
+<<<<<<< HEAD
         const cacheKey = getCacheKey(date);
         const cached = picksCache[cacheKey];
         if (cached && (Date.now() - cached.timestamp < CACHE_DURATION)) {
@@ -204,6 +233,54 @@
                 console.error('[NBA-PICKS] HTML fallback also failed:', fallbackError.message);
                 throw error;
             }
+=======
+        // Use cache if fresh
+        if (picksCache && lastFetch && (Date.now() - lastFetch < CACHE_DURATION)) {
+            console.log(`[NBA-PICKS] Using cached picks (source: ${lastSource})`);
+            return picksCache;
+        }
+
+        // Try Function App first (primary source for Weekly Lineup)
+        const functionUrl = `${NBA_FUNCTION_URL}/api/weekly-lineup/nba`;
+        console.log(`[NBA-PICKS] Trying Function App: ${functionUrl}`);
+
+        try {
+            const response = await fetchWithTimeout(functionUrl);
+            if (response.ok) {
+                const data = await response.json();
+                picksCache = data;
+                lastFetch = Date.now();
+                lastSource = 'function-app';
+                const pickCount = data.plays?.length || data.picks?.length || data.total_plays || 0;
+                console.log(`[NBA-PICKS] ✅ Function App returned ${pickCount} picks`);
+                return data;
+            }
+            console.warn(`[NBA-PICKS] Function App returned ${response.status}, trying Container App...`);
+        } catch (error) {
+            console.warn(`[NBA-PICKS] Function App failed: ${error.message}, trying Container App...`);
+        }
+
+        // Fallback to Container App
+        const containerUrl = `${NBA_API_URL}/slate/${date}/executive`;
+        console.log(`[NBA-PICKS] Falling back to Container App: ${containerUrl}`);
+
+        try {
+            const response = await fetchWithTimeout(containerUrl);
+            if (!response.ok) {
+                throw new Error(`Container App error: ${response.status}`);
+            }
+
+            const data = await response.json();
+            picksCache = data;
+            lastFetch = Date.now();
+            lastSource = 'container-app';
+
+            console.log(`[NBA-PICKS] ✅ Container App returned ${data.total_plays || 0} picks`);
+            return data;
+        } catch (error) {
+            console.error('[NBA-PICKS] Both sources failed:', error.message);
+            throw error;
+>>>>>>> 3209fcd64a2ffe0e79a7841c8d93e96f534a16f1
         }
     }
 
@@ -231,19 +308,50 @@
     }
 
     /**
-     * Check API health
+     * Check API health for both sources
      * @returns {Promise<Object>} Health status
      */
     async function checkHealth() {
+<<<<<<< HEAD
         const apiUrl = getApiUrl();
         const url = `${apiUrl}/health`;
         try {
             const response = await fetch(url, { cache: 'no-store' });
             return await response.json();
+=======
+        const health = {
+            functionApp: { status: 'unknown' },
+            containerApp: { status: 'unknown' }
+        };
+
+        // Check Function App
+        try {
+            const response = await fetchWithTimeout(`${NBA_FUNCTION_URL}/api/health`, 5000);
+            if (response.ok) {
+                health.functionApp = await response.json();
+                health.functionApp.status = 'healthy';
+            } else {
+                health.functionApp = { status: 'error', code: response.status };
+            }
+>>>>>>> 3209fcd64a2ffe0e79a7841c8d93e96f534a16f1
         } catch (error) {
-            console.error('[NBA-PICKS] Health check failed:', error.message);
-            return { status: 'error', message: error.message };
+            health.functionApp = { status: 'error', message: error.message };
         }
+
+        // Check Container App
+        try {
+            const response = await fetchWithTimeout(`${NBA_API_URL}/health`, 5000);
+            if (response.ok) {
+                health.containerApp = await response.json();
+                health.containerApp.status = 'healthy';
+            } else {
+                health.containerApp = { status: 'error', code: response.status };
+            }
+        } catch (error) {
+            health.containerApp = { status: 'error', message: error.message };
+        }
+
+        return health;
     }
 
     /**
@@ -266,6 +374,82 @@
      *   fire_rating: "GOOD"
      * }
      */
+    function generateRationale(play) {
+        // Generate detailed rationale from model data
+        const parts = [];
+
+        // Add model prediction vs market line
+        if (play.model_prediction && play.market_line) {
+            const modelPred = parseFloat(play.model_prediction);
+            const marketLine = parseFloat(play.market_line);
+            const diff = Math.abs(modelPred - marketLine);
+
+            if (play.market === 'TOTAL') {
+                if (play.pick.startsWith('OVER')) {
+                    parts.push(`Model predicts ${modelPred.toFixed(1)} total points (${diff >= 2 ? 'strongly' : 'moderately'} favoring OVER)`);
+                } else if (play.pick.startsWith('UNDER')) {
+                    parts.push(`Model predicts ${modelPred.toFixed(1)} total points (${diff >= 2 ? 'strongly' : 'moderately'} favoring UNDER)`);
+                }
+            } else if (play.market === 'SPREAD') {
+                if (play.model_prediction.includes(' ')) {
+                    // Format: "Team -0.2"
+                    parts.push(`Model predicts ${play.model_prediction} spread movement`);
+                }
+            }
+        }
+
+        // Add edge analysis
+        if (play.edge) {
+            const edgeVal = parseFloat(play.edge.replace('%', ''));
+            parts.push(`${Math.abs(edgeVal).toFixed(1)}% edge ${edgeVal > 0 ? 'advantage' : 'disadvantage'}`);
+        }
+
+        // Add probability analysis
+        if (play.p_model && play.p_fair) {
+            const modelProb = (parseFloat(play.p_model) * 100).toFixed(1);
+            const fairProb = (parseFloat(play.p_fair) * 100).toFixed(1);
+            parts.push(`Model probability: ${modelProb}% vs fair market: ${fairProb}%`);
+        }
+
+        // Add EV analysis
+        if (play.ev_pct) {
+            const ev = parseFloat(play.ev_pct);
+            if (ev > 0) {
+                parts.push(`Positive expected value: ${ev.toFixed(1)}%`);
+            }
+        }
+
+        // Add Kelly criterion
+        if (play.kelly_fraction) {
+            const kelly = parseFloat(play.kelly_fraction);
+            if (kelly > 0) {
+                const recommendedBet = (kelly * 100).toFixed(1);
+                parts.push(`Kelly criterion suggests ${recommendedBet}% of bankroll`);
+            }
+        }
+
+        // Add confidence/fire rating explanation
+        if (play.fire_rating) {
+            const rating = play.fire_rating.toUpperCase();
+            if (rating === 'ELITE') {
+                parts.push('ELITE rating: 70%+ confidence with 5+ point edge');
+            } else if (rating === 'STRONG') {
+                parts.push('STRONG rating: 60%+ confidence with 3+ point edge');
+            } else if (rating === 'GOOD') {
+                parts.push('GOOD rating: Passes all quality filters');
+            }
+        }
+
+        // Add market context
+        if (play.market === 'TOTAL') {
+            parts.push(`Market line: ${play.market_line} points`);
+        } else if (play.market === 'SPREAD') {
+            parts.push(`Market spread: ${play.market_line}`);
+        }
+
+        return parts.length > 0 ? parts.join('. ') : 'Advanced machine learning analysis of team performance, injuries, pace, and historical data.';
+    }
+
     function formatPickForTable(play) {
         // Parse matchup to get teams (format: "Away Team (W-L) @ Home Team (W-L)")
         const matchupStr = play.matchup || '';
@@ -313,8 +497,8 @@
             line: play.market_line || '',
             modelPrice: play.model_prediction || '',
             fire_rating: play.fire_rating || '',
-            rationale: play.rationale || play.reason || play.analysis || play.notes || play.executive_summary || '',
-            modelVersion: play.model_version || play.modelVersion || play.model_tag || play.modelTag || ''
+            rationale: generateRationale(play),
+            modelVersion: play.model_version || play.modelVersion || play.model_tag || play.modelTag || play.version || 'NBA_v33.0.8.0'
         };
     }
 
@@ -325,11 +509,16 @@
         checkHealth,
         formatPickForTable,
         getCache: () => picksCache,
+<<<<<<< HEAD
         clearCache: () => {
             Object.keys(picksCache).forEach((k) => delete picksCache[k]);
         }
+=======
+        getLastSource: () => lastSource,
+        clearCache: () => { picksCache = null; lastFetch = null; lastSource = null; }
+>>>>>>> 3209fcd64a2ffe0e79a7841c8d93e96f534a16f1
     };
 
-    console.log('✅ NBAPicksFetcher v1.0 loaded');
+    console.log('✅ NBAPicksFetcher v1.1 loaded (Function App + Container App fallback)');
 
 })();

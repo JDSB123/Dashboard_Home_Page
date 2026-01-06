@@ -453,6 +453,44 @@
             setTimeout(() => {
                 statusBadge.style.animation = '';
             }, 500);
+
+            // Persist FINAL statuses to localStorage (win/loss/push)
+            // This ensures the archive system can read correct outcomes
+            if (['win', 'loss', 'push'].includes(newStatus)) {
+                this.persistStatusToStorage(row, newStatus);
+            }
+        }
+
+        /**
+         * Persist final status to localStorage for archive tracking
+         */
+        persistStatusToStorage(row, status) {
+            try {
+                const pickId = row.getAttribute('data-pick-id') || row.getAttribute('data-row-id');
+                if (!pickId) return;
+
+                const STORAGE_KEY = 'gbsv_picks';
+                const picks = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+
+                let updated = false;
+                const updatedPicks = picks.map(p => {
+                    // Match by ID or by row-id pattern
+                    if (p.id === pickId || p.id?.includes(pickId) || pickId?.includes(p.id)) {
+                        if (p.status !== status) {
+                            updated = true;
+                            return { ...p, status: status, finalizedAt: new Date().toISOString() };
+                        }
+                    }
+                    return p;
+                });
+
+                if (updated) {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedPicks));
+                    console.log(`[LIVE-SCORES] Persisted status '${status}' for pick ${pickId}`);
+                }
+            } catch (e) {
+                console.error('[LIVE-SCORES] Error persisting status:', e);
+            }
         }
 
         /**

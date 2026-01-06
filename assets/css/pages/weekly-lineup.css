@@ -880,6 +880,138 @@ body.page-weekly-lineup .picks-table tbody tr:hover,
     content: '✓';
 }
 
+/* ===== TRACKING STATUS INDICATORS ===== */
+.weekly-lineup-table .tracking-status {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    min-width: 60px;
+}
+
+.weekly-lineup-table .tracked-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.15rem;
+    padding: 0.25rem 0.5rem;
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.4);
+    border-radius: 4px;
+    font-size: 0.75rem;
+    color: var(--emerald-400);
+}
+
+.weekly-lineup-table .tracked-icon {
+    font-size: 0.875rem;
+    font-weight: bold;
+    color: var(--emerald-400);
+}
+
+.weekly-lineup-table .tracked-time {
+    font-size: 0.65rem;
+    color: var(--emerald-300);
+    white-space: nowrap;
+}
+
+/* Change alert indicator */
+.weekly-lineup-table .pick-change-alert {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.2rem 0.4rem;
+    background: rgba(251, 191, 36, 0.2);
+    border: 1px solid rgba(251, 191, 36, 0.5);
+    border-radius: 4px;
+    font-size: 0.7rem;
+    color: var(--gold-400);
+    white-space: nowrap;
+    margin-top: 0.15rem;
+}
+
+.weekly-lineup-table .change-icon {
+    font-size: 0.75rem;
+}
+
+.weekly-lineup-table .change-text {
+    font-weight: 600;
+}
+
+/* Remove button for tracked picks */
+.weekly-lineup-table .remove-tracked-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    margin-top: 4px;
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    border-radius: 4px;
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.weekly-lineup-table .remove-tracked-btn:hover {
+    background: rgba(239, 68, 68, 0.3);
+    border-color: rgba(239, 68, 68, 0.6);
+    color: #fca5a5;
+    transform: scale(1.1);
+}
+
+/* Row highlighting for tracked picks */
+.weekly-lineup-table tr.pick-tracked {
+    background: rgba(16, 185, 129, 0.05) !important;
+    border-left: 2px solid rgba(16, 185, 129, 0.3);
+}
+
+.weekly-lineup-table tr.pick-tracked:hover {
+    background: rgba(16, 185, 129, 0.1) !important;
+}
+
+/* Row highlighting for changed picks */
+.weekly-lineup-table tr.pick-changed {
+    border-left-color: rgba(251, 191, 36, 0.5);
+    background: rgba(251, 191, 36, 0.03) !important;
+}
+
+.weekly-lineup-table tr.pick-changed:hover {
+    background: rgba(251, 191, 36, 0.08) !important;
+}
+
+/* Changed value indicators */
+.weekly-lineup-table .value-changed {
+    position: relative;
+    color: var(--gold-400);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-style: wavy;
+    text-decoration-color: var(--gold-400);
+    text-underline-offset: 2px;
+}
+
+.weekly-lineup-table .edge-value-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    justify-content: center;
+}
+
+.weekly-lineup-table .edge-change-indicator {
+    font-size: 0.75rem;
+    opacity: 0.8;
+}
+
+/* Pick value changed styling */
+.weekly-lineup-table .pick-value-changed {
+    color: var(--gold-400);
+    font-weight: 600;
+}
+
 .weekly-lineup-table .matchup-stack .versus {
     color: var(--neutral-400);
     font-size: 0.875rem;
@@ -948,23 +1080,59 @@ body.page-weekly-lineup .picks-table tbody tr:hover,
 }
 
 /* Weekly Lineup - Rationale expand/collapse */
+/* CRITICAL: Override overflow:hidden on Pick cell to allow rationale dropdown to display */
+/* Use :has() selector to target TD containing the rationale panel */
+.page-weekly-lineup .weekly-lineup-table td:has(.rationale-panel),
+.page-weekly-lineup .weekly-lineup-table td:has(.pick-cell-wrapper),
+.page-weekly-lineup .weekly-lineup-table tbody td:nth-child(5),
+.page-weekly-lineup .picks-table tbody td:nth-child(5),
+body.page-weekly-lineup .weekly-lineup-table td[data-label="Pick"],
+body.page-weekly-lineup .weekly-lineup-table td[data-label="Recommended Pick"],
+body.page-weekly-lineup td[data-label="Recommended Pick"],
+body.page-weekly-lineup td[data-label="Pick"] {
+    overflow: visible !important;
+}
+
+/* Also ensure table rows don't clip the dropdown */
+.page-weekly-lineup .weekly-lineup-table tbody tr,
+body.page-weekly-lineup .weekly-lineup-table tbody tr,
+body.page-weekly-lineup .picks-table tbody tr {
+    overflow: visible !important;
+}
+
 .page-weekly-lineup .pick-cell-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.page-weekly-lineup .pick-cell-content {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: nowrap;
+    width: 100%;
+}
+
+.page-weekly-lineup .pick-cell-content .pick-cell {
+    flex: 1;
+    min-width: 0;
 }
 
 .page-weekly-lineup .rationale-toggle {
-    align-self: flex-start;
+    flex-shrink: 0;
     background: rgba(16, 185, 129, 0.10);
     border: 1px solid rgba(16, 185, 129, 0.28);
     color: var(--neutral-100);
-    font-size: 0.78rem;
+    font-size: 0.7rem;
     font-weight: 600;
     letter-spacing: 0.02em;
-    padding: 4px 10px;
-    border-radius: 999px;
+    padding: 3px 8px;
+    border-radius: 4px;
     cursor: pointer;
+    white-space: nowrap;
+    height: fit-content;
+    line-height: 1.2;
     transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
 }
 
@@ -975,16 +1143,270 @@ body.page-weekly-lineup .picks-table tbody tr:hover,
 }
 
 .page-weekly-lineup .rationale-panel {
-    background: rgba(10, 16, 28, 0.60);
-    border: 1px solid rgba(255, 255, 255, 0.10);
-    border-radius: 12px;
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    background: #080c14;
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    border-radius: 6px;
+    padding: 10px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8);
+    width: 260px;
+    max-width: 90vw;
+    text-align: left;
+    color: #e5e7eb;
+    font-size: 11px;
+    line-height: 1.4;
+}
+
+/* Horizontal header row: Model | Market | Edge */
+.page-weekly-lineup .details-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.page-weekly-lineup .details-col {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.page-weekly-lineup .details-label {
+    color: #d1d5db;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: 'Cormorant Garamond', 'Garamond', Georgia, serif;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 4px;
+}
+
+.page-weekly-lineup .details-val {
+    font-weight: 700;
+    font-size: 18px;
+    font-family: 'Cormorant Garamond', 'Garamond', Georgia, serif;
+    color: #ffffff;
+}
+
+.page-weekly-lineup .model-val {
+    color: #4ade80;
+    text-shadow: 0 0 10px rgba(74, 222, 128, 0.4);
+}
+
+.page-weekly-lineup .market-val {
+    color: #c4b5fd;
+}
+
+.page-weekly-lineup .odds-tag {
+    color: #d1d5db;
+    font-size: 13px;
+    font-weight: 600;
+    margin-left: 2px;
+}
+
+.page-weekly-lineup .edge-val {
+    color: #4ade80;
+    font-size: 20px;
+    font-weight: 800;
+    text-shadow: 0 0 12px rgba(74, 222, 128, 0.5);
+}
+
+/* Rationale - left-aligned, clean bullets */
+.page-weekly-lineup .rationale-body {
+    text-align: left;
+}
+
+.page-weekly-lineup .rationale-list {
+    margin: 0;
+    padding-left: 14px;
+    list-style: none;
+}
+
+.page-weekly-lineup .rationale-list li {
+    position: relative;
+    padding-left: 8px;
+    margin-bottom: 6px;
+    color: #e5e7eb;
+    font-size: 13px;
+    line-height: 1.5;
+    text-align: left;
+    font-family: 'Cormorant Garamond', 'Garamond', Georgia, serif;
+}
+
+.page-weekly-lineup .rationale-list li::before {
+    content: "•";
+    position: absolute;
+    left: -6px;
+    color: #4ade80;
+    font-weight: bold;
+}
+
+.page-weekly-lineup .rationale-list li:last-child {
+    margin-bottom: 0;
+}
+
+.page-weekly-lineup .rationale-text {
+    margin: 0;
+    color: #e5e7eb;
+    font-size: 13px;
+    line-height: 1.5;
+    text-align: left;
+    font-family: 'Cormorant Garamond', 'Garamond', Georgia, serif;
+}
+
+/* Model version footer */
+.page-weekly-lineup .details-footer {
+    margin-top: 8px;
+    padding-top: 6px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 9px;
+    color: #4b5563;
+    text-align: left;
+}
+
+/* Comparison section - first in rationale panel */
+.page-weekly-lineup .rationale-comparison {
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.page-weekly-lineup .comparison-header {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--emerald-400);
+    margin-bottom: 12px;
+    letter-spacing: 0.02em;
+}
+
+/* Comparison Grid Layout */
+.page-weekly-lineup .comparison-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.page-weekly-lineup .comparison-block {
     padding: 10px 12px;
+    border-radius: 6px;
+    text-align: center;
+}
+
+.page-weekly-lineup .comparison-block.model-block {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.page-weekly-lineup .comparison-block.market-block {
+    background: rgba(99, 102, 241, 0.1);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+}
+
+.page-weekly-lineup .block-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+}
+
+.page-weekly-lineup .model-block .block-label {
+    color: var(--emerald-400);
+}
+
+.page-weekly-lineup .market-block .block-label {
+    color: var(--indigo-400);
+}
+
+.page-weekly-lineup .block-value {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--neutral-100);
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 4px;
+}
+
+.page-weekly-lineup .block-odds {
+    font-size: 0.75rem;
+    color: var(--neutral-400);
+}
+
+/* Edge Summary */
+.page-weekly-lineup .edge-summary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 12px;
+    background: rgba(16, 185, 129, 0.12);
+    border-radius: 6px;
+    border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.page-weekly-lineup .edge-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--neutral-200);
+}
+
+.page-weekly-lineup .edge-value-large {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--emerald-400);
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.page-weekly-lineup .edge-value-large.edge-high {
+    color: #22c55e;
+    text-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+}
+
+.page-weekly-lineup .edge-value-large.edge-medium {
+    color: var(--emerald-400);
+}
+
+.page-weekly-lineup .comparison-row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.page-weekly-lineup .comparison-item {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-size: 0.8rem;
+}
+
+.page-weekly-lineup .comparison-label {
+    font-weight: 600;
+    color: var(--neutral-300);
+    min-width: 60px;
+}
+
+.page-weekly-lineup .comparison-value {
+    color: var(--neutral-100);
+    font-weight: 500;
+}
+
+.page-weekly-lineup .comparison-value.edge-highlight {
+    color: var(--emerald-400);
+    font-weight: 700;
 }
 
 .page-weekly-lineup .rationale-meta {
-    font-size: 0.78rem;
-    color: var(--neutral-300);
+    font-size: 0.75rem;
+    color: var(--neutral-400);
     margin-bottom: 8px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .page-weekly-lineup .rationale-meta-label {
@@ -1000,6 +1422,16 @@ body.page-weekly-lineup .picks-table tbody tr:hover,
     font-size: 0.86rem;
     color: var(--neutral-200);
     line-height: 1.35;
+    margin-top: 8px;
+}
+
+.page-weekly-lineup .rationale-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--neutral-300);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
 }
 
 .page-weekly-lineup .rationale-empty {
@@ -4484,6 +4916,152 @@ body.page-weekly-lineup .th-filter-dropdown.weekly-lineup-filter-dropdown .team-
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35), 0 0 12px rgba(0, 214, 137, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
+/* View Toggle (Active/History) */
+.ft-view-toggle {
+    display: flex;
+    gap: 2px;
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 16px;
+    padding: 2px;
+    border: 1px solid rgba(100, 130, 170, 0.25);
+}
+
+.ft-view-btn {
+    padding: 5px 14px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    font-family: inherit;
+    color: rgba(180, 195, 210, 0.7);
+    background: transparent;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.ft-view-btn:hover {
+    color: rgba(200, 215, 230, 0.95);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.ft-view-btn.active {
+    color: #fff;
+    background: linear-gradient(135deg, rgba(0, 80, 70, 0.9) 0%, rgba(0, 60, 55, 0.95) 100%);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 8px rgba(0, 214, 137, 0.2);
+}
+
+.ft-divider {
+    width: 1px;
+    height: 20px;
+    background: rgba(100, 130, 170, 0.3);
+    margin: 0 6px;
+    align-self: center;
+}
+
+/* Outcome Badges for History View */
+.outcome-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 10px;
+    margin-left: 6px;
+}
+
+.outcome-badge.win {
+    color: #00ff88;
+    background: rgba(0, 255, 136, 0.15);
+    border: 1px solid rgba(0, 255, 136, 0.4);
+    text-shadow: 0 0 6px rgba(0, 255, 136, 0.4);
+}
+
+.outcome-badge.loss {
+    color: #ff6b6b;
+    background: rgba(255, 107, 107, 0.15);
+    border: 1px solid rgba(255, 107, 107, 0.4);
+    text-shadow: 0 0 6px rgba(255, 107, 107, 0.4);
+}
+
+.outcome-badge.push {
+    color: #ffd93d;
+    background: rgba(255, 217, 61, 0.15);
+    border: 1px solid rgba(255, 217, 61, 0.4);
+    text-shadow: 0 0 6px rgba(255, 217, 61, 0.4);
+}
+
+.outcome-badge.no-action {
+    color: rgba(180, 195, 210, 0.6);
+    background: rgba(100, 130, 170, 0.1);
+    border: 1px solid rgba(100, 130, 170, 0.25);
+}
+
+/* Tracked indicator for history */
+.tracked-indicator {
+    font-size: 0.65rem;
+    color: rgba(0, 214, 137, 0.8);
+    margin-left: 4px;
+}
+
+/* History Stats Summary */
+.history-stats-bar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 16px;
+    background: linear-gradient(135deg, rgba(20, 35, 60, 0.6) 0%, rgba(15, 28, 50, 0.7) 100%);
+    border: 1px solid rgba(100, 130, 170, 0.2);
+    border-radius: 10px;
+    margin-bottom: 12px;
+}
+
+.history-stats-bar .stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.history-stats-bar .stat-value {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.history-stats-bar .stat-label {
+    font-size: 0.65rem;
+    color: rgba(180, 195, 210, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.history-stats-bar .stat-value.wins { color: #00ff88; }
+.history-stats-bar .stat-value.losses { color: #ff6b6b; }
+.history-stats-bar .stat-value.pushes { color: #ffd93d; }
+.history-stats-bar .stat-value.win-rate { color: #00d4ff; }
+
+.history-week-selector {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.history-week-selector select {
+    padding: 5px 10px;
+    font-size: 0.75rem;
+    color: rgba(200, 215, 230, 0.95);
+    background: rgba(15, 28, 50, 0.9);
+    border: 1px solid rgba(100, 130, 170, 0.35);
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.history-week-selector label {
+    font-size: 0.72rem;
+    color: rgba(180, 195, 210, 0.7);
+}
+
 /* Dropdown */
 .ft-dropdown {
     position: relative;
@@ -5092,4 +5670,343 @@ body.page-weekly-lineup .dashboard-topline {
 
 body.page-weekly-lineup .brand-header-inline {
     padding-left: 0;
+}
+
+/* ==========================================================================
+   MOBILE RESPONSIVENESS v33.02.0 - Added for proper mobile support
+   These must be at the END of the file to override earlier declarations
+   ========================================================================== */
+
+/* Tablet: 768px - 1024px */
+@media (max-width: 1024px) {
+    body.page-weekly-lineup {
+        background-attachment: scroll; /* Fix iOS Safari jank */
+    }
+
+    body.page-weekly-lineup .main-container {
+        margin-top: 140px;
+    }
+
+    body.page-weekly-lineup .weekly-lineup-table-wrapper {
+        margin-left: 24px;
+        margin-right: 24px;
+        width: calc(100% - 48px);
+    }
+
+    body.page-weekly-lineup .dashboard-topline {
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+
+    body.page-weekly-lineup .toolbar-layout {
+        margin-left: 24px;
+        margin-right: 24px;
+        width: calc(100% - 48px);
+    }
+
+    /* Allow table to scroll horizontally */
+    body.page-weekly-lineup .table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    body.page-weekly-lineup .weekly-lineup-table {
+        table-layout: auto;
+        min-width: 700px;
+    }
+
+    /* Remove fixed column widths */
+    body.page-weekly-lineup .weekly-lineup-table thead th,
+    body.page-weekly-lineup .weekly-lineup-table tbody td {
+        width: auto;
+        min-width: 0;
+        max-width: none;
+    }
+
+    /* Drop hard colgroup widths on tablet to avoid squeezing columns */
+    body.page-weekly-lineup .weekly-lineup-table col {
+        width: auto !important;
+    }
+}
+
+/* Phone: 480px - 767px */
+@media (max-width: 767px) {
+    body.page-weekly-lineup .main-container {
+        margin-top: 80px;
+    }
+
+    body.page-weekly-lineup .weekly-lineup-table-wrapper,
+    body.page-weekly-lineup .table-container {
+        margin-left: 8px;
+        margin-right: 8px;
+        width: calc(100% - 16px);
+    }
+
+    body.page-weekly-lineup .dashboard-topline {
+        padding-left: 12px;
+        padding-right: 12px;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    body.page-weekly-lineup .toolbar-layout {
+        margin-left: 8px;
+        margin-right: 8px;
+        width: calc(100% - 16px);
+    }
+
+    body.page-weekly-lineup .weekly-lineup-table {
+        min-width: 550px;
+        font-size: 12px;
+    }
+
+    body.page-weekly-lineup .weekly-lineup-table td,
+    body.page-weekly-lineup .weekly-lineup-table th {
+        padding: 8px 6px;
+    }
+
+    /* Hide Track column on phones */
+    body.page-weekly-lineup .weekly-lineup-table th:nth-child(8),
+    body.page-weekly-lineup .weekly-lineup-table td:nth-child(8) {
+        display: none;
+    }
+
+    /* Remove colgroup widths and hide Track col element */
+    body.page-weekly-lineup .weekly-lineup-table col {
+        width: auto !important;
+    }
+
+    body.page-weekly-lineup .weekly-lineup-table col:nth-child(8) {
+        display: none;
+    }
+
+    /* Compact brand header */
+    body.page-weekly-lineup .brand-header-inline {
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    body.page-weekly-lineup .brand-logo-inline {
+        width: 50px;
+        height: 50px;
+    }
+
+    body.page-weekly-lineup .brand-line-1 {
+        font-size: 1.25rem;
+    }
+
+    body.page-weekly-lineup .brand-line-2 {
+        font-size: 0.9rem;
+    }
+
+    /* Filter toolbar horizontal scroll */
+    body.page-weekly-lineup .filter-toolbar {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        gap: 8px;
+    }
+
+    body.page-weekly-lineup .filter-toolbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* KPI tiles grid */
+    body.page-weekly-lineup .kpi-tiles {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+        width: 100%;
+    }
+
+    body.page-weekly-lineup .kpi-tile {
+        width: 100%;
+        min-width: 0;
+        height: auto;
+        padding: 12px 10px;
+    }
+
+    /* Team logos smaller */
+    body.page-weekly-lineup .weekly-lineup-table .team-logo {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+/* Small Phone: < 480px */
+@media (max-width: 480px) {
+    body.page-weekly-lineup .main-container {
+        margin-top: 50px;
+    }
+
+    body.page-weekly-lineup .weekly-lineup-table-wrapper,
+    body.page-weekly-lineup .table-container {
+        margin-left: 4px;
+        margin-right: 4px;
+        width: calc(100% - 8px);
+    }
+
+    body.page-weekly-lineup .dashboard-topline {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    body.page-weekly-lineup .toolbar-layout {
+        margin-left: 4px;
+        margin-right: 4px;
+        width: calc(100% - 8px);
+    }
+
+    body.page-weekly-lineup .weekly-lineup-table {
+        min-width: 420px;
+        font-size: 11px;
+    }
+
+    body.page-weekly-lineup .weekly-lineup-table td,
+    body.page-weekly-lineup .weekly-lineup-table th {
+        padding: 6px 4px;
+    }
+
+    /* Hide Segment (4) and Fire (7) columns on small phones */
+    body.page-weekly-lineup .weekly-lineup-table th:nth-child(4),
+    body.page-weekly-lineup .weekly-lineup-table td:nth-child(4),
+    body.page-weekly-lineup .weekly-lineup-table th:nth-child(7),
+    body.page-weekly-lineup .weekly-lineup-table td:nth-child(7) {
+        display: none;
+    }
+
+    /* Ensure colgroup matches hidden columns */
+    body.page-weekly-lineup .weekly-lineup-table col:nth-child(4),
+    body.page-weekly-lineup .weekly-lineup-table col:nth-child(7),
+    body.page-weekly-lineup .weekly-lineup-table col:nth-child(8) {
+        display: none;
+    }
+
+    body.page-weekly-lineup .weekly-lineup-table col {
+        width: auto !important;
+    }
+
+    /* Card-style rows for very small screens */
+    body.page-weekly-lineup .weekly-lineup-table {
+        min-width: 0;
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+    body.page-weekly-lineup .weekly-lineup-table thead {
+        display: none;
+    }
+
+    body.page-weekly-lineup .weekly-lineup-table tbody tr {
+        display: block;
+        margin-bottom: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        background: rgba(0, 0, 0, 0.28);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
+        overflow: hidden;
+    }
+
+    body.page-weekly-lineup .weekly-lineup-table tbody td {
+        display: grid;
+        grid-template-columns: 110px 1fr;
+        gap: 8px;
+        align-items: start;
+        padding: 10px 12px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        line-height: 1.3;
+    }
+
+    body.page-weekly-lineup .weekly-lineup-table tbody td:last-child {
+        border-bottom: none;
+    }
+
+    body.page-weekly-lineup .weekly-lineup-table tbody td::before {
+        font-weight: 600;
+        font-size: 10px;
+        letter-spacing: 0.03em;
+        color: #8fd8ff;
+        text-transform: uppercase;
+    }
+
+    body.page-weekly-lineup .weekly-lineup-table tbody td:nth-child(1)::before { content: 'Date/Time'; }
+    body.page-weekly-lineup .weekly-lineup-table tbody td:nth-child(2)::before { content: 'League'; }
+    body.page-weekly-lineup .weekly-lineup-table tbody td:nth-child(3)::before { content: 'Matchup'; }
+    body.page-weekly-lineup .weekly-lineup-table tbody td:nth-child(5)::before { content: 'Pick'; }
+    body.page-weekly-lineup .weekly-lineup-table tbody td:nth-child(6)::before { content: 'Edge'; }
+
+    /* Smaller header text */
+    body.page-weekly-lineup .weekly-lineup-table .header-main-text {
+        font-size: 0.65rem;
+    }
+
+    body.page-weekly-lineup .weekly-lineup-table .header-subtext {
+        display: none;
+    }
+
+    /* Smaller brand */
+    body.page-weekly-lineup .brand-logo-inline {
+        width: 38px;
+        height: 38px;
+    }
+
+    body.page-weekly-lineup .brand-line-1 {
+        font-size: 1rem;
+    }
+
+    body.page-weekly-lineup .brand-line-2 {
+        font-size: 0.75rem;
+    }
+
+    /* Even smaller logos */
+    body.page-weekly-lineup .weekly-lineup-table .team-logo {
+        width: 14px;
+        height: 14px;
+    }
+
+    /* Single column KPI tiles */
+    body.page-weekly-lineup .kpi-tiles {
+        grid-template-columns: 1fr;
+    }
+
+    /* Compact KPI text */
+    body.page-weekly-lineup .kpi-label {
+        font-size: 0.65rem;
+    }
+
+    body.page-weekly-lineup .kpi-value {
+        font-size: 1rem;
+    }
+
+    /* Import dropdown full-width bottom sheet */
+    body.page-weekly-lineup .import-tile .import-dropdown-panel {
+        position: fixed;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        max-width: 100%;
+        border-radius: 16px 16px 0 0;
+        max-height: 70vh;
+        overflow-y: auto;
+    }
+
+    /* Rationale panel mobile */
+    body.page-weekly-lineup .rationale-panel {
+        position: fixed;
+        left: 8px;
+        right: 8px;
+        top: auto;
+        bottom: 60px;
+        transform: none;
+        width: auto;
+        max-width: calc(100vw - 16px);
+        max-height: 50vh;
+        overflow-y: auto;
+    }
 }

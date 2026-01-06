@@ -1,0 +1,527 @@
+/**
+ * Mobile Buttons & Controls Overcrowding Fix
+ * Clean, spacious layout for all interactive elements
+ */
+
+/* ============================================
+   FILTER TOOLBAR - COMPLETE REDESIGN
+   ============================================ */
+
+@media (max-width: 767px) {
+    /* Hide the entire filter toolbar on mobile - too crowded */
+    .filter-toolbar,
+    .toolbar-layout .ft-left,
+    .toolbar-layout .ft-right {
+        display: none !important;
+    }
+    
+    /* Replace with a single filter button */
+    .mobile-filter-toggle {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #00ffaa 0%, #00d689 100%);
+        border: none;
+        box-shadow: 0 4px 12px rgba(0, 255, 170, 0.3);
+        z-index: 500;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .mobile-filter-toggle:active {
+        transform: scale(0.9);
+    }
+    
+    .mobile-filter-toggle::before {
+        content: '⚙';
+        font-size: 24px;
+        color: #081121;
+    }
+    
+    /* Mobile filter panel - slides up from bottom */
+    .mobile-filter-panel {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to top, 
+            rgba(8, 17, 33, 0.98) 0%, 
+            rgba(12, 25, 48, 0.95) 100%);
+        backdrop-filter: blur(20px);
+        border-radius: 20px 20px 0 0;
+        padding: 24px 20px;
+        transform: translateY(100%);
+        transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        z-index: 600;
+        max-height: 70vh;
+        overflow-y: auto;
+    }
+    
+    .mobile-filter-panel.active {
+        transform: translateY(0);
+    }
+    
+    /* Filter options in panel - vertical list */
+    .mobile-filter-options {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .mobile-filter-option {
+        padding: 14px 16px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        font-size: 14px;
+        color: #fff;
+        text-align: left;
+        transition: all 0.2s ease;
+    }
+    
+    .mobile-filter-option.active {
+        background: rgba(0, 255, 170, 0.2);
+        border-color: #00ffaa;
+    }
+}
+
+/* ============================================
+   DATE TOGGLES - SIMPLIFY
+   ============================================ */
+
+@media (max-width: 767px) {
+    /* Hide complex date toggle groups */
+    .date-toggle-group {
+        display: none !important;
+    }
+    
+    /* Replace with simple date selector */
+    .mobile-date-selector {
+        display: flex;
+        justify-content: center;
+        padding: 12px;
+        background: rgba(0, 0, 0, 0.3);
+        margin-bottom: 12px;
+    }
+    
+    .mobile-date-btn {
+        padding: 10px 20px;
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    
+    .mobile-date-btn:first-child {
+        border-radius: 8px 0 0 8px;
+    }
+    
+    .mobile-date-btn:last-child {
+        border-radius: 0 8px 8px 0;
+    }
+    
+    .mobile-date-btn.active {
+        background: rgba(0, 255, 170, 0.2);
+        border-color: #00ffaa;
+        color: #00ffaa;
+    }
+    
+    /* Only show Today, Tomorrow, This Week */
+    .mobile-date-btn:nth-child(n+4) {
+        display: none;
+    }
+}
+
+/* ============================================
+   SPORTSBOOK SECTION - HIDE ON MOBILE
+   ============================================ */
+
+@media (max-width: 767px) {
+    /* Hide the entire sportsbook dropdown */
+    .nav-dropdown[aria-label*="Sports Books"],
+    .nav-dropdown .nav-dropdown-trigger[id*="sportsbooks"] {
+        display: none !important;
+    }
+    
+    /* Move sportsbook functionality to settings */
+    .mobile-settings-link {
+        display: block;
+        padding: 16px 24px;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 14px;
+    }
+}
+
+/* ============================================
+   IMPORT/EXPORT BUTTONS - CONSOLIDATE
+   ============================================ */
+
+@media (max-width: 767px) {
+    /* Hide individual import/export buttons */
+    .export-import-controls,
+    .import-picks-btn,
+    .export-picks-btn,
+    .upload-picks-btn {
+        display: none !important;
+    }
+    
+    /* Single action button for data management */
+    .mobile-data-btn {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 400;
+    }
+    
+    .mobile-data-btn::before {
+        content: '↕';
+        font-size: 20px;
+        color: #fff;
+    }
+}
+
+/* ============================================
+   KPI TILES - MINIMIZE ON MOBILE
+   ============================================ */
+
+@media (max-width: 767px) {
+    /* Make KPI section collapsible */
+    .kpi-section {
+        margin-bottom: 16px;
+    }
+    
+    .kpi-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 16px;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 8px;
+        cursor: pointer;
+    }
+    
+    .kpi-header::after {
+        content: '▼';
+        font-size: 12px;
+        transition: transform 0.3s ease;
+    }
+    
+    .kpi-section.collapsed .kpi-header::after {
+        transform: rotate(-90deg);
+    }
+    
+    .kpi-section.collapsed .kpi-tiles {
+        display: none;
+    }
+    
+    /* Show only essential KPIs by default */
+    .kpi-tiles {
+        display: flex !important;
+        overflow-x: auto;
+        gap: 10px;
+        padding: 12px;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+    
+    .kpi-tiles::-webkit-scrollbar {
+        display: none;
+    }
+    
+    .kpi-tile {
+        flex: 0 0 120px;
+        min-height: 60px !important;
+        padding: 10px !important;
+    }
+    
+    /* Hide less important KPIs on mobile */
+    .kpi-tile:nth-child(n+5) {
+        display: none;
+    }
+}
+
+/* ============================================
+   NAVIGATION - CLEANER MOBILE NAV
+   ============================================ */
+
+@media (max-width: 767px) {
+    /* Simplified nav bar */
+    .brand-nav {
+        height: 48px !important;
+        padding: 0 12px !important;
+    }
+    
+    /* Hide nav actions on mobile */
+    .nav-actions,
+    .last-refresh,
+    .user-avatar {
+        display: none !important;
+    }
+    
+    /* Center logo/title */
+    .brand-nav::before {
+        content: 'Weekly Lineup';
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 16px;
+        font-weight: 600;
+        color: #fff;
+    }
+    
+    /* Hamburger only on left */
+    .mobile-nav-toggle {
+        position: absolute;
+        left: 8px;
+    }
+}
+
+/* ============================================
+   FETCH BUTTONS - COMBINE INTO ONE
+   ============================================ */
+
+@media (max-width: 767px) {
+    /* Hide individual league fetch buttons */
+    .ft-fetch-buttons,
+    .ft-fetch-league-btn,
+    .fetch-all-btn {
+        display: none !important;
+    }
+    
+    /* Single refresh button in header */
+    .mobile-refresh-btn {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+    
+    .mobile-refresh-btn::before {
+        content: '↻';
+        font-size: 18px;
+        color: #00ffaa;
+    }
+    
+    .mobile-refresh-btn.loading {
+        animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+        from { transform: translateY(-50%) rotate(0deg); }
+        to { transform: translateY(-50%) rotate(360deg); }
+    }
+}
+
+/* ============================================
+   QUICK ACCESS BAR - BOTTOM OF SCREEN
+   ============================================ */
+
+@media (max-width: 767px) {
+    /* Create bottom quick access bar */
+    .mobile-quick-bar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 52px;
+        background: linear-gradient(to top, 
+            rgba(8, 17, 33, 0.98) 0%, 
+            rgba(12, 25, 48, 0.95) 100%);
+        border-top: 1px solid rgba(0, 255, 170, 0.1);
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        z-index: 300;
+        padding: 0 20px;
+    }
+    
+    .mobile-quick-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2px;
+        padding: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 10px;
+    }
+    
+    .mobile-quick-item.active {
+        color: #00ffaa;
+    }
+    
+    .mobile-quick-item:active {
+        transform: scale(0.9);
+    }
+    
+    .mobile-quick-item svg,
+    .mobile-quick-item::before {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+    }
+    
+    /* Quick bar items */
+    .mobile-quick-item.home::before { content: '🏠'; }
+    .mobile-quick-item.filter::before { content: '⚙'; }
+    .mobile-quick-item.refresh::before { content: '↻'; }
+    .mobile-quick-item.stats::before { content: '📊'; }
+    
+    /* Adjust content for bottom bar */
+    .main-container {
+        padding-bottom: 68px !important;
+    }
+}
+
+/* ============================================
+   SEGMENT PILLS - HIDE ON MOBILE
+   ============================================ */
+
+@media (max-width: 640px) {
+    /* Hide segment filters - not essential on mobile */
+    .segment-filters,
+    .ft-pill[data-filter="segment"] {
+        display: none !important;
+    }
+}
+
+/* ============================================
+   STATUS FILTERS - SIMPLIFY
+   ============================================ */
+
+@media (max-width: 640px) {
+    /* Combine status filters into dropdown */
+    .status-filter-pills {
+        display: none !important;
+    }
+    
+    .mobile-status-dropdown {
+        width: 100%;
+        padding: 12px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        color: #fff;
+        font-size: 14px;
+        margin-bottom: 12px;
+    }
+}
+
+/* ============================================
+   CLEAN SPACING THROUGHOUT
+   ============================================ */
+
+@media (max-width: 767px) {
+    /* Remove all unnecessary margins/paddings */
+    .dashboard-topline {
+        display: none !important; /* Hide header on mobile */
+    }
+    
+    .main-dashboard-layout {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    
+    .unified-filter {
+        margin: 0 !important;
+        border-radius: 0 !important;
+    }
+    
+    /* Streamline table container */
+    .table-container {
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        background: transparent !important;
+    }
+}
+
+/* ============================================
+   FOCUS ON CONTENT
+   ============================================ */
+
+@media (max-width: 640px) {
+    /* Make picks the primary focus */
+    body.page-weekly-lineup {
+        padding-top: 48px !important; /* Just header height */
+    }
+    
+    body.page-weekly-lineup .main-container {
+        margin-top: 48px !important;
+        padding: 0 !important;
+    }
+    
+    /* Remove all decorative elements */
+    .brand-header-inline,
+    .brand-logo-inline,
+    .brand-text {
+        display: none !important;
+    }
+    
+    /* Go straight to picks */
+    .weekly-lineup-table tbody {
+        padding-top: 8px !important;
+    }
+}
+
+/* ============================================
+   PROGRESSIVE DISCLOSURE
+   ============================================ */
+
+@media (max-width: 640px) {
+    /* Start with minimal UI, reveal on demand */
+    .advanced-controls,
+    .secondary-filters,
+    .detailed-stats {
+        display: none;
+    }
+    
+    /* Show more button */
+    .mobile-show-more {
+        text-align: center;
+        padding: 16px;
+    }
+    
+    .mobile-show-more-btn {
+        padding: 10px 24px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 13px;
+        cursor: pointer;
+    }
+    
+    .mobile-show-more-btn:active {
+        background: rgba(255, 255, 255, 0.1);
+    }
+}

@@ -1,0 +1,31 @@
+# Core dependencies
+pandas>=2.0.0
+numpy>=1.24.0
+openpyxl>=3.1.0  # Excel file support
+xlrd>=2.0.0      # Legacy Excel support
+
+# Azure SDK
+azure-storage-blob>=12.19.0
+azure-data-tables>=12.4.0
+azure-identity>=1.15.0
+
+# API and web scraping
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+lxml>=4.9.0
+
+# Data processing
+python-dateutil>=2.8.0
+pytz>=2023.3
+
+# Logging and configuration
+python-dotenv>=1.0.0
+colorlog>=6.7.0
+
+# Testing
+pytest>=7.4.0
+pytest-cov>=4.1.0
+pytest-mock>=3.11.0
+
+# Type hints
+typing-extensions>=4.7.0

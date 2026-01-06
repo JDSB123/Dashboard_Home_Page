@@ -1,18 +1,84 @@
 /**
- * NCAAM Picks Fetcher v2.1
+ * NCAAM Picks Fetcher v2.3
  * Fetches NCAAM model picks from the Azure Container App API
- * Updated to use /api/picks/{date} endpoint (matches NBA pattern)
- * Supports date-specific caching
+ * Updated to use /api/picks/{date} endpoint with trigger-on-demand support
+ * 
+ * Container App: ncaam-stable-prediction (NCAAM-GBSV-MODEL-RG)
+ * Endpoints:
+ *   - /api/picks/{date} - Get picks for date
+ *   - /trigger-picks - Trigger pick generation (if picks not ready)
+ *   - /picks/html - Get HTML formatted picks
+ * 
+ * Registry Integration:
+ *   - Uses model-endpoints-bootstrap.js to get latest endpoint from Azure registry
+ *   - Falls back to hardcoded URL if registry not available
  */
 
 (function() {
     'use strict';
 
-    const NCAAM_API_URL = window.APP_CONFIG?.NCAAM_API_URL || 'https://ncaam-stable-prediction.blackglacier-5fab3573.centralus.azurecontainerapps.io';
+    // Fallback URL (used if registry endpoint not available)
+    const FALLBACK_NCAAM_API_URL = 'https://ncaam-stable-prediction.wonderfulforest-c2d7d49a.centralus.azurecontainerapps.io';
+    
+    /**
+     * Get the current NCAAM API endpoint from registry or fallback
+     * This is called dynamically to ensure we use the latest registry endpoint
+     * @returns {string} The NCAAM API endpoint URL
+     */
+    function getNCAAMEndpoint() {
+        const registryEndpoint = window.APP_CONFIG?.NCAAM_API_URL;
+        if (registryEndpoint) {
+            console.log('[NCAAM-PICKS] Using registry endpoint:', registryEndpoint);
+            return registryEndpoint;
+        }
+        console.warn('[NCAAM-PICKS] Registry endpoint not available, using fallback:', FALLBACK_NCAAM_API_URL);
+        return FALLBACK_NCAAM_API_URL;
+    }
 
     // Date-aware cache: { date: { data, timestamp } }
     const picksCache = {};
+    let lastSource = 'container-app';
     const CACHE_DURATION = 60000; // 1 minute
+    const REQUEST_TIMEOUT = 15000; // 15 seconds (NCAAM API can be slow)
+
+    /**
+     * Fetch with timeout
+     */
+    async function fetchWithTimeout(url, timeoutMs = REQUEST_TIMEOUT) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+        try {
+            const response = await fetch(url, { signal: controller.signal });
+            clearTimeout(timeoutId);
+            return response;
+        } catch (error) {
+            clearTimeout(timeoutId);
+            if (error.name === 'AbortError') {
+                throw new Error(`Request timed out after ${timeoutMs}ms`);
+            }
+            throw error;
+        }
+    }
+
+    /**
+     * Trigger picks generation if not already available
+     */
+    async function triggerPicksIfNeeded() {
+        try {
+            const endpoint = getNCAAMEndpoint();
+            console.log('[NCAAM-PICKS] Triggering picks generation at:', endpoint);
+            const response = await fetchWithTimeout(`${endpoint}/trigger-picks`, 30000);
+            if (response.ok) {
+                const result = await response.json();
+                console.log('[NCAAM-PICKS] Trigger response:', result);
+                return true;
+            }
+            return false;
+        } catch (error) {
+            console.warn('[NCAAM-PICKS] Trigger failed:', error.message);
+            return false;
+        }
+    }
 
     /**
      * Fetch NCAAM picks for a given date
@@ -26,20 +92,35 @@
         // Use cache if fresh for this specific date
         const cached = picksCache[cacheKey];
         if (cached && (Date.now() - cached.timestamp < CACHE_DURATION)) {
-            console.log(`[NCAAM-PICKS] Using cached picks for ${cacheKey}`);
+            console.log(`[NCAAM-PICKS] Using cached picks for ${cacheKey} (source: ${lastSource})`);
             return cached.data;
         }
 
-        const url = `${NCAAM_API_URL}/api/picks/${date}`;
-        console.log(`[NCAAM-PICKS] Fetching picks from: ${url}`);
+        // Get endpoint dynamically from registry (ensures we use latest endpoint)
+        const endpoint = getNCAAMEndpoint();
+        const url = `${endpoint}/api/picks/${date}`;
+        console.log(`[NCAAM-PICKS] Fetching picks from registry endpoint: ${url}`);
 
         try {
-            const response = await fetch(url);
+            let response = await fetchWithTimeout(url);
+            
+            // If 503, try triggering picks first then retry
+            if (response.status === 503) {
+                console.warn('[NCAAM-PICKS] API returned 503, attempting to trigger picks...');
+                const triggered = await triggerPicksIfNeeded();
+                if (triggered) {
+                    // Wait a moment for picks to generate
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    response = await fetchWithTimeout(url);
+                }
+            }
+            
             if (!response.ok) {
                 throw new Error(`NCAAM API error: ${response.status}`);
             }
 
             const data = await response.json();
+            lastSource = 'container-app';
 
             // Cache with date key
             picksCache[cacheKey] = {
@@ -47,7 +128,7 @@
                 timestamp: Date.now()
             };
 
-            console.log(`[NCAAM-PICKS] Fetched ${data.total_picks || 0} picks for ${cacheKey}`);
+            console.log(`[NCAAM-PICKS] ✅ Fetched ${data.total_picks || data.picks?.length || 0} picks for ${cacheKey}`);
             return data;
         } catch (error) {
             console.error('[NCAAM-PICKS] Error fetching picks:', error.message);
@@ -60,14 +141,23 @@
      * @returns {Promise<Object>} Health status
      */
     const checkHealth = async function() {
-        const url = `${NCAAM_API_URL}/health`;
+        const endpoint = getNCAAMEndpoint();
+        const url = `${endpoint}/health`;
         try {
-            const response = await fetch(url);
-            const text = await response.text();
-            return { status: text === 'ok' ? 'ok' : 'error', message: text };
+            const response = await fetchWithTimeout(url, 5000);
+            if (response.ok) {
+                const data = await response.json();
+                return { 
+                    status: 'healthy', 
+                    ...data,
+                    containerApp: endpoint,
+                    source: window.APP_CONFIG?.NCAAM_API_URL ? 'registry' : 'fallback'
+                };
+            }
+            return { status: 'error', code: response.status, containerApp: endpoint };
         } catch (error) {
             console.error('[NCAAM-PICKS] Health check failed:', error.message);
-            return { status: 'error', message: error.message };
+            return { status: 'error', message: error.message, containerApp: endpoint };
         }
     };
 
@@ -143,7 +233,10 @@
         fetchPicks: fetchNCAAMPicks,
         checkHealth,
         formatPickForTable,
+        triggerPicks: triggerPicksIfNeeded,
         getCache: (date) => picksCache[date || 'today']?.data || null,
+        getLastSource: () => lastSource,
+        getEndpoint: getNCAAMEndpoint,
         clearCache: (date) => {
             if (date) {
                 delete picksCache[date];
@@ -153,6 +246,9 @@
         }
     };
 
-    console.log('NCAAM PicksFetcher v2.1 loaded');
+    // Log endpoint source on load
+    const initialEndpoint = getNCAAMEndpoint();
+    const endpointSource = window.APP_CONFIG?.NCAAM_API_URL ? 'registry' : 'fallback';
+    console.log(`✅ NCAAMPicksFetcher v2.3 loaded - Using ${endpointSource} endpoint: ${initialEndpoint}`);
 
 })();

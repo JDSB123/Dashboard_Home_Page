@@ -1,69 +1,93 @@
 {
   "navigationFallback": {
-    "rewrite": "/dashboard.html",
+    "rewrite": "/index.html",
     "exclude": ["/assets/*", "/config.*.js", "/*.png", "/*.ico"]
   },
   "routes": [
     {
       "route": "/",
-      "rewrite": "/dashboard.html",
+      "rewrite": "/index.html",
       "headers": {
-        "Cache-Control": "no-cache, must-revalidate"
+        "Cache-Control": "no-cache, no-store, must-revalidate"
+      }
+    },
+    {
+      "route": "/index.html",
+      "headers": {
+        "Cache-Control": "no-cache, no-store, must-revalidate"
       }
     },
     {
       "route": "/dashboard",
-      "rewrite": "/dashboard.html",
+      "rewrite": "/index.html",
       "headers": {
-        "Cache-Control": "no-cache, must-revalidate"
+        "Cache-Control": "no-cache, no-store, must-revalidate"
       }
     },
     {
       "route": "/weekly-lineup",
       "rewrite": "/weekly-lineup.html",
       "headers": {
-        "Cache-Control": "no-cache, must-revalidate"
+        "Cache-Control": "no-cache, no-store, must-revalidate"
       }
     },
     {
       "route": "/odds-market",
       "rewrite": "/odds-market.html",
       "headers": {
-        "Cache-Control": "no-cache, must-revalidate"
+        "Cache-Control": "no-cache, no-store, must-revalidate"
       }
     },
     {
       "route": "/*.html",
       "headers": {
-        "Cache-Control": "no-cache, must-revalidate"
+        "Cache-Control": "no-cache, no-store, must-revalidate"
       }
     },
     {
       "route": "/assets/js/*",
       "headers": {
-        "Cache-Control": "no-cache, must-revalidate"
+        "Cache-Control": "no-cache, no-store, must-revalidate"
       }
     },
     {
       "route": "/*.js",
       "headers": {
-        "Cache-Control": "no-cache, must-revalidate"
+        "Cache-Control": "no-cache, no-store, must-revalidate"
+      }
+    },
+    {
+      "route": "/assets/data/*",
+      "headers": {
+        "Cache-Control": "no-cache, no-store, must-revalidate"
+      }
+    },
+    {
+      "route": "/assets/css/*",
+      "headers": {
+        "Cache-Control": "no-cache, no-store, must-revalidate"
+      }
+    },
+    {
+      "route": "/config.*.js",
+      "headers": {
+        "Cache-Control": "no-cache, no-store, must-revalidate"
       }
     }
   ],
   "responseOverrides": {
     "404": {
-      "rewrite": "/dashboard.html"
+      "rewrite": "/index.html"
     }
   },
   "globalHeaders": {
-    "Cache-Control": "public, max-age=3600",
+    "Cache-Control": "no-cache, no-store, must-revalidate",
     "X-Content-Type-Options": "nosniff",
     "X-Frame-Options": "DENY",
     "X-XSS-Protection": "1; mode=block",
     "Referrer-Policy": "strict-origin-when-cross-origin",
     "Permissions-Policy": "geolocation=(), microphone=(), camera=()",
-    "Content-Security-Policy": "default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://a.espncdn.com https://*.espncdn.com https://api.sportsdata.io; connect-src 'self' https://green-bier-picks-api.azurewebsites.net https://site.api.espn.com https://api.sportsdata.io https://api.the-odds-api.com https://*.azurecontainerapps.io; frame-ancestors 'none'"
+    "Content-Security-Policy": "default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://a.espncdn.com https://*.espncdn.com https://api.sportsdata.io; connect-src 'self' https://site.api.espn.com https://api.sportsdata.io https://api.the-odds-api.com https://*.azurecontainerapps.io https://fonts.googleapis.com https://fonts.gstatic.com; frame-ancestors 'none'"
   },
   "mimeTypes": {
     ".json": "application/json",
