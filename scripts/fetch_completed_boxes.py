@@ -217,15 +217,32 @@ class ESPNFetcher(BoxScoreFetcher):
             team_name = team.get("abbreviation") or team.get("shortDisplayName") or team.get("displayName")
             score_val = int(score) if score and str(score).isdigit() else None
             
+            # Extract periods/linescores
+            # JSON format: "linescores": [{"value": 24}, {"value": 31}, ...]
+            periods = []
+            ls_data = comp.get("linescores", [])
+            if ls_data:
+                for p in ls_data:
+                    val = p.get("value")
+                    periods.append(int(val) if val is not None else 0)
+
             if comp.get("homeAway") == "home":
                 home_team = team_name
                 home_score = score_val
+                home_periods = periods
             else:
                 away_team = team_name
                 away_score = score_val
+                away_periods = periods
         
         if not home_team or not away_team:
             return None
+            
+        # Structure period scores
+        # mapped as Q1, Q2 etc.
+        quarter_scores = {}
+        for i, (h_p, a_p) in enumerate(zip(home_periods, away_periods)):
+            quarter_scores[f"Q{i+1}"] = {"home": h_p, "away": a_p}
         
         # Parse status
         status_obj = event.get("status", {})
@@ -266,6 +283,7 @@ class ESPNFetcher(BoxScoreFetcher):
             "away_score": away_score,
             "status": status,
             "half_scores": half_scores,
+            "period_scores": quarter_scores,
             "source": self.league
         }
 
