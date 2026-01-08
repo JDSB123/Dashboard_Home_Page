@@ -124,16 +124,19 @@ function Get-Configuration {
                     resourceGroup = "nba-gbsv-model-rg"
                     containerApp = "nba-gbsv-api"
                     endpoint = "https://nba-gbsv-api.livelycoast-b48c3cb0.eastus.azurecontainerapps.io"
+                    functionUrl = "https://nba-picks-trigger.azurewebsites.net"
                 }
                 ncaam = @{
                     resourceGroup = "ncaam-gbsv-model-rg"
                     containerApp = "ncaam-stable-prediction"
                     endpoint = "https://ncaam-stable-prediction.wonderfulforest-c2d7d49a.centralus.azurecontainerapps.io"
+                    functionUrl = ""
                 }
                 nfl = @{
                     resourceGroup = "nfl-gbsv-model-rg"
                     containerApp = "nfl-api"
                     endpoint = "https://nfl-api.purplegrass-5889a981.eastus.azurecontainerapps.io"
+                    functionUrl = "https://nfl-picks-trigger.azurewebsites.net"
                 }
                 ncaaf = @{
                     resourceGroup = "ncaaf-gbsv-model-rg"
