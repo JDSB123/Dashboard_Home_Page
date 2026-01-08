@@ -131,7 +131,7 @@
    - Enable email notifications
 
 4. **Update Dashboard**:
-   - Commit config.production.js changes
+   - Commit client/config.js changes
    - Deploy to static web app
    - Test real-time updates
 

@@ -70,7 +70,7 @@
         } catch (err) {
             // Safe to continue; pick fetchers will fall back to current APP_CONFIG values
             console.warn('[MODEL-ENDPOINTS] Unable to refresh endpoints from registry:', err.message);
-            console.warn('[MODEL-ENDPOINTS] Fetchers will use fallback endpoints from config.production.js');
+            console.warn('[MODEL-ENDPOINTS] Fetchers will use fallback endpoints from config.js');
         }
     };
 

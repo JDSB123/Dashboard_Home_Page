@@ -10,7 +10,7 @@ conn_str = os.environ.get('AZURE_FUNCTIONS_STORAGE_CONNECTION')
 if not conn_str:
     raise ValueError("AZURE_FUNCTIONS_STORAGE_CONNECTION environment variable not set")
 
-# Model endpoints from config.production.js
+# Model endpoints from client/config.js
 endpoints = {
     'nba': 'https://nba-gbsv-api.livelycoast-b48c3cb0.eastus.azurecontainerapps.io',
     'ncaam': 'https://ncaam-stable-prediction.blackglacier-5fab3573.centralus.azurecontainerapps.io',

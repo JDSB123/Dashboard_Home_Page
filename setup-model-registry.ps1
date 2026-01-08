@@ -97,7 +97,7 @@ if (!$tableExists.exists) {
 }
 
 # Step 5: Seed with current endpoints
-Write-Host "[5/5] Seeding endpoints from config.production.js..." -ForegroundColor Yellow
+Write-Host "[5/5] Seeding endpoints from client/config.js..." -ForegroundColor Yellow
 
 $endpoints = @(
     @{ model = "nba"; endpoint = "https://nba-gbsv-api.livelycoast-b48c3cb0.eastus.azurecontainerapps.io" }

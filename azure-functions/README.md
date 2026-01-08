@@ -35,7 +35,7 @@ Deploy the Functions backend as a container via Azure Container Apps using the G
   - `ACR_LOGIN_SERVER`, `ACR_USERNAME`, `ACR_PASSWORD`
   - `AZURE_FUNCTIONS_STORAGE_CONNECTION`, `AZURE_SIGNALR_CONNECTION_STRING`, `APPINSIGHTS_CONNECTION_STRING`
 2. Push to `main` or run `.github/workflows/azure-functions-container.yml` manually.
-3. After deploy, grab the Container App FQDN (workflow outputs it) and set `API_BASE_URL` in `config.production.js` to `https://<fqdn>/api`.
+3. After deploy, grab the Container App FQDN (workflow outputs it) and set `API_BASE_URL` in `client/config.js` to `https://<fqdn>/api`.
 
 ### Option B: Zip deploy (legacy)
 
@@ -154,7 +154,7 @@ az functionapp config appsettings set \
 
 ### 4. Update Dashboard Configuration
 
-Update `config.production.js` in the dashboard:
+Update `client/config.js` in the dashboard:
 
 ```javascript
 ORCHESTRATOR_URL: 'https://gbsv-orchestrator.azurewebsites.net/api',

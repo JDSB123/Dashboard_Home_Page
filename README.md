@@ -12,7 +12,7 @@ This repo is a **static HTML/CSS/JS dashboard** hosted on **Azure Static Web App
 
 Production runtime config is injected via:
 
-- `config.production.js` (sets `window.APP_CONFIG`)
+- `client/config.js` (sets `window.APP_CONFIG`)
 
 Key setting:
 

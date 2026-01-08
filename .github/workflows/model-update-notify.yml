@@ -280,23 +280,23 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         
-      - name: Update config.production.js
+      - name: Update client/config.js
         run: |
           model_type="${{ github.event.client_payload.model_type }}"
           new_endpoint="${{ github.event.client_payload.endpoint }}"
           
           case "$model_type" in
             nba)
-              sed -i "s|NBA_API_URL: '.*'|NBA_API_URL: '$new_endpoint'|" config.production.js
+              sed -i "s|NBA_API_URL: '.*'|NBA_API_URL: '$new_endpoint'|" client/config.js
               ;;
             nfl)
-              sed -i "s|NFL_API_URL: '.*'|NFL_API_URL: '$new_endpoint'|" config.production.js
+              sed -i "s|NFL_API_URL: '.*'|NFL_API_URL: '$new_endpoint'|" client/config.js
               ;;
             ncaam)
-              sed -i "s|NCAAM_API_URL: '.*'|NCAAM_API_URL: '$new_endpoint'|" config.production.js
+              sed -i "s|NCAAM_API_URL: '.*'|NCAAM_API_URL: '$new_endpoint'|" client/config.js
               ;;
             ncaaf)
-              sed -i "s|NCAAF_API_URL: '.*'|NCAAF_API_URL: '$new_endpoint'|" config.production.js
+              sed -i "s|NCAAF_API_URL: '.*'|NCAAF_API_URL: '$new_endpoint'|" client/config.js
               ;;
           esac
       
@@ -305,6 +305,6 @@ jobs:
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
-          git add config.production.js
+          git add client/config.js
           git diff --staged --quiet || git commit -m "Update ${{ github.event.client_payload.model_type }} endpoint to ${{ github.event.client_payload.endpoint }}"
           git push

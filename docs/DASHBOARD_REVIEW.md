@@ -141,7 +141,7 @@ The Green Bier Sport Ventures Dashboard is a well-architected, modular sports be
 
 ### 3. **Configuration**
 
-#### **config.production.js**
+#### **client/config.js**
 ✅ **Good**
 - Clear API endpoint configuration
 - Proper environment identification
@@ -405,7 +405,7 @@ With the recommended improvements, this dashboard would be **enterprise-grade**.
 dashboard/
 ├── dashboard.html          ✅ Main dashboard page
 ├── index.html              ⚠️ Duplicate of dashboard.html
-├── config.production.js    ✅ API configuration
+├── client/config.js        ✅ API configuration
 ├── staticwebapp.config.json ✅ Azure Static Web Apps config
 │
 ├── dashboard/js/           ✅ Dashboard-specific scripts

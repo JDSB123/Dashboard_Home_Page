@@ -2108,7 +2108,7 @@ function initializePicksAndRecords() {
 }
 
 // Auto-load picks on page load - DISABLED while using picks-loader.js for Azure Blob Storage
-// Uncomment when database API is configured in config.production.js
+// Uncomment when database API is configured in config.js
 // if (document.readyState === 'loading') {
 //     document.addEventListener('DOMContentLoaded', initializePicksAndRecords);
 // } else {
