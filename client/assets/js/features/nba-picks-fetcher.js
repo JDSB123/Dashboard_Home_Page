@@ -198,42 +198,6 @@
      * @returns {Promise<Object>} Picks data
      */
     async function fetchNBAPicks(date = 'today') {
-<<<<<<< HEAD
-        const cacheKey = getCacheKey(date);
-        const cached = picksCache[cacheKey];
-        if (cached && (Date.now() - cached.timestamp < CACHE_DURATION)) {
-            console.log(`[NBA-PICKS] Using cached picks for ${cacheKey}`);
-            return cached.data;
-        }
-
-        const apiUrl = getApiUrl();
-        const url = `${apiUrl}/slate/${encodeURIComponent(date)}/executive`;
-        console.log(`[NBA-PICKS] Fetching picks from: ${url}`);
-
-        try {
-            const response = await fetch(url, { cache: 'no-store' });
-            if (!response.ok) throw new Error(`NBA API error: ${response.status}`);
-
-            const data = await response.json();
-            picksCache[cacheKey] = { data, timestamp: Date.now() };
-
-            console.log(`[NBA-PICKS] Fetched ${data.total_plays || 0} picks for ${cacheKey}`);
-            return data;
-        } catch (error) {
-            console.error('[NBA-PICKS] Error fetching picks:', error.message);
-
-            // The JSON slate endpoints can intermittently fail (e.g., upstream odds API issues).
-            // If that happens, fall back to the HTML endpoint which often still renders picks.
-            try {
-                const fallback = await fetchExecutiveFallbackFromHtml(date);
-                picksCache[cacheKey] = { data: fallback, timestamp: Date.now() };
-                console.warn(`[NBA-PICKS] Using HTML fallback with ${fallback.total_plays || 0} plays for ${cacheKey}`);
-                return fallback;
-            } catch (fallbackError) {
-                console.error('[NBA-PICKS] HTML fallback also failed:', fallbackError.message);
-                throw error;
-            }
-=======
         // Use cache if fresh
         if (picksCache && lastFetch && (Date.now() - lastFetch < CACHE_DURATION)) {
             console.log(`[NBA-PICKS] Using cached picks (source: ${lastSource})`);
@@ -280,7 +244,6 @@
         } catch (error) {
             console.error('[NBA-PICKS] Both sources failed:', error.message);
             throw error;
->>>>>>> 3209fcd64a2ffe0e79a7841c8d93e96f534a16f1
         }
     }
 
@@ -312,13 +275,6 @@
      * @returns {Promise<Object>} Health status
      */
     async function checkHealth() {
-<<<<<<< HEAD
-        const apiUrl = getApiUrl();
-        const url = `${apiUrl}/health`;
-        try {
-            const response = await fetch(url, { cache: 'no-store' });
-            return await response.json();
-=======
         const health = {
             functionApp: { status: 'unknown' },
             containerApp: { status: 'unknown' }
@@ -333,7 +289,6 @@
             } else {
                 health.functionApp = { status: 'error', code: response.status };
             }
->>>>>>> 3209fcd64a2ffe0e79a7841c8d93e96f534a16f1
         } catch (error) {
             health.functionApp = { status: 'error', message: error.message };
         }
@@ -509,14 +464,8 @@
         checkHealth,
         formatPickForTable,
         getCache: () => picksCache,
-<<<<<<< HEAD
-        clearCache: () => {
-            Object.keys(picksCache).forEach((k) => delete picksCache[k]);
-        }
-=======
         getLastSource: () => lastSource,
         clearCache: () => { picksCache = null; lastFetch = null; lastSource = null; }
->>>>>>> 3209fcd64a2ffe0e79a7841c8d93e96f534a16f1
     };
 
     console.log('✅ NBAPicksFetcher v1.1 loaded (Function App + Container App fallback)');
