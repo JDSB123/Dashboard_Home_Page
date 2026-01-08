@@ -48,3 +48,5 @@ azure-functions/local.settings.json
 
 # Nested repository
 Dashboard_Home_Page/
+
+client/config.js

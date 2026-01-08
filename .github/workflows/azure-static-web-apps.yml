@@ -23,16 +23,16 @@ jobs:
         run: |
           echo "Validating configuration files..."
           # Check if required files exist
-          if [ ! -f "staticwebapp.config.json" ]; then
-            echo "ERROR: staticwebapp.config.json not found"
+          if [ ! -f "client/staticwebapp.config.json" ]; then
+            echo "ERROR: client/staticwebapp.config.json not found"
             exit 1
           fi
-          if [ ! -f "index.html" ]; then
-            echo "ERROR: index.html not found"
+          if [ ! -f "client/index.html" ]; then
+            echo "ERROR: client/index.html not found"
             exit 1
           fi
           # Use Python for JSON validation
-          if ! python3 -m json.tool staticwebapp.config.json > /dev/null 2>&1; then
+          if ! python3 -m json.tool client/staticwebapp.config.json > /dev/null 2>&1; then
             echo "ERROR: staticwebapp.config.json is not valid JSON"
             exit 1
           fi
@@ -45,9 +45,9 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
-          app_location: "/"
+          app_location: "/client"
           api_location: ""
-          output_location: "/"
+          output_location: ""
           skip_app_build: true
 
   close_pull_request_job:

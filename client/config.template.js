@@ -21,8 +21,8 @@ window.APP_CONFIG = {
   AZURE_REGION: 'eastus',
 
   // API Configuration
-  API_BASE_URL: 'https://gbsv-orchestrator.wittypebble-41c11c65.eastus.azurecontainerapps.io/api',
-  ORCHESTRATOR_URL: 'https://gbsv-orchestrator.wittypebble-41c11c65.eastus.azurecontainerapps.io',
+  API_BASE_URL: '__API_BASE_URL__',
+  ORCHESTRATOR_URL: '__ORCHESTRATOR_URL__',
 
   // Model API Endpoints (can be dynamically updated by model-endpoints-bootstrap.js)
   // These endpoints are used by:
@@ -31,13 +31,13 @@ window.APP_CONFIG = {
   //   - model-endpoints-bootstrap.js fetches latest from /api/registry on page load
   
   // NBA: Function App (primary) + Container App (fallback)
-  NBA_FUNCTION_URL: 'https://nba-picks-trigger.azurewebsites.net',  // Primary - Function App with /api/weekly-lineup/nba
-  NBA_API_URL: 'https://nba-gbsv-api.livelycoast-b48c3cb0.eastus.azurecontainerapps.io',  // Fallback - Container App
-  NCAAM_API_URL: 'https://ncaam-stable-prediction.wonderfulforest-c2d7d49a.centralus.azurecontainerapps.io',
+  NBA_FUNCTION_URL: '__NBA_FUNCTION_URL__',  // Primary - Function App with /api/weekly-lineup/nba
+  NBA_API_URL: '__NBA_API_URL__',  // Fallback - Container App
+  NCAAM_API_URL: '__NCAAM_API_URL__',
   // NFL: Function App (primary) + Container App (fallback)
-  NFL_FUNCTION_URL: 'https://nfl-picks-trigger.azurewebsites.net',  // Primary - Function App with /api/weekly-lineup/nfl
-  NFL_API_URL: 'https://nfl-api.purplegrass-5889a981.eastus.azurecontainerapps.io',  // Fallback - Container App
-  NCAAF_API_URL: 'https://ncaaf-v5-prod.salmonwave-314d4ffe.eastus.azurecontainerapps.io',
+  NFL_FUNCTION_URL: '__NFL_FUNCTION_URL__',  // Primary - Function App with /api/weekly-lineup/nfl
+  NFL_API_URL: '__NFL_API_URL__',  // Fallback - Container App
+  NCAAF_API_URL: '__NCAAF_API_URL__',
   NHL_API_URL: '', // Placeholder - will be populated from registry when available
   MLB_API_URL: '', // Placeholder - will be populated from registry when available
 

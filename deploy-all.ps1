@@ -644,18 +644,31 @@ function Update-DashboardConfig {
     
     Write-Section "Updating Dashboard Configuration"
     
-    $configFile = Join-Path $PSScriptRoot "config.production.js"
+    $templateFile = Join-Path $PSScriptRoot "client/config.template.js"
+    $targetFile = Join-Path $PSScriptRoot "client/config.js"
     
-    if (Test-Path $configFile) {
-        Write-Status "Updating config.production.js with new orchestrator URL" -Type Info
+    if (Test-Path $templateFile) {
+        Write-Status "Generating config.js from template..." -Type Info
         
-        $content = Get-Content $configFile -Raw
-        $content = $content -replace '(API_BASE_URL:\s*[''"]).*?([''"])', "`${1}$OrchestratorUrl/api`${2}"
-        $content | Set-Content $configFile
+        $content = Get-Content $templateFile -Raw
         
-        Write-Status "Dashboard configuration updated" -Type Success
+        # Replace placeholders
+        $content = $content.Replace('__API_BASE_URL__', "$OrchestratorUrl/api")
+        $content = $content.Replace('__ORCHESTRATOR_URL__', $OrchestratorUrl)
+        
+        # In a real scenario, you'd pull these from the Config object or Azure
+        $content = $content.Replace('__NBA_FUNCTION_URL__', $Config.models.nba.functionUrl)
+        $content = $content.Replace('__NBA_API_URL__', $Config.models.nba.endpoint)
+        $content = $content.Replace('__NCAAM_API_URL__', $Config.models.ncaam.endpoint)
+        $content = $content.Replace('__NFL_FUNCTION_URL__', $Config.models.nfl.functionUrl)
+        $content = $content.Replace('__NFL_API_URL__', $Config.models.nfl.endpoint)
+        $content = $content.Replace('__NCAAF_API_URL__', $Config.models.ncaaf.endpoint)
+
+        $content | Set-Content $targetFile
+        
+        Write-Status "Dashboard configuration (config.js) generated successfully" -Type Success
     } else {
-        Write-Status "config.production.js not found - please update manually" -Type Warning
+        Write-Status "client/config.template.js not found - cannot generate config" -Type Error
     }
 }
 
