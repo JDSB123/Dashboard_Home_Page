@@ -11,8 +11,9 @@ from datetime import datetime
 from bs4 import BeautifulSoup
 from collections import defaultdict
 
-# Paths
-ROOT_DIR = Path(__file__).parent.parent
+# Paths (repo-root relative)
+# This file lives at `data-pipeline/scripts/`, so repo root is 3 levels up.
+ROOT_DIR = Path(__file__).resolve().parent.parent.parent
 TELEGRAM_DIR = ROOT_DIR / "telegram_history"
 OUTPUT_DIR = ROOT_DIR / "output" / "telegram_parsed"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -76,13 +77,35 @@ def parse_pick_line(text: str, date: str) -> list:
     # Split on <br> for multiple picks in one message
     lines = re.split(r'<br>|<br/>|<br />', text)
 
+    # Context within a single Telegram message (used for "teamless" totals that
+    # follow a team line, e.g. "Fresno -1 -110 $50<br>Over 20 -112 $50").
+    last_team: str | None = None
+
+    segment_patterns = sorted(SEGMENT_MAP.keys(), key=len, reverse=True)
+
+    def _strip_segment_tokens(s: str) -> str:
+        out = s
+        for pat in segment_patterns:
+            out = re.sub(rf'\b{re.escape(pat)}\b', ' ', out, flags=re.IGNORECASE)
+        out = re.sub(r'\s+', ' ', out).strip()
+        return out
+
     for line in lines:
         line = line.strip()
         if not line or len(line) < 5:
             continue
 
-        # Skip non-pick messages
-        if any(skip in line.lower() for skip in ['?', 'what', 'how', 'why', 'ok', 'nice', 'good', 'lol', 'haha', 'yes', 'no', 'maybe', 'idk', 'probably']):
+        # Skip obvious non-pick messages that contain $ amounts (e.g., payments).
+        # We require some betting-like token beyond the stake.
+        line_lower = line.lower()
+        has_betting_signal = (
+            bool(re.search(r'([+-]\d{2,4})\b', line))  # odds
+            or bool(re.search(r'\b(?:over|under)\s*\d', line_lower))
+            or bool(re.search(r'\b[ou]\s*\d', line_lower))
+            or 'ml' in line_lower
+            or bool(re.search(r'\b[+-]\d+\.?\d*\b', line))  # spreads
+        )
+        if not has_betting_signal:
             continue
 
         # Extract stake ($XX or $XX,XXX)
@@ -92,25 +115,78 @@ def parse_pick_line(text: str, date: str) -> list:
 
         stake = float(stake_match.group(1).replace(',', ''))
 
-        # Extract odds (-XXX or +XXX)
-        odds_match = re.search(r'([+-]\d{2,4})\b', line)
-        odds = odds_match.group(1) if odds_match else '-110'  # Default odds
+        # Extract odds (-XXX or +XXX). Prefer odds adjacent to the stake to avoid
+        # grabbing trailing result markers like "-55".
+        odds = '-110'  # Default odds
+        odds_matches = list(re.finditer(r'([+-]\d{2,4})\s*\$\d', line))
+        if odds_matches:
+            odds = odds_matches[-1].group(1)
+        else:
+            odds_matches = list(re.finditer(r'\$\d+(?:,?\d{3})*(?:\.\d{2})?\s*([+-]\d{2,4})', line))
+            if odds_matches:
+                odds = odds_matches[-1].group(1)
+            else:
+                odds_tokens = re.findall(r'([+-]\d{2,4})\b', line)
+                if odds_tokens:
+                    odds = odds_tokens[-1]
+        # Guardrail: American odds should be at least +/-100 (avoid bad parses like "-12").
+        try:
+            if abs(int(odds)) < 100:
+                odds = '-110'
+        except Exception:
+            odds = '-110'
 
         # Detect league and segment
         league = detect_league(line)
         segment = detect_segment(line)
 
-        # Extract team and pick type
-        # Pattern: team [+/-]spread or team [o/u]total
+        # Remove segment tokens before attempting to parse team/pick tokens.
+        line_no_seg = _strip_segment_tokens(line)
+
+        # Handle totals with no team specified (e.g., "U137.5 -110 $50", "2h u17 -108 $50", "Over 20 -112 $50")
+        total_word_match = re.match(r'^\s*(over|under)\s*(\d+\.?\d*)\b', line_no_seg, re.IGNORECASE)
+        total_ou_match = re.match(r'^\s*([ou])\s*(\d+\.?\d*)\b', line_no_seg, re.IGNORECASE)
+        if total_word_match or total_ou_match:
+            if total_word_match:
+                ou_word = total_word_match.group(1).lower()
+                total = total_word_match.group(2)
+                pick_type = f"{'Over' if ou_word == 'over' else 'Under'} {total}"
+            else:
+                ou = total_ou_match.group(1).lower()
+                total = total_ou_match.group(2)
+                pick_type = f"{'Over' if ou == 'o' else 'Under'} {total}"
+
+            pick_str = f"{pick_type} ({odds})"
+            inferred_team = last_team or ''
+            picks.append({
+                'Date': date,
+                'League': league,
+                'Matchup': inferred_team,  # Will be enriched later (fallback to last team in message)
+                'Segment': segment,
+                'Pick': pick_str,
+                'Odds': odds,
+                'Risk': stake,
+                'ToWin': calculate_to_win(stake, odds),
+                'RawText': line,
+            })
+            continue
+
+        # Extract team + pick token (spread/total/ml).
+        # Important: Avoid consuming "o/u" when it's directly attached to a number
+        # (e.g., "Pels o228.5" should parse as team="Pels", token="o228.5").
         pick_match = re.search(
-            r'([A-Za-z]+(?:\s+[A-Za-z]+)?)\s*'  # Team name
-            r'([+-]?\d+\.?\d*|[ou]\d+\.?\d*|ml)',  # Spread, total, or ML
-            line, re.IGNORECASE
+            r'([A-Za-z]+(?:\s+(?![ou]\d)[A-Za-z]+){0,3})\s*'  # Team (1-4 words)
+            r'([ou]\d+\.?\d*|[+-]?\d+\.?\d*|ml)\b',       # Total, spread, or ML
+            line_no_seg, re.IGNORECASE
         )
 
         if pick_match:
-            team = pick_match.group(1).strip().title()
-            pick_value = pick_match.group(2).lower()
+            team_raw = pick_match.group(1).strip()
+            pick_value = pick_match.group(2).lower().strip()
+
+            # Normalize team display (keep original-ish casing for readability)
+            team = team_raw.title()
+            last_team = team
 
             # Determine pick type
             if pick_value.startswith('o'):
@@ -120,8 +196,16 @@ def parse_pick_line(text: str, date: str) -> list:
             elif pick_value == 'ml':
                 pick_type = f"{team} ML"
             else:
-                # Spread
-                pick_type = f"{team} {pick_value}"
+                # Spread vs. moneyline: if the numeric token looks like American odds
+                # and matches the extracted odds, treat as moneyline.
+                try:
+                    pv = float(pick_value)
+                    if abs(int(pv)) >= 100 and str(int(pv)) == str(int(odds)):
+                        pick_type = f"{team} ML"
+                    else:
+                        pick_type = f"{team} {pick_value}"
+                except Exception:
+                    pick_type = f"{team} {pick_value}"
 
             pick_str = f"{pick_type} ({odds})"
 
@@ -129,6 +213,26 @@ def parse_pick_line(text: str, date: str) -> list:
                 'Date': date,
                 'League': league,
                 'Matchup': team,  # Will be enriched later
+                'Segment': segment,
+                'Pick': pick_str,
+                'Odds': odds,
+                'Risk': stake,
+                'ToWin': calculate_to_win(stake, odds),
+                'RawText': line,
+            })
+            continue
+
+        # Fallback: totals found anywhere in the line (rare formatting variants).
+        total_only_match = re.search(r'\b([ou])\s*(\d+\.?\d*)\b', line_no_seg, re.IGNORECASE)
+        if total_only_match:
+            ou = total_only_match.group(1).lower()
+            total = total_only_match.group(2)
+            pick_type = f"{'Over' if ou == 'o' else 'Under'} {total}"
+            pick_str = f"{pick_type} ({odds})"
+            picks.append({
+                'Date': date,
+                'League': league,
+                'Matchup': last_team or '',  # Unknown / not specified; fall back to last team in message
                 'Segment': segment,
                 'Pick': pick_str,
                 'Odds': odds,

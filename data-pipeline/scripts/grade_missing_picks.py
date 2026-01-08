@@ -12,7 +12,7 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent))
 from fetch_completed_boxes import ESPNFetcher, SportsDataIOFetcher
 
-ROOT_DIR = Path(__file__).parent.parent
+ROOT_DIR = Path(__file__).resolve().parent.parent.parent
 INPUT_FILE = ROOT_DIR / "output" / "reconciled" / "telegram_needs_grading.csv"
 OUTPUT_DIR = ROOT_DIR / "output" / "reconciled"
 OUTPUT_FILE = OUTPUT_DIR / "missing_picks_graded.csv"

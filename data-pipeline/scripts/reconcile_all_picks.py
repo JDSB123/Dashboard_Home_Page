@@ -7,7 +7,7 @@ import pandas as pd
 from pathlib import Path
 from datetime import datetime
 
-ROOT_DIR = Path(__file__).parent.parent
+ROOT_DIR = Path(__file__).resolve().parent.parent.parent
 OUTPUT_DIR = ROOT_DIR / 'output' / 'reconciled'
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -33,13 +33,16 @@ def main():
     print(f"  Telegram: {len(telegram)} picks")
 
     # Load historical graded
-    historical = pd.read_csv(ROOT_DIR / 'pick-analysis-tracker/output/graded_all_historical.csv')
+    historical = pd.read_csv(ROOT_DIR / 'data-pipeline/pick-analysis-tracker/output/graded_all_historical.csv')
     print(f"  Historical: {len(historical)} picks")
 
-    # Load recent graded (needs date fix)
-    recent = pd.read_csv(ROOT_DIR / 'output/graded/picks_dec28_jan6_graded.csv')
+    # Load recent graded (prefer fully-graded file if present)
+    recent_path = ROOT_DIR / 'output/graded/picks_dec28_jan6_fully_graded.csv'
+    if not recent_path.exists():
+        recent_path = ROOT_DIR / 'output/graded/picks_dec28_jan6_graded.csv'
+    recent = pd.read_csv(recent_path)
     recent['Date'] = recent['Date'].apply(fix_year)
-    print(f"  Recent (date-fixed): {len(recent)} picks")
+    print(f"  Recent (date-fixed): {len(recent)} picks ({recent_path.name})")
 
     print()
     print("=" * 60)

@@ -8,6 +8,7 @@ import re
 import json
 import pandas as pd
 import requests
+from difflib import SequenceMatcher
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
@@ -16,6 +17,9 @@ ROOT_DIR = Path(__file__).parent.parent
 INPUT_FILE = ROOT_DIR / "output" / "reconciled" / "missing_picks_graded.csv"
 OUTPUT_FILE = ROOT_DIR / "output" / "reconciled" / "deep_dive_graded.csv"
 REPORT_FILE = ROOT_DIR / "output" / "reconciled" / "deep_dive_report.txt"
+
+# Leagues we can resolve against ESPN schedules
+SUPPORTED_LEAGUES = ["NFL", "NCAAF", "NBA", "NCAAM"]
 
 # Comprehensive team name mappings
 TEAM_MAPPINGS = {
@@ -163,6 +167,75 @@ TEAM_MAPPINGS = {
     'villanova': ('villanova', 'NCAAM'), 'nova': ('villanova', 'NCAAM'),
 }
 
+# Extra alias expansions for common shorthand / nicknames where naive substring
+# matching fails (e.g., "Commies" -> Commanders, "Raps" -> Raptors).
+TEAM_ALIAS_EXPANSIONS: Dict[str, List[str]] = {
+    # NFL
+    "commies": ["commanders", "washington commanders", "washington"],
+    "commis": ["commanders", "washington commanders", "washington"],
+    "wsh": ["commanders", "washington commanders", "washington"],
+    "raider": ["raiders", "las vegas raiders"],
+
+    # NBA
+    "raps": ["raptors", "toronto raptors"],
+    "pels": ["pelicans", "new orleans pelicans"],
+    "mavs": ["mavericks", "dallas mavericks"],
+    "cavs": ["cavaliers", "cleveland cavaliers"],
+    "sixers": ["76ers", "philadelphia 76ers"],
+    "dubs": ["warriors", "golden state warriors"],
+    "nugs": ["nuggets", "denver nuggets"],
+    "grizz": ["grizzlies", "memphis grizzlies"],
+    "clips": ["clippers", "los angeles clippers"],
+    "stones": ["pistons", "detroit pistons"],
+
+    # NCAAM shorthand seen in TG
+    "ky": ["kentucky"],
+    "uk": ["kentucky"],
+    "ucsd": ["uc san diego"],
+    "ucsb": ["uc santa barbara"],
+    "lmu": ["loyola marymount"],
+
+    # NCAAF shorthand seen in TG
+    "uf": ["florida"],
+    "gt": ["georgia tech"],
+    "penn st": ["penn state"],
+    "wash st": ["washington state"],
+    "jmu": ["james madison"],
+    "utsa": ["utsa", "ut san antonio"],
+}
+
+
+def _norm_key(text: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "", str(text or "").lower())
+
+
+def _clean_team_hint(team: Optional[str]) -> Optional[str]:
+    t = str(team or "").strip()
+    if not t or t.lower() in {"nan", "none"}:
+        return None
+    t = re.sub(r"\s+[ou]$", "", t, flags=re.IGNORECASE).strip()
+    if t.lower() in {"o", "u"}:
+        return None
+    return t
+
+
+def _expand_team_aliases(team_hints: List[str]) -> List[str]:
+    expanded: List[str] = []
+    seen = set()
+    for hint in team_hints:
+        if not hint:
+            continue
+        base = hint.strip()
+        if not base:
+            continue
+
+        for candidate in [base] + TEAM_ALIAS_EXPANSIONS.get(base.lower(), []):
+            k = _norm_key(candidate)
+            if k and k not in seen:
+                expanded.append(candidate)
+                seen.add(k)
+    return expanded
+
 # Non-pick message patterns to filter out
 NON_PICK_PATTERNS = [
     r'if u up',
@@ -213,6 +286,23 @@ def resolve_team(raw_text: str) -> Tuple[Optional[str], Optional[str]]:
     return None, None
 
 
+def resolve_team_candidates(raw_text: str) -> List[Tuple[str, str]]:
+    """Return all (team, league) candidates found in raw text."""
+    text = raw_text.lower().strip()
+
+    candidates: List[Tuple[str, str]] = []
+    seen: set = set()
+    for abbr, (team, league) in TEAM_MAPPINGS.items():
+        if not league:
+            continue
+        if re.search(rf'\b{re.escape(abbr)}\b', text):
+            key = (team, league)
+            if key not in seen:
+                candidates.append(key)
+                seen.add(key)
+    return candidates
+
+
 def fetch_espn_schedule(date: str, league: str) -> List[Dict]:
     """Fetch game schedule from ESPN API."""
     date_fmt = date.replace('-', '')
@@ -244,6 +334,7 @@ def fetch_espn_schedule(date: str, league: str) -> List[Dict]:
                 'game_id': event.get('id'),
                 'name': event.get('name', ''),
                 'date': date,
+                'league': league,
                 'status': event.get('status', {}).get('type', {}).get('name', ''),
             }
 
@@ -251,17 +342,27 @@ def fetch_espn_schedule(date: str, league: str) -> List[Dict]:
                 team = comp.get('team', {})
                 score = comp.get('score')
 
-                team_name = (team.get('displayName') or team.get('shortDisplayName') or
-                            team.get('abbreviation') or '').lower()
-                team_abbr = (team.get('abbreviation') or '').lower()
+                team_display = team.get('displayName') or ''
+                team_short = team.get('shortDisplayName') or ''
+                team_name = team.get('name') or ''
+                team_location = team.get('location') or ''
+                team_abbr = team.get('abbreviation') or ''
 
                 if comp.get('homeAway') == 'home':
-                    game['home_team'] = team_name
-                    game['home_abbr'] = team_abbr
+                    game['home_team'] = (team_display or team_short or team_abbr).lower()
+                    game['home_display'] = team_display
+                    game['home_short'] = team_short
+                    game['home_name'] = team_name
+                    game['home_location'] = team_location
+                    game['home_abbr'] = team_abbr.lower()
                     game['home_score'] = int(score) if score and str(score).isdigit() else None
                 else:
-                    game['away_team'] = team_name
-                    game['away_abbr'] = team_abbr
+                    game['away_team'] = (team_display or team_short or team_abbr).lower()
+                    game['away_display'] = team_display
+                    game['away_short'] = team_short
+                    game['away_name'] = team_name
+                    game['away_location'] = team_location
+                    game['away_abbr'] = team_abbr.lower()
                     game['away_score'] = int(score) if score and str(score).isdigit() else None
 
             # Get period scores
@@ -283,23 +384,84 @@ def fetch_espn_schedule(date: str, league: str) -> List[Dict]:
         return []
 
 
-def find_matching_game(team: str, games: List[Dict]) -> Optional[Dict]:
-    """Find a game where the team played."""
-    team_lower = team.lower()
+def fetch_games_all_leagues(date: str) -> List[Dict]:
+    """Fetch ESPN schedules for all supported leagues for a given date."""
+    all_games: List[Dict] = []
+    for league in SUPPORTED_LEAGUES:
+        all_games.extend(fetch_espn_schedule(date, league))
+    return all_games
+
+
+def _team_variants(game: Dict, side: str) -> List[str]:
+    fields = [
+        f"{side}_team",
+        f"{side}_display",
+        f"{side}_short",
+        f"{side}_name",
+        f"{side}_location",
+        f"{side}_abbr",
+    ]
+    variants: List[str] = []
+    for f in fields:
+        v = str(game.get(f) or "").strip()
+        if v:
+            variants.append(v)
+    loc = str(game.get(f"{side}_location") or "").strip()
+    name = str(game.get(f"{side}_name") or "").strip()
+    if loc and name:
+        variants.append(f"{loc} {name}")
+    return variants
+
+
+def _score_strings(a: str, b: str) -> float:
+    na = _norm_key(a)
+    nb = _norm_key(b)
+    if not na or not nb:
+        return 0.0
+    if na == nb:
+        return 1.0
+    if len(na) >= 3 and len(nb) >= 3 and (na in nb or nb in na):
+        return 0.92
+    return SequenceMatcher(None, na, nb).ratio()
+
+
+def find_best_game(team_hints: List[str], games: List[Dict], preferred_leagues: Optional[List[str]] = None) -> Tuple[Optional[Dict], Optional[str], float]:
+    """
+    Find the best matching game across leagues. Returns (game, side, score).
+    side is 'home' or 'away'.
+    """
+    if not team_hints:
+        return None, None, 0.0
+
+    preferred = [str(x).upper() for x in (preferred_leagues or []) if str(x).strip()]
+
+    best_game: Optional[Dict] = None
+    best_side: Optional[str] = None
+    best_score: float = 0.0
 
     for game in games:
-        home = game.get('home_team', '').lower()
-        away = game.get('away_team', '').lower()
-        home_abbr = game.get('home_abbr', '').lower()
-        away_abbr = game.get('away_abbr', '').lower()
+        league = str(game.get("league") or "").upper()
+        league_bonus = 0.05 if preferred and league in preferred else 0.0
+        final_bonus = 0.02 if str(game.get("status") or "") == "STATUS_FINAL" else 0.0
 
-        # Check various matches
-        if (team_lower in home or team_lower in away or
-            team_lower == home_abbr or team_lower == away_abbr or
-            home in team_lower or away in team_lower):
-            return game
+        for side in ("home", "away"):
+            variants = _team_variants(game, side)
+            side_score = 0.0
+            for hint in team_hints:
+                for v in variants:
+                    side_score = max(side_score, _score_strings(hint, v))
 
-    return None
+            total_score = side_score + league_bonus + final_bonus
+            if total_score > best_score:
+                best_score = total_score
+                best_game = game
+                best_side = side
+
+    # Require a decent match
+    if best_score < 0.78:
+        return None, None, best_score
+
+    return best_game, best_side, best_score
 
 
 def extract_pick_details(raw_text: str) -> Dict:
@@ -320,9 +482,26 @@ def extract_pick_details(raw_text: str) -> Dict:
         result['stake'] = float(stake_match.group(1))
 
     # Extract odds
-    odds_match = re.search(r'([+-]\d{2,4})\b', text)
-    if odds_match:
-        result['odds'] = int(odds_match.group(1))
+    # Prefer odds immediately before $stake (e.g., "-110 $50"), or after (e.g., "$50 -110").
+    odds_matches = list(re.finditer(r'([+-]\d{2,4})\s*\$\d', text))
+    if odds_matches:
+        result['odds'] = int(odds_matches[-1].group(1))
+    else:
+        odds_matches = list(re.finditer(r'\$\d+\s*([+-]\d{2,4})', text))
+        if odds_matches:
+            result['odds'] = int(odds_matches[-1].group(1))
+        else:
+            tokens = re.findall(r'([+-]\d{2,4})\b', text)
+            if tokens:
+                result['odds'] = int(tokens[-1])
+
+    # Guardrail: American odds should be at least +/-100. If parsing produced an
+    # implausible value (e.g., "-12"), fall back to -110.
+    try:
+        if abs(int(result['odds'])) < 100:
+            result['odds'] = -110
+    except Exception:
+        result['odds'] = -110
 
     # Extract segment
     if '1h' in text or '1st half' in text:
@@ -333,15 +512,25 @@ def extract_pick_details(raw_text: str) -> Dict:
         result['segment'] = '1Q'
 
     # Extract pick type and value
-    # Over/Under
-    over_match = re.search(r'[ou](\d+\.?\d*)', text)
-    if over_match:
-        val = float(over_match.group(1))
-        if text[text.find(over_match.group(0))-1:text.find(over_match.group(0))] == 'o' or 'o' + over_match.group(1) in text:
-            result['pick_type'] = 'over'
-        else:
-            result['pick_type'] = 'under'
-        result['value'] = val
+
+    # Team total (tt) - must run before generic o/u parsing
+    if re.search(r'\btt\b|\btto\b', text):
+        tt_ou = re.search(r'\b([ou])\s*(\d+\.?\d*)\b', text)
+        if tt_ou:
+            result['pick_type'] = 'team_total_over' if tt_ou.group(1).lower() == 'o' else 'team_total_under'
+            result['value'] = float(tt_ou.group(2))
+            return result
+        tt_word = re.search(r'\b(over|under)\s*(\d+\.?\d*)\b', text)
+        if tt_word:
+            result['pick_type'] = 'team_total_over' if tt_word.group(1).lower() == 'over' else 'team_total_under'
+            result['value'] = float(tt_word.group(2))
+            return result
+
+    # Over/Under shorthand (o228.5, u49)
+    ou_match = re.search(r'\b([ou])\s*(\d+\.?\d*)\b', text)
+    if ou_match:
+        result['pick_type'] = 'over' if ou_match.group(1).lower() == 'o' else 'under'
+        result['value'] = float(ou_match.group(2))
         return result
 
     # Explicit over/under
@@ -354,13 +543,6 @@ def extract_pick_details(raw_text: str) -> Dict:
     if under_match2:
         result['pick_type'] = 'under'
         result['value'] = float(under_match2.group(1))
-        return result
-
-    # Team total (tt)
-    tt_match = re.search(r'tt\s*[ou]?(\d+\.?\d*)', text)
-    if tt_match:
-        result['pick_type'] = 'team_total_under' if 'u' in text else 'team_total_over'
-        result['value'] = float(tt_match.group(1))
         return result
 
     # Spread
@@ -483,15 +665,14 @@ def main():
     print("=" * 70)
     print()
 
-    # Load ungraded picks
+    # Load picks (some may already be graded by earlier pipeline steps)
     df = pd.read_csv(INPUT_FILE)
-    ungraded = df[~df['Hit/Miss'].isin(['win', 'loss', 'push'])].copy()
-    print(f"Loaded {len(ungraded)} ungraded picks")
+    print(f"Loaded {len(df)} picks")
 
     # Filter out non-picks
     valid_picks = []
     invalid_count = 0
-    for idx, row in ungraded.iterrows():
+    for idx, row in df.iterrows():
         if is_non_pick(row['RawText']):
             invalid_count += 1
             continue
@@ -519,34 +700,70 @@ def main():
         # Resolve team and league
         team, league = resolve_team(raw_text)
 
-        if not team:
+        # Parse pick info early (used for heuristics)
+        pick_details = extract_pick_details(raw_text)
+        segment = str(row.get("Segment") or pick_details.get("segment") or "FG").upper()
+        pick_details["segment"] = segment
+
+        # Build team candidates + league preferences
+        team_candidates: List[str] = []
+        hint = _clean_team_hint(row.get("Matchup"))
+        if hint:
+            team_candidates.append(hint)
+        if team:
+            team_candidates.append(team)
+
+        resolved_candidates = resolve_team_candidates(raw_text)
+        preferred_leagues: List[str] = []
+        for t, lg in resolved_candidates:
+            team_candidates.append(t)
+            if lg and lg not in preferred_leagues:
+                preferred_leagues.append(lg)
+
+        existing_league = str(row.get("League") or "").strip().upper()
+        if existing_league and existing_league != "UNKNOWN" and existing_league not in preferred_leagues:
+            preferred_leagues.insert(0, existing_league)
+        if league and league not in preferred_leagues:
+            preferred_leagues.insert(0, league)
+
+        if not preferred_leagues and pick_details.get("pick_type") in {"over", "under"} and pick_details.get("value") is not None:
+            try:
+                val = float(pick_details["value"])
+                if val >= 100:
+                    preferred_leagues = ["NBA", "NCAAM"]
+                elif val <= 70:
+                    preferred_leagues = ["NFL", "NCAAF"]
+            except Exception:
+                pass
+
+        team_candidates = _expand_team_aliases(team_candidates)
+
+        if not team_candidates:
             report_lines.append(f"  ❌ Could not resolve team")
-            row['Hit/Miss'] = ''
-            row['PnL'] = 0
-            row['Resolution'] = 'team_not_found'
+            row['Resolution'] = row.get('Resolution') or 'team_not_found'
             results.append(row)
             continue
 
-        report_lines.append(f"  Team: {team} ({league})")
+        report_lines.append(f"  Team hints: {team_candidates[:5]}{'...' if len(team_candidates) > 5 else ''}")
+        if preferred_leagues:
+            report_lines.append(f"  League preference: {preferred_leagues}")
 
-        # Fetch schedule if not cached
-        cache_key = f"{date}_{league}"
+        # Fetch schedules (all leagues) if not cached
+        cache_key = date
         if cache_key not in schedule_cache:
-            print(f"  Fetching {league} schedule for {date}...")
-            schedule_cache[cache_key] = fetch_espn_schedule(date, league)
+            print(f"  Fetching schedules for {date} ({', '.join(SUPPORTED_LEAGUES)})...")
+            schedule_cache[cache_key] = fetch_games_all_leagues(date)
 
         games = schedule_cache[cache_key]
         report_lines.append(f"  Games found: {len(games)}")
 
-        # Find matching game
-        game = find_matching_game(team, games)
+        # Find matching game (cross-league)
+        game, side, score = find_best_game(team_candidates, games, preferred_leagues=preferred_leagues)
 
         if not game:
             report_lines.append(f"  ❌ No matching game found")
             report_lines.append(f"  Available games: {[g.get('name', '') for g in games[:5]]}")
-            row['Hit/Miss'] = ''
-            row['PnL'] = 0
-            row['Resolution'] = 'game_not_found'
+            row['Resolution'] = row.get('Resolution') or 'game_not_found'
             results.append(row)
             continue
 
@@ -554,27 +771,56 @@ def main():
         report_lines.append(f"  Score: {game.get('away_team', '')} {game.get('away_score', '')} @ {game.get('home_team', '')} {game.get('home_score', '')}")
         report_lines.append(f"  Status: {game.get('status', '')}")
 
-        # Extract pick details
-        pick_details = extract_pick_details(raw_text)
-        segment = pick_details['segment']
+        matched_league = str(game.get("league") or "").upper()
+        row["MatchedGame"] = game.get("name", "")
+        row["MatchedLeague"] = matched_league
+        row["MatchScore"] = round(float(score), 4)
+        if game.get("away_score") is not None and game.get("home_score") is not None:
+            row["FinalScore"] = f"{game.get('away_score')} - {game.get('home_score')}"
+        if matched_league:
+            row["League"] = matched_league
+        row["Matchup"] = game.get("name", row.get("Matchup"))
+        resolved_team = str(game.get(f"{side}_display") or game.get(f"{side}_team") or "").strip()
+        row["ResolvedTeam"] = resolved_team
 
         report_lines.append(f"  Pick type: {pick_details['pick_type']}, Value: {pick_details['value']}, Segment: {segment}")
 
-        # Grade the pick
-        result, pnl = grade_pick(pick_details, game, team, segment)
+        # If this looks like an implicit team total (no 'tt' token) we can infer it
+        # after we know the matched league + segment.
+        if pick_details.get("pick_type") in {"over", "under"} and segment == "FG" and not re.search(r"\btt\b|\btto\b", raw_text.lower()):
+            try:
+                v = float(pick_details.get("value"))
+                if matched_league in {"NFL", "NCAAF"} and v <= 30:
+                    pick_details["pick_type"] = "team_total_over" if pick_details["pick_type"] == "over" else "team_total_under"
+                elif matched_league in {"NBA", "NCAAM"} and v <= 100:
+                    pick_details["pick_type"] = "team_total_over" if pick_details["pick_type"] == "over" else "team_total_under"
+            except Exception:
+                pass
+
+        # Grade the pick (re-grade when we can, but preserve existing if grading fails)
+        existing_result = str(row.get("Hit/Miss") or "").strip().lower()
+        existing_pnl = row.get("PnL")
+
+        result, pnl = grade_pick(pick_details, game, resolved_team or team_candidates[0], segment)
 
         if result:
             report_lines.append(f"  ✅ Result: {result.upper()}, PnL: ${pnl:,.2f}")
+            if existing_result in {"win", "loss", "push"} and existing_result != result:
+                row["PrevHitMiss"] = existing_result
+                row["PrevPnL"] = existing_pnl
+                row["Resolution"] = "regraded"
+            else:
+                row["Resolution"] = row.get("Resolution") or "graded"
             row['Hit/Miss'] = result
             row['PnL'] = pnl
-            row['Resolution'] = 'graded'
             row['MatchedGame'] = game.get('name', '')
             row['FinalScore'] = f"{game.get('away_score', '')} - {game.get('home_score', '')}"
         else:
             report_lines.append(f"  ⚠️ Could not grade (game not final or pick type issue)")
-            row['Hit/Miss'] = ''
-            row['PnL'] = 0
-            row['Resolution'] = 'could_not_grade'
+            if existing_result in {"win", "loss", "push"}:
+                row["Resolution"] = row.get("Resolution") or "kept_existing_grade"
+            else:
+                row["Resolution"] = row.get("Resolution") or "could_not_grade"
 
         results.append(row)
 

@@ -187,10 +187,24 @@ def extract_pick_info(raw_text):
     if stake_match:
         info['stake'] = float(stake_match.group(1))
 
-    # Odds
-    odds_match = re.search(r'([+-]\d{2,4})\b', text)
-    if odds_match:
-        info['odds'] = int(odds_match.group(1))
+    # Odds (prefer the token closest to $stake; ignore implausible values like "-12")
+    odds_matches = list(re.finditer(r'([+-]\d{2,4})\s*\$\d', text))
+    if odds_matches:
+        info['odds'] = int(odds_matches[-1].group(1))
+    else:
+        odds_matches = list(re.finditer(r'\$\d+\s*([+-]\d{2,4})', text))
+        if odds_matches:
+            info['odds'] = int(odds_matches[-1].group(1))
+        else:
+            tokens = re.findall(r'([+-]\d{2,4})\b', text)
+            if tokens:
+                info['odds'] = int(tokens[-1])
+
+    try:
+        if abs(int(info['odds'])) < 100:
+            info['odds'] = -110
+    except Exception:
+        info['odds'] = -110
 
     # Segment
     if '1h' in text:
@@ -378,6 +392,10 @@ def main():
             row['Hit/Miss'] = result
             row['PnL'] = pnl
             row['MatchedGame'] = game.get('name', '')
+            row['MatchedLeague'] = game.get('league', league)
+            row['League'] = game.get('league', league)
+            row['Matchup'] = game.get('name', row.get('Matchup', ''))
+            row['FinalScore'] = f"{game.get('away_score', '')} - {game.get('home_score', '')}"
             row['Resolution'] = 'graded'
             new_graded.append(row)
         else:
