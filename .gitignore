@@ -39,6 +39,9 @@ nul
 # Generated datasets / caches (do not commit)
 pick-analysis-tracker/cache/
 pick-analysis-tracker/output/
+output/
+logs/
+telegram_history/
 
 # Azure Functions local config (contains secrets in real use)
 azure-functions/local.settings.json
