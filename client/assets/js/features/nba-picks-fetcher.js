@@ -1,9 +1,9 @@
 /**
  * NBA Picks Fetcher v1.1
- * Fetches NBA model picks from Azure Function App (primary) or Container App (fallback)
+ * Fetches NBA model picks from Azure Container App directly
  * 
- * Primary: nba-picks-trigger Function App (/api/weekly-lineup/nba)
- * Fallback: nba-gbsv-api Container App (/slate/{date}/executive)
+ * Endpoint: nba-gbsv-api Container App (/slate/{date}/executive)
+ * Function App removed Jan 2026 - all endpoints now on Container App
  */
 
 (function() {
@@ -211,29 +211,9 @@
             return picksCache;
         }
 
-        // Try Function App first (primary source for Weekly Lineup)
-        const functionUrl = `${getFunctionEndpoint()}/api/weekly-lineup/nba`;
-        console.log(`[NBA-PICKS] Trying Function App: ${functionUrl}`);
-
-        try {
-            const response = await fetchWithTimeout(functionUrl);
-            if (response.ok) {
-                const data = await response.json();
-                picksCache = data;
-                lastFetch = Date.now();
-                lastSource = 'function-app';
-                const pickCount = data.plays?.length || data.picks?.length || data.total_plays || 0;
-                console.log(`[NBA-PICKS] ✅ Function App returned ${pickCount} picks`);
-                return data;
-            }
-            console.warn(`[NBA-PICKS] Function App returned ${response.status}, trying Container App...`);
-        } catch (error) {
-            console.warn(`[NBA-PICKS] Function App failed: ${error.message}, trying Container App...`);
-        }
-
-        // Fallback to Container App
-        const containerUrl = `${NBA_API_URL}/slate/${date}/executive`;
-        console.log(`[NBA-PICKS] Falling back to Container App: ${containerUrl}`);
+        // Fetch directly from Container App (Function App removed Jan 2026)
+        const containerUrl = `${getApiEndpoint()}/slate/${date}/executive`;
+        console.log(`[NBA-PICKS] Fetching from Container App: ${containerUrl}`);
 
         try {
             const response = await fetchWithTimeout(containerUrl);
