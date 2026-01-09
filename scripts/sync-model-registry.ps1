@@ -80,7 +80,7 @@ function Get-ContainerAppFqdn {
 
     if ($LASTEXITCODE -ne 0) {
         $msg = ($fqdnOutput | Out-String).Trim()
-        throw "az containerapp show failed for $AppName in $ResourceGroup: $msg"
+        throw "az containerapp show failed for $AppName in ${ResourceGroup}: $msg"
     }
 
     $fqdn = ($fqdnOutput | Out-String).Trim()
