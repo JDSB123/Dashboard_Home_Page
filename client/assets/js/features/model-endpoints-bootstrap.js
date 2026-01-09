@@ -27,19 +27,43 @@
     };
 
     const hydrateEndpoints = async () => {
-        const baseUrl = window.APP_CONFIG?.API_BASE_URL;
-        if (!baseUrl) {
-            console.warn('[MODEL-ENDPOINTS] API_BASE_URL not configured, skipping registry fetch');
-            return;
-        }
+        const primaryBase = window.APP_CONFIG?.API_BASE_URL;
+        const fallbackBase = window.APP_CONFIG?.API_BASE_FALLBACK;
 
-        const url = `${baseUrl}/registry`;
-        console.log('[MODEL-ENDPOINTS] Fetching model endpoints from registry:', url);
-
-        try {
+        const resolveRegistry = async (base) => {
+            if (!base) return null;
+            const url = `${base}/registry`;
+            console.log('[MODEL-ENDPOINTS] Fetching model endpoints from registry:', url);
             const res = await fetchWithTimeout(url);
             if (!res.ok) throw new Error(`Registry request failed: ${res.status}`);
-            const registry = await res.json();
+            const ct = (res.headers.get('content-type') || '').toLowerCase();
+            if (!ct.includes('application/json')) {
+                // Likely a SPA HTML fallback; treat as failure so we try the fallback base
+                throw new Error(`Unexpected content-type: ${ct}`);
+            }
+            return await res.json();
+        };
+
+        let registry = null;
+        try {
+            registry = await resolveRegistry(primaryBase);
+        } catch (err) {
+            console.warn('[MODEL-ENDPOINTS] Primary registry fetch failed:', err.message);
+            if (fallbackBase) {
+                try {
+                    registry = await resolveRegistry(fallbackBase);
+                    console.log('[MODEL-ENDPOINTS] ✅ Fallback registry succeeded');
+                } catch (fallbackErr) {
+                    console.warn('[MODEL-ENDPOINTS] Fallback registry failed:', fallbackErr.message);
+                }
+            }
+        }
+
+        if (!registry) {
+            console.warn('[MODEL-ENDPOINTS] Unable to refresh endpoints from registry (primary + fallback failed)');
+            console.warn('[MODEL-ENDPOINTS] Fetchers will use fallback endpoints from config.js');
+            return;
+        }
 
             // Dynamically iterate over ALL keys in registry response
             // This allows new leagues/models to be added without code changes

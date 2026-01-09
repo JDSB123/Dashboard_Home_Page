@@ -23,6 +23,8 @@ window.APP_CONFIG = {
   // API Configuration
   API_BASE_URL: 'https://www.greenbiersportventures.com/api',
   ORCHESTRATOR_URL: 'https://www.greenbiersportventures.com',
+  // Fallback to legacy orchestrator host if www proxy is misconfigured
+  API_BASE_FALLBACK: 'https://gbsv-orchestrator.wittypebble-41c11c65.eastus.azurecontainerapps.io/api',
 
   // Model API Endpoints (can be dynamically updated by model-endpoints-bootstrap.js)
   // These endpoints are used by:

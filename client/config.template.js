@@ -23,6 +23,7 @@ window.APP_CONFIG = {
   // API Configuration
   API_BASE_URL: '__API_BASE_URL__',
   ORCHESTRATOR_URL: '__ORCHESTRATOR_URL__',
+  API_BASE_FALLBACK: '__API_BASE_FALLBACK__',
 
   // Model API Endpoints (can be dynamically updated by model-endpoints-bootstrap.js)
   // These endpoints are used by:
