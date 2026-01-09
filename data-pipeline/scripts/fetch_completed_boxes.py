@@ -453,14 +453,22 @@ class SportsDataIOFetcher(BoxScoreFetcher):
         home_score = game.get("HomeScore")
         away_score = game.get("AwayScore")
         
-        # Determine status
+        # Determine status - SportsDataIO uses multiple fields
         is_completed = game.get("IsCompleted", False)
         is_in_progress = game.get("IsInProgress", False)
+        status_field = game.get("Status", "")
         
-        if is_completed:
+        # Status field values: "Final", "InProgress", "Scheduled", "Postponed", "Canceled"
+        # Also check if game has final scores (both scores not None and game date is in the past)
+        has_scores = home_score is not None and away_score is not None
+        game_in_past = game_date < datetime.now().strftime("%Y-%m-%d")
+        
+        if is_completed or status_field == "Final" or (has_scores and game_in_past):
             status = "final"
-        elif is_in_progress:
+        elif is_in_progress or status_field == "InProgress":
             status = "in_progress"
+        elif status_field in ("Postponed", "Canceled"):
+            status = status_field.lower()
         else:
             status = "scheduled"
         
