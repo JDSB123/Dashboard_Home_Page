@@ -1,5 +1,5 @@
 /**
- * NBA Picks Fetcher v2.0
+ * NBA Picks Fetcher v2.1
  * Fetches NBA model picks via domain-based API proxy
  * 
  * Endpoint: https://www.greenbiersportventures.com/api/*
@@ -52,7 +52,7 @@
         const NBA_API_URL = getApiEndpoint();
         const cacheKey = getCacheKey(date);
 
-        // Check cache for today's data
+        // Check cache for today's data (only for 'today' queries)
         if (date === 'today' && picksCache && lastFetch) {
             const now = new Date().getTime();
             if (now - lastFetch < CACHE_DURATION) {
@@ -63,7 +63,6 @@
 
         try {
             // Updated Endpoint Structure for backend Proxy
-            // The backend expects /api/v1/picks?date=... or /api/v1/picks/{date}
             let endpoint = `${NBA_API_URL}/v1/picks`;
             
             // Handle date parameter
@@ -78,13 +77,14 @@
             const response = await fetchWithTimeout(endpoint);
 
             if (!response.ok) {
+                // Determine if 404 means no games or bad endpoint
                 throw new Error(`API returned ${response.status}: ${response.statusText}`);
             }
 
             const data = await response.json();
 
             // Validate response structure
-            if (!data || (!data.data && !Array.isArray(data))) {
+            if (!data || (!data.data && !Array.isArray(data) && !data.plays)) {
                 console.warn('[NBA-FETCHER] Unexpected response format', data);
             }
 
@@ -99,13 +99,68 @@
 
         } catch (error) {
             console.error('[NBA-FETCHER] Fetch failed:', error);
+            // Return failure object that unified fetcher understands
             return { success: false, error: error.message };
+        }
+    }
+
+    /**
+     * Formats a raw API play object into the standard table format
+     * @param {Object} play - Raw play object from API
+     * @returns {Object} Formatted pick object
+     */
+    function formatPickForTable(play) {
+        if (!play) return null;
+
+        const home = play.home_team || play.home || 'Unknown';
+        const away = play.away_team || play.away || 'Unknown';
+        const matchup = `${away} @ ${home}`;
+        
+        // Determine pick display text
+        let pickText = play.selection || play.feature_name || play.model_feature || 'N/A';
+        // Cleanup pick text if it's too raw (e.g. "home_spread_-5.5" -> "Home -5.5")
+        if (pickText && typeof pickText === 'string') {
+            pickText = pickText.replace(/_/g, ' ');
+        }
+
+        return {
+            sport: 'NBA',
+            matchup: matchup,
+            market: play.market || play.bet_type || 'General',
+            pick: pickText,
+            odds: play.odds_available || play.price || play.odds || -110,
+            units: play.units || (play.kelly_fraction ? (play.kelly_fraction * 10).toFixed(2) : '1.0'),
+            confidence: play.confidence || 'Norm',
+            ev: play.ev ? `${(play.ev * 100).toFixed(1)}%` : '0%',
+            sportsbook: play.sportsbook || 'Any',
+            startTime: play.game_date || play.date || new Date().toISOString(),
+            raw: play // Keep raw data for details view
+        };
+    }
+
+    /**
+     * Checks if the API is reachable
+     * @returns {Promise<boolean>}
+     */
+    async function checkHealth() {
+        try {
+            const NBA_API_URL = getApiEndpoint();
+            // Try hitting base health endpoint if v1/picks is heavyweight
+            // Usually /health or /api/health check
+            const response = await fetchWithTimeout(`${NBA_API_URL}/health`, 5000);
+            return response.ok;
+        } catch (e) {
+            console.warn('[NBA-FETCHER] Health check failed:', e);
+            return false;
         }
     }
 
     // Expose via global window object
     window.NBAPicksFetcher = {
         fetchNBAPicks,
+        fetchPicks: fetchNBAPicks, // Alias for unified fetcher
+        formatPickForTable,
+        checkHealth,
         clearCache: () => {
             picksCache = null;
             lastFetch = null;
@@ -113,6 +168,6 @@
         }
     };
 
-    console.log('[NBA-FETCHER] v2.0 loaded - Domain Proxy Mode');
+    console.log('[NBA-FETCHER] v2.1 loaded - Domain Proxy Mode with Unified Interface');
 
 })();
