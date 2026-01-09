@@ -1,0 +1,61 @@
+name: Notify Dashboard on Model Deploy
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'requirements.txt'
+      - '.github/workflows/notify-dashboard-on-deploy.yml'
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  ORCHESTRATOR_URL: https://gbsv-orchestrator.wittypebble-41c11c65.eastus.azurecontainerapps.io/api
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Azure Login (OIDC)
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Get Container App FQDN
+        id: fqdn
+        run: |
+          RG="REPLACE_ME_RG"          # e.g., nba-gbsv-model-rg
+          APP="REPLACE_ME_APP_NAME"   # e.g., nba-gbsv-api
+          FQDN=$(az containerapp show --name "$APP" --resource-group "$RG" --query 'properties.configuration.ingress.fqdn' -o tsv)
+          if [ -z "$FQDN" ]; then
+            echo "Failed to resolve Container App FQDN" >&2
+            exit 1
+          fi
+          echo "fqdn=$FQDN" >> $GITHUB_OUTPUT
+
+      - name: Update Dashboard Registry
+        env:
+          FUNCTIONS_KEY: ${{ secrets.ORCHESTRATOR_FUNCTIONS_KEY }} # leave empty if not required
+        run: |
+          MODEL="REPLACE_ME_MODEL"   # e.g., nba | ncaam | nfl | ncaaf
+          ENDPOINT="https://${{ steps.fqdn.outputs.fqdn }}"
+          HEADERS=(-H "Content-Type: application/json")
+          if [ -n "$FUNCTIONS_KEY" ]; then
+            HEADERS+=(-H "x-functions-key: $FUNCTIONS_KEY")
+          fi
+          curl -X POST "${{ env.ORCHESTRATOR_URL }}/registry/update" \
+            "${HEADERS[@]}" \
+            -d '{
+              "model": "'$MODEL'",
+              "endpoint": "'$ENDPOINT'",
+              "version": "'$GITHUB_SHA'",
+              "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'"
+            }'
