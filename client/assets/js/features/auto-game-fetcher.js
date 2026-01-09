@@ -11,10 +11,20 @@
     const SPORTSDATAIO_API_KEY = window.APP_CONFIG?.SPORTSDATAIO?.API_KEY || '';
     const todayISO = new Date().toISOString().split('T')[0];
     const todayESPN = todayISO.replace(/-/g, '');
+    const STANDINGS_TTL_MS = 6 * 60 * 60 * 1000; // cache standings for 6 hours
+    const SCOREBOARD_INTERVAL_INITIAL_MS = 180000; // 3 minutes
+    const SCOREBOARD_INTERVAL_MAX_MS = 600000; // 10 minutes
 
     let todaysGamesCache = null;
     let teamRecordsCache = {};  // Map of team name -> record string
     let lastFetch = null;
+    const lastStandingsFetch = {
+        NBA: 0,
+        NFL: 0,
+        NCAAM: 0,
+        NCAAF: 0
+    };
+    let scoreboardIntervalMs = SCOREBOARD_INTERVAL_INITIAL_MS;
 
     /**
      * Fetch from SportsDataIO
@@ -45,6 +55,11 @@
      * Fetch standings from ESPN to get team records
      */
     async function fetchStandings(sport) {
+        const now = Date.now();
+        if (lastStandingsFetch[sport] && now - lastStandingsFetch[sport] < STANDINGS_TTL_MS) {
+            return;
+        }
+
         const sportPath = sport === 'NBA' ? 'nba' :
                          sport === 'NFL' ? 'nfl' :
                          sport === 'NCAAM' ? 'mens-college-basketball' :
@@ -80,6 +95,7 @@
                     teamRecordsCache[teamName.toLowerCase()] = `${wins}-${losses}`;
                 }
             }
+            lastStandingsFetch[sport] = now;
             console.log(`[AUTO-GAME-FETCHER] Loaded ${Object.keys(teamRecordsCache).length} team records for ${sport}`);
         } catch (e) {
             console.warn(`[AUTO-GAME-FETCHER] Could not fetch ${sport} standings:`, e.message);
@@ -182,8 +198,8 @@
             return todaysGamesCache;
         }
 
-        // FIRST: Fetch standings to get team records
-        console.log('[AUTO-GAME-FETCHER] Fetching team standings for records...');
+        // FIRST: Fetch standings (cached) to get team records
+        console.log('[AUTO-GAME-FETCHER] Fetching team standings for records (cached)...');
         await Promise.all([
             fetchStandings('NBA'),
             fetchStandings('NFL'),
@@ -292,19 +308,26 @@
         return `Scheduled for ${game.time}`;
     }
 
-    // Auto-fetch on load
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
-            fetchTodaysGames().catch(console.error);
-        });
-    } else {
-        fetchTodaysGames().catch(console.error);
+    async function scheduleScoreboardRefresh() {
+        try {
+            await fetchTodaysGames(true);
+            scoreboardIntervalMs = SCOREBOARD_INTERVAL_INITIAL_MS;
+        } catch (err) {
+            console.error('[AUTO-GAME-FETCHER] Refresh failed:', err.message || err);
+            scoreboardIntervalMs = Math.min(scoreboardIntervalMs * 2, SCOREBOARD_INTERVAL_MAX_MS);
+        } finally {
+            setTimeout(scheduleScoreboardRefresh, scoreboardIntervalMs);
+        }
     }
 
-    // Refresh every 60 seconds
-    setInterval(() => {
-        fetchTodaysGames(true).catch(console.error);
-    }, 60000);
+    // Auto-fetch on load, then refresh with backoff
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchTodaysGames().catch(console.error).finally(() => scheduleScoreboardRefresh());
+        });
+    } else {
+        fetchTodaysGames().catch(console.error).finally(() => scheduleScoreboardRefresh());
+    }
 
     // Export
     window.AutoGameFetcher = {

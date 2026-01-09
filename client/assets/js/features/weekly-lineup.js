@@ -579,16 +579,12 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
     // ===== STORAGE FUNCTIONS FOR WEEKLY LINEUP PICKS =====
     function saveWeeklyLineupPicks(picks) {
         try {
-            if (picks && picks.length > 0) {
-                localStorage.setItem(WEEKLY_LINEUP_STORAGE_KEY, JSON.stringify({
-                    picks: picks,
-                    timestamp: new Date().toISOString()
-                }));
-                log(`💾 Saved ${picks.length} weekly lineup picks to localStorage`);
-            } else {
-                // Don't save empty arrays - keep previous picks
-                log('💾 Skipping save - no picks to save');
-            }
+            const safePicks = Array.isArray(picks) ? picks : [];
+            localStorage.setItem(WEEKLY_LINEUP_STORAGE_KEY, JSON.stringify({
+                picks: safePicks,
+                timestamp: new Date().toISOString()
+            }));
+            log(`💾 Saved ${safePicks.length} weekly lineup picks to localStorage`);
         } catch (e) {
             console.error('Error saving weekly lineup picks:', e);
         }
@@ -723,22 +719,39 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         }
     }
 
+    function normalizePickIdentityFields(pick) {
+        return {
+            pickTeam: (pick.pickTeam || '').toUpperCase().trim(),
+            line: (pick.line || '').toString().trim(),
+            awayTeam: (pick.awayTeam || '').toUpperCase().trim(),
+            homeTeam: (pick.homeTeam || '').toUpperCase().trim(),
+            segment: normalizeSegment(pick.segment || pick.period || 'FG').toUpperCase(),
+            odds: (pick.odds || '').toString().trim(),
+            date: (pick.date || pick.gameDate || '').toLowerCase().trim()
+        };
+    }
+
+    function picksMatch(pickA, pickB) {
+        const a = normalizePickIdentityFields(pickA || {});
+        const b = normalizePickIdentityFields(pickB || {});
+
+        const sameTeams = a.awayTeam === b.awayTeam && a.homeTeam === b.homeTeam;
+        const samePick = a.pickTeam === b.pickTeam && a.line === b.line;
+        const sameSegment = a.segment === b.segment;
+
+        const oddsComparable = a.odds && b.odds ? a.odds === b.odds : true;
+        const dateComparable = a.date && b.date ? a.date === b.date : true;
+
+        return sameTeams && samePick && sameSegment && oddsComparable && dateComparable;
+    }
+
     /**
      * Get outcome for a pick from dashboard data
      */
     function getPickOutcome(pick) {
         try {
             const dashboardPicks = JSON.parse(localStorage.getItem('gbsv_picks') || '[]');
-            const pickId = generatePickId(pick);
-
-            // Find matching dashboard pick by comparing key fields
-            const matched = dashboardPicks.find(dp => {
-                // Match by pickTeam, line, date, and teams
-                const sameTeam = dp.pickTeam === pick.pickTeam;
-                const sameLine = dp.line === pick.line;
-                const sameMatchup = (dp.awayTeam === pick.awayTeam && dp.homeTeam === pick.homeTeam);
-                return sameTeam && sameLine && sameMatchup;
-            });
+            const matched = dashboardPicks.find(dp => picksMatch(dp, pick));
 
             if (matched && matched.status) {
                 // Return status: win, loss, push
@@ -3232,10 +3245,20 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             // Get existing picks
             const existingData = localStorage.getItem(STORAGE_KEY);
             const existingPicks = existingData ? JSON.parse(existingData) : [];
+            const pickId = generatePickId(pickData);
+
+            const isDuplicate = existingPicks.some(p => generatePickId(p) === pickId);
+            if (isDuplicate) {
+                btn.textContent = '✓';
+                btn.classList.add('added');
+                btn.disabled = true;
+                showNotification('Pick already added to Dashboard', 'info');
+                return;
+            }
 
             // Transform data to match dashboard expected format
             const dashboardPick = {
-                id: `pick_${Date.now()}_${Math.random().toString(36).substring(7)}`,
+                id: pickId,
                 createdAt: trackedAt,
                 // Date/Time - dashboard expects gameDate and gameTime
                 gameDate: pickData.date || getTodayDateString(),
@@ -3371,13 +3394,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             let updatedCount = 0;
 
             archiveData.picks.forEach(archivedPick => {
-                // Find matching dashboard pick
-                const matched = dashboardPicks.find(dp => {
-                    const sameTeam = dp.pickTeam === archivedPick.pickTeam;
-                    const sameLine = dp.line === archivedPick.line;
-                    const sameMatchup = (dp.awayTeam === archivedPick.awayTeam && dp.homeTeam === archivedPick.homeTeam);
-                    return sameTeam && sameLine && sameMatchup;
-                });
+                const matched = dashboardPicks.find(dp => picksMatch(dp, archivedPick));
 
                 if (matched && matched.status) {
                     const newOutcome = ['win', 'loss', 'push'].includes(matched.status.toLowerCase())
