@@ -17,6 +17,9 @@
         window.APP_CONFIG?.NBA_FUNCTION_URL ||
         'https://nba-picks-trigger.azurewebsites.net';
 
+    // Ensure we always have a defined fallback reference for legacy code paths
+    const NBA_API_URL = getApiEndpoint();
+
     let picksCache = null;
     let lastFetch = null;
     let lastSource = null; // Track which source was used
