@@ -26,7 +26,8 @@
      * @returns {string} The NCAAM API endpoint URL
      */
     function getNCAAMEndpoint() {
-        const registryEndpoint = window.APP_CONFIG?.NCAAM_API_URL;
+        const resolverApi = window.ModelEndpointResolver?.getApiEndpoint?.('ncaam');
+        const registryEndpoint = resolverApi || window.APP_CONFIG?.NCAAM_API_URL;
         if (registryEndpoint) {
             console.log('[NCAAM-PICKS] Using registry endpoint:', registryEndpoint);
             return registryEndpoint;
@@ -60,12 +61,19 @@
         }
     }
 
+    const triggerInFlight = {};
+
     /**
      * Trigger picks generation if not already available
      */
-    async function triggerPicksIfNeeded() {
+    async function triggerPicksIfNeeded(cacheKey) {
+        const endpoint = getNCAAMEndpoint();
+        const triggerKey = `${endpoint}|${cacheKey || 'today'}`;
+        if (triggerInFlight[triggerKey]) {
+            return false;
+        }
+        triggerInFlight[triggerKey] = true;
         try {
-            const endpoint = getNCAAMEndpoint();
             console.log('[NCAAM-PICKS] Triggering picks generation at:', endpoint);
             const response = await fetchWithTimeout(`${endpoint}/trigger-picks`, 30000);
             if (response.ok) {
@@ -77,6 +85,8 @@
         } catch (error) {
             console.warn('[NCAAM-PICKS] Trigger failed:', error.message);
             return false;
+        } finally {
+            triggerInFlight[triggerKey] = false;
         }
     }
 
@@ -86,6 +96,9 @@
      * @returns {Promise<Object>} Picks data
      */
     const fetchNCAAMPicks = async function(date = 'today') {
+        if (window.ModelEndpointResolver?.ensureRegistryHydrated) {
+            window.ModelEndpointResolver.ensureRegistryHydrated();
+        }
         // Normalize date for cache key
         const cacheKey = date || 'today';
 
@@ -107,7 +120,7 @@
             // If 503, try triggering picks first then retry
             if (response.status === 503) {
                 console.warn('[NCAAM-PICKS] API returned 503, attempting to trigger picks...');
-                const triggered = await triggerPicksIfNeeded();
+                const triggered = await triggerPicksIfNeeded(cacheKey);
                 if (triggered) {
                     // Wait a moment for picks to generate
                     await new Promise(resolve => setTimeout(resolve, 2000));
@@ -128,7 +141,7 @@
                 console.warn('[NCAAM-PICKS] 0 picks found for today. Triggering generation...');
                 
                 // Trigger
-                const triggered = await triggerPicksIfNeeded();
+                const triggered = await triggerPicksIfNeeded(cacheKey);
                 
                 if (triggered) {
                     console.log('[NCAAM-PICKS] Waiting 5s for generation...');

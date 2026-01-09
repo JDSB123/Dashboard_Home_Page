@@ -6,7 +6,9 @@
 (function() {
     'use strict';
 
-    const NCAAF_API_URL = window.APP_CONFIG?.NCAAF_API_URL || 'https://ncaaf-v5-prod.salmonwave-314d4ffe.eastus.azurecontainerapps.io';
+    const getApiEndpoint = () => (window.ModelEndpointResolver?.getApiEndpoint('ncaaf')) ||
+        window.APP_CONFIG?.NCAAF_API_URL ||
+        'https://ncaaf-v5-prod.salmonwave-314d4ffe.eastus.azurecontainerapps.io';
 
     let picksCache = null;
     let lastFetch = null;
@@ -52,7 +54,11 @@
             week = week || current.week;
         }
 
-        const url = `${NCAAF_API_URL}/api/v1/predictions/week/${season}/${week}`;
+        if (window.ModelEndpointResolver?.ensureRegistryHydrated) {
+            window.ModelEndpointResolver.ensureRegistryHydrated();
+        }
+
+        const url = `${getApiEndpoint()}/api/v1/predictions/week/${season}/${week}`;
         console.log(`[NCAAF-PICKS] Fetching picks from: ${url}`);
 
         try {
@@ -79,7 +85,7 @@
      * @returns {Promise<Object>} Health status
      */
     const checkHealth = async function() {
-        const url = `${NCAAF_API_URL}/health`;
+        const url = `${getApiEndpoint()}/health`;
         try {
             const response = await fetch(url);
             return await response.json();

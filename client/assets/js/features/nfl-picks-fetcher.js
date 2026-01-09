@@ -10,9 +10,12 @@
     'use strict';
 
     // Primary: Function App for Weekly Lineup picks
-    const NFL_FUNCTION_URL = window.APP_CONFIG?.NFL_FUNCTION_URL || 'https://nfl-picks-trigger.azurewebsites.net';
-    // Fallback: Container App for model API
-    const NFL_API_URL = window.APP_CONFIG?.NFL_API_URL || 'https://nfl-api.purplegrass-5889a981.eastus.azurecontainerapps.io';
+    const getApiEndpoint = () => (window.ModelEndpointResolver?.getApiEndpoint('nfl')) ||
+        window.APP_CONFIG?.NFL_API_URL ||
+        'https://nfl-api.purplegrass-5889a981.eastus.azurecontainerapps.io';
+    const getFunctionEndpoint = () => (window.ModelEndpointResolver?.getFunctionEndpoint('nfl')) ||
+        window.APP_CONFIG?.NFL_FUNCTION_URL ||
+        'https://nfl-picks-trigger.azurewebsites.net';
 
     let picksCache = null;
     let lastFetch = null;
@@ -85,6 +88,9 @@
      * @returns {Promise<Object>} Picks data
      */
     async function fetchNFLPicks(date = 'today') {
+        if (window.ModelEndpointResolver?.ensureRegistryHydrated) {
+            window.ModelEndpointResolver.ensureRegistryHydrated();
+        }
         // Use cache if fresh
         if (picksCache && lastFetch && (Date.now() - lastFetch < CACHE_DURATION)) {
             console.log(`[NFL-PICKS] Using cached picks (source: ${lastSource})`);
@@ -92,7 +98,7 @@
         }
 
         // Try Function App first (primary source for Weekly Lineup)
-        const functionUrl = `${NFL_FUNCTION_URL}/api/weekly-lineup/nfl`;
+        const functionUrl = `${getFunctionEndpoint()}/api/weekly-lineup/nfl`;
         console.log(`[NFL-PICKS] Trying Function App: ${functionUrl}`);
 
         try {
@@ -113,7 +119,7 @@
 
         // Fallback to Container App
         const { season, week } = dateToNFLSeasonWeek(date);
-        const containerUrl = `${NFL_API_URL}/api/v1/predictions/week/${season}/${week}`;
+        const containerUrl = `${getApiEndpoint()}/api/v1/predictions/week/${season}/${week}`;
         console.log(`[NFL-PICKS] Falling back to Container App: ${containerUrl}`);
 
         try {
@@ -147,7 +153,7 @@
 
         // Check Function App
         try {
-            const response = await fetchWithTimeout(`${NFL_FUNCTION_URL}/api/health`, 5000);
+            const response = await fetchWithTimeout(`${getFunctionEndpoint()}/api/health`, 5000);
             if (response.ok) {
                 health.functionApp = await response.json();
                 health.functionApp.status = 'healthy';
@@ -160,7 +166,7 @@
 
         // Check Container App
         try {
-            const response = await fetchWithTimeout(`${NFL_API_URL}/health`, 5000);
+            const response = await fetchWithTimeout(`${getApiEndpoint()}/health`, 5000);
             if (response.ok) {
                 health.containerApp = await response.json();
                 health.containerApp.status = 'healthy';

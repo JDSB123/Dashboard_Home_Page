@@ -10,9 +10,12 @@
     'use strict';
 
     // Primary: Function App for Weekly Lineup picks
-    const NBA_FUNCTION_URL = window.APP_CONFIG?.NBA_FUNCTION_URL || 'https://nba-picks-trigger.azurewebsites.net';
-    // Fallback: Container App for model API
-    const NBA_API_URL = window.APP_CONFIG?.NBA_API_URL || 'https://nba-gbsv-api.livelycoast-b48c3cb0.eastus.azurecontainerapps.io';
+    const getApiEndpoint = () => (window.ModelEndpointResolver?.getApiEndpoint('nba')) ||
+        window.APP_CONFIG?.NBA_API_URL ||
+        'https://nba-gbsv-api.livelycoast-b48c3cb0.eastus.azurecontainerapps.io';
+    const getFunctionEndpoint = () => (window.ModelEndpointResolver?.getFunctionEndpoint('nba')) ||
+        window.APP_CONFIG?.NBA_FUNCTION_URL ||
+        'https://nba-picks-trigger.azurewebsites.net';
 
     let picksCache = null;
     let lastFetch = null;
@@ -38,8 +41,6 @@
             throw error;
         }
     }
-
-    const getApiUrl = () => window.APP_CONFIG?.NBA_API_URL || DEFAULT_NBA_API_URL;
 
     const getCacheKey = (date) => (date || 'today').toString().trim().toLowerCase() || 'today';
 
@@ -171,7 +172,7 @@
     };
 
     const fetchExecutiveFallbackFromHtml = async (date) => {
-        const apiUrl = getApiUrl();
+        const apiUrl = getApiEndpoint();
         const qs = date ? `?date=${encodeURIComponent(date)}` : '';
         const url = `${apiUrl}/picks/html${qs}`;
 
@@ -198,6 +199,9 @@
      * @returns {Promise<Object>} Picks data
      */
     async function fetchNBAPicks(date = 'today') {
+        if (window.ModelEndpointResolver?.ensureRegistryHydrated) {
+            window.ModelEndpointResolver.ensureRegistryHydrated();
+        }
         // Use cache if fresh
         if (picksCache && lastFetch && (Date.now() - lastFetch < CACHE_DURATION)) {
             console.log(`[NBA-PICKS] Using cached picks (source: ${lastSource})`);
@@ -205,7 +209,7 @@
         }
 
         // Try Function App first (primary source for Weekly Lineup)
-        const functionUrl = `${NBA_FUNCTION_URL}/api/weekly-lineup/nba`;
+        const functionUrl = `${getFunctionEndpoint()}/api/weekly-lineup/nba`;
         console.log(`[NBA-PICKS] Trying Function App: ${functionUrl}`);
 
         try {

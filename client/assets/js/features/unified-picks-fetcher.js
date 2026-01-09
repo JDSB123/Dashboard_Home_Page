@@ -138,6 +138,9 @@
      * @returns {Promise<Object>} Object with picks array, errors, and metadata
      */
     const fetchPicks = async function(league = 'all', date = 'today') {
+        if (window.ModelEndpointResolver?.ensureRegistryHydrated) {
+            window.ModelEndpointResolver.ensureRegistryHydrated();
+        }
         let allPicks = [];
         const errors = [];
         const leagueUpper = league.toUpperCase();
@@ -173,28 +176,21 @@
                     try {
                         data = await window.NCAAMPicksFetcher.fetchPicks(date);
                     } catch (containerError) {
-                debugWarn('[UNIFIED-FETCHER] NCAAM container app failed:', containerError.message);
-                
-                // Fallback to main API is NOT supported for NCAAM yet (Orchestrator has no picks endpoint)
-                // We re-throw or handle gracefully to avoid 404 spam
-                throw new Error(`NCAAM fetch failed: ${containerError.message}`);
+                        debugWarn('[UNIFIED-FETCHER] NCAAM container app failed:', containerError.message);
+                        errors.push({ league: 'NCAAM', error: containerError.message });
+                        data = null;
+                    }
 
-                /* 
-                // DISABLED: Main API does not support /picks route currently
-                const mainApiUrl = `${window.APP_CONFIG?.API_BASE_URL || 'https://green-bier-picks-api.azurewebsites.net/api'}/picks?league=ncaam`;
-                const response = await fetchWithTimeout(mainApiUrl);
-                if (!response.ok) throw new Error(`Main API error: ${response.status}`);
-                data = await response.json();
-                */
-
-                    const modelStamp = extractModelStampFromResponse(data);
-                    const picks = data.picks || data.plays || data.recommendations || [];
-                    picks.forEach(pick => {
-                        const formatted = window.NCAAMPicksFetcher.formatPickForTable(pick);
-                        if (modelStamp && !formatted.modelStamp) formatted.modelStamp = modelStamp;
-                        allPicks.push(formatted);
-                    });
-                    debugLog(`[UNIFIED-FETCHER] NCAAM: ${picks.length} picks`);
+                    if (data) {
+                        const modelStamp = extractModelStampFromResponse(data);
+                        const picks = data.picks || data.plays || data.recommendations || [];
+                        picks.forEach(pick => {
+                            const formatted = window.NCAAMPicksFetcher.formatPickForTable(pick);
+                            if (modelStamp && !formatted.modelStamp) formatted.modelStamp = modelStamp;
+                            allPicks.push(formatted);
+                        });
+                        debugLog(`[UNIFIED-FETCHER] NCAAM: ${picks.length} picks`);
+                    }
                 }
             } catch (e) {
                 debugError('[UNIFIED-FETCHER] NCAAM fetch error:', e.message);
