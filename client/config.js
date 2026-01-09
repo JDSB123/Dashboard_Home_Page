@@ -21,8 +21,8 @@ window.APP_CONFIG = {
   AZURE_REGION: 'eastus',
 
   // API Configuration
-  API_BASE_URL: 'https://gbsv-orchestrator.wittypebble-41c11c65.eastus.azurecontainerapps.io/api',
-  ORCHESTRATOR_URL: 'https://gbsv-orchestrator.wittypebble-41c11c65.eastus.azurecontainerapps.io',
+  API_BASE_URL: 'https://www.greenbiersportventures.com/api',
+  ORCHESTRATOR_URL: 'https://www.greenbiersportventures.com',
 
   // Model API Endpoints (can be dynamically updated by model-endpoints-bootstrap.js)
   // These endpoints are used by:
