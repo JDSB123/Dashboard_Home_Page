@@ -21,10 +21,10 @@ window.APP_CONFIG = {
   AZURE_REGION: 'eastus',
 
   // API Configuration
-  API_BASE_URL: 'https://www.greenbiersportventures.com/api',
-  ORCHESTRATOR_URL: 'https://www.greenbiersportventures.com',
-  // Fallback to legacy orchestrator host if www proxy is misconfigured
-  API_BASE_FALLBACK: 'https://gbsv-orchestrator.wittypebble-41c11c65.eastus.azurecontainerapps.io/api',
+  // Primary = orchestrator host (known-good JSON); fallback = www proxy (use when fixed)
+  API_BASE_URL: 'https://gbsv-orchestrator.wittypebble-41c11c65.eastus.azurecontainerapps.io/api',
+  ORCHESTRATOR_URL: 'https://gbsv-orchestrator.wittypebble-41c11c65.eastus.azurecontainerapps.io',
+  API_BASE_FALLBACK: 'https://www.greenbiersportventures.com/api',
 
   // Model API Endpoints (can be dynamically updated by model-endpoints-bootstrap.js)
   // These endpoints are used by:
