@@ -1,0 +1,46 @@
+name: Sync Model Registry
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Daily at 07:00 UTC; adjust or remove if you prefer manual only.
+    - cron: "0 7 * * *"
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  ORCHESTRATOR_URL: https://gbsv-orchestrator.wittypebble-41c11c65.eastus.azurecontainerapps.io/api
+  MODELS_JSON: |
+    [
+      {"model":"nba","resourceGroup":"nba-gbsv-model-rg","appName":"nba-gbsv-api"},
+      {"model":"ncaam","resourceGroup":"ncaam-gbsv-model-rg","appName":"ncaam-stable-prediction"},
+      {"model":"nfl","resourceGroup":"nfl-gbsv-model-rg","appName":"nfl-api"},
+      {"model":"ncaaf","resourceGroup":"ncaaf-gbsv-model-rg","appName":"ncaaf-v5-prod"}
+    ]
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Sync orchestrator registry from Container Apps
+        shell: pwsh
+        env:
+          FUNCTIONS_KEY: ${{ secrets.ORCHESTRATOR_FUNCTIONS_KEY }}
+        run: |
+          pwsh ./scripts/sync-model-registry.ps1 `
+            -SubscriptionId "${{ secrets.AZURE_SUBSCRIPTION_ID }}" `
+            -OrchestratorUrl "$env:ORCHESTRATOR_URL" `
+            -ModelsJson "$env:MODELS_JSON" `
+            -FunctionsKey "$env:FUNCTIONS_KEY"

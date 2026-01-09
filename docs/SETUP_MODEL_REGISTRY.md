@@ -53,6 +53,18 @@ This deploys:
 
 ---
 
+## Optional: Central Sync Workflow (multiple RGs)
+
+If your models live in different resource groups, enable the included GitHub Action to keep the registry updated without touching each model repo:
+
+- Workflow: `.github/workflows/sync-model-registry.yml`
+- Script it runs: `scripts/sync-model-registry.ps1` (pulls Container App FQDNs per model RG and calls `/registry/update`)
+- Required secrets: `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`, `ORCHESTRATOR_FUNCTIONS_KEY` (Functions host key if the endpoint is secured)
+- Configure `MODELS_JSON` in the workflow env to match your RG/app names for each model
+- It is scheduled daily and can be run on-demand via the Actions tab
+
+---
+
 ## Step 4: Update Your **Model** Repositories (Optional But Important)
 
 Each of your model repos (nba-gbsv-model, ncaam-gbsv-model, etc.) should **automatically notify the dashboard** when they deploy.
