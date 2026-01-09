@@ -391,13 +391,13 @@
         }
 
         // Add confidence/fire rating explanation
-        if (play.fire_rating) {
-            const rating = play.fire_rating.toUpperCase();
-            if (rating === 'ELITE') {
+        const fireRating = (typeof play.fire_rating === 'string' ? play.fire_rating : '').toUpperCase();
+        if (fireRating) {
+            if (fireRating === 'ELITE') {
                 parts.push('ELITE rating: 70%+ confidence with 5+ point edge');
-            } else if (rating === 'STRONG') {
+            } else if (fireRating === 'STRONG') {
                 parts.push('STRONG rating: 60%+ confidence with 3+ point edge');
-            } else if (rating === 'GOOD') {
+            } else if (fireRating === 'GOOD') {
                 parts.push('GOOD rating: Passes all quality filters');
             }
         }
@@ -429,7 +429,7 @@
 
         // Convert fire_rating to number (ELITE=5, STRONG=4, GOOD=3)
         let fireNum = 3;
-        const fireRating = (play.fire_rating || '').toUpperCase();
+        const fireRating = (typeof play.fire_rating === 'string' ? play.fire_rating : '').toUpperCase();
         if (fireRating === 'ELITE' || fireRating === 'MAX') fireNum = 5;
         else if (fireRating === 'STRONG') fireNum = 4;
         else if (fireRating === 'GOOD') fireNum = 3;
