@@ -39,7 +39,7 @@
     const picksCache = {};
     let lastSource = 'container-app';
     const CACHE_DURATION = 60000; // 1 minute
-    const REQUEST_TIMEOUT = 15000; // 15 seconds (NCAAM API can be slow)
+    const REQUEST_TIMEOUT = 60000; // 60 seconds (Increased for cold starts)
 
     /**
      * Fetch with timeout
@@ -119,7 +119,30 @@
                 throw new Error(`NCAAM API error: ${response.status}`);
             }
 
-            const data = await response.json();
+            let data = await response.json();
+            
+            // If we got 0 picks for 'today', the model might not have run yet.
+            // Try triggering it actively, then wait and retry once.
+            const pickCount = data.total_picks || (data.picks ? data.picks.length : 0);
+            if (pickCount === 0 && (cacheKey === 'today' || cacheKey === new Date().toISOString().split('T')[0])) {
+                console.warn('[NCAAM-PICKS] 0 picks found for today. Triggering generation...');
+                
+                // Trigger
+                const triggered = await triggerPicksIfNeeded();
+                
+                if (triggered) {
+                    console.log('[NCAAM-PICKS] Waiting 5s for generation...');
+                    await new Promise(resolve => setTimeout(resolve, 5000));
+                    
+                    // Retry fetch
+                    console.log('[NCAAM-PICKS] Retrying fetch...');
+                    response = await fetchWithTimeout(url);
+                    if (response.ok) {
+                        data = await response.json();
+                    }
+                }
+            }
+
             lastSource = 'container-app';
 
             // Cache with date key

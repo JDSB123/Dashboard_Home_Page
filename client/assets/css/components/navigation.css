@@ -859,9 +859,8 @@ body.page-active-picks .nav-link {
     text-transform: uppercase !important;
     letter-spacing: 0.1em !important;
     text-shadow: 
-        0 1px 2px rgba(0, 31, 63, 0.9),
-        0 0 4px rgba(0, 214, 137, 0.3) !important;
-    opacity: 1 !important;
+        0 1px 2px rgba(0, 31, 63, 0.9); /* Removed green glow from default state */
+    opacity: 0.85 !important; /* Slightly reduced opacity for non-active */
     padding: 4px 8px !important;
     -webkit-font-smoothing: antialiased;
     transition: color 0.3s ease, text-shadow 0.3s ease, background 0.3s ease, transform 0.2s ease;
@@ -874,8 +873,9 @@ body.page-active-picks .nav-link:hover {
     text-shadow: 
         0 0 8px rgba(0, 214, 137, 0.5),
         0 1px 2px rgba(0, 31, 63, 0.9);
-    background: linear-gradient(135deg, rgba(0, 214, 137, 0.1), rgba(0, 31, 63, 0.1));
+    background: transparent !important; /* Clean hover, no background */
     transform: translateY(-1px);
+    opacity: 1 !important;
 }
 
 body.page-weekly-lineup .nav-link.active,
@@ -888,7 +888,8 @@ body.page-active-picks .nav-link[aria-current="page"] {
     text-shadow: 
         0 0 6px rgba(0, 214, 137, 0.4),
         0 1px 2px rgba(0, 31, 63, 0.9);
-    background: linear-gradient(135deg, rgba(0, 214, 137, 0.15), rgba(0, 31, 63, 0.15));
+    background: transparent !important; /* Only underline for active state */
+    opacity: 1 !important;
 }
 
 

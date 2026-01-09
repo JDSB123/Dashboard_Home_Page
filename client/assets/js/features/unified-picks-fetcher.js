@@ -28,8 +28,8 @@
         }
     };
 
-    // Request timeout in milliseconds (15 seconds)
-    const REQUEST_TIMEOUT_MS = 15000;
+    // Request timeout in milliseconds (60 seconds for cold starts)
+    const REQUEST_TIMEOUT_MS = 60000;
 
     const extractModelStampFromResponse = (data) => {
         if (!data || typeof data !== 'object') return '';
@@ -173,13 +173,19 @@
                     try {
                         data = await window.NCAAMPicksFetcher.fetchPicks(date);
                     } catch (containerError) {
-                        debugWarn('[UNIFIED-FETCHER] NCAAM container app failed, trying main API:', containerError.message);
-                        // Fallback to main API with timeout
-                        const mainApiUrl = `${window.APP_CONFIG?.API_BASE_URL || 'https://green-bier-picks-api.azurewebsites.net/api'}/picks?league=ncaam`;
-                        const response = await fetchWithTimeout(mainApiUrl);
-                        if (!response.ok) throw new Error(`Main API error: ${response.status}`);
-                        data = await response.json();
-                    }
+                debugWarn('[UNIFIED-FETCHER] NCAAM container app failed:', containerError.message);
+                
+                // Fallback to main API is NOT supported for NCAAM yet (Orchestrator has no picks endpoint)
+                // We re-throw or handle gracefully to avoid 404 spam
+                throw new Error(`NCAAM fetch failed: ${containerError.message}`);
+
+                /* 
+                // DISABLED: Main API does not support /picks route currently
+                const mainApiUrl = `${window.APP_CONFIG?.API_BASE_URL || 'https://green-bier-picks-api.azurewebsites.net/api'}/picks?league=ncaam`;
+                const response = await fetchWithTimeout(mainApiUrl);
+                if (!response.ok) throw new Error(`Main API error: ${response.status}`);
+                data = await response.json();
+                */
 
                     const modelStamp = extractModelStampFromResponse(data);
                     const picks = data.picks || data.plays || data.recommendations || [];

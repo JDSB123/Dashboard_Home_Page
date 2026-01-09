@@ -101,7 +101,7 @@ Write-Host "[5/5] Seeding endpoints from client/config.js..." -ForegroundColor Y
 
 $endpoints = @(
     @{ model = "nba"; endpoint = "https://nba-gbsv-api.livelycoast-b48c3cb0.eastus.azurecontainerapps.io" }
-    @{ model = "ncaam"; endpoint = "https://ncaam-stable-prediction.blackglacier-5fab3573.centralus.azurecontainerapps.io" }
+    @{ model = "ncaam"; endpoint = "https://ncaam-stable-prediction.wonderfulforest-c2d7d49a.centralus.azurecontainerapps.io" }
     @{ model = "nfl"; endpoint = "https://nfl-api.purplegrass-5889a981.eastus.azurecontainerapps.io" }
     @{ model = "ncaaf"; endpoint = "https://ncaaf-v5-prod.salmonwave-314d4ffe.eastus.azurecontainerapps.io" }
 )
@@ -111,13 +111,23 @@ $timestamp = (Get-Date -AsUTC).ToString("o")
 foreach ($ep in $endpoints) {
     Write-Host "  ⏳ Adding $($ep.model)..." -ForegroundColor Cyan
     
-    # Use az table entity insert to add/update the entity
-    az storage table entity insert `
-        --account-name $StorageAccountName `
-        --account-key $storageAccountKey `
-        --table-name "modelregistry" `
-        --entity PartitionKey=$($ep.model) RowKey="current" endpoint=$($ep.endpoint) version="1.0.0" lastUpdated="$timestamp" healthy=true `
-        --output none
+    # Use az storage entity insert/merge to add/update the entity
+    try {
+        az storage entity insert `
+            --account-name $StorageAccountName `
+            --account-key $storageAccountKey `
+            --table-name "modelregistry" `
+            --entity PartitionKey=$($ep.model) RowKey="current" endpoint=$($ep.endpoint) version="1.0.0" lastUpdated="$timestamp" healthy=true `
+            --output none
+    } catch {
+        Write-Host "    Entity exists, updating..." -ForegroundColor DarkGray
+        az storage entity merge `
+            --account-name $StorageAccountName `
+            --account-key $storageAccountKey `
+            --table-name "modelregistry" `
+            --entity PartitionKey=$($ep.model) RowKey="current" endpoint=$($ep.endpoint) version="1.0.0" lastUpdated="$timestamp" healthy=true `
+            --output none
+    }
     
     Write-Host "  ✅ $($ep.model): $($ep.endpoint)" -ForegroundColor Green
 }

@@ -96,7 +96,7 @@ jobs:
                 FQDN="nba-gbsv-api.livelycoast-b48c3cb0.eastus.azurecontainerapps.io"
                 ;;
               ncaam)
-                FQDN="ncaam-stable-prediction.blackglacier-5fab3573.centralus.azurecontainerapps.io"
+                FQDN="ncaam-stable-prediction.wonderfulforest-c2d7d49a.centralus.azurecontainerapps.io"
                 ;;
               nfl)
                 FQDN="nfl-api.purplegrass-5889a981.eastus.azurecontainerapps.io"

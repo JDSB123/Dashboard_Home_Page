@@ -20,6 +20,6 @@ print(f"This will take a few minutes as we fetch game results from APIs...\n")
 grade_file(input_path, output_path)
 
 print(f"\n{'='*90}")
-print(f"✓ GRADING COMPLETE!")
-print(f"✓ Results saved to {output_path}")
+print("GRADING COMPLETE!")
+print(f"Results saved to {output_path}")
 print(f"{'='*90}\n")

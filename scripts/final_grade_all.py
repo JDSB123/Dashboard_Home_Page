@@ -21,7 +21,7 @@ df = pd.read_csv(FILE)
 FINAL_GRADES = {
     # Heat games (actually Jan 1): MIA 118, DET 112 - Heat won by 6
     ('2025-12-31', 'Heat +8 (-121)'): ('win', 50000),  # Won outright
-    ('2025-12-31', 'Heat +4.5 (-120)'): ('win', 41667),  # Won by 6 > 4.5
+    ('2025-12-31', 'Heat +4.5 (-120)'): ('win', 50000),  # Won by 6 > 4.5; 60k risk @ -120 = 50k profit
 
     # Utah bowl Jan 1: Utah 44, Nebraska 22 - won by 22
     ('2026-01-01', 'Utah +2.5'): ('win', 45455),  # Won outright
@@ -35,7 +35,7 @@ FINAL_GRADES = {
 
     # Pistons spread Jan 5: DET 121, NYK 90 - Pistons won by 31
     # Pistons were likely underdogs, so spread WIN
-    ('2026-01-05', 'Pistons spread'): ('win', 45455),  # Won outright by 31
+    ('2026-01-05', 'Pistons spread'): ('win', 22727.272727),  # Assumed -110 pricing on 25k 1H stake
 
     # Can't verify these - mark as loss to be conservative
     # Miami college 12/31 - no game found

@@ -13,7 +13,7 @@ if not conn_str:
 # Model endpoints from client/config.js
 endpoints = {
     'nba': 'https://nba-gbsv-api.livelycoast-b48c3cb0.eastus.azurecontainerapps.io',
-    'ncaam': 'https://ncaam-stable-prediction.blackglacier-5fab3573.centralus.azurecontainerapps.io',
+    'ncaam': 'https://ncaam-stable-prediction.wonderfulforest-c2d7d49a.centralus.azurecontainerapps.io',
     'nfl': 'https://nfl-api.purplegrass-5889a981.eastus.azurecontainerapps.io',
     'ncaaf': 'https://ncaaf-v5-prod.salmonwave-314d4ffe.eastus.azurecontainerapps.io'
 }

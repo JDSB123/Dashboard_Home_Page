@@ -51,6 +51,54 @@ def norm(s: str) -> str:
     return re.sub(r"\s+", " ", str(s).strip().lower())
 
 
+def normalize_segment(segment: str) -> str:
+    """Normalize segment strings (e.g. 'Full Game', 'FG ML', '1H ML') into grading keys."""
+    s = norm(segment)
+    s_key = re.sub(r"[^a-z0-9]+", "", s)
+    if not s_key:
+        return "fg"
+
+    if s_key.startswith("fg") or s_key.startswith("full"):
+        return "fg"
+
+    if s_key.startswith(("1h", "h1", "1sthalf", "firsthalf")):
+        return "1h"
+    if s_key.startswith(("2h", "h2", "2ndhalf", "secondhalf")):
+        return "2h"
+
+    if s_key.startswith(("1q", "q1")):
+        return "1q"
+    if s_key.startswith(("2q", "q2")):
+        return "2q"
+    if s_key.startswith(("3q", "q3")):
+        return "3q"
+    if s_key.startswith(("4q", "q4")):
+        return "4q"
+
+    return s_key
+
+
+def build_pick_key(pick: Dict, pick_text: str) -> str:
+    """Create a stable key for de-duping tracker rows that refer to the same bet."""
+    def _clean_team(team: str) -> str:
+        t = norm(team or "")
+        # Remove common market/segment tokens that sometimes leak into the "team" field.
+        t = re.sub(r"\b(ml|moneyline|fullgame|full|game|fg|1h|2h|1q|2q|3q|4q)\b", " ", t)
+        t = re.sub(r"\s+", " ", t).strip()
+        return t
+
+    ptype = pick.get("type")
+    if ptype == "total":
+        return f"total|{pick.get('dir')}|{pick.get('line')}"
+    if ptype == "spread":
+        return f"spread|{_clean_team(pick.get('team'))}|{pick.get('line')}"
+    if ptype == "moneyline":
+        return f"ml|{_clean_team(pick.get('team'))}"
+    if ptype == "team_total":
+        return f"tt|{_clean_team(pick.get('team'))}|{pick.get('dir')}|{pick.get('line')}"
+    return f"unknown|{norm(pick_text)}"
+
+
 def load_aliases() -> Dict[str, Dict[str, Dict[str, str]]]:
     if ALIAS_SPIO_PATH.exists():
         try:
@@ -177,7 +225,9 @@ def fetch_scoreboard(date_val: datetime, league: str) -> Optional[Dict]:
         return None
     url = f"https://site.api.espn.com/apis/site/v2/sports/{path}/scoreboard?dates={date_val.strftime('%Y%m%d')}"
     if lg == "ncaam":
-        url += "&groups=50"
+        url += "&groups=50&limit=300"
+    if lg == "ncaaf":
+        url += "&groups=80&limit=300"
     resp = requests.get(url, timeout=20)
     if not resp.ok:
         return None
@@ -647,8 +697,8 @@ def grade_pick(ev: Dict, pick: Dict, matchup: Tuple[str, str], segment: str, lea
         if line is None:
             return "unknown"
         if pick["dir"] == "over":
-            return "win" if total > line else "loss"
-        return "win" if total < line else "loss"
+            return "win" if total > line else "loss" if total < line else "push"
+        return "win" if total < line else "loss" if total > line else "push"
     
     # Determine team side for spread/ml/team_total
     team_name = pick.get("team") or ""
@@ -706,24 +756,27 @@ def grade_pick(ev: Dict, pick: Dict, matchup: Tuple[str, str], segment: str, lea
         return "unknown"
         
     if pick["type"] == "moneyline":
-        return "win" if team_pts > opp_pts else "loss"
+        return "win" if team_pts > opp_pts else "loss" if team_pts < opp_pts else "push"
     if pick["type"] == "spread":
         line = pick.get("line")
         if line is None:
             return "unknown"
         margin = team_pts - opp_pts
-        return "win" if margin + line > 0 else "loss"
+        adjusted = margin + line
+        return "win" if adjusted > 0 else "loss" if adjusted < 0 else "push"
     if pick["type"] == "team_total":
         line = pick.get("line")
         if line is None:
             return "unknown"
         if pick.get("dir") == "over":
-            return "win" if team_pts > line else "loss"
-        return "win" if team_pts < line else "loss"
+            return "win" if team_pts > line else "loss" if team_pts < line else "push"
+        return "win" if team_pts < line else "loss" if team_pts > line else "push"
     return "unknown"
 
 
 def compute_pnl(result: str, risk: Optional[float], to_win: Optional[float]) -> Optional[float]:
+    if result == "push":
+        return 0.0
     if result == "win" and to_win is not None:
         return to_win
     if result == "loss" and risk is not None:
@@ -735,6 +788,59 @@ def grade_file(input_path: Path = DEFAULT_INPUT, output_path: Path = DEFAULT_OUT
     if not input_path.exists():
         raise FileNotFoundError(f"Input not found: {input_path}")
     df = pd.read_csv(input_path)
+
+    # De-duplicate tracker inputs: the consolidated tracker often contains multiple
+    # representations of the same bet (e.g., "Full Game" vs "FG" vs "FG ML").
+    def _safe_float(v):
+        try:
+            if pd.isna(v):
+                return None
+        except Exception:
+            pass
+        try:
+            return float(v)
+        except Exception:
+            return None
+
+    def _dedupe_key(row) -> Optional[tuple]:
+        date_raw = str(row.get("Date") or "")
+        date_clean = re.sub(r"\s+[A-Z]{2}$", "", date_raw)
+        try:
+            dt = pd.to_datetime(date_clean)
+        except Exception:
+            return None
+
+        league = str(row.get("League") or "nba").lower().strip()
+        matchup = str(row.get("Matchup") or "")
+        away, home = parse_matchup(matchup)
+        if away and home:
+            matchup_key = "|".join(sorted([norm(away), norm(home)]))
+        else:
+            matchup_key = norm(matchup)
+
+        seg_key = normalize_segment(row.get("Segment") or "fg")
+
+        pick_text = str(row.get("Pick") or "")
+        pick = parse_pick(pick_text)
+        pick_key = build_pick_key(pick, pick_text)
+
+        risk = _safe_float(row.get("Risk"))
+        to_win = _safe_float(row.get("ToWin"))
+
+        return (dt.date().isoformat(), league, matchup_key, seg_key, pick_key, risk, to_win)
+
+    before_rows = len(df)
+    df["_dedupe_key"] = df.apply(_dedupe_key, axis=1)
+    with_key = df[df["_dedupe_key"].notna()].copy()
+    no_key = df[df["_dedupe_key"].isna()].copy()
+    dupes = with_key.duplicated("_dedupe_key", keep="first").sum()
+    if dupes:
+        print(f"De-duping input rows: {before_rows} rows, {dupes} duplicates detected")
+    with_key = with_key.drop_duplicates("_dedupe_key", keep="first")
+    df = pd.concat([with_key, no_key], ignore_index=True).drop(columns=["_dedupe_key"])
+    if before_rows != len(df):
+        print(f"Input rows after de-dupe: {before_rows} -> {len(df)}")
+
     team_config = load_json(TEAM_CONFIG_PATH)
     _ = team_config  # reserved for future alias resolution
     alias_map = load_aliases()
@@ -758,7 +864,7 @@ def grade_file(input_path: Path = DEFAULT_INPUT, output_path: Path = DEFAULT_OUT
                 dt = pd.to_datetime(date_clean)
             except Exception:
                 continue
-            league = str(row.get("League") or "nba").lower()
+            league = str(row.get("League") or "nba").lower().strip()
             
             matchup = str(row.get("Matchup") or "")
             away, home = parse_matchup(matchup)
@@ -766,71 +872,7 @@ def grade_file(input_path: Path = DEFAULT_INPUT, output_path: Path = DEFAULT_OUT
             pick = parse_pick(pick_text)
             
             ev = None
-            sdio_game = None
             found_away, found_home = away, home
-            
-            # Use SportsDataIO for college football and NFL
-            if league in SDIO_LEAGUES:
-                # Load indexed schedule data (cached in memory)
-                sdio_index_key = f"_sdio_index_{league}"
-                sdio_alias_key = f"_sdio_aliases_{league}"
-                
-                if sdio_index_key not in sb_cache:
-                    print(f"Loading SDIO index for {league}...")
-                    sb_cache[sdio_index_key] = load_sdio_index(league)
-                    sb_cache[sdio_alias_key] = load_sdio_aliases(league)
-                
-                sdio_index = sb_cache.get(sdio_index_key, {})
-                sdio_aliases = sb_cache.get(sdio_alias_key, {})
-                
-                # Determine search team
-                TBD_WORDS = {"TBD", "OPPONENT", "OPP"}
-                INVALID_TEAM_NAMES = {"total", "over", "under", ""}
-                def is_tbd(val):
-                    if not val:
-                        return True
-                    v = val.upper()
-                    return any(w in v for w in TBD_WORDS)
-                
-                def is_valid_team(val):
-                    return val and norm(val) not in INVALID_TEAM_NAMES
-                
-                search_team = pick.get("team") if is_valid_team(pick.get("team")) else None
-                if not search_team and away and not is_tbd(away):
-                    search_team = away
-                if not search_team and home and not is_tbd(home):
-                    search_team = home
-                
-                # Search with date offset
-                if search_team and sdio_index:
-                    for offset in [0, 1, -1, 2, -2, 3, -3]:
-                        check_dt = dt + timedelta(days=offset)
-                        iso_date = check_dt.date().isoformat()
-                        
-                        sdio_game = find_game_in_index(sdio_index, iso_date, search_team, sdio_aliases)
-                        if sdio_game:
-                            found_away = sdio_game.get("AwayTeam") or away
-                            found_home = sdio_game.get("HomeTeam") or home
-                            break
-                
-                # Grade using SDIO data
-                segment = row.get("Segment") or "fg"
-                result = grade_sdio_pick(sdio_game, pick, segment, sdio_aliases)
-                pnl = compute_pnl(result, row.get("Risk"), row.get("ToWin"))
-                results.append({
-                    "Date": dt.date().isoformat(),
-                    "League": league.upper(),
-                    "Matchup": matchup,
-                    "Segment": segment,
-                    "Pick": row.get("Pick"),
-                    "Odds": row.get("Odds"),
-                    "Risk": row.get("Risk"),
-                    "ToWin": row.get("ToWin"),
-                    "Hit/Miss": result,
-                    "PnL": pnl,
-                    "StakeRule": row.get("StakeRule"),
-                })
-                continue  # Skip ESPN logic for SDIO leagues
             
             # ESPN path for other leagues
             for offset in [0, 1, -1, 2, -2, 3, -3]:
@@ -838,7 +880,8 @@ def grade_file(input_path: Path = DEFAULT_INPUT, output_path: Path = DEFAULT_OUT
                 iso_date = check_dt.date().isoformat()
                 cache_key = f"{league}_{iso_date}"
                 
-                if cache_key not in sb_cache:
+                # Refetch if missing OR previously cached as None (transient network failure)
+                if cache_key not in sb_cache or not sb_cache.get(cache_key):
                     print(f"Fetching {league} scoreboard for {iso_date}...")
                     sb_cache[cache_key] = fetch_scoreboard(check_dt.to_pydatetime(), league)
                     # Save cache every few requests to avoid losing progress
@@ -882,7 +925,8 @@ def grade_file(input_path: Path = DEFAULT_INPUT, output_path: Path = DEFAULT_OUT
                     if ev:
                         break
         
-            segment = row.get("Segment") or "fg"
+            segment_raw = row.get("Segment") or "fg"
+            segment = normalize_segment(segment_raw)
             result = grade_pick(ev, pick, (found_away, found_home), segment, league, alias_map)
             pnl = compute_pnl(result, row.get("Risk"), row.get("ToWin"))
             results.append({

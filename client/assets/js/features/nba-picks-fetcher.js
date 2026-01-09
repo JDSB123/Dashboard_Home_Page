@@ -18,7 +18,7 @@
     let lastFetch = null;
     let lastSource = null; // Track which source was used
     const CACHE_DURATION = 60000; // 1 minute
-    const REQUEST_TIMEOUT = 10000; // 10 seconds
+    const REQUEST_TIMEOUT = 60000; // 60 seconds (Increased for cold starts)
 
     /**
      * Fetch with timeout
