@@ -451,7 +451,12 @@ class SportsDataIOFetcher(BoxScoreFetcher):
         home_team = game.get("HomeTeam")
         away_team = game.get("AwayTeam")
         home_score = game.get("HomeScore")
+        if home_score is None:
+            home_score = game.get("HomeTeamScore")
+            
         away_score = game.get("AwayScore")
+        if away_score is None:
+            away_score = game.get("AwayTeamScore")
         
         # Determine status - SportsDataIO uses multiple fields
         is_completed = game.get("IsCompleted", False)
@@ -474,7 +479,8 @@ class SportsDataIOFetcher(BoxScoreFetcher):
         
         # Get quarter scores if available
         quarter_scores = {}
-        for quarter in game.get("Quarters", []):
+        quarters_list = game.get("Quarters") or game.get("Periods") or []
+        for quarter in quarters_list:
             q_num = quarter.get("Number", 0)
             if q_num > 0:
                 quarter_scores[f"Q{q_num}"] = {
