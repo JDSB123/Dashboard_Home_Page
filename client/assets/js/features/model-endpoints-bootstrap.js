@@ -52,7 +52,7 @@
             if (fallbackBase) {
                 try {
                     registry = await resolveRegistry(fallbackBase);
-                    console.log('[MODEL-ENDPOINTS] ✅ Fallback registry succeeded');
+                    console.log('[MODEL-ENDPOINTS] • Fallback registry succeeded');
                 } catch (fallbackErr) {
                     console.warn('[MODEL-ENDPOINTS] Fallback registry failed:', fallbackErr.message);
                 }
@@ -65,37 +65,32 @@
             return;
         }
 
-            // Dynamically iterate over ALL keys in registry response
-            // This allows new leagues/models to be added without code changes
-            const registryKeys = Object.keys(registry || {});
-            const allLeagues = [...new Set([...KNOWN_LEAGUES, ...registryKeys])];
+        // Dynamically iterate over ALL keys in registry response
+        // This allows new leagues/models to be added without code changes
+        const registryKeys = Object.keys(registry || {});
+        const allLeagues = [...new Set([...KNOWN_LEAGUES, ...registryKeys])];
 
-            let updatedCount = 0;
-            allLeagues.forEach((key) => {
-                const entry = registry?.[key];
-                if (entry?.endpoint) {
-                    const configKey = `${key.toUpperCase()}_API_URL`;
-                    const oldEndpoint = window.APP_CONFIG[configKey];
-                    window.APP_CONFIG[configKey] = entry.endpoint;
-                    updatedCount++;
-                    if (oldEndpoint !== entry.endpoint) {
-                        console.log(`[MODEL-ENDPOINTS] Updated ${key.toUpperCase()} endpoint: ${entry.endpoint}`);
-                    }
+        let updatedCount = 0;
+        allLeagues.forEach((key) => {
+            const entry = registry?.[key];
+            if (entry?.endpoint) {
+                const configKey = `${key.toUpperCase()}_API_URL`;
+                const oldEndpoint = window.APP_CONFIG[configKey];
+                window.APP_CONFIG[configKey] = entry.endpoint;
+                updatedCount++;
+                if (oldEndpoint !== entry.endpoint) {
+                    console.log(`[MODEL-ENDPOINTS] Updated ${key.toUpperCase()} endpoint: ${entry.endpoint}`);
                 }
-            });
-
-            window.APP_CONFIG.MODEL_ENDPOINTS_LAST_UPDATED = new Date().toISOString();
-            window.APP_CONFIG.MODEL_ENDPOINTS_COUNT = updatedCount;
-
-            if (updatedCount > 0) {
-                console.log(`[MODEL-ENDPOINTS] Hydrated ${updatedCount} endpoints from registry`);
             }
-            console.log(`[MODEL-ENDPOINTS] ✅ Registry hydration complete - ${updatedCount} endpoints updated`);
-        } catch (err) {
-            // Safe to continue; pick fetchers will fall back to current APP_CONFIG values
-            console.warn('[MODEL-ENDPOINTS] Unable to refresh endpoints from registry:', err.message);
-            console.warn('[MODEL-ENDPOINTS] Fetchers will use fallback endpoints from config.js');
+        });
+
+        window.APP_CONFIG.MODEL_ENDPOINTS_LAST_UPDATED = new Date().toISOString();
+        window.APP_CONFIG.MODEL_ENDPOINTS_COUNT = updatedCount;
+
+        if (updatedCount > 0) {
+            console.log(`[MODEL-ENDPOINTS] Hydrated ${updatedCount} endpoints from registry`);
         }
+        console.log(`[MODEL-ENDPOINTS] • Registry hydration complete - ${updatedCount} endpoints updated`);
     };
 
     // Kick off hydration early so downstream fetchers use fresh endpoints
