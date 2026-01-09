@@ -72,18 +72,19 @@ function Get-ContainerAppFqdn {
         [string]$ResourceGroup,
         [string]$AppName
     )
-    $fqdnOutput = az containerapp show `
+    $jsonOutput = az containerapp show `
         --name $AppName `
         --resource-group $ResourceGroup `
-        --query "properties.configuration.ingress.fqdn" `
-        -o tsv 2>&1
+        --output json `
+        --only-show-errors 2>&1
 
     if ($LASTEXITCODE -ne 0) {
-        $msg = ($fqdnOutput | Out-String).Trim()
+        $msg = ($jsonOutput | Out-String).Trim()
         throw "az containerapp show failed for $AppName in ${ResourceGroup}: $msg"
     }
 
-    $fqdn = ($fqdnOutput | Out-String).Trim()
+    $app = $jsonOutput | ConvertFrom-Json
+    $fqdn = ($app.properties.configuration.ingress.fqdn | Out-String).Trim()
     if (-not $fqdn) {
         throw "Ingress FQDN empty for $AppName in $ResourceGroup (ingress disabled or app missing)"
     }
