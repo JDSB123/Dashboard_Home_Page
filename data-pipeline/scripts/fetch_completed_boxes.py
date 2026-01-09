@@ -26,6 +26,7 @@ import sys
 import json
 import argparse
 import logging
+from collections import defaultdict
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
@@ -120,7 +121,7 @@ class BoxScoreFetcher:
         }
     
     def save_games(self, games: List[Dict], date: str) -> int:
-        """Save games to JSON file"""
+        """Save games for a single date"""
         if not games:
             self._log(f"No games to save for {date}")
             return 0
@@ -128,12 +129,11 @@ class BoxScoreFetcher:
         league_dir = OUTPUT_DIR / self.league
         league_dir.mkdir(parents=True, exist_ok=True)
         
-        output_file = league_dir / f"{date}.json"
+        sanitized_date = date or "unknown"
+        output_file = league_dir / f"{sanitized_date}.json"
         
-        # Standardize all games
         standardized = [self.standardize_game(g) for g in games]
         
-        # Write file
         try:
             output_file.write_text(json.dumps(standardized, indent=2))
             self._log(f"Saved {len(standardized)} games to {output_file.name}")
@@ -141,6 +141,44 @@ class BoxScoreFetcher:
         except Exception as e:
             self._log(f"Error saving games: {e}", "error")
             return 0
+
+    def save_historical_snapshot(self, games: List[Dict], start_date: str, end_date: str) -> Optional[Path]:
+        """Persist an aggregated snapshot for the requested date span"""
+        if not games or not start_date or not end_date:
+            self._log("Skipping snapshot save (missing data or date range)", "debug")
+            return None
+
+        league_dir = OUTPUT_DIR / self.league
+        league_dir.mkdir(parents=True, exist_ok=True)
+
+        start_key = start_date.replace("-", "")
+        end_key = end_date.replace("-", "")
+        snapshot_path = league_dir / f"historical_{start_key}_to_{end_key}.json"
+
+        standardized = [self.standardize_game(g) for g in games]
+        try:
+            snapshot_path.write_text(json.dumps(standardized, indent=2))
+            self._log(f"Saved snapshot {snapshot_path.name} ({len(standardized)} games)")
+            return snapshot_path
+        except Exception as e:
+            self._log(f"Error saving snapshot: {e}", "error")
+            return None
+
+
+def group_games_by_date(games: List[Dict]) -> Dict[str, List[Dict]]:
+    grouped = defaultdict(list)
+    for game in games:
+        day = game.get("date") or "unknown"
+        grouped[day].append(game)
+    return grouped
+
+
+def save_games_by_day(fetcher: BoxScoreFetcher, games: List[Dict]) -> int:
+    daily_groups = group_games_by_date(games)
+    total_saved = 0
+    for date in sorted(daily_groups.keys()):
+        total_saved += fetcher.save_games(daily_groups[date], date)
+    return total_saved
 
 
 class ESPNFetcher(BoxScoreFetcher):
@@ -467,11 +505,13 @@ def fetch_all_sports(date_range: Tuple[str, str], verbose: bool = False) -> Dict
         games = fetcher.fetch_games(date_range)
         completed = fetcher.filter_completed(games)
         
-        count = fetcher.save_games(completed, date_range[0])
+        daily_saved = save_games_by_day(fetcher, completed)
+        snapshot_path = fetcher.save_historical_snapshot(completed, date_range[0], date_range[1])
         results[league] = {
             "total": len(games),
             "completed": len(completed),
-            "saved": count
+            "daily_saved": daily_saved,
+            "snapshot": snapshot_path.name if snapshot_path else None
         }
     
     # SportsDataIO sports (paid, optional)
@@ -490,11 +530,13 @@ def fetch_all_sports(date_range: Tuple[str, str], verbose: bool = False) -> Dict
             games = fetcher.fetch_games(date_range)
             completed = fetcher.filter_completed(games)
             
-            count = fetcher.save_games(completed, date_range[0])
+            daily_saved = save_games_by_day(fetcher, completed)
+            snapshot_path = fetcher.save_historical_snapshot(completed, date_range[0], date_range[1])
             results[league] = {
                 "total": len(games),
                 "completed": len(completed),
-                "saved": count
+                "daily_saved": daily_saved,
+                "snapshot": snapshot_path.name if snapshot_path else None
             }
     
     return results
@@ -510,7 +552,12 @@ def print_summary(results: Dict) -> None:
         if "error" in stats:
             logger.info(f"{sport:8} | ❌ {stats['error']}")
         else:
-            logger.info(f"{sport:8} | Total: {stats['total']:2} | Completed: {stats['completed']:2} | Saved: {stats['saved']:2}")
+            snapshot_label = stats.get("snapshot") or "none"
+            daily_files = stats.get("daily_saved", 0)
+            logger.info(
+                f"{sport:8} | Total: {stats['total']:2} | Completed: {stats['completed']:2} | "
+                f"DailyFiles: {daily_files:2} | Snapshot: {snapshot_label}"
+            )
     
     logger.info(f"{'='*60}")
     logger.info(f"Log saved to: {LOG_FILE}")
