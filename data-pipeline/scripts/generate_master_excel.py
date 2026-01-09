@@ -219,23 +219,11 @@ def create_formatted_excel():
             # Score columns
             auto_fit_column_width(ws, col_idx, header, column_data[header], min_width=10, max_width=12)
     
-    # Create table for better filtering experience
-    # Note: Do not set ws.auto_filter.ref when using a Table, as Tables manage their own filters
-    # conflicts can cause Excel repair errors.
+    # Apply basic AutoFilter to the range (safer than Table object)
     if len(games) > 0:
         last_col = get_column_letter(len(OUTPUT_HEADERS))
-        table_ref = f"A1:{last_col}{len(games) + 1}"
-        
-        # Ensure table name is safe (no spaces, starts with letter)
-        table = Table(displayName="MasterScheduleTable", ref=table_ref)
-        table.tableStyleInfo = TableStyleInfo(
-            name="TableStyleMedium2",
-            showFirstColumn=False,
-            showLastColumn=False,
-            showRowStripes=True,
-            showColumnStripes=False
-        )
-        ws.add_table(table)
+        full_ref = f"A1:{last_col}{len(games) + 1}"
+        ws.auto_filter.ref = full_ref
     
     # Add summary sheet
     ws_summary = wb.create_sheet(title="Summary")
