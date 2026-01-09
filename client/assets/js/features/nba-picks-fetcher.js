@@ -9,13 +9,13 @@
 (function() {
     'use strict';
 
-    // Primary: Function App for Weekly Lineup picks
+    // Use Container App as primary (Function App disabled for browser fetches)
     const getApiEndpoint = () => (window.ModelEndpointResolver?.getApiEndpoint('nba')) ||
         window.APP_CONFIG?.NBA_API_URL ||
         'https://nba-gbsv-api.livelycoast-b48c3cb0.eastus.azurecontainerapps.io';
-    const getFunctionEndpoint = () => (window.ModelEndpointResolver?.getFunctionEndpoint('nba')) ||
-        window.APP_CONFIG?.NBA_FUNCTION_URL ||
-        'https://nba-picks-trigger.azurewebsites.net';
+
+    // Function endpoint intentionally unused for front-end calls; keep for logs if needed
+    const getFunctionEndpoint = () => '';
 
     // Ensure we always have a defined fallback reference for legacy code paths
     const NBA_API_URL = getApiEndpoint();
