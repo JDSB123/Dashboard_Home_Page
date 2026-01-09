@@ -7,6 +7,7 @@ Columns: Date | League | Matchup (Away @ Home) | 1H Score | 2H Score | Final Sco
 """
 
 import json
+import re  # Added for sanitization
 from datetime import datetime
 from pathlib import Path
 from openpyxl import Workbook
@@ -18,7 +19,7 @@ from openpyxl.worksheet.table import Table, TableStyleInfo
 SCRIPT_DIR = Path(__file__).parent
 OUTPUT_DIR = SCRIPT_DIR.parent / "output"
 BOX_SCORES_DIR = OUTPUT_DIR / "box_scores"
-XLSX_PATH = OUTPUT_DIR / "master_schedule_all_leagues.xlsx"
+XLSX_PATH = OUTPUT_DIR / "master_schedule_all_leagues_fixed.xlsx"  # Changed to avoid lock
 
 LEAGUES = ["NBA", "NCAAM", "NFL", "NCAAF"]
 
@@ -82,6 +83,13 @@ def load_all_games() -> list:
     return all_games
 
 
+def sanitize_string(val):
+    """Remove control characters that are invalid in XML."""
+    if not isinstance(val, str):
+        return val
+    # Remove control characters that are invalid in XML (ASCII 0-8, 11-12, 14-31)
+    return re.sub(r'[\x00-\x08\x0B\x0C\x0E-\x1F]', '', val)
+
 def transform_game(game: dict) -> dict:
     """Transform raw game data into simplified row format."""
     # Get half scores
@@ -113,7 +121,7 @@ def transform_game(game: dict) -> dict:
     return {
         "Date": game.get("date", ""),
         "League": game.get("league", ""),
-        "Matchup": matchup,
+        "Matchup": sanitize_string(matchup),
         "1H Away": h1.get("away", "") if h1 else "",
         "1H Home": h1.get("home", "") if h1 else "",
         "2H Away": h2.get("away", "") if h2 else "",
@@ -211,21 +219,23 @@ def create_formatted_excel():
             # Score columns
             auto_fit_column_width(ws, col_idx, header, column_data[header], min_width=10, max_width=12)
     
-    # Add auto-filter (creates sortable/filterable columns)
-    last_col = get_column_letter(len(OUTPUT_HEADERS))
-    ws.auto_filter.ref = f"A1:{last_col}{len(games) + 1}"
-    
     # Create table for better filtering experience
-    table_ref = f"A1:{last_col}{len(games) + 1}"
-    table = Table(displayName="MasterSchedule", ref=table_ref)
-    table.tableStyleInfo = TableStyleInfo(
-        name="TableStyleMedium2",
-        showFirstColumn=False,
-        showLastColumn=False,
-        showRowStripes=True,
-        showColumnStripes=False
-    )
-    ws.add_table(table)
+    # Note: Do not set ws.auto_filter.ref when using a Table, as Tables manage their own filters
+    # conflicts can cause Excel repair errors.
+    if len(games) > 0:
+        last_col = get_column_letter(len(OUTPUT_HEADERS))
+        table_ref = f"A1:{last_col}{len(games) + 1}"
+        
+        # Ensure table name is safe (no spaces, starts with letter)
+        table = Table(displayName="MasterScheduleTable", ref=table_ref)
+        table.tableStyleInfo = TableStyleInfo(
+            name="TableStyleMedium2",
+            showFirstColumn=False,
+            showLastColumn=False,
+            showRowStripes=True,
+            showColumnStripes=False
+        )
+        ws.add_table(table)
     
     # Add summary sheet
     ws_summary = wb.create_sheet(title="Summary")
