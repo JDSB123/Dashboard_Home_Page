@@ -52,9 +52,9 @@ def generate_full_tracker(
     # Alternate leagues to try if primary fails
     ALTERNATE_LEAGUES = {
         'NCAAM': ['NCAAF'],  # Basketball picks may be football games
-        'NCAAF': ['NCAAM'],  # Football picks may be basketball
+        'NCAAF': ['NCAAM', 'NFL'],  # Football picks may be basketball or NFL (Arizona confusion)
         'NBA': [],
-        'NFL': [],
+        'NFL': ['NCAAF'],  # NFL picks may be college
     }
     
     for idx, row in graded_df.iterrows():
