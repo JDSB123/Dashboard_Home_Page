@@ -443,7 +443,7 @@ class NavigationManager {
                     !!href &&
                     (
                         href === path ||                      // Exact file match
-                        (href.endsWith('.html') && path === '') // Root route serving an HTML file
+                        (path === '' && href === 'index.html') // Root route matches index.html only
                     );
 
                 link.classList.toggle('active', isActive);
