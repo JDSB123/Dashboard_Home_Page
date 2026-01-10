@@ -120,22 +120,23 @@ def format_row_standard(row, mod, base_bet):
     except:
         pnl_val = 0.0
 
+    # Format scores as single-cell strings
+    h1_score = f"{a1}-{h1} (Total: {t1})" if isinstance(a1, (int,float)) and isinstance(h1, (int,float)) else "unknown"
+    h2_score = f"{a2}-{h2} (Total: {t2})" if isinstance(a2, (int,float)) and isinstance(h2, (int,float)) else "unknown"
+    full_score = f"{fa}-{fh}" if isinstance(fa, (int,float)) and isinstance(fh, (int,float)) else "unknown"
+
     out = {
-        'DateTime (CST)': f"{row.get('Date')}, {row.get('Time (CST)')}",
+        'Date': row.get('Date'),
+        'Time (CST)': row.get('Time (CST)'),
         'League': row.get('League'),
         'Matchup': matchup,
         'Segment': segment,
         'Pick': row.get('Pick'),
         'Odds': odds,
         'Hit/Miss': result,
-        '1H_Away': a1,
-        '1H_Home': h1,
-        '1H_Total': t1,
-        '2H+OT_Away': a2,
-        '2H+OT_Home': h2,
-        '2H+OT_Total': t2,
-        'Full_Away': fa,
-        'Full_Home': fh,
+        '1H Score': h1_score,
+        '2H+OT Score': h2_score,
+        'Full Score': full_score,
         'To Risk': tr,
         'To Win': tw,
         'PnL': round(pnl_val,2)
@@ -162,9 +163,8 @@ def run_for_date(date_str, input_csv=None, base_bet=50000):
         standardized.append(format_row_standard(r, mod, base_bet))
 
     # Write CSV
-    keys = ['DateTime (CST)','League','Matchup','Segment','Pick','Odds','Hit/Miss',
-            '1H_Away','1H_Home','1H_Total','2H+OT_Away','2H+OT_Home','2H+OT_Total',
-            'Full_Away','Full_Home','To Risk','To Win','PnL']
+    keys = ['Date','Time (CST)','League','Matchup','Segment','Pick','Odds','Hit/Miss',
+            '1H Score','2H+OT Score','Full Score','To Risk','To Win','PnL']
     with open(out_csv, 'w', newline='', encoding='utf-8') as of:
         writer = csv.DictWriter(of, fieldnames=keys)
         writer.writeheader()
@@ -173,8 +173,8 @@ def run_for_date(date_str, input_csv=None, base_bet=50000):
 
     # Also print formatted lines
     for r in standardized:
-        dt = r['DateTime (CST)']
-        line = f"{dt} | {r['League']} | {r['Matchup']} | {r['Segment']} | {r['Pick']} | {r['Odds']} | {r['Hit/Miss']} | 1H: {r['1H_Away']},{r['1H_Home']} (Total: {r['1H_Total']}) | 2H+OT: {r['2H+OT_Away']},{r['2H+OT_Home']} (Total: {r['2H+OT_Total']}) | Full: {r['Full_Away']}-{r['Full_Home']} | ToRisk: {r['To Risk']} | ToWin: {r['To Win']} | PnL: {r['PnL']}"
+        dt = f"{r['Date']}, {r['Time (CST)']}"
+        line = f"{dt} | {r['League']} | {r['Matchup']} | {r['Segment']} | {r['Pick']} | {r['Odds']} | {r['Hit/Miss']} | 1H: {r['1H Score']} | 2H+OT: {r['2H+OT Score']} | Full: {r['Full Score']} | ToRisk: {r['To Risk']} | ToWin: {r['To Win']} | PnL: {r['PnL']}"
         print(line)
 
     return out_csv

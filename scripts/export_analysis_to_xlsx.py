@@ -16,14 +16,22 @@ WHITE = 'FFFFFF'
 RED = 'FF0000'
 
 
-def autosize_columns(ws, df):
-    """Auto-size columns based on content width."""
-    for idx, col in enumerate(df.columns, 1):
-        max_len = max(
-            df[col].astype(str).map(len).max(),
-            len(col)
-        ) + 2
-        ws.column_dimensions[get_column_letter(idx)].width = min(max_len, 50)
+def autosize_columns(ws):
+    """Auto-size columns based on actual cell content width."""
+    for col in ws.columns:
+        max_length = 0
+        column = col[0].column_letter
+        for cell in col:
+            try:
+                if cell.value:
+                    # Handle multi-line content
+                    lines = str(cell.value).split('\n')
+                    cell_len = max(len(line) for line in lines)
+                    max_length = max(max_length, cell_len)
+            except:
+                pass
+        adjusted_width = min(max_length + 2, 60)
+        ws.column_dimensions[column].width = adjusted_width
 
 
 def format_workbook(path):
@@ -33,6 +41,22 @@ def format_workbook(path):
     
     # Build column index map
     col_map = {cell.value: idx for idx, cell in enumerate(ws[1], 1)}
+    
+    # Stack Date and Time (CST) into single cell with line break
+    if 'Date' in col_map and 'Time (CST)' in col_map:
+        date_col = col_map['Date']
+        time_col = col_map['Time (CST)']
+        for row_num in range(2, ws.max_row + 1):
+            date_val = ws.cell(row_num, date_col).value
+            time_val = ws.cell(row_num, time_col).value
+            if date_val and time_val:
+                ws.cell(row_num, date_col).value = f"{date_val}\n{time_val}"
+                ws.cell(row_num, date_col).alignment = Alignment(horizontal='left', vertical='center', wrap_text=True)
+        # Delete Time column and update header
+        ws.delete_cols(time_col)
+        ws.cell(1, date_col).value = 'Date & Time CST'
+        # Rebuild col_map after deletion
+        col_map = {cell.value: idx for idx, cell in enumerate(ws[1], 1)}
     
     # Apply header formatting: navy blue background, bold white Calibri 9
     header_fill = PatternFill(start_color=NAVY_BLUE, end_color=NAVY_BLUE, fill_type='solid')
@@ -52,6 +76,11 @@ def format_workbook(path):
         for cell in row:
             cell.font = body_font
             cell.alignment = body_alignment
+    
+    # Enable text wrapping for all body cells
+    for row in ws.iter_rows(min_row=2, max_row=ws.max_row):
+        for cell in row:
+            cell.alignment = Alignment(horizontal='left', vertical='center', wrap_text=True)
     
     # Format currency columns: $#,##0.00
     currency_cols = ['To Risk', 'To Win', 'PnL']
@@ -73,7 +102,7 @@ def format_workbook(path):
                     pass
     
     # Format numeric columns without currency
-    numeric_cols = ['Odds', '1H_Away', '1H_Home', '1H_Total', '2H+OT_Away', '2H+OT_Home', '2H+OT_Total', 'Full_Away', 'Full_Home']
+    numeric_cols = ['Odds']
     for col_name in numeric_cols:
         if col_name in col_map:
             col_idx = col_map[col_name]
@@ -102,6 +131,9 @@ def format_workbook(path):
     tab.tableStyleInfo = style
     ws.add_table(tab)
     
+    # Auto-size columns after all formatting
+    autosize_columns(ws)
+    
     wb.save(path)
 
 
@@ -117,8 +149,6 @@ def run(date_str):
     # Write to Excel
     with pd.ExcelWriter(xlsx_path, engine='openpyxl') as writer:
         df.to_excel(writer, index=False, sheet_name='analysis')
-        ws = writer.book.active
-        autosize_columns(ws, df)
 
     # Apply number formatting
     format_workbook(xlsx_path)
