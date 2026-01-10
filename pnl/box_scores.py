@@ -197,14 +197,26 @@ def format_score(game: dict, league: str) -> tuple[str, str, str]:
     if not game:
         return '', '', ''
     
-    away_full = game.get('AwayScore', 0) or 0
-    home_full = game.get('HomeScore', 0) or 0
+    # Handle different score field names
+    away_full = game.get('AwayScore') or game.get('AwayTeamScore') or 0
+    home_full = game.get('HomeScore') or game.get('HomeTeamScore') or 0
     
     away_1h, home_1h = 0, 0
     away_2h, home_2h = 0, 0
     
+    # SportsDataIO format with Periods array (NCAAF bowl games)
+    if 'Periods' in game and game.get('Periods'):
+        periods = game['Periods']
+        for p in periods:
+            num = p.get('Number', 0)
+            if num in (1, 2):
+                away_1h += p.get('AwayScore', 0) or 0
+                home_1h += p.get('HomeScore', 0) or 0
+            elif num >= 3:
+                away_2h += p.get('AwayScore', 0) or 0
+                home_2h += p.get('HomeScore', 0) or 0
     # NCAAM/NCAAF format: HomeScore1H, AwayScore1H
-    if 'AwayScore1H' in game or 'HomeScore1H' in game:
+    elif 'AwayScore1H' in game or 'HomeScore1H' in game:
         away_1h = game.get('AwayScore1H', 0) or 0
         home_1h = game.get('HomeScore1H', 0) or 0
         away_2h = away_full - away_1h

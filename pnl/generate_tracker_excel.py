@@ -49,17 +49,38 @@ def generate_full_tracker(
     # Cache loaded box scores by (league, date)
     box_cache = {}
     
+    # Alternate leagues to try if primary fails
+    ALTERNATE_LEAGUES = {
+        'NCAAM': ['NCAAF'],  # Basketball picks may be football games
+        'NCAAF': ['NCAAM'],  # Football picks may be basketball
+        'NBA': [],
+        'NFL': [],
+    }
+    
     for idx, row in graded_df.iterrows():
         league = row['League']
         date_str = row['Date']
         matchup = row['Matchup']
         
+        # Try primary league first
         cache_key = (league, date_str)
         if cache_key not in box_cache:
             box_cache[cache_key] = load_box_scores(league, date_str)
         
         games = box_cache[cache_key]
         game = find_game_score(games, matchup, league)
+        
+        # If not found, try alternate leagues
+        if not game:
+            for alt_league in ALTERNATE_LEAGUES.get(league, []):
+                alt_key = (alt_league, date_str)
+                if alt_key not in box_cache:
+                    box_cache[alt_key] = load_box_scores(alt_league, date_str)
+                alt_games = box_cache[alt_key]
+                game = find_game_score(alt_games, matchup, alt_league)
+                if game:
+                    break
+        
         s1h, s2h, sfull = format_score(game, league)
         scores_1h.append(s1h)
         scores_2h.append(s2h)
