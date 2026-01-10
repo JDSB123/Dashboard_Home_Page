@@ -2,11 +2,59 @@ import os
 import csv
 import argparse
 from datetime import datetime
+from team_variant_lookup import TeamVariantLookup
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RECONCILED_DIR = os.path.join(ROOT, 'output', 'reconciled')
 ANALYSIS_DIR = os.path.join(ROOT, 'output', 'analysis')
 CONSOLIDATED_CSV = os.path.join(ROOT, 'data-pipeline', 'consolidated_historical_data.csv')
+
+
+# Initialize team variant lookup (singleton)
+_team_lookup = None
+
+def get_team_lookup():
+    global _team_lookup
+    if _team_lookup is None:
+        _team_lookup = TeamVariantLookup()
+    return _team_lookup
+
+
+def normalize_team_name(team_str, league):
+    """
+    Normalize team shorthand/variants to proper abbreviation.
+    Examples: 'raiders' -> 'LV', 'Lakers' -> 'LAL', 'Duke' -> 'DUKE'
+    """
+    if not team_str:
+        return team_str
+    
+    lookup = get_team_lookup()
+    team_str = team_str.strip()
+    
+    # Try to find team in appropriate league
+    try:
+        if league == 'NFL':
+            result = lookup.find_nfl_team(team_str)
+            if result:
+                return result['key']  # Return canonical abbreviation
+        elif league == 'NBA':
+            result = lookup.find_nba_team(team_str)
+            if result:
+                return result['key']
+        elif league == 'NCAAM':
+            result = lookup.find_ncaam_team(team_str)
+            if result:
+                return result['key']
+        elif league == 'NCAAF':
+            # Try CFB if available, else fallback to NCAAM
+            result = lookup.find_ncaam_team(team_str)  # TODO: add find_cfb_team if needed
+            if result:
+                return result['key']
+    except Exception as e:
+        print(f"Warning: Team lookup error for '{team_str}' in {league}: {e}")
+    
+    # Return original if not found
+    return team_str
 
 
 def load_reconcile_module():
@@ -56,6 +104,7 @@ def format_row_standard(row, mod, base_bet):
     # Use mod.load_data() helpers to compute scores
     game_map = mod.load_data()
     matchup = row.get('Match-Up (Away vs Home)') or row.get('Match-Up (Away vs Home)')
+    league = row.get('League')
     segment = row.get('Segment')
     odds_raw = row.get('Odds')
     # normalize odds to int
@@ -69,10 +118,13 @@ def format_row_standard(row, mod, base_bet):
         except:
             odds = 0
 
-    # Find game
+    # Find game - normalize team names using variant lookup
     away_abbr = home_abbr = ''
     if matchup and '@' in matchup:
-        away_abbr, home_abbr = [x.strip() for x in matchup.split('@')]
+        away_raw, home_raw = [x.strip() for x in matchup.split('@')]
+        # Normalize using team variant lookup
+        away_abbr = normalize_team_name(away_raw, league)
+        home_abbr = normalize_team_name(home_raw, league)
 
     game = game_map.get(home_abbr) or game_map.get(away_abbr)
     scores = {'Home': {'Final': None, '1H': None, '2H': None}, 'Away': {'Final': None, '1H': None, '2H': None}}
