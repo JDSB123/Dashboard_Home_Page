@@ -1,0 +1,209 @@
+/* Snapshot & Export Controls Styling */
+
+.snapshot-export-controls {
+    display: flex;
+    gap: 8px;
+    margin-right: 12px;
+}
+
+/* Snapshot Dropdown Specific Styles */
+.snapshot-dropdown-menu {
+    padding: 0;
+}
+
+.snapshot-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    border-bottom: 1px solid #e2e8f0;
+    background: #f7fafc;
+}
+
+.snapshot-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #2d3748;
+}
+
+.snapshot-clear-btn {
+    font-size: 11px;
+    padding: 4px 8px;
+    background: #fff;
+    border: 1px solid #cbd5e0;
+    border-radius: 4px;
+    color: #e53e3e;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.snapshot-clear-btn:hover {
+    background: #fff5f5;
+    border-color: #fc8181;
+}
+
+.snapshot-list {
+    max-height: 350px;
+    overflow-y: auto;
+}
+
+.snapshot-date-group {
+    margin-bottom: 8px;
+}
+
+.snapshot-date-label {
+    padding: 8px 15px;
+    background: #edf2f7;
+    font-size: 11px;
+    font-weight: 600;
+    color: #4a5568;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.snapshot-empty {
+    padding: 30px 15px;
+    text-align: center;
+    color: #a0aec0;
+    font-size: 13px;
+}
+
+.snapshot-item {
+    padding: 12px 15px;
+    border-bottom: 1px solid #e2e8f0;
+    cursor: pointer;
+    transition: background 0.2s;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.snapshot-item:hover {
+    background: #f7fafc;
+}
+
+.snapshot-item.current {
+    background: #ebf8ff;
+    border-left: 3px solid #3182ce;
+}
+
+.snapshot-info {
+    flex: 1;
+}
+
+.snapshot-time {
+    font-size: 13px;
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 4px;
+}
+
+.snapshot-meta {
+    font-size: 11px;
+    color: #718096;
+    display: flex;
+    gap: 10px;
+}
+
+.snapshot-meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.snapshot-actions {
+    display: flex;
+    gap: 4px;
+    margin-left: 8px;
+}
+
+.snapshot-delete-btn {
+    padding: 4px 8px;
+    background: transparent;
+    border: none;
+    color: #a0aec0;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 16px;
+    line-height: 1;
+    transition: all 0.2s;
+}
+
+.snapshot-delete-btn:hover {
+    background: #fff5f5;
+    color: #e53e3e;
+}
+
+/* Export Dropdown Specific Styles */
+.export-dropdown-menu {
+    min-width: 200px;
+}
+
+.export-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    width: 100%;
+    background: transparent;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    color: #2d3748;
+    font-size: 13px;
+    transition: background 0.2s;
+}
+
+.export-item:hover {
+    background: #f7fafc;
+}
+
+.export-item svg {
+    flex-shrink: 0;
+}
+
+/* Current Snapshot Badge */
+.ft-current-snapshot {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    background: #ebf8ff;
+    border: 1px solid #90cdf4;
+    border-radius: 4px;
+    font-size: 11px;
+    color: #2c5282;
+    margin-right: 8px;
+}
+
+.ft-current-snapshot svg {
+    width: 12px;
+    height: 12px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 767px) {
+    .snapshot-export-controls {
+        display: none !important;
+    }
+}
+
+/* Scrollbar styling for snapshot list */
+.snapshot-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.snapshot-list::-webkit-scrollbar-track {
+    background: #f7fafc;
+}
+
+.snapshot-list::-webkit-scrollbar-thumb {
+    background: #cbd5e0;
+    border-radius: 3px;
+}
+
+.snapshot-list::-webkit-scrollbar-thumb:hover {
+    background: #a0aec0;
+}

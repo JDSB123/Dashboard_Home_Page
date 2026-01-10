@@ -414,6 +414,9 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                     
                     // Update last fetched timestamp
                     updateLastFetchedTime();
+                    
+                    // Auto-save snapshot when picks are loaded
+                    savePicksSnapshot(formattedPicks, 'auto-load');
                 } else {
                     console.log('[Weekly Lineup] ⚠️ No picks returned from APIs');
                     showNoPicks('No picks available for today. Check back later or fetch manually.');
@@ -2514,6 +2517,9 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                         populateWeeklyLineupTable(formattedPicks);
                         updateModelStamp(formattedPicks);
                         console.log(`[Weekly Lineup] ✅ Fetched ${result.picks.length} picks for ${fetchType}`);
+                        
+                        // Auto-save snapshot when picks are manually fetched
+                        savePicksSnapshot(formattedPicks, 'manual-fetch');
                     } else {
                         // Show empty state when no picks returned
                         populateWeeklyLineupTable([]);
@@ -3485,6 +3491,42 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         }
     }
 
+    // ===== SNAPSHOT INTEGRATION =====
+    /**
+     * Save picks snapshot using PicksSnapshotManager
+     * @param {Array} picks - Picks to save
+     * @param {string} source - Source of the snapshot
+     */
+    function savePicksSnapshot(picks, source = 'manual') {
+        try {
+            if (window.PicksSnapshotManager && Array.isArray(picks) && picks.length > 0) {
+                const snapshotId = window.PicksSnapshotManager.saveSnapshot(picks, source);
+                if (snapshotId) {
+                    log(`📸 Snapshot saved: ${snapshotId} (${picks.length} picks)`);
+                    // Dispatch event for UI updates
+                    document.dispatchEvent(new CustomEvent('picks-updated', {
+                        detail: { picks, snapshotId }
+                    }));
+                }
+            }
+        } catch (error) {
+            console.error('Failed to save snapshot:', error);
+        }
+    }
+
+    // Listen for snapshot load events
+    document.addEventListener('load-snapshot', (e) => {
+        const snapshot = e.detail?.snapshot;
+        if (snapshot && snapshot.picks) {
+            log(`📂 Loading snapshot: ${snapshot.id}`);
+            populateWeeklyLineupTable(snapshot.picks);
+            updateModelStamp(snapshot.picks);
+            
+            // Show notification
+            showNotification(`Loaded snapshot from ${snapshot.timestampDisplay}`, 'info');
+        }
+    });
+
     // Export for external use
     window.WeeklyLineup = {
         loadModelOutputs,
@@ -3501,7 +3543,9 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         clearArchivedPicks,
         getWeeklyStatsSummary,
         loadArchivedPicks,
-        updateArchivedPickOutcome
+        updateArchivedPickOutcome,
+        // Snapshot function
+        savePicksSnapshot
     };
 
     log('✅ Weekly Lineup v33.01.0 loaded (with archive support)');
