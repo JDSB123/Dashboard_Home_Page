@@ -1,78 +1,20 @@
+"""
+Generate Full Tracker Excel
+===========================
+Create the telegram_analysis_2025-12-28.xlsx file with all 18 columns
+including box scores from cache.
+"""
 import pandas as pd
 import sys
-import json
 from pathlib import Path
 
-# Fix import
+# Fix import for running as script
 repo_root = Path(__file__).parent.parent
 if str(repo_root) not in sys.path:
     sys.path.insert(0, str(repo_root))
+
 from pnl.aggregator import compute_aggregates
-
-BOX_SCORE_DIR = Path('output/box_scores')
-
-# Team abbreviation mappings
-TEAM_ABBREVS = {
-    # NFL
-    'panthers': 'CAR', 'bears': 'CHI', '49ers': 'SF', 'chiefs': 'KC', 'bills': 'BUF',
-    'steelers': 'PIT', 'ravens': 'BAL', 'falcons': 'ATL', 'commanders': 'WAS',
-    'bucs': 'TB', 'saints': 'NO', 'cowboys': 'DAL', 'giants': 'NYG', 'cardinals': 'ARI',
-    'rams': 'LA', 'titans': 'TEN', 'jaguars': 'JAX', 'colts': 'IND', 'texans': 'HOU',
-    'packers': 'GB', 'raiders': 'LV', 'jets': 'NYJ', 'bengals': 'CIN', 'lions': 'DET',
-    # NBA
-    'raptors': 'TOR', 'nets': 'BKN', 'hornets': 'CHA', 'wizards': 'WAS', 'hawks': 'ATL',
-    'bulls': 'CHI', 'spurs': 'SA', 'pelicans': 'NO', 'nuggets': 'DEN', 'kings': 'SAC',
-    'jazz': 'UTA', 'pistons': 'DET', 'lakers': 'LAL', 'clippers': 'LAC', 'suns': 'PHX',
-    'heat': 'MIA', 'warriors': 'GSW', 'knicks': 'NYK', '76ers': 'PHI', 'blazers': 'POR',
-    'mavs': 'DAL', 'rockets': 'HOU', 'celtics': 'BOS', 'magic': 'ORL', 'cavaliers': 'CLE',
-    'pacers': 'IND', 'timberwolves': 'MIN', 'grizzlies': 'MEM',
-}
-
-
-def load_box_scores(league, date_str):
-    """Load box scores for a given league and date."""
-    path = BOX_SCORE_DIR / league / f'{date_str}.json'
-    if path.exists():
-        with open(path, 'r') as f:
-            return json.load(f)
-    return []
-
-
-def find_game_score(games, matchup):
-    """Find game in box scores matching the matchup."""
-    matchup_lower = matchup.lower()
-    for game in games:
-        away = game.get('AwayTeam', '').lower()
-        home = game.get('HomeTeam', '').lower()
-        # Check if any team in matchup matches
-        for team_name, abbr in TEAM_ABBREVS.items():
-            if team_name in matchup_lower:
-                if abbr.lower() == away or abbr.lower() == home:
-                    return game
-    return None
-
-
-def format_score(game):
-    """Format 1H, 2H+OT, and Full scores from game data."""
-    if not game:
-        return '', '', ''
-    
-    # 1H Score (Q1 + Q2)
-    away_1h = game.get('AwayScoreQuarter1', 0) + game.get('AwayScoreQuarter2', 0)
-    home_1h = game.get('HomeScoreQuarter1', 0) + game.get('HomeScoreQuarter2', 0)
-    score_1h = f"{away_1h}-{home_1h} (Total: {away_1h + home_1h})"
-    
-    # 2H+OT Score (Q3 + Q4 + OT)
-    away_2h = game.get('AwayScoreQuarter3', 0) + game.get('AwayScoreQuarter4', 0) + game.get('AwayScoreOvertime', 0)
-    home_2h = game.get('HomeScoreQuarter3', 0) + game.get('HomeScoreQuarter4', 0) + game.get('HomeScoreOvertime', 0)
-    score_2h = f"{away_2h}-{home_2h} (Total: {away_2h + home_2h})"
-    
-    # Full Score
-    away_full = game.get('AwayScore', 0)
-    home_full = game.get('HomeScore', 0)
-    score_full = f"{away_full}-{home_full}"
-    
-    return score_1h, score_2h, score_full
+from pnl.box_scores import load_box_scores, find_game_score, format_score
 
 
 def generate_full_tracker(
@@ -117,8 +59,8 @@ def generate_full_tracker(
             box_cache[cache_key] = load_box_scores(league, date_str)
         
         games = box_cache[cache_key]
-        game = find_game_score(games, matchup)
-        s1h, s2h, sfull = format_score(game)
+        game = find_game_score(games, matchup, league)
+        s1h, s2h, sfull = format_score(game, league)
         scores_1h.append(s1h)
         scores_2h.append(s2h)
         scores_full.append(sfull)
