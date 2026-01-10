@@ -1,0 +1,38 @@
+[
+  {
+    "League": "NBA",
+    "Total Risk_k": 4432.75,
+    "Total PnL_k": 1183.0644959046801,
+    "Wins": 68,
+    "Pick Count": 114,
+    "Win %": 59.6,
+    "ROE %": 26.7
+  },
+  {
+    "League": "NCAAF",
+    "Total Risk_k": 1675.5,
+    "Total PnL_k": 210.77864045864047,
+    "Wins": 18,
+    "Pick Count": 31,
+    "Win %": 58.1,
+    "ROE %": 12.6
+  },
+  {
+    "League": "NCAAM",
+    "Total Risk_k": 1352.0,
+    "Total PnL_k": -394.97313792813793,
+    "Wins": 12,
+    "Pick Count": 28,
+    "Win %": 42.9,
+    "ROE %": -29.2
+  },
+  {
+    "League": "NFL",
+    "Total Risk_k": 2467.0,
+    "Total PnL_k": 338.5638586210538,
+    "Wins": 26,
+    "Pick Count": 45,
+    "Win %": 57.8,
+    "ROE %": 13.7
+  }
+]
