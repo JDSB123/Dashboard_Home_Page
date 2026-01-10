@@ -3,9 +3,26 @@
  * Dashboard_Home_Page - Production Runtime Configuration
  * ════════════════════════════════════════════════════════════════════
  * Repository:  github.com/JDSB123/Dashboard_Home_Page
- * Azure RG:    Dashboard_Home_Page (eastus)
+ * Azure RG:    dashboard-gbsv-main-rg (eastus)
  * Owner:       jb@greenbiercapital.com
- * Version:     33.02.0
+ * Version:     34.00.0
+ * ════════════════════════════════════════════════════════════════════
+ * 
+ * ROUTING ARCHITECTURE (Azure Front Door):
+ * ────────────────────────────────────────
+ * All API traffic routes through Front Door for:
+ *   - Global CDN edge caching
+ *   - WAF protection
+ *   - Path-based routing to Container Apps
+ *   - Single unified domain
+ * 
+ * Path Routing:
+ *   /api/nba/*    → NBA Container App
+ *   /api/ncaam/*  → NCAAM Container App
+ *   /api/nfl/*    → NFL Container App
+ *   /api/ncaaf/*  → NCAAF Container App
+ *   /api/*        → Orchestrator (fallback)
+ *   /*            → Static Web App (dashboard)
  * ════════════════════════════════════════════════════════════════════
  */
 
@@ -13,32 +30,57 @@
 window.APP_CONFIG = {
   // Project Identification
   PROJECT_NAME: 'Dashboard_Home_Page',
-  VERSION: '33.02.0',
+  VERSION: '34.00.0',
   ENVIRONMENT: 'production',
 
   // Azure Configuration
-  AZURE_RESOURCE_GROUP: 'Dashboard_Home_Page',
+  AZURE_RESOURCE_GROUP: 'dashboard-gbsv-main-rg',
   AZURE_REGION: 'eastus',
 
-  // API Configuration - ALL APIs now use greenbiersportventures.com domain
+  // ═══════════════════════════════════════════════════════════════════
+  // FRONT DOOR ROUTING CONFIGURATION
+  // All APIs routed through Azure Front Door with path-based routing
+  // ═══════════════════════════════════════════════════════════════════
+  
+  // Primary API endpoint (Front Door)
   API_BASE_URL: 'https://www.greenbiersportventures.com/api',
+  
+  // Fallback direct endpoints (used if Front Door unavailable)
   ORCHESTRATOR_URL: 'https://gbsv-orchestrator.wittypebble-41c11c65.eastus.azurecontainerapps.io',
-  API_BASE_FALLBACK: 'https://www.greenbiersportventures.com/api',
+  API_BASE_FALLBACK: 'https://gbsv-orchestrator.wittypebble-41c11c65.eastus.azurecontainerapps.io',
 
-  // Model API Endpoints - Use domain-based API proxy (Jan 2026)
-  // All sports now route through www.greenbiersportventures.com/api/*
-  NBA_FUNCTION_URL: '',  // Deprecated - use NBA_API_URL
-  NBA_API_URL: 'https://www.greenbiersportventures.com/api',  // Primary - domain proxy to Container App
-  NCAAM_API_URL: 'https://ncaam-stable-prediction.wonderfulforest-c2d7d49a.centralus.azurecontainerapps.io',
+  // ═══════════════════════════════════════════════════════════════════
+  // SPORT-SPECIFIC API ENDPOINTS
+  // Primary: Front Door path-based routing (unified domain)
+  // Direct: Container App URLs (for fallback/debugging)
+  // ═══════════════════════════════════════════════════════════════════
+  
+  // NBA API
+  NBA_API_URL: 'https://www.greenbiersportventures.com/api/nba',
+  NBA_API_DIRECT: 'https://nba-gbsv-api.wittypebble-41c11c65.eastus.azurecontainerapps.io',
+  NBA_FUNCTION_URL: '',  // Deprecated
+  
+  // NCAAM API
+  NCAAM_API_URL: 'https://www.greenbiersportventures.com/api/ncaam',
+  NCAAM_API_DIRECT: 'https://ncaam-stable-prediction.wonderfulforest-c2d7d49a.centralus.azurecontainerapps.io',
+  
+  // NFL API
+  NFL_API_URL: 'https://www.greenbiersportventures.com/api/nfl',
+  NFL_API_DIRECT: 'https://nfl-api.purplegrass-5889a981.eastus.azurecontainerapps.io',
   NFL_FUNCTION_URL: '',  // Deprecated
-  NFL_API_URL: 'https://nfl-api.purplegrass-5889a981.eastus.azurecontainerapps.io',
-  NCAAF_API_URL: 'https://ncaaf-v5-prod.salmonwave-314d4ffe.eastus.azurecontainerapps.io',
-  NHL_API_URL: '',  // Placeholder
-  MLB_API_URL: '',  // Placeholder
+  
+  // NCAAF API
+  NCAAF_API_URL: 'https://www.greenbiersportventures.com/api/ncaaf',
+  NCAAF_API_DIRECT: 'https://ncaaf-v5-prod.salmonwave-314d4ffe.eastus.azurecontainerapps.io',
+  
+  // Future sports (placeholders)
+  NHL_API_URL: '',
+  MLB_API_URL: '',
 
   // Feature Flags
   AUTH_ENABLED: false,
   DEBUG_MODE: false,
+  USE_FRONT_DOOR: true,  // Toggle to use Front Door vs direct Container App URLs
 
   // Repository Info
   REPO_URL: 'https://github.com/JDSB123/Dashboard_Home_Page',

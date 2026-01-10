@@ -1,0 +1,872 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.39.26.7824",
+      "templateHash": "6569526977951835261"
+    }
+  },
+  "parameters": {
+    "environment": {
+      "type": "string",
+      "defaultValue": "prod",
+      "allowedValues": [
+        "dev",
+        "staging",
+        "prod"
+      ],
+      "metadata": {
+        "description": "Environment name (dev, staging, prod)"
+      }
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "global",
+      "metadata": {
+        "description": "Azure region for Front Door (global service)"
+      }
+    },
+    "resourceGroupLocation": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]",
+      "metadata": {
+        "description": "Resource group location for regional resources"
+      }
+    },
+    "customDomainName": {
+      "type": "string",
+      "defaultValue": "www.greenbiersportventures.com",
+      "metadata": {
+        "description": "Custom domain name (e.g., www.greenbiersportventures.com)"
+      }
+    },
+    "enableWaf": {
+      "type": "bool",
+      "defaultValue": true,
+      "metadata": {
+        "description": "Enable WAF policy"
+      }
+    },
+    "skuName": {
+      "type": "string",
+      "defaultValue": "Standard_AzureFrontDoor",
+      "allowedValues": [
+        "Standard_AzureFrontDoor",
+        "Premium_AzureFrontDoor"
+      ],
+      "metadata": {
+        "description": "Front Door SKU"
+      }
+    },
+    "staticWebAppHostname": {
+      "type": "string",
+      "defaultValue": "proud-cliff-008e2e20f.2.azurestaticapps.net",
+      "metadata": {
+        "description": "Static Web App hostname"
+      }
+    },
+    "orchestratorHostname": {
+      "type": "string",
+      "defaultValue": "gbsv-orchestrator.wittypebble-41c11c65.eastus.azurecontainerapps.io",
+      "metadata": {
+        "description": "Orchestrator Container App hostname"
+      }
+    },
+    "nbaApiHostname": {
+      "type": "string",
+      "defaultValue": "nba-gbsv-api.livelycoast-b48c3cb0.eastus.azurecontainerapps.io",
+      "metadata": {
+        "description": "NBA API Container App hostname"
+      }
+    },
+    "ncaamApiHostname": {
+      "type": "string",
+      "defaultValue": "ncaam-stable-prediction.wonderfulforest-c2d7d49a.centralus.azurecontainerapps.io",
+      "metadata": {
+        "description": "NCAAM API Container App hostname"
+      }
+    },
+    "nflApiHostname": {
+      "type": "string",
+      "defaultValue": "nfl-api.purplegrass-5889a981.eastus.azurecontainerapps.io",
+      "metadata": {
+        "description": "NFL API Container App hostname"
+      }
+    },
+    "ncaafApiHostname": {
+      "type": "string",
+      "defaultValue": "ncaaf-v5-prod.salmonwave-314d4ffe.eastus.azurecontainerapps.io",
+      "metadata": {
+        "description": "NCAAF API Container App hostname"
+      }
+    }
+  },
+  "variables": {
+    "frontDoorName": "[format('gbsv-frontdoor-{0}', parameters('environment'))]",
+    "wafPolicyName": "[format('gbsvwafpolicy{0}', parameters('environment'))]",
+    "endpointName": "[format('gbsv-endpoint-{0}', parameters('environment'))]",
+    "originGroupDashboard": "og-dashboard",
+    "originGroupOrchestrator": "og-orchestrator",
+    "originGroupNba": "og-nba-api",
+    "originGroupNcaam": "og-ncaam-api",
+    "originGroupNfl": "og-nfl-api",
+    "originGroupNcaaf": "og-ncaaf-api"
+  },
+  "resources": [
+    {
+      "condition": "[parameters('enableWaf')]",
+      "type": "Microsoft.Network/FrontDoorWebApplicationFirewallPolicies",
+      "apiVersion": "2024-02-01",
+      "name": "[variables('wafPolicyName')]",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "[parameters('skuName')]"
+      },
+      "properties": {
+        "policySettings": {
+          "mode": "Prevention",
+          "requestBodyCheck": "Enabled",
+          "customBlockResponseStatusCode": 403,
+          "customBlockResponseBody": "[base64('{\"error\": \"Request blocked by WAF policy\"}')]"
+        },
+        "managedRules": {
+          "managedRuleSets": [
+            {
+              "ruleSetType": "Microsoft_DefaultRuleSet",
+              "ruleSetVersion": "2.1",
+              "ruleSetAction": "Block"
+            },
+            {
+              "ruleSetType": "Microsoft_BotManagerRuleSet",
+              "ruleSetVersion": "1.0",
+              "ruleSetAction": "Block"
+            }
+          ]
+        },
+        "customRules": {
+          "rules": [
+            {
+              "name": "RateLimitRule",
+              "priority": 100,
+              "ruleType": "RateLimitRule",
+              "rateLimitDurationInMinutes": 1,
+              "rateLimitThreshold": 1000,
+              "matchConditions": [
+                {
+                  "matchVariable": "RequestUri",
+                  "operator": "Contains",
+                  "matchValue": [
+                    "/api/"
+                  ]
+                }
+              ],
+              "action": "Block"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Cdn/profiles",
+      "apiVersion": "2024-02-01",
+      "name": "[variables('frontDoorName')]",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "[parameters('skuName')]"
+      },
+      "properties": {
+        "originResponseTimeoutSeconds": 60
+      },
+      "tags": {
+        "environment": "[parameters('environment')]",
+        "project": "gbsv-dashboard"
+      }
+    },
+    {
+      "type": "Microsoft.Cdn/profiles/afdEndpoints",
+      "apiVersion": "2024-02-01",
+      "name": "[format('{0}/{1}', variables('frontDoorName'), variables('endpointName'))]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "enabledState": "Enabled"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Cdn/profiles', variables('frontDoorName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Cdn/profiles/originGroups",
+      "apiVersion": "2024-02-01",
+      "name": "[format('{0}/{1}', variables('frontDoorName'), variables('originGroupDashboard'))]",
+      "properties": {
+        "loadBalancingSettings": {
+          "sampleSize": 4,
+          "successfulSamplesRequired": 3,
+          "additionalLatencyInMilliseconds": 50
+        },
+        "healthProbeSettings": {
+          "probePath": "/",
+          "probeRequestType": "HEAD",
+          "probeProtocol": "Https",
+          "probeIntervalInSeconds": 100
+        },
+        "sessionAffinityState": "Disabled"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Cdn/profiles', variables('frontDoorName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Cdn/profiles/originGroups",
+      "apiVersion": "2024-02-01",
+      "name": "[format('{0}/{1}', variables('frontDoorName'), variables('originGroupOrchestrator'))]",
+      "properties": {
+        "loadBalancingSettings": {
+          "sampleSize": 4,
+          "successfulSamplesRequired": 3,
+          "additionalLatencyInMilliseconds": 50
+        },
+        "healthProbeSettings": {
+          "probePath": "/api/health",
+          "probeRequestType": "GET",
+          "probeProtocol": "Https",
+          "probeIntervalInSeconds": 30
+        },
+        "sessionAffinityState": "Disabled"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Cdn/profiles', variables('frontDoorName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Cdn/profiles/originGroups",
+      "apiVersion": "2024-02-01",
+      "name": "[format('{0}/{1}', variables('frontDoorName'), variables('originGroupNba'))]",
+      "properties": {
+        "loadBalancingSettings": {
+          "sampleSize": 4,
+          "successfulSamplesRequired": 3,
+          "additionalLatencyInMilliseconds": 50
+        },
+        "healthProbeSettings": {
+          "probePath": "/health",
+          "probeRequestType": "GET",
+          "probeProtocol": "Https",
+          "probeIntervalInSeconds": 30
+        },
+        "sessionAffinityState": "Disabled"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Cdn/profiles', variables('frontDoorName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Cdn/profiles/originGroups",
+      "apiVersion": "2024-02-01",
+      "name": "[format('{0}/{1}', variables('frontDoorName'), variables('originGroupNcaam'))]",
+      "properties": {
+        "loadBalancingSettings": {
+          "sampleSize": 4,
+          "successfulSamplesRequired": 3,
+          "additionalLatencyInMilliseconds": 50
+        },
+        "healthProbeSettings": {
+          "probePath": "/health",
+          "probeRequestType": "GET",
+          "probeProtocol": "Https",
+          "probeIntervalInSeconds": 30
+        },
+        "sessionAffinityState": "Disabled"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Cdn/profiles', variables('frontDoorName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Cdn/profiles/originGroups",
+      "apiVersion": "2024-02-01",
+      "name": "[format('{0}/{1}', variables('frontDoorName'), variables('originGroupNfl'))]",
+      "properties": {
+        "loadBalancingSettings": {
+          "sampleSize": 4,
+          "successfulSamplesRequired": 3,
+          "additionalLatencyInMilliseconds": 50
+        },
+        "healthProbeSettings": {
+          "probePath": "/health",
+          "probeRequestType": "GET",
+          "probeProtocol": "Https",
+          "probeIntervalInSeconds": 30
+        },
+        "sessionAffinityState": "Disabled"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Cdn/profiles', variables('frontDoorName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Cdn/profiles/originGroups",
+      "apiVersion": "2024-02-01",
+      "name": "[format('{0}/{1}', variables('frontDoorName'), variables('originGroupNcaaf'))]",
+      "properties": {
+        "loadBalancingSettings": {
+          "sampleSize": 4,
+          "successfulSamplesRequired": 3,
+          "additionalLatencyInMilliseconds": 50
+        },
+        "healthProbeSettings": {
+          "probePath": "/health",
+          "probeRequestType": "GET",
+          "probeProtocol": "Https",
+          "probeIntervalInSeconds": 30
+        },
+        "sessionAffinityState": "Disabled"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Cdn/profiles', variables('frontDoorName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Cdn/profiles/originGroups/origins",
+      "apiVersion": "2024-02-01",
+      "name": "[format('{0}/{1}/{2}', variables('frontDoorName'), variables('originGroupDashboard'), 'origin-dashboard')]",
+      "properties": {
+        "hostName": "[parameters('staticWebAppHostname')]",
+        "httpPort": 80,
+        "httpsPort": 443,
+        "originHostHeader": "[parameters('staticWebAppHostname')]",
+        "priority": 1,
+        "weight": 1000,
+        "enabledState": "Enabled",
+        "enforceCertificateNameCheck": true
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupDashboard'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Cdn/profiles/originGroups/origins",
+      "apiVersion": "2024-02-01",
+      "name": "[format('{0}/{1}/{2}', variables('frontDoorName'), variables('originGroupOrchestrator'), 'origin-orchestrator')]",
+      "properties": {
+        "hostName": "[parameters('orchestratorHostname')]",
+        "httpPort": 80,
+        "httpsPort": 443,
+        "originHostHeader": "[parameters('orchestratorHostname')]",
+        "priority": 1,
+        "weight": 1000,
+        "enabledState": "Enabled",
+        "enforceCertificateNameCheck": true
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupOrchestrator'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Cdn/profiles/originGroups/origins",
+      "apiVersion": "2024-02-01",
+      "name": "[format('{0}/{1}/{2}', variables('frontDoorName'), variables('originGroupNba'), 'origin-nba-api')]",
+      "properties": {
+        "hostName": "[parameters('nbaApiHostname')]",
+        "httpPort": 80,
+        "httpsPort": 443,
+        "originHostHeader": "[parameters('nbaApiHostname')]",
+        "priority": 1,
+        "weight": 1000,
+        "enabledState": "Enabled",
+        "enforceCertificateNameCheck": true
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupNba'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Cdn/profiles/originGroups/origins",
+      "apiVersion": "2024-02-01",
+      "name": "[format('{0}/{1}/{2}', variables('frontDoorName'), variables('originGroupNcaam'), 'origin-ncaam-api')]",
+      "properties": {
+        "hostName": "[parameters('ncaamApiHostname')]",
+        "httpPort": 80,
+        "httpsPort": 443,
+        "originHostHeader": "[parameters('ncaamApiHostname')]",
+        "priority": 1,
+        "weight": 1000,
+        "enabledState": "Enabled",
+        "enforceCertificateNameCheck": true
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupNcaam'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Cdn/profiles/originGroups/origins",
+      "apiVersion": "2024-02-01",
+      "name": "[format('{0}/{1}/{2}', variables('frontDoorName'), variables('originGroupNfl'), 'origin-nfl-api')]",
+      "properties": {
+        "hostName": "[parameters('nflApiHostname')]",
+        "httpPort": 80,
+        "httpsPort": 443,
+        "originHostHeader": "[parameters('nflApiHostname')]",
+        "priority": 1,
+        "weight": 1000,
+        "enabledState": "Enabled",
+        "enforceCertificateNameCheck": true
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupNfl'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Cdn/profiles/originGroups/origins",
+      "apiVersion": "2024-02-01",
+      "name": "[format('{0}/{1}/{2}', variables('frontDoorName'), variables('originGroupNcaaf'), 'origin-ncaaf-api')]",
+      "properties": {
+        "hostName": "[parameters('ncaafApiHostname')]",
+        "httpPort": 80,
+        "httpsPort": 443,
+        "originHostHeader": "[parameters('ncaafApiHostname')]",
+        "priority": 1,
+        "weight": 1000,
+        "enabledState": "Enabled",
+        "enforceCertificateNameCheck": true
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupNcaaf'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Cdn/profiles/ruleSets",
+      "apiVersion": "2024-02-01",
+      "name": "[format('{0}/{1}', variables('frontDoorName'), 'ApiRoutingRules')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Cdn/profiles', variables('frontDoorName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Cdn/profiles/ruleSets/rules",
+      "apiVersion": "2024-02-01",
+      "name": "[format('{0}/{1}/{2}', variables('frontDoorName'), 'ApiRoutingRules', 'RewriteNbaPath')]",
+      "properties": {
+        "order": 1,
+        "conditions": [
+          {
+            "name": "UrlPath",
+            "parameters": {
+              "typeName": "DeliveryRuleUrlPathMatchConditionParameters",
+              "operator": "BeginsWith",
+              "matchValues": [
+                "/api/nba/"
+              ],
+              "transforms": [
+                "Lowercase"
+              ]
+            }
+          }
+        ],
+        "actions": [
+          {
+            "name": "UrlRewrite",
+            "parameters": {
+              "typeName": "DeliveryRuleUrlRewriteActionParameters",
+              "sourcePattern": "/api/nba/",
+              "destination": "/",
+              "preserveUnmatchedPath": true
+            }
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Cdn/profiles/ruleSets', variables('frontDoorName'), 'ApiRoutingRules')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Cdn/profiles/ruleSets/rules",
+      "apiVersion": "2024-02-01",
+      "name": "[format('{0}/{1}/{2}', variables('frontDoorName'), 'ApiRoutingRules', 'RewriteNcaamPath')]",
+      "properties": {
+        "order": 2,
+        "conditions": [
+          {
+            "name": "UrlPath",
+            "parameters": {
+              "typeName": "DeliveryRuleUrlPathMatchConditionParameters",
+              "operator": "BeginsWith",
+              "matchValues": [
+                "/api/ncaam/"
+              ],
+              "transforms": [
+                "Lowercase"
+              ]
+            }
+          }
+        ],
+        "actions": [
+          {
+            "name": "UrlRewrite",
+            "parameters": {
+              "typeName": "DeliveryRuleUrlRewriteActionParameters",
+              "sourcePattern": "/api/ncaam/",
+              "destination": "/",
+              "preserveUnmatchedPath": true
+            }
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Cdn/profiles/ruleSets', variables('frontDoorName'), 'ApiRoutingRules')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Cdn/profiles/ruleSets/rules",
+      "apiVersion": "2024-02-01",
+      "name": "[format('{0}/{1}/{2}', variables('frontDoorName'), 'ApiRoutingRules', 'RewriteNflPath')]",
+      "properties": {
+        "order": 3,
+        "conditions": [
+          {
+            "name": "UrlPath",
+            "parameters": {
+              "typeName": "DeliveryRuleUrlPathMatchConditionParameters",
+              "operator": "BeginsWith",
+              "matchValues": [
+                "/api/nfl/"
+              ],
+              "transforms": [
+                "Lowercase"
+              ]
+            }
+          }
+        ],
+        "actions": [
+          {
+            "name": "UrlRewrite",
+            "parameters": {
+              "typeName": "DeliveryRuleUrlRewriteActionParameters",
+              "sourcePattern": "/api/nfl/",
+              "destination": "/",
+              "preserveUnmatchedPath": true
+            }
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Cdn/profiles/ruleSets', variables('frontDoorName'), 'ApiRoutingRules')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Cdn/profiles/ruleSets/rules",
+      "apiVersion": "2024-02-01",
+      "name": "[format('{0}/{1}/{2}', variables('frontDoorName'), 'ApiRoutingRules', 'RewriteNcaafPath')]",
+      "properties": {
+        "order": 4,
+        "conditions": [
+          {
+            "name": "UrlPath",
+            "parameters": {
+              "typeName": "DeliveryRuleUrlPathMatchConditionParameters",
+              "operator": "BeginsWith",
+              "matchValues": [
+                "/api/ncaaf/"
+              ],
+              "transforms": [
+                "Lowercase"
+              ]
+            }
+          }
+        ],
+        "actions": [
+          {
+            "name": "UrlRewrite",
+            "parameters": {
+              "typeName": "DeliveryRuleUrlRewriteActionParameters",
+              "sourcePattern": "/api/ncaaf/",
+              "destination": "/",
+              "preserveUnmatchedPath": true
+            }
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Cdn/profiles/ruleSets', variables('frontDoorName'), 'ApiRoutingRules')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Cdn/profiles/afdEndpoints/routes",
+      "apiVersion": "2024-02-01",
+      "name": "[format('{0}/{1}/{2}', variables('frontDoorName'), variables('endpointName'), 'route-nba-api')]",
+      "properties": {
+        "originGroup": {
+          "id": "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupNba'))]"
+        },
+        "originPath": "/",
+        "ruleSets": [
+          {
+            "id": "[resourceId('Microsoft.Cdn/profiles/ruleSets', variables('frontDoorName'), 'ApiRoutingRules')]"
+          }
+        ],
+        "supportedProtocols": [
+          "Https"
+        ],
+        "patternsToMatch": [
+          "/api/nba/*"
+        ],
+        "forwardingProtocol": "HttpsOnly",
+        "linkToDefaultDomain": "Enabled",
+        "httpsRedirect": "Enabled",
+        "enabledState": "Enabled"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Cdn/profiles/afdEndpoints', variables('frontDoorName'), variables('endpointName'))]",
+        "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupNba'))]",
+        "[resourceId('Microsoft.Cdn/profiles/originGroups/origins', variables('frontDoorName'), variables('originGroupNba'), 'origin-nba-api')]",
+        "[resourceId('Microsoft.Cdn/profiles/ruleSets/rules', variables('frontDoorName'), 'ApiRoutingRules', 'RewriteNbaPath')]",
+        "[resourceId('Microsoft.Cdn/profiles/ruleSets', variables('frontDoorName'), 'ApiRoutingRules')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Cdn/profiles/afdEndpoints/routes",
+      "apiVersion": "2024-02-01",
+      "name": "[format('{0}/{1}/{2}', variables('frontDoorName'), variables('endpointName'), 'route-ncaam-api')]",
+      "properties": {
+        "originGroup": {
+          "id": "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupNcaam'))]"
+        },
+        "originPath": "/",
+        "ruleSets": [
+          {
+            "id": "[resourceId('Microsoft.Cdn/profiles/ruleSets', variables('frontDoorName'), 'ApiRoutingRules')]"
+          }
+        ],
+        "supportedProtocols": [
+          "Https"
+        ],
+        "patternsToMatch": [
+          "/api/ncaam/*"
+        ],
+        "forwardingProtocol": "HttpsOnly",
+        "linkToDefaultDomain": "Enabled",
+        "httpsRedirect": "Enabled",
+        "enabledState": "Enabled"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Cdn/profiles/afdEndpoints', variables('frontDoorName'), variables('endpointName'))]",
+        "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupNcaam'))]",
+        "[resourceId('Microsoft.Cdn/profiles/originGroups/origins', variables('frontDoorName'), variables('originGroupNcaam'), 'origin-ncaam-api')]",
+        "[resourceId('Microsoft.Cdn/profiles/ruleSets/rules', variables('frontDoorName'), 'ApiRoutingRules', 'RewriteNcaamPath')]",
+        "[resourceId('Microsoft.Cdn/profiles/ruleSets', variables('frontDoorName'), 'ApiRoutingRules')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Cdn/profiles/afdEndpoints/routes",
+      "apiVersion": "2024-02-01",
+      "name": "[format('{0}/{1}/{2}', variables('frontDoorName'), variables('endpointName'), 'route-nfl-api')]",
+      "properties": {
+        "originGroup": {
+          "id": "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupNfl'))]"
+        },
+        "originPath": "/",
+        "ruleSets": [
+          {
+            "id": "[resourceId('Microsoft.Cdn/profiles/ruleSets', variables('frontDoorName'), 'ApiRoutingRules')]"
+          }
+        ],
+        "supportedProtocols": [
+          "Https"
+        ],
+        "patternsToMatch": [
+          "/api/nfl/*"
+        ],
+        "forwardingProtocol": "HttpsOnly",
+        "linkToDefaultDomain": "Enabled",
+        "httpsRedirect": "Enabled",
+        "enabledState": "Enabled"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Cdn/profiles/afdEndpoints', variables('frontDoorName'), variables('endpointName'))]",
+        "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupNfl'))]",
+        "[resourceId('Microsoft.Cdn/profiles/originGroups/origins', variables('frontDoorName'), variables('originGroupNfl'), 'origin-nfl-api')]",
+        "[resourceId('Microsoft.Cdn/profiles/ruleSets/rules', variables('frontDoorName'), 'ApiRoutingRules', 'RewriteNflPath')]",
+        "[resourceId('Microsoft.Cdn/profiles/ruleSets', variables('frontDoorName'), 'ApiRoutingRules')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Cdn/profiles/afdEndpoints/routes",
+      "apiVersion": "2024-02-01",
+      "name": "[format('{0}/{1}/{2}', variables('frontDoorName'), variables('endpointName'), 'route-ncaaf-api')]",
+      "properties": {
+        "originGroup": {
+          "id": "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupNcaaf'))]"
+        },
+        "originPath": "/",
+        "ruleSets": [
+          {
+            "id": "[resourceId('Microsoft.Cdn/profiles/ruleSets', variables('frontDoorName'), 'ApiRoutingRules')]"
+          }
+        ],
+        "supportedProtocols": [
+          "Https"
+        ],
+        "patternsToMatch": [
+          "/api/ncaaf/*"
+        ],
+        "forwardingProtocol": "HttpsOnly",
+        "linkToDefaultDomain": "Enabled",
+        "httpsRedirect": "Enabled",
+        "enabledState": "Enabled"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Cdn/profiles/afdEndpoints', variables('frontDoorName'), variables('endpointName'))]",
+        "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupNcaaf'))]",
+        "[resourceId('Microsoft.Cdn/profiles/originGroups/origins', variables('frontDoorName'), variables('originGroupNcaaf'), 'origin-ncaaf-api')]",
+        "[resourceId('Microsoft.Cdn/profiles/ruleSets/rules', variables('frontDoorName'), 'ApiRoutingRules', 'RewriteNcaafPath')]",
+        "[resourceId('Microsoft.Cdn/profiles/ruleSets', variables('frontDoorName'), 'ApiRoutingRules')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Cdn/profiles/afdEndpoints/routes",
+      "apiVersion": "2024-02-01",
+      "name": "[format('{0}/{1}/{2}', variables('frontDoorName'), variables('endpointName'), 'route-orchestrator-api')]",
+      "properties": {
+        "originGroup": {
+          "id": "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupOrchestrator'))]"
+        },
+        "supportedProtocols": [
+          "Https"
+        ],
+        "patternsToMatch": [
+          "/api/*"
+        ],
+        "forwardingProtocol": "HttpsOnly",
+        "linkToDefaultDomain": "Enabled",
+        "httpsRedirect": "Enabled",
+        "enabledState": "Enabled"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Cdn/profiles/afdEndpoints', variables('frontDoorName'), variables('endpointName'))]",
+        "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupOrchestrator'))]",
+        "[resourceId('Microsoft.Cdn/profiles/originGroups/origins', variables('frontDoorName'), variables('originGroupOrchestrator'), 'origin-orchestrator')]",
+        "[resourceId('Microsoft.Cdn/profiles/afdEndpoints/routes', variables('frontDoorName'), variables('endpointName'), 'route-nba-api')]",
+        "[resourceId('Microsoft.Cdn/profiles/afdEndpoints/routes', variables('frontDoorName'), variables('endpointName'), 'route-ncaaf-api')]",
+        "[resourceId('Microsoft.Cdn/profiles/afdEndpoints/routes', variables('frontDoorName'), variables('endpointName'), 'route-ncaam-api')]",
+        "[resourceId('Microsoft.Cdn/profiles/afdEndpoints/routes', variables('frontDoorName'), variables('endpointName'), 'route-nfl-api')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Cdn/profiles/afdEndpoints/routes",
+      "apiVersion": "2024-02-01",
+      "name": "[format('{0}/{1}/{2}', variables('frontDoorName'), variables('endpointName'), 'route-dashboard')]",
+      "properties": {
+        "originGroup": {
+          "id": "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupDashboard'))]"
+        },
+        "supportedProtocols": [
+          "Https",
+          "Http"
+        ],
+        "patternsToMatch": [
+          "/*"
+        ],
+        "forwardingProtocol": "HttpsOnly",
+        "linkToDefaultDomain": "Enabled",
+        "httpsRedirect": "Enabled",
+        "enabledState": "Enabled",
+        "cacheConfiguration": {
+          "queryStringCachingBehavior": "UseQueryString",
+          "compressionSettings": {
+            "isCompressionEnabled": true,
+            "contentTypesToCompress": [
+              "text/html",
+              "text/css",
+              "application/javascript",
+              "application/json",
+              "image/svg+xml"
+            ]
+          }
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Cdn/profiles/afdEndpoints', variables('frontDoorName'), variables('endpointName'))]",
+        "[resourceId('Microsoft.Cdn/profiles/originGroups/origins', variables('frontDoorName'), variables('originGroupDashboard'), 'origin-dashboard')]",
+        "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupDashboard'))]",
+        "[resourceId('Microsoft.Cdn/profiles/afdEndpoints/routes', variables('frontDoorName'), variables('endpointName'), 'route-orchestrator-api')]"
+      ]
+    },
+    {
+      "condition": "[parameters('enableWaf')]",
+      "type": "Microsoft.Cdn/profiles/securityPolicies",
+      "apiVersion": "2024-02-01",
+      "name": "[format('{0}/{1}', variables('frontDoorName'), 'waf-policy-association')]",
+      "properties": {
+        "parameters": {
+          "type": "WebApplicationFirewall",
+          "wafPolicy": {
+            "id": "[resourceId('Microsoft.Network/FrontDoorWebApplicationFirewallPolicies', variables('wafPolicyName'))]"
+          },
+          "associations": [
+            {
+              "domains": [
+                {
+                  "id": "[resourceId('Microsoft.Cdn/profiles/afdEndpoints', variables('frontDoorName'), variables('endpointName'))]"
+                }
+              ],
+              "patternsToMatch": [
+                "/api/*"
+              ]
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Cdn/profiles/afdEndpoints', variables('frontDoorName'), variables('endpointName'))]",
+        "[resourceId('Microsoft.Cdn/profiles', variables('frontDoorName'))]",
+        "[resourceId('Microsoft.Network/FrontDoorWebApplicationFirewallPolicies', variables('wafPolicyName'))]"
+      ]
+    }
+  ],
+  "outputs": {
+    "frontDoorName": {
+      "type": "string",
+      "metadata": {
+        "description": "Front Door profile name"
+      },
+      "value": "[variables('frontDoorName')]"
+    },
+    "frontDoorEndpointHostname": {
+      "type": "string",
+      "metadata": {
+        "description": "Front Door endpoint hostname"
+      },
+      "value": "[reference(resourceId('Microsoft.Cdn/profiles/afdEndpoints', variables('frontDoorName'), variables('endpointName')), '2024-02-01').hostName]"
+    },
+    "frontDoorUrl": {
+      "type": "string",
+      "metadata": {
+        "description": "Front Door endpoint URL"
+      },
+      "value": "[format('https://{0}', reference(resourceId('Microsoft.Cdn/profiles/afdEndpoints', variables('frontDoorName'), variables('endpointName')), '2024-02-01').hostName)]"
+    },
+    "frontDoorProfileId": {
+      "type": "string",
+      "metadata": {
+        "description": "Front Door profile ID"
+      },
+      "value": "[resourceId('Microsoft.Cdn/profiles', variables('frontDoorName'))]"
+    },
+    "wafPolicyId": {
+      "type": "string",
+      "metadata": {
+        "description": "WAF policy ID"
+      },
+      "value": "[if(parameters('enableWaf'), resourceId('Microsoft.Network/FrontDoorWebApplicationFirewallPolicies', variables('wafPolicyName')), '')]"
+    },
+    "endpointId": {
+      "type": "string",
+      "metadata": {
+        "description": "Endpoint ID for custom domain association"
+      },
+      "value": "[resourceId('Microsoft.Cdn/profiles/afdEndpoints', variables('frontDoorName'), variables('endpointName'))]"
+    }
+  }
+}

@@ -6,6 +6,24 @@
     margin-right: 12px;
 }
 
+/* Enhanced Dropdown Items Readability */
+.ft-dropdown-item {
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
+.ft-dropdown-item strong {
+    color: #1a202c;
+    font-weight: 600;
+    margin-right: 4px;
+}
+
+#segment-dropdown-menu .ft-dropdown-item,
+#picktype-dropdown-menu .ft-dropdown-item {
+    padding: 10px 15px;
+    font-size: 13px;
+}
+
 /* Snapshot Dropdown Specific Styles */
 .snapshot-dropdown-menu {
     padding: 0;
