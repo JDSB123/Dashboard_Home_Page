@@ -26,6 +26,11 @@
     <link rel="stylesheet" href="assets/css/components/nav-gap-hotfix.css?v=1.0.0">
     <!-- COMPLETE MOBILE OVERHAUL - This MUST be loaded LAST to override everything -->
     <link rel="stylesheet" href="assets/css/weekly-lineup-mobile-complete.css?v=2.0.0">
+
+    <!-- Prevent FOUC - set dark background immediately -->
+    <style>
+        html, body { background-color: #030b16; }
+    </style>
     
     <!-- Silence console output in production BEFORE any other deferred scripts run -->
     <script src="assets/js/core/debug-config.js?v=33.00.0" defer></script>
