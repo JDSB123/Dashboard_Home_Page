@@ -43,7 +43,7 @@ window.APP_CONFIG = {
   // ═══════════════════════════════════════════════════════════════════
   
   // Primary API endpoint (Front Door) - LOCAL OVERRIDE
-  API_BASE_URL: 'http://localhost:7071/api',
+  API_BASE_URL: 'https://www.greenbiersportventures.com/api',
   
   // Fallback direct endpoints (used if Front Door unavailable) - LOCAL OVERRIDE
   ORCHESTRATOR_URL: 'http://localhost:7071/api',
