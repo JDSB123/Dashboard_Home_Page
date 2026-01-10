@@ -3,8 +3,10 @@
   WEEKLY LINEUP PAGE (v33.00.0)
   Production release - Real picks only, no stale data
 -->
-<html lang="en">
+<html lang="en" style="background-color:#030b16">
 <head>
+    <style>html,body{background-color:#030b16!important}</style>
+    <meta name="theme-color" content="#030b16">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Bears & Bulls — Today's Picks</title>
@@ -27,11 +29,6 @@
     <!-- COMPLETE MOBILE OVERHAUL - This MUST be loaded LAST to override everything -->
     <link rel="stylesheet" href="assets/css/weekly-lineup-mobile-complete.css?v=2.0.0">
 
-    <!-- Prevent FOUC - set dark background immediately -->
-    <style>
-        html, body { background-color: #030b16; }
-    </style>
-    
     <!-- Silence console output in production BEFORE any other deferred scripts run -->
     <script src="assets/js/core/debug-config.js?v=33.00.0" defer></script>
     <script src="config.js" defer></script>
@@ -82,7 +79,7 @@
         }
     </style>
 </head>
-<body class="page-glow page-weekly-lineup">
+<body class="page-glow page-weekly-lineup" style="background-color:#030b16">
 <noscript>
     <div class="noscript-warning" role="alert">
         <strong>JavaScript Required:</strong> This dashboard requires JavaScript.
