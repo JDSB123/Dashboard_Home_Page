@@ -43,6 +43,10 @@ output/
 logs/
 telegram_history/
 
+# Large Kaggle datasets (use external storage)
+data-pipeline/kaggle_basketball/
+data-pipeline/kaggle_historical_nba/
+
 # Azure Functions local config (contains secrets in real use)
 azure-functions/local.settings.json
 
