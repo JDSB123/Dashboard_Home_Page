@@ -105,56 +105,6 @@ def validate_pick_timing(segment, ticket_placed_date, ticket_placed_time, game_d
     Returns: 'OK', 'WARNING', or specific issue description.
     """
     if game_datetime_cst == 'unknown':
-        return 'WARN: Game time unknown'
-    
-    try:
-        from datetime import datetime
-        # Parse game datetime
-        if 'T' in str(game_datetime_cst):
-            game_dt = datetime.fromisoformat(str(game_datetime_cst).replace('Z', ''))
-        else:
-            game_dt = datetime.strptime(str(game_datetime_cst), '%Y-%m-%d %H:%M:%S %Z')
-        
-        # Parse ticket placed datetime
-        ticket_dt_str = f"{ticket_placed_date} {ticket_placed_time}"
-        try:
-            ticket_dt = datetime.strptime(ticket_dt_str, '%Y-%m-%d %I:%M %p')
-        except:
-            try:
-                ticket_dt = datetime.strptime(ticket_dt_str, '%Y-%m-%d %H:%M:%S')
-            except:
-                return 'WARN: Ticket time format unknown'
-        
-        # Validation logic
-        time_diff_minutes = (ticket_dt - game_dt).total_seconds() / 60
-        
-        # 2H picks must be placed after game starts (at least after 1H ends, ~60min into game)
-        if segment and '2H' in str(segment).upper():
-            if time_diff_minutes < 60:  # Placed before game or during 1H
-                return f'ERROR: 2H pick placed {abs(time_diff_minutes):.0f}min before 1H ends'
-        
-        # 1H picks placed after game starts are suspicious
-        if segment and '1H' in str(segment).upper():
-            if time_diff_minutes > 10:  # Placed more than 10min after game start
-                return f'WARN: 1H pick placed {time_diff_minutes:.0f}min after kickoff'
-        
-        # FG picks placed after game ends
-        if segment and 'FG' in str(segment).upper():
-            if time_diff_minutes > 180:  # Placed more than 3 hours after start (most games done)
-                return f'WARN: FG pick placed {time_diff_minutes:.0f}min after kickoff'
-        
-        return 'OK'
-    
-    except Exception as e:
-        return f'WARN: Validation error - {str(e)}'
-
-
-def validate_pick_timing(segment, ticket_placed_date, ticket_placed_time, game_datetime_cst):
-    """
-    Validate if pick timing makes logical sense.
-    Returns: 'OK', 'WARNING', or specific issue description.
-    """
-    if game_datetime_cst == 'unknown':
         return 'OK (Game time unknown)'
     
     try:
@@ -179,20 +129,18 @@ def validate_pick_timing(segment, ticket_placed_date, ticket_placed_time, game_d
         # Validation logic
         time_diff_minutes = (ticket_dt - game_dt).total_seconds() / 60
         
-        # 2H picks must be placed after game starts (at least after 1H ends, ~60min into game)
-        if segment and '2H' in str(segment).upper():
-            if time_diff_minutes < 60:  # Placed before game or during 1H
-                return f'ERROR: 2H pick placed {abs(time_diff_minutes):.0f}min before 1H ends'
+        # Skip 2H validation - too difficult to predict exact halftime start
+        # (halftime varies by sport and game flow)
         
         # 1H picks placed after game starts are suspicious
         if segment and '1H' in str(segment).upper():
             if time_diff_minutes > 10:  # Placed more than 10min after game start
-                return f'WARN: 1H pick placed {time_diff_minutes:.0f}min after kickoff'
+                return f'WARN: 1H pick placed {time_diff_minutes:.0f}min after game start'
         
         # FG picks placed after game ends
         if segment and 'FG' in str(segment).upper():
             if time_diff_minutes > 180:  # Placed more than 3 hours after start (most games done)
-                return f'WARN: FG pick placed {time_diff_minutes:.0f}min after kickoff'
+                return f'WARN: FG pick placed {time_diff_minutes:.0f}min after game start'
         
         return 'OK'
     
@@ -227,7 +175,25 @@ def format_row_standard(row, mod, base_bet):
         away_abbr = normalize_team_name(away_raw, league)
         home_abbr = normalize_team_name(home_raw, league)
 
-    game = game_map.get(home_abbr) or game_map.get(away_abbr)
+    # Match game by team AND date (not just team)
+    pick_date = row.get('Date')
+    game = None
+    # Search all games for matching BOTH teams AND date (regardless of home/away order)
+    for g in game_map:  # game_map is now a list of all games
+        game_teams = {g.get('HomeTeam'), g.get('AwayTeam')}
+        pick_teams = {away_abbr, home_abbr}
+        # Check if both teams match (regardless of home/away order)
+        if pick_teams == game_teams and g.get('game_date') == pick_date:
+            game = g
+            break
+    # Fallback: if no date match, use first game with both matching teams
+    if not game:
+        for g in game_map:
+            game_teams = {g.get('HomeTeam'), g.get('AwayTeam')}
+            pick_teams = {away_abbr, home_abbr}
+            if pick_teams == game_teams:
+                game = g
+                break
     scores = {'Home': {'Final': None, '1H': None, '2H': None}, 'Away': {'Final': None, '1H': None, '2H': None}}
     if game:
         scores = mod.calculate_period_scores(game)

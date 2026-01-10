@@ -835,7 +835,7 @@ body.page-active-picks .brand-nav {
     top: 0 !important;
     left: 0 !important;
     right: 0 !important;
-    margin-top: 0.124in !important; /* 0.124in from top of viewport */
+    margin-top: 0 !important;
     padding-top: 0 !important;
     padding-bottom: 0 !important;
     padding-left: 0.75in !important;

@@ -2073,6 +2073,7 @@
     "nickname": "Beavers",
     "abbreviations": [
       "ORST",
+      "OREGST",
       "ST"
     ],
     "espn_id": "204"
@@ -2421,7 +2422,8 @@
     "location": "Santa Clara",
     "nickname": "Broncos",
     "abbreviations": [
-      "SCU"
+      "SCU",
+      "SCLA"
     ],
     "espn_id": "2541"
   },

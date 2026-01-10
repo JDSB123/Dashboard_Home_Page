@@ -27,20 +27,19 @@ def normalize_team(name):
     return TEAM_MAPPINGS.get(name, name)
 
 def load_data():
-    """Load games from consolidated CSV and index by team abbreviations."""
+    """Load games from consolidated CSV and return list of all games."""
     print(f"Loading consolidated games from {CONSOLIDATED_CSV}")
-    game_map = {}
+    games_list = []
     if not os.path.exists(CONSOLIDATED_CSV):
-        print("Consolidated CSV not found; falling back to empty map")
-        return game_map
+        print("Consolidated CSV not found; falling back to empty list")
+        return games_list
 
     import csv
     with open(CONSOLIDATED_CSV, newline='', encoding='utf-8') as fh:
         reader = csv.DictReader(fh)
         for row in reader:
-            # Only index NFL games
-            if row.get('league') != 'NFL' and row.get('League') != 'NFL':
-                continue
+            # Load all leagues (NFL, NBA, NCAAM)
+            # No filtering needed - caller will match by team and date
 
             # Normalize keys that grading expects
             game = {}
@@ -77,18 +76,15 @@ def load_data():
 
             # Also make 1H/2H accessible under quarter-sum logic if needed
             # (the grading code calls calculate_period_scores which will check for quarter keys first)
-            # Include game datetime for validation
+            # Include game datetime and date for validation
             game['game_datetime_cst'] = row.get('game_datetime_cst')
+            game['game_date'] = row.get('game_date')
             
-            # Index by both abbreviations for quick lookup
-            ht = game['HomeTeam']
-            at = game['AwayTeam']
-            if ht:
-                game_map[ht] = game
-            if at:
-                game_map[at] = game
+            # Add to list (no indexing, caller will filter by team AND date)
+            games_list.append(game)
 
-    return game_map
+    print(f"Loaded {len(games_list)} NFL games")
+    return games_list
 
 def calculate_period_scores(game):
     # Prefer 1H/2H fields if present, otherwise fall back to quarters

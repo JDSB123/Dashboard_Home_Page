@@ -63,41 +63,22 @@
 
     /**
      * Handle pasted text input
+     * Pass raw text directly to parseAndAdd (same as manual-upload.js)
      */
     function handlePasteImport() {
         const pasteArea = document.getElementById('paste-area');
-        const text = pasteArea.value.trim();
+        const rawText = pasteArea.value.trim();
 
-        if (!text) {
+        if (!rawText) {
             showStatus('Please paste pick text first', 'warning');
             return;
         }
 
-        // Determine league from text if possible
-        const detectedLeague = detectLeagueFromText(text);
-
-        // Parse picks using universal parser
-        const picks = window.PickParser?.parseText(text, detectedLeague) || [];
-
-        if (picks.length === 0) {
-            showStatus('❌ Could not parse any picks from the text', 'error');
-            return;
-        }
-
-        // Show parsed picks for review
-        showParsedPicksReview(picks, 'pasted');
-    }
-
-    /**
-     * Detect league from text (NBA, NFL, etc.)
-     */
-    function detectLeagueFromText(text) {
-        const upper = text.toUpperCase();
-        if (upper.includes('NBA') || upper.includes('LAKERS') || upper.includes('CELTICS')) return 'NBA';
-        if (upper.includes('NFL') || upper.includes('CHIEFS') || upper.includes('COWBOYS')) return 'NFL';
-        if (upper.includes('NCAAM') || upper.includes('NCAA')) return 'NCAAM';
-        if (upper.includes('NCAAF') || upper.includes('COLLEGE')) return 'NCAAF';
-        return null;
+        console.log('Raw pasted text:', rawText);
+        
+        // Show review modal with raw text
+        // Actual parsing happens via parseAndAdd when user confirms
+        showParsedPicksReview([], 'paste', rawText);
     }
 
     /**
@@ -239,100 +220,104 @@
 
     /**
      * Show parsed picks for review before adding to dashboard
+     * The actual parsing happens via parseAndAdd (after user confirms)
      */
-    function showParsedPicksReview(picks, source = 'manual') {
-        // Remove existing review if any
+    function showParsedPicksReview(picks, source = 'manual', rawText = '') {
+        // If we don't have raw text, reconstruct from picks
+        if (!rawText && picks.length > 0 && picks[0].pick) {
+            rawText = picks.map(p => `${p.pick} ${p.odds} $${p.risk}`).join('\n');
+        }
+
+        // For now, just pass the raw text directly to parseAndAdd
+        // This avoids double-parsing and uses the same PickStandardizer as manual-upload.js
+        if (!rawText) {
+            showStatus('No pick text to process', 'error');
+            return;
+        }
+
+        // Create a simple preview modal
         const existing = document.getElementById('picks-review-modal');
         if (existing) existing.remove();
 
-        // Create review modal
         const modal = document.createElement('div');
         modal.id = 'picks-review-modal';
         modal.className = 'picks-review-modal-overlay';
         modal.innerHTML = `
             <div class="picks-review-modal">
                 <div class="modal-header">
-                    <h2>Review Parsed Picks (${picks.length})</h2>
+                    <h2>Add Picks to Dashboard</h2>
                     <button type="button" class="modal-close" aria-label="Close">✕</button>
                 </div>
                 <div class="modal-body">
-                    <div class="picks-review-list" id="picks-review-list"></div>
+                    <div class="picks-preview-text" style="background:#f5f5f5; padding:12px; border-radius:4px; font-family:monospace; font-size:12px; max-height:300px; overflow-y:auto; border:1px solid #ddd; white-space:pre-wrap; word-break:break-word;">
+${escapeHtml(rawText)}
+                    </div>
+                    <div style="margin-top:10px; font-size:12px; color:#666;">
+                        Picks will be parsed and added to your dashboard with automatic game data enrichment.
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" id="review-cancel">Cancel</button>
-                    <button type="button" class="btn btn-primary" id="review-confirm">Add All to Dashboard</button>
+                    <button type="button" class="btn btn-primary" id="review-confirm">Add to Dashboard</button>
                 </div>
             </div>
         `;
 
         document.body.appendChild(modal);
 
-        // Populate picks list
-        const listContainer = modal.querySelector('#picks-review-list');
-        picks.forEach((pick, idx) => {
-            const item = document.createElement('div');
-            item.className = 'review-pick-item';
-            item.innerHTML = `
-                <div class="review-pick-header">
-                    <input type="checkbox" class="review-pick-checkbox" data-index="${idx}" checked>
-                    <div class="review-pick-summary">
-                        <div class="review-pick-league">${pick.league || '?'}</div>
-                        <div class="review-pick-matchup">${pick.matchup || 'Unknown'}</div>
-                    </div>
-                </div>
-                <div class="review-pick-details">
-                    <div class="detail"><strong>Pick:</strong> ${pick.pick}</div>
-                    <div class="detail"><strong>Odds:</strong> ${pick.odds}</div>
-                    <div class="detail"><strong>Risk:</strong> $${pick.risk}</div>
-                    <div class="detail"><strong>Segment:</strong> ${pick.segment}</div>
-                </div>
-            `;
-            listContainer.appendChild(item);
-        });
-
         // Attach handlers
         modal.querySelector('.modal-close').addEventListener('click', () => modal.remove());
         modal.querySelector('#review-cancel').addEventListener('click', () => modal.remove());
         modal.querySelector('#review-confirm').addEventListener('click', () => {
-            confirmAndAddPicks(picks, modal);
+            confirmAndAddPicksFromText(rawText, modal);
         });
 
         modal.style.display = 'flex';
     }
 
     /**
-     * Confirm and add selected picks to dashboard
+     * Escape HTML entities for safe display
      */
-    function confirmAndAddPicks(allPicks, modal) {
-        const checkboxes = modal.querySelectorAll('.review-pick-checkbox:checked');
-        const selectedPicks = [];
+    function escapeHtml(text) {
+        const map = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;'
+        };
+        return text.replace(/[&<>"']/g, m => map[m]);
+    }
 
-        checkboxes.forEach(checkbox => {
-            const idx = parseInt(checkbox.dataset.index);
-            const pick = allPicks[idx];
-            if (pick) {
-                selectedPicks.push({
-                    ...pick,
-                    source: 'manual-import',
-                    timestamp: new Date().toISOString(),
-                    status: 'pending'
-                });
-            }
-        });
-
-        if (selectedPicks.length === 0) {
-            showStatus('No picks selected', 'warning');
+    /**
+     * Add picks from raw text using parseAndAdd (matches manual-upload.js behavior)
+     */
+    function confirmAndAddPicksFromText(rawText, modal) {
+        if (!rawText.trim()) {
+            showStatus('No picks to add', 'warning');
             return;
         }
 
-        // Add to dashboard
-        if (window.LocalPicksManager) {
-            window.LocalPicksManager.addPicks(selectedPicks);
-            showStatus(`✅ Added ${selectedPicks.length} picks to dashboard`, 'success', 3000);
-            modal.remove();
-            closeImportOptions();
+        // Use the SAME parseAndAdd function as manual-upload.js (index.html)
+        // This ensures: parsing, enrichment, and prevents stale data mixing
+        if (window.LocalPicksManager?.parseAndAdd) {
+            window.LocalPicksManager.parseAndAdd(rawText, 'Sportsbooks Import')
+                .then(added => {
+                    if (added && added.length > 0) {
+                        showStatus(`✅ Added ${added.length} picks to dashboard`, 'success', 3000);
+                        modal.remove();
+                        closeImportOptions();
+                        clearPasteArea();
+                    } else {
+                        showStatus('❌ No valid picks found', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error adding picks:', error);
+                    showStatus(`❌ Error: ${error.message}`, 'error');
+                });
         } else {
-            showStatus('❌ LocalPicksManager not found', 'error');
+            showStatus('❌ LocalPicksManager not available', 'error');
         }
     }
 
@@ -361,6 +346,16 @@
         const importOptions = document.getElementById('import-options');
         if (importOptions) {
             importOptions.hidden = true;
+        }
+    }
+
+    /**
+     * Clear the paste area
+     */
+    function clearPasteArea() {
+        const pasteArea = document.getElementById('paste-area');
+        if (pasteArea) {
+            pasteArea.value = '';
         }
     }
 
