@@ -99,6 +99,107 @@ def compute_risk_win(odds, base_bet):
     return float(to_risk), float(to_win)
 
 
+def validate_pick_timing(segment, ticket_placed_date, ticket_placed_time, game_datetime_cst):
+    """
+    Validate if pick timing makes logical sense.
+    Returns: 'OK', 'WARNING', or specific issue description.
+    """
+    if game_datetime_cst == 'unknown':
+        return 'WARN: Game time unknown'
+    
+    try:
+        from datetime import datetime
+        # Parse game datetime
+        if 'T' in str(game_datetime_cst):
+            game_dt = datetime.fromisoformat(str(game_datetime_cst).replace('Z', ''))
+        else:
+            game_dt = datetime.strptime(str(game_datetime_cst), '%Y-%m-%d %H:%M:%S %Z')
+        
+        # Parse ticket placed datetime
+        ticket_dt_str = f"{ticket_placed_date} {ticket_placed_time}"
+        try:
+            ticket_dt = datetime.strptime(ticket_dt_str, '%Y-%m-%d %I:%M %p')
+        except:
+            try:
+                ticket_dt = datetime.strptime(ticket_dt_str, '%Y-%m-%d %H:%M:%S')
+            except:
+                return 'WARN: Ticket time format unknown'
+        
+        # Validation logic
+        time_diff_minutes = (ticket_dt - game_dt).total_seconds() / 60
+        
+        # 2H picks must be placed after game starts (at least after 1H ends, ~60min into game)
+        if segment and '2H' in str(segment).upper():
+            if time_diff_minutes < 60:  # Placed before game or during 1H
+                return f'ERROR: 2H pick placed {abs(time_diff_minutes):.0f}min before 1H ends'
+        
+        # 1H picks placed after game starts are suspicious
+        if segment and '1H' in str(segment).upper():
+            if time_diff_minutes > 10:  # Placed more than 10min after game start
+                return f'WARN: 1H pick placed {time_diff_minutes:.0f}min after kickoff'
+        
+        # FG picks placed after game ends
+        if segment and 'FG' in str(segment).upper():
+            if time_diff_minutes > 180:  # Placed more than 3 hours after start (most games done)
+                return f'WARN: FG pick placed {time_diff_minutes:.0f}min after kickoff'
+        
+        return 'OK'
+    
+    except Exception as e:
+        return f'WARN: Validation error - {str(e)}'
+
+
+def validate_pick_timing(segment, ticket_placed_date, ticket_placed_time, game_datetime_cst):
+    """
+    Validate if pick timing makes logical sense.
+    Returns: 'OK', 'WARNING', or specific issue description.
+    """
+    if game_datetime_cst == 'unknown':
+        return 'OK (Game time unknown)'
+    
+    try:
+        from datetime import datetime
+        # Parse game datetime - handle "2026-01-04 15:25:00 CST" format
+        game_dt_str = str(game_datetime_cst)
+        # Remove timezone suffix (CST, CDT, etc.)
+        for tz in [' CST', ' CDT', ' EST', ' EDT', ' PST', ' PDT', ' MST', ' MDT']:
+            game_dt_str = game_dt_str.replace(tz, '')
+        game_dt = datetime.strptime(game_dt_str.strip(), '%Y-%m-%d %H:%M:%S')
+        
+        # Parse ticket placed datetime
+        ticket_dt_str = f"{ticket_placed_date} {ticket_placed_time}"
+        try:
+            ticket_dt = datetime.strptime(ticket_dt_str, '%Y-%m-%d %I:%M %p')
+        except:
+            try:
+                ticket_dt = datetime.strptime(ticket_dt_str, '%Y-%m-%d %H:%M:%S')
+            except:
+                return 'OK (Ticket time format unknown)'
+        
+        # Validation logic
+        time_diff_minutes = (ticket_dt - game_dt).total_seconds() / 60
+        
+        # 2H picks must be placed after game starts (at least after 1H ends, ~60min into game)
+        if segment and '2H' in str(segment).upper():
+            if time_diff_minutes < 60:  # Placed before game or during 1H
+                return f'ERROR: 2H pick placed {abs(time_diff_minutes):.0f}min before 1H ends'
+        
+        # 1H picks placed after game starts are suspicious
+        if segment and '1H' in str(segment).upper():
+            if time_diff_minutes > 10:  # Placed more than 10min after game start
+                return f'WARN: 1H pick placed {time_diff_minutes:.0f}min after kickoff'
+        
+        # FG picks placed after game ends
+        if segment and 'FG' in str(segment).upper():
+            if time_diff_minutes > 180:  # Placed more than 3 hours after start (most games done)
+                return f'WARN: FG pick placed {time_diff_minutes:.0f}min after kickoff'
+        
+        return 'OK'
+    
+    except Exception as e:
+        return f'OK (Validation error: {str(e)[:30]})'
+
+
 def format_row_standard(row, mod, base_bet):
     # row is a dict from reconcile CSV
     # Use mod.load_data() helpers to compute scores
@@ -177,9 +278,24 @@ def format_row_standard(row, mod, base_bet):
     h2_score = f"{a2}-{h2} (Total: {t2})" if isinstance(a2, (int,float)) and isinstance(h2, (int,float)) else "unknown"
     full_score = f"{fa}-{fh}" if isinstance(fa, (int,float)) and isinstance(fh, (int,float)) else "unknown"
 
+    # Extract game datetime from consolidated data
+    game_datetime_cst = 'unknown'
+    if game:
+        game_datetime_cst = game.get('game_datetime_cst') or 'unknown'
+
+    # Ticket placed time (from reconciled CSV or default to same as Date/Time)
+    ticket_placed_date = row.get('Ticket Placed Date') or row.get('Date')
+    ticket_placed_time = row.get('Ticket Placed Time') or row.get('Time (CST)')
+
+    # Validation: Check if pick timing makes sense
+    validation_flag = validate_pick_timing(segment, ticket_placed_date, ticket_placed_time, game_datetime_cst)
+
     out = {
         'Date': row.get('Date'),
         'Time (CST)': row.get('Time (CST)'),
+        'Game DateTime (CST)': game_datetime_cst,
+        'Ticket Placed Date': ticket_placed_date,
+        'Ticket Placed Time': ticket_placed_time,
         'League': row.get('League'),
         'Matchup': matchup,
         'Segment': segment,
@@ -191,7 +307,8 @@ def format_row_standard(row, mod, base_bet):
         'Full Score': full_score,
         'To Risk': tr,
         'To Win': tw,
-        'PnL': round(pnl_val,2)
+        'PnL': round(pnl_val,2),
+        'Validation': validation_flag
     }
     return out
 
@@ -215,8 +332,9 @@ def run_for_date(date_str, input_csv=None, base_bet=50000):
         standardized.append(format_row_standard(r, mod, base_bet))
 
     # Write CSV
-    keys = ['Date','Time (CST)','League','Matchup','Segment','Pick','Odds','Hit/Miss',
-            '1H Score','2H+OT Score','Full Score','To Risk','To Win','PnL']
+    keys = ['Date','Time (CST)','Game DateTime (CST)','Ticket Placed Date','Ticket Placed Time',
+            'League','Matchup','Segment','Pick','Odds','Hit/Miss',
+            '1H Score','2H+OT Score','Full Score','To Risk','To Win','PnL','Validation']
     with open(out_csv, 'w', newline='', encoding='utf-8') as of:
         writer = csv.DictWriter(of, fieldnames=keys)
         writer.writeheader()

@@ -54,7 +54,22 @@ def format_workbook(path):
                 ws.cell(row_num, date_col).alignment = Alignment(horizontal='left', vertical='center', wrap_text=True)
         # Delete Time column and update header
         ws.delete_cols(time_col)
-        ws.cell(1, date_col).value = 'Date & Time CST'
+        ws.cell(1, date_col).value = 'Match-Up\nDate & Time CST'
+        # Rebuild col_map after deletion
+        col_map = {cell.value: idx for idx, cell in enumerate(ws[1], 1)}
+    
+    # Stack Ticket Placed Date and Time into single cell
+    if 'Ticket Placed Date' in col_map and 'Ticket Placed Time' in col_map:
+        date_col = col_map['Ticket Placed Date']
+        time_col = col_map['Ticket Placed Time']
+        for row_num in range(2, ws.max_row + 1):
+            date_val = ws.cell(row_num, date_col).value
+            time_val = ws.cell(row_num, time_col).value
+            if date_val and time_val:
+                ws.cell(row_num, date_col).value = f"{date_val}\n{time_val}"
+        # Delete Time column and update header
+        ws.delete_cols(time_col)
+        ws.cell(1, date_col).value = 'Ticket Placed\nDate & Time CST'
         # Rebuild col_map after deletion
         col_map = {cell.value: idx for idx, cell in enumerate(ws[1], 1)}
     
@@ -124,6 +139,18 @@ def format_workbook(path):
                         cell.number_format = '0'
                 except:
                     pass
+    
+    # Validation column: highlight ERROR/WARN cells
+    if 'Validation' in col_map:
+        val_col = col_map['Validation']
+        red_fill = PatternFill(start_color='FFCCCC', end_color='FFCCCC', fill_type='solid')
+        yellow_fill = PatternFill(start_color='FFFFCC', end_color='FFFFCC', fill_type='solid')
+        for row_num in range(2, ws.max_row + 1):
+            val = str(ws.cell(row_num, val_col).value or '')
+            if 'ERROR' in val:
+                ws.cell(row_num, val_col).fill = red_fill
+            elif 'WARN' in val:
+                ws.cell(row_num, val_col).fill = yellow_fill
     
     # Apply Excel Table formatting
     last_col_letter = get_column_letter(len(col_map))

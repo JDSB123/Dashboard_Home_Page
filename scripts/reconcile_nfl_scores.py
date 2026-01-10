@@ -77,6 +77,9 @@ def load_data():
 
             # Also make 1H/2H accessible under quarter-sum logic if needed
             # (the grading code calls calculate_period_scores which will check for quarter keys first)
+            # Include game datetime for validation
+            game['game_datetime_cst'] = row.get('game_datetime_cst')
+            
             # Index by both abbreviations for quick lookup
             ht = game['HomeTeam']
             at = game['AwayTeam']
