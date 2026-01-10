@@ -1,0 +1,135 @@
+/* ==========================================================================
+   Upload Picks Card - Compact Formatting Hotfix
+   --------------------------------------------------------------------------
+   Align with standard sportsbook card layout (single row, matched height)
+   ========================================================================== */
+
+.sportsbook-card.upload-picks-card {
+    padding: 8px 10px !important;
+    height: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    margin-bottom: 4px !important;
+}
+
+.sportsbook-card.upload-picks-card .sportsbook-upload-shell {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+}
+
+/* Hide popup completely when not active */
+.sportsbook-card.upload-picks-card .import-options-popup {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.sportsbook-card.upload-picks-card .import-options-popup:not([hidden]) {
+    display: block !important;
+    visibility: visible !important;
+    height: auto !important;
+}
+
+/* Destination Select Row */
+.sportsbook-card.upload-picks-card .upload-destination {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+}
+
+.sportsbook-card.upload-picks-card .upload-label {
+    display: none !important;
+}
+
+.sportsbook-card.upload-picks-card .sportsbook-select {
+    flex: 1 !important;
+    height: 24px !important;
+    min-height: 24px !important;
+    max-height: 24px !important;
+    background: rgba(0, 0, 0, 0.2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    color: #cfd8dc !important;
+    font-family: var(--sportsbook-heading-font) !important;
+    font-size: 10px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.04em !important;
+    text-transform: uppercase !important;
+    padding: 0 6px !important;
+    border-radius: 3px !important;
+    margin: 0 !important;
+    line-height: 24px !important;
+    box-sizing: border-box !important;
+}
+
+.sportsbook-card.upload-picks-card .sportsbook-select:hover {
+    background: rgba(0, 0, 0, 0.3) !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Action Buttons Row */
+.sportsbook-card.upload-picks-card .sportsbook-actions-compact {
+    display: flex !important;
+    gap: 4px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    width: auto !important;
+    align-items: center !important;
+    height: 24px !important;
+}
+
+.sportsbook-card.upload-picks-card .action-btn-cta {
+    display: none !important;
+}
+
+.sportsbook-card.upload-picks-card .action-btn-compact {
+    height: 24px !important;
+    padding: 0 8px !important;
+    margin: 0 !important;
+    font-size: 9px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.05em !important;
+    text-transform: uppercase !important;
+    border-radius: 3px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    white-space: nowrap !important;
+    line-height: 1 !important;
+    flex: 0 0 auto !important;
+    box-sizing: border-box !important;
+}
+
+.sportsbook-card.upload-picks-card .add-book-btn-compact {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.sportsbook-card.upload-picks-card .add-book-btn-compact:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: #fff !important;
+    border-color: rgba(255, 255, 255, 0.25) !important;
+}
+
+.sportsbook-card.upload-picks-card .import-picks-btn {
+    background: rgba(0, 255, 170, 0.1) !important;
+    border: 1px solid rgba(0, 255, 170, 0.25) !important;
+    color: #00ffaa !important;
+}
+
+.sportsbook-card.upload-picks-card .import-picks-btn:hover {
+    background: rgba(0, 255, 170, 0.2) !important;
+    border-color: #00ffaa !important;
+    color: #fff !important;
+    box-shadow: 0 0 8px rgba(0, 255, 170, 0.25) !important;
+}
