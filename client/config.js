@@ -57,7 +57,7 @@ window.APP_CONFIG = {
   
   // NBA API
   NBA_API_URL: 'https://www.greenbiersportventures.com/api/nba',
-  NBA_API_DIRECT: 'https://nba-gbsv-api.wittypebble-41c11c65.eastus.azurecontainerapps.io',
+  NBA_API_DIRECT: 'https://nba-gbsv-api.livelycoast-b48c3cb0.eastus.azurecontainerapps.io',
   NBA_FUNCTION_URL: '',  // Deprecated
   
   // NCAAM API
