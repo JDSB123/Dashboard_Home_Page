@@ -1,0 +1,167 @@
+[
+  {
+    "game_id": "401812686",
+    "date": "2025-10-08",
+    "league": "NBA",
+    "home_team": "MIA",
+    "away_team": "SA",
+    "home_team_full": "Miami Heat",
+    "away_team_full": "San Antonio Spurs",
+    "home_score": 107,
+    "away_score": 112,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 33,
+        "away": 33
+      },
+      "H2": {
+        "home": 24,
+        "away": 28
+      },
+      "OT1": {
+        "home": 23,
+        "away": 25
+      },
+      "OT2": {
+        "home": 27,
+        "away": 26
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.685454"
+  },
+  {
+    "game_id": "401812687",
+    "date": "2025-10-08",
+    "league": "NBA",
+    "home_team": "HOU",
+    "away_team": "UTAH",
+    "home_team_full": "Houston Rockets",
+    "away_team_full": "Utah Jazz",
+    "home_score": 140,
+    "away_score": 127,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 23,
+        "away": 25
+      },
+      "H2": {
+        "home": 44,
+        "away": 36
+      },
+      "OT1": {
+        "home": 40,
+        "away": 40
+      },
+      "OT2": {
+        "home": 33,
+        "away": 26
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.685454"
+  },
+  {
+    "game_id": "401812688",
+    "date": "2025-10-08",
+    "league": "NBA",
+    "home_team": "MEM",
+    "away_team": "BOS",
+    "home_team_full": "Memphis Grizzlies",
+    "away_team_full": "Boston Celtics",
+    "home_score": 103,
+    "away_score": 121,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 23,
+        "away": 35
+      },
+      "H2": {
+        "home": 22,
+        "away": 33
+      },
+      "OT1": {
+        "home": 27,
+        "away": 31
+      },
+      "OT2": {
+        "home": 31,
+        "away": 22
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.685454"
+  },
+  {
+    "game_id": "401812689",
+    "date": "2025-10-08",
+    "league": "NBA",
+    "home_team": "GS",
+    "away_team": "POR",
+    "home_team_full": "Golden State Warriors",
+    "away_team_full": "Portland Trail Blazers",
+    "home_score": 129,
+    "away_score": 123,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 25,
+        "away": 39
+      },
+      "H2": {
+        "home": 32,
+        "away": 34
+      },
+      "OT1": {
+        "home": 21,
+        "away": 24
+      },
+      "OT2": {
+        "home": 51,
+        "away": 26
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.685454"
+  },
+  {
+    "game_id": "401812690",
+    "date": "2025-10-08",
+    "league": "NBA",
+    "home_team": "SAC",
+    "away_team": "TOR",
+    "home_team_full": "Sacramento Kings",
+    "away_team_full": "Toronto Raptors",
+    "home_score": 122,
+    "away_score": 130,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 27,
+        "away": 36
+      },
+      "H2": {
+        "home": 25,
+        "away": 29
+      },
+      "OT1": {
+        "home": 26,
+        "away": 32
+      },
+      "OT2": {
+        "home": 44,
+        "away": 33
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.685454"
+  }
+]

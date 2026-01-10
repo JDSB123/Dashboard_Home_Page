@@ -1,0 +1,101 @@
+[
+  {
+    "game_id": "401810383",
+    "date": "2026-01-08",
+    "league": "NBA",
+    "home_team": "CHA",
+    "away_team": "IND",
+    "home_team_full": "Charlotte Hornets",
+    "away_team_full": "Indiana Pacers",
+    "home_score": 112,
+    "away_score": 114,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 30,
+        "away": 33
+      },
+      "H2": {
+        "home": 28,
+        "away": 27
+      },
+      "OT1": {
+        "home": 29,
+        "away": 30
+      },
+      "OT2": {
+        "home": 25,
+        "away": 24
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.898152"
+  },
+  {
+    "game_id": "401810385",
+    "date": "2026-01-08",
+    "league": "NBA",
+    "home_team": "MIN",
+    "away_team": "CLE",
+    "home_team_full": "Minnesota Timberwolves",
+    "away_team_full": "Cleveland Cavaliers",
+    "home_score": 131,
+    "away_score": 122,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 32,
+        "away": 31
+      },
+      "H2": {
+        "home": 31,
+        "away": 36
+      },
+      "OT1": {
+        "home": 43,
+        "away": 22
+      },
+      "OT2": {
+        "home": 25,
+        "away": 33
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.898152"
+  },
+  {
+    "game_id": "401810386",
+    "date": "2026-01-08",
+    "league": "NBA",
+    "home_team": "UTAH",
+    "away_team": "DAL",
+    "home_team_full": "Utah Jazz",
+    "away_team_full": "Dallas Mavericks",
+    "home_score": 116,
+    "away_score": 114,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 34,
+        "away": 29
+      },
+      "H2": {
+        "home": 24,
+        "away": 26
+      },
+      "OT1": {
+        "home": 30,
+        "away": 34
+      },
+      "OT2": {
+        "home": 28,
+        "away": 25
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.898152"
+  }
+]

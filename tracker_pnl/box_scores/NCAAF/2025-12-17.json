@@ -1,0 +1,68 @@
+[
+  {
+    "game_id": 16403,
+    "date": "2025-12-17",
+    "league": "NCAAF",
+    "home_team": "SFL",
+    "away_team": "OLD",
+    "home_team_full": "South Florida Bulls",
+    "away_team_full": "Old Dominion Monarchs",
+    "home_score": 10,
+    "away_score": 24,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {
+      "Q1": {
+        "home": 3,
+        "away": 7
+      },
+      "Q2": {
+        "home": 7,
+        "away": 0
+      },
+      "Q3": {
+        "home": 0,
+        "away": 10
+      },
+      "Q4": {
+        "home": 0,
+        "away": 7
+      }
+    },
+    "source": "NCAAF",
+    "fetched_at": "2026-01-09T16:47:00.530923"
+  },
+  {
+    "game_id": 16404,
+    "date": "2025-12-17",
+    "league": "NCAAF",
+    "home_team": "DEL",
+    "away_team": "LOULAF",
+    "home_team_full": "Delaware Fightin' Blue Hens",
+    "away_team_full": "Louisiana-Lafayette Ragin' Cajuns",
+    "home_score": 20,
+    "away_score": 13,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {
+      "Q1": {
+        "home": 7,
+        "away": 0
+      },
+      "Q2": {
+        "home": 3,
+        "away": 3
+      },
+      "Q3": {
+        "home": 10,
+        "away": 3
+      },
+      "Q4": {
+        "home": 0,
+        "away": 7
+      }
+    },
+    "source": "NCAAF",
+    "fetched_at": "2026-01-09T16:47:00.530923"
+  }
+]

@@ -1,0 +1,35 @@
+[
+  {
+    "game_id": 16439,
+    "date": "2025-12-29",
+    "league": "NCAAF",
+    "home_team": "APPLST",
+    "away_team": "GAS",
+    "home_team_full": "Appalachian State Mountaineers",
+    "away_team_full": "Georgia Southern Eagles",
+    "home_score": 10,
+    "away_score": 29,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {
+      "Q1": {
+        "home": 0,
+        "away": 7
+      },
+      "Q2": {
+        "home": 7,
+        "away": 6
+      },
+      "Q3": {
+        "home": 3,
+        "away": 13
+      },
+      "Q4": {
+        "home": 0,
+        "away": 3
+      }
+    },
+    "source": "NCAAF",
+    "fetched_at": "2026-01-09T16:47:00.543258"
+  }
+]

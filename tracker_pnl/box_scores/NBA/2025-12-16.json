@@ -1,0 +1,35 @@
+[
+  {
+    "game_id": "401809839",
+    "date": "2025-12-16",
+    "league": "NBA",
+    "home_team": "NY",
+    "away_team": "SA",
+    "home_team_full": "New York Knicks",
+    "away_team_full": "San Antonio Spurs",
+    "home_score": 124,
+    "away_score": 113,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 28,
+        "away": 30
+      },
+      "H2": {
+        "home": 31,
+        "away": 31
+      },
+      "OT1": {
+        "home": 30,
+        "away": 33
+      },
+      "OT2": {
+        "home": 35,
+        "away": 19
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.812801"
+  }
+]

@@ -1,0 +1,134 @@
+[
+  {
+    "game_id": 16055,
+    "date": "2025-10-09",
+    "league": "NCAAF",
+    "home_team": "SMHO",
+    "away_team": "JAXST",
+    "home_team_full": "Sam Houston Bearkats",
+    "away_team_full": "Jacksonville State Gamecocks",
+    "home_score": 27,
+    "away_score": 29,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {
+      "Q1": {
+        "home": 0,
+        "away": 7
+      },
+      "Q2": {
+        "home": 14,
+        "away": 10
+      },
+      "Q3": {
+        "home": 7,
+        "away": 0
+      },
+      "Q4": {
+        "home": 6,
+        "away": 12
+      }
+    },
+    "source": "NCAAF",
+    "fetched_at": "2026-01-09T16:47:00.425535"
+  },
+  {
+    "game_id": 16057,
+    "date": "2025-10-09",
+    "league": "NCAAF",
+    "home_team": "KENEST",
+    "away_team": "LOUTCH",
+    "home_team_full": "Kennesaw State Owls",
+    "away_team_full": "Louisiana Tech Bulldogs",
+    "home_score": 35,
+    "away_score": 7,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {
+      "Q1": {
+        "home": 0,
+        "away": 7
+      },
+      "Q2": {
+        "home": 14,
+        "away": 0
+      },
+      "Q3": {
+        "home": 7,
+        "away": 0
+      },
+      "Q4": {
+        "home": 14,
+        "away": 0
+      }
+    },
+    "source": "NCAAF",
+    "fetched_at": "2026-01-09T16:47:00.425535"
+  },
+  {
+    "game_id": 16180,
+    "date": "2025-10-09",
+    "league": "NCAAF",
+    "home_team": "GAS",
+    "away_team": "SOUMIS",
+    "home_team_full": "Georgia Southern Eagles",
+    "away_team_full": "Southern Miss Golden Eagles",
+    "home_score": 35,
+    "away_score": 38,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {
+      "Q1": {
+        "home": 7,
+        "away": 7
+      },
+      "Q2": {
+        "home": 0,
+        "away": 21
+      },
+      "Q3": {
+        "home": 14,
+        "away": 7
+      },
+      "Q4": {
+        "home": 14,
+        "away": 3
+      }
+    },
+    "source": "NCAAF",
+    "fetched_at": "2026-01-09T16:47:00.425535"
+  },
+  {
+    "game_id": 16280,
+    "date": "2025-10-09",
+    "league": "NCAAF",
+    "home_team": "TULANE",
+    "away_team": "ECAR",
+    "home_team_full": "Tulane Green Wave",
+    "away_team_full": "East Carolina Pirates",
+    "home_score": 26,
+    "away_score": 19,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {
+      "Q1": {
+        "home": 3,
+        "away": 0
+      },
+      "Q2": {
+        "home": 9,
+        "away": 0
+      },
+      "Q3": {
+        "home": 0,
+        "away": 16
+      },
+      "Q4": {
+        "home": 14,
+        "away": 3
+      }
+    },
+    "source": "NCAAF",
+    "fetched_at": "2026-01-09T16:47:00.425535"
+  }
+]

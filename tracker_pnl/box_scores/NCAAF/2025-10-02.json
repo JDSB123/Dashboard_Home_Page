@@ -1,0 +1,35 @@
+[
+  {
+    "game_id": 16052,
+    "date": "2025-10-02",
+    "league": "NCAAF",
+    "home_team": "NMXST",
+    "away_team": "SMHO",
+    "home_team_full": "New Mexico State Aggies",
+    "away_team_full": "Sam Houston Bearkats",
+    "home_score": 37,
+    "away_score": 10,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {
+      "Q1": {
+        "home": 0,
+        "away": 0
+      },
+      "Q2": {
+        "home": 10,
+        "away": 3
+      },
+      "Q3": {
+        "home": 3,
+        "away": 7
+      },
+      "Q4": {
+        "home": 24,
+        "away": 0
+      }
+    },
+    "source": "NCAAF",
+    "fetched_at": "2026-01-09T16:47:00.414176"
+  }
+]

@@ -1,0 +1,68 @@
+[
+  {
+    "game_id": 15835,
+    "date": "2025-11-14",
+    "league": "NCAAF",
+    "home_team": "ORE",
+    "away_team": "MINNST",
+    "home_team_full": "Oregon Ducks",
+    "away_team_full": "Minnesota Golden Gophers",
+    "home_score": 42,
+    "away_score": 13,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {
+      "Q1": {
+        "home": 14,
+        "away": 0
+      },
+      "Q2": {
+        "home": 14,
+        "away": 6
+      },
+      "Q3": {
+        "home": 7,
+        "away": 7
+      },
+      "Q4": {
+        "home": 7,
+        "away": 0
+      }
+    },
+    "source": "NCAAF",
+    "fetched_at": "2026-01-09T16:47:00.473196"
+  },
+  {
+    "game_id": 15847,
+    "date": "2025-11-14",
+    "league": "NCAAF",
+    "home_team": "LOU",
+    "away_team": "CLMSN",
+    "home_team_full": "Louisville Cardinals",
+    "away_team_full": "Clemson Tigers",
+    "home_score": 19,
+    "away_score": 20,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {
+      "Q1": {
+        "home": 3,
+        "away": 3
+      },
+      "Q2": {
+        "home": 6,
+        "away": 7
+      },
+      "Q3": {
+        "home": 10,
+        "away": 3
+      },
+      "Q4": {
+        "home": 0,
+        "away": 7
+      }
+    },
+    "source": "NCAAF",
+    "fetched_at": "2026-01-09T16:47:00.473196"
+  }
+]

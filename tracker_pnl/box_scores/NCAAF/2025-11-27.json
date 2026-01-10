@@ -1,0 +1,35 @@
+[
+  {
+    "game_id": 16315,
+    "date": "2025-11-27",
+    "league": "NCAAF",
+    "home_team": "MPHS",
+    "away_team": "NAVY",
+    "home_team_full": "Memphis Tigers",
+    "away_team_full": "Navy Midshipmen",
+    "home_score": 17,
+    "away_score": 28,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {
+      "Q1": {
+        "home": 3,
+        "away": 0
+      },
+      "Q2": {
+        "home": 14,
+        "away": 14
+      },
+      "Q3": {
+        "home": 0,
+        "away": 7
+      },
+      "Q4": {
+        "home": 0,
+        "away": 7
+      }
+    },
+    "source": "NCAAF",
+    "fetched_at": "2026-01-09T16:47:00.497416"
+  }
+]

@@ -1,0 +1,68 @@
+[
+  {
+    "game_id": 16377,
+    "date": "2025-11-19",
+    "league": "NCAAF",
+    "home_team": "BUF",
+    "away_team": "MIAOH",
+    "home_team_full": "Buffalo Bulls",
+    "away_team_full": "Miami (OH) RedHawks",
+    "home_score": 20,
+    "away_score": 37,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {
+      "Q1": {
+        "home": 3,
+        "away": 0
+      },
+      "Q2": {
+        "home": 7,
+        "away": 17
+      },
+      "Q3": {
+        "home": 10,
+        "away": 14
+      },
+      "Q4": {
+        "home": 0,
+        "away": 6
+      }
+    },
+    "source": "NCAAF",
+    "fetched_at": "2026-01-09T16:47:00.480382"
+  },
+  {
+    "game_id": 16378,
+    "date": "2025-11-19",
+    "league": "NCAAF",
+    "home_team": "KENTST",
+    "away_team": "CMICH",
+    "home_team_full": "Kent State Golden Flashes",
+    "away_team_full": "Central Michigan Chippewas",
+    "home_score": 16,
+    "away_score": 28,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {
+      "Q1": {
+        "home": 0,
+        "away": 7
+      },
+      "Q2": {
+        "home": 3,
+        "away": 7
+      },
+      "Q3": {
+        "home": 0,
+        "away": 0
+      },
+      "Q4": {
+        "home": 13,
+        "away": 14
+      }
+    },
+    "source": "NCAAF",
+    "fetched_at": "2026-01-09T16:47:00.480382"
+  }
+]

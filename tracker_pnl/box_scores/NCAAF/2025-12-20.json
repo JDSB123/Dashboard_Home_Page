@@ -1,0 +1,101 @@
+[
+  {
+    "game_id": 16405,
+    "date": "2025-12-20",
+    "league": "NCAAF",
+    "home_team": "MISS",
+    "away_team": "TULANE",
+    "home_team_full": "Ole Miss Rebels",
+    "away_team_full": "Tulane Green Wave",
+    "home_score": 41,
+    "away_score": 10,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {
+      "Q1": {
+        "home": 14,
+        "away": 0
+      },
+      "Q2": {
+        "home": 3,
+        "away": 3
+      },
+      "Q3": {
+        "home": 10,
+        "away": 0
+      },
+      "Q4": {
+        "home": 14,
+        "away": 7
+      }
+    },
+    "source": "NCAAF",
+    "fetched_at": "2026-01-09T16:47:00.534540"
+  },
+  {
+    "game_id": 16407,
+    "date": "2025-12-20",
+    "league": "NCAAF",
+    "home_team": "TXAM",
+    "away_team": "MIA",
+    "home_team_full": "Texas A&M Aggies",
+    "away_team_full": "Miami Hurricanes",
+    "home_score": 3,
+    "away_score": 10,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {
+      "Q1": {
+        "home": 0,
+        "away": 0
+      },
+      "Q2": {
+        "home": 0,
+        "away": 0
+      },
+      "Q3": {
+        "home": 0,
+        "away": 3
+      },
+      "Q4": {
+        "home": 3,
+        "away": 7
+      }
+    },
+    "source": "NCAAF",
+    "fetched_at": "2026-01-09T16:47:00.534540"
+  },
+  {
+    "game_id": 16408,
+    "date": "2025-12-20",
+    "league": "NCAAF",
+    "home_team": "ORE",
+    "away_team": "JMAD",
+    "home_team_full": "Oregon Ducks",
+    "away_team_full": "James Madison Dukes",
+    "home_score": 51,
+    "away_score": 34,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {
+      "Q1": {
+        "home": 13,
+        "away": 3
+      },
+      "Q2": {
+        "home": 21,
+        "away": 3
+      },
+      "Q3": {
+        "home": 14,
+        "away": 14
+      },
+      "Q4": {
+        "home": 3,
+        "away": 14
+      }
+    },
+    "source": "NCAAF",
+    "fetched_at": "2026-01-09T16:47:00.534540"
+  }
+]

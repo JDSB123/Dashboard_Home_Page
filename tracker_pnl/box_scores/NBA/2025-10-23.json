@@ -1,0 +1,80 @@
+[
+  {
+    "game_id": "401809236",
+    "date": "2025-10-23",
+    "league": "NBA",
+    "home_team": "IND",
+    "away_team": "OKC",
+    "home_team_full": "Indiana Pacers",
+    "away_team_full": "Oklahoma City Thunder",
+    "home_score": 135,
+    "away_score": 141,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 25,
+        "away": 22
+      },
+      "H2": {
+        "home": 22,
+        "away": 32
+      },
+      "OT1": {
+        "home": 31,
+        "away": 27
+      },
+      "OT2": {
+        "home": 35,
+        "away": 32
+      },
+      "OT3": {
+        "home": 11,
+        "away": 11
+      },
+      "OT4": {
+        "home": 11,
+        "away": 17
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.699890"
+  },
+  {
+    "game_id": "401809237",
+    "date": "2025-10-23",
+    "league": "NBA",
+    "home_team": "GS",
+    "away_team": "DEN",
+    "home_team_full": "Golden State Warriors",
+    "away_team_full": "Denver Nuggets",
+    "home_score": 137,
+    "away_score": 131,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 27,
+        "away": 31
+      },
+      "H2": {
+        "home": 34,
+        "away": 39
+      },
+      "OT1": {
+        "home": 33,
+        "away": 24
+      },
+      "OT2": {
+        "home": 26,
+        "away": 26
+      },
+      "OT3": {
+        "home": 17,
+        "away": 11
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.699890"
+  }
+]

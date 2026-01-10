@@ -1,0 +1,18 @@
+[
+  {
+    "game_id": 19267,
+    "date": "2025-12-15",
+    "league": "NFL",
+    "home_team": "PIT",
+    "away_team": "MIA",
+    "home_team_full": null,
+    "away_team_full": null,
+    "home_score": 28,
+    "away_score": 15,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {},
+    "source": "NFL",
+    "fetched_at": "2026-01-09T16:47:00.158045"
+  }
+]

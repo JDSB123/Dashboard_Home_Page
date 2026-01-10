@@ -1,0 +1,332 @@
+[
+  {
+    "game_id": "401809986",
+    "date": "2025-10-29",
+    "league": "NBA",
+    "home_team": "TOR",
+    "away_team": "HOU",
+    "home_team_full": "Toronto Raptors",
+    "away_team_full": "Houston Rockets",
+    "home_score": 121,
+    "away_score": 139,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 30,
+        "away": 39
+      },
+      "H2": {
+        "home": 33,
+        "away": 31
+      },
+      "OT1": {
+        "home": 28,
+        "away": 36
+      },
+      "OT2": {
+        "home": 30,
+        "away": 33
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.706854"
+  },
+  {
+    "game_id": "401809983",
+    "date": "2025-10-29",
+    "league": "NBA",
+    "home_team": "BOS",
+    "away_team": "CLE",
+    "home_team_full": "Boston Celtics",
+    "away_team_full": "Cleveland Cavaliers",
+    "home_score": 125,
+    "away_score": 105,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 40,
+        "away": 42
+      },
+      "H2": {
+        "home": 35,
+        "away": 18
+      },
+      "OT1": {
+        "home": 23,
+        "away": 25
+      },
+      "OT2": {
+        "home": 27,
+        "away": 20
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.706854"
+  },
+  {
+    "game_id": "401809984",
+    "date": "2025-10-29",
+    "league": "NBA",
+    "home_team": "DET",
+    "away_team": "ORL",
+    "home_team_full": "Detroit Pistons",
+    "away_team_full": "Orlando Magic",
+    "home_score": 135,
+    "away_score": 116,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 29,
+        "away": 36
+      },
+      "H2": {
+        "home": 36,
+        "away": 28
+      },
+      "OT1": {
+        "home": 36,
+        "away": 28
+      },
+      "OT2": {
+        "home": 34,
+        "away": 24
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.706854"
+  },
+  {
+    "game_id": "401809985",
+    "date": "2025-10-29",
+    "league": "NBA",
+    "home_team": "BKN",
+    "away_team": "ATL",
+    "home_team_full": "Brooklyn Nets",
+    "away_team_full": "Atlanta Hawks",
+    "home_score": 112,
+    "away_score": 117,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 27,
+        "away": 34
+      },
+      "H2": {
+        "home": 24,
+        "away": 30
+      },
+      "OT1": {
+        "home": 32,
+        "away": 30
+      },
+      "OT2": {
+        "home": 29,
+        "away": 23
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.706854"
+  },
+  {
+    "game_id": "401809987",
+    "date": "2025-10-29",
+    "league": "NBA",
+    "home_team": "CHI",
+    "away_team": "SAC",
+    "home_team_full": "Chicago Bulls",
+    "away_team_full": "Sacramento Kings",
+    "home_score": 126,
+    "away_score": 113,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 36,
+        "away": 33
+      },
+      "H2": {
+        "home": 26,
+        "away": 31
+      },
+      "OT1": {
+        "home": 39,
+        "away": 27
+      },
+      "OT2": {
+        "home": 25,
+        "away": 22
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.706854"
+  },
+  {
+    "game_id": "401809988",
+    "date": "2025-10-29",
+    "league": "NBA",
+    "home_team": "DAL",
+    "away_team": "IND",
+    "home_team_full": "Dallas Mavericks",
+    "away_team_full": "Indiana Pacers",
+    "home_score": 107,
+    "away_score": 105,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 25,
+        "away": 30
+      },
+      "H2": {
+        "home": 27,
+        "away": 25
+      },
+      "OT1": {
+        "home": 29,
+        "away": 19
+      },
+      "OT2": {
+        "home": 26,
+        "away": 31
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.706854"
+  },
+  {
+    "game_id": "401809989",
+    "date": "2025-10-29",
+    "league": "NBA",
+    "home_team": "DEN",
+    "away_team": "NO",
+    "home_team_full": "Denver Nuggets",
+    "away_team_full": "New Orleans Pelicans",
+    "home_score": 122,
+    "away_score": 88,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 34,
+        "away": 25
+      },
+      "H2": {
+        "home": 19,
+        "away": 22
+      },
+      "OT1": {
+        "home": 39,
+        "away": 11
+      },
+      "OT2": {
+        "home": 30,
+        "away": 30
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.706854"
+  },
+  {
+    "game_id": "401809990",
+    "date": "2025-10-29",
+    "league": "NBA",
+    "home_team": "UTAH",
+    "away_team": "POR",
+    "home_team_full": "Utah Jazz",
+    "away_team_full": "Portland Trail Blazers",
+    "home_score": 134,
+    "away_score": 136,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 43,
+        "away": 33
+      },
+      "H2": {
+        "home": 30,
+        "away": 46
+      },
+      "OT1": {
+        "home": 25,
+        "away": 38
+      },
+      "OT2": {
+        "home": 36,
+        "away": 19
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.706854"
+  },
+  {
+    "game_id": "401809991",
+    "date": "2025-10-29",
+    "league": "NBA",
+    "home_team": "MIN",
+    "away_team": "LAL",
+    "home_team_full": "Minnesota Timberwolves",
+    "away_team_full": "Los Angeles Lakers",
+    "home_score": 115,
+    "away_score": 116,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 34,
+        "away": 32
+      },
+      "H2": {
+        "home": 24,
+        "away": 30
+      },
+      "OT1": {
+        "home": 28,
+        "away": 35
+      },
+      "OT2": {
+        "home": 29,
+        "away": 19
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.706854"
+  },
+  {
+    "game_id": "401809992",
+    "date": "2025-10-29",
+    "league": "NBA",
+    "home_team": "PHX",
+    "away_team": "MEM",
+    "home_team_full": "Phoenix Suns",
+    "away_team_full": "Memphis Grizzlies",
+    "home_score": 113,
+    "away_score": 114,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 26,
+        "away": 27
+      },
+      "H2": {
+        "home": 27,
+        "away": 22
+      },
+      "OT1": {
+        "home": 25,
+        "away": 32
+      },
+      "OT2": {
+        "home": 35,
+        "away": 33
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.706854"
+  }
+]

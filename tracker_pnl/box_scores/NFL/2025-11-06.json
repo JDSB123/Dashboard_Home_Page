@@ -1,0 +1,18 @@
+[
+  {
+    "game_id": 19184,
+    "date": "2025-11-06",
+    "league": "NFL",
+    "home_team": "DEN",
+    "away_team": "LV",
+    "home_team_full": null,
+    "away_team_full": null,
+    "home_score": 10,
+    "away_score": 7,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {},
+    "source": "NFL",
+    "fetched_at": "2026-01-09T16:47:00.135495"
+  }
+]

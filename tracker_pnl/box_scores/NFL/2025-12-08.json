@@ -1,0 +1,18 @@
+[
+  {
+    "game_id": 19251,
+    "date": "2025-12-08",
+    "league": "NFL",
+    "home_team": "LAC",
+    "away_team": "PHI",
+    "home_team_full": null,
+    "away_team_full": null,
+    "home_score": 22,
+    "away_score": 19,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {},
+    "source": "NFL",
+    "fetched_at": "2026-01-09T16:47:00.155770"
+  }
+]

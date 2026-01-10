@@ -1,0 +1,50 @@
+[
+  {
+    "game_id": 19043,
+    "date": "2025-12-25",
+    "league": "NFL",
+    "home_team": "KC",
+    "away_team": "DEN",
+    "home_team_full": null,
+    "away_team_full": null,
+    "home_score": 13,
+    "away_score": 20,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {},
+    "source": "NFL",
+    "fetched_at": "2026-01-09T16:47:00.166043"
+  },
+  {
+    "game_id": 19052,
+    "date": "2025-12-25",
+    "league": "NFL",
+    "home_team": "WAS",
+    "away_team": "DAL",
+    "home_team_full": null,
+    "away_team_full": null,
+    "home_score": 23,
+    "away_score": 30,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {},
+    "source": "NFL",
+    "fetched_at": "2026-01-09T16:47:00.166043"
+  },
+  {
+    "game_id": 19053,
+    "date": "2025-12-25",
+    "league": "NFL",
+    "home_team": "MIN",
+    "away_team": "DET",
+    "home_team_full": null,
+    "away_team_full": null,
+    "home_score": 23,
+    "away_score": 10,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {},
+    "source": "NFL",
+    "fetched_at": "2026-01-09T16:47:00.166043"
+  }
+]

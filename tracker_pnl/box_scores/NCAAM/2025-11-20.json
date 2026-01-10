@@ -1,0 +1,972 @@
+[
+  {
+    "game_id": "401823636",
+    "date": "2025-11-20",
+    "league": "NCAAM",
+    "home_team": "PUR",
+    "away_team": "MEM",
+    "home_team_full": "Purdue Boilermakers",
+    "away_team_full": "Memphis Tigers",
+    "home_score": 80,
+    "away_score": 71,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 36,
+        "away": 35
+      },
+      "H2": {
+        "home": 44,
+        "away": 36
+      }
+    },
+    "quarter_scores": {},
+    "source": "NCAAM",
+    "fetched_at": "2026-01-09T16:06:12.916228"
+  },
+  {
+    "game_id": "401812629",
+    "date": "2025-11-20",
+    "league": "NCAAM",
+    "home_team": "HOU",
+    "away_team": "RID",
+    "home_team_full": "Houston Cougars",
+    "away_team_full": "Rider Broncs",
+    "home_score": 91,
+    "away_score": 45,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 47,
+        "away": 25
+      },
+      "H2": {
+        "home": 44,
+        "away": 20
+      }
+    },
+    "quarter_scores": {},
+    "source": "NCAAM",
+    "fetched_at": "2026-01-09T16:06:12.916228"
+  },
+  {
+    "game_id": "401809078",
+    "date": "2025-11-20",
+    "league": "NCAAM",
+    "home_team": "SJU",
+    "away_team": "BUCK",
+    "home_team_full": "St. John's Red Storm",
+    "away_team_full": "Bucknell Bison",
+    "home_score": 97,
+    "away_score": 49,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 41,
+        "away": 25
+      },
+      "H2": {
+        "home": 56,
+        "away": 24
+      }
+    },
+    "quarter_scores": {},
+    "source": "NCAAM",
+    "fetched_at": "2026-01-09T16:06:12.916228"
+  },
+  {
+    "game_id": "401817531",
+    "date": "2025-11-20",
+    "league": "NCAAM",
+    "home_team": "TTU",
+    "away_team": "WAKE",
+    "home_team_full": "Texas Tech Red Raiders",
+    "away_team_full": "Wake Forest Demon Deacons",
+    "home_score": 84,
+    "away_score": 83,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 35,
+        "away": 34
+      },
+      "H2": {
+        "home": 49,
+        "away": 49
+      }
+    },
+    "quarter_scores": {},
+    "source": "NCAAM",
+    "fetched_at": "2026-01-09T16:06:12.916228"
+  },
+  {
+    "game_id": "401829386",
+    "date": "2025-11-20",
+    "league": "NCAAM",
+    "home_team": "TENN",
+    "away_team": "TNST",
+    "home_team_full": "Tennessee Volunteers",
+    "away_team_full": "Tennessee State Tigers",
+    "home_score": 89,
+    "away_score": 60,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 43,
+        "away": 21
+      },
+      "H2": {
+        "home": 46,
+        "away": 39
+      }
+    },
+    "quarter_scores": {},
+    "source": "NCAAM",
+    "fetched_at": "2026-01-09T16:06:12.916228"
+  },
+  {
+    "game_id": "401820482",
+    "date": "2025-11-20",
+    "league": "NCAAM",
+    "home_team": "UIW",
+    "away_team": "USI",
+    "home_team_full": "Incarnate Word Cardinals",
+    "away_team_full": "Southern Indiana Screaming Eagles",
+    "home_score": 87,
+    "away_score": 81,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 41,
+        "away": 38
+      },
+      "H2": {
+        "home": 46,
+        "away": 43
+      }
+    },
+    "quarter_scores": {},
+    "source": "NCAAM",
+    "fetched_at": "2026-01-09T16:06:12.916228"
+  },
+  {
+    "game_id": "401820483",
+    "date": "2025-11-20",
+    "league": "NCAAM",
+    "home_team": "UIC",
+    "away_team": "HPU",
+    "home_team_full": "UIC Flames",
+    "away_team_full": "High Point Panthers",
+    "home_score": 80,
+    "away_score": 90,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 39,
+        "away": 41
+      },
+      "H2": {
+        "home": 41,
+        "away": 49
+      }
+    },
+    "quarter_scores": {},
+    "source": "NCAAM",
+    "fetched_at": "2026-01-09T16:06:12.916228"
+  },
+  {
+    "game_id": "401827130",
+    "date": "2025-11-20",
+    "league": "NCAAM",
+    "home_team": "MRSH",
+    "away_team": "UAPB",
+    "home_team_full": "Marshall Thundering Herd",
+    "away_team_full": "Arkansas-Pine Bluff Golden Lions",
+    "home_score": 98,
+    "away_score": 70,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 35,
+        "away": 37
+      },
+      "H2": {
+        "home": 63,
+        "away": 33
+      }
+    },
+    "quarter_scores": {},
+    "source": "NCAAM",
+    "fetched_at": "2026-01-09T16:06:12.916228"
+  },
+  {
+    "game_id": "401825578",
+    "date": "2025-11-20",
+    "league": "NCAAM",
+    "home_team": "MTST",
+    "away_team": "NOB",
+    "home_team_full": "Montana State Bobcats",
+    "away_team_full": "Nobel Knights",
+    "home_score": 92,
+    "away_score": 55,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 54,
+        "away": 26
+      },
+      "H2": {
+        "home": 38,
+        "away": 29
+      }
+    },
+    "quarter_scores": {},
+    "source": "NCAAM",
+    "fetched_at": "2026-01-09T16:06:12.916228"
+  },
+  {
+    "game_id": "401822399",
+    "date": "2025-11-20",
+    "league": "NCAAM",
+    "home_team": "IU",
+    "away_team": "LIN",
+    "home_team_full": "Indiana Hoosiers",
+    "away_team_full": "Lindenwood Lions",
+    "home_score": 73,
+    "away_score": 53,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 34,
+        "away": 18
+      },
+      "H2": {
+        "home": 39,
+        "away": 35
+      }
+    },
+    "quarter_scores": {},
+    "source": "NCAAM",
+    "fetched_at": "2026-01-09T16:06:12.916228"
+  },
+  {
+    "game_id": "401817197",
+    "date": "2025-11-20",
+    "league": "NCAAM",
+    "home_team": "SBU",
+    "away_team": "RMU",
+    "home_team_full": "St. Bonaventure Bonnies",
+    "away_team_full": "Robert Morris Colonials",
+    "home_score": 75,
+    "away_score": 61,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 37,
+        "away": 33
+      },
+      "H2": {
+        "home": 38,
+        "away": 28
+      }
+    },
+    "quarter_scores": {},
+    "source": "NCAAM",
+    "fetched_at": "2026-01-09T16:06:12.916228"
+  },
+  {
+    "game_id": "401818551",
+    "date": "2025-11-20",
+    "league": "NCAAM",
+    "home_team": "STBK",
+    "away_team": "BRWN",
+    "home_team_full": "Stony Brook Seawolves",
+    "away_team_full": "Brown Bears",
+    "home_score": 80,
+    "away_score": 70,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 49,
+        "away": 32
+      },
+      "H2": {
+        "home": 31,
+        "away": 38
+      }
+    },
+    "quarter_scores": {},
+    "source": "NCAAM",
+    "fetched_at": "2026-01-09T16:06:12.916228"
+  },
+  {
+    "game_id": "401830835",
+    "date": "2025-11-20",
+    "league": "NCAAM",
+    "home_team": "DSU",
+    "away_team": "KEAN",
+    "home_team_full": "Delaware State Hornets",
+    "away_team_full": "Kean Cougars",
+    "home_score": 66,
+    "away_score": 64,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 38,
+        "away": 37
+      },
+      "H2": {
+        "home": 28,
+        "away": 27
+      }
+    },
+    "quarter_scores": {},
+    "source": "NCAAM",
+    "fetched_at": "2026-01-09T16:06:12.916228"
+  },
+  {
+    "game_id": "401829402",
+    "date": "2025-11-20",
+    "league": "NCAAM",
+    "home_team": "COR",
+    "away_team": "COLG",
+    "home_team_full": "Cornell Big Red",
+    "away_team_full": "Colgate Raiders",
+    "home_score": 95,
+    "away_score": 94,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 37,
+        "away": 41
+      },
+      "H2": {
+        "home": 38,
+        "away": 34
+      },
+      "OT1": {
+        "home": 8,
+        "away": 8
+      },
+      "OT2": {
+        "home": 12,
+        "away": 11
+      }
+    },
+    "quarter_scores": {},
+    "source": "NCAAM",
+    "fetched_at": "2026-01-09T16:06:12.916228"
+  },
+  {
+    "game_id": "401827238",
+    "date": "2025-11-20",
+    "league": "NCAAM",
+    "home_team": "UNM",
+    "away_team": "NEB",
+    "home_team_full": "New Mexico Lobos",
+    "away_team_full": "Nebraska Cornhuskers",
+    "home_score": 72,
+    "away_score": 84,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 25,
+        "away": 43
+      },
+      "H2": {
+        "home": 47,
+        "away": 41
+      }
+    },
+    "quarter_scores": {},
+    "source": "NCAAM",
+    "fetched_at": "2026-01-09T16:06:12.916228"
+  },
+  {
+    "game_id": "401827006",
+    "date": "2025-11-20",
+    "league": "NCAAM",
+    "home_team": "VAN",
+    "away_team": "TXSO",
+    "home_team_full": "Vanderbilt Commodores",
+    "away_team_full": "Texas Southern Tigers",
+    "home_score": 109,
+    "away_score": 74,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 60,
+        "away": 33
+      },
+      "H2": {
+        "home": 49,
+        "away": 41
+      }
+    },
+    "quarter_scores": {},
+    "source": "NCAAM",
+    "fetched_at": "2026-01-09T16:06:12.916228"
+  },
+  {
+    "game_id": "401826863",
+    "date": "2025-11-20",
+    "league": "NCAAM",
+    "home_team": "PRIN",
+    "away_team": "NE",
+    "home_team_full": "Princeton Tigers",
+    "away_team_full": "Northeastern Huskies",
+    "home_score": 70,
+    "away_score": 57,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 33,
+        "away": 20
+      },
+      "H2": {
+        "home": 37,
+        "away": 37
+      }
+    },
+    "quarter_scores": {},
+    "source": "NCAAM",
+    "fetched_at": "2026-01-09T16:06:12.916228"
+  },
+  {
+    "game_id": "401824063",
+    "date": "2025-11-20",
+    "league": "NCAAM",
+    "home_team": "FAU",
+    "away_team": "PAC",
+    "home_team_full": "Florida Atlantic Owls",
+    "away_team_full": "Pacific Tigers",
+    "home_score": 82,
+    "away_score": 59,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 40,
+        "away": 28
+      },
+      "H2": {
+        "home": 42,
+        "away": 31
+      }
+    },
+    "quarter_scores": {},
+    "source": "NCAAM",
+    "fetched_at": "2026-01-09T16:06:12.916228"
+  },
+  {
+    "game_id": "401823493",
+    "date": "2025-11-20",
+    "league": "NCAAM",
+    "home_team": "QUC",
+    "away_team": "UNCG",
+    "home_team_full": "Queens University Royals",
+    "away_team_full": "UNC Greensboro Spartans",
+    "home_score": 101,
+    "away_score": 94,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 51,
+        "away": 39
+      },
+      "H2": {
+        "home": 50,
+        "away": 55
+      }
+    },
+    "quarter_scores": {},
+    "source": "NCAAM",
+    "fetched_at": "2026-01-09T16:06:12.916228"
+  },
+  {
+    "game_id": "401823410",
+    "date": "2025-11-20",
+    "league": "NCAAM",
+    "home_team": "WRST",
+    "away_team": "OWU",
+    "home_team_full": "Wright State Raiders",
+    "away_team_full": "Ohio Wesleyan Battling Bishops",
+    "home_score": 100,
+    "away_score": 47,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 52,
+        "away": 24
+      },
+      "H2": {
+        "home": 48,
+        "away": 23
+      }
+    },
+    "quarter_scores": {},
+    "source": "NCAAM",
+    "fetched_at": "2026-01-09T16:06:12.916228"
+  },
+  {
+    "game_id": "401823385",
+    "date": "2025-11-20",
+    "league": "NCAAM",
+    "home_team": "CMU",
+    "away_team": "NKU",
+    "home_team_full": "Central Michigan Chippewas",
+    "away_team_full": "Northern Kentucky Norse",
+    "home_score": 66,
+    "away_score": 90,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 30,
+        "away": 44
+      },
+      "H2": {
+        "home": 36,
+        "away": 46
+      }
+    },
+    "quarter_scores": {},
+    "source": "NCAAM",
+    "fetched_at": "2026-01-09T16:06:12.916228"
+  },
+  {
+    "game_id": "401822342",
+    "date": "2025-11-20",
+    "league": "NCAAM",
+    "home_team": "IOWA",
+    "away_team": "CHST",
+    "home_team_full": "Iowa Hawkeyes",
+    "away_team_full": "Chicago State Cougars",
+    "home_score": 93,
+    "away_score": 54,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 40,
+        "away": 24
+      },
+      "H2": {
+        "home": 53,
+        "away": 30
+      }
+    },
+    "quarter_scores": {},
+    "source": "NCAAM",
+    "fetched_at": "2026-01-09T16:06:12.916228"
+  },
+  {
+    "game_id": "401820211",
+    "date": "2025-11-20",
+    "league": "NCAAM",
+    "home_team": "M-OH",
+    "away_team": "MERC",
+    "home_team_full": "Miami (OH) RedHawks",
+    "away_team_full": "Mercyhurst Lakers",
+    "home_score": 76,
+    "away_score": 71,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 37,
+        "away": 29
+      },
+      "H2": {
+        "home": 39,
+        "away": 42
+      }
+    },
+    "quarter_scores": {},
+    "source": "NCAAM",
+    "fetched_at": "2026-01-09T16:06:12.916228"
+  },
+  {
+    "game_id": "401817445",
+    "date": "2025-11-20",
+    "league": "NCAAM",
+    "home_team": "UCF",
+    "away_team": "PITT",
+    "home_team_full": "UCF Knights",
+    "away_team_full": "Pittsburgh Panthers",
+    "home_score": 77,
+    "away_score": 67,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 38,
+        "away": 36
+      },
+      "H2": {
+        "home": 39,
+        "away": 31
+      }
+    },
+    "quarter_scores": {},
+    "source": "NCAAM",
+    "fetched_at": "2026-01-09T16:06:12.916228"
+  },
+  {
+    "game_id": "401812355",
+    "date": "2025-11-20",
+    "league": "NCAAM",
+    "home_team": "FOR",
+    "away_team": "LIU",
+    "home_team_full": "Fordham Rams",
+    "away_team_full": "Long Island University Sharks",
+    "home_score": 69,
+    "away_score": 53,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 38,
+        "away": 29
+      },
+      "H2": {
+        "home": 31,
+        "away": 24
+      }
+    },
+    "quarter_scores": {},
+    "source": "NCAAM",
+    "fetched_at": "2026-01-09T16:06:12.916228"
+  },
+  {
+    "game_id": "401809417",
+    "date": "2025-11-20",
+    "league": "NCAAM",
+    "home_team": "MIA",
+    "away_team": "ELON",
+    "home_team_full": "Miami Hurricanes",
+    "away_team_full": "Elon Phoenix",
+    "home_score": 99,
+    "away_score": 72,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 48,
+        "away": 41
+      },
+      "H2": {
+        "home": 51,
+        "away": 31
+      }
+    },
+    "quarter_scores": {},
+    "source": "NCAAM",
+    "fetched_at": "2026-01-09T16:06:12.916228"
+  },
+  {
+    "game_id": "401828332",
+    "date": "2025-11-20",
+    "league": "NCAAM",
+    "home_team": "HCU",
+    "away_team": "CBS",
+    "home_team_full": "Houston Christian Huskies",
+    "away_team_full": "College Of Biblical Studies Ambassadors",
+    "home_score": 85,
+    "away_score": 67,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 45,
+        "away": 23
+      },
+      "H2": {
+        "home": 40,
+        "away": 44
+      }
+    },
+    "quarter_scores": {},
+    "source": "NCAAM",
+    "fetched_at": "2026-01-09T16:06:12.916228"
+  },
+  {
+    "game_id": "401827255",
+    "date": "2025-11-20",
+    "league": "NCAAM",
+    "home_team": "OSU",
+    "away_team": "WMU",
+    "home_team_full": "Ohio State Buckeyes",
+    "away_team_full": "Western Michigan Broncos",
+    "home_score": 91,
+    "away_score": 58,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 49,
+        "away": 24
+      },
+      "H2": {
+        "home": 42,
+        "away": 34
+      }
+    },
+    "quarter_scores": {},
+    "source": "NCAAM",
+    "fetched_at": "2026-01-09T16:06:12.916228"
+  },
+  {
+    "game_id": "401826808",
+    "date": "2025-11-20",
+    "league": "NCAAM",
+    "home_team": "RICE",
+    "away_team": "TAR",
+    "home_team_full": "Rice Owls",
+    "away_team_full": "Tarleton State Texans",
+    "home_score": 74,
+    "away_score": 90,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 38,
+        "away": 37
+      },
+      "H2": {
+        "home": 36,
+        "away": 53
+      }
+    },
+    "quarter_scores": {},
+    "source": "NCAAM",
+    "fetched_at": "2026-01-09T16:06:12.916228"
+  },
+  {
+    "game_id": "401826779",
+    "date": "2025-11-20",
+    "league": "NCAAM",
+    "home_team": "OU",
+    "away_team": "ORU",
+    "home_team_full": "Oklahoma Sooners",
+    "away_team_full": "Oral Roberts Golden Eagles",
+    "home_score": 95,
+    "away_score": 71,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 42,
+        "away": 24
+      },
+      "H2": {
+        "home": 53,
+        "away": 47
+      }
+    },
+    "quarter_scores": {},
+    "source": "NCAAM",
+    "fetched_at": "2026-01-09T16:06:12.916228"
+  },
+  {
+    "game_id": "401824937",
+    "date": "2025-11-20",
+    "league": "NCAAM",
+    "home_team": "UNT",
+    "away_team": "CARK",
+    "home_team_full": "North Texas Mean Green",
+    "away_team_full": "Central Arkansas Bears",
+    "home_score": 74,
+    "away_score": 56,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 28,
+        "away": 26
+      },
+      "H2": {
+        "home": 46,
+        "away": 30
+      }
+    },
+    "quarter_scores": {},
+    "source": "NCAAM",
+    "fetched_at": "2026-01-09T16:06:12.916228"
+  },
+  {
+    "game_id": "401813257",
+    "date": "2025-11-20",
+    "league": "NCAAM",
+    "home_team": "ILST",
+    "away_team": "ROCKF",
+    "home_team_full": "Illinois State Redbirds",
+    "away_team_full": "Rockford Regents",
+    "home_score": 93,
+    "away_score": 48,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 48,
+        "away": 21
+      },
+      "H2": {
+        "home": 45,
+        "away": 27
+      }
+    },
+    "quarter_scores": {},
+    "source": "NCAAM",
+    "fetched_at": "2026-01-09T16:06:12.916228"
+  },
+  {
+    "game_id": "401811106",
+    "date": "2025-11-20",
+    "league": "NCAAM",
+    "home_team": "MIZ",
+    "away_team": "SDAK",
+    "home_team_full": "Missouri Tigers",
+    "away_team_full": "South Dakota Coyotes",
+    "home_score": 102,
+    "away_score": 68,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 53,
+        "away": 42
+      },
+      "H2": {
+        "home": 49,
+        "away": 26
+      }
+    },
+    "quarter_scores": {},
+    "source": "NCAAM",
+    "fetched_at": "2026-01-09T16:06:12.916228"
+  },
+  {
+    "game_id": "401819909",
+    "date": "2025-11-20",
+    "league": "NCAAM",
+    "home_team": "UTAH",
+    "away_team": "CP",
+    "home_team_full": "Utah Utes",
+    "away_team_full": "Cal Poly Mustangs",
+    "home_score": 85,
+    "away_score": 92,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 39,
+        "away": 50
+      },
+      "H2": {
+        "home": 46,
+        "away": 42
+      }
+    },
+    "quarter_scores": {},
+    "source": "NCAAM",
+    "fetched_at": "2026-01-09T16:06:12.916228"
+  },
+  {
+    "game_id": "401819891",
+    "date": "2025-11-20",
+    "league": "NCAAM",
+    "home_team": "KSU",
+    "away_team": "MSST",
+    "home_team_full": "Kansas State Wildcats",
+    "away_team_full": "Mississippi State Bulldogs",
+    "home_score": 98,
+    "away_score": 77,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 44,
+        "away": 36
+      },
+      "H2": {
+        "home": 54,
+        "away": 41
+      }
+    },
+    "quarter_scores": {},
+    "source": "NCAAM",
+    "fetched_at": "2026-01-09T16:06:12.916228"
+  },
+  {
+    "game_id": "401827210",
+    "date": "2025-11-20",
+    "league": "NCAAM",
+    "home_team": "USC",
+    "away_team": "TROY",
+    "home_team_full": "USC Trojans",
+    "away_team_full": "Troy Trojans",
+    "home_score": 107,
+    "away_score": 106,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 29,
+        "away": 29
+      },
+      "H2": {
+        "home": 39,
+        "away": 39
+      },
+      "OT1": {
+        "home": 10,
+        "away": 10
+      },
+      "OT2": {
+        "home": 11,
+        "away": 11
+      },
+      "OT3": {
+        "home": 18,
+        "away": 17
+      }
+    },
+    "quarter_scores": {},
+    "source": "NCAAM",
+    "fetched_at": "2026-01-09T16:06:12.916228"
+  },
+  {
+    "game_id": "401820399",
+    "date": "2025-11-20",
+    "league": "NCAAM",
+    "home_team": "UNLV",
+    "away_team": "JOES",
+    "home_team_full": "UNLV Rebels",
+    "away_team_full": "Saint Joseph's Hawks",
+    "home_score": 99,
+    "away_score": 85,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 45,
+        "away": 40
+      },
+      "H2": {
+        "home": 54,
+        "away": 45
+      }
+    },
+    "quarter_scores": {},
+    "source": "NCAAM",
+    "fetched_at": "2026-01-09T16:06:12.916228"
+  },
+  {
+    "game_id": "401819817",
+    "date": "2025-11-20",
+    "league": "NCAAM",
+    "home_team": "HAW",
+    "away_team": "ASU",
+    "home_team_full": "Hawai'i Rainbow Warriors",
+    "away_team_full": "Arizona State Sun Devils",
+    "home_score": 76,
+    "away_score": 83,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 35,
+        "away": 34
+      },
+      "H2": {
+        "home": 41,
+        "away": 49
+      }
+    },
+    "quarter_scores": {},
+    "source": "NCAAM",
+    "fetched_at": "2026-01-09T16:06:12.916228"
+  }
+]

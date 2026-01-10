@@ -1,0 +1,134 @@
+[
+  {
+    "game_id": "401809993",
+    "date": "2025-10-30",
+    "league": "NBA",
+    "home_team": "CHA",
+    "away_team": "ORL",
+    "home_team_full": "Charlotte Hornets",
+    "away_team_full": "Orlando Magic",
+    "home_score": 107,
+    "away_score": 123,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 31,
+        "away": 38
+      },
+      "H2": {
+        "home": 27,
+        "away": 33
+      },
+      "OT1": {
+        "home": 27,
+        "away": 21
+      },
+      "OT2": {
+        "home": 22,
+        "away": 31
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.708363"
+  },
+  {
+    "game_id": "401809994",
+    "date": "2025-10-30",
+    "league": "NBA",
+    "home_team": "MIL",
+    "away_team": "GS",
+    "home_team_full": "Milwaukee Bucks",
+    "away_team_full": "Golden State Warriors",
+    "home_score": 120,
+    "away_score": 110,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 34,
+        "away": 25
+      },
+      "H2": {
+        "home": 26,
+        "away": 33
+      },
+      "OT1": {
+        "home": 27,
+        "away": 26
+      },
+      "OT2": {
+        "home": 33,
+        "away": 26
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.708363"
+  },
+  {
+    "game_id": "401809995",
+    "date": "2025-10-30",
+    "league": "NBA",
+    "home_team": "OKC",
+    "away_team": "WSH",
+    "home_team_full": "Oklahoma City Thunder",
+    "away_team_full": "Washington Wizards",
+    "home_score": 127,
+    "away_score": 108,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 28,
+        "away": 20
+      },
+      "H2": {
+        "home": 31,
+        "away": 29
+      },
+      "OT1": {
+        "home": 33,
+        "away": 35
+      },
+      "OT2": {
+        "home": 35,
+        "away": 24
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.708363"
+  },
+  {
+    "game_id": "401809996",
+    "date": "2025-10-30",
+    "league": "NBA",
+    "home_team": "SA",
+    "away_team": "MIA",
+    "home_team_full": "San Antonio Spurs",
+    "away_team_full": "Miami Heat",
+    "home_score": 107,
+    "away_score": 101,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 33,
+        "away": 31
+      },
+      "H2": {
+        "home": 26,
+        "away": 27
+      },
+      "OT1": {
+        "home": 28,
+        "away": 14
+      },
+      "OT2": {
+        "home": 20,
+        "away": 29
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.708363"
+  }
+]

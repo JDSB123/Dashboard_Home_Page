@@ -1,0 +1,72 @@
+[
+  {
+    "game_id": 16062,
+    "date": "2025-10-22",
+    "league": "NCAAF",
+    "home_team": "NMXST",
+    "away_team": "MSRST",
+    "home_team_full": "New Mexico State Aggies",
+    "away_team_full": "Missouri State Bears",
+    "home_score": 17,
+    "away_score": 24,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {
+      "Q1": {
+        "home": 0,
+        "away": 7
+      },
+      "Q2": {
+        "home": 7,
+        "away": 0
+      },
+      "Q3": {
+        "home": 0,
+        "away": 10
+      },
+      "Q4": {
+        "home": 10,
+        "away": 0
+      },
+      "Q5": {
+        "home": 0,
+        "away": 7
+      }
+    },
+    "source": "NCAAF",
+    "fetched_at": "2026-01-09T16:47:00.438865"
+  },
+  {
+    "game_id": 16065,
+    "date": "2025-10-22",
+    "league": "NCAAF",
+    "home_team": "DEL",
+    "away_team": "MTNST",
+    "home_team_full": "Delaware Blue Hens",
+    "away_team_full": "Middle Tennessee Blue Raiders",
+    "home_score": 31,
+    "away_score": 28,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {
+      "Q1": {
+        "home": 7,
+        "away": 14
+      },
+      "Q2": {
+        "home": 17,
+        "away": 0
+      },
+      "Q3": {
+        "home": 7,
+        "away": 7
+      },
+      "Q4": {
+        "home": 0,
+        "away": 7
+      }
+    },
+    "source": "NCAAF",
+    "fetched_at": "2026-01-09T16:47:00.438865"
+  }
+]

@@ -1,0 +1,101 @@
+[
+  {
+    "game_id": 16058,
+    "date": "2025-10-14",
+    "league": "NCAAF",
+    "home_team": "LIBRTY",
+    "away_team": "NMXST",
+    "home_team_full": "Liberty Flames",
+    "away_team_full": "New Mexico State Aggies",
+    "home_score": 30,
+    "away_score": 27,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {
+      "Q1": {
+        "home": 3,
+        "away": 0
+      },
+      "Q2": {
+        "home": 17,
+        "away": 6
+      },
+      "Q3": {
+        "home": 0,
+        "away": 14
+      },
+      "Q4": {
+        "home": 10,
+        "away": 7
+      }
+    },
+    "source": "NCAAF",
+    "fetched_at": "2026-01-09T16:47:00.432545"
+  },
+  {
+    "game_id": 16061,
+    "date": "2025-10-14",
+    "league": "NCAAF",
+    "home_team": "WKENT",
+    "away_team": "FLINT",
+    "home_team_full": "Western Kentucky Hilltoppers",
+    "away_team_full": "Florida International Panthers",
+    "home_score": 6,
+    "away_score": 25,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {
+      "Q1": {
+        "home": 3,
+        "away": 6
+      },
+      "Q2": {
+        "home": 3,
+        "away": 13
+      },
+      "Q3": {
+        "home": 0,
+        "away": 6
+      },
+      "Q4": {
+        "home": 0,
+        "away": 0
+      }
+    },
+    "source": "NCAAF",
+    "fetched_at": "2026-01-09T16:47:00.432545"
+  },
+  {
+    "game_id": 16222,
+    "date": "2025-10-14",
+    "league": "NCAAF",
+    "home_team": "SALA",
+    "away_team": "ARKST",
+    "home_team_full": "South Alabama Jaguars",
+    "away_team_full": "Arkansas State Red Wolves",
+    "home_score": 14,
+    "away_score": 15,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {
+      "Q1": {
+        "home": 7,
+        "away": 0
+      },
+      "Q2": {
+        "home": 0,
+        "away": 3
+      },
+      "Q3": {
+        "home": 7,
+        "away": 0
+      },
+      "Q4": {
+        "home": 0,
+        "away": 12
+      }
+    },
+    "source": "NCAAF",
+    "fetched_at": "2026-01-09T16:47:00.432545"
+  }
+]

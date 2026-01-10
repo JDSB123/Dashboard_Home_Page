@@ -1,0 +1,101 @@
+[
+  {
+    "game_id": "401810080",
+    "date": "2025-11-13",
+    "league": "NBA",
+    "home_team": "CLE",
+    "away_team": "TOR",
+    "home_team_full": "Cleveland Cavaliers",
+    "away_team_full": "Toronto Raptors",
+    "home_score": 113,
+    "away_score": 126,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 30,
+        "away": 29
+      },
+      "H2": {
+        "home": 24,
+        "away": 38
+      },
+      "OT1": {
+        "home": 31,
+        "away": 23
+      },
+      "OT2": {
+        "home": 28,
+        "away": 36
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.730269"
+  },
+  {
+    "game_id": "401810081",
+    "date": "2025-11-13",
+    "league": "NBA",
+    "home_team": "PHX",
+    "away_team": "IND",
+    "home_team_full": "Phoenix Suns",
+    "away_team_full": "Indiana Pacers",
+    "home_score": 133,
+    "away_score": 98,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 31,
+        "away": 23
+      },
+      "H2": {
+        "home": 39,
+        "away": 29
+      },
+      "OT1": {
+        "home": 36,
+        "away": 32
+      },
+      "OT2": {
+        "home": 27,
+        "away": 14
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.730269"
+  },
+  {
+    "game_id": "401810082",
+    "date": "2025-11-13",
+    "league": "NBA",
+    "home_team": "UTAH",
+    "away_team": "ATL",
+    "home_team_full": "Utah Jazz",
+    "away_team_full": "Atlanta Hawks",
+    "home_score": 122,
+    "away_score": 132,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 33,
+        "away": 42
+      },
+      "H2": {
+        "home": 34,
+        "away": 38
+      },
+      "OT1": {
+        "home": 36,
+        "away": 23
+      },
+      "OT2": {
+        "home": 19,
+        "away": 29
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.730269"
+  }
+]

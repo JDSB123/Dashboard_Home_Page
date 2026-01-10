@@ -1,0 +1,200 @@
+[
+  {
+    "game_id": "401810365",
+    "date": "2026-01-06",
+    "league": "NBA",
+    "home_team": "IND",
+    "away_team": "CLE",
+    "home_team_full": "Indiana Pacers",
+    "away_team_full": "Cleveland Cavaliers",
+    "home_score": 116,
+    "away_score": 120,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 28,
+        "away": 22
+      },
+      "H2": {
+        "home": 32,
+        "away": 31
+      },
+      "OT1": {
+        "home": 33,
+        "away": 31
+      },
+      "OT2": {
+        "home": 23,
+        "away": 36
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.893641"
+  },
+  {
+    "game_id": "401810366",
+    "date": "2026-01-06",
+    "league": "NBA",
+    "home_team": "WSH",
+    "away_team": "ORL",
+    "home_team_full": "Washington Wizards",
+    "away_team_full": "Orlando Magic",
+    "home_score": 120,
+    "away_score": 112,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 30,
+        "away": 29
+      },
+      "H2": {
+        "home": 32,
+        "away": 21
+      },
+      "OT1": {
+        "home": 39,
+        "away": 37
+      },
+      "OT2": {
+        "home": 19,
+        "away": 25
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.893641"
+  },
+  {
+    "game_id": "401810367",
+    "date": "2026-01-06",
+    "league": "NBA",
+    "home_team": "MEM",
+    "away_team": "SA",
+    "home_team_full": "Memphis Grizzlies",
+    "away_team_full": "San Antonio Spurs",
+    "home_score": 106,
+    "away_score": 105,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 21,
+        "away": 31
+      },
+      "H2": {
+        "home": 25,
+        "away": 23
+      },
+      "OT1": {
+        "home": 36,
+        "away": 27
+      },
+      "OT2": {
+        "home": 24,
+        "away": 24
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.893641"
+  },
+  {
+    "game_id": "401810368",
+    "date": "2026-01-06",
+    "league": "NBA",
+    "home_team": "MIN",
+    "away_team": "MIA",
+    "home_team_full": "Minnesota Timberwolves",
+    "away_team_full": "Miami Heat",
+    "home_score": 122,
+    "away_score": 94,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 27,
+        "away": 29
+      },
+      "H2": {
+        "home": 34,
+        "away": 25
+      },
+      "OT1": {
+        "home": 32,
+        "away": 23
+      },
+      "OT2": {
+        "home": 29,
+        "away": 17
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.893641"
+  },
+  {
+    "game_id": "401810369",
+    "date": "2026-01-06",
+    "league": "NBA",
+    "home_team": "NO",
+    "away_team": "LAL",
+    "home_team_full": "New Orleans Pelicans",
+    "away_team_full": "Los Angeles Lakers",
+    "home_score": 103,
+    "away_score": 111,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 25,
+        "away": 29
+      },
+      "H2": {
+        "home": 29,
+        "away": 22
+      },
+      "OT1": {
+        "home": 32,
+        "away": 28
+      },
+      "OT2": {
+        "home": 17,
+        "away": 32
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.893641"
+  },
+  {
+    "game_id": "401810370",
+    "date": "2026-01-06",
+    "league": "NBA",
+    "home_team": "SAC",
+    "away_team": "DAL",
+    "home_team_full": "Sacramento Kings",
+    "away_team_full": "Dallas Mavericks",
+    "home_score": 98,
+    "away_score": 100,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 35,
+        "away": 25
+      },
+      "H2": {
+        "home": 23,
+        "away": 21
+      },
+      "OT1": {
+        "home": 20,
+        "away": 30
+      },
+      "OT2": {
+        "home": 20,
+        "away": 24
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.893641"
+  }
+]

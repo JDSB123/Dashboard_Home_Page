@@ -1,0 +1,134 @@
+[
+  {
+    "game_id": 15735,
+    "date": "2025-10-17",
+    "league": "NCAAF",
+    "home_team": "MINNST",
+    "away_team": "NEBR",
+    "home_team_full": "Minnesota Golden Gophers",
+    "away_team_full": "Nebraska Cornhuskers",
+    "home_score": 24,
+    "away_score": 6,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {
+      "Q1": {
+        "home": 0,
+        "away": 3
+      },
+      "Q2": {
+        "home": 7,
+        "away": 3
+      },
+      "Q3": {
+        "home": 7,
+        "away": 0
+      },
+      "Q4": {
+        "home": 10,
+        "away": 0
+      }
+    },
+    "source": "NCAAF",
+    "fetched_at": "2026-01-09T16:47:00.434857"
+  },
+  {
+    "game_id": 15744,
+    "date": "2025-10-17",
+    "league": "NCAAF",
+    "home_team": "MIA",
+    "away_team": "LOU",
+    "home_team_full": "Miami Hurricanes",
+    "away_team_full": "Louisville Cardinals",
+    "home_score": 21,
+    "away_score": 24,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {
+      "Q1": {
+        "home": 7,
+        "away": 14
+      },
+      "Q2": {
+        "home": 3,
+        "away": 0
+      },
+      "Q3": {
+        "home": 3,
+        "away": 3
+      },
+      "Q4": {
+        "home": 8,
+        "away": 7
+      }
+    },
+    "source": "NCAAF",
+    "fetched_at": "2026-01-09T16:47:00.434857"
+  },
+  {
+    "game_id": 15746,
+    "date": "2025-10-17",
+    "league": "NCAAF",
+    "home_team": "CAH",
+    "away_team": "NCAR",
+    "home_team_full": "California Golden Bears",
+    "away_team_full": "North Carolina Tar Heels",
+    "home_score": 21,
+    "away_score": 18,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {
+      "Q1": {
+        "home": 14,
+        "away": 7
+      },
+      "Q2": {
+        "home": 0,
+        "away": 3
+      },
+      "Q3": {
+        "home": 7,
+        "away": 0
+      },
+      "Q4": {
+        "home": 0,
+        "away": 8
+      }
+    },
+    "source": "NCAAF",
+    "fetched_at": "2026-01-09T16:47:00.434857"
+  },
+  {
+    "game_id": 16132,
+    "date": "2025-10-17",
+    "league": "NCAAF",
+    "home_team": "UTAHST",
+    "away_team": "SJST",
+    "home_team_full": "Utah State Aggies",
+    "away_team_full": "San Jose State Spartans",
+    "home_score": 30,
+    "away_score": 25,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {
+      "Q1": {
+        "home": 7,
+        "away": 3
+      },
+      "Q2": {
+        "home": 3,
+        "away": 6
+      },
+      "Q3": {
+        "home": 14,
+        "away": 10
+      },
+      "Q4": {
+        "home": 6,
+        "away": 6
+      }
+    },
+    "source": "NCAAF",
+    "fetched_at": "2026-01-09T16:47:00.434857"
+  }
+]

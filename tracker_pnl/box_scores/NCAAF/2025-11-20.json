@@ -1,0 +1,35 @@
+[
+  {
+    "game_id": 16234,
+    "date": "2025-11-20",
+    "league": "NCAAF",
+    "home_team": "ARKST",
+    "away_team": "LOULAF",
+    "home_team_full": "Arkansas State Red Wolves",
+    "away_team_full": "Louisiana Ragin Cajuns",
+    "home_score": 30,
+    "away_score": 34,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {
+      "Q1": {
+        "home": 10,
+        "away": 7
+      },
+      "Q2": {
+        "home": 17,
+        "away": 17
+      },
+      "Q3": {
+        "home": 0,
+        "away": 7
+      },
+      "Q4": {
+        "home": 3,
+        "away": 3
+      }
+    },
+    "source": "NCAAF",
+    "fetched_at": "2026-01-09T16:47:00.482898"
+  }
+]

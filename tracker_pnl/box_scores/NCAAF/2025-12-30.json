@@ -1,0 +1,105 @@
+[
+  {
+    "game_id": 16413,
+    "date": "2025-12-30",
+    "league": "NCAAF",
+    "home_team": "TCU",
+    "away_team": "USC",
+    "home_team_full": "TCU Horned Frogs",
+    "away_team_full": "USC Trojans",
+    "home_score": 30,
+    "away_score": 27,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {
+      "Q1": {
+        "home": 0,
+        "away": 3
+      },
+      "Q2": {
+        "home": 14,
+        "away": 10
+      },
+      "Q3": {
+        "home": 0,
+        "away": 8
+      },
+      "Q4": {
+        "home": 10,
+        "away": 3
+      },
+      "Q5": {
+        "home": 6,
+        "away": 3
+      }
+    },
+    "source": "NCAAF",
+    "fetched_at": "2026-01-09T16:47:00.544724"
+  },
+  {
+    "game_id": 16415,
+    "date": "2025-12-30",
+    "league": "NCAAF",
+    "home_team": "LOUTCH",
+    "away_team": "COAST",
+    "home_team_full": "Louisiana Tech Bulldogs",
+    "away_team_full": "Coastal Carolina Chanticleers",
+    "home_score": 23,
+    "away_score": 14,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {
+      "Q1": {
+        "home": 0,
+        "away": 7
+      },
+      "Q2": {
+        "home": 3,
+        "away": 7
+      },
+      "Q3": {
+        "home": 3,
+        "away": 0
+      },
+      "Q4": {
+        "home": 17,
+        "away": 0
+      }
+    },
+    "source": "NCAAF",
+    "fetched_at": "2026-01-09T16:47:00.544724"
+  },
+  {
+    "game_id": 16418,
+    "date": "2025-12-30",
+    "league": "NCAAF",
+    "home_team": "ILL",
+    "away_team": "TENN",
+    "home_team_full": "Illinois Fighting Illini",
+    "away_team_full": "Tennessee Volunteers",
+    "home_score": 30,
+    "away_score": 28,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {
+      "Q1": {
+        "home": 7,
+        "away": 7
+      },
+      "Q2": {
+        "home": 3,
+        "away": 0
+      },
+      "Q3": {
+        "home": 14,
+        "away": 7
+      },
+      "Q4": {
+        "home": 6,
+        "away": 14
+      }
+    },
+    "source": "NCAAF",
+    "fetched_at": "2026-01-09T16:47:00.544724"
+  }
+]

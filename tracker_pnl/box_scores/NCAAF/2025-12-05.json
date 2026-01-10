@@ -1,0 +1,134 @@
+[
+  {
+    "game_id": 16395,
+    "date": "2025-12-05",
+    "league": "NCAAF",
+    "home_team": "JAXST",
+    "away_team": "KENEST",
+    "home_team_full": "Jacksonville State Gamecocks",
+    "away_team_full": "Kennesaw State Owls",
+    "home_score": 15,
+    "away_score": 19,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {
+      "Q1": {
+        "home": 0,
+        "away": 0
+      },
+      "Q2": {
+        "home": 0,
+        "away": 7
+      },
+      "Q3": {
+        "home": 0,
+        "away": 3
+      },
+      "Q4": {
+        "home": 15,
+        "away": 9
+      }
+    },
+    "source": "NCAAF",
+    "fetched_at": "2026-01-09T16:47:00.513037"
+  },
+  {
+    "game_id": 16396,
+    "date": "2025-12-05",
+    "league": "NCAAF",
+    "home_team": "JMAD",
+    "away_team": "TROY",
+    "home_team_full": "James Madison Dukes",
+    "away_team_full": "Troy Trojans",
+    "home_score": 31,
+    "away_score": 14,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {
+      "Q1": {
+        "home": 3,
+        "away": 0
+      },
+      "Q2": {
+        "home": 14,
+        "away": 14
+      },
+      "Q3": {
+        "home": 0,
+        "away": 0
+      },
+      "Q4": {
+        "home": 14,
+        "away": 0
+      }
+    },
+    "source": "NCAAF",
+    "fetched_at": "2026-01-09T16:47:00.513037"
+  },
+  {
+    "game_id": 16397,
+    "date": "2025-12-05",
+    "league": "NCAAF",
+    "home_team": "TULANE",
+    "away_team": "NTX",
+    "home_team_full": "Tulane Green Wave",
+    "away_team_full": "North Texas Mean Green",
+    "home_score": 34,
+    "away_score": 21,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {
+      "Q1": {
+        "home": 7,
+        "away": 7
+      },
+      "Q2": {
+        "home": 17,
+        "away": 0
+      },
+      "Q3": {
+        "home": 7,
+        "away": 6
+      },
+      "Q4": {
+        "home": 3,
+        "away": 8
+      }
+    },
+    "source": "NCAAF",
+    "fetched_at": "2026-01-09T16:47:00.513037"
+  },
+  {
+    "game_id": 16400,
+    "date": "2025-12-05",
+    "league": "NCAAF",
+    "home_team": "BOISE",
+    "away_team": "UNLV",
+    "home_team_full": "Boise State Broncos",
+    "away_team_full": "UNLV Runnin' Rebels",
+    "home_score": 38,
+    "away_score": 21,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {
+      "Q1": {
+        "home": 14,
+        "away": 0
+      },
+      "Q2": {
+        "home": 14,
+        "away": 14
+      },
+      "Q3": {
+        "home": 0,
+        "away": 7
+      },
+      "Q4": {
+        "home": 10,
+        "away": 0
+      }
+    },
+    "source": "NCAAF",
+    "fetched_at": "2026-01-09T16:47:00.513037"
+  }
+]

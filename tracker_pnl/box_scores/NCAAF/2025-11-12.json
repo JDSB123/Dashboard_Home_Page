@@ -1,0 +1,101 @@
+[
+  {
+    "game_id": 16369,
+    "date": "2025-11-12",
+    "league": "NCAAF",
+    "home_team": "UMASS",
+    "away_team": "NILL",
+    "home_team_full": "UMass Minutemen",
+    "away_team_full": "Northern Illinois Huskies",
+    "home_score": 3,
+    "away_score": 45,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {
+      "Q1": {
+        "home": 0,
+        "away": 10
+      },
+      "Q2": {
+        "home": 0,
+        "away": 21
+      },
+      "Q3": {
+        "home": 0,
+        "away": 14
+      },
+      "Q4": {
+        "home": 3,
+        "away": 0
+      }
+    },
+    "source": "NCAAF",
+    "fetched_at": "2026-01-09T16:47:00.465240"
+  },
+  {
+    "game_id": 16370,
+    "date": "2025-11-12",
+    "league": "NCAAF",
+    "home_team": "MIAOH",
+    "away_team": "TOLEDO",
+    "home_team_full": "Miami (OH) RedHawks",
+    "away_team_full": "Toledo Rockets",
+    "home_score": 3,
+    "away_score": 24,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {
+      "Q1": {
+        "home": 0,
+        "away": 0
+      },
+      "Q2": {
+        "home": 0,
+        "away": 14
+      },
+      "Q3": {
+        "home": 3,
+        "away": 10
+      },
+      "Q4": {
+        "home": 0,
+        "away": 0
+      }
+    },
+    "source": "NCAAF",
+    "fetched_at": "2026-01-09T16:47:00.465240"
+  },
+  {
+    "game_id": 16373,
+    "date": "2025-11-12",
+    "league": "NCAAF",
+    "home_team": "CMICH",
+    "away_team": "BUF",
+    "home_team_full": "Central Michigan Chippewas",
+    "away_team_full": "Buffalo Bulls",
+    "home_score": 38,
+    "away_score": 19,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {
+      "Q1": {
+        "home": 7,
+        "away": 3
+      },
+      "Q2": {
+        "home": 7,
+        "away": 7
+      },
+      "Q3": {
+        "home": 10,
+        "away": 3
+      },
+      "Q4": {
+        "home": 14,
+        "away": 6
+      }
+    },
+    "source": "NCAAF",
+    "fetched_at": "2026-01-09T16:47:00.465240"
+  }
+]

@@ -1,0 +1,109 @@
+[
+  {
+    "game_id": 15771,
+    "date": "2025-10-24",
+    "league": "NCAAF",
+    "home_team": "VTECH",
+    "away_team": "CAH",
+    "home_team_full": "Virginia Tech Hokies",
+    "away_team_full": "California Golden Bears",
+    "home_score": 42,
+    "away_score": 34,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {
+      "Q5": {
+        "home": 7,
+        "away": 7
+      },
+      "Q6": {
+        "home": 8,
+        "away": 0
+      },
+      "Q1": {
+        "home": 10,
+        "away": 3
+      },
+      "Q2": {
+        "home": 0,
+        "away": 17
+      },
+      "Q3": {
+        "home": 10,
+        "away": 0
+      },
+      "Q4": {
+        "home": 7,
+        "away": 7
+      }
+    },
+    "source": "NCAAF",
+    "fetched_at": "2026-01-09T16:47:00.440865"
+  },
+  {
+    "game_id": 16136,
+    "date": "2025-10-24",
+    "league": "NCAAF",
+    "home_team": "NEVADA",
+    "away_team": "BOISE",
+    "home_team_full": "Nevada Wolf Pack",
+    "away_team_full": "Boise State Broncos",
+    "home_score": 3,
+    "away_score": 24,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {
+      "Q1": {
+        "home": 3,
+        "away": 3
+      },
+      "Q2": {
+        "home": 0,
+        "away": 7
+      },
+      "Q3": {
+        "home": 0,
+        "away": 7
+      },
+      "Q4": {
+        "home": 0,
+        "away": 7
+      }
+    },
+    "source": "NCAAF",
+    "fetched_at": "2026-01-09T16:47:00.440865"
+  },
+  {
+    "game_id": 16291,
+    "date": "2025-10-24",
+    "league": "NCAAF",
+    "home_team": "CHARLT",
+    "away_team": "NTX",
+    "home_team_full": "Charlotte 49ers",
+    "away_team_full": "North Texas Mean Green",
+    "home_score": 20,
+    "away_score": 54,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {
+      "Q1": {
+        "home": 10,
+        "away": 7
+      },
+      "Q2": {
+        "home": 7,
+        "away": 10
+      },
+      "Q3": {
+        "home": 3,
+        "away": 10
+      },
+      "Q4": {
+        "home": 0,
+        "away": 27
+      }
+    },
+    "source": "NCAAF",
+    "fetched_at": "2026-01-09T16:47:00.440865"
+  }
+]

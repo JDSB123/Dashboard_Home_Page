@@ -1,0 +1,200 @@
+[
+  {
+    "game_id": "401810104",
+    "date": "2025-11-18",
+    "league": "NBA",
+    "home_team": "ORL",
+    "away_team": "GS",
+    "home_team_full": "Orlando Magic",
+    "away_team_full": "Golden State Warriors",
+    "home_score": 121,
+    "away_score": 113,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 36,
+        "away": 32
+      },
+      "H2": {
+        "home": 31,
+        "away": 28
+      },
+      "OT1": {
+        "home": 26,
+        "away": 25
+      },
+      "OT2": {
+        "home": 28,
+        "away": 28
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.739930"
+  },
+  {
+    "game_id": "401810105",
+    "date": "2025-11-18",
+    "league": "NBA",
+    "home_team": "BKN",
+    "away_team": "BOS",
+    "home_team_full": "Brooklyn Nets",
+    "away_team_full": "Boston Celtics",
+    "home_score": 99,
+    "away_score": 113,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 29,
+        "away": 29
+      },
+      "H2": {
+        "home": 32,
+        "away": 33
+      },
+      "OT1": {
+        "home": 24,
+        "away": 27
+      },
+      "OT2": {
+        "home": 14,
+        "away": 24
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.739930"
+  },
+  {
+    "game_id": "401810106",
+    "date": "2025-11-18",
+    "league": "NBA",
+    "home_team": "ATL",
+    "away_team": "DET",
+    "home_team_full": "Atlanta Hawks",
+    "away_team_full": "Detroit Pistons",
+    "home_score": 112,
+    "away_score": 120,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 30,
+        "away": 35
+      },
+      "H2": {
+        "home": 24,
+        "away": 32
+      },
+      "OT1": {
+        "home": 28,
+        "away": 27
+      },
+      "OT2": {
+        "home": 30,
+        "away": 26
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.739930"
+  },
+  {
+    "game_id": "401810107",
+    "date": "2025-11-18",
+    "league": "NBA",
+    "home_team": "SA",
+    "away_team": "MEM",
+    "home_team_full": "San Antonio Spurs",
+    "away_team_full": "Memphis Grizzlies",
+    "home_score": 111,
+    "away_score": 101,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 23,
+        "away": 24
+      },
+      "H2": {
+        "home": 26,
+        "away": 23
+      },
+      "OT1": {
+        "home": 37,
+        "away": 40
+      },
+      "OT2": {
+        "home": 25,
+        "away": 14
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.739930"
+  },
+  {
+    "game_id": "401810108",
+    "date": "2025-11-18",
+    "league": "NBA",
+    "home_team": "LAL",
+    "away_team": "UTAH",
+    "home_team_full": "Los Angeles Lakers",
+    "away_team_full": "Utah Jazz",
+    "home_score": 140,
+    "away_score": 126,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 27,
+        "away": 36
+      },
+      "H2": {
+        "home": 40,
+        "away": 35
+      },
+      "OT1": {
+        "home": 37,
+        "away": 22
+      },
+      "OT2": {
+        "home": 36,
+        "away": 33
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.739930"
+  },
+  {
+    "game_id": "401810109",
+    "date": "2025-11-18",
+    "league": "NBA",
+    "home_team": "POR",
+    "away_team": "PHX",
+    "home_team_full": "Portland Trail Blazers",
+    "away_team_full": "Phoenix Suns",
+    "home_score": 110,
+    "away_score": 127,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 32,
+        "away": 35
+      },
+      "H2": {
+        "home": 29,
+        "away": 29
+      },
+      "OT1": {
+        "home": 21,
+        "away": 36
+      },
+      "OT2": {
+        "home": 28,
+        "away": 27
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.739930"
+  }
+]

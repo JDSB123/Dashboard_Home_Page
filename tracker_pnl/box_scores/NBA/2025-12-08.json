@@ -1,0 +1,101 @@
+[
+  {
+    "game_id": "401810219",
+    "date": "2025-12-08",
+    "league": "NBA",
+    "home_team": "IND",
+    "away_team": "SAC",
+    "home_team_full": "Indiana Pacers",
+    "away_team_full": "Sacramento Kings",
+    "home_score": 116,
+    "away_score": 105,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 35,
+        "away": 23
+      },
+      "H2": {
+        "home": 31,
+        "away": 28
+      },
+      "OT1": {
+        "home": 26,
+        "away": 37
+      },
+      "OT2": {
+        "home": 24,
+        "away": 17
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.797719"
+  },
+  {
+    "game_id": "401810220",
+    "date": "2025-12-08",
+    "league": "NBA",
+    "home_team": "MIN",
+    "away_team": "PHX",
+    "home_team_full": "Minnesota Timberwolves",
+    "away_team_full": "Phoenix Suns",
+    "home_score": 105,
+    "away_score": 108,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 23,
+        "away": 29
+      },
+      "H2": {
+        "home": 34,
+        "away": 32
+      },
+      "OT1": {
+        "home": 27,
+        "away": 23
+      },
+      "OT2": {
+        "home": 21,
+        "away": 24
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.797719"
+  },
+  {
+    "game_id": "401810221",
+    "date": "2025-12-08",
+    "league": "NBA",
+    "home_team": "NO",
+    "away_team": "SA",
+    "home_team_full": "New Orleans Pelicans",
+    "away_team_full": "San Antonio Spurs",
+    "home_score": 132,
+    "away_score": 135,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 25,
+        "away": 35
+      },
+      "H2": {
+        "home": 32,
+        "away": 42
+      },
+      "OT1": {
+        "home": 45,
+        "away": 23
+      },
+      "OT2": {
+        "home": 30,
+        "away": 35
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.797719"
+  }
+]

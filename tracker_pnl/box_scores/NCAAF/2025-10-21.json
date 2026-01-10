@@ -1,0 +1,72 @@
+[
+  {
+    "game_id": 16063,
+    "date": "2025-10-21",
+    "league": "NCAAF",
+    "home_team": "FLINT",
+    "away_team": "KENEST",
+    "home_team_full": "Florida International Panthers",
+    "away_team_full": "Kennesaw State Owls",
+    "home_score": 26,
+    "away_score": 45,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {
+      "Q1": {
+        "home": 7,
+        "away": 14
+      },
+      "Q2": {
+        "home": 7,
+        "away": 10
+      },
+      "Q3": {
+        "home": 3,
+        "away": 7
+      },
+      "Q4": {
+        "home": 9,
+        "away": 14
+      }
+    },
+    "source": "NCAAF",
+    "fetched_at": "2026-01-09T16:47:00.438865"
+  },
+  {
+    "game_id": 16064,
+    "date": "2025-10-21",
+    "league": "NCAAF",
+    "home_team": "LOUTCH",
+    "away_team": "WKENT",
+    "home_team_full": "Louisiana Tech Bulldogs",
+    "away_team_full": "Western Kentucky Hilltoppers",
+    "home_score": 27,
+    "away_score": 28,
+    "status": "final",
+    "half_scores": {},
+    "quarter_scores": {
+      "Q1": {
+        "home": 7,
+        "away": 10
+      },
+      "Q2": {
+        "home": 0,
+        "away": 10
+      },
+      "Q3": {
+        "home": 7,
+        "away": 0
+      },
+      "Q4": {
+        "home": 6,
+        "away": 0
+      },
+      "Q5": {
+        "home": 7,
+        "away": 8
+      }
+    },
+    "source": "NCAAF",
+    "fetched_at": "2026-01-09T16:47:00.438865"
+  }
+]

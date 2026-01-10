@@ -1,0 +1,68 @@
+[
+  {
+    "game_id": "401812676",
+    "date": "2025-10-05",
+    "league": "NBA",
+    "home_team": "CHA",
+    "away_team": "OKC",
+    "home_team_full": "Charlotte Hornets",
+    "away_team_full": "Oklahoma City Thunder",
+    "home_score": 114,
+    "away_score": 135,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 26,
+        "away": 36
+      },
+      "H2": {
+        "home": 31,
+        "away": 34
+      },
+      "OT1": {
+        "home": 31,
+        "away": 37
+      },
+      "OT2": {
+        "home": 26,
+        "away": 28
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.681641"
+  },
+  {
+    "game_id": "401812677",
+    "date": "2025-10-05",
+    "league": "NBA",
+    "home_team": "GS",
+    "away_team": "LAL",
+    "home_team_full": "Golden State Warriors",
+    "away_team_full": "Los Angeles Lakers",
+    "home_score": 111,
+    "away_score": 103,
+    "status": "final",
+    "half_scores": {
+      "H1": {
+        "home": 32,
+        "away": 31
+      },
+      "H2": {
+        "home": 30,
+        "away": 24
+      },
+      "OT1": {
+        "home": 40,
+        "away": 25
+      },
+      "OT2": {
+        "home": 9,
+        "away": 23
+      }
+    },
+    "quarter_scores": {},
+    "source": "NBA",
+    "fetched_at": "2026-01-09T16:05:55.681641"
+  }
+]
