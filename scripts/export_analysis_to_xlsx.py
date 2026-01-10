@@ -58,29 +58,37 @@ def format_workbook(path):
         # Rebuild col_map after deletion
         col_map = {cell.value: idx for idx, cell in enumerate(ws[1], 1)}
     
-    # Apply header formatting: navy blue background, bold white Calibri 9
+    # Apply header formatting: navy blue background, bold white Calibri 9, centered with borders
     header_fill = PatternFill(start_color=NAVY_BLUE, end_color=NAVY_BLUE, fill_type='solid')
     header_font = Font(name='Calibri', size=9, bold=True, color=WHITE)
     header_alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
+    header_border = Border(
+        left=Side(style='medium', color=WHITE),
+        right=Side(style='medium', color=WHITE),
+        top=Side(style='medium', color=WHITE),
+        bottom=Side(style='medium', color=WHITE)
+    )
     
     for cell in ws[1]:
         cell.fill = header_fill
         cell.font = header_font
         cell.alignment = header_alignment
+        cell.border = header_border
     
-    # Apply body formatting: Calibri 9, centered
+    # Apply body formatting: Calibri 9, centered with borders
     body_font = Font(name='Calibri', size=9)
-    body_alignment = Alignment(horizontal='left', vertical='center')
+    thin_border = Border(
+        left=Side(style='thin', color='D3D3D3'),
+        right=Side(style='thin', color='D3D3D3'),
+        top=Side(style='thin', color='D3D3D3'),
+        bottom=Side(style='thin', color='D3D3D3')
+    )
     
     for row in ws.iter_rows(min_row=2, max_row=ws.max_row):
         for cell in row:
             cell.font = body_font
-            cell.alignment = body_alignment
-    
-    # Enable text wrapping for all body cells
-    for row in ws.iter_rows(min_row=2, max_row=ws.max_row):
-        for cell in row:
-            cell.alignment = Alignment(horizontal='left', vertical='center', wrap_text=True)
+            cell.alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
+            cell.border = thin_border
     
     # Format currency columns: $#,##0.00
     currency_cols = ['To Risk', 'To Win', 'PnL']
