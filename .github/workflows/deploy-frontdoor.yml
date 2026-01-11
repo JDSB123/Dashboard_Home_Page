@@ -23,6 +23,10 @@ on:
         default: false
         type: boolean
 
+permissions:
+  id-token: write   # Required for azure/login OIDC federated credentials
+  contents: read    # Required to checkout the repository
+
 env:
   RESOURCE_GROUP: dashboard-gbsv-main-rg
   LOCATION: eastus
