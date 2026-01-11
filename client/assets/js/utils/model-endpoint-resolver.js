@@ -1,8 +1,20 @@
 /**
- * Model Endpoint Resolver
+ * Model Endpoint Resolver v34.00.0
+ * 
+ * PURPOSE:
  * - Centralizes how front-end fetchers resolve model endpoints (API + Function)
  * - Reads dynamic registry values hydrated by model-endpoints-bootstrap.js
  * - Falls back to sane defaults so missing config never breaks fetching
+ * 
+ * RELATIONSHIP WITH model-endpoints-bootstrap.js:
+ * - Bootstrap runs FIRST at page load to fetch /api/registry
+ * - Bootstrap updates APP_CONFIG with fresh Container App URLs
+ * - Resolver provides HELPER FUNCTIONS for fetchers to access those URLs
+ * - Resolver has DEFAULT fallbacks if bootstrap fails or times out
+ * 
+ * USAGE:
+ *   window.ModelEndpointResolver.getApiEndpoint('nba')
+ *   // Returns: APP_CONFIG.NBA_API_URL || DEFAULTS.nba.api
  */
 (function() {
     'use strict';

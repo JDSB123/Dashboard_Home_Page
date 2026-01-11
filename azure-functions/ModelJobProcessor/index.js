@@ -93,6 +93,7 @@ module.exports = async function (context, jobMessage) {
         context.log(`Calling model API: ${apiConfig.method} ${apiConfig.url}`);
 
         // Call the model API with correct method and endpoint
+        // Timeout matches frontend REQUEST_TIMEOUT_MS (60s) for cold starts
         const response = await axios({
             method: apiConfig.method,
             url: apiConfig.url,
@@ -101,7 +102,7 @@ module.exports = async function (context, jobMessage) {
                 'Content-Type': 'application/json',
                 'X-Request-ID': jobId
             },
-            timeout: 300000 // 5 minutes timeout
+            timeout: 60000 // 60 seconds timeout (matches frontend cold-start tolerance)
         });
 
         // Store results

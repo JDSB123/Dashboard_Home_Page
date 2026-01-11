@@ -1,6 +1,20 @@
 /**
+ * Model Endpoints Bootstrap v34.00.0
+ * 
+ * PURPOSE:
  * Fetch model endpoints from the orchestrator registry so front-end stays in sync
  * with updated Azure Container App URLs without redeploying static assets.
+ *
+ * EXECUTION ORDER:
+ * 1. Runs IMMEDIATELY at page load (not deferred)
+ * 2. Fetches /api/registry with 6-second timeout
+ * 3. Updates APP_CONFIG.{NBA|NCAAM|NFL|NCAAF}_API_URL dynamically
+ * 4. Falls back to config.js defaults if registry unavailable
+ * 
+ * RELATIONSHIP WITH model-endpoint-resolver.js:
+ * - Bootstrap UPDATES APP_CONFIG at page load
+ * - Resolver READS FROM APP_CONFIG when fetchers need endpoints
+ * - Together they enable zero-downtime Container App updates
  *
  * Supports dynamic discovery of new leagues - any key in the registry with an
  * 'endpoint' property will be added to APP_CONFIG as {KEY}_API_URL.
