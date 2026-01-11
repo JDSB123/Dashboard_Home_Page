@@ -84,17 +84,14 @@ Manual zip deploy steps remain the same:
 
 ### 1. SignalR Service Setup
 
-Create a SignalR Service in `dashboard-gbsv-main-rg`:
+The deploy scripts now create (or reconcile) the `gbsv-signalr` service in `dashboard-gbsv-main-rg` with SKU `Free_F1` and `Serverless` mode, and they push the resulting connection string into the function app settings automatically. If you need to reconfigure the SignalR resource manually (for key rotation or a custom service name), edit the `SIGNALR_SERVICE_NAME` value at the top of `deploy.ps1` / `deploy.sh` and rerun the script. The commands below can be used for manual verification or troubleshooting:
 
 ```bash
-az signalr create \
+az signalr show \
   --name gbsv-signalr \
-  --resource-group dashboard-gbsv-main-rg \
-  --sku Free_F1 \
-  --service-mode Serverless
+  --resource-group dashboard-gbsv-main-rg
 ```
 
-Get the connection string:
 ```bash
 az signalr key list \
   --name gbsv-signalr \
@@ -102,12 +99,11 @@ az signalr key list \
   --query primaryConnectionString -o tsv
 ```
 
-Add to Function App settings:
 ```bash
-az functionapp config appsettings set \
+az functionapp config appsettings list \
   --name gbsv-orchestrator \
   --resource-group dashboard-gbsv-main-rg \
-  --settings "AzureSignalRConnectionString=<connection-string>"
+  --query "[?name=='AzureSignalRConnectionString']"
 ```
 
 ### 2. Grant RBAC Permissions

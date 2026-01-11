@@ -10,6 +10,9 @@ $StorageAccount = "gbsvorchestratorstorage"
 $Location = "eastus"
 $Runtime = "node"
 $RuntimeVersion = "18"
+$SignalRServiceName = "gbsv-signalr"
+$SignalRSku = "Free_F1"
+$SignalRServiceMode = "Serverless"
 
 Write-Host "Starting deployment of GBSV Model Orchestrator" -ForegroundColor Green
 
@@ -93,10 +96,57 @@ $Identity = az functionapp identity assign `
 
 Write-Host "Managed Identity Principal ID: $Identity" -ForegroundColor Green
 
+# Ensure SignalR service is provisioned
+Write-Host "Ensuring SignalR service '$SignalRServiceName' exists..."
+try {
+    $signalrService = az signalr show `
+        --name $SignalRServiceName `
+        --resource-group $ResourceGroup | ConvertFrom-Json
+}
+catch {
+    Write-Host "SignalR service not found; it will be created." -ForegroundColor Yellow
+    $signalrService = $null
+}
+
+if (-not $signalrService) {
+    az signalr create `
+        --name $SignalRServiceName `
+        --resource-group $ResourceGroup `
+        --location $Location `
+        --sku $SignalRSku `
+        --service-mode $SignalRServiceMode
+    $signalrService = az signalr show `
+        --name $SignalRServiceName `
+        --resource-group $ResourceGroup | ConvertFrom-Json
+}
+elseif ($signalrService.properties.serviceMode -ne $SignalRServiceMode -or $signalrService.sku.name -ne $SignalRSku) {
+    Write-Host "Updating SignalR service configuration to match required settings..." -ForegroundColor Yellow
+    az signalr update `
+        --name $SignalRServiceName `
+        --resource-group $ResourceGroup `
+        --sku $SignalRSku `
+        --service-mode $SignalRServiceMode
+    $signalrService = az signalr show `
+        --name $SignalRServiceName `
+        --resource-group $ResourceGroup | ConvertFrom-Json
+}
+
+Write-Host "Retrieving SignalR connection string..."
+$SignalRConnectionString = az signalr key list `
+    --name $SignalRServiceName `
+    --resource-group $ResourceGroup `
+    --query primaryConnectionString -o tsv
+
+if (-not $SignalRConnectionString) {
+    Write-Host "Failed to read SignalR connection string; aborting." -ForegroundColor Red
+    exit 1
+}
+
 # Configure application settings
 Write-Host "Configuring application settings..."
 $settings = @(
     "AzureWebJobsStorage=$StorageConnection",
+    "AzureSignalRConnectionString=$SignalRConnectionString",
     "WEBSITE_RUN_FROM_PACKAGE=1",
     "FUNCTIONS_WORKER_RUNTIME=node",
     "NBA_API_URL=https://nba-gbsv-api.livelycoast-b48c3cb0.eastus.azurecontainerapps.io",
@@ -154,9 +204,9 @@ Write-Host "Function App URL: https://$FunctionUrl" -ForegroundColor Green
 Write-Host "Orchestrator API: https://$FunctionUrl/api" -ForegroundColor Green
 Write-Host ""
 Write-Host "Next steps:" -ForegroundColor Yellow
-Write-Host "1. Configure SignalR Service (if not already done)"
-Write-Host "2. Grant RBAC permissions to managed identity for accessing model Container Apps"
-Write-Host "3. Update dashboard config with the orchestrator URL"
+Write-Host "1. Grant RBAC permissions to the managed identity for accessing model Container Apps"
+Write-Host "2. Update dashboard config with the orchestrator URL"
+Write-Host "3. (Optional) Verify the AzureSignalRConnectionString app setting if you customized the SignalR service"
 Write-Host ""
 Write-Host "To grant RBAC permissions, run:" -ForegroundColor Yellow
 Write-Host "az role assignment create --role 'Container Apps Reader' --assignee $Identity --scope /subscriptions/YOUR_SUBSCRIPTION_ID/resourceGroups/nba-gbsv-model-rg"

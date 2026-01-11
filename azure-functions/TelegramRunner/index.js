@@ -1,4 +1,4 @@
-const { exec } = require('child_process');
+const { spawn } = require('child_process');
 const path = require('path');
 
 module.exports = async function (context, req) {
@@ -22,19 +22,48 @@ module.exports = async function (context, req) {
   }
 
   // Attempt to extract a date (YYYY-MM-DD) from the message; default to today
+  // Strict validation: only allow digits and hyphens in expected format
   const dateMatch = text.match(/(\d{4}-\d{2}-\d{2})/);
-  const date = dateMatch ? dateMatch[1] : new Date().toISOString().slice(0,10);
+  const date = dateMatch ? dateMatch[1] : new Date().toISOString().slice(0, 10);
+
+  // Additional validation: ensure date is valid
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+    context.res = { status: 400, body: { error: 'Invalid date format' } };
+    return;
+  }
 
   const repoRoot = path.resolve(__dirname, '..', '..');
   const script = path.join(repoRoot, 'scripts', 'run_telegram_analysis.py');
-  const cmd = `python "${script}" --date ${date}`;
 
-  context.log(`Executing: ${cmd}`);
+  context.log(`Executing: python ${script} --date ${date}`);
 
-  exec(cmd, { cwd: repoRoot, maxBuffer: 1024 * 1024 * 4 }, (err, stdout, stderr) => {
-    if (err) {
-      context.log.error('Runner failed', err, stderr);
-      context.res = { status: 500, body: { error: 'Runner failed', details: stderr || err.message } };
+  // Use spawn with argument array to prevent command injection
+  const child = spawn('python', [script, '--date', date], {
+    cwd: repoRoot,
+    maxBuffer: 1024 * 1024 * 4
+  });
+
+  let stdout = '';
+  let stderr = '';
+
+  child.stdout.on('data', (data) => {
+    stdout += data.toString();
+  });
+
+  child.stderr.on('data', (data) => {
+    stderr += data.toString();
+  });
+
+  child.on('error', (err) => {
+    context.log.error('Runner failed to start', err);
+    context.res = { status: 500, body: { error: 'Runner failed to start', details: err.message } };
+    context.done();
+  });
+
+  child.on('close', (code) => {
+    if (code !== 0) {
+      context.log.error('Runner failed', code, stderr);
+      context.res = { status: 500, body: { error: 'Runner failed', exitCode: code, details: stderr } };
       context.done();
       return;
     }

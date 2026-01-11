@@ -1,9 +1,36 @@
 const { BlobServiceClient } = require("@azure/storage-blob");
 
+// CORS configuration
+const DEFAULT_ALLOWED_ORIGINS = [
+    'https://www.greenbiersportventures.com',
+    'https://wittypebble-41c11c65.eastus.azurestaticapps.net',
+    'http://localhost:3000',
+    'http://localhost:8080'
+];
+const configuredOrigins = (process.env.CORS_ALLOWED_ORIGINS || process.env.ALLOWED_ORIGINS || '')
+    .split(',')
+    .map(origin => origin.trim())
+    .filter(Boolean);
+const ALLOWED_ORIGINS = configuredOrigins.length > 0 ? configuredOrigins : DEFAULT_ALLOWED_ORIGINS;
+
+function buildCorsHeaders(req) {
+    const origin = req.headers?.origin;
+    const allowOrigin = origin && ALLOWED_ORIGINS.includes(origin)
+        ? origin
+        : ALLOWED_ORIGINS[0];
+
+    return {
+        'Access-Control-Allow-Origin': allowOrigin,
+        'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, x-functions-key',
+        'Vary': 'Origin'
+    };
+}
+
 /**
  * Archive Picks to Azure Blob Storage
  * POST /api/archive-picks
- * 
+ *
  * Request body:
  * {
  *   "picks": [...],
@@ -13,11 +40,19 @@ const { BlobServiceClient } = require("@azure/storage-blob");
  */
 module.exports = async function (context, req) {
     context.log('Archive picks request received');
+    const corsHeaders = buildCorsHeaders(req);
+
+    // Handle preflight OPTIONS request
+    if (req.method === 'OPTIONS') {
+        context.res = { status: 204, headers: corsHeaders };
+        return;
+    }
 
     // Only allow POST
     if (req.method !== 'POST') {
         context.res = {
             status: 405,
+            headers: corsHeaders,
             body: { error: 'Method not allowed' }
         };
         return;
@@ -28,6 +63,7 @@ module.exports = async function (context, req) {
     if (!picks || !Array.isArray(picks)) {
         context.res = {
             status: 400,
+            headers: corsHeaders,
             body: { error: 'Missing or invalid picks array' }
         };
         return;
@@ -36,6 +72,7 @@ module.exports = async function (context, req) {
     if (!weekId || !slateDate) {
         context.res = {
             status: 400,
+            headers: corsHeaders,
             body: { error: 'Missing weekId or slateDate' }
         };
         return;
@@ -49,6 +86,7 @@ module.exports = async function (context, req) {
             context.log.error('AZURE_STORAGE_CONNECTION_STRING not configured');
             context.res = {
                 status: 500,
+                headers: corsHeaders,
                 body: { error: 'Storage not configured' }
             };
             return;
@@ -100,7 +138,8 @@ module.exports = async function (context, req) {
         context.res = {
             status: 200,
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                ...corsHeaders
             },
             body: {
                 success: true,
@@ -114,9 +153,10 @@ module.exports = async function (context, req) {
         context.log.error('Archive error:', error);
         context.res = {
             status: 500,
-            body: { 
+            headers: corsHeaders,
+            body: {
                 error: 'Failed to archive picks',
-                details: error.message 
+                details: error.message
             }
         };
     }

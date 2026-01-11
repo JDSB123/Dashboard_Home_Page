@@ -12,6 +12,9 @@ STORAGE_ACCOUNT="gbsvorchestratorstorage"
 LOCATION="eastus"
 RUNTIME="node"
 RUNTIME_VERSION="18"
+SIGNALR_SERVICE_NAME="gbsv-signalr"
+SIGNALR_SKU="Free_F1"
+SIGNALR_MODE="Serverless"
 
 # Colors for output
 RED='\033[0;31m'
@@ -95,6 +98,52 @@ IDENTITY=$(az functionapp identity assign \
 
 echo -e "${GREEN}Managed Identity Principal ID: $IDENTITY${NC}"
 
+# Ensure SignalR service exists and is configured
+echo "Ensuring SignalR service '$SIGNALR_SERVICE_NAME' exists..."
+SIGNALR_EXISTS=$(az signalr show \
+    --name $SIGNALR_SERVICE_NAME \
+    --resource-group $RESOURCE_GROUP \
+    --query name -o tsv 2>/dev/null || true)
+
+if [ -z "$SIGNALR_EXISTS" ]; then
+    echo "Creating SignalR service..."
+    az signalr create \
+        --name $SIGNALR_SERVICE_NAME \
+        --resource-group $RESOURCE_GROUP \
+        --location $LOCATION \
+        --sku $SIGNALR_SKU \
+        --service-mode $SIGNALR_MODE
+else
+    CURRENT_MODE=$(az signalr show \
+        --name $SIGNALR_SERVICE_NAME \
+        --resource-group $RESOURCE_GROUP \
+        --query serviceMode -o tsv)
+    CURRENT_SKU=$(az signalr show \
+        --name $SIGNALR_SERVICE_NAME \
+        --resource-group $RESOURCE_GROUP \
+        --query sku.name -o tsv)
+
+    if [ "$CURRENT_MODE" != "$SIGNALR_MODE" ] || [ "$CURRENT_SKU" != "$SIGNALR_SKU" ]; then
+        echo "Updating SignalR service configuration..."
+        az signalr update \
+            --name $SIGNALR_SERVICE_NAME \
+            --resource-group $RESOURCE_GROUP \
+            --sku $SIGNALR_SKU \
+            --service-mode $SIGNALR_MODE
+    fi
+fi
+
+echo "Retrieving SignalR connection string..."
+SIGNALR_CONNECTION=$(az signalr key list \
+    --name $SIGNALR_SERVICE_NAME \
+    --resource-group $RESOURCE_GROUP \
+    --query primaryConnectionString -o tsv)
+
+if [ -z "$SIGNALR_CONNECTION" ]; then
+    echo -e "${RED}Failed to read SignalR connection string. Aborting.${NC}"
+    exit 1
+fi
+
 # Configure application settings
 echo "Configuring application settings..."
 az functionapp config appsettings set \
@@ -102,6 +151,7 @@ az functionapp config appsettings set \
     --resource-group $RESOURCE_GROUP \
     --settings \
     "AzureWebJobsStorage=$STORAGE_CONNECTION" \
+    "AzureSignalRConnectionString=$SIGNALR_CONNECTION" \
     "WEBSITE_RUN_FROM_PACKAGE=1" \
     "FUNCTIONS_WORKER_RUNTIME=node" \
     "NBA_API_URL=https://nba-gbsv-api.livelycoast-b48c3cb0.eastus.azurecontainerapps.io" \
@@ -145,9 +195,9 @@ echo -e "${GREEN}Function App URL: https://$FUNCTION_URL${NC}"
 echo -e "${GREEN}Orchestrator API: https://$FUNCTION_URL/api${NC}"
 echo ""
 echo -e "${YELLOW}Next steps:${NC}"
-echo "1. Configure SignalR Service (if not already done)"
-echo "2. Grant RBAC permissions to managed identity for accessing model Container Apps"
-echo "3. Update dashboard config with the orchestrator URL"
+echo "1. Grant RBAC permissions to the managed identity for accessing model Container Apps"
+echo "2. Update dashboard config with the orchestrator URL"
+echo "3. (Optional) Verify the AzureSignalRConnectionString app setting if you customized the SignalR service"
 echo ""
 echo -e "${YELLOW}To grant RBAC permissions, run:${NC}"
 echo "az role assignment create --role \"Container Apps Reader\" --assignee $IDENTITY --scope /subscriptions/YOUR_SUBSCRIPTION_ID/resourceGroups/nba-gbsv-model-rg"
