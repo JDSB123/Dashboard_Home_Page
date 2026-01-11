@@ -5,7 +5,7 @@
  * Repository:  github.com/JDSB123/Dashboard_Home_Page
  * Azure RG:    dashboard-gbsv-main-rg (eastus)
  * Owner:       jb@greenbiercapital.com
- * Version:     34.00.0
+ * Version:     34.01.0
  * ════════════════════════════════════════════════════════════════════
  * 
  * ROUTING ARCHITECTURE (Azure Front Door):
@@ -30,7 +30,7 @@
 window.APP_CONFIG = {
   // Project Identification
   PROJECT_NAME: 'Dashboard_Home_Page',
-  VERSION: '34.00.0',
+  VERSION: '34.01.0',
   ENVIRONMENT: 'production',
 
   // Azure Configuration
@@ -46,8 +46,8 @@ window.APP_CONFIG = {
   API_BASE_URL: 'https://www.greenbiersportventures.com/api',
   
   // Fallback: Orchestrator direct URL (must be HTTPS for CSP compliance)
-  ORCHESTRATOR_URL: '',
-  API_BASE_FALLBACK: '',
+  ORCHESTRATOR_URL: 'https://gbsv-orchestrator.wittypebble-41c11c65.eastus.azurecontainerapps.io',
+  API_BASE_FALLBACK: 'https://gbsv-orchestrator.wittypebble-41c11c65.eastus.azurecontainerapps.io/api',
 
   // ═══════════════════════════════════════════════════════════════════
   // SPORT-SPECIFIC API ENDPOINTS

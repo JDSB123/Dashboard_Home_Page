@@ -194,26 +194,74 @@
         }
 
         /**
+         * Get sport-specific API URL from config
+         */
+        getSportApiUrl(sport) {
+            const sportUpper = sport.toUpperCase();
+            const configKey = `${sportUpper}_API_URL`;
+            
+            // Try to get from ModelEndpointResolver first
+            if (window.ModelEndpointResolver?.getApiEndpoint) {
+                const resolvedEndpoint = window.ModelEndpointResolver.getApiEndpoint(sport);
+                if (resolvedEndpoint) {
+                    return resolvedEndpoint;
+                }
+            }
+            
+            // Fall back to APP_CONFIG
+            if (window.APP_CONFIG && window.APP_CONFIG[configKey]) {
+                return window.APP_CONFIG[configKey];
+            }
+            
+            // Default fallbacks
+            const defaults = {
+                nba: 'https://www.greenbiersportventures.com/api/nba',
+                ncaam: 'https://www.greenbiersportventures.com/api/ncaam',
+                nfl: 'https://www.greenbiersportventures.com/api/nfl',
+                ncaaf: 'https://www.greenbiersportventures.com/api/ncaaf'
+            };
+            
+            return defaults[sport.toLowerCase()] || null;
+        }
+
+        /**
          * Update scores for a specific sport
          */
         async updateSportScores(sport, picks) {
             try {
-                // Determine which API to use
-                let endpoint = '';
-                if (sport === 'nba') {
-                    endpoint = `${this.apiEndpoint}/get-nba-scores`;
-                } else {
-                    endpoint = `${this.apiEndpoint}/get-espn-scores?sport=${sport}`;
+                // Get sport-specific API URL
+                const sportApiUrl = this.getSportApiUrl(sport);
+                
+                if (!sportApiUrl) {
+                    console.warn(`[LIVE-SCORES] No API endpoint configured for ${sport}`);
+                    return;
                 }
+                
+                // Use sport-specific scores endpoint
+                // Most Container Apps expose /scores or /live-scores endpoint
+                const endpoint = `${sportApiUrl}/scores`;
 
-                // Fetch latest scores
-                const response = await fetch(endpoint);
+                // Fetch latest scores with timeout
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 10000);
+                
+                const response = await fetch(endpoint, { 
+                    signal: controller.signal,
+                    headers: { 'Accept': 'application/json' }
+                });
+                clearTimeout(timeoutId);
+                
                 if (!response.ok) {
+                    // Scores endpoint may not exist for all sports - fail silently
+                    if (response.status === 404) {
+                        console.log(`[LIVE-SCORES] Scores endpoint not available for ${sport}`);
+                        return;
+                    }
                     throw new Error(`HTTP ${response.status}`);
                 }
 
                 const data = await response.json();
-                const games = data.data?.games || [];
+                const games = data.data?.games || data.games || data || [];
 
                 // Update each pick with matching game data
                 for (const pick of picks) {
@@ -223,7 +271,11 @@
                     }
                 }
             } catch (error) {
-                console.warn(`Failed to update ${sport} scores:`, error);
+                if (error.name === 'AbortError') {
+                    console.warn(`[LIVE-SCORES] Request timeout for ${sport} scores`);
+                } else {
+                    console.warn(`[LIVE-SCORES] Failed to update ${sport} scores:`, error.message);
+                }
 
                 // Try fallback to odds API if available
                 await this.fallbackToOddsAPI(sport, picks);
