@@ -68,10 +68,10 @@
 
         try {
             const apiGames = await fetchGamesFromApi();
-            games = (apiGames && apiGames.length > 0) ? apiGames : getMockGames();
+            games = (apiGames && apiGames.length > 0) ? apiGames : [];
         } catch (error) {
             console.error('❌ Error loading games:', error);
-            games = getMockGames();
+            games = [];
         }
 
         renderGames();
@@ -79,143 +79,37 @@
     }
 
     async function fetchGamesFromApi() {
-        // Placeholder - returns null to use mock data until API is ready
-        // Future: fetch from /api/get-odds
-        return null;
-    }
+        // Try to fetch games from The Odds API or ESPN
+        // Returns empty array if no odds API is configured
+        const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://www.greenbiersportventures.com/api';
 
-    // ===== MOCK DATA =====
-    function getMockGames() {
-        const today = new Date();
-        const tomorrow = new Date(today);
-        tomorrow.setDate(tomorrow.getDate() + 1);
+        try {
+            // Try orchestrator odds endpoint first
+            const response = await fetch(`${baseUrl}/get-odds`, {
+                method: 'GET',
+                headers: { 'Accept': 'application/json' },
+                signal: AbortSignal.timeout(10000)
+            });
 
-        const formatDate = (d) => {
-            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-            return `${days[d.getDay()]} ${months[d.getMonth()]} ${d.getDate()}`;
-        };
-
-        return [
-            {
-                id: 'nba-1',
-                league: 'nba',
-                date: formatDate(today),
-                time: '7:00 PM',
-                isLive: false,
-                awayTeam: { name: 'Lakers', abbr: 'LAL', record: '15-12' },
-                homeTeam: { name: 'Celtics', abbr: 'BOS', record: '22-6' },
-                odds: {
-                    fg: {
-                        spread: { away: { line: '+6.5', odds: '-110' }, home: { line: '-6.5', odds: '-110' } },
-                        total: { line: '224.5', over: '-110', under: '-110' },
-                        ml: { away: '+210', home: '-255' }
-                    },
-                    '1h': {
-                        spread: { away: { line: '+3.5', odds: '-110' }, home: { line: '-3.5', odds: '-110' } },
-                        total: { line: '112.5', over: '-110', under: '-110' },
-                        ml: { away: '+165', home: '-190' }
-                    },
-                    '1q': {
-                        spread: { away: { line: '+2', odds: '-110' }, home: { line: '-2', odds: '-110' } },
-                        total: { line: '56.5', over: '-110', under: '-110' },
-                        ml: { away: '+140', home: '-160' }
-                    },
-                    teamTotal: {
-                        away: { line: '109', over: '-110', under: '-110' },
-                        home: { line: '115.5', over: '-110', under: '-110' }
-                    }
-                }
-            },
-            {
-                id: 'nba-2',
-                league: 'nba',
-                date: formatDate(today),
-                time: '7:30 PM',
-                isLive: true,
-                liveInfo: { period: '3Q', clock: '4:32', awayScore: 54, homeScore: 62 },
-                awayTeam: { name: 'Bulls', abbr: 'CHI', record: '13-16' },
-                homeTeam: { name: 'Bucks', abbr: 'MIL', record: '18-9' },
-                odds: {
-                    fg: {
-                        spread: { away: { line: '+8', odds: '-108' }, home: { line: '-8', odds: '-112' } },
-                        total: { line: '231', over: '-105', under: '-115' },
-                        ml: { away: '+285', home: '-350' }
-                    },
-                    '1h': {
-                        spread: { away: { line: '+4', odds: '-110' }, home: { line: '-4', odds: '-110' } },
-                        total: { line: '115.5', over: '-110', under: '-110' },
-                        ml: { away: '+180', home: '-210' }
-                    },
-                    '1q': {
-                        spread: { away: { line: '+2', odds: '-110' }, home: { line: '-2', odds: '-110' } },
-                        total: { line: '58', over: '-110', under: '-110' },
-                        ml: { away: '+145', home: '-165' }
-                    },
-                    teamTotal: {
-                        away: { line: '111.5', over: '-110', under: '-110' },
-                        home: { line: '119.5', over: '-110', under: '-110' }
-                    }
-                }
-            },
-            {
-                id: 'nfl-1',
-                league: 'nfl',
-                date: formatDate(today),
-                time: '8:15 PM',
-                isLive: false,
-                awayTeam: { name: 'Chiefs', abbr: 'KC', record: '12-3' },
-                homeTeam: { name: 'Bills', abbr: 'BUF', record: '11-4' },
-                odds: {
-                    fg: {
-                        spread: { away: { line: '+2.5', odds: '-110' }, home: { line: '-2.5', odds: '-110' } },
-                        total: { line: '47.5', over: '-110', under: '-110' },
-                        ml: { away: '+118', home: '-138' }
-                    },
-                    '1h': {
-                        spread: { away: { line: '+1', odds: '-110' }, home: { line: '-1', odds: '-110' } },
-                        total: { line: '24', over: '-110', under: '-110' },
-                        ml: { away: '+105', home: '-125' }
-                    },
-                    '1q': {
-                        spread: { away: { line: 'PK', odds: '-110' }, home: { line: 'PK', odds: '-110' } },
-                        total: { line: '10.5', over: '-110', under: '-110' },
-                        ml: { away: '-105', home: '-115' }
-                    },
-                    teamTotal: {
-                        away: { line: '22.5', over: '-110', under: '-110' },
-                        home: { line: '25', over: '-110', under: '-110' }
-                    }
-                }
-            },
-            {
-                id: 'ncaab-1',
-                league: 'ncaab',
-                date: formatDate(tomorrow),
-                time: '9:00 PM',
-                isLive: false,
-                awayTeam: { name: 'Duke', abbr: 'DUKE', record: '10-2', rank: 4 },
-                homeTeam: { name: 'North Carolina', abbr: 'UNC', record: '9-4', rank: 12 },
-                odds: {
-                    fg: {
-                        spread: { away: { line: '-3.5', odds: '-110' }, home: { line: '+3.5', odds: '-110' } },
-                        total: { line: '152.5', over: '-110', under: '-110' },
-                        ml: { away: '-165', home: '+140' }
-                    },
-                    '1h': {
-                        spread: { away: { line: '-1.5', odds: '-110' }, home: { line: '+1.5', odds: '-110' } },
-                        total: { line: '76', over: '-110', under: '-110' },
-                        ml: { away: '-130', home: '+110' }
-                    },
-                    '1q': null,
-                    teamTotal: {
-                        away: { line: '78', over: '-110', under: '-110' },
-                        home: { line: '74.5', over: '-110', under: '-110' }
-                    }
+            if (response.ok) {
+                const data = await response.json();
+                if (data.games && Array.isArray(data.games)) {
+                    console.log(`✅ Loaded ${data.games.length} games from API`);
+                    return data.games;
                 }
             }
-        ];
+
+            console.log('⚠️ Odds API not available - showing empty state');
+            return [];
+        } catch (error) {
+            console.warn('⚠️ Could not fetch odds:', error.message);
+            return [];
+        }
     }
+
+    // ===== MOCK DATA REMOVED =====
+    // Production version - no fake/sample data
+    // Real data comes from /api/get-odds endpoint
 
     // ===== RENDER GAMES =====
     function renderGames() {
