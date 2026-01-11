@@ -188,6 +188,8 @@
      * @returns {Object} Formatted pick
      */
     const formatPickForTable = function(pick) {
+        console.log('[NFL-FORMATTER] Raw pick from API:', pick);
+        
         const rawFire = (pick.fire_rating ?? pick.confidence ?? '').toString().trim();
         const upperFire = rawFire.toUpperCase();
         const fireMap = { MAX: 5, ELITE: 5, STRONG: 4, GOOD: 3, STANDARD: 2, LOW: 1 };
@@ -270,7 +272,7 @@
             edgeValue = parseFloat(pick.edge.replace('%', '')) / 100;
         }
 
-        return {
+        const formatted = {
             sport: 'NFL',
             league: 'NFL',
             awayTeam: awayTeam,
@@ -294,6 +296,9 @@
             modelStamp: pick.model_version || pick.modelVersion || pick.model_tag || pick.modelTag || '',
             modelVersion: pick.model_version || pick.modelVersion || pick.model_tag || pick.modelTag || ''
         };
+        
+        console.log('[NFL-FORMATTER] Formatted pick:', formatted);
+        return formatted;
     };
 
     // Export
