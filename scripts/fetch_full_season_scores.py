@@ -4,7 +4,9 @@ import os
 from collections import defaultdict
 from datetime import datetime
 
-API_KEY = 'f202ae3458724f8b9beb8230820db7fe'
+API_KEY = os.environ.get('SDIO_KEY')
+if not API_KEY:
+    raise EnvironmentError("SDIO_KEY environment variable not set. Run: . .\scripts\load-secrets.ps1 -FromKeyVault")
 SEASON = '2025'
 OUTPUT_DIR = 'output/box_scores'
 

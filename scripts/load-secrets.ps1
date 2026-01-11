@@ -33,13 +33,21 @@ if ($FromKeyVault) {
 }
 
 if (-not $FromKeyVault) {
-    # DEV values (same machine only; do not push to git)
-    $env:SDIO_KEY = "f202ae3458724f8b9beb8230820db7fe"
-    $env:ODDS_API_KEY = "4a0b80471d1ebeeb74c358fa0fcc4a27"
-    $env:BASKETBALL_API_KEY = "eea8757fae3c507add2df14800bae25f"
-    $env:ACTIONNETWORK_USER = "jb@greenbiercapital.com"
-    # Password not stored in script for security; set manually if needed
-    Write-Host "  ✅ Loaded dev secrets (local only)" -ForegroundColor Green
+    # Load from local .env file if it exists
+    $envFile = Join-Path $PSScriptRoot ".." ".env"
+    if (Test-Path $envFile) {
+        Write-Host "  Loading from .env file..." -ForegroundColor Yellow
+        Get-Content $envFile | ForEach-Object {
+            if ($_ -match '^([^#][^=]+)=(.*)$') {
+                [Environment]::SetEnvironmentVariable($matches[1].Trim(), $matches[2].Trim(), 'Process')
+            }
+        }
+        Write-Host "  ✅ Loaded secrets from .env file" -ForegroundColor Green
+    } else {
+        Write-Host "  ⚠️ No .env file found. Create one from env.template or use -FromKeyVault" -ForegroundColor Red
+        Write-Host "  Run: copy env.template .env  then fill in your values" -ForegroundColor Yellow
+        return
+    }
 }
 
 # Report what's loaded

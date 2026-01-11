@@ -2,7 +2,9 @@ import requests
 import json
 import os
 
-API_KEY = 'f202ae3458724f8b9beb8230820db7fe'
+API_KEY = os.environ.get('SDIO_KEY')
+if not API_KEY:
+    raise EnvironmentError("SDIO_KEY environment variable not set. Run: . .\scripts\load-secrets.ps1 -FromKeyVault")
 DATE = '2025-12-28'
 
 def fetch_nfl():

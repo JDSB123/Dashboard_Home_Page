@@ -7,7 +7,7 @@ This document lists the environment variables that must be populated from Azure 
 |---------|-----------------------------|-------|
 | `SDIO_KEY` | `sportsdataio-nfl-ncaaf` | SportsDataIO NFL/NCAAF key (used by `fetch_completed_boxes.py` and related pipeline scripts). ⚠️ Required for NFL/NCAAF schedules and box scores. |
 | `ODDS_API_KEY` | `oddsapi-main` | Odds API key for NBA/NCAAM odds pulls that will be added to the pipeline. |
-| `ACTIONNETWORK_USER` | `actionnetwork-user` | `jb@greenbiercapital.com` (used for Action Network integrations). |
+| `ACTIONNETWORK_USER` | `actionnetwork-user` | Email for Action Network integrations. |
 | `ACTIONNETWORK_PASS` | `actionnetwork-password` | Secure password (store as secure string). |
 | `BASKETBALL_API_KEY` | `basketball-api` | NBA-specific service key. |
 
@@ -16,30 +16,43 @@ This document lists the environment variables that must be populated from Azure 
 Run this before executing any data-pipeline script:
 
 ```powershell
-# Option A – Direct values (DEV ONLY; do not commit to git)
-$env:SDIO_KEY = "f202ae3458724f8b9beb8230820db7fe"
-$env:ODDS_API_KEY = "4a0b80471d1ebeeb74c358fa0fcc4a27"
-$env:BASKETBALL_API_KEY = "eea8757fae3c507add2df14800bae25f"
-$env:ACTIONNETWORK_USER = "jb@greenbiercapital.com"
-$env:ACTIONNETWORK_PASS = "YOUR_PASSWORD_HERE"
+# Option A – Load from .env file (local development)
+# First create .env from env.template: copy env.template .env
+# Then edit .env with your actual values
+. .\scripts\load-secrets.ps1
 
-# Option B – Pull from Azure Key Vault (production-ready)
-$vault = 'ncaam-stablegbsvkv'
-$env:SDIO_KEY = (az keyvault secret show --vault-name $vault --name sportsdataio-nfl-ncaaf --query value -o tsv)
-$env:ODDS_API_KEY = (az keyvault secret show --vault-name $vault --name oddsapi-main --query value -o tsv)
-$env:BASKETBALL_API_KEY = (az keyvault secret show --vault-name $vault --name basketball-api --query value -o tsv)
+# Option B – Pull from Azure Key Vault (production-ready, recommended)
+. .\scripts\load-secrets.ps1 -FromKeyVault -VaultName "dashboard-gbsv-kv"
 ```
 
 ## Strategy
 1. **Store secrets in Key Vault** if not already present. Use the names above (or your chosen aliases) so the pipelines can resolve them consistently.
 2. **Map secrets to env vars** before running `fetch_completed_boxes.py`, the pick tracker, or any Azure Function. Examples:
    ```powershell
-   $vault = 'ncaam-stablegbsvkv'
+   $vault = 'dashboard-gbsv-kv'
    $env:SDIO_KEY = (az keyvault secret show --vault-name $vault --name sportsdataio-nfl-ncaaf --query value -o tsv)
    $env:ODDS_API_KEY = (az keyvault secret show --vault-name $vault --name oddsapi-main --query value -o tsv)
    ```
-3. **Local development**: add the same env vars to `local.settings.json` (under `Values`) or export them in your shell/profile before running scripts.
-4. **Audit**: if a fetch fails due to missing keys, the log now reports which env var was absent. Add that var back to the Key Vault / environment and rerun.
+3. **Local development**: Create a `.env` file from `env.template` and fill in your values. This file is gitignored.
+4. **Azure Functions**: Configure app settings in Azure Portal or via deployment scripts to reference Key Vault secrets.
+5. **Audit**: if a fetch fails due to missing keys, the log now reports which env var was absent. Add that var back to the Key Vault / environment and rerun.
+
+## Setting Up Key Vault Secrets
+
+```powershell
+# Login to Azure
+az login
+
+# Set the Key Vault name
+$vault = 'dashboard-gbsv-kv'
+
+# Add secrets (replace YOUR_KEY_HERE with actual values)
+az keyvault secret set --vault-name $vault --name "sportsdataio-nfl-ncaaf" --value "YOUR_KEY_HERE"
+az keyvault secret set --vault-name $vault --name "oddsapi-main" --value "YOUR_KEY_HERE"
+az keyvault secret set --vault-name $vault --name "basketball-api" --value "YOUR_KEY_HERE"
+az keyvault secret set --vault-name $vault --name "actionnetwork-user" --value "YOUR_EMAIL_HERE"
+az keyvault secret set --vault-name $vault --name "actionnetwork-password" --value "YOUR_PASSWORD_HERE"
+```
 
 ## Data Pipeline Output
 

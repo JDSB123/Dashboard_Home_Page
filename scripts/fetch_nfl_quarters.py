@@ -4,8 +4,11 @@ Fetch NFL box scores with quarter/half data from SportsData.io
 """
 import requests
 import json
+import os
 
-API_KEY = 'f202ae3458724f8b9beb8230820db7fe'
+API_KEY = os.environ.get('SDIO_KEY')
+if not API_KEY:
+    raise EnvironmentError("SDIO_KEY environment variable not set. Run: . .\scripts\load-secrets.ps1 -FromKeyVault")
 
 print("Testing SportsData.io NFL endpoints for 12/28/2025")
 print("="*80)

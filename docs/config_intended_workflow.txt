@@ -17,16 +17,18 @@ Global Configurations
 
 Data Ingestion and API Sources - predominantly used for Box Score integration to track results, metrics, KPIs, and live box scores and status of picks from the dashboard. 
 
-    1) SportsDataIO API f202ae3458724f8b9beb8230820db7fe
+    1) SportsDataIO API
+        Key stored in Azure Key Vault: sportsdataio-nfl-ncaaf
         Subscription only available for NCAAF and NBA
         Primary endpoints and data source for NCAAF and NBA. The Odds API does include NCAAF and NFL data, but very rarely do we need to use it since SportsDataio Must work
-    2) The Odds API: 4a0b80471d1ebeeb74c358fa0fcc4a27
+    2) The Odds API
+        Key stored in Azure Key Vault: oddsapi-main
         Primary data source for NCAAM and NBA
         Premium Subscription Active
     3)  Actionnetwork.com (premium subscription available in addition to Action Labs)
-	        username: jb@greenbiercapital.com
-	        password: 6nRC!d!Axt3!4nKQ
-    4) basketball-api: eea8757fae3c507add2df14800bae25f
+	        Credentials stored in Azure Key Vault
+    4) basketball-api
+        Key stored in Azure Key Vault: basketball-api
         Secondary data source for NCAAM and NBA
         Premium subscription active 
     5) ESPN APIs as needed
