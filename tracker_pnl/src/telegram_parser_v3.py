@@ -121,9 +121,7 @@ class TelegramParserV3:
         self._update_segment(text)
         
         # Check for matchup announcements
-        if self._extract_matchup(text):
-            # Continue to check for picks in same message
-            pass
+        is_matchup = self._extract_matchup(text)
         
         # Try betting patterns
         for pattern in self.bet_patterns:
@@ -132,6 +130,8 @@ class TelegramParserV3:
                 pick = self._create_pick_from_pattern_match(match, pattern, text)
                 if pick:
                     picks.append(pick)
+                    # If we found a pick, don't update context with just this pick's team
+                    # unless it's a clear matchup announcement
                     break
         
         # If no structured pattern matched, try contextual parsing
@@ -141,17 +141,29 @@ class TelegramParserV3:
                 picks.append(contextual_pick)
         
         return picks
-    
+
     def _update_segment(self, text: str):
         """Update current segment from text."""
         text_lower = text.lower()
+        # Reset segment to FG if "game" or "full game" is mentioned
+        # but keep it if it's a specific segment
         for pattern, segment in self.segment_patterns.items():
             if re.search(pattern, text_lower):
                 self.context.last_segment = segment
                 return
-    
+
     def _extract_matchup(self, text: str) -> bool:
         """Extract matchup from text."""
+        # Check if it's just a team name (possible matchup header)
+        words = text.split()
+        if len(words) <= 3:
+            team_norm, league = self.team_registry.normalize_team(text)
+            if team_norm:
+                self.context.current_matchup = f"{team_norm} Game"
+                if league:
+                    self.context.current_league = league
+                return True
+
         patterns = [
             r"([A-Za-z][A-Za-z\s&'.-]*?)\s+(?:vs\.?|versus|v\.?)\s+([A-Za-z][A-Za-z\s&'.-]*)",
             r"([A-Za-z][A-Za-z\s&'.-]*?)\s+@\s+([A-Za-z][A-Za-z\s&'.-]*)",
@@ -291,7 +303,8 @@ class TelegramParserV3:
                     # Found a team, try to extract spread/total
                     numbers = re.findall(r'[-+]?\d+\.?\d*', text)
                     if numbers:
-                        spread = numbers[0]
+                        # Find first number that isn't the team name if it was numeric
+                        val = numbers[0]
                         # Look for odds
                         odds = None
                         if len(numbers) > 1:
@@ -303,7 +316,7 @@ class TelegramParserV3:
                         return Pick(
                             date=self.context.current_date,
                             matchup=self.context.current_matchup,
-                            pick_description=f"{team_norm} {spread}",
+                            pick_description=f"{team_norm} {val}",
                             segment=self.context.last_segment,
                             odds=odds,
                             league=league or self.context.current_league
@@ -319,6 +332,7 @@ class TelegramParserV3:
             odds_match = re.search(r'[-+]\d{3,4}', text)
             odds = odds_match.group(0) if odds_match else None
             
+            # If we have a matchup in context, use it!
             return Pick(
                 date=self.context.current_date,
                 matchup=self.context.current_matchup,
@@ -328,4 +342,15 @@ class TelegramParserV3:
                 league=self.context.current_league
             )
         
+        # Check for ML only with team in context
+        if "ml" in text_lower and self.context.last_team:
+             return Pick(
+                date=self.context.current_date,
+                matchup=self.context.current_matchup,
+                pick_description=f"{self.context.last_team} ML",
+                segment=self.context.last_segment,
+                odds=None,
+                league=self.context.current_league
+            )
+
         return None

@@ -42,12 +42,12 @@ window.APP_CONFIG = {
   // All APIs routed through Azure Front Door with path-based routing
   // ═══════════════════════════════════════════════════════════════════
   
-  // Primary API endpoint (Front Door) - LOCAL OVERRIDE
+  // Primary API endpoint (Front Door) - Production Only
   API_BASE_URL: 'https://www.greenbiersportventures.com/api',
   
-  // Fallback direct endpoints (used if Front Door unavailable) - LOCAL OVERRIDE
-  ORCHESTRATOR_URL: 'http://localhost:7071/api',
-  API_BASE_FALLBACK: 'http://localhost:7071/api',
+  // Fallback: Orchestrator direct URL (must be HTTPS for CSP compliance)
+  ORCHESTRATOR_URL: 'https://orchestrator-gb-stable.usercode-8c2f3f45.eastus.azurecontainerapps.io/api',
+  API_BASE_FALLBACK: 'https://orchestrator-gb-stable.usercode-8c2f3f45.eastus.azurecontainerapps.io/api',
 
   // ═══════════════════════════════════════════════════════════════════
   // SPORT-SPECIFIC API ENDPOINTS

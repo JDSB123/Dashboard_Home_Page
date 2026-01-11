@@ -404,8 +404,23 @@ class TeamRegistry:
             # Major programs and common references
             "Alabama": {
                 "id": "BAMA",
-                "aliases": ["alabama", "bama", "crimson tide", "tide", "ala"],
+                "aliases": ["alabama", "bama", "crimson tide", "tide", "ala", "bama fg"],
                 "conference": "SEC"
+            },
+            "North Dakota State": {
+                "id": "NDSU",
+                "aliases": ["north dakota state", "ndsu", "bison", "nd state"],
+                "conference": "Missouri Valley"
+            },
+            "CSU Bakersfield": {
+                "id": "CSUB",
+                "aliases": ["csu bakersfield", "csu bakers", "cs bakers", "bakersfield", "roadrunners"],
+                "conference": "Big West"
+            },
+            "UC Riverside": {
+                "id": "UCR",
+                "aliases": ["uc riverside", "uc river", "riverside", "highlanders"],
+                "conference": "Big West"
             },
             "Ohio State": {
                 "id": "OSU",

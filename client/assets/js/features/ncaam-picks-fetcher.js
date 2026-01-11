@@ -40,7 +40,7 @@
     const picksCache = {};
     let lastSource = 'container-app';
     const CACHE_DURATION = 60000; // 1 minute
-    const REQUEST_TIMEOUT = 60000; // 60 seconds (Increased for cold starts)
+    const REQUEST_TIMEOUT = 20000; // 20 seconds (reduced from 60s for faster failure)
 
     /**
      * Fetch with timeout
