@@ -132,15 +132,19 @@ class TelegramParserV3:
             if match:
                 pick = self._create_pick_from_pattern_match(match, pattern, text)
                 if pick:
+                    # Update league context from pick
+                    if pick.league:
+                        self.context.current_league = pick.league
                     picks.append(pick)
-                    # If we found a pick, don't update context with just this pick's team
-                    # unless it's a clear matchup announcement
                     break
         
         # If no structured pattern matched, try contextual parsing
         if not picks and self._looks_like_bet(text):
             contextual_pick = self._parse_contextual_bet(text)
             if contextual_pick:
+                # Update league context from pick
+                if contextual_pick.league:
+                    self.context.current_league = contextual_pick.league
                 picks.append(contextual_pick)
         
         return picks
@@ -224,6 +228,7 @@ class TelegramParserV3:
                 ou_type = "Over" if groups[0].lower() in ["over", "o"] else "Under"
                 total = groups[1]
                 odds = groups[2] if len(groups) > 2 else None
+                league = self.context.current_league
             else:
                 # Team total format "Nets o219"
                 team = groups[0]
@@ -234,8 +239,6 @@ class TelegramParserV3:
                 team_norm, league = self.team_registry.normalize_team(team, self.context.current_league)
                 if team_norm:
                     self.context.last_team = team_norm
-                    if league:
-                        self.context.current_league = league
             
             return Pick(
                 date=self.context.current_date,
@@ -243,7 +246,7 @@ class TelegramParserV3:
                 pick_description=f"{ou_type} {total}",
                 segment=self.context.last_segment,
                 odds=odds,
-                league=self.context.current_league
+                league=league or self.context.current_league
             )
         
         else:
@@ -306,8 +309,16 @@ class TelegramParserV3:
                     # Found a team, try to extract spread/total
                     numbers = re.findall(r'[-+]?\d+\.?\d*', text)
                     if numbers:
-                        # Find first number that isn't the team name if it was numeric
                         val = numbers[0]
+                        # If the message has "over" or "o", it's a total
+                        ou_type = None
+                        if "over" in text_lower or " o" in text_lower: ou_type = "Over"
+                        elif "under" in text_lower or " u" in text_lower: ou_type = "Under"
+                        
+                        desc = f"{team_norm} {val}"
+                        if ou_type:
+                            desc = f"{ou_type} {val}"
+                            
                         # Look for odds
                         odds = None
                         if len(numbers) > 1:
@@ -319,7 +330,7 @@ class TelegramParserV3:
                         return Pick(
                             date=self.context.current_date,
                             matchup=self.context.current_matchup,
-                            pick_description=f"{team_norm} {val}",
+                            pick_description=desc,
                             segment=self.context.last_segment,
                             odds=odds,
                             league=league or self.context.current_league

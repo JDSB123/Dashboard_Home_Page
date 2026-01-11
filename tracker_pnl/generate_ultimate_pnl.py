@@ -36,6 +36,37 @@ class UltimatePnlEvaluator:
         if not games:
             return None
         
+        # Load half/quarter scores for all games
+        conn = sqlite3.connect("box_scores.db")
+        cursor = conn.cursor()
+        
+        for game in games:
+            game_id = game.get("game_id")
+            if not game_id:
+                continue
+            
+            # Load quarter scores
+            cursor.execute("""
+                SELECT quarter, home_score, away_score FROM quarter_scores
+                WHERE game_id = ? AND league = ?
+            """, (game_id, league))
+            quarter_scores = {}
+            for qrow in cursor.fetchall():
+                quarter_scores[qrow[0]] = {"home": qrow[1], "away": qrow[2]}
+            game["quarter_scores"] = quarter_scores
+            
+            # Load half scores
+            cursor.execute("""
+                SELECT half, home_score, away_score FROM half_scores
+                WHERE game_id = ? AND league = ?
+            """, (game_id, league))
+            half_scores = {}
+            for hrow in cursor.fetchall():
+                half_scores[hrow[0]] = {"home": hrow[1], "away": hrow[2]}
+            game["half_scores"] = half_scores
+        
+        conn.close()
+        
         # Build team candidates from multiple sources
         team_candidates = []
         
@@ -166,9 +197,10 @@ class UltimatePnlEvaluator:
         pick_desc_lower = pick_desc.lower()
         
         # Get scores based on segment
-        if segment == "1H":
+        # Normalize segment format
+        if segment in ["1H", "H1"]:
             scores = self.tracker_eval._get_half_scores(game, "H1", league)
-        elif segment == "2H":
+        elif segment in ["2H", "H2"]:
             scores = self.tracker_eval._get_half_scores(game, "H2", league)
         else:
             scores = {"home": game.get("home_score", 0) or 0, "away": game.get("away_score", 0) or 0}
@@ -261,7 +293,9 @@ class UltimatePnlEvaluator:
             
             # Get half scores if needed
             if segment in ["1H", "H1", "2H", "H2"]:
-                half_scores = self.get_half_scores_ultimate(game, segment, league)
+                # Normalize segment format for tracker_evaluator (expects "H1" or "H2")
+                half_key = "H1" if segment in ["1H", "H1"] else "H2"
+                half_scores = self.get_half_scores_ultimate(game, half_key, league)
                 if half_scores:
                     result_row["half_score"] = f"{half_scores.get('away', 0)}-{half_scores.get('home', 0)}"
                 else:

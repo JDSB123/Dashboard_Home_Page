@@ -598,8 +598,20 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             const data = localStorage.getItem(WEEKLY_LINEUP_STORAGE_KEY);
             if (data) {
                 const parsed = JSON.parse(data);
+                
+                // Check cache expiry: clear if timestamp is from previous day
+                if (parsed.timestamp) {
+                    const cachedDate = new Date(parsed.timestamp).toDateString();
+                    const today = new Date().toDateString();
+                    if (cachedDate !== today) {
+                        log(`⏰ Clearing stale picks (cached ${cachedDate}, today is ${today})`);
+                        localStorage.removeItem(WEEKLY_LINEUP_STORAGE_KEY);
+                        return null;
+                    }
+                }
+                
                 if (parsed.picks && Array.isArray(parsed.picks) && parsed.picks.length > 0) {
-                    log(`📂 Loaded ${parsed.picks.length} weekly lineup picks from localStorage`);
+                    log(`📂 Loaded ${parsed.picks.length} weekly lineup picks from localStorage (cached today)`);
                     return parsed.picks;
                 }
             }
@@ -3540,6 +3552,30 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         archiveExpiredPicks,
         syncArchivedOutcomes,
         forceArchiveAllPicks,
+        // New: Sync bridge - get current active picks for Dashboard
+        getActivePicks: () => allPicks || [],
+        exportToDashboard: () => {
+            // Export all currently active picks in a format Dashboard can consume
+            const picks = allPicks || [];
+            return picks.map(pick => ({
+                ...pick,
+                source: 'weekly-lineup',
+                createdAt: pick.createdAt || new Date().toISOString(),
+                status: pick.status || 'pending'
+            }));
+        },
+        // Sync: Dashboard can call this to push results back
+        syncDashboardOutcomes: (dashboardPicks) => {
+            // Update archived picks with outcomes from Dashboard
+            if (!Array.isArray(dashboardPicks)) return;
+            log('[Weekly Lineup] Syncing outcomes from Dashboard...');
+            dashboardPicks.forEach(dbPick => {
+                if (dbPick.status && ['win', 'loss', 'push'].includes(dbPick.status.toLowerCase())) {
+                    const pickId = generatePickId(dbPick);
+                    updateArchivedPickOutcome(pickId, dbPick.status.toLowerCase());
+                }
+            });
+        }
         clearArchivedPicks,
         getWeeklyStatsSummary,
         loadArchivedPicks,

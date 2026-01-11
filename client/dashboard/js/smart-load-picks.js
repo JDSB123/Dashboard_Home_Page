@@ -2077,29 +2077,24 @@ async function loadPicksFromDatabase() {
 }
 
 function initializePicksAndRecords() {
-    const recordsPromise = loadTeamRecords();
-    if (recordsPromise && typeof recordsPromise.catch === 'function') {
-        recordsPromise.catch(error => console.warn('[RECORDS] Initial team records load failed:', error));
-    }
-
-    // Try to load from database first, then fall back to uploaded picks
+    // Try to load from database first, then fall back to API/localStorage picks
     const databasePromise = loadPicksFromDatabase();
     databasePromise.then(dbPicks => {
         if (dbPicks && dbPicks.length > 0) {
             // Use database picks
-            console.log('Using picks from database');
-            // Process and display picks
-            // TODO: Add logic to append picks to table
+            console.log('[DASHBOARD] ✅ Using picks from database');
+            // Picks are already loaded and displayed by loadPicksFromDatabase
         } else {
-            // Fall back to uploaded picks
+            // Fall back to API or localStorage
+            console.log('[DASHBOARD] No database picks, trying API/localStorage...');
             const picksPromise = loadAndAppendPicks();
             if (picksPromise && typeof picksPromise.catch === 'function') {
                 picksPromise.catch(error => console.warn('[PICKS LOADER] Initial load encountered an error:', error));
             }
         }
     }).catch(error => {
-        // Fall back to uploaded picks on error
-        console.warn('Database load failed, using uploaded picks:', error);
+        // Fall back to API/localStorage on error
+        console.warn('[DASHBOARD] Database load failed, trying API/localStorage:', error.message);
         const picksPromise = loadAndAppendPicks();
         if (picksPromise && typeof picksPromise.catch === 'function') {
             picksPromise.catch(error => console.warn('[PICKS LOADER] Initial load encountered an error:', error));
@@ -2107,28 +2102,35 @@ function initializePicksAndRecords() {
     });
 }
 
-// Auto-load picks on page load - DISABLED while using picks-loader.js for Azure Blob Storage
-// Uncomment when database API is configured in config.js
-// if (document.readyState === 'loading') {
-//     document.addEventListener('DOMContentLoaded', initializePicksAndRecords);
-// } else {
-//     initializePicksAndRecords();
-// }
-
-// Only load team records (not picks) on page load
+/**
+ * Auto-load picks AND team records on page load
+ * Tries database first, falls back to API/localStorage if available
+ */
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
+        // Load team records (non-blocking)
         const recordsPromise = loadTeamRecords();
         if (recordsPromise && typeof recordsPromise.catch === 'function') {
             recordsPromise.catch(error => console.warn('[RECORDS] Initial team records load failed:', error));
         }
+        
+        // Load picks from database/API/localStorage
+        initializePicksAndRecords();
+        
+        // Initialize delete buttons
         initializeDeleteButtons();
     });
 } else {
+    // Load team records (non-blocking)
     const recordsPromise = loadTeamRecords();
     if (recordsPromise && typeof recordsPromise.catch === 'function') {
         recordsPromise.catch(error => console.warn('[RECORDS] Initial team records load failed:', error));
     }
+    
+    // Load picks from database/API/localStorage
+    initializePicksAndRecords();
+    
+    // Initialize delete buttons
     initializeDeleteButtons();
 }
 

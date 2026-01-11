@@ -92,6 +92,23 @@ def evaluate_pick(pick, db: BoxScoreDatabase) -> Dict:
     return result
 
 
+def calculate_payout(odds_str: Optional[str], risk: float) -> float:
+    """Calculate payout from American odds."""
+    if not odds_str:
+        return risk * 0.9  # Assume -110 average if no odds
+    
+    try:
+        # Handle cases like "-110", "+120", "110"
+        odds_val = str(odds_str).replace("+", "").strip()
+        odds = int(odds_val)
+        if odds > 0:
+            return risk * (odds / 100)
+        else:
+            return risk * (100 / abs(odds))
+    except:
+        return risk * 0.9
+
+
 def get_games_with_scores(db: BoxScoreDatabase, date: str, league: str) -> List[Dict]:
     """Get games from DB with full score data."""
     import sqlite3

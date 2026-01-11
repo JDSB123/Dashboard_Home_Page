@@ -185,9 +185,6 @@
 
         riskInput?.removeEventListener('input', updateToWinCalc);
         riskInput?.addEventListener('input', updateToWinCalc);
-
-        // Inject buttons into table rows
-        injectButtonsIntoTableRows();
     }
 
     /**

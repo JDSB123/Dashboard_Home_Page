@@ -46,8 +46,8 @@ window.APP_CONFIG = {
   API_BASE_URL: 'https://www.greenbiersportventures.com/api',
   
   // Fallback: Orchestrator direct URL (must be HTTPS for CSP compliance)
-  ORCHESTRATOR_URL: 'https://orchestrator-gb-stable.usercode-8c2f3f45.eastus.azurecontainerapps.io/api',
-  API_BASE_FALLBACK: 'https://orchestrator-gb-stable.usercode-8c2f3f45.eastus.azurecontainerapps.io/api',
+  ORCHESTRATOR_URL: '',
+  API_BASE_FALLBACK: '',
 
   // ═══════════════════════════════════════════════════════════════════
   // SPORT-SPECIFIC API ENDPOINTS
