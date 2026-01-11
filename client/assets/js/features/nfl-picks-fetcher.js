@@ -209,19 +209,89 @@
             if (!Number.isNaN(asNum)) fireNum = Math.max(1, Math.min(5, asNum));
         }
 
+        // Extract team names
+        const awayTeam = pick.away_team || pick.awayTeam || '';
+        const homeTeam = pick.home_team || pick.homeTeam || '';
+        
+        // Parse pick to extract team, type, direction, and line
+        const pickDisplay = pick.pick_display || pick.pick || pick.recommendation || '';
+        const marketType = (pick.market_type || pick.market || '').toLowerCase();
+        
+        // Determine pick type and extract components
+        let pickType = 'spread';
+        let pickTeam = '';
+        let pickDirection = '';
+        let line = '';
+        
+        if (marketType === 'moneyline' || marketType === 'ml') {
+            pickType = 'ml';
+            // For ML, pick is the team name
+            pickTeam = pickDisplay.replace(/\s*ML\s*/i, '').trim() || awayTeam;
+            line = 'ML';
+        } else if (marketType === 'total' || marketType === 'totals' || marketType === 'over/under') {
+            pickType = 'total';
+            // Parse "OVER 45.5" or "UNDER 45.5"
+            const totalMatch = pickDisplay.match(/^(OVER|UNDER|Over|Under)\s+([\d.]+)/i);
+            if (totalMatch) {
+                pickDirection = totalMatch[1].toUpperCase();
+                pickTeam = pickDirection;
+                line = totalMatch[2];
+            } else {
+                pickDirection = 'OVER';
+                pickTeam = 'OVER';
+                line = pickDisplay.replace(/[^\d.]/g, '');
+            }
+        } else if (marketType === 'team total' || marketType === 'team_total' || marketType === 'tt') {
+            pickType = 'tt';
+            const ttMatch = pickDisplay.match(/^(.+?)\s+(OVER|UNDER|Over|Under)\s+([\d.]+)/i);
+            if (ttMatch) {
+                pickTeam = ttMatch[1].trim();
+                pickDirection = ttMatch[2].toUpperCase();
+                line = ttMatch[3];
+            }
+        } else {
+            // Default to spread: "Team +X.X" or "Team -X.X"
+            pickType = 'spread';
+            const spreadMatch = pickDisplay.match(/^(.+?)\s+([+-][\d.]+)/);
+            if (spreadMatch) {
+                pickTeam = spreadMatch[1].trim();
+                line = spreadMatch[2];
+            } else {
+                // Fallback: just use the pick display as team
+                pickTeam = pickDisplay.trim();
+            }
+        }
+        
+        // Calculate edge percentage
+        let edgeValue = 0;
+        if (typeof pick.edge === 'number') {
+            edgeValue = pick.edge;
+        } else if (typeof pick.edge === 'string') {
+            edgeValue = parseFloat(pick.edge.replace('%', '')) / 100;
+        }
+
         return {
             sport: 'NFL',
-            game: `${pick.away_team || pick.awayTeam} @ ${pick.home_team || pick.homeTeam}`,
-            pick: pick.pick_display || pick.pick || pick.recommendation,
-            odds: pick.odds || pick.market_odds || '',
-            edge: pick.edge ? `${(pick.edge * 100).toFixed(1)}%` : '',
+            league: 'NFL',
+            awayTeam: awayTeam,
+            homeTeam: homeTeam,
+            awayRecord: pick.away_record || '',
+            homeRecord: pick.home_record || '',
+            pickTeam: pickTeam,
+            pickType: pickType,
+            pickDirection: pickDirection,
+            line: line,
+            odds: pick.odds || pick.market_odds || '-110',
+            edge: edgeValue,
+            fire: fireNum,
             confidence: fireNum,
-            time: pick.game_time || pick.time || '',
-            market: pick.market_type || pick.market || '',
-            period: pick.period || 'FG',
-            fire_rating: pick.fire_rating || '',
             fireLabel: fireNum === 5 ? 'MAX' : '',
+            time: pick.game_time || pick.time || '',
+            date: pick.game_date || pick.date || '',
+            segment: pick.period || pick.segment || 'FG',
+            market: marketType || 'spread',
             rationale: pick.rationale || pick.reason || pick.analysis || pick.notes || pick.executive_summary || '',
+            modelStamp: pick.model_version || pick.modelVersion || pick.model_tag || pick.modelTag || '',
             modelVersion: pick.model_version || pick.modelVersion || pick.model_tag || pick.modelTag || ''
         };
     };

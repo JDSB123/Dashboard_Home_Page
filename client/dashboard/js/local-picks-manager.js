@@ -654,6 +654,38 @@
             setTimeout(() => window.DashboardFilterPills.applyFilters(), 50);
         }
 
+        // ========== ACTIVATE LIVE SCORES & BOX SCORES ==========
+        // Fetch today's games and start live score updates
+        setTimeout(async () => {
+            try {
+                // 1. Fetch today's games first (needed for matching)
+                if (window.AutoGameFetcher) {
+                    console.log('[PICKS-TABLE] Fetching today\'s games for live scores...');
+                    await window.AutoGameFetcher.fetchTodaysGames(true); // Force refresh
+                    const games = window.AutoGameFetcher.getTodaysGames() || [];
+                    console.log(`[PICKS-TABLE] Loaded ${games.length} games for live score matching`);
+                }
+
+                // 2. Start/restart LiveScoreUpdater
+                if (window.LiveScoreUpdater) {
+                    console.log('[PICKS-TABLE] Starting live score updates...');
+                    window.LiveScoreUpdater.stopLiveUpdates(); // Stop if running
+                    window.LiveScoreUpdater.startLiveUpdates(); // Start fresh
+                    // Also trigger an immediate update
+                    window.LiveScoreUpdater.updateScores();
+                }
+
+                // 3. Populate team records in box scores
+                if (typeof window.populateTeamRecordsWhenReady === 'function') {
+                    window.populateTeamRecordsWhenReady(tbody, { force: true });
+                }
+
+                console.log('[PICKS-TABLE] ✅ Live scores and box scores activated');
+            } catch (e) {
+                console.warn('[PICKS-TABLE] Error activating live scores:', e);
+            }
+        }, 200);
+
         // Attach sportsbook dropdown event handlers
         attachSportsbookDropdownListeners();
         
@@ -806,18 +838,27 @@
             new Date(`${pick.gameDate} ${pick.gameTime}`).getTime() : Date.now();
 
         row.setAttribute('data-pick-id', pick.id || `pick-${idx}`);
+        row.setAttribute('data-row-id', pick.id || `pick-${idx}`); // For LiveScoreUpdater
         row.setAttribute('data-league', sport);
+        row.setAttribute('data-sport', sport); // For LiveScoreUpdater
         row.setAttribute('data-epoch', epochTime);
         row.setAttribute('data-book', sportsbook.toLowerCase());
         row.setAttribute('data-away', awayTeam.toLowerCase());
         row.setAttribute('data-home', homeTeam.toLowerCase());
+        row.setAttribute('data-away-team', awayTeam); // For LiveScoreUpdater
+        row.setAttribute('data-home-team', homeTeam); // For LiveScoreUpdater
+        row.setAttribute('data-away-abbr', awayInfo.abbr || ''); // For LiveScoreUpdater
+        row.setAttribute('data-home-abbr', homeInfo.abbr || ''); // For LiveScoreUpdater
         row.setAttribute('data-pick-type', pick.pickType || 'spread');
+        row.setAttribute('data-pick-team', pick.pickTeam || ''); // For LiveScoreUpdater
         row.setAttribute('data-pick-text', selection);
+        row.setAttribute('data-line', pick.line || ''); // For LiveScoreUpdater
         row.setAttribute('data-segment', segmentKey);
         row.setAttribute('data-odds', pick.odds || '');
         row.setAttribute('data-risk', pick.risk || '');
         row.setAttribute('data-win', pick.win || '');
         row.setAttribute('data-status', status);
+        row.setAttribute('data-game-id', pick.gameId || ''); // For LiveScoreUpdater
         row.classList.add('group-start');
 
         const isSingleTeamBet = !pick.homeTeam || homeTeam === 'TBD';
