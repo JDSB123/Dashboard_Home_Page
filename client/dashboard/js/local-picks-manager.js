@@ -1070,6 +1070,23 @@
 
     // ========== INITIALIZE ==========
 
+    /**
+     * Check if we're on the dashboard page (not weekly-lineup or other pages)
+     */
+    function isDashboardPage() {
+        // Check for the page-weekly-lineup class on body
+        if (document.body.classList.contains('page-weekly-lineup')) {
+            return false;
+        }
+        // Check the URL path
+        const path = window.location.pathname.toLowerCase();
+        if (path.includes('weekly-lineup') || path.includes('odds-market')) {
+            return false;
+        }
+        // Default to true if on index.html or dashboard-like page
+        return true;
+    }
+
     function initialize() {
         console.log('🏠 LocalPicksManager v33.01.0 initialized (real data only)');
         
@@ -1083,11 +1100,16 @@
         window.processAndSavePicks = parseAndAddPicks;
         window.loadUploadedPicks = refreshPicksTable;
 
-        // Load existing picks first (shows immediately)
-        refreshPicksTable();
+        // Only auto-refresh table on dashboard page (not weekly-lineup)
+        if (isDashboardPage()) {
+            // Load existing picks first (shows immediately)
+            refreshPicksTable();
 
-        // Then re-enrich with ESPN data (async, updates when ready)
-        setTimeout(() => reEnrichExistingPicks(), 500);
+            // Then re-enrich with ESPN data (async, updates when ready)
+            setTimeout(() => reEnrichExistingPicks(), 500);
+        } else {
+            console.log('🏠 LocalPicksManager: Skipping auto-refresh (not on dashboard page)');
+        }
     }
 
     // Auto-initialize
