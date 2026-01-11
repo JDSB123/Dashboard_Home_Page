@@ -49,6 +49,10 @@ window.APP_CONFIG = {
   ORCHESTRATOR_URL: 'https://gbsv-orchestrator.wittypebble-41c11c65.eastus.azurecontainerapps.io',
   API_BASE_FALLBACK: 'https://gbsv-orchestrator.wittypebble-41c11c65.eastus.azurecontainerapps.io/api',
 
+  // Azure Functions URL (for registry, SignalR negotiate, etc.)
+  // Set to empty string to use static fallbacks instead of dynamic registry
+  FUNCTIONS_BASE_URL: '',
+
   // ═══════════════════════════════════════════════════════════════════
   // SPORT-SPECIFIC API ENDPOINTS
   // Primary: Front Door path-based routing (unified domain)
@@ -82,6 +86,8 @@ window.APP_CONFIG = {
   DEBUG_MODE: false,
   USE_FRONT_DOOR: true,  // Toggle to use Front Door vs direct Container App URLs
   ENABLE_DB_SYNC: false, // Set to false to disable fetching from non-existent Orchestrator endpoints (get-picks, team-records)
+  SIGNALR_ENABLED: false, // Set to true ONLY when Azure SignalR Service is deployed and configured
+  DYNAMIC_REGISTRY_ENABLED: false, // Set to true ONLY when Azure Functions are deployed with ModelRegistry
 
   // Repository Info
   REPO_URL: 'https://github.com/JDSB123/Dashboard_Home_Page',

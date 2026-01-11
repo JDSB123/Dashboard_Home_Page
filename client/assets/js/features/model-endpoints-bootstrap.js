@@ -41,8 +41,19 @@
     };
 
     const hydrateEndpoints = async () => {
+        // Check if dynamic registry is enabled - if not, skip network calls entirely
+        if (!window.APP_CONFIG?.DYNAMIC_REGISTRY_ENABLED) {
+            console.log('[MODEL-ENDPOINTS] Dynamic registry disabled - using static config.js endpoints');
+            console.log('[MODEL-ENDPOINTS] • To enable dynamic registry, set DYNAMIC_REGISTRY_ENABLED: true in config.js');
+            console.log('[MODEL-ENDPOINTS] • Requires Azure Functions deployment with ModelRegistry function');
+            window.APP_CONFIG.MODEL_ENDPOINTS_SOURCE = 'static';
+            window.APP_CONFIG.MODEL_ENDPOINTS_LAST_UPDATED = new Date().toISOString();
+            return;
+        }
+
         const primaryBase = window.APP_CONFIG?.API_BASE_URL;
         const fallbackBase = window.APP_CONFIG?.API_BASE_FALLBACK;
+        const functionsBase = window.APP_CONFIG?.FUNCTIONS_BASE_URL;
 
         const resolveRegistry = async (base) => {
             if (!base) return null;
@@ -59,23 +70,29 @@
         };
 
         let registry = null;
-        try {
-            registry = await resolveRegistry(primaryBase);
-        } catch (err) {
-            console.warn('[MODEL-ENDPOINTS] Primary registry fetch failed:', err.message);
-            if (fallbackBase) {
-                try {
-                    registry = await resolveRegistry(fallbackBase);
-                    console.log('[MODEL-ENDPOINTS] • Fallback registry succeeded');
-                } catch (fallbackErr) {
-                    console.warn('[MODEL-ENDPOINTS] Fallback registry failed:', fallbackErr.message);
+        const sources = [
+            { name: 'primary', base: primaryBase },
+            { name: 'fallback', base: fallbackBase },
+            { name: 'functions', base: functionsBase ? `${functionsBase}/api` : null }
+        ].filter(s => s.base);
+
+        for (const source of sources) {
+            try {
+                registry = await resolveRegistry(source.base);
+                if (registry) {
+                    console.log(`[MODEL-ENDPOINTS] • Registry loaded from ${source.name}`);
+                    break;
                 }
+            } catch (err) {
+                console.warn(`[MODEL-ENDPOINTS] ${source.name} registry fetch failed:`, err.message);
             }
         }
 
         if (!registry) {
-            console.warn('[MODEL-ENDPOINTS] Unable to refresh endpoints from registry (primary + fallback failed)');
-            console.warn('[MODEL-ENDPOINTS] Fetchers will use fallback endpoints from config.js');
+            console.warn('[MODEL-ENDPOINTS] Unable to refresh endpoints from registry (all sources failed)');
+            console.log('[MODEL-ENDPOINTS] • Using fallback endpoints from config.js');
+            console.log('[MODEL-ENDPOINTS] • Consider setting DYNAMIC_REGISTRY_ENABLED: false if registry not deployed');
+            window.APP_CONFIG.MODEL_ENDPOINTS_SOURCE = 'static-fallback';
             return;
         }
 
@@ -100,6 +117,7 @@
 
         window.APP_CONFIG.MODEL_ENDPOINTS_LAST_UPDATED = new Date().toISOString();
         window.APP_CONFIG.MODEL_ENDPOINTS_COUNT = updatedCount;
+        window.APP_CONFIG.MODEL_ENDPOINTS_SOURCE = 'registry';
 
         if (updatedCount > 0) {
             console.log(`[MODEL-ENDPOINTS] Hydrated ${updatedCount} endpoints from registry`);

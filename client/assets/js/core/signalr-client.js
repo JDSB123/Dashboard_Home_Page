@@ -37,14 +37,34 @@
          * Initialize SignalR connection
          */
         async connect() {
-            // Check if SignalR library is loaded
-            if (typeof signalR === 'undefined') {
-                console.warn('SignalR library not loaded, using polling fallback');
+            // Check if SignalR is enabled in config
+            if (!window.APP_CONFIG?.SIGNALR_ENABLED) {
+                console.log('[SignalR] Disabled in config - using polling fallback');
+                console.log('[SignalR] • To enable, set SIGNALR_ENABLED: true in config.js');
+                console.log('[SignalR] • Requires Azure SignalR Service + Azure Functions deployment');
                 this._startPollingFallback();
                 return false;
             }
 
+            // Check if SignalR library is loaded
+            if (typeof signalR === 'undefined') {
+                console.warn('[SignalR] Library not loaded, using polling fallback');
+                this._startPollingFallback();
+                return false;
+            }
+
+            // Check if negotiate URL is configured
+            if (!this.negotiateUrl || this.negotiateUrl === '/api/signalr/negotiate') {
+                // Relative URL won't work without proper backend - check if FUNCTIONS_BASE_URL is set
+                if (!window.APP_CONFIG?.FUNCTIONS_BASE_URL) {
+                    console.log('[SignalR] No FUNCTIONS_BASE_URL configured - using polling fallback');
+                    this._startPollingFallback();
+                    return false;
+                }
+            }
+
             try {
+                console.log('[SignalR] Attempting to negotiate connection...');
                 // Get connection info from Azure Functions
                 const response = await fetch(this.negotiateUrl, {
                     method: 'POST',
