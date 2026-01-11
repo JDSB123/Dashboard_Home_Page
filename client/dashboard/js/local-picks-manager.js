@@ -656,6 +656,9 @@
 
         // Attach sportsbook dropdown event handlers
         attachSportsbookDropdownListeners();
+        
+        // Attach risk/win amount edit handlers
+        attachRiskWinEditListeners();
     }
 
     // ========== SPORTSBOOK DROPDOWN HANDLER ==========
@@ -684,6 +687,55 @@
             pick.sportsbook = newSportsbook;
             savePicks(picks);
             console.log(`✅ Updated pick ${pickId} sportsbook to: ${newSportsbook || 'None'}`);
+        }
+    }
+
+    // ========== RISK/WIN AMOUNT EDIT HANDLERS ==========
+
+    function attachRiskWinEditListeners() {
+        const riskInputs = document.querySelectorAll('.editable-risk');
+        const winInputs = document.querySelectorAll('.editable-win');
+        
+        riskInputs.forEach(input => {
+            input.removeEventListener('change', handleRiskChange);
+            input.addEventListener('change', handleRiskChange);
+        });
+        
+        winInputs.forEach(input => {
+            input.removeEventListener('change', handleWinChange);
+            input.addEventListener('change', handleWinChange);
+        });
+    }
+
+    function handleRiskChange(event) {
+        const pickId = event.target.getAttribute('data-pick-id');
+        const newRisk = parseFloat(event.target.value) || 0;
+        
+        if (!pickId) return;
+        
+        const picks = getAllPicks();
+        const pick = picks.find(p => p.id === pickId);
+        
+        if (pick) {
+            pick.risk = Math.round(newRisk);
+            savePicks(picks);
+            console.log(`✅ Updated pick ${pickId} risk to: $${pick.risk.toLocaleString()}`);
+        }
+    }
+
+    function handleWinChange(event) {
+        const pickId = event.target.getAttribute('data-pick-id');
+        const newWin = parseFloat(event.target.value) || 0;
+        
+        if (!pickId) return;
+        
+        const picks = getAllPicks();
+        const pick = picks.find(p => p.id === pickId);
+        
+        if (pick) {
+            pick.win = Math.round(newWin);
+            savePicks(picks);
+            console.log(`✅ Updated pick ${pickId} win to: $${pick.win.toLocaleString()}`);
         }
     }
 
@@ -962,10 +1014,25 @@
                 </div>
             </td>
             <td class="center">
-                <span class="currency-combined currency-stacked">
-                    <span class="currency-risk-row"><span class="risk-amount">${formatCurrencyValue(pick.risk)}</span><span class="currency-separator"> /</span></span>
-                    <span class="win-amount">${formatCurrencyValue(pick.win)}</span>
-                </span>
+                <div class="currency-combined currency-stacked editable-amounts">
+                    <div class="currency-risk-row">
+                        <input type="number" 
+                               class="editable-risk" 
+                               value="${Math.round(pick.risk || 50000)}" 
+                               data-pick-id="${pick.id}"
+                               aria-label="Risk amount"
+                               min="0"
+                               step="1000">
+                        <span class="currency-separator"> /</span>
+                    </div>
+                    <input type="number" 
+                           class="editable-win" 
+                           value="${Math.round(pick.win || 50000)}" 
+                           data-pick-id="${pick.id}"
+                           aria-label="Win amount"
+                           min="0"
+                           step="1000">
+                </div>
             </td>
             <td class="center">
                 ${boxscoreHtml}
@@ -1148,6 +1215,11 @@
         if (isDashboardPage()) {
             // Load existing picks first (shows immediately)
             refreshPicksTable();
+
+            // Initialize table sorting
+            if (window.PicksSortManager && typeof window.PicksSortManager.initSorting === 'function') {
+                setTimeout(() => window.PicksSortManager.initSorting(), 100);
+            }
 
             // Then re-enrich with ESPN data (async, updates when ready)
             setTimeout(() => reEnrichExistingPicks(), 500);

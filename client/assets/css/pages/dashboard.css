@@ -642,6 +642,62 @@ body.page-active-picks .win-amount {
     color: #66ffbb;
 }
 
+/* ===== EDITABLE RISK/WIN AMOUNTS ===== */
+body.page-active-picks .editable-amounts {
+    gap: 4px;
+}
+
+body.page-active-picks .editable-risk,
+body.page-active-picks .editable-win {
+    width: 90px;
+    padding: 4px 8px;
+    font-family: var(--font-body), 'Cormorant Garamond', Georgia, serif;
+    font-weight: 600;
+    font-size: var(--text-lg, 0.9375rem);
+    background-color: rgba(25, 50, 80, 0.5);
+    border: 1px solid rgba(110, 160, 200, 0.3);
+    border-radius: 4px;
+    color: var(--neutral-100);
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+body.page-active-picks .editable-risk {
+    color: #ff9999;
+}
+
+body.page-active-picks .editable-win {
+    color: #66ffbb;
+}
+
+body.page-active-picks .editable-risk:hover,
+body.page-active-picks .editable-win:hover {
+    background-color: rgba(30, 60, 90, 0.7);
+    border-color: rgba(110, 160, 200, 0.6);
+}
+
+body.page-active-picks .editable-risk:focus,
+body.page-active-picks .editable-win:focus {
+    outline: none;
+    background-color: rgba(40, 70, 100, 0.9);
+    border-color: rgba(150, 200, 255, 0.8);
+    box-shadow: 0 0 0 3px rgba(150, 200, 255, 0.2);
+}
+
+/* Remove spinner arrows from number inputs */
+body.page-active-picks .editable-risk::-webkit-outer-spin-button,
+body.page-active-picks .editable-risk::-webkit-inner-spin-button,
+body.page-active-picks .editable-win::-webkit-outer-spin-button,
+body.page-active-picks .editable-win::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+body.page-active-picks .editable-risk,
+body.page-active-picks .editable-win {
+    -moz-appearance: textfield;
+}
+
 /* ==========================================================================
    STATUS BADGES (Dashboard) - Functional Color-Coded Pills
    ========================================================================== */
