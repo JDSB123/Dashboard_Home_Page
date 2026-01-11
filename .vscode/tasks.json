@@ -9,7 +9,7 @@
 			"isBackground": true,
 			"dependsOn": "npm install (functions)",
 			"options": {
-				"cwd": "${workspaceFolder}/Dashboard_Home_Page\\azure-functions"
+				"cwd": "${workspaceFolder}/azure-functions"
 			}
 		},
 		{
@@ -17,7 +17,7 @@
 			"label": "npm install (functions)",
 			"command": "npm install",
 			"options": {
-				"cwd": "${workspaceFolder}/Dashboard_Home_Page\\azure-functions"
+				"cwd": "${workspaceFolder}/azure-functions"
 			}
 		},
 		{
@@ -26,7 +26,7 @@
 			"command": "npm prune --production",
 			"problemMatcher": [],
 			"options": {
-				"cwd": "${workspaceFolder}/Dashboard_Home_Page\\azure-functions"
+				"cwd": "${workspaceFolder}/azure-functions"
 			}
 		}
 	]
