@@ -261,18 +261,10 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             // Archive expired picks on page load
             archiveExpiredPicks();
 
-            // Load saved picks from localStorage on page load (persist across refreshes)
-            const savedPicks = loadWeeklyLineupPicks();
-            if (savedPicks && savedPicks.length > 0) {
-                log(`📂 Restoring ${savedPicks.length} saved picks from previous session`);
-                // Use requestAnimationFrame to ensure DOM is ready
-                requestAnimationFrame(() => {
-                    populateWeeklyLineupTable(savedPicks);
-                });
-            }
-
-            // Don't auto-fetch picks - user must click Fetch button
-            // Picks will only fetch when user triggers fetch via toolbar buttons
+            // v33.01.1: Auto-fetch fresh picks on page load (production behavior)
+            // Always fetch fresh data from API to ensure latest picks are shown
+            log('🚀 [Weekly Lineup] Auto-fetching fresh picks from API...');
+            loadModelOutputs();
 
             // Initialize filter system
             requestAnimationFrame(() => {
