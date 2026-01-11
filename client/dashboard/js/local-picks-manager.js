@@ -54,7 +54,7 @@
 
     function clearPicks() {
         localStorage.removeItem(STORAGE_KEY);
-        console.log('🗑️ Cleared all picks from localStorage');
+        console.log('CLEANUP Cleared all picks from localStorage');
         refreshPicksTable();
     }
 
@@ -1029,7 +1029,7 @@
     // ========== CLEANUP SAMPLE DATA ==========
     
     function cleanupSampleData() {
-        const CLEANUP_VERSION_KEY = 'gbsv_cleanup_v2';  // Bump version to re-run cleanup
+        const CLEANUP_VERSION_KEY = 'gbsv_cleanup_v3';  // Bump version to re-run cleanup
         
         // Only run cleanup once per browser (per version)
         if (localStorage.getItem(CLEANUP_VERSION_KEY)) {
@@ -1042,14 +1042,16 @@
         
         const picks = getAllPicks();
         if (picks.length === 0) {
+            // Still clear snapshots to avoid carrying over demo history
+            localStorage.removeItem('gbsv_picks_snapshots');
             localStorage.setItem(CLEANUP_VERSION_KEY, 'done');
             return;
         }
-        
-        // Filter out any sample/demo picks
+
+        // Filter out any sample/demo/placeholder picks
         const realPicks = picks.filter(pick => {
-            // Remove if it has demo/sample markers
-            if (pick.isDemo || pick.isSample || pick.source === 'demo') {
+            // Remove if it has demo/sample/placeholder markers
+            if (pick.isDemo || pick.isSample || pick.placeholder || pick.source === 'demo' || pick.source === 'placeholder' || pick.source === 'fake') {
                 return false;
             }
             // Remove Demo Book picks
@@ -1067,12 +1069,18 @@
             // Default: remove as potential sample data
             return false;
         });
-        
-        if (realPicks.length < picks.length) {
-            console.log(`🧹 Cleaned up ${picks.length - realPicks.length} sample/demo picks`);
+
+        if (realPicks.length === 0) {
+            console.log('CLEANUP Removed all placeholder/demo picks; starting clean');
+            localStorage.removeItem(STORAGE_KEY);
+        } else if (realPicks.length < picks.length) {
+            console.log(`CLEANUP Removed ${picks.length - realPicks.length} sample/demo picks`);
             savePicks(realPicks);
         }
-        
+
+        // Drop any old snapshots so they don't reintroduce demo data
+        localStorage.removeItem('gbsv_picks_snapshots');
+
         localStorage.setItem(CLEANUP_VERSION_KEY, 'done');
     }
 
@@ -1138,7 +1146,27 @@
         refresh: refreshPicksTable,
         reEnrich: reEnrichExistingPicks,
         getUnitMultiplier,
-        setUnitMultiplier
+        setUnitMultiplier,
+        // Debug helpers
+        debug: () => {
+            const picks = getAllPicks();
+            console.log('=== LocalPicksManager Debug ===');
+            console.log(`Total picks in localStorage: ${picks.length}`);
+            console.log('Storage key:', STORAGE_KEY);
+            console.log('Raw localStorage:', localStorage.getItem(STORAGE_KEY)?.substring(0, 500));
+            if (picks.length > 0) {
+                console.log('Sample pick:', JSON.stringify(picks[0], null, 2));
+            }
+            const tbody = document.getElementById('picks-tbody');
+            console.log('Table element found:', !!tbody);
+            console.log('Table rows:', tbody?.children?.length || 0);
+            return picks;
+        },
+        forceRefresh: () => {
+            console.log('Force refreshing picks table...');
+            refreshPicksTable();
+            return getAllPicks().length;
+        }
     };
 
     console.log('✅ LocalPicksManager v33.01.0 loaded');
