@@ -942,6 +942,17 @@
         let currentGame = null;
 
         for (const line of rawLines) {
+            // ===== PIPE-DELIMITED FORMAT =====
+            // Format: "Team1 vs Team2 | Full Game | Pick Line (Odds)"
+            // Example: "Memphis vs FAU | Full Game | FAU -2 (-110)"
+            if (line.includes('|')) {
+                const pipePick = parsePipeDelimitedLine(line);
+                if (pipePick) {
+                    picks.push(pipePick);
+                    continue;
+                }
+            }
+            
             // Check for sport/game context
             const contextInfo = extractContext(line);
             if (contextInfo.sport) currentSport = contextInfo.sport;
@@ -1184,6 +1195,102 @@
 
         console.log(`✅ Parsed: "${originalLine}" -> ${pick.pickTeam} ${pick.line || pick.odds} (${pick.segment})`);
         return pick;
+    }
+
+    /**
+     * Parse pipe-delimited format: "Team1 vs Team2 | Full Game | Pick Line (Odds)"
+     * Examples:
+     *   "Memphis vs FAU | Full Game | FAU -2 (-110)"
+     *   "Siena vs Mount St Marys | Full Game | Siena -3 (-110)"
+     *   "UAB vs East Carolina | Full Game | UAB -7.5 (-110)"
+     *   "IPFW vs Robert Morris | Full Game | IPFW +4 (-110)"
+     *   "Northern Kentucky vs Wisc Green Bay | Full Game | N Kentucky -4 (-110)"
+     */
+    function parsePipeDelimitedLine(line) {
+        const parts = line.split('|').map(p => p.trim());
+        
+        if (parts.length < 3) return null;
+        
+        const [matchupPart, segmentPart, pickPart] = parts;
+        
+        // Parse matchup (Team1 vs Team2)
+        const matchupMatch = matchupPart.match(/^(.+?)\s*(?:vs\.?|@|versus)\s*(.+)$/i);
+        if (!matchupMatch) return null;
+        
+        const awayTeam = matchupMatch[1].trim();
+        const homeTeam = matchupMatch[2].trim();
+        
+        // Parse segment
+        let segment = 'Full Game';
+        const segLower = segmentPart.toLowerCase();
+        if (segLower.includes('1st half') || segLower.includes('1h')) {
+            segment = '1st Half';
+        } else if (segLower.includes('2nd half') || segLower.includes('2h')) {
+            segment = '2nd Half';
+        } else if (segLower.includes('1st quarter') || segLower.includes('1q')) {
+            segment = '1st Quarter';
+        }
+        
+        // Parse pick part: "FAU -2 (-110)" or "Over 150 (-110)" or "FAU ML (-110)"
+        const pick = {
+            sport: 'NCAAB',  // Default for college basketball
+            segment: segment,
+            status: 'pending',
+            date: getTodayDate(),
+            gameDate: new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }),
+            gameTime: 'TBD',
+            awayTeam: awayTeam,
+            homeTeam: homeTeam,
+            game: `${awayTeam} @ ${homeTeam}`
+        };
+        
+        // Extract odds (in parentheses at end)
+        const oddsMatch = pickPart.match(/\(([+-]?\d+)\)\s*$/);
+        if (oddsMatch) {
+            pick.odds = oddsMatch[1].startsWith('+') || oddsMatch[1].startsWith('-') 
+                ? oddsMatch[1] 
+                : `-${oddsMatch[1]}`;
+        }
+        
+        // Remove odds from pick part for further parsing
+        let pickText = pickPart.replace(/\s*\([+-]?\d+\)\s*$/, '').trim();
+        
+        // Check for game total (Over/Under)
+        const totalMatch = pickText.match(/^(over|under|o|u)\s+(\d+\.?\d*)/i);
+        if (totalMatch) {
+            pick.pickType = 'total';
+            pick.pickDirection = /^(over|o)$/i.test(totalMatch[1]) ? 'Over' : 'Under';
+            pick.pickTeam = pick.pickDirection;
+            pick.line = totalMatch[2];
+            console.log(`✅ Parsed pipe format (total): "${line}" -> ${pick.pickDirection} ${pick.line}`);
+            return pick;
+        }
+        
+        // Check for moneyline (Team ML)
+        const mlMatch = pickText.match(/^(.+?)\s+ml$/i);
+        if (mlMatch) {
+            pick.pickType = 'moneyline';
+            pick.pickTeam = mlMatch[1].trim();
+            console.log(`✅ Parsed pipe format (ML): "${line}" -> ${pick.pickTeam} ML`);
+            return pick;
+        }
+        
+        // Default: Spread (Team +/- Line)
+        const spreadMatch = pickText.match(/^(.+?)\s+([+-]?\d+\.?\d*)$/);
+        if (spreadMatch) {
+            pick.pickType = 'spread';
+            pick.pickTeam = spreadMatch[1].trim();
+            const lineVal = spreadMatch[2];
+            pick.line = lineVal.startsWith('+') || lineVal.startsWith('-') 
+                ? lineVal 
+                : `+${lineVal}`;
+            console.log(`✅ Parsed pipe format (spread): "${line}" -> ${pick.pickTeam} ${pick.line}`);
+            return pick;
+        }
+        
+        // Couldn't parse the pick part
+        console.log(`⚠️ Could not parse pipe-delimited pick: "${pickPart}"`);
+        return null;
     }
 
     /**
