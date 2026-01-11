@@ -1821,7 +1821,7 @@ async function loadAndAppendPicks() {
         // Check if database sync is enabled (default to false if not specified)
         if (window.APP_CONFIG?.ENABLE_DB_SYNC === false) {
              console.log('[PICKS LOADER] DB sync disabled in config - skipping API fetch');
-             throw new Error('DB_SYNC_DISABLED');
+             return; // Silently exit instead of throwing error
         }
 
         const response = await fetch(`${apiUrl}/get-picks`);
