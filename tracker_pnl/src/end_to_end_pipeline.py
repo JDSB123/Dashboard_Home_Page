@@ -167,7 +167,7 @@ class EndToEndPipeline:
         return risk, to_win
     
     def _find_matching_game(self, pick: Pick) -> Optional[Dict]:
-        """Find matching game in box score database."""
+        """Find matching game in box score database using multiple strategies."""
         if not pick.date or not pick.league:
             return None
         
@@ -176,78 +176,120 @@ class EndToEndPipeline:
         if not games:
             return None
         
-        # Try to match by pick description (team name)
         pick_desc = pick.pick_description or ""
+        
+        # Strategy 1: Extract team from pick description
         pick_team = self._extract_team_from_pick(pick_desc)
         
-        # If Over/Under without team, we can't determine which game
-        if not pick_team and ("over" in pick_desc.lower() or "under" in pick_desc.lower()):
-            # Try matchup for context
-            if pick.matchup:
-                matchup_parts = pick.matchup.replace(" vs ", "@").split("@")
-                if len(matchup_parts) >= 1:
-                    pick_team = matchup_parts[0].strip()
+        # Strategy 2: Use matchup if available
+        matchup_teams = []
+        if pick.matchup:
+            for sep in [" vs ", " @ ", "/"]:
+                if sep in pick.matchup:
+                    parts = pick.matchup.split(sep)
+                    matchup_teams.extend([p.strip() for p in parts if p.strip()])
+                    break
         
-        if not pick_team:
-            # Try matchup
-            if pick.matchup:
-                pick_team = pick.matchup.split(" vs ")[0] if " vs " in pick.matchup else None
+        # Strategy 3: For pure O/U, try to use matchup context
+        is_pure_ou = ("over" in pick_desc.lower() or "under" in pick_desc.lower()) and not pick_team
         
-        if not pick_team:
-            return None
+        # Build list of candidate team names to search
+        candidate_teams = []
+        if pick_team:
+            candidate_teams.append(pick_team)
+        candidate_teams.extend(matchup_teams)
         
-        # Normalize team name
-        pick_team_norm, _ = self.team_registry.normalize_team(pick_team, pick.league)
-        pick_team_norm = pick_team_norm or pick_team
+        # If still no candidates and pure O/U, we'll try fuzzy matching later
         
-        # Find matching game - try multiple matching strategies
+        # Find matching game using all candidates
         best_match = None
         best_score = 0
         
         for game in games:
             home_team = game.get("home_team_full") or game.get("home_team", "")
             away_team = game.get("away_team_full") or game.get("away_team", "")
+            home_abbr = game.get("home_team", "")
+            away_abbr = game.get("away_team", "")
             
             # Normalize game teams
             home_norm, _ = self.team_registry.normalize_team(home_team, pick.league)
             away_norm, _ = self.team_registry.normalize_team(away_team, pick.league)
             
-            # Check for match
-            pick_lower = pick_team_norm.lower()
-            pick_original_lower = pick_team.lower() if pick_team else ""
-            home_lower = (home_norm or home_team).lower()
-            away_lower = (away_norm or away_team).lower()
-            home_orig_lower = home_team.lower()
-            away_orig_lower = away_team.lower()
+            game_score = 0
             
-            score = 0
-            
-            # Exact normalized match
-            if pick_lower == home_lower or pick_lower == away_lower:
-                score = 100
-            # Substring match on normalized
-            elif pick_lower in home_lower or home_lower in pick_lower:
-                score = 80
-            elif pick_lower in away_lower or away_lower in pick_lower:
-                score = 80
-            # Substring match on original
-            elif pick_original_lower in home_orig_lower or home_orig_lower in pick_original_lower:
-                score = 60
-            elif pick_original_lower in away_orig_lower or away_orig_lower in pick_original_lower:
-                score = 60
-            # Token match
-            else:
-                pick_tokens = set(pick_lower.split())
-                home_tokens = set(home_lower.split())
-                away_tokens = set(away_lower.split())
+            for candidate in candidate_teams:
+                if not candidate:
+                    continue
+                    
+                # Normalize candidate
+                cand_norm, _ = self.team_registry.normalize_team(candidate, pick.league)
+                cand_norm = cand_norm or candidate
+                cand_lower = cand_norm.lower()
+                cand_orig = candidate.lower()
                 
-                if pick_tokens & home_tokens:
-                    score = 40
-                elif pick_tokens & away_tokens:
-                    score = 40
+                # Check against all representations of game teams
+                team_strs = [
+                    (home_norm or home_team).lower(),
+                    (away_norm or away_team).lower(),
+                    home_team.lower(),
+                    away_team.lower(),
+                    home_abbr.lower(),
+                    away_abbr.lower()
+                ]
+                
+                for team_str in team_strs:
+                    # Exact match
+                    if cand_lower == team_str:
+                        game_score = max(game_score, 100)
+                    # Substring match (normalized)
+                    elif cand_lower in team_str or team_str in cand_lower:
+                        game_score = max(game_score, 80)
+                    # Substring match (original)
+                    elif cand_orig in team_str or team_str in cand_orig:
+                        game_score = max(game_score, 70)
+                    else:
+                        # Token overlap
+                        cand_tokens = set(cand_lower.split())
+                        team_tokens = set(team_str.split())
+                        overlap = cand_tokens & team_tokens
+                        if overlap:
+                            game_score = max(game_score, 40 + len(overlap) * 10)
             
-            if score > best_score:
-                best_score = score
+            # Also check common abbreviation mappings
+            if game_score < 50:
+                abbr_map = {
+                    "brooklyn": "bkn", "nets": "bkn",
+                    "dallas": "dal", "mavs": "dal", "mavericks": "dal",
+                    "boston": "bos", "celtics": "bos",
+                    "miami": "mia", "heat": "mia",
+                    "lakers": "lal", "los angeles lakers": "lal",
+                    "clippers": "lac", "los angeles clippers": "lac",
+                    "warriors": "gs", "golden state": "gs",
+                    "knicks": "ny", "new york": "ny",
+                    "orlando": "orl", "magic": "orl",
+                    "spurs": "sa", "san antonio": "sa",
+                    "oklahoma": "okc", "thunder": "okc",
+                    "detroit": "det", "pistons": "det",
+                    "atlanta": "atl", "hawks": "atl",
+                    "charlotte": "cha", "hornets": "cha",
+                    "minnesota": "min", "timberwolves": "min",
+                    "utah": "utah", "jazz": "utah",
+                    "memphis": "mem", "grizzlies": "mem",
+                    "chicago": "chi", "bulls": "chi",
+                }
+                
+                for candidate in candidate_teams:
+                    if not candidate:
+                        continue
+                    cand_lower = candidate.lower()
+                    
+                    for name, abbr in abbr_map.items():
+                        if name in cand_lower:
+                            if abbr == home_abbr.lower() or abbr == away_abbr.lower():
+                                game_score = max(game_score, 90)
+            
+            if game_score > best_score:
+                best_score = game_score
                 best_match = game
         
         return best_match if best_score >= 40 else None
