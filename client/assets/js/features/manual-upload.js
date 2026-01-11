@@ -107,9 +107,11 @@
             });
 
             // Handle global paste when document has focus (for any images in clipboard)
+            const self = this;
             document.addEventListener('paste', (e) => {
-                // Only process if the manual upload UI is visible
-                if (!this.dropZone || this.dropZone.closest('.nav-dropdown-menu').getAttribute('hidden') !== null) {
+                // Only process if the dropdown menu is currently visible
+                const dropdownMenu = document.getElementById('sportsbooks-menu');
+                if (!dropdownMenu || dropdownMenu.hasAttribute('hidden')) {
                     return;
                 }
 
@@ -119,7 +121,7 @@
                     if (items[i].type.indexOf('image') !== -1) {
                         const blob = items[i].getAsFile();
                         e.preventDefault();
-                        this.handleFiles([blob]);
+                        self.handleFiles([blob]);
                         break;
                     }
                 }
