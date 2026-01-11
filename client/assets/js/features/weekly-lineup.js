@@ -3573,7 +3573,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                     updateArchivedPickOutcome(pickId, dbPick.status.toLowerCase());
                 }
             });
-        }
+        },
         clearArchivedPicks,
         getWeeklyStatsSummary,
         loadArchivedPicks,

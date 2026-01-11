@@ -1,8 +1,9 @@
 /**
- * Auto Game Fetcher v2.0
+ * Auto Game Fetcher v2.1
  * Automatically fetches today's games and validates pick games
  * Prevents betting on finished/invalid games
  * v2.0: Fetches standings for team records (W-L)
+ * v2.1: SportsDataIO as primary source for NFL/NCAAF (more accurate)
  */
 
 (function() {
@@ -190,6 +191,71 @@
     }
 
     /**
+     * Parse SportsDataIO games into standard format
+     */
+    function parseSportsDataIOGames(games, sport) {
+        if (!Array.isArray(games) || games.length === 0) {
+            return [];
+        }
+
+        return games.map(game => {
+            const awayTeamName = game.AwayTeam || game.AwayTeamName || '';
+            const homeTeamName = game.HomeTeam || game.HomeTeamName || '';
+
+            // Parse game time
+            let gameTime = 'TBD';
+            if (game.DateTime) {
+                try {
+                    gameTime = new Date(game.DateTime).toLocaleTimeString('en-US', {
+                        hour: 'numeric',
+                        minute: '2-digit',
+                        hour12: true
+                    });
+                } catch (e) {
+                    gameTime = 'TBD';
+                }
+            }
+
+            // Determine status from SportsDataIO Status field
+            const sdStatus = (game.Status || '').toLowerCase();
+            let status = 'Scheduled';
+            let statusDetail = '';
+
+            if (sdStatus === 'final' || sdStatus === 'f' || sdStatus === 'f/ot') {
+                status = 'Final';
+                statusDetail = sdStatus === 'f/ot' ? 'Final/OT' : 'Final';
+            } else if (sdStatus === 'inprogress' || sdStatus === 'in progress') {
+                status = 'In Progress';
+                statusDetail = game.TimeRemaining ? `Q${game.Quarter} ${game.TimeRemaining}` : `Q${game.Quarter || 1}`;
+            } else if (sdStatus === 'halftime') {
+                status = 'Halftime';
+                statusDetail = 'Halftime';
+            } else if (sdStatus === 'postponed') {
+                status = 'Postponed';
+            } else if (sdStatus === 'canceled') {
+                status = 'Canceled';
+            }
+
+            return {
+                sport,
+                date: todayISO,
+                time: gameTime,
+                awayTeam: awayTeamName,
+                homeTeam: homeTeamName,
+                awayRecord: getTeamRecord(awayTeamName),
+                homeRecord: getTeamRecord(homeTeamName),
+                awayScore: game.AwayScore || 0,
+                homeScore: game.HomeScore || 0,
+                status: status,
+                statusDetail: statusDetail,
+                gameId: String(game.GameID || game.ScoreID || ''),
+                channel: game.Channel || 'TBD',
+                source: 'sportsdata.io'
+            };
+        }).filter(g => g.awayTeam && g.homeTeam);
+    }
+
+    /**
      * Fetch all today's games
      */
     async function fetchTodaysGames(forceRefresh = false) {
@@ -229,24 +295,50 @@
             console.error('[AUTO-GAME-FETCHER] Error fetching NBA:', e.message);
         }
 
+        // NFL: SportsDataIO primary, ESPN fallback
         try {
-            console.log('[AUTO-GAME-FETCHER] Fetching NFL games...');
-            const nflData = await fetchESPN('NFL');
-            const nflGames = parseESPNGames(nflData, 'NFL');
-            allGames.push(...nflGames);
-            console.log(`[AUTO-GAME-FETCHER] Found ${nflGames.length} NFL games`);
+            console.log('[AUTO-GAME-FETCHER] Fetching NFL games from SportsDataIO...');
+            const nflSportsData = await fetchSportsDataIO('nfl');
+            const nflGames = parseSportsDataIOGames(nflSportsData, 'NFL');
+            if (nflGames.length > 0) {
+                allGames.push(...nflGames);
+                console.log(`[AUTO-GAME-FETCHER] Found ${nflGames.length} NFL games (SportsDataIO)`);
+            } else {
+                throw new Error('No games from SportsDataIO');
+            }
         } catch (e) {
-            console.error('[AUTO-GAME-FETCHER] Error fetching NFL:', e.message);
+            console.warn(`[AUTO-GAME-FETCHER] SportsDataIO NFL failed (${e.message}), trying ESPN...`);
+            try {
+                const nflData = await fetchESPN('NFL');
+                const nflGames = parseESPNGames(nflData, 'NFL');
+                allGames.push(...nflGames);
+                console.log(`[AUTO-GAME-FETCHER] Found ${nflGames.length} NFL games (ESPN fallback)`);
+            } catch (e2) {
+                console.error('[AUTO-GAME-FETCHER] Error fetching NFL from both sources:', e2.message);
+            }
         }
 
+        // NCAAF: SportsDataIO primary, ESPN fallback
         try {
-            console.log('[AUTO-GAME-FETCHER] Fetching NCAAF games...');
-            const ncaafData = await fetchESPN('NCAAF');
-            const ncaafGames = parseESPNGames(ncaafData, 'NCAAF');
-            allGames.push(...ncaafGames);
-            console.log(`[AUTO-GAME-FETCHER] Found ${ncaafGames.length} NCAAF games`);
+            console.log('[AUTO-GAME-FETCHER] Fetching NCAAF games from SportsDataIO...');
+            const ncaafSportsData = await fetchSportsDataIO('cfb');
+            const ncaafGames = parseSportsDataIOGames(ncaafSportsData, 'NCAAF');
+            if (ncaafGames.length > 0) {
+                allGames.push(...ncaafGames);
+                console.log(`[AUTO-GAME-FETCHER] Found ${ncaafGames.length} NCAAF games (SportsDataIO)`);
+            } else {
+                throw new Error('No games from SportsDataIO');
+            }
         } catch (e) {
-            console.error('[AUTO-GAME-FETCHER] Error fetching NCAAF:', e.message);
+            console.warn(`[AUTO-GAME-FETCHER] SportsDataIO NCAAF failed (${e.message}), trying ESPN...`);
+            try {
+                const ncaafData = await fetchESPN('NCAAF');
+                const ncaafGames = parseESPNGames(ncaafData, 'NCAAF');
+                allGames.push(...ncaafGames);
+                console.log(`[AUTO-GAME-FETCHER] Found ${ncaafGames.length} NCAAF games (ESPN fallback)`);
+            } catch (e2) {
+                console.error('[AUTO-GAME-FETCHER] Error fetching NCAAF from both sources:', e2.message);
+            }
         }
 
         todaysGamesCache = allGames;
@@ -341,6 +433,6 @@
         getRecordsCache: () => teamRecordsCache
     };
 
-    console.log('✅ AutoGameFetcher v2.0 loaded (with standings)');
+    console.log('✅ AutoGameFetcher v2.1 loaded - NFL/NCAAF: SportsDataIO (primary) | NBA/NCAAM: ESPN');
 
 })();

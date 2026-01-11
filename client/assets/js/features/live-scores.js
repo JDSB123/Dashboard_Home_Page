@@ -1,6 +1,7 @@
 /**
- * Live Score Updates
+ * Live Score Updates v2.1
  * Real-time score updates for active games without page refresh
+ * v2.1: SportsDataIO as primary source for NFL/NCAAF box scores
  */
 
 (function() {
@@ -226,17 +227,29 @@
 
         /**
          * Update scores for a specific sport
-         * Uses AutoGameFetcher's ESPN data instead of non-existent Container App /scores endpoints
+         * NFL/NCAAF: SportsDataIO (primary) -> ESPN (fallback)
+         * NBA/NCAAM: ESPN via AutoGameFetcher (primary) -> Direct ESPN (fallback)
          */
         async updateSportScores(sport, picks) {
+            const sportUpper = sport.toUpperCase();
+
             try {
-                // Primary: Use AutoGameFetcher's cached ESPN data (already fetched on page load)
+                // NFL and NCAAF: Use SportsDataIO as primary source (more accurate for football)
+                if (sportUpper === 'NFL' || sportUpper === 'NCAAF') {
+                    const success = await this.fetchSportsDataIOScores(sport, picks);
+                    if (success) return;
+
+                    // Fallback to ESPN for NFL/NCAAF
+                    console.log(`[LIVE-SCORES] SportsDataIO failed for ${sport}, falling back to ESPN`);
+                }
+
+                // NBA and NCAAM: Use AutoGameFetcher's cached ESPN data (primary)
                 if (window.AutoGameFetcher) {
                     const allGames = window.AutoGameFetcher.getTodaysGames() || [];
-                    const sportGames = allGames.filter(g => g.sport?.toUpperCase() === sport.toUpperCase());
+                    const sportGames = allGames.filter(g => g.sport?.toUpperCase() === sportUpper);
 
                     if (sportGames.length > 0) {
-                        console.log(`[LIVE-SCORES] Using AutoGameFetcher data for ${sport} (${sportGames.length} games)`);
+                        console.log(`[LIVE-SCORES] Using ESPN data for ${sport} (${sportGames.length} games)`);
 
                         // Update each pick with matching game data
                         for (const pick of picks) {
@@ -267,6 +280,107 @@
                 await this.fetchESPNScores(sport, picks);
             } catch (error) {
                 console.warn(`[LIVE-SCORES] Failed to update ${sport} scores:`, error.message);
+            }
+        }
+
+        /**
+         * Fetch scores from SportsDataIO (primary for NFL/NCAAF)
+         * Returns true if successful, false if should fallback to ESPN
+         */
+        async fetchSportsDataIOScores(sport, picks) {
+            const apiKey = window.APP_CONFIG?.SPORTSDATAIO?.API_KEY;
+            if (!apiKey) {
+                console.warn(`[LIVE-SCORES] Missing SportsDataIO API key for ${sport}`);
+                return false;
+            }
+
+            // SportsDataIO uses lowercase sport paths
+            const sportPath = sport.toLowerCase();
+            const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+
+            const url = `https://api.sportsdata.io/v4/${sportPath}/scores/json/ScoresByDate/${today}`;
+
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+                const response = await fetch(url, {
+                    signal: controller.signal,
+                    headers: {
+                        'Ocp-Apim-Subscription-Key': apiKey
+                    }
+                });
+                clearTimeout(timeoutId);
+
+                if (!response.ok) {
+                    console.warn(`[LIVE-SCORES] SportsDataIO ${sport} returned ${response.status}`);
+                    return false;
+                }
+
+                const games = await response.json();
+                if (!Array.isArray(games) || games.length === 0) {
+                    console.log(`[LIVE-SCORES] No SportsDataIO games for ${sport} today`);
+                    return false;
+                }
+
+                console.log(`[LIVE-SCORES] SportsDataIO returned ${games.length} ${sport} games`);
+
+                for (const pick of picks) {
+                    for (const sdGame of games) {
+                        // SportsDataIO uses AwayTeam/HomeTeam or AwayTeamName/HomeTeamName
+                        const awayTeam = sdGame.AwayTeam || sdGame.AwayTeamName || '';
+                        const homeTeam = sdGame.HomeTeam || sdGame.HomeTeamName || '';
+
+                        if (this.teamMatches(pick.awayTeam, awayTeam) &&
+                            this.teamMatches(pick.homeTeam, homeTeam)) {
+
+                            // Determine game status from SportsDataIO Status field
+                            const status = (sdGame.Status || '').toLowerCase();
+                            const isScheduled = status === 'scheduled' || status === 'pregame';
+                            const isFinal = status === 'final' || status === 'f' || status === 'f/ot';
+                            const isLive = !isScheduled && !isFinal && status !== 'postponed' && status !== 'canceled';
+
+                            // Build quarter/period scoring if available
+                            const scoring = {};
+                            if (sdGame.Quarters && Array.isArray(sdGame.Quarters)) {
+                                sdGame.Quarters.forEach((q, idx) => {
+                                    const periodKey = `q${idx + 1}`;
+                                    scoring[periodKey] = {
+                                        away: q.AwayScore || 0,
+                                        home: q.HomeScore || 0
+                                    };
+                                });
+                            }
+
+                            const game = {
+                                gameId: sdGame.GameID || sdGame.ScoreID,
+                                awayTeam: awayTeam,
+                                homeTeam: homeTeam,
+                                awayScore: sdGame.AwayScore || 0,
+                                homeScore: sdGame.HomeScore || 0,
+                                isLive: isLive,
+                                isFinal: isFinal,
+                                scoring: scoring,
+                                gameStatus: {
+                                    clock: sdGame.TimeRemaining || sdGame.Quarter || status,
+                                    period: sdGame.Quarter || 1
+                                }
+                            };
+
+                            this.updatePickWithGameData(pick, game);
+                            break;
+                        }
+                    }
+                }
+
+                return true; // Successfully processed
+            } catch (error) {
+                if (error.name === 'AbortError') {
+                    console.warn(`[LIVE-SCORES] SportsDataIO ${sport} request timed out`);
+                } else {
+                    console.warn(`[LIVE-SCORES] SportsDataIO ${sport} error:`, error.message);
+                }
+                return false;
             }
         }
 
@@ -690,5 +804,5 @@
         }
     });
 
-    console.log('[LIVE-SCORES] v2.0 loaded - Using ESPN via AutoGameFetcher');
+    console.log('[LIVE-SCORES] v2.1 loaded - NFL/NCAAF: SportsDataIO (primary) | NBA/NCAAM: ESPN');
 })();
