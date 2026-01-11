@@ -30,6 +30,9 @@
     <script src="config.js?v=34.00.1" defer></script>
     <script src="assets/js/features/model-endpoints-bootstrap.js?v=34.00.1" defer></script>
     <script src="assets/js/features/auto-game-fetcher.js?v=34.00.1" defer></script>
+    
+    <!-- Page Transition Handler (smooth navigation with loading state) -->
+    <script src="assets/js/utils/page-transition-handler.js?v=1.0.0" defer></script>
 
     <!-- Model API Fetchers - v34.00.1 Production -->
     <script src="assets/js/features/nba-picks-fetcher.js?v=34.00.1" defer></script>
@@ -407,13 +410,14 @@
         <div class="table-container weekly-lineup-table-wrapper">
             <table class="picks-table weekly-lineup-table" aria-label="Today's picks - sorted by edge">
                 <colgroup>
-                    <col style="width: 11%;"><!-- Date/Time -->
-                    <col style="width: 7%;"><!-- League (was 6%) -->
-                    <col style="width: 24%;"><!-- Matchup -->
-                    <col style="width: 8%;"><!-- Segment -->
-                    <col style="width: 18%;"><!-- Pick -->
-                    <col style="width: 8%;"><!-- Edge -->
-                    <col style="width: 16%;"><!-- Fire -->
+                    <col style="width: 10%;"><!-- Date/Time -->
+                    <col style="width: 6%;"><!-- League -->
+                    <col style="width: 22%;"><!-- Matchup -->
+                    <col style="width: 7%;"><!-- Segment -->
+                    <col style="width: 16%;"><!-- Pick -->
+                    <col style="width: 9%;"><!-- Market -->
+                    <col style="width: 7%;"><!-- Edge -->
+                    <col style="width: 15%;"><!-- Fire -->
                     <col style="width: 8%;"><!-- Track -->
                 </colgroup>
                 <thead>
@@ -473,6 +477,11 @@
                                 <div class="filter-section-compact"><div class="pick-type-pills"><button class="pick-pill active" data-pick="all">All</button><button class="pick-pill" data-pick="spread">Spread</button><button class="pick-pill" data-pick="ml">Moneyline</button><button class="pick-pill" data-pick="total">Total</button><button class="pick-pill" data-pick="tt">Team Total</button></div></div>
                             </div>
                         </th>
+                        <th scope="col" data-sort="market" class="center col-market">
+                            <div class="th-header-shell">
+                                <button class="th-sort-btn" aria-label="Sort by market odds"><span class="header-main-text">Market</span><span class="sort-icon" aria-hidden="true">▲</span></button>
+                            </div>
+                        </th>
                         <th scope="col" data-sort="edge" class="center col-edge">
                             <div class="th-header-shell">
                                 <button class="th-sort-btn" aria-label="Sort by edge"><span class="header-main-text">Edge</span><span class="sort-icon" aria-hidden="true">▲</span></button>
@@ -500,7 +509,7 @@
                 </thead>
                 <tbody id="picks-tbody">
                     <tr class="empty-state-row">
-                        <td colspan="8" class="empty-state-cell">
+                        <td colspan="9" class="empty-state-cell">
                             <div class="empty-state">
                                 <span class="empty-icon">📊</span>
                                 <span class="empty-message">No picks fetched yet. Click Fetch to load picks.</span>

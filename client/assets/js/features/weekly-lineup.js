@@ -358,7 +358,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
         const tbody = document.querySelector('.weekly-lineup-table tbody');
         if (tbody) {
-            tbody.innerHTML = '<tr class="empty-state-row"><td colspan="8" class="empty-state-cell"><div class="empty-state"><span class="empty-icon">📊</span><span class="empty-message">Loading picks...</span></div></td></tr>';
+            tbody.innerHTML = '<tr class="empty-state-row"><td colspan="9" class="empty-state-cell"><div class="empty-state"><span class="empty-icon">📊</span><span class="empty-message">Loading picks...</span></div></td></tr>';
         }
 
         try {
@@ -490,7 +490,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
     function showNoPicks(message) {
         const tbody = document.querySelector('.weekly-lineup-table tbody');
         if (tbody) {
-            tbody.innerHTML = `<tr class="empty-state-row"><td colspan="8" class="empty-state-cell"><div class="empty-state"><span class="empty-icon">📊</span><span class="empty-message">${message}</span></div></td></tr>`;
+            tbody.innerHTML = `<tr class="empty-state-row"><td colspan="9" class="empty-state-cell"><div class="empty-state"><span class="empty-icon">📊</span><span class="empty-message">${message}</span></div></td></tr>`;
         }
     }
     
@@ -1010,7 +1010,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         } else {
             const tbody = document.querySelector('.weekly-lineup-table tbody');
             if (tbody) {
-                tbody.innerHTML = '<tr class="empty-state-row"><td colspan="8" class="empty-state-cell"><div class="empty-state"><span class="empty-icon">📊</span><span class="empty-message">No picks fetched yet. Click Fetch to load picks.</span></div></td></tr>';
+                tbody.innerHTML = '<tr class="empty-state-row"><td colspan="9" class="empty-state-cell"><div class="empty-state"><span class="empty-icon">📊</span><span class="empty-message">No picks fetched yet. Click Fetch to load picks.</span></div></td></tr>';
             }
         }
     }
@@ -1113,7 +1113,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
         // Show empty state if no archived picks
         if (!filteredPicks || filteredPicks.length === 0) {
-            tbody.innerHTML = '<tr class="empty-state-row"><td colspan="8" class="empty-state-cell"><div class="empty-state"><span class="empty-icon">📦</span><span class="empty-message">No archived picks yet. Completed games will appear here.</span></div></td></tr>';
+            tbody.innerHTML = '<tr class="empty-state-row"><td colspan="9" class="empty-state-cell"><div class="empty-state"><span class="empty-icon">📦</span><span class="empty-message">No archived picks yet. Completed games will appear here.</span></div></td></tr>';
             return;
         }
 
@@ -1222,6 +1222,9 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                     <span class="pick-display">${pickDisplay}</span>
                 </div>
             </td>
+            <td class="center col-market">
+                <span class="market-value">${escapeHtml(pick.marketOdds || pick.market || '-')}</span>
+            </td>
             <td class="center col-edge">
                 <span class="edge-value edge-${edgeClass}">${edgeValue.toFixed(1)}%</span>
             </td>
@@ -1253,7 +1256,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
         // Show empty state if no picks
         if (!picks || picks.length === 0) {
-            tbody.innerHTML = '<tr class="empty-state-row"><td colspan="8" class="empty-state-cell"><div class="empty-state"><span class="empty-icon">📊</span><span class="empty-message">No picks available. Try fetching again or check back later.</span></div></td></tr>';
+            tbody.innerHTML = '<tr class="empty-state-row"><td colspan="9" class="empty-state-cell"><div class="empty-state"><span class="empty-icon">📊</span><span class="empty-message">No picks available. Try fetching again or check back later.</span></div></td></tr>';
             log('📊 No picks to display');
             return;
         }
@@ -1715,6 +1718,9 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                         ${modelStampHtml}
                     </div>
                 </div>
+            </td>
+            <td data-label="Market" class="center col-market">
+                ${marketHtml}
             </td>
             <td data-label="Edge" class="center">
                 ${edgeDisplayHtml}
@@ -2489,7 +2495,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                     // Show loading state in table
                     const tbody = document.querySelector('.weekly-lineup-table tbody');
                     if (tbody) {
-                        tbody.innerHTML = '<tr class="empty-state-row"><td colspan="8" class="empty-state-cell"><div class="empty-state"><span class="empty-icon">📊</span><span class="empty-message">Loading picks...</span></div></td></tr>';
+                        tbody.innerHTML = '<tr class="empty-state-row"><td colspan="9" class="empty-state-cell"><div class="empty-state"><span class="empty-icon">📊</span><span class="empty-message">Loading picks...</span></div></td></tr>';
                     }
 
                     const result = await window.UnifiedPicksFetcher.fetchPicks(

@@ -776,6 +776,22 @@ body.page-weekly-lineup .picks-table tbody tr:hover,
     border: 1px solid rgba(100, 116, 139, 0.3);
 }
 
+/* Market column - displays market odds at time of model pick */
+.weekly-lineup-table .col-market {
+    text-align: center;
+}
+
+.weekly-lineup-table .market-value {
+    font-family: var(--font-display, 'Oswald', sans-serif);
+    font-weight: 500;
+    font-size: 0.85rem;
+    color: var(--neutral-300);
+    padding: 0.15rem 0.35rem;
+    display: inline-block;
+    min-width: 42px;
+    text-align: center;
+}
+
 /* Fire indicators - integrated compact style */
 .weekly-lineup-table .fire-max {
     font-family: var(--font-display, 'Oswald', sans-serif);

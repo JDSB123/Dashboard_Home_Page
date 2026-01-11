@@ -20,6 +20,13 @@ body.page-active-picks {
 
     /* Lighter background to show bear image - match weekly-lineup */
     background-color: rgba(3, 11, 22, 0.18);
+    background-image: url('/assets/JB_Bearish_Market_FULL_page.png');
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    position: relative;
+    isolation: isolate;
 }
 
 /* Override main-container padding for consistent 0.75in left/right margins */
