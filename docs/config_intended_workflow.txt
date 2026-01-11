@@ -1,0 +1,93 @@
+Intended Workflow
+
+Azure Resource Groups in Scope
+    dashboard-gbsv-main-rgb
+        Front end user interface designed to serve as a metrics/kpi tracker, model trigger/hook, production ready and posture to expand capabilities and features in the future
+    domain_svcs_azure_green_bier
+        intended to manage the tenants/custom domains such as www.greenbiersportventures.com 
+    nba-gbsv-model-rg
+    ncaaf-gbsv-model-rg
+    ncaam-gbsv-model-rg
+    nfl-gbsv-model-rg
+
+
+Global Configurations
+
+    As the individual resource groups and their respective Azure Container Apps are modified in the different workspaces/folders, the dashboard is integrated in a way that versions are not hardcoded, but dynamic, so the workflow is automatically integrated with the dashboard and landing page features so no additional action is required to ensure the fetching is dynamic and fetches/runs models for the latest versions pushed from the workspaces of the prediction models themselves.
+
+Data Ingestion and API Sources - predominantly used for Box Score integration to track results, metrics, KPIs, and live box scores and status of picks from the dashboard. 
+
+    1) SportsDataIO API f202ae3458724f8b9beb8230820db7fe
+        Subscription only available for NCAAF and NBA
+        Primary endpoints and data source for NCAAF and NBA. The Odds API does include NCAAF and NFL data, but very rarely do we need to use it since SportsDataio Must work
+    2) The Odds API: 4a0b80471d1ebeeb74c358fa0fcc4a27
+        Primary data source for NCAAM and NBA
+        Premium Subscription Active
+    3)  Actionnetwork.com (premium subscription available in addition to Action Labs)
+	        username: jb@greenbiercapital.com
+	        password: 6nRC!d!Axt3!4nKQ
+    4) basketball-api: eea8757fae3c507add2df14800bae25f
+        Secondary data source for NCAAM and NBA
+        Premium subscription active 
+    5) ESPN APIs as needed
+    6) Open sources and websearches as needed
+
+
+Domain Control
+
+    www.greenbiersportventures.com and variants serves as the "parent" domain and url access point for our dashboard, metrics, and respective sports prediction models by league
+
+    confirm we maintain standardized organization nomenclature for files/scripts/etc for repeatability, scalability, organization and version control(s). i.e. clean modularity 
+
+    for respective prediction models and their resource groups, the APIs must be properly named and incorporated to our parent domain and url access. This allows for organization, professional appearance, readability, and avoids confusion when we reference the apis that are being pulled/cleaned. 
+
+    next phase once our baseline is completed, is to implement a "my account" or "my profile" feature as we scale and roll-out to accept different users; this will require individual and unique log in credentials. 
+
+
+Interfaces and "entry" points/triggers/fetchers
+
+    1.) www.greenbiersportventures.com/weekly-lineup
+    2.) teams webhooks 
+
+Prediction model output
+
+    Weekly-Line up output of prediction models are properly formatted and the away vs home team contents in the table match up column also include FRESH records from the data source of the odds as to serve as a "sniff test" that we are indeed pulling fresh and accurate data
+
+    The drop down of the pick features provide an organized, clean, and accurate 'rationale' of the pick which expands upon the prediction model's output vs the market pricing. These are unique to each individual pick and market themselves and take into account appropriate features such as market/sharp moves/activity, recent performance, and other factors as relevant 
+
+
+
+Weekly Lineup Page
+
+    Integrated with our Azure RGs that have existing Azure Container Apps and/or Function Apps, etc. that are prediction models.
+
+    After picks are "fetched" whether they are "refreshed" all, or at the individual sport/league level, they appear in the weekly line up table
+
+    Every time a "refresh" or a recent fetch picks is triggered, the previous "replaced" picks and data from a prior date/time stamp of picks is archived and properly stored/cached in our azure blob storage dedicated to metrics/roe and general tracking; also postured for potential use in dynamic learning for our respective prediction models
+
+    Fetched picks from the weekly line up table can be 'added' via + sign per each pick, which then sends the respective pick to the dashboard for tracking. 
+
+    When a pick is added from the weekly line up to the dashboard, the pick remains on the weekly line up, but the plus sign is displayed as to the reader understands it is picked and tracked 
+
+    Once all of the weekly-line up picks expired, i.e. the last game completed, the weekly-line up picks for that slate is then archived to azure blob storage.. not until the next "fetch picks" is initiated to replace the completed data.
+
+    The historical picks can be accessed when the 'history' toggle is selected from the weekly lineup landing page. 
+
+    When the sportsbook drop down information is actioned from the weekly-lineup page, that information is fetched/uploaded as required/relevant, and then routed to dashboard page since the intention is for those features and inputs to be interactive with the dashboard page.
+
+Dashboard Landing Page
+
+    Add book features initiates user's ability to add an additional sports book. The sports books used in the sub text of the Date & Time column of the dashboard table always match active books unless it is specifically tagged as "Manual" or not tied to a specific sportsbook enabled/active 
+
+    The upload picks from the sportsbooks drop downs must be robust logic and fully integrated to accept several file sources such as: PDFs, txt, word documents, excel spreadsheets, csv files, html files, html code/text whether pasted directly into the text box of the drop down or saved as whatever file formats. Also accept all image forms, including but not limited to, png, jpg, and other common image formats.
+
+    The picks uploaded via text must accept raw html code. 
+
+    The picks manually input or typed by the user must have robust logic, similar to that of the logic we implemented, or started to build, in our telegram modules so as to the raw data and text/short hand can be interpreted and translated consistently/accurately to our desired output and format in the dashboard table.
+  
+    Next phase after first rollout of the completed Dashboard - integrate sportsbooks to fetch picks placed in books that also serves as a means to track the live picks and also track metrics if we were to place bets that were not sourced from our prediction models
+
+    
+Mobile Features/Interface 
+
+   
