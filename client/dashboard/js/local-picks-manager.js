@@ -1029,57 +1029,46 @@
     // ========== CLEANUP SAMPLE DATA ==========
     
     function cleanupSampleData() {
-        const CLEANUP_VERSION_KEY = 'gbsv_cleanup_v3';  // Bump version to re-run cleanup
-        
+        const CLEANUP_VERSION_KEY = 'gbsv_cleanup_v4';  // Bump version to re-run cleanup
+
         // Only run cleanup once per browser (per version)
         if (localStorage.getItem(CLEANUP_VERSION_KEY)) {
             return;
         }
-        
+
         // Clear the old demo import flag so cleanup runs fresh
         localStorage.removeItem('gbsv_demo_imported_v1');
         localStorage.removeItem('gbsv_cleanup_v1');
-        
+
         const picks = getAllPicks();
         if (picks.length === 0) {
-            // Still clear snapshots to avoid carrying over demo history
-            localStorage.removeItem('gbsv_picks_snapshots');
             localStorage.setItem(CLEANUP_VERSION_KEY, 'done');
             return;
         }
 
-        // Filter out any sample/demo/placeholder picks
+        // Filter out ONLY explicitly marked demo/sample picks - keep everything else
         const realPicks = picks.filter(pick => {
-            // Remove if it has demo/sample/placeholder markers
-            if (pick.isDemo || pick.isSample || pick.placeholder || pick.source === 'demo' || pick.source === 'placeholder' || pick.source === 'fake') {
+            // Remove if it has explicit demo/sample markers
+            if (pick.isDemo === true || pick.isSample === true) {
+                return false;
+            }
+            // Remove if source is explicitly marked as demo/fake
+            if (pick.source === 'demo' || pick.source === 'fake') {
                 return false;
             }
             // Remove Demo Book picks
             if (pick.sportsbook === 'Demo Book') {
                 return false;
             }
-            // Keep picks that have a valid sportsbook
-            if (pick.sportsbook && pick.sportsbook !== 'unknown') {
-                return true;
-            }
-            // Keep picks with valid IDs that look like user-added picks
-            if (pick.id && pick.id.startsWith('pick_')) {
-                return true;
-            }
-            // Default: remove as potential sample data
-            return false;
+            // KEEP everything else - don't be aggressive with cleanup
+            return true;
         });
 
-        if (realPicks.length === 0) {
-            console.log('CLEANUP Removed all placeholder/demo picks; starting clean');
-            localStorage.removeItem(STORAGE_KEY);
-        } else if (realPicks.length < picks.length) {
-            console.log(`CLEANUP Removed ${picks.length - realPicks.length} sample/demo picks`);
+        if (realPicks.length < picks.length) {
+            const removed = picks.length - realPicks.length;
+            console.log(`[Cleanup] Removed ${removed} demo picks, kept ${realPicks.length} real picks`);
             savePicks(realPicks);
         }
-
-        // Drop any old snapshots so they don't reintroduce demo data
-        localStorage.removeItem('gbsv_picks_snapshots');
 
         localStorage.setItem(CLEANUP_VERSION_KEY, 'done');
     }

@@ -3562,6 +3562,47 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                 status: pick.status || 'pending'
             }));
         },
+        // Sync picks directly to Dashboard's localStorage
+        syncToDashboard: () => {
+            const picks = allPicks || [];
+            if (picks.length === 0) {
+                log('[Sync] No picks to sync');
+                showNotification('No picks to sync', 'warning');
+                return 0;
+            }
+
+            const DASHBOARD_KEY = 'gbsv_picks';
+            const dashboardPicks = picks.map((pick, idx) => ({
+                id: `pick_${Date.now()}_${idx}_${Math.random().toString(36).substring(7)}`,
+                pickTeam: pick.pickTeam || pick.pick || '',
+                awayTeam: pick.awayTeam || '',
+                homeTeam: pick.homeTeam || '',
+                awayRecord: pick.awayRecord || '',
+                homeRecord: pick.homeRecord || '',
+                game: `${pick.awayTeam || ''} @ ${pick.homeTeam || ''}`,
+                sport: pick.sport || 'NBA',
+                segment: pick.segment || 'Full Game',
+                pickType: pick.pickType || 'spread',
+                line: pick.line || '',
+                odds: pick.odds || '-110',
+                risk: 50000, // Default 1 unit = $50k
+                win: 45455, // Default at -110 odds
+                edge: pick.edge || 0,
+                fire: pick.fire || 0,
+                status: 'pending',
+                gameDate: pick.date || new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }),
+                gameTime: pick.time || 'TBD',
+                sportsbook: 'Model Pick',
+                source: 'weekly-lineup-sync',
+                createdAt: new Date().toISOString()
+            }));
+
+            // Save to dashboard localStorage (replace existing)
+            localStorage.setItem(DASHBOARD_KEY, JSON.stringify(dashboardPicks));
+            log(`[Sync] ✅ Synced ${dashboardPicks.length} picks to Dashboard localStorage`);
+            showNotification(`Synced ${dashboardPicks.length} picks to Dashboard`, 'success');
+            return dashboardPicks.length;
+        },
         // Sync: Dashboard can call this to push results back
         syncDashboardOutcomes: (dashboardPicks) => {
             // Update archived picks with outcomes from Dashboard
