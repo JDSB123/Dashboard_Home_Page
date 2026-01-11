@@ -1,7 +1,8 @@
 /**
- * Mobile Responsiveness Enhancements v2.0
+ * Mobile Responsiveness Enhancements v34.00.0
  * Optimizes layout and interactions for mobile devices
  * Includes: Hamburger menu, responsive tables, touch improvements
+ * CONSOLIDATED: mobile-hotfix, nav-gap-hotfix, nav-spacing-hotfix, upload-picks-card-hotfix
  */
 
 /* ===== MOBILE BREAKPOINTS ===== */
@@ -9,6 +10,162 @@
 /* Phones: 480px - 767px */
 /* Tablets: 768px - 1024px */
 /* Desktop: > 1024px */
+
+/* ===== CONSOLIDATED HOTFIXES ===== */
+
+/* iOS text scaling consistency */
+html, body { 
+    -webkit-text-size-adjust: 100%; 
+    text-size-adjust: 100%; 
+}
+
+/* Navigation Gap Hotfix - Removes the 12px top gap between viewport and nav */
+.brand-nav {
+    top: 0 !important;
+    margin-top: 0 !important;
+}
+
+/* Nav Spacing Hotfix - Fix excessive padding and tight spacing */
+.brand-nav .nav-links {
+    padding-top: 0 !important;
+    padding-right: 12px !important;
+    gap: 8px !important;
+}
+
+.brand-nav .nav-links li {
+    margin: 0 !important;
+    padding: 4px 8px !important;
+}
+
+/* Respect iPhone safe areas (notch, home indicator) */
+@supports (padding: max(0px)) {
+    .brand-nav { 
+        padding-top: max(12px, env(safe-area-inset-top)); 
+        padding-left: max(12px, env(safe-area-inset-left)); 
+        padding-right: max(12px, env(safe-area-inset-right)); 
+    }
+    .main-container { 
+        padding-bottom: max(16px, env(safe-area-inset-bottom)); 
+    }
+    .nav-links { 
+        padding-top: calc(80px + env(safe-area-inset-top)); 
+    }
+}
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { 
+        animation: none !important; 
+        transition: none !important; 
+    }
+}
+
+/* Upload Picks Card - Compact Formatting Hotfix */
+.sportsbook-card.upload-picks-card {
+    padding: 8px 10px !important;
+    height: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    margin-bottom: 4px !important;
+}
+
+.sportsbook-card.upload-picks-card .sportsbook-upload-shell {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+}
+
+/* Hide popup completely when not active */
+.sportsbook-card.upload-picks-card .import-options-popup {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.sportsbook-card.upload-picks-card .import-options-popup:not([hidden]) {
+    display: block !important;
+    visibility: visible !important;
+    height: auto !important;
+}
+
+.sportsbook-card.upload-picks-card .upload-destination {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+}
+
+.sportsbook-card.upload-picks-card .upload-label {
+    display: none !important;
+}
+
+.sportsbook-card.upload-picks-card .sportsbook-select {
+    flex: 1 !important;
+    height: 24px !important;
+    min-height: 24px !important;
+    max-height: 24px !important;
+    background: rgba(0, 0, 0, 0.2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    color: #cfd8dc !important;
+    font-family: var(--sportsbook-heading-font) !important;
+    font-size: 10px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.04em !important;
+    text-transform: uppercase !important;
+    padding: 0 6px !important;
+    border-radius: 3px !important;
+    margin: 0 !important;
+    line-height: 24px !important;
+    box-sizing: border-box !important;
+}
+
+.sportsbook-card.upload-picks-card .sportsbook-select:hover {
+    background: rgba(0, 0, 0, 0.3) !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+.sportsbook-card.upload-picks-card .sportsbook-actions-compact {
+    display: flex !important;
+    gap: 4px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    width: auto !important;
+    align-items: center !important;
+    height: 24px !important;
+}
+
+.sportsbook-card.upload-picks-card .action-btn-cta {
+    display: none !important;
+}
+
+.sportsbook-card.upload-picks-card .action-btn-compact {
+    height: 24px !important;
+    padding: 0 8px !important;
+    margin: 0 !important;
+    font-size: 9px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.05em !important;
+    text-transform: uppercase !important;
+    background: rgba(0, 214, 137, 0.12) !important;
+    border: 1px solid rgba(0, 214, 137, 0.3) !important;
+    color: #00d689 !important;
+    border-radius: 3px !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease !important;
+}
+
+.sportsbook-card.upload-picks-card .action-btn-compact:hover {
+    background: rgba(0, 214, 137, 0.2) !important;
+    border-color: rgba(0, 214, 137, 0.5) !important;
+}
 
 /* ===== HAMBURGER MENU ===== */
 .mobile-menu-toggle {
