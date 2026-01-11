@@ -10,7 +10,9 @@
     'use strict';
 
     const SPORTSDATAIO_API_KEY = window.APP_CONFIG?.SPORTSDATAIO?.API_KEY || '';
-    const todayISO = new Date().toISOString().split('T')[0];
+    // Use local time instead of UTC to match CST game schedules
+    const today = new Date();
+    const todayISO = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
     const todayESPN = todayISO.replace(/-/g, '');
     const STANDINGS_TTL_MS = 6 * 60 * 60 * 1000; // cache standings for 6 hours
     const SCOREBOARD_INTERVAL_INITIAL_MS = 180000; // 3 minutes
