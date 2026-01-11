@@ -42,3 +42,10 @@ tracker_output/
 *.log
 temp/
 tmp/
+
+# Generated output files
+alignment_results.xlsx
+improved_alignment_results.xlsx
+pick_results.xlsx
+tracker_evaluation.xlsx
+*.xlsx
