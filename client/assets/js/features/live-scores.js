@@ -226,59 +226,123 @@
 
         /**
          * Update scores for a specific sport
+         * Uses AutoGameFetcher's ESPN data instead of non-existent Container App /scores endpoints
          */
         async updateSportScores(sport, picks) {
             try {
-                // Get sport-specific API URL
-                const sportApiUrl = this.getSportApiUrl(sport);
-                
-                if (!sportApiUrl) {
-                    console.warn(`[LIVE-SCORES] No API endpoint configured for ${sport}`);
-                    return;
-                }
-                
-                // Use sport-specific scores endpoint
-                // Most Container Apps expose /scores or /live-scores endpoint
-                const endpoint = `${sportApiUrl}/scores`;
+                // Primary: Use AutoGameFetcher's cached ESPN data (already fetched on page load)
+                if (window.AutoGameFetcher) {
+                    const allGames = window.AutoGameFetcher.getTodaysGames() || [];
+                    const sportGames = allGames.filter(g => g.sport?.toUpperCase() === sport.toUpperCase());
 
-                // Fetch latest scores with timeout
+                    if (sportGames.length > 0) {
+                        console.log(`[LIVE-SCORES] Using AutoGameFetcher data for ${sport} (${sportGames.length} games)`);
+
+                        // Update each pick with matching game data
+                        for (const pick of picks) {
+                            const game = this.findMatchingGame(pick, sportGames);
+                            if (game) {
+                                // Convert ESPN format to our expected format
+                                const normalizedGame = {
+                                    gameId: game.gameId,
+                                    awayTeam: game.awayTeam,
+                                    homeTeam: game.homeTeam,
+                                    awayScore: game.awayScore || 0,
+                                    homeScore: game.homeScore || 0,
+                                    isLive: game.status && !game.status.toLowerCase().includes('scheduled') && !game.status.toLowerCase().includes('final'),
+                                    isFinal: game.status?.toLowerCase().includes('final'),
+                                    gameStatus: {
+                                        clock: game.statusDetail || game.status,
+                                        period: this.extractPeriod(game.status)
+                                    }
+                                };
+                                this.updatePickWithGameData(pick, normalizedGame);
+                            }
+                        }
+                        return; // Success - no need for fallback
+                    }
+                }
+
+                // Fallback: Try direct ESPN fetch if AutoGameFetcher not available
+                await this.fetchESPNScores(sport, picks);
+            } catch (error) {
+                console.warn(`[LIVE-SCORES] Failed to update ${sport} scores:`, error.message);
+            }
+        }
+
+        /**
+         * Extract period number from ESPN status string
+         */
+        extractPeriod(status) {
+            if (!status) return 1;
+            const match = status.match(/(\d+)(st|nd|rd|th)/i);
+            return match ? parseInt(match[1]) : 1;
+        }
+
+        /**
+         * Fallback: Fetch directly from ESPN API
+         */
+        async fetchESPNScores(sport, picks) {
+            const sportPath = sport.toLowerCase() === 'ncaam' ? 'mens-college-basketball' :
+                             sport.toLowerCase() === 'ncaaf' ? 'college-football' :
+                             sport.toLowerCase();
+
+            const sportCategory = sport.toLowerCase() === 'nba' || sport.toLowerCase() === 'ncaam' ? 'basketball' : 'football';
+            const today = new Date().toISOString().split('T')[0].replace(/-/g, '');
+
+            const url = `https://site.api.espn.com/apis/site/v2/sports/${sportCategory}/${sportPath}/scoreboard?dates=${today}`;
+
+            try {
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 10000);
-                
-                const response = await fetch(endpoint, { 
-                    signal: controller.signal,
-                    headers: { 'Accept': 'application/json' }
-                });
+
+                const response = await fetch(url, { signal: controller.signal });
                 clearTimeout(timeoutId);
-                
-                if (!response.ok) {
-                    // Scores endpoint may not exist for all sports - fail silently
-                    if (response.status === 404) {
-                        console.log(`[LIVE-SCORES] Scores endpoint not available for ${sport}`);
-                        return;
-                    }
-                    throw new Error(`HTTP ${response.status}`);
-                }
+
+                if (!response.ok) return;
 
                 const data = await response.json();
-                const games = data.data?.games || data.games || data || [];
+                const events = data.events || [];
 
-                // Update each pick with matching game data
                 for (const pick of picks) {
-                    const game = this.findMatchingGame(pick, games);
-                    if (game) {
-                        this.updatePickWithGameData(pick, game);
+                    for (const event of events) {
+                        const competition = event.competitions?.[0];
+                        if (!competition) continue;
+
+                        const competitors = competition.competitors || [];
+                        const homeTeam = competitors.find(t => t.homeAway === 'home');
+                        const awayTeam = competitors.find(t => t.homeAway === 'away');
+
+                        if (!homeTeam || !awayTeam) continue;
+
+                        // Check if this event matches the pick
+                        if (this.teamMatches(pick.awayTeam, awayTeam.team.displayName) &&
+                            this.teamMatches(pick.homeTeam, homeTeam.team.displayName)) {
+
+                            const status = competition.status?.type || {};
+                            const game = {
+                                gameId: event.id,
+                                awayTeam: awayTeam.team.displayName,
+                                homeTeam: homeTeam.team.displayName,
+                                awayScore: parseInt(awayTeam.score) || 0,
+                                homeScore: parseInt(homeTeam.score) || 0,
+                                isLive: status.state === 'in',
+                                isFinal: status.completed === true,
+                                gameStatus: {
+                                    clock: status.detail || status.description,
+                                    period: status.period || 1
+                                }
+                            };
+
+                            this.updatePickWithGameData(pick, game);
+                            break;
+                        }
                     }
                 }
             } catch (error) {
-                if (error.name === 'AbortError') {
-                    console.warn(`[LIVE-SCORES] Request timeout for ${sport} scores`);
-                } else {
-                    console.warn(`[LIVE-SCORES] Failed to update ${sport} scores:`, error.message);
+                if (error.name !== 'AbortError') {
+                    console.warn(`[LIVE-SCORES] ESPN fallback failed for ${sport}:`, error.message);
                 }
-
-                // Try fallback to odds API if available
-                await this.fallbackToOddsAPI(sport, picks);
             }
         }
 
@@ -562,12 +626,9 @@
         }
 
         /**
-         * Fallback to odds API
+         * Get sport-specific API URL from config (kept for compatibility)
+         * Note: Now primarily using ESPN via AutoGameFetcher
          */
-        async fallbackToOddsAPI(sport, picks) {
-            // Implementation for fallback to odds API if main score API fails
-            console.log(`Attempting fallback to odds API for ${sport}`);
-        }
 
         /**
          * Update KPI metrics
@@ -629,5 +690,5 @@
         }
     });
 
-    console.log('Live score updater initialized');
+    console.log('[LIVE-SCORES] v2.0 loaded - Using ESPN via AutoGameFetcher');
 })();
