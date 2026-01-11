@@ -284,40 +284,43 @@
         }
 
         /**
-         * Fetch scores from SportsDataIO (primary for NFL/NCAAF)
+         * Get the scoreboard proxy URL (Azure Functions)
+         */
+        getScoreboardProxyUrl() {
+            const functionsBase = window.APP_CONFIG?.FUNCTIONS_BASE_URL;
+            if (functionsBase) {
+                return `${functionsBase}/api/scoreboard`;
+            }
+            return '/api/scoreboard';
+        }
+
+        /**
+         * Fetch scores from SportsDataIO via proxy (primary for NFL/NCAAF)
          * Returns true if successful, false if should fallback to ESPN
          */
         async fetchSportsDataIOScores(sport, picks) {
-            const apiKey = window.APP_CONFIG?.SPORTSDATAIO?.API_KEY;
-            if (!apiKey) {
-                console.warn(`[LIVE-SCORES] Missing SportsDataIO API key for ${sport}`);
-                return false;
-            }
-
             // SportsDataIO uses lowercase sport paths, cfb for college football
             const sportPath = sport.toLowerCase() === 'ncaaf' ? 'cfb' : sport.toLowerCase();
 
-            // SportsDataIO expects date format: YYYY-MMM-DD (e.g., 2024-JAN-15)
-            const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+            // Use proxy to avoid CORS issues
             const now = new Date();
-            const today = `${now.getFullYear()}-${months[now.getMonth()]}-${String(now.getDate()).padStart(2, '0')}`;
-
-            const url = `https://api.sportsdata.io/v3/${sportPath}/scores/json/ScoresByDate/${today}`;
+            const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+            const proxyBase = this.getScoreboardProxyUrl();
+            const url = `${proxyBase}/${sportPath}?date=${today}`;
 
             try {
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 10000);
 
+                console.log(`[LIVE-SCORES] Fetching ${sport} via proxy: ${url}`);
+
                 const response = await fetch(url, {
-                    signal: controller.signal,
-                    headers: {
-                        'Ocp-Apim-Subscription-Key': apiKey
-                    }
+                    signal: controller.signal
                 });
                 clearTimeout(timeoutId);
 
                 if (!response.ok) {
-                    console.warn(`[LIVE-SCORES] SportsDataIO ${sport} returned ${response.status}`);
+                    console.warn(`[LIVE-SCORES] Scoreboard proxy ${sport} returned ${response.status}`);
                     return false;
                 }
 

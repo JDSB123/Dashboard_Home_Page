@@ -1,15 +1,15 @@
 /**
- * Auto Game Fetcher v2.1
+ * Auto Game Fetcher v2.2
  * Automatically fetches today's games and validates pick games
  * Prevents betting on finished/invalid games
  * v2.0: Fetches standings for team records (W-L)
  * v2.1: SportsDataIO as primary source for NFL/NCAAF (more accurate)
+ * v2.2: Use Azure Functions proxy for SportsDataIO (avoids CORS)
  */
 
 (function() {
     'use strict';
 
-    const SPORTSDATAIO_API_KEY = window.APP_CONFIG?.SPORTSDATAIO?.API_KEY || '';
     // Use local time instead of UTC to match CST game schedules
     const today = new Date();
     const todayISO = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
@@ -30,29 +30,33 @@
     let scoreboardIntervalMs = SCOREBOARD_INTERVAL_INITIAL_MS;
 
     /**
-     * Fetch from SportsDataIO
+     * Get the scoreboard proxy URL (Azure Functions)
+     */
+    function getScoreboardProxyUrl() {
+        // Primary: Azure Functions via Front Door or direct
+        const functionsBase = window.APP_CONFIG?.FUNCTIONS_BASE_URL;
+        if (functionsBase) {
+            return `${functionsBase}/api/scoreboard`;
+        }
+        // Fallback: relative path (won't work for SportsDataIO)
+        return '/api/scoreboard';
+    }
+
+    /**
+     * Fetch from SportsDataIO via Azure Functions proxy (avoids CORS)
      */
     async function fetchSportsDataIO(sport) {
-        if (!SPORTSDATAIO_API_KEY) {
-            console.warn(`[AUTO-GAME-FETCHER] Missing SportsDataIO API key, skipping ${sport} fetch.`);
-            return [];
+        const proxyBase = getScoreboardProxyUrl();
+        const url = `${proxyBase}/${sport}?date=${todayISO}`;
+
+        console.log(`[AUTO-GAME-FETCHER] Fetching ${sport} via proxy: ${url}`);
+
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            throw new Error(`Scoreboard proxy ${sport} error: ${response.status}`);
         }
 
-        // SportsDataIO expects date format: YYYY-MMM-DD (e.g., 2024-JAN-15)
-        const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-        const todaySportsDataIO = `${today.getFullYear()}-${months[today.getMonth()]}-${String(today.getDate()).padStart(2, '0')}`;
-        const url = `https://api.sportsdata.io/v3/${sport}/scores/json/ScoresByDate/${todaySportsDataIO}`;
-        
-        const response = await fetch(url, {
-            headers: {
-                'Ocp-Apim-Subscription-Key': SPORTSDATAIO_API_KEY
-            }
-        });
-        
-        if (!response.ok) {
-            throw new Error(`SportsDataIO ${sport} API error: ${response.status}`);
-        }
-        
         return await response.json();
     }
 
@@ -437,6 +441,6 @@
         getRecordsCache: () => teamRecordsCache
     };
 
-    console.log('✅ AutoGameFetcher v2.1 loaded - NFL/NCAAF: SportsDataIO (primary) | NBA/NCAAM: ESPN');
+    console.log('✅ AutoGameFetcher v2.2 loaded - NFL/NCAAF: SportsDataIO via proxy | NBA/NCAAM: ESPN');
 
 })();
