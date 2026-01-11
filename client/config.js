@@ -89,7 +89,7 @@ window.APP_CONFIG = {
   // Key also stored in Azure Functions app settings as SDIO_KEY
   SPORTSDATAIO: {
     API_KEY: 'f202ae3458724f8b9beb8230820db7fe',
-    BASE_URL: 'https://api.sportsdata.io/v4'
+    BASE_URL: 'https://api.sportsdata.io/v3'
   },
 
   // Feature Flags
