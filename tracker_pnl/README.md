@@ -1,0 +1,196 @@
+# Sports Betting Picks Tracker
+
+A comprehensive system for ingesting, tracking, and analyzing sports betting picks from various sources.
+
+## Features
+
+- **Multi-format ingestion**: Parse picks from HTML conversations (Telegram), plain text, or structured formats
+- **Automatic box score matching**: Matches picks with game results from stored box score JSON files
+- **Result evaluation**: Automatically determines Hit/Miss/Push status based on segment scores (1H, 2H, Q1-Q4, Full Game)
+- **Excel export**: Exports picks in the desired format with all required columns
+- **SharePoint integration**: Upload and update tracker files in SharePoint
+- **Betting logic**: Automatically calculates risk and to-win amounts based on odds and base unit ($50k default)
+
+## Installation
+
+1. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+2. Create `.env` file with API keys (copy from `.env.example`):
+```bash
+cp .env.example .env
+# Edit .env with your credentials
+```
+
+## Usage
+
+### Basic Usage
+
+Parse picks from a text file:
+```bash
+python ingest_picks.py --input conversations.txt --input-type file --output tracker.xlsx
+```
+
+Parse picks from HTML (Telegram export):
+```bash
+python ingest_picks.py --input messages.html --input-type html --output tracker.xlsx
+```
+
+Parse picks from direct text input:
+```bash
+python ingest_picks.py --input "Bills @ Patriots Under 24 (-110) NFL" --output tracker.xlsx
+```
+
+### With SharePoint Upload
+
+```bash
+python ingest_picks.py --input picks.txt --output tracker.xlsx --sharepoint
+```
+
+Make sure to configure SharePoint credentials in `.env`:
+```
+SHAREPOINT_SITE_URL=https://yourcompany.sharepoint.com/sites/yoursite
+SHAREPOINT_USERNAME=your@email.com
+SHAREPOINT_PASSWORD=yourpassword
+SHAREPOINT_FOLDER_PATH=Shared Documents/Trackers
+```
+
+### Programmatic Usage
+
+```python
+from src.pick_parser import PickParser
+from src.pick_tracker import PickTracker
+from src.box_score_matcher import BoxScoreMatcher
+from src.result_evaluator import ResultEvaluator
+from src.excel_exporter import ExcelExporter
+
+# Parse picks
+parser = PickParser()
+picks = parser.parse_text_conversation("Bills @ Patriots Under 24 (-110) NFL", "2025-12-14")
+
+# Create tracker
+tracker = PickTracker()
+tracker.add_picks(picks)
+
+# Match with box scores and evaluate
+matcher = BoxScoreMatcher()
+evaluator = ResultEvaluator(matcher)
+
+for pick in tracker.picks:
+    matcher.update_pick_with_box_score(pick)
+    evaluator.evaluate_pick(pick)
+
+# Export
+exporter = ExcelExporter()
+exporter.export_tracker_to_excel(tracker, "output.xlsx")
+```
+
+## Betting Logic
+
+The system uses the following betting logic:
+
+- **Base Unit**: $50,000 (default, unless specified otherwise)
+- **Negative Odds** (e.g., -110): Bet is to **WIN** $50k → Risk more (e.g., $55k to win $50k)
+- **Positive Odds** (e.g., +105): Bet is to **RISK** $50k → Win more (e.g., risk $50k to win $52.5k)
+
+## Output Format
+
+The tracker exports to Excel with the following columns:
+
+1. Date & Time (CST)
+2. Date
+3. League
+4. Matchup (Away @ Home)
+5. Segment (1st Half, 2nd Half, Q1-Q4, Full Game)
+6. Pick (Odds)
+7. Risk ($)
+8. To Win ($)
+9. Final Score
+10. 1H Score
+11. Hit/Miss/Push
+
+## Box Scores
+
+Box scores are stored in JSON format in the `box_scores/` directory, organized by league:
+- `box_scores/NBA/YYYY-MM-DD.json`
+- `box_scores/NFL/YYYY-MM-DD.json`
+- `box_scores/NCAAF/YYYY-MM-DD.json`
+- `box_scores/NCAAM/YYYY-MM-DD.json`
+
+Box score format:
+```json
+{
+  "game_id": "...",
+  "date": "YYYY-MM-DD",
+  "league": "NBA",
+  "home_team": "LAL",
+  "away_team": "BOS",
+  "home_score": 120,
+  "away_score": 115,
+  "status": "final",
+  "half_scores": {
+    "H1": {"home": 60, "away": 55},
+    "H2": {"home": 60, "away": 60}
+  },
+  "quarter_scores": {
+    "Q1": {"home": 30, "away": 28},
+    ...
+  }
+}
+```
+
+## Parsing Formats
+
+The parser supports various pick formats:
+
+- `Bills @ Patriots Under 24 (-110) NFL`
+- `Bears +7.5 1H -110 NFL`
+- `Lakers -5.5 NBA -110`
+- `Over 54.5 CFB -110`
+- `Giants TT Under 23.5 +105`
+
+## API Keys
+
+The following API keys are used (configure in `.env`):
+
+- **The Odds API**: For odds data
+- **API-Basketball / API-Sports**: For basketball data
+- **SportsDataIO**: For NFL and NCAAF data
+- **Action Network**: For additional sports data
+
+## Project Structure
+
+```
+tracker_pnl/
+├── src/
+│   ├── __init__.py
+│   ├── pick_tracker.py      # Data models and tracker class
+│   ├── pick_parser.py       # Parsing logic for conversations
+│   ├── box_score_matcher.py # Box score matching
+│   ├── result_evaluator.py  # Hit/Miss/Push evaluation
+│   ├── excel_exporter.py    # Excel export
+│   ├── sharepoint_integration.py  # SharePoint upload
+│   └── main.py              # Main script
+├── box_scores/              # Box score JSON files
+├── ingest_picks.py          # CLI entry point
+├── requirements.txt         # Dependencies
+└── README.md               # This file
+```
+
+## Development
+
+To extend the parser or add new features:
+
+1. **Add new parsing patterns**: Edit `src/pick_parser.py`
+2. **Modify betting logic**: Edit `src/pick_tracker.py` → `Pick.calculate_bet_amounts()`
+3. **Add new result evaluators**: Edit `src/result_evaluator.py`
+4. **Customize export format**: Edit `src/excel_exporter.py`
+
+## Notes
+
+- Times are stored in CST (Central Standard Time)
+- Default base unit is $50,000 unless specified
+- Box scores must be pre-fetched and stored in JSON format
+- SharePoint integration requires Office365-REST-Python-Client library
