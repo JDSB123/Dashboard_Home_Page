@@ -1,38 +1,36 @@
 /**
- * NCAAM Picks Fetcher v2.3
- * Fetches NCAAM model picks from the Azure Container App API
- * Updated to use /api/picks/{date} endpoint with trigger-on-demand support
- * 
+ * NCAAM Picks Fetcher v2.4
+ * Fetches NCAAM model picks via Azure Front Door weekly-lineup route
+ *
+ * Primary Route: https://www.greenbiersportventures.com/api/weekly-lineup/ncaam
+ * Fallback Route: https://www.greenbiersportventures.com/api/ncaam/api/picks/{date}
+ *
  * Container App: ncaam-stable-prediction (NCAAM-GBSV-MODEL-RG)
  * Endpoints:
  *   - /api/picks/{date} - Get picks for date
  *   - /trigger-picks - Trigger pick generation (if picks not ready)
- *   - /picks/html - Get HTML formatted picks
- * 
- * Registry Integration:
- *   - Uses model-endpoints-bootstrap.js to get latest endpoint from Azure registry
- *   - Falls back to hardcoded URL if registry not available
  */
 
 (function() {
     'use strict';
 
-    // Fallback URL (used if registry endpoint not available)
+    // Base API endpoint for weekly-lineup routes
+    const getBaseApiUrl = () =>
+        window.APP_CONFIG?.API_BASE_URL ||
+        'https://www.greenbiersportventures.com/api';
+
+    // Fallback: Direct Container App URL
     const FALLBACK_NCAAM_API_URL = 'https://ncaam-stable-prediction.wonderfulforest-c2d7d49a.centralus.azurecontainerapps.io';
-    
+
     /**
-     * Get the current NCAAM API endpoint from registry or fallback
-     * This is called dynamically to ensure we use the latest registry endpoint
-     * @returns {string} The NCAAM API endpoint URL
+     * Get the NCAAM Container App endpoint for fallback
      */
     function getNCAAMEndpoint() {
         const resolverApi = window.ModelEndpointResolver?.getApiEndpoint?.('ncaam');
         const registryEndpoint = resolverApi || window.APP_CONFIG?.NCAAM_API_URL;
         if (registryEndpoint) {
-            console.log('[NCAAM-PICKS] Using registry endpoint:', registryEndpoint);
             return registryEndpoint;
         }
-        console.warn('[NCAAM-PICKS] Registry endpoint not available, using fallback:', FALLBACK_NCAAM_API_URL);
         return FALLBACK_NCAAM_API_URL;
     }
 
@@ -109,54 +107,63 @@
             return cached.data;
         }
 
-        // Get endpoint dynamically from registry (ensures we use latest endpoint)
-        const endpoint = getNCAAMEndpoint();
-        const url = `${endpoint}/api/picks/${date}`;
-        console.log(`[NCAAM-PICKS] Fetching picks from registry endpoint: ${url}`);
+        // Primary: Weekly-lineup route through orchestrator
+        const baseUrl = getBaseApiUrl();
+        const primaryUrl = `${baseUrl}/weekly-lineup/ncaam${date !== 'today' ? `?date=${date}` : ''}`;
+        console.log(`[NCAAM-PICKS] Fetching from weekly-lineup route: ${primaryUrl}`);
 
         try {
-            let response = await fetchWithTimeout(url);
-            
-            // If 503, try triggering picks first then retry
-            if (response.status === 503) {
-                console.warn('[NCAAM-PICKS] API returned 503, attempting to trigger picks...');
-                const triggered = await triggerPicksIfNeeded(cacheKey);
-                if (triggered) {
-                    // Wait a moment for picks to generate
-                    await new Promise(resolve => setTimeout(resolve, 2000));
-                    response = await fetchWithTimeout(url);
-                }
-            }
-            
+            // Try primary weekly-lineup route first
+            let response = await fetchWithTimeout(primaryUrl);
+
+            // If primary fails, try direct Container App fallback
             if (!response.ok) {
-                throw new Error(`NCAAM API error: ${response.status}`);
+                console.warn(`[NCAAM-PICKS] Weekly-lineup route failed (${response.status}), trying Container App fallback...`);
+
+                const endpoint = getNCAAMEndpoint();
+                const fallbackUrl = `${endpoint}/api/picks/${date}`;
+                console.log(`[NCAAM-PICKS] Fallback URL: ${fallbackUrl}`);
+
+                response = await fetchWithTimeout(fallbackUrl);
+
+                // If 503, try triggering picks first then retry
+                if (response.status === 503) {
+                    console.warn('[NCAAM-PICKS] API returned 503, attempting to trigger picks...');
+                    const triggered = await triggerPicksIfNeeded(cacheKey);
+                    if (triggered) {
+                        await new Promise(resolve => setTimeout(resolve, 2000));
+                        response = await fetchWithTimeout(fallbackUrl);
+                    }
+                }
+
+                if (!response.ok) {
+                    throw new Error(`Both routes failed. Last error: ${response.status}`);
+                }
+                lastSource = 'container-app-fallback';
+            } else {
+                lastSource = 'weekly-lineup';
             }
 
             let data = await response.json();
-            
-            // If we got 0 picks for 'today', the model might not have run yet.
-            // Try triggering it actively, then wait and retry once.
+
+            // If we got 0 picks for 'today', try triggering generation
             const pickCount = data.total_picks || (data.picks ? data.picks.length : 0);
             if (pickCount === 0 && (cacheKey === 'today' || cacheKey === new Date().toISOString().split('T')[0])) {
                 console.warn('[NCAAM-PICKS] 0 picks found for today. Triggering generation...');
-                
-                // Trigger
+
                 const triggered = await triggerPicksIfNeeded(cacheKey);
-                
                 if (triggered) {
                     console.log('[NCAAM-PICKS] Waiting 5s for generation...');
                     await new Promise(resolve => setTimeout(resolve, 5000));
-                    
-                    // Retry fetch
-                    console.log('[NCAAM-PICKS] Retrying fetch...');
-                    response = await fetchWithTimeout(url);
+
+                    // Retry with fallback
+                    const endpoint = getNCAAMEndpoint();
+                    response = await fetchWithTimeout(`${endpoint}/api/picks/${date}`);
                     if (response.ok) {
                         data = await response.json();
                     }
                 }
             }
-
-            lastSource = 'container-app';
 
             // Cache with date key
             picksCache[cacheKey] = {
@@ -164,7 +171,7 @@
                 timestamp: Date.now()
             };
 
-            console.log(`[NCAAM-PICKS] ✅ Fetched ${data.total_picks || data.picks?.length || 0} picks for ${cacheKey}`);
+            console.log(`[NCAAM-PICKS] ✅ Fetched ${data.total_picks || data.picks?.length || 0} picks for ${cacheKey} (source: ${lastSource})`);
             return data;
         } catch (error) {
             console.error('[NCAAM-PICKS] Error fetching picks:', error.message);
@@ -282,9 +289,6 @@
         }
     };
 
-    // Log endpoint source on load
-    const initialEndpoint = getNCAAMEndpoint();
-    const endpointSource = window.APP_CONFIG?.NCAAM_API_URL ? 'registry' : 'fallback';
-    console.log(`✅ NCAAMPicksFetcher v2.3 loaded - Using ${endpointSource} endpoint: ${initialEndpoint}`);
+    console.log('[NCAAM-FETCHER] v2.4 loaded - Primary: /api/weekly-lineup/ncaam | Fallback: Container App /api/picks/{date}');
 
 })();

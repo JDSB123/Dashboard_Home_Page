@@ -1,27 +1,30 @@
 /**
- * NFL Picks Fetcher v1.1
- * Fetches NFL model picks from Azure Function App (primary) or Container App (fallback)
+ * NFL Picks Fetcher v1.2
+ * Fetches NFL model picks via Azure Front Door weekly-lineup route
  *
- * Primary: nfl-picks-trigger Function App (/api/weekly-lineup/nfl)
- * Fallback: nfl-api Container App (/api/v1/predictions/week/{season}/{week})
+ * Primary Route: https://www.greenbiersportventures.com/api/weekly-lineup/nfl
+ * Fallback Route: Container App /api/v1/predictions/week/{season}/{week}
  */
 
 (function() {
     'use strict';
 
-    // Primary: Function App for Weekly Lineup picks
-    const getApiEndpoint = () => (window.ModelEndpointResolver?.getApiEndpoint('nfl')) ||
+    // Base API endpoint for weekly-lineup routes
+    const getBaseApiUrl = () =>
+        window.APP_CONFIG?.API_BASE_URL ||
+        'https://www.greenbiersportventures.com/api';
+
+    // Fallback: Direct Container App URL
+    const getContainerEndpoint = () =>
+        (window.ModelEndpointResolver?.getApiEndpoint('nfl')) ||
         window.APP_CONFIG?.NFL_API_URL ||
         'https://nfl-api.purplegrass-5889a981.eastus.azurecontainerapps.io';
-    const getFunctionEndpoint = () => (window.ModelEndpointResolver?.getFunctionEndpoint('nfl')) ||
-        window.APP_CONFIG?.NFL_FUNCTION_URL ||
-        'https://nfl-picks-trigger.azurewebsites.net';
 
     let picksCache = null;
     let lastFetch = null;
-    let lastSource = null; // Track which source was used
+    let lastSource = null;
     const CACHE_DURATION = 60000; // 1 minute
-    const REQUEST_TIMEOUT = 10000; // 10 seconds
+    const REQUEST_TIMEOUT = 15000; // 15 seconds
 
     /**
      * Fetch with timeout
@@ -83,7 +86,7 @@
 
     /**
      * Fetch NFL picks for a given date
-     * Tries Function App first, falls back to Container App
+     * Tries weekly-lineup route first, falls back to Container App
      * @param {string} date - Date in YYYY-MM-DD format, 'today', or 'tomorrow'
      * @returns {Promise<Object>} Picks data
      */
@@ -97,76 +100,75 @@
             return picksCache;
         }
 
-        // Try Function App first (primary source for Weekly Lineup)
-        const functionUrl = `${getFunctionEndpoint()}/api/weekly-lineup/nfl`;
-        console.log(`[NFL-PICKS] Trying Function App: ${functionUrl}`);
+        // Primary: Weekly-lineup route through orchestrator
+        const baseUrl = getBaseApiUrl();
+        const primaryUrl = `${baseUrl}/weekly-lineup/nfl`;
+        console.log(`[NFL-PICKS] Fetching from weekly-lineup route: ${primaryUrl}`);
 
         try {
-            const response = await fetchWithTimeout(functionUrl);
+            let response = await fetchWithTimeout(primaryUrl);
+
             if (response.ok) {
                 const data = await response.json();
                 picksCache = data;
                 lastFetch = Date.now();
-                lastSource = 'function-app';
+                lastSource = 'weekly-lineup';
                 const pickCount = data.plays?.length || data.picks?.length || data.total_plays || 0;
-                console.log(`[NFL-PICKS] ✅ Function App returned ${pickCount} picks`);
+                console.log(`[NFL-PICKS] ✅ Weekly-lineup returned ${pickCount} picks`);
                 return data;
             }
-            console.warn(`[NFL-PICKS] Function App returned ${response.status}, trying Container App...`);
-        } catch (error) {
-            console.warn(`[NFL-PICKS] Function App failed: ${error.message}, trying Container App...`);
-        }
 
-        // Fallback to Container App
-        const { season, week } = dateToNFLSeasonWeek(date);
-        const containerUrl = `${getApiEndpoint()}/api/v1/predictions/week/${season}/${week}`;
-        console.log(`[NFL-PICKS] Falling back to Container App: ${containerUrl}`);
+            console.warn(`[NFL-PICKS] Weekly-lineup route failed (${response.status}), trying Container App fallback...`);
 
-        try {
-            const response = await fetchWithTimeout(containerUrl);
+            // Fallback to Container App
+            const { season, week } = dateToNFLSeasonWeek(date);
+            const containerUrl = `${getContainerEndpoint()}/api/v1/predictions/week/${season}/${week}`;
+            console.log(`[NFL-PICKS] Fallback URL: ${containerUrl}`);
+
+            response = await fetchWithTimeout(containerUrl);
             if (!response.ok) {
-                throw new Error(`Container App error: ${response.status}`);
+                throw new Error(`Both routes failed. Last error: ${response.status}`);
             }
 
             const data = await response.json();
             picksCache = data;
             lastFetch = Date.now();
-            lastSource = 'container-app';
+            lastSource = 'container-app-fallback';
 
             console.log(`[NFL-PICKS] ✅ Container App returned ${data.total_plays || 0} picks`);
             return data;
         } catch (error) {
-            console.error('[NFL-PICKS] Both sources failed:', error.message);
+            console.error('[NFL-PICKS] All routes failed:', error.message);
             throw error;
         }
     }
 
     /**
-     * Check API health for both sources
+     * Check API health
      * @returns {Promise<Object>} Health status
      */
     async function checkHealth() {
         const health = {
-            functionApp: { status: 'unknown' },
+            weeklyLineup: { status: 'unknown' },
             containerApp: { status: 'unknown' }
         };
 
-        // Check Function App
+        // Check weekly-lineup route
         try {
-            const response = await fetchWithTimeout(`${getFunctionEndpoint()}/api/health`, 5000);
+            const response = await fetchWithTimeout(`${getBaseApiUrl()}/health`, 5000);
             if (response.ok) {
-                health.functionApp = await response.json();
-                health.functionApp.status = 'healthy';
+                health.weeklyLineup = await response.json();
+                health.weeklyLineup.status = 'healthy';
             } else {
-                health.functionApp = { status: 'error', code: response.status };
+                health.weeklyLineup = { status: 'error', code: response.status };
             }
         } catch (error) {
-            health.functionApp = { status: 'error', message: error.message };
+            health.weeklyLineup = { status: 'error', message: error.message };
         }
 
         // Check Container App
         try {
-            const response = await fetchWithTimeout(`${getApiEndpoint()}/health`, 5000);
+            const response = await fetchWithTimeout(`${getContainerEndpoint()}/health`, 5000);
             if (response.ok) {
                 health.containerApp = await response.json();
                 health.containerApp.status = 'healthy';
@@ -234,6 +236,6 @@
         clearCache: () => { picksCache = null; lastFetch = null; lastSource = null; }
     };
 
-    console.log('✅ NFLPicksFetcher v1.1 loaded (Function App + Container App fallback)');
+    console.log('[NFL-FETCHER] v1.2 loaded - Primary: /api/weekly-lineup/nfl | Fallback: Container App');
 
 })();

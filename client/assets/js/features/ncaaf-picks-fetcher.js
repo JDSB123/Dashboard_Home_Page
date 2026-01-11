@@ -1,21 +1,52 @@
 /**
- * NCAAF Picks Fetcher v1.0
- * Fetches NCAAF model picks from the Azure Container App API
+ * NCAAF Picks Fetcher v1.1
+ * Fetches NCAAF model picks via Azure Front Door weekly-lineup route
+ *
+ * Primary Route: https://www.greenbiersportventures.com/api/weekly-lineup/ncaaf
+ * Fallback Route: Container App /api/v1/predictions/week/{season}/{week}
  */
 
 (function() {
     'use strict';
 
-    const getApiEndpoint = () => (window.ModelEndpointResolver?.getApiEndpoint('ncaaf')) ||
+    // Base API endpoint for weekly-lineup routes
+    const getBaseApiUrl = () =>
+        window.APP_CONFIG?.API_BASE_URL ||
+        'https://www.greenbiersportventures.com/api';
+
+    // Fallback: Direct Container App URL
+    const getContainerEndpoint = () =>
+        (window.ModelEndpointResolver?.getApiEndpoint('ncaaf')) ||
         window.APP_CONFIG?.NCAAF_API_URL ||
         'https://ncaaf-v5-prod.salmonwave-314d4ffe.eastus.azurecontainerapps.io';
 
     let picksCache = null;
     let lastFetch = null;
+    let lastSource = null;
     const CACHE_DURATION = 60000; // 1 minute
+    const REQUEST_TIMEOUT = 15000; // 15 seconds
 
     /**
-     * Get current NFL season and week
+     * Fetch with timeout
+     */
+    async function fetchWithTimeout(url, timeoutMs = REQUEST_TIMEOUT) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+        try {
+            const response = await fetch(url, { signal: controller.signal });
+            clearTimeout(timeoutId);
+            return response;
+        } catch (error) {
+            clearTimeout(timeoutId);
+            if (error.name === 'AbortError') {
+                throw new Error(`Request timed out after ${timeoutMs}ms`);
+            }
+            throw error;
+        }
+    }
+
+    /**
+     * Get current NCAAF season and week
      * @returns {Object} { season, week }
      */
     const getCurrentSeasonWeek = function() {
@@ -24,7 +55,6 @@
         const month = now.getMonth() + 1;
 
         // NCAAF season runs Aug-Jan
-        // Season year is the fall year (e.g., 2024-2025 season = 2024)
         const season = month >= 8 ? year : year - 1;
 
         // Approximate week calculation (season starts late August)
@@ -36,46 +66,68 @@
 
     /**
      * Fetch NCAAF picks for a given week
-     * @param {number} season - Season year
-     * @param {number} week - Week number
+     * Tries weekly-lineup route first, falls back to Container App
+     * @param {number} season - Season year (optional)
+     * @param {number} week - Week number (optional)
      * @returns {Promise<Object>} Picks data
      */
     const fetchNCAAFPicks = async function(season = null, week = null) {
-        // Use cache if fresh
-        if (picksCache && lastFetch && (Date.now() - lastFetch < CACHE_DURATION)) {
-            console.log('[NCAAF-PICKS] Using cached picks');
-            return picksCache;
-        }
-
-        // Default to current season/week
-        if (!season || !week) {
-            const current = getCurrentSeasonWeek();
-            season = season || current.season;
-            week = week || current.week;
-        }
-
         if (window.ModelEndpointResolver?.ensureRegistryHydrated) {
             window.ModelEndpointResolver.ensureRegistryHydrated();
         }
 
-        const url = `${getApiEndpoint()}/api/v1/predictions/week/${season}/${week}`;
-        console.log(`[NCAAF-PICKS] Fetching picks from: ${url}`);
+        // Use cache if fresh
+        if (picksCache && lastFetch && (Date.now() - lastFetch < CACHE_DURATION)) {
+            console.log(`[NCAAF-PICKS] Using cached picks (source: ${lastSource})`);
+            return picksCache;
+        }
+
+        // Primary: Weekly-lineup route through orchestrator
+        const baseUrl = getBaseApiUrl();
+        const primaryUrl = `${baseUrl}/weekly-lineup/ncaaf`;
+        console.log(`[NCAAF-PICKS] Fetching from weekly-lineup route: ${primaryUrl}`);
 
         try {
-            const response = await fetch(url);
+            let response = await fetchWithTimeout(primaryUrl);
+
+            if (response.ok) {
+                const data = await response.json();
+                picksCache = data;
+                lastFetch = Date.now();
+                lastSource = 'weekly-lineup';
+                const pickCount = data.predictions?.length || data.picks?.length || 0;
+                console.log(`[NCAAF-PICKS] ✅ Weekly-lineup returned ${pickCount} picks`);
+                return data;
+            }
+
+            console.warn(`[NCAAF-PICKS] Weekly-lineup route failed (${response.status}), trying Container App fallback...`);
+
+            // Default to current season/week for fallback
+            if (!season || !week) {
+                const current = getCurrentSeasonWeek();
+                season = season || current.season;
+                week = week || current.week;
+            }
+
+            // Fallback to Container App
+            const containerUrl = `${getContainerEndpoint()}/api/v1/predictions/week/${season}/${week}`;
+            console.log(`[NCAAF-PICKS] Fallback URL: ${containerUrl}`);
+
+            response = await fetchWithTimeout(containerUrl);
             if (!response.ok) {
-                throw new Error(`NCAAF API error: ${response.status}`);
+                throw new Error(`Both routes failed. Last error: ${response.status}`);
             }
 
             const data = await response.json();
             picksCache = data;
             lastFetch = Date.now();
+            lastSource = 'container-app-fallback';
 
             const pickCount = data.predictions?.length || data.length || 0;
-            console.log(`[NCAAF-PICKS] Fetched ${pickCount} picks`);
+            console.log(`[NCAAF-PICKS] ✅ Container App returned ${pickCount} picks`);
             return data;
         } catch (error) {
-            console.error('[NCAAF-PICKS] Error fetching picks:', error.message);
+            console.error('[NCAAF-PICKS] All routes failed:', error.message);
             throw error;
         }
     };
@@ -85,14 +137,38 @@
      * @returns {Promise<Object>} Health status
      */
     const checkHealth = async function() {
-        const url = `${getApiEndpoint()}/health`;
+        const health = {
+            weeklyLineup: { status: 'unknown' },
+            containerApp: { status: 'unknown' }
+        };
+
+        // Check weekly-lineup route
         try {
-            const response = await fetch(url);
-            return await response.json();
+            const response = await fetchWithTimeout(`${getBaseApiUrl()}/health`, 5000);
+            if (response.ok) {
+                health.weeklyLineup = await response.json();
+                health.weeklyLineup.status = 'healthy';
+            } else {
+                health.weeklyLineup = { status: 'error', code: response.status };
+            }
         } catch (error) {
-            console.error('[NCAAF-PICKS] Health check failed:', error.message);
-            return { status: 'error', message: error.message };
+            health.weeklyLineup = { status: 'error', message: error.message };
         }
+
+        // Check Container App
+        try {
+            const response = await fetchWithTimeout(`${getContainerEndpoint()}/health`, 5000);
+            if (response.ok) {
+                health.containerApp = await response.json();
+                health.containerApp.status = 'healthy';
+            } else {
+                health.containerApp = { status: 'error', code: response.status };
+            }
+        } catch (error) {
+            health.containerApp = { status: 'error', message: error.message };
+        }
+
+        return health;
     };
 
     /**
@@ -146,9 +222,10 @@
         formatPickForTable,
         getCurrentSeasonWeek,
         getCache: () => picksCache,
-        clearCache: () => { picksCache = null; lastFetch = null; }
+        getLastSource: () => lastSource,
+        clearCache: () => { picksCache = null; lastFetch = null; lastSource = null; }
     };
 
-    console.log('NCAAF PicksFetcher v1.0 loaded');
+    console.log('[NCAAF-FETCHER] v1.1 loaded - Primary: /api/weekly-lineup/ncaaf | Fallback: Container App');
 
 })();

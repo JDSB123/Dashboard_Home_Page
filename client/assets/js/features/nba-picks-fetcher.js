@@ -1,25 +1,32 @@
 /**
- * NBA Picks Fetcher v2.2
- * Fetches NBA model picks via domain-based API proxy
- * 
- * Endpoint: https://www.greenbiersportventures.com/api/*
- * All API calls now route through the main domain (Jan 2026)
+ * NBA Picks Fetcher v2.3
+ * Fetches NBA model picks via Azure Front Door weekly-lineup route
+ *
+ * Primary Route: https://www.greenbiersportventures.com/api/weekly-lineup/nba
+ * Fallback Route: https://www.greenbiersportventures.com/api/nba/slate/{date}/executive
+ *
+ * The weekly-lineup route is the canonical path that proxies to the Container App
  */
 
 (function() {
     'use strict';
 
-    // Primary API endpoint - uses domain proxy
-    const getApiEndpoint = () => 
-        (window.ModelEndpointResolver?.getApiEndpoint('nba')) || 
-        window.APP_CONFIG?.NBA_API_URL || 
+    // Base API endpoint for weekly-lineup routes (NOT sport-specific)
+    const getBaseApiUrl = () =>
+        window.APP_CONFIG?.API_BASE_URL ||
         'https://www.greenbiersportventures.com/api';
+
+    // Sport-specific endpoint for direct Container App access (fallback)
+    const getNbaContainerEndpoint = () =>
+        (window.ModelEndpointResolver?.getApiEndpoint('nba')) ||
+        window.APP_CONFIG?.NBA_API_URL ||
+        'https://www.greenbiersportventures.com/api/nba';
 
     let picksCache = null;
     let lastFetch = null;
     let lastSource = null;
     const CACHE_DURATION = 60000; // 1 minute
-    const REQUEST_TIMEOUT = 60000; // 60 seconds
+    const REQUEST_TIMEOUT = 15000; // 15 seconds (reduced from 60s for better UX)
 
     /**
      * Fetch with timeout
@@ -62,36 +69,45 @@
         }
 
         try {
-            // Updated Endpoint Structure for backend Proxy
-            // The backend serves picks at /weekly-lineup/nba, not /v1/picks
-            let endpoint = `${NBA_API_URL}/weekly-lineup/nba`;
-            
-            // Handle date parameter
-            // Note: /weekly-lineup/nba currently relies on backend calculating 'latest' or today
-            // If the backend supports ?date=..., we append it. It is mostly auto-determined.
-            // Based on previous analysis, we will rely on default backend behavior for 'today'.
-            
-            if (date && date !== 'today') {
-                 // Warning: Backend might not support arbitrary dates on this specific endpoint
-                 // But we pass it just in case logic updates
-                 endpoint += `?date=${encodeURIComponent(date)}`;
-            }
+            // Primary: Weekly-lineup route (canonical path through orchestrator)
+            // Route: https://www.greenbiersportventures.com/api/weekly-lineup/nba
+            const baseUrl = getBaseApiUrl();
+            const primaryEndpoint = `${baseUrl}/weekly-lineup/nba`;
 
-            console.log(`[NBA-FETCHER] Fetching from: ${endpoint}`);
+            console.log(`[NBA-FETCHER] Fetching from weekly-lineup route: ${primaryEndpoint}`);
 
-            const response = await fetchWithTimeout(endpoint);
+            let response = await fetchWithTimeout(primaryEndpoint);
 
+            // If primary fails, try direct Container App fallback
             if (!response.ok) {
-                // Try alternate endpoint if first fails, or just throw
-                 // Maybe fallback to v1/picks? No, that was 404.
-                throw new Error(`API returned ${response.status}: ${response.statusText}`);
+                console.warn(`[NBA-FETCHER] Primary route failed (${response.status}), trying Container App fallback...`);
+
+                // Normalize date for fallback endpoint
+                let dateParam = date;
+                if (date === 'tomorrow') {
+                    const tomorrow = new Date();
+                    tomorrow.setDate(tomorrow.getDate() + 1);
+                    dateParam = tomorrow.toISOString().split('T')[0];
+                }
+
+                const fallbackEndpoint = `${getNbaContainerEndpoint()}/slate/${dateParam}/executive`;
+                console.log(`[NBA-FETCHER] Fallback endpoint: ${fallbackEndpoint}`);
+
+                response = await fetchWithTimeout(fallbackEndpoint);
+                if (!response.ok) {
+                    throw new Error(`Both routes failed. Last error: ${response.status} ${response.statusText}`);
+                }
+                lastSource = 'container-app-fallback';
             }
 
             const data = await response.json();
 
-            // Validate response structure
-            if (!data || (!data.data && !Array.isArray(data) && !data.plays && !data.picks)) {
-                console.warn('[NBA-FETCHER] Unexpected response format', data);
+            // Validate response structure - NBA API returns { plays: [...], total_plays, version, etc. }
+            if (!data || (!data.plays && !data.picks && !Array.isArray(data))) {
+                console.warn('[NBA-FETCHER] Unexpected response format:', Object.keys(data || {}));
+            } else {
+                const playCount = data.plays?.length || data.picks?.length || 0;
+                console.log(`[NBA-FETCHER] ✅ Received ${playCount} plays from API (version: ${data.version || 'unknown'})`);
             }
 
             // Cache if it's today's data
@@ -222,6 +238,6 @@
         }
     };
 
-    console.log('[NBA-FETCHER] v2.2 loaded - Domain Proxy Mode (Fixed Route /weekly-lineup/nba)');
+    console.log('[NBA-FETCHER] v2.3 loaded - Primary: /api/weekly-lineup/nba | Fallback: /api/nba/slate/{date}/executive');
 
 })();
