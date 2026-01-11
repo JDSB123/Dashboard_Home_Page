@@ -1817,6 +1817,13 @@ async function loadAndAppendPicks() {
     console.log('[PICKS LOADER] Starting to load picks...');
     try {
         const apiUrl = window.APP_CONFIG?.API_BASE_URL || '/api';
+        
+        // Check if database sync is enabled (default to false if not specified)
+        if (window.APP_CONFIG?.ENABLE_DB_SYNC === false) {
+             console.log('[PICKS LOADER] DB sync disabled in config - skipping API fetch');
+             throw new Error('DB_SYNC_DISABLED');
+        }
+
         const response = await fetch(`${apiUrl}/get-picks`);
         console.log('[PICKS LOADER] API response status:', response.status);
 
@@ -1943,29 +1950,36 @@ async function loadTeamRecords(options = {}) {
         try {
             // Try to load from API first
             if (window.APP_CONFIG?.API_BASE_URL) {
-                try {
-                    const apiUrl = window.APP_CONFIG.API_BASE_URL;
-                    const response = await fetch(`${apiUrl}/team-records`);
-                    if (response.ok) {
-                        const data = await response.json();
-                        if (data.records) {
-                            const normalized = {};
-                            Object.keys(data.records).forEach(key => {
-                                normalized[key.toUpperCase()] = data.records[key];
-                            });
-                            teamRecordsCache = normalized;
-                            if (globalScope) {
-                                globalScope.__TEAM_RECORDS_CACHE__ = normalized;
-                                globalScope.teamRecordsCache = normalized;
+                // Check if DB sync is enabled
+                if (window.APP_CONFIG?.ENABLE_DB_SYNC === false) {
+                     // explicit false check to allow undefined to default to true/try
+                     // But here we want to default to skip if we know it's missing
+                     // Actually, defaulting to skip is safer if we want to avoid 404s
+                } else {
+                    try {
+                        const apiUrl = window.APP_CONFIG.API_BASE_URL;
+                        const response = await fetch(`${apiUrl}/team-records`);
+                        if (response.ok) {
+                            const data = await response.json();
+                            if (data.records) {
+                                const normalized = {};
+                                Object.keys(data.records).forEach(key => {
+                                    normalized[key.toUpperCase()] = data.records[key];
+                                });
+                                teamRecordsCache = normalized;
+                                if (globalScope) {
+                                    globalScope.__TEAM_RECORDS_CACHE__ = normalized;
+                                    globalScope.teamRecordsCache = normalized;
+                                }
+                                populateTeamRecords(document, { force: true });
+                                return normalized;
                             }
-                            populateTeamRecords(document, { force: true });
-                            return normalized;
                         }
+                        // 404 is expected when endpoint doesn't exist - just skip
+                        console.log('[TEAM RECORDS] API endpoint not available (expected). Team records will use local data. Status:', response.status);
+                    } catch (apiError) {
+                        console.log('[RECORDS] API not available, trying config file');
                     }
-                    // 404 is expected when endpoint doesn't exist - just skip
-                    console.log('[TEAM RECORDS] API endpoint not available (expected). Team records will use local data. Status:', response.status);
-                } catch (apiError) {
-                    console.log('[RECORDS] API not available, trying config file');
                 }
             }
 
@@ -2036,6 +2050,12 @@ async function loadPicksFromDatabase() {
         if (!window.APP_CONFIG || !window.APP_CONFIG.API_BASE_URL) {
             console.log('[DB LOADER] API not configured, using LocalPicksManager');
             return null;
+        }
+
+        // Check if database sync is enabled
+        if (window.APP_CONFIG?.ENABLE_DB_SYNC === false) {
+             console.log('[DB LOADER] DB sync disabled in config - skipping API fetch');
+             return null;
         }
 
         const apiUrl = window.APP_CONFIG.API_BASE_URL;

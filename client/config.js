@@ -81,6 +81,7 @@ window.APP_CONFIG = {
   AUTH_ENABLED: false,
   DEBUG_MODE: false,
   USE_FRONT_DOOR: true,  // Toggle to use Front Door vs direct Container App URLs
+  ENABLE_DB_SYNC: false, // Set to false to disable fetching from non-existent Orchestrator endpoints (get-picks, team-records)
 
   // Repository Info
   REPO_URL: 'https://github.com/JDSB123/Dashboard_Home_Page',
