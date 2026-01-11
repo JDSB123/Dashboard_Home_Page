@@ -1821,10 +1821,9 @@ async function loadAndAppendPicks() {
         console.log('[PICKS LOADER] API response status:', response.status);
 
         if (!response.ok) {
-            console.log('[PICKS LOADER] API not available, using static HTML picks');
-            if (window.ErrorHandler && response.status !== 404) {
-                window.ErrorHandler.handleApi(response, 'Load picks');
-            }
+            console.log('[PICKS LOADER] API not available (expected - using LocalPicksManager). Status:', response.status);
+            // 404 is expected when get-picks endpoint doesn't exist
+            // Dashboard uses LocalPicksManager for storage instead
             return;
         }
 
@@ -1963,6 +1962,8 @@ async function loadTeamRecords(options = {}) {
                             return normalized;
                         }
                     }
+                    // 404 is expected when endpoint doesn't exist - just skip
+                    console.log('[TEAM RECORDS] API endpoint not available (expected). Team records will use local data. Status:', response.status);
                 } catch (apiError) {
                     console.log('[RECORDS] API not available, trying config file');
                 }
@@ -2033,7 +2034,7 @@ async function loadPicksFromDatabase() {
     try {
         // Check if API is available
         if (!window.APP_CONFIG || !window.APP_CONFIG.API_BASE_URL) {
-            console.warn('API not configured, using local picks');
+            console.log('[DB LOADER] API not configured, using LocalPicksManager');
             return null;
         }
 
@@ -2041,10 +2042,10 @@ async function loadPicksFromDatabase() {
         const response = await fetch(`${apiUrl}/get-picks?limit=100`);
 
         if (!response.ok) {
-            if (window.ErrorHandler && response.status !== 404) {
-                window.ErrorHandler.handleApi(response, 'Load picks from database');
-            }
-            throw new Error(`HTTP ${response.status}`);
+            // 404 is expected when get-picks endpoint doesn't exist
+            // Dashboard uses LocalPicksManager for storage instead
+            console.log('[DB LOADER] API endpoint not available (expected). Using LocalPicksManager. Status:', response.status);
+            return null;
         }
 
         let data;
@@ -2078,6 +2079,8 @@ async function loadPicksFromDatabase() {
 
 function initializePicksAndRecords() {
     // Try to load from database first, then fall back to API/localStorage picks
+    // Note: In local development, database/get-picks endpoints may not exist
+    // In that case, LocalPicksManager will handle loading from localStorage
     const databasePromise = loadPicksFromDatabase();
     databasePromise.then(dbPicks => {
         if (dbPicks && dbPicks.length > 0) {
@@ -2086,7 +2089,7 @@ function initializePicksAndRecords() {
             // Picks are already loaded and displayed by loadPicksFromDatabase
         } else {
             // Fall back to API or localStorage
-            console.log('[DASHBOARD] No database picks, trying API/localStorage...');
+            console.log('[DASHBOARD] No database picks available, falling back to localStorage (LocalPicksManager)');
             const picksPromise = loadAndAppendPicks();
             if (picksPromise && typeof picksPromise.catch === 'function') {
                 picksPromise.catch(error => console.warn('[PICKS LOADER] Initial load encountered an error:', error));
