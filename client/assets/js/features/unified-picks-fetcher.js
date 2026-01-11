@@ -151,10 +151,12 @@
         if (league === 'all' || leagueUpper === 'NBA') {
             try {
                 if (window.NBAPicksFetcher) {
-                    const data = await window.NBAPicksFetcher.fetchPicks(date);
-                    const modelStamp = extractModelStampFromResponse(data);
-                    // API returns { plays: [...] } not { picks: [...] }
-                    const plays = data.plays || data.picks || data.recommendations || [];
+                    const result = await window.NBAPicksFetcher.fetchPicks(date);
+                    // NBAPicksFetcher returns { success, data, source } - extract nested data
+                    const apiData = result.success ? result.data : result;
+                    const modelStamp = extractModelStampFromResponse(apiData);
+                    // API returns { picks: [...] } - check both nested and direct
+                    const plays = apiData?.picks || apiData?.plays || apiData?.recommendations || [];
                     plays.forEach(play => {
                         const formatted = window.NBAPicksFetcher.formatPickForTable(play);
                         if (modelStamp && !formatted.modelStamp) formatted.modelStamp = modelStamp;
