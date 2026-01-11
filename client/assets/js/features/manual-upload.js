@@ -91,8 +91,39 @@
                 }
             });
             
-            // Also handle global paste when dropdown is open? 
-            // Maybe too aggressive. Let's stick to textarea or dropzone focus.
+            // Handle paste on the dropzone area (when focused or modal is open)
+            this.dropZone.addEventListener('paste', (e) => {
+                const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+                let blob = null;
+
+                for (let i = 0; i < items.length; i++) {
+                    if (items[i].type.indexOf('image') !== -1) {
+                        blob = items[i].getAsFile();
+                        e.preventDefault();
+                        this.handleFiles([blob]);
+                        break;
+                    }
+                }
+            });
+
+            // Handle global paste when document has focus (for any images in clipboard)
+            document.addEventListener('paste', (e) => {
+                // Only process if the manual upload UI is visible
+                if (!this.dropZone || this.dropZone.closest('.nav-dropdown-menu').getAttribute('hidden') !== null) {
+                    return;
+                }
+
+                const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+                
+                for (let i = 0; i < items.length; i++) {
+                    if (items[i].type.indexOf('image') !== -1) {
+                        const blob = items[i].getAsFile();
+                        e.preventDefault();
+                        this.handleFiles([blob]);
+                        break;
+                    }
+                }
+            });
         }
 
         setupSubmit() {
