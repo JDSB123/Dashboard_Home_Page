@@ -127,26 +127,68 @@
         // Sometimes raw feed has explicit matchup string
         const matchup = play.matchup || `${away} @ ${home}`;
         
-        // Determine pick display text
+        // Determine pick display text - extract team/direction from pick field
         let pickText = play.pick || play.selection || play.feature_name || play.model_feature || 'N/A';
         // Cleanup pick text if it's too raw (e.g. "home_spread_-5.5" -> "Home -5.5")
         if (pickText && typeof pickText === 'string') {
             pickText = pickText.replace(/_/g, ' ');
         }
 
+        // Extract pick team (e.g., "Home", "Away", or specific team name)
+        let pickTeam = '';
+        let pickType = 'spread';
+        
+        if (pickText && typeof pickText === 'string') {
+            const upper = pickText.toUpperCase();
+            if (upper.includes('OVER') || upper.includes('O ')) {
+                pickTeam = 'Over';
+                pickType = 'total';
+            } else if (upper.includes('UNDER') || upper.includes('U ')) {
+                pickTeam = 'Under';
+                pickType = 'total';
+            } else if (upper.includes('HOME') || upper.includes('FAVORITE')) {
+                pickTeam = home;
+                pickType = 'spread';
+            } else if (upper.includes('AWAY') || upper.includes('UNDERDOG')) {
+                pickTeam = away;
+                pickType = 'spread';
+            } else {
+                // Could be a direct team name or moneyline
+                pickTeam = pickText;
+                if (upper.includes('ML')) {
+                    pickType = 'ml';
+                }
+            }
+        }
+
+        // Extract line from pick if it contains spread info (e.g., "-3.5", "+110")
+        let line = '';
+        const lineMatch = pickText?.match(/([+-]?\d+\.?\d*)/);
+        if (lineMatch) {
+            line = lineMatch[1];
+        }
+
+        // Parse edge/confidence - maps to fire rating
+        const edge = parseFloat(play.edge) || parseFloat(play.ev) || 0;
+        const fire = Math.max(0, Math.min(5, Math.ceil(edge / 1.5)));
+
         return {
             sport: 'NBA',
-            matchup: matchup,
-            market: play.market || play.bet_type || 'General',
-            pick: pickText,
+            date: play.date || play.game_date || new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }),
+            time: play.time || 'TBD',
+            awayTeam: away,
+            homeTeam: home,
+            segment: play.segment || 'FG',
+            pickTeam: pickTeam,
+            pickType: pickType,
+            pickDirection: play.pick_direction || (pickTeam.toUpperCase() === 'OVER' ? 'OVER' : (pickTeam.toUpperCase() === 'UNDER' ? 'UNDER' : '')),
+            line: line,
             odds: play.odds || play.odds_available || play.price || -110,
-            units: play.units || (play.kelly_fraction ? (play.kelly_fraction * 10).toFixed(2) : '1.0'),
-            // Map backend 'tier' to 'confidence' or keep as is.
-            // The unified table expects 'confidence' column, usually "Star" or "Normal" or numeric
-            confidence: play.tier || play.confidence || 'Norm', 
-            ev: play.edge || (play.ev ? `${(play.ev * 100).toFixed(1)}%` : '0%'),
-            sportsbook: play.sportsbook || 'Any',
-            startTime: play.time || play.game_date || play.date || new Date().toISOString(),
+            edge: edge,
+            fire: fire,
+            fireLabel: fire === 5 ? 'MAX' : '',
+            rationale: play.rationale || play.explanation || '',
+            modelStamp: play.model_version || play.modelVersion || '',
             raw: play // Keep raw data for details view
         };
     }

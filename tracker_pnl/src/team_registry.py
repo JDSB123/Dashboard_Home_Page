@@ -409,7 +409,7 @@ class TeamRegistry:
             },
             "Ohio State": {
                 "id": "OSU",
-                "aliases": ["ohio state", "osu", "buckeyes", "bucks", "ohio st"],
+                "aliases": ["ohio state", "osu", "buckeyes", "bucks", "ohio st", "oh state", "oh st"],
                 "conference": "Big Ten"
             },
             "Michigan": {
