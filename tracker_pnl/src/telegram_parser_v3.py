@@ -97,10 +97,13 @@ class TelegramParserV3:
             date_div = message_div.find('div', class_='date')
             if date_div and date_div.get('title'):
                 try:
-                    timestamp = datetime.strptime(date_div['title'], "%d.%m.%Y %H:%M:%S")
+                    # Format: "28.11.2025 18:38:40 UTC-06:00"
+                    date_str = date_div['title'].split(' UTC')[0]
+                    timestamp = datetime.strptime(date_str, "%d.%m.%Y %H:%M:%S")
                     self.context.current_date = timestamp.strftime("%Y-%m-%d")
                     self.context.last_message_time = timestamp
-                except:
+                except Exception as e:
+                    # Fallback or log error
                     pass
             
             # Parse the message

@@ -436,7 +436,7 @@ def main():
         league_df_summary.to_excel(writer, sheet_name="By League", index=False)
     
     print(f"\n{'='*80}")
-    print(f"✅ Exported to: {output_file}")
+    print(f"[SUCCESS] Exported to: {output_file}")
     print(f"{'='*80}")
 
 
