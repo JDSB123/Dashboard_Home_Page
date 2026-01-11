@@ -56,7 +56,7 @@
      * @returns {Promise<Object>} Picks data
      */
     async function fetchNBAPicks(date = 'today') {
-        const NBA_API_URL = getApiEndpoint();
+        const NBA_API_URL = getNbaContainerEndpoint();
         const cacheKey = getCacheKey(date);
 
         // Check cache for today's data (only for 'today' queries)
@@ -216,7 +216,7 @@
     async function checkHealth() {
         try {
              // For health check, we can use the main health endpoint
-            const NBA_API_URL = getApiEndpoint();
+            const NBA_API_URL = getNbaContainerEndpoint();
             const response = await fetchWithTimeout(`${NBA_API_URL}/health`, 5000);
             return response.ok;
         } catch (e) {
