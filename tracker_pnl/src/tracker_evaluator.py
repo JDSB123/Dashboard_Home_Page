@@ -134,7 +134,8 @@ class TrackerEvaluator:
         "memphis": ("Memphis", "MEM"),
         "louisville": ("Louisville", "LOU"),
         "pepperdine": ("Pepperdine", "PEPP"),
-        "sd state": ("South Dakota State", "SDSU"), "south dakota state": ("South Dakota State", "SDSU"), "san diego state": ("San Diego State", "SDST"),
+        "sd state": ("South Dakota State", "SDST"), "south dakota state": ("South Dakota State", "SDST"), "south dakota st": ("South Dakota State", "SDST"), "sdsu": ("South Dakota State", "SDST"),
+        "san diego state": ("San Diego State", "SDSU"), "san diego st": ("San Diego State", "SDSU"),
         "unlv": ("UNLV", "UNLV"),
         "wvu": ("West Virginia", "WVU"), "west virginia": ("West Virginia", "WVU"),
         "byu": ("BYU", "BYU"), "brigham young": ("BYU", "BYU"),
@@ -334,10 +335,11 @@ class TrackerEvaluator:
         pick_desc = pick.pick_description.lower()
         
         # Get scores based on segment
+        league = pick.league or game.get("league", "")
         if pick.segment == "1H":
-            scores = self._get_half_scores(game, "H1")
+            scores = self._get_half_scores(game, "H1", league)
         elif pick.segment == "2H":
-            scores = self._get_half_scores(game, "H2")
+            scores = self._get_half_scores(game, "H2", league)
         else:
             scores = {"home": game.get("home_score", 0), "away": game.get("away_score", 0)}
         
@@ -353,8 +355,9 @@ class TrackerEvaluator:
         is_under = "under" in pick_desc or re.search(r'\bu\d', pick_desc)  # "u219" format
         is_ml = "ml" in pick_desc
         
-        # Extract line value
-        line_match = re.search(r'[ou]?(\d+\.?\d*)', pick.pick_description, re.I)
+        # Extract line value (including sign for spreads)
+        # For spreads like "Team -5" or "Team +3.5", capture the sign
+        line_match = re.search(r'([+-]?\d+\.?\d*)', pick.pick_description, re.I)
         if not line_match and not is_ml:
             pick.evaluated_result = "Pending"
             return
@@ -560,16 +563,67 @@ class TrackerEvaluator:
         
         return best_game if best_score >= 50 else None
     
-    def _get_half_scores(self, game: Dict, half: str) -> Optional[Dict]:
-        """Get scores for a half - calculate from quarters if needed."""
+    def _get_half_scores(self, game: Dict, half: str, league: str = None) -> Optional[Dict]:
+        """Get scores for a half.
+        
+        IMPORTANT: For betting, 2nd half INCLUDES overtime!
+        
+        Data format varies by league:
+        - NBA: H1=Q1, H2=Q2, OT1, OT2, etc. (quarters stored as halves)
+        - NCAAM/NCAAF: H1=actual 1st half, H2=actual 2nd half
+        - NFL: Quarter scores only (Q1, Q2, Q3, Q4)
+        
+        For 2H bets: 2H = Final - 1H (includes OT)
+        """
         half_scores = game.get("half_scores", {})
-        
-        if half in half_scores:
-            return half_scores[half]
-        
-        # Calculate from quarters
         quarter_scores = game.get("quarter_scores", {})
+        league = league or game.get("league", "")
         
+        # Check if this is a college game (actual halves) or pro game (quarters as halves)
+        is_college = league in ["NCAAM", "NCAAF"]
+        is_nba = league == "NBA"
+        
+        h1 = half_scores.get("H1", {})
+        h2 = half_scores.get("H2", {})
+        
+        if is_college:
+            # College games: H1 and H2 are actual half scores
+            if half == "H1":
+                if h1:
+                    return h1
+            elif half == "H2":
+                # 2H = Final - 1H (includes any OT)
+                if h1:
+                    return {
+                        "home": game.get("home_score", 0) - h1.get("home", 0),
+                        "away": game.get("away_score", 0) - h1.get("away", 0)
+                    }
+            
+        elif is_nba:
+            # NBA: H1=Q1, H2=Q2, OT1, OT2, etc.
+            # 1H = Q1 + Q2 (stored as H1 + H2 in our data)
+            # 2H = Final - 1H (includes Q3, Q4, and any OT)
+            
+            if half == "H1":
+                # First half = H1 + H2 (which is Q1 + Q2)
+                if h1 and h2:
+                    return {
+                        "home": h1.get("home", 0) + h2.get("home", 0),
+                        "away": h1.get("away", 0) + h2.get("away", 0)
+                    }
+                    
+            elif half == "H2":
+                # 2H = Final - 1H (includes OT for betting purposes)
+                if h1 and h2:
+                    first_half_home = h1.get("home", 0) + h2.get("home", 0)
+                    first_half_away = h1.get("away", 0) + h2.get("away", 0)
+                    
+                    return {
+                        "home": game.get("home_score", 0) - first_half_home,
+                        "away": game.get("away_score", 0) - first_half_away
+                    }
+        
+        # Fallback: Try quarters (for NFL or if half_scores empty)
         if half == "H1":
             q1 = quarter_scores.get("Q1", {})
             q2 = quarter_scores.get("Q2", {})
@@ -579,12 +633,15 @@ class TrackerEvaluator:
                     "away": q1.get("away", 0) + q2.get("away", 0)
                 }
         elif half == "H2":
-            q3 = quarter_scores.get("Q3", {})
-            q4 = quarter_scores.get("Q4", {})
-            if q3 and q4:
+            # 2H from quarters = Final - (Q1+Q2)
+            q1 = quarter_scores.get("Q1", {})
+            q2 = quarter_scores.get("Q2", {})
+            if q1 and q2:
+                first_half_home = q1.get("home", 0) + q2.get("home", 0)
+                first_half_away = q1.get("away", 0) + q2.get("away", 0)
                 return {
-                    "home": q3.get("home", 0) + q4.get("home", 0),
-                    "away": q3.get("away", 0) + q4.get("away", 0)
+                    "home": game.get("home_score", 0) - first_half_home,
+                    "away": game.get("away_score", 0) - first_half_away
                 }
         
         return None
