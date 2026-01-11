@@ -40,7 +40,7 @@
     const picksCache = {};
     let lastSource = 'container-app';
     const CACHE_DURATION = 60000; // 1 minute
-    const REQUEST_TIMEOUT = 20000; // 20 seconds (reduced from 60s for faster failure)
+    const REQUEST_TIMEOUT = 60000; // 60 seconds to handle cold starts
 
     /**
      * Fetch with timeout
@@ -75,7 +75,7 @@
         triggerInFlight[triggerKey] = true;
         try {
             console.log('[NCAAM-PICKS] Triggering picks generation at:', endpoint);
-            const response = await fetchWithTimeout(`${endpoint}/trigger-picks`, 30000);
+            const response = await fetchWithTimeout(`${endpoint}/trigger-picks`, 60000);
             if (response.ok) {
                 const result = await response.json();
                 console.log('[NCAAM-PICKS] Trigger response:', result);
