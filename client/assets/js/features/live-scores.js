@@ -294,11 +294,15 @@
                 return false;
             }
 
-            // SportsDataIO uses lowercase sport paths
-            const sportPath = sport.toLowerCase();
-            const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+            // SportsDataIO uses lowercase sport paths, cfb for college football
+            const sportPath = sport.toLowerCase() === 'ncaaf' ? 'cfb' : sport.toLowerCase();
 
-            const url = `https://api.sportsdata.io/v4/${sportPath}/scores/json/ScoresByDate/${today}`;
+            // SportsDataIO expects date format: YYYY-MMM-DD (e.g., 2024-JAN-15)
+            const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+            const now = new Date();
+            const today = `${now.getFullYear()}-${months[now.getMonth()]}-${String(now.getDate()).padStart(2, '0')}`;
+
+            const url = `https://api.sportsdata.io/v3/${sportPath}/scores/json/ScoresByDate/${today}`;
 
             try {
                 const controller = new AbortController();

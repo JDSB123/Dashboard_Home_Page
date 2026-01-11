@@ -38,8 +38,10 @@
             return [];
         }
 
-        const todaySportsDataIO = todayISO.replace(/-/g, '-').toUpperCase();
-        const url = `https://api.sportsdata.io/v4/${sport}/scores/json/ScoresByDate/${todaySportsDataIO}`;
+        // SportsDataIO expects date format: YYYY-MMM-DD (e.g., 2024-JAN-15)
+        const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+        const todaySportsDataIO = `${today.getFullYear()}-${months[today.getMonth()]}-${String(today.getDate()).padStart(2, '0')}`;
+        const url = `https://api.sportsdata.io/v3/${sport}/scores/json/ScoresByDate/${todaySportsDataIO}`;
         
         const response = await fetch(url, {
             headers: {

@@ -80,6 +80,18 @@ window.APP_CONFIG = {
   NHL_API_URL: '',
   MLB_API_URL: '',
 
+  // ═══════════════════════════════════════════════════════════════════
+  // EXTERNAL DATA PROVIDERS
+  // Used for live scores, box scores, and game status
+  // ═══════════════════════════════════════════════════════════════════
+
+  // SportsDataIO - Primary source for NFL/NCAAF live scores
+  // Key also stored in Azure Functions app settings as SDIO_KEY
+  SPORTSDATAIO: {
+    API_KEY: 'f202ae3458724f8b9beb8230820db7fe',
+    BASE_URL: 'https://api.sportsdata.io/v4'
+  },
+
   // Feature Flags
   AUTH_ENABLED: false,
   DEBUG_MODE: false,
