@@ -1029,12 +1029,16 @@
     // ========== CLEANUP SAMPLE DATA ==========
     
     function cleanupSampleData() {
-        const CLEANUP_VERSION_KEY = 'gbsv_cleanup_v1';
+        const CLEANUP_VERSION_KEY = 'gbsv_cleanup_v2';  // Bump version to re-run cleanup
         
-        // Only run cleanup once per browser
+        // Only run cleanup once per browser (per version)
         if (localStorage.getItem(CLEANUP_VERSION_KEY)) {
             return;
         }
+        
+        // Clear the old demo import flag so cleanup runs fresh
+        localStorage.removeItem('gbsv_demo_imported_v1');
+        localStorage.removeItem('gbsv_cleanup_v1');
         
         const picks = getAllPicks();
         if (picks.length === 0) {
@@ -1042,10 +1046,14 @@
             return;
         }
         
-        // Filter out any sample/demo picks (picks without a sportsbook or with demo markers)
+        // Filter out any sample/demo picks
         const realPicks = picks.filter(pick => {
             // Remove if it has demo/sample markers
             if (pick.isDemo || pick.isSample || pick.source === 'demo') {
+                return false;
+            }
+            // Remove Demo Book picks
+            if (pick.sportsbook === 'Demo Book') {
                 return false;
             }
             // Keep picks that have a valid sportsbook
