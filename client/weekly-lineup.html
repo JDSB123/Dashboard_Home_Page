@@ -5,12 +5,30 @@
 -->
 <html lang="en" style="background-color:#030b16">
 <head>
-    <style>html,body{background-color:#030b16!important}</style>
+    <!-- Critical inline styles - prevent white flash on initial load -->
+    <style>
+        html, body {
+            background-color: #030b16 !important;
+            margin: 0;
+            padding: 0;
+        }
+        body.page-weekly-lineup {
+            background-image: url('/assets/JB_Bearish_Market_FULL_page.png');
+            background-size: cover;
+            background-position: center top;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+    </style>
     <meta name="theme-color" content="#030b16">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Bears & Bulls — Today's Picks</title>
     <link rel="icon" type="image/png" href="assets/Logo%208.5.png?v=20251216">
+    
+    <!-- Preload critical background image -->
+    <link rel="preload" as="image" href="assets/JB_Bearish_Market_FULL_page.png">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&amp;family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Oswald:wght@500;600;700&amp;family=Bebas+Neue&amp;family=Inter:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;family=Exo+2:wght@400;500;600&amp;family=Roboto+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
