@@ -215,7 +215,7 @@ class TrackerEvaluator:
     def evaluate_tracker(
         self,
         tracker_path: str,
-        sheet_name: str = "audited 12.15 thru 12.27",
+        sheet_name: str = "Master Schedule",
         date_range: Tuple[str, str] = None
     ) -> List[TrackerPick]:
         """Evaluate all picks from tracker."""
@@ -737,7 +737,7 @@ class TrackerEvaluator:
 
 def run_tracker_evaluation(
     tracker_path: str = r"C:\Users\JB\Green Bier Capital\Early Stage Sport Ventures - Documents\Daily Picks\20251222_bombay711_tracker_consolidated.xlsx",
-    sheet_name: str = "audited 12.15 thru 12.27",
+    sheet_name: str = "Master Schedule",
     date_range: Tuple[str, str] = ("2025-12-12", "2025-12-27"),
     output_path: str = "tracker_evaluation.xlsx"
 ):

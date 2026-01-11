@@ -33,7 +33,7 @@ class SportsDataIOClient:
     
     def get_nfl_scores(self, game_date: str) -> List[Dict]:
         """
-        Get NFL scores for a specific date.
+        Get NFL scores for a specific date (deprecated - use get_nfl_scores_by_week).
         
         Args:
             game_date: Date in YYYY-MM-DD format
@@ -41,6 +41,7 @@ class SportsDataIOClient:
         Returns:
             List of box score dictionaries
         """
+        # Try the date-based endpoint first
         url = f"{self.BASE_URL}/nfl/scores/json/Scores/{game_date}"
         
         try:
@@ -59,27 +60,178 @@ class SportsDataIOClient:
             print(f"Error fetching NFL scores for {game_date}: {e}")
             return []
     
-    def get_nfl_box_score(self, game_id: int) -> Optional[Dict]:
+    def get_nfl_scores_by_week(self, season: int, week: int) -> List[Dict]:
         """
-        Get detailed box score for an NFL game.
+        Get NFL scores for a specific week.
         
         Args:
-            game_id: NFL game ID
+            season: Season year (e.g., 2025)
+            week: Week number (1-18 for regular season, 19+ for playoffs)
+            
+        Returns:
+            List of game dictionaries with scores
+        """
+        url = f"{self.BASE_URL}/nfl/scores/json/ScoresByWeek/{season}/{week}"
+        
+        try:
+            response = self.session.get(url, timeout=10)
+            response.raise_for_status()
+            games = response.json()
+            
+            result = []
+            for game in games:
+                game_date = game.get("Date", "")[:10] if game.get("Date") else ""
+                parsed = self._parse_nfl_game(game, game_date)
+                if parsed:
+                    parsed["score_id"] = game.get("ScoreID")
+                    result.append(parsed)
+            
+            return result
+        except Exception as e:
+            print(f"Error fetching NFL scores for week {week}: {e}")
+            return []
+    
+    def get_nfl_box_scores_by_week(self, season: int, week: int) -> List[Dict]:
+        """
+        Get all NFL box scores for a week (includes quarter-by-quarter scores).
+        
+        Args:
+            season: Season year (e.g., 2025)
+            week: Week number (1-18 for regular season, 19+ for playoffs)
+            
+        Returns:
+            List of box score dictionaries with quarter/half data
+        """
+        url = f"{self.BASE_URL}/nfl/stats/json/BoxScoresFinal/{season}/{week}"
+        
+        try:
+            response = self.session.get(url, timeout=10)
+            response.raise_for_status()
+            box_scores = response.json()
+            
+            result = []
+            for box in box_scores:
+                score = box.get("Score", {})
+                game_date = score.get("Date", "")[:10] if score.get("Date") else ""
+                
+                # Parse scoring quarters from the Score object
+                quarter_scores = {}
+                half_scores = {}
+                
+                for q in ["1", "2", "3", "4"]:
+                    home_key = f"HomeScoreQuarter{q}"
+                    away_key = f"AwayScoreQuarter{q}"
+                    home_val = score.get(home_key)
+                    away_val = score.get(away_key)
+                    if home_val is not None and away_val is not None:
+                        quarter_scores[f"Q{q}"] = {
+                            "home": home_val,
+                            "away": away_val
+                        }
+                
+                # Derive halves from quarters
+                if "Q1" in quarter_scores and "Q2" in quarter_scores:
+                    half_scores["H1"] = {
+                        "home": quarter_scores["Q1"]["home"] + quarter_scores["Q2"]["home"],
+                        "away": quarter_scores["Q1"]["away"] + quarter_scores["Q2"]["away"]
+                    }
+                if "Q3" in quarter_scores and "Q4" in quarter_scores:
+                    half_scores["H2"] = {
+                        "home": quarter_scores["Q3"]["home"] + quarter_scores["Q4"]["home"],
+                        "away": quarter_scores["Q3"]["away"] + quarter_scores["Q4"]["away"]
+                    }
+                
+                # Check for overtime
+                ot_home = score.get("HomeScoreOvertime")
+                ot_away = score.get("AwayScoreOvertime")
+                if ot_home is not None and ot_away is not None and (ot_home > 0 or ot_away > 0):
+                    quarter_scores["OT"] = {"home": ot_home, "away": ot_away}
+                
+                parsed = {
+                    "game_id": score.get("GameKey"),
+                    "score_id": score.get("ScoreID"),
+                    "date": game_date,
+                    "league": "NFL",
+                    "home_team": score.get("HomeTeam"),
+                    "away_team": score.get("AwayTeam"),
+                    "home_team_full": score.get("HomeTeamName"),
+                    "away_team_full": score.get("AwayTeamName"),
+                    "home_score": score.get("HomeScore"),
+                    "away_score": score.get("AwayScore"),
+                    "status": "final" if score.get("IsOver") else "scheduled",
+                    "quarter_scores": quarter_scores,
+                    "half_scores": half_scores,
+                    "source": "SportsDataIO",
+                    "fetched_at": datetime.now().isoformat()
+                }
+                result.append(parsed)
+            
+            return result
+        except Exception as e:
+            print(f"Error fetching NFL box scores for week {week}: {e}")
+            return []
+    
+    def get_nfl_box_score(self, game_id: int) -> Optional[Dict]:
+        """
+        Get detailed box score for an NFL game by ScoreID.
+        
+        Args:
+            game_id: NFL ScoreID
             
         Returns:
             Box score dictionary with segment data
         """
-        url = f"{self.BASE_URL}/nfl/scores/json/BoxScore/{game_id}"
+        url = f"{self.BASE_URL}/nfl/stats/json/BoxScoreByScoreIDV3/{game_id}"
         
         try:
             response = self.session.get(url, timeout=10)
             response.raise_for_status()
             data = response.json()
             
-            return self._parse_nfl_box_score(data)
+            return self._parse_nfl_box_score_v3(data)
         except Exception as e:
             print(f"Error fetching NFL box score for game {game_id}: {e}")
             return None
+    
+    def _parse_nfl_box_score_v3(self, data: Dict) -> Dict:
+        """Parse NFL box score v3 format with quarter data."""
+        score = data.get("Score", {})
+        
+        quarter_scores = {}
+        for q in ["1", "2", "3", "4"]:
+            home_key = f"HomeScoreQuarter{q}"
+            away_key = f"AwayScoreQuarter{q}"
+            home_val = score.get(home_key)
+            away_val = score.get(away_key)
+            if home_val is not None and away_val is not None:
+                quarter_scores[f"Q{q}"] = {
+                    "home": home_val,
+                    "away": away_val
+                }
+        
+        # Derive halves from quarters
+        halves = {}
+        if "Q1" in quarter_scores and "Q2" in quarter_scores:
+            halves["H1"] = {
+                "home": quarter_scores["Q1"]["home"] + quarter_scores["Q2"]["home"],
+                "away": quarter_scores["Q1"]["away"] + quarter_scores["Q2"]["away"]
+            }
+        if "Q3" in quarter_scores and "Q4" in quarter_scores:
+            halves["H2"] = {
+                "home": quarter_scores["Q3"]["home"] + quarter_scores["Q4"]["home"],
+                "away": quarter_scores["Q3"]["away"] + quarter_scores["Q4"]["away"]
+            }
+        
+        # Overtime
+        ot_home = score.get("HomeScoreOvertime")
+        ot_away = score.get("AwayScoreOvertime")
+        if ot_home is not None and ot_away is not None and (ot_home > 0 or ot_away > 0):
+            quarter_scores["OT"] = {"home": ot_home, "away": ot_away}
+        
+        return {
+            "quarter_scores": quarter_scores,
+            "half_scores": halves
+        }
     
     def get_ncaaf_scores(self, season: int, week: int) -> List[Dict]:
         """
