@@ -176,6 +176,57 @@ resource secretActionNetworkPass 'Microsoft.KeyVault/vaults/secrets@2023-07-01' 
   }
 }
 
+// Azure Storage connection string - for blob archival
+resource secretStorageConn 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
+  parent: keyVault
+  name: 'azure-storage-connection-string'
+  properties: {
+    value: 'PLACEHOLDER-SET-VIA-CLI'
+    contentType: 'Connection String'
+    attributes: {
+      enabled: true
+    }
+  }
+  tags: {
+    service: 'Azure Storage'
+    usage: 'Picks archival to blob storage'
+  }
+}
+
+// Azure Computer Vision endpoint - for OCR
+resource secretVisionEndpoint 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
+  parent: keyVault
+  name: 'azure-vision-endpoint'
+  properties: {
+    value: 'PLACEHOLDER-SET-VIA-CLI'
+    contentType: 'Endpoint URL'
+    attributes: {
+      enabled: true
+    }
+  }
+  tags: {
+    service: 'Azure Computer Vision'
+    usage: 'OCR for bet slip images'
+  }
+}
+
+// Azure Computer Vision key - for OCR
+resource secretVisionKey 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
+  parent: keyVault
+  name: 'azure-vision-key'
+  properties: {
+    value: 'PLACEHOLDER-SET-VIA-CLI'
+    contentType: 'API Key'
+    attributes: {
+      enabled: true
+    }
+  }
+  tags: {
+    service: 'Azure Computer Vision'
+    usage: 'OCR for bet slip images'
+  }
+}
+
 // ════════════════════════════════════════════════════════════════════════════
 // Outputs
 // ════════════════════════════════════════════════════════════════════════════
@@ -194,4 +245,7 @@ output secretReferences object = {
   sdioKey: '@Microsoft.KeyVault(SecretUri=${keyVault.properties.vaultUri}secrets/sportsdataio-nfl-ncaaf/)'
   oddsApiKey: '@Microsoft.KeyVault(SecretUri=${keyVault.properties.vaultUri}secrets/oddsapi-main/)'
   basketballApiKey: '@Microsoft.KeyVault(SecretUri=${keyVault.properties.vaultUri}secrets/basketball-api/)'
+  storageConnectionString: '@Microsoft.KeyVault(SecretUri=${keyVault.properties.vaultUri}secrets/azure-storage-connection-string/)'
+  visionEndpoint: '@Microsoft.KeyVault(SecretUri=${keyVault.properties.vaultUri}secrets/azure-vision-endpoint/)'
+  visionKey: '@Microsoft.KeyVault(SecretUri=${keyVault.properties.vaultUri}secrets/azure-vision-key/)'
 }
