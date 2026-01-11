@@ -187,17 +187,38 @@
      * Process individual file
      */
     async function processFile(file) {
-        const text = await file.text();
-
-        // Handle different file types
-        if (file.type.includes('image')) {
-            return processTelegramScreenshot(text);
-        } else if (file.type.includes('pdf')) {
-            return processPDF(text);
-        } else if (file.name.includes('.csv')) {
+        // Handle different file types with proper parsers
+        if (file.type.includes('image') || /\.(png|jpg|jpeg|gif|webp|bmp)$/i.test(file.name)) {
+            // Use OCR parser for images
+            if (window.ImageOCRParser) {
+                showStatus('Running OCR on image...', 'info');
+                const result = await window.ImageOCRParser.extractAndParsePicks(file);
+                return result.picks || [];
+            }
+            return [];
+        } else if (file.type === 'application/pdf' || file.name.endsWith('.pdf')) {
+            // Use PDF parser
+            if (window.PDFParser) {
+                showStatus('Extracting text from PDF...', 'info');
+                const result = await window.PDFParser.extractAndParsePicks(file);
+                return result.picks || [];
+            }
+            return [];
+        } else if (file.name.endsWith('.csv')) {
+            const text = await file.text();
             return window.PickParser?.parseCSV(text) || [];
+        } else if (file.name.endsWith('.xlsx') || file.name.endsWith('.xls')) {
+            // Excel files - read as text for now
+            showStatus('Excel support coming soon', 'warning');
+            return [];
+        } else if (file.type.includes('html') || file.name.endsWith('.html')) {
+            const text = await file.text();
+            // Strip HTML tags and parse as text
+            const plainText = text.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ');
+            return window.PickParser?.parseText(plainText) || [];
         } else {
-            // Treat as plain text
+            // Treat as plain text (txt, etc.)
+            const text = await file.text();
             return window.PickParser?.parseText(text) || [];
         }
     }
