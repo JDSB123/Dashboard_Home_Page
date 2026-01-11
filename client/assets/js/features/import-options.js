@@ -43,17 +43,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const importBtn = document.querySelector('.import-picks-btn');
     const backBtn = document.querySelector('.import-back-btn');
 
-    if (!actionButtons || !importOptions || !importBtn) return;
+    // Don't exit early - import options may already be visible
+    if (!importOptions) {
+        console.warn('Import options element not found');
+        return;
+    }
 
     // Show/hide import options
     function showImportOptions() {
-        actionButtons.style.display = 'none';
+        if (actionButtons) actionButtons.style.display = 'none';
         importOptions.removeAttribute('hidden');
     }
 
     function hideImportOptions() {
         importOptions.setAttribute('hidden', '');
-        actionButtons.style.display = 'flex';
+        if (actionButtons) actionButtons.style.display = 'flex';
         resetUploadForm();
     }
 
@@ -75,10 +79,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (statusDiv) statusDiv.style.display = 'none';
     }
 
-    importBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        showImportOptions();
-    });
+    if (importBtn) {
+        importBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            showImportOptions();
+        });
+    }
 
     if (backBtn) {
         backBtn.addEventListener('click', (e) => {
