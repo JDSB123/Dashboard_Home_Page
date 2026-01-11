@@ -1,9 +1,13 @@
 /**
- * Unified Picks Fetcher v1.2
- * Orchestrates fetching picks from all model APIs and adds them to the weekly lineup
- * Supports date-specific fetching
+ * Unified Picks Fetcher v1.3
+ * Orchestrates fetching picks from all model APIs in PARALLEL
+ * Supports date-specific fetching with cache-first strategy
  *
- * Production-ready: No demo/placeholder data fallback
+ * v1.3 Performance improvements:
+ * - Parallel fetching of all leagues (was sequential)
+ * - Reduced timeout from 60s to 15s
+ * - Cache-first strategy
+ * - Progressive rendering support
  */
 
 (function() {
@@ -28,8 +32,17 @@
         }
     };
 
-    // Request timeout in milliseconds (60 seconds for cold starts)
-    const REQUEST_TIMEOUT_MS = 60000;
+    // Request timeout in milliseconds (reduced from 60s for better UX)
+    const REQUEST_TIMEOUT_MS = 15000;
+
+    // Cache for picks results
+    const picksCache = {
+        data: null,
+        timestamp: 0,
+        date: null,
+        league: null
+    };
+    const CACHE_DURATION_MS = 60000; // 1 minute cache
 
     const extractModelStampFromResponse = (data) => {
         if (!data || typeof data !== 'object') return '';
@@ -132,221 +145,149 @@
     };
 
     /**
-     * Fetch picks from all or specific league APIs
+     * Check if cache is valid for the given parameters
+     */
+    const isCacheValid = (league, date) => {
+        return picksCache.data &&
+               picksCache.league === league &&
+               picksCache.date === date &&
+               (Date.now() - picksCache.timestamp) < CACHE_DURATION_MS;
+    };
+
+    /**
+     * Fetch picks for a single league (helper for parallel fetching)
+     */
+    const fetchLeaguePicks = async (leagueName, date, fetcher) => {
+        try {
+            const result = await fetcher.fetchPicks(date);
+            const apiData = result.success ? result.data : result;
+            const modelStamp = extractModelStampFromResponse(apiData);
+            const picks = apiData?.picks || apiData?.plays || apiData?.predictions || apiData?.recommendations || [];
+
+            return {
+                league: leagueName,
+                picks: picks.map(pick => {
+                    const formatted = fetcher.formatPickForTable(pick);
+                    if (modelStamp && !formatted.modelStamp) formatted.modelStamp = modelStamp;
+                    return formatted;
+                }),
+                error: null
+            };
+        } catch (e) {
+            debugError(`[UNIFIED-FETCHER] ${leagueName} fetch error:`, e.message);
+            return {
+                league: leagueName,
+                picks: [],
+                error: e.message
+            };
+        }
+    };
+
+    /**
+     * Fetch picks from all or specific league APIs IN PARALLEL
      * @param {string} league - 'all', 'nba', 'ncaam', 'nfl', 'ncaaf', 'nhl', 'mlb'
      * @param {string} date - 'today', 'tomorrow', or 'YYYY-MM-DD' (default: 'today')
+     * @param {Object} options - { skipCache: false, onLeagueComplete: null }
      * @returns {Promise<Object>} Object with picks array, errors, and metadata
      */
-    const fetchPicks = async function(league = 'all', date = 'today') {
+    const fetchPicks = async function(league = 'all', date = 'today', options = {}) {
+        const { skipCache = false, onLeagueComplete = null } = options;
+
+        // Cache-first strategy: return cached data if valid
+        if (!skipCache && isCacheValid(league, date)) {
+            debugLog('[UNIFIED-FETCHER] Returning cached picks');
+            return picksCache.data;
+        }
+
         if (window.ModelEndpointResolver?.ensureRegistryHydrated) {
             window.ModelEndpointResolver.ensureRegistryHydrated();
         }
+
+        const leagueUpper = league.toUpperCase();
+        const startTime = Date.now();
+        debugLog(`[UNIFIED-FETCHER] Fetching picks for: ${league}, date: ${date} (PARALLEL mode)`);
+
+        // Build list of fetchers to run in parallel
+        const fetchPromises = [];
+        const leagueFetchers = [
+            { name: 'NBA', fetcher: window.NBAPicksFetcher, match: leagueUpper === 'NBA' || league === 'all' },
+            { name: 'NCAAM', fetcher: window.NCAAMPicksFetcher, match: leagueUpper === 'NCAAM' || leagueUpper === 'NCAAB' || league === 'all' },
+            { name: 'NFL', fetcher: window.NFLPicksFetcher, match: leagueUpper === 'NFL' || league === 'all' },
+            { name: 'NCAAF', fetcher: window.NCAAFPicksFetcher, match: leagueUpper === 'NCAAF' || league === 'all' },
+            { name: 'NHL', fetcher: window.NHLPicksFetcher, match: leagueUpper === 'NHL' || league === 'all' },
+            { name: 'MLB', fetcher: window.MLBPicksFetcher, match: leagueUpper === 'MLB' || league === 'all' }
+        ];
+
+        for (const { name, fetcher, match } of leagueFetchers) {
+            if (match && fetcher) {
+                const promise = fetchLeaguePicks(name, date, fetcher).then(result => {
+                    // Progressive callback: notify when each league completes
+                    if (onLeagueComplete && result.picks.length > 0) {
+                        onLeagueComplete(result.league, result.picks);
+                    }
+                    return result;
+                });
+                fetchPromises.push(promise);
+            }
+        }
+
+        // Wait for all fetches to complete in parallel
+        const results = await Promise.allSettled(fetchPromises);
+
+        // Aggregate results
         let allPicks = [];
         const errors = [];
-        const leagueUpper = league.toUpperCase();
 
-        debugLog(`[UNIFIED-FETCHER] Fetching picks for: ${league}, date: ${date}`);
-
-        // NBA
-        if (league === 'all' || leagueUpper === 'NBA') {
-            try {
-                if (window.NBAPicksFetcher) {
-                    const result = await window.NBAPicksFetcher.fetchPicks(date);
-                    // NBAPicksFetcher returns { success, data, source } - extract nested data
-                    const apiData = result.success ? result.data : result;
-                    const modelStamp = extractModelStampFromResponse(apiData);
-                    // API returns { picks: [...] } - check both nested and direct
-                    const plays = apiData?.picks || apiData?.plays || apiData?.recommendations || [];
-                    plays.forEach(play => {
-                        const formatted = window.NBAPicksFetcher.formatPickForTable(play);
-                        if (modelStamp && !formatted.modelStamp) formatted.modelStamp = modelStamp;
-                        allPicks.push(formatted);
-                    });
-                    debugLog(`[UNIFIED-FETCHER] NBA: ${plays.length} picks`);
+        for (const result of results) {
+            if (result.status === 'fulfilled') {
+                const { league: leagueName, picks, error } = result.value;
+                if (picks.length > 0) {
+                    allPicks.push(...picks);
+                    debugLog(`[UNIFIED-FETCHER] ${leagueName}: ${picks.length} picks`);
                 }
-            } catch (e) {
-                debugError('[UNIFIED-FETCHER] NBA fetch error:', e.message);
-                errors.push({ league: 'NBA', error: e.message });
+                if (error) {
+                    errors.push({ league: leagueName, error });
+                }
+            } else {
+                debugError('[UNIFIED-FETCHER] Fetch rejected:', result.reason);
             }
         }
 
-        // NCAAM - Try container app first, fallback to main API
-        if (league === 'all' || leagueUpper === 'NCAAM' || leagueUpper === 'NCAAB') {
-            try {
-                if (window.NCAAMPicksFetcher) {
-                    let data;
-                    try {
-                        data = await window.NCAAMPicksFetcher.fetchPicks(date);
-                    } catch (containerError) {
-                        debugWarn('[UNIFIED-FETCHER] NCAAM container app failed:', containerError.message);
-                        errors.push({ league: 'NCAAM', error: containerError.message });
-                        data = null;
-                    }
+        const elapsed = Date.now() - startTime;
+        debugLog(`[UNIFIED-FETCHER] Completed in ${elapsed}ms - ${allPicks.length} total picks from ${fetchPromises.length} leagues`);
 
-                    if (data) {
-                        const modelStamp = extractModelStampFromResponse(data);
-                        const picks = data.picks || data.plays || data.recommendations || [];
-                        picks.forEach(pick => {
-                            const formatted = window.NCAAMPicksFetcher.formatPickForTable(pick);
-                            if (modelStamp && !formatted.modelStamp) formatted.modelStamp = modelStamp;
-                            allPicks.push(formatted);
-                        });
-                        debugLog(`[UNIFIED-FETCHER] NCAAM: ${picks.length} picks`);
-                    }
-                }
-            } catch (e) {
-                debugError('[UNIFIED-FETCHER] NCAAM fetch error:', e.message);
-                errors.push({ league: 'NCAAM', error: e.message });
-            }
-        }
-
-        // NFL - Try container app first, fallback to main API
-        if (league === 'all' || leagueUpper === 'NFL') {
-            try {
-                if (window.NFLPicksFetcher) {
-                    let data;
-                    try {
-                        data = await window.NFLPicksFetcher.fetchPicks(date);
-                    } catch (containerError) {
-                        debugWarn('[UNIFIED-FETCHER] NFL container app failed, trying main API:', containerError.message);
-                        // Fallback to main API with timeout
-                        const mainApiUrl = `${window.APP_CONFIG?.API_BASE_URL || 'https://green-bier-picks-api.azurewebsites.net/api'}/picks?league=nfl`;
-                        const response = await fetchWithTimeout(mainApiUrl);
-                        if (!response.ok) throw new Error(`Main API error: ${response.status}`);
-                        data = await response.json();
-                    }
-
-                    const modelStamp = extractModelStampFromResponse(data);
-                    const picks = data.picks || data.plays || data.recommendations || [];
-                    picks.forEach(pick => {
-                        const formatted = window.NFLPicksFetcher.formatPickForTable(pick);
-                        if (modelStamp && !formatted.modelStamp) formatted.modelStamp = modelStamp;
-                        allPicks.push(formatted);
-                    });
-                    debugLog(`[UNIFIED-FETCHER] NFL: ${picks.length} picks`);
-                }
-            } catch (e) {
-                debugError('[UNIFIED-FETCHER] NFL fetch error:', e.message);
-                errors.push({ league: 'NFL', error: e.message });
-            }
-        }
-
-        // NCAAF - Try container app first, fallback to main API
-        if (league === 'all' || leagueUpper === 'NCAAF') {
-            try {
-                if (window.NCAAFPicksFetcher) {
-                    let data;
-                    try {
-                        data = await window.NCAAFPicksFetcher.fetchPicks(date);
-                    } catch (containerError) {
-                        debugWarn('[UNIFIED-FETCHER] NCAAF container app failed, trying main API:', containerError.message);
-                        // Fallback to main API with timeout
-                        const mainApiUrl = `${window.APP_CONFIG?.API_BASE_URL || 'https://green-bier-picks-api.azurewebsites.net/api'}/picks?league=ncaaf`;
-                        const response = await fetchWithTimeout(mainApiUrl);
-                        if (!response.ok) throw new Error(`Main API error: ${response.status}`);
-                        data = await response.json();
-                    }
-
-                    const modelStamp = extractModelStampFromResponse(data);
-                    const predictions = data.predictions || data.picks || data.plays || [];
-                    predictions.forEach(pick => {
-                        const formatted = window.NCAAFPicksFetcher.formatPickForTable(pick);
-                        if (modelStamp && !formatted.modelStamp) formatted.modelStamp = modelStamp;
-                        allPicks.push(formatted);
-                    });
-                    debugLog(`[UNIFIED-FETCHER] NCAAF: ${predictions.length} picks`);
-                }
-            } catch (e) {
-                debugError('[UNIFIED-FETCHER] NCAAF fetch error:', e.message);
-                errors.push({ league: 'NCAAF', error: e.message });
-            }
-        }
-
-        // NHL - Will activate when NHLPicksFetcher is created and loaded
-        if (league === 'all' || leagueUpper === 'NHL') {
-            try {
-                if (window.NHLPicksFetcher) {
-                    let data;
-                    try {
-                        data = await window.NHLPicksFetcher.fetchPicks(date);
-                    } catch (containerError) {
-                        debugWarn('[UNIFIED-FETCHER] NHL container app failed, trying main API:', containerError.message);
-                        const mainApiUrl = `${window.APP_CONFIG?.API_BASE_URL || 'https://green-bier-picks-api.azurewebsites.net/api'}/picks?league=nhl`;
-                        const response = await fetchWithTimeout(mainApiUrl);
-                        if (!response.ok) throw new Error(`Main API error: ${response.status}`);
-                        data = await response.json();
-                    }
-
-                    const modelStamp = extractModelStampFromResponse(data);
-                    const picks = data.picks || data.plays || data.predictions || [];
-                    picks.forEach(pick => {
-                        const formatted = window.NHLPicksFetcher.formatPickForTable(pick);
-                        if (modelStamp && !formatted.modelStamp) formatted.modelStamp = modelStamp;
-                        allPicks.push(formatted);
-                    });
-                    debugLog(`[UNIFIED-FETCHER] NHL: ${picks.length} picks`);
-                }
-            } catch (e) {
-                debugError('[UNIFIED-FETCHER] NHL fetch error:', e.message);
-                errors.push({ league: 'NHL', error: e.message });
-            }
-        }
-
-        // MLB - Will activate when MLBPicksFetcher is created and loaded
-        if (league === 'all' || leagueUpper === 'MLB') {
-            try {
-                if (window.MLBPicksFetcher) {
-                    let data;
-                    try {
-                        data = await window.MLBPicksFetcher.fetchPicks(date);
-                    } catch (containerError) {
-                        debugWarn('[UNIFIED-FETCHER] MLB container app failed, trying main API:', containerError.message);
-                        const mainApiUrl = `${window.APP_CONFIG?.API_BASE_URL || 'https://green-bier-picks-api.azurewebsites.net/api'}/picks?league=mlb`;
-                        const response = await fetchWithTimeout(mainApiUrl);
-                        if (!response.ok) throw new Error(`Main API error: ${response.status}`);
-                        data = await response.json();
-                    }
-
-                    const modelStamp = extractModelStampFromResponse(data);
-                    const picks = data.picks || data.plays || data.predictions || [];
-                    picks.forEach(pick => {
-                        const formatted = window.MLBPicksFetcher.formatPickForTable(pick);
-                        if (modelStamp && !formatted.modelStamp) formatted.modelStamp = modelStamp;
-                        allPicks.push(formatted);
-                    });
-                    debugLog(`[UNIFIED-FETCHER] MLB: ${picks.length} picks`);
-                }
-            } catch (e) {
-                debugError('[UNIFIED-FETCHER] MLB fetch error:', e.message);
-                errors.push({ league: 'MLB', error: e.message });
-            }
-        }
-
-        // Production mode: No demo data fallback - show actual API status to users
-        // If all APIs failed, the errors array will contain details for user notification
-        const allApisFailed = allPicks.length === 0 && errors.length > 0;
-
-        debugLog(`[UNIFIED-FETCHER] Total picks fetched: ${allPicks.length}`);
-
-        return {
+        // Cache the results
+        const response = {
             picks: allPicks,
-            errors: errors,
-            date: date,
-            timestamp: new Date().toISOString(),
-            allApisFailed: allApisFailed
+            errors,
+            meta: {
+                fetchedAt: new Date().toISOString(),
+                elapsedMs: elapsed,
+                leaguesQueried: fetchPromises.length
+            }
         };
+
+        picksCache.data = response;
+        picksCache.timestamp = Date.now();
+        picksCache.date = date;
+        picksCache.league = league;
+
+        return response;
     };
+
 
     /**
      * Fetch picks and add them to the weekly lineup table
      * @param {string} league - 'all', 'nba', 'ncaam', 'nfl', 'ncaaf'
      * @param {string} date - 'today', 'tomorrow', or 'YYYY-MM-DD' (default: 'today')
+     * @param {Object} options - { skipCache: false }
      */
-    const fetchAndDisplayPicks = async function(league = 'all', date = 'today') {
-        const result = await fetchPicks(league, date);
+    const fetchAndDisplayPicks = async function(league = 'all', date = 'today', options = {}) {
+        const result = await fetchPicks(league, date, options);
 
         // Handle API failures - notify user
-        if (result.allApisFailed) {
+        const allApisFailed = result.picks.length === 0 && result.errors.length > 0;
+        if (allApisFailed) {
             const failedLeagues = result.errors.map(e => e.league).join(', ');
             if (window.WeeklyLineup?.showNotification) {
                 window.WeeklyLineup.showNotification(
@@ -464,13 +405,25 @@
         return health;
     };
 
+    /**
+     * Clear the picks cache (useful when forcing refresh)
+     */
+    const clearCache = () => {
+        picksCache.data = null;
+        picksCache.timestamp = 0;
+        picksCache.date = null;
+        picksCache.league = null;
+    };
+
     // Export
     window.UnifiedPicksFetcher = {
         fetchPicks,
         fetchAndDisplayPicks,
-        checkAllHealth
+        checkAllHealth,
+        clearCache,
+        isCacheValid: (league, date) => isCacheValid(league, date)
     };
 
-    debugLog('UnifiedPicksFetcher v1.2 loaded');
+    console.log('[UNIFIED-FETCHER] v1.3 loaded - PARALLEL mode | Cache-first | 15s timeout');
 
 })();
