@@ -653,6 +653,38 @@
         if (window.DashboardFilterPills && typeof window.DashboardFilterPills.applyFilters === 'function') {
             setTimeout(() => window.DashboardFilterPills.applyFilters(), 50);
         }
+
+        // Attach sportsbook dropdown event handlers
+        attachSportsbookDropdownListeners();
+    }
+
+    // ========== SPORTSBOOK DROPDOWN HANDLER ==========
+
+    function attachSportsbookDropdownListeners() {
+        const dropdowns = document.querySelectorAll('.sportsbook-dropdown');
+        dropdowns.forEach(dropdown => {
+            // Remove any existing listeners to avoid duplicates
+            dropdown.removeEventListener('change', handleSportsbookChange);
+            // Attach new listener
+            dropdown.addEventListener('change', handleSportsbookChange);
+        });
+    }
+
+    function handleSportsbookChange(event) {
+        const pickId = event.target.getAttribute('data-pick-id');
+        const newSportsbook = event.target.value;
+        
+        if (!pickId) return;
+        
+        // Update the pick's sportsbook
+        const picks = getAllPicks();
+        const pick = picks.find(p => p.id === pickId);
+        
+        if (pick) {
+            pick.sportsbook = newSportsbook;
+            savePicks(picks);
+            console.log(`✅ Updated pick ${pickId} sportsbook to: ${newSportsbook || 'None'}`);
+        }
     }
 
     // ========== CREATE ROW (FULL TEMPLATE) ==========
@@ -898,7 +930,14 @@
             <td data-label="Date & Time">
                 <div class="cell-date">${formatDateValue(pick.gameDate)}</div>
                 <div class="cell-time">${pick.gameTime || 'TBD'}</div>
-                <div class="sportsbook-value">${sportsbook}</div>
+                <select class="sportsbook-dropdown" data-pick-id="${pick.id}" aria-label="Change sportsbook for this pick">
+                    <option value="">No Book</option>
+                    <option value="hulkwager" ${sportsbook === 'hulkwager' ? 'selected' : ''}>Hulk Wager</option>
+                    <option value="bombay711" ${sportsbook === 'bombay711' ? 'selected' : ''}>Bombay 711</option>
+                    <option value="kingofsports" ${sportsbook === 'kingofsports' ? 'selected' : ''}>King of Sports</option>
+                    <option value="primetimeaction" ${sportsbook === 'primetimeaction' ? 'selected' : ''}>Prime Time Action</option>
+                    <option value="other" ${sportsbook === 'other' ? 'selected' : ''}>Other</option>
+                </select>
             </td>
             <td class="center">
                 ${renderLeagueCell(sport)}

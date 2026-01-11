@@ -528,6 +528,47 @@ body.page-active-picks .cell-date {
     margin-bottom: 0.25rem;
 }
 
+/* ===== SPORTSBOOK DROPDOWN (in Date & Time cell) ===== */
+body.page-active-picks .sportsbook-dropdown {
+    display: block;
+    width: 100%;
+    margin-top: 0.5rem;
+    padding: 0.4rem 0.5rem;
+    font-family: var(--font-body), 'Cormorant Garamond', Georgia, serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--neutral-100);
+    background-color: rgba(25, 50, 80, 0.6);
+    border: 1px solid rgba(110, 160, 200, 0.4);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+body.page-active-picks .sportsbook-dropdown:hover {
+    background-color: rgba(30, 60, 90, 0.8);
+    border-color: rgba(110, 160, 200, 0.7);
+}
+
+body.page-active-picks .sportsbook-dropdown:focus {
+    outline: none;
+    background-color: rgba(40, 70, 100, 0.9);
+    border-color: rgba(150, 200, 255, 0.8);
+    box-shadow: 0 0 0 3px rgba(150, 200, 255, 0.2);
+}
+
+body.page-active-picks .sportsbook-dropdown option {
+    background-color: #1a2840;
+    color: var(--neutral-100);
+    padding: 0.4rem;
+}
+
+body.page-active-picks .sportsbook-dropdown option:checked {
+    background: linear-gradient(#00aa88, #00aa88);
+    background-color: #00aa88;
+    color: #030b16;
+}
+
 /* Matchup/Pick cell layout & typography are handled by the shared table component
    (`assets/css/components/picks-table.css`). Avoid overriding here so the stacked
    layout (Away / vs / Home) and the pick stacking stay consistent. */
