@@ -41,12 +41,65 @@
 
     function addPicks(newPicks) {
         const existing = getAllPicks();
-        const enrichedPicks = newPicks.map((pick, idx) => ({
-            ...pick,
-            id: pick.id || `pick_${Date.now()}_${idx}_${Math.random().toString(36).substring(7)}`,
-            createdAt: pick.createdAt || new Date().toISOString(),
-            status: pick.status || 'pending'
-        }));
+        const enrichedPicks = newPicks.map((pick, idx) => {
+            // Normalize league/sport values
+            let sport = (pick.sport || pick.league || 'NBA').toUpperCase();
+            
+            // Map league variants to standard values
+            const leagueMap = {
+                'NCAAM': 'NCAAB',
+                'NCAB': 'NCAAB',
+                'CBB': 'NCAAB',
+                'COLLEGE BASKETBALL': 'NCAAB',
+                'NCAAF': 'NCAAF',
+                'CFB': 'NCAAF',
+                'COLLEGE FOOTBALL': 'NCAAF',
+                'NFL': 'NFL',
+                'NBA': 'NBA',
+                'NCAAB': 'NCAAB',
+                'MLB': 'MLB',
+                'NHL': 'NHL'
+            };
+            sport = leagueMap[sport] || sport;
+            
+            // Ensure awayTeam and homeTeam are set correctly
+            let awayTeam = pick.awayTeam || '';
+            let homeTeam = pick.homeTeam || '';
+            
+            // If game field exists, try to parse it
+            if (pick.game && !awayTeam && !homeTeam) {
+                const parts = pick.game.split(/\s*(?:@|vs\.?|versus)\s*/i);
+                if (parts.length === 2) {
+                    awayTeam = parts[0].trim();
+                    homeTeam = parts[1].trim();
+                }
+            }
+            
+            // Normalize pick direction for totals
+            let pickDirection = pick.pickDirection || '';
+            if (pickDirection) {
+                pickDirection = pickDirection.replace(/^UNDE\b/i, 'UNDER').toUpperCase();
+            }
+            
+            // Ensure pickType is normalized
+            let pickType = (pick.pickType || 'spread').toLowerCase();
+            if (pickType === 'ml') pickType = 'moneyline';
+            if (pickType === 'tt') pickType = 'team-total';
+            if (pickType === 'ou') pickType = 'total';
+            
+            return {
+                ...pick,
+                id: pick.id || `pick_${Date.now()}_${idx}_${Math.random().toString(36).substring(7)}`,
+                createdAt: pick.createdAt || new Date().toISOString(),
+                status: pick.status || 'pending',
+                sport: sport,
+                league: sport,
+                awayTeam: awayTeam,
+                homeTeam: homeTeam,
+                pickDirection: pickDirection,
+                pickType: pickType
+            };
+        });
         const all = [...existing, ...enrichedPicks];
         savePicks(all);
         return enrichedPicks;

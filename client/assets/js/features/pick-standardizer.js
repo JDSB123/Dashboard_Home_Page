@@ -948,6 +948,8 @@
             if (line.includes('|')) {
                 const pipePick = parsePipeDelimitedLine(line);
                 if (pipePick) {
+                    // Ensure sport is uppercase
+                    if (pipePick.sport) pipePick.sport = pipePick.sport.toUpperCase();
                     picks.push(pipePick);
                     continue;
                 }
@@ -955,7 +957,7 @@
             
             // Check for sport/game context
             const contextInfo = extractContext(line);
-            if (contextInfo.sport) currentSport = contextInfo.sport;
+            if (contextInfo.sport) currentSport = contextInfo.sport.toUpperCase();
             if (contextInfo.game) currentGame = contextInfo.game;
             
             // Skip if it's just a context line (no bet info)
@@ -967,8 +969,17 @@
             }
         }
 
-        console.log(`📊 Parsed ${picks.length} picks from text input`);
-        return picks;
+        // Normalize all picks for consistency
+        const normalizedPicks = picks.map(pick => ({
+            ...pick,
+            sport: (pick.sport || 'NBA').toUpperCase(),
+            league: (pick.league || pick.sport || 'NBA').toUpperCase(),
+            pickDirection: pick.pickDirection ? pick.pickDirection.replace(/^UNDE\b/i, 'UNDER').toUpperCase() : '',
+            pickType: (pick.pickType || 'spread').toLowerCase()
+        }));
+        
+        console.log(`📊 Parsed ${normalizedPicks.length} picks from text input`);
+        return normalizedPicks;
     }
 
     /**
@@ -978,7 +989,7 @@
         const lower = line.toLowerCase();
         const result = { sport: null, game: null, isContextOnly: false };
 
-        // Detect sport
+        // Detect sport - ALWAYS uppercase
         if (/\bnfl\b/i.test(lower)) result.sport = 'NFL';
         else if (/\bnba\b/i.test(lower)) result.sport = 'NBA';
         else if (/\bncaab\b|\bncaam\b|\bcbb\b/i.test(lower)) result.sport = 'NCAAB';
@@ -1007,8 +1018,11 @@
      * Smart flexible parser - handles any format intuitively
      */
     function parseFlexibleLine(line, defaultSport, currentGame) {
+        // Normalize default sport to uppercase
+        const normalizedSport = (defaultSport || 'NBA').toUpperCase();
         const pick = {
-            sport: defaultSport,
+            sport: normalizedSport,
+            league: normalizedSport,
             segment: 'Full Game',
             status: 'pending',
             date: getTodayDate(),
