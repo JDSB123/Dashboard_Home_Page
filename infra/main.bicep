@@ -371,7 +371,43 @@ resource originNcaaf 'Microsoft.Cdn/profiles/originGroups/origins@2024-02-01' = 
 
 resource ruleSet 'Microsoft.Cdn/profiles/ruleSets@2024-02-01' = {
   parent: frontDoorProfile
-  name: 'ApiRoutingRules'
+  name: 'UrlRewriteRules'
+}
+
+// Rule to strip /api/nba prefix when forwarding to NBA backend
+// Enforce canonical host: redirect any non-approved host to www.greenbiersportventures.com
+resource ruleCanonicalHost 'Microsoft.Cdn/profiles/ruleSets/rules@2024-02-01' = {
+  parent: ruleSet
+  name: 'EnforceCanonicalHost'
+  properties: {
+    order: 1
+    conditions: [
+      {
+        name: 'RequestHeader'
+        parameters: {
+          typeName: 'DeliveryRuleRequestHeaderConditionParameters'
+          headerName: 'Host'
+          operator: 'Equal'
+          negateCondition: true
+          matchValues: [
+            'www.greenbiersportventures.com'
+            'greenbiersportventures.com'
+          ]
+        }
+      }
+    ]
+    actions: [
+      {
+        name: 'UrlRedirect'
+        parameters: {
+          typeName: 'DeliveryRuleUrlRedirectActionParameters'
+          redirectType: 'Moved'
+          destinationProtocol: 'Https'
+          customHostname: 'www.greenbiersportventures.com'
+        }
+      }
+    ]
+  }
 }
 
 // Rule to strip /api/nba prefix when forwarding to NBA backend
@@ -379,7 +415,7 @@ resource ruleNbaRewrite 'Microsoft.Cdn/profiles/ruleSets/rules@2024-02-01' = {
   parent: ruleSet
   name: 'RewriteNbaPath'
   properties: {
-    order: 1
+    order: 2
     conditions: [
       {
         name: 'UrlPath'
@@ -410,7 +446,7 @@ resource ruleNcaamRewrite 'Microsoft.Cdn/profiles/ruleSets/rules@2024-02-01' = {
   parent: ruleSet
   name: 'RewriteNcaamPath'
   properties: {
-    order: 2
+    order: 3
     conditions: [
       {
         name: 'UrlPath'
@@ -441,7 +477,7 @@ resource ruleNflRewrite 'Microsoft.Cdn/profiles/ruleSets/rules@2024-02-01' = {
   parent: ruleSet
   name: 'RewriteNflPath'
   properties: {
-    order: 3
+    order: 4
     conditions: [
       {
         name: 'UrlPath'
@@ -472,7 +508,7 @@ resource ruleNcaafRewrite 'Microsoft.Cdn/profiles/ruleSets/rules@2024-02-01' = {
   parent: ruleSet
   name: 'RewriteNcaafPath'
   properties: {
-    order: 4
+    order: 5
     conditions: [
       {
         name: 'UrlPath'
