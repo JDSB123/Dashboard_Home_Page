@@ -57,11 +57,24 @@
     <!-- Page Transition Handler (smooth navigation with loading state) -->
     <script src="assets/js/utils/page-transition-handler.js?v=1.0.0" defer></script>
 
-    <!-- CRITICAL: Unified picks fetcher only (others loaded on-demand) -->
+    <!-- Model API Fetchers - v34.00.1 Production -->
+    <script src="assets/js/features/auto-game-fetcher.js?v=34.00.1" defer></script>
+    <script src="assets/js/features/nba-picks-fetcher.js?v=34.00.1" defer></script>
+    <script src="assets/js/features/ncaam-picks-fetcher.js?v=34.00.1" defer></script>
+    <script src="assets/js/features/nfl-picks-fetcher.js?v=34.00.1" defer></script>
+    <script src="assets/js/features/ncaaf-picks-fetcher.js?v=34.00.1" defer></script>
     <script src="assets/js/features/unified-picks-fetcher.js?v=34.00.1" defer></script>
+    <!-- Snapshot & Export Managers - v34.00.0 -->
+    <script src="assets/js/features/picks-snapshot-manager.js?v=34.00.0" defer></script>
+    <script src="assets/js/features/picks-export-manager.js?v=34.00.0" defer></script>
+    <script src="assets/js/features/snapshot-export-ui.js?v=34.00.0" defer></script>
+    <!-- Complete Mobile Experience -->
+    <script src="assets/js/weekly-lineup-mobile.js?v=34.00.0" defer></script>
     
-    <!-- NON-CRITICAL: Lazy-loaded after page interactive via inline loader below -->
-    <!-- Model API Fetchers, Snapshot/Export, Manual Entry, Mobile enhancements -->
+    <!-- Manual Pick Entry - Option A & B -->
+    <script src="assets/js/features/pick-parser.js?v=34.00.0" defer></script>
+    <script src="assets/js/features/manual-pick-modal.js?v=34.00.0" defer></script>
+    <script src="assets/js/features/sportsbooks-import-handler.js?v=34.00.0" defer></script>
     <link rel="stylesheet" href="assets/css/components/manual-pick-modal.css?v=34.00.0">
     <link rel="stylesheet" href="assets/css/components/sportsbooks-import.css?v=34.00.0">
     
@@ -592,47 +605,18 @@
     });
   }
 
-  // Lazy-load non-critical scripts after page interactive
-  window.addEventListener('load', () => {
-    const LazyScriptLoader = window.LazyScriptLoader;
-    if (!LazyScriptLoader) return;
-
-    // Batch 1: Fetchers (load when idle)
-    LazyScriptLoader.loadWhenIdle([
-      'assets/js/features/auto-game-fetcher.js?v=34.00.1',
-      'assets/js/features/nba-picks-fetcher.js?v=34.00.1',
-      'assets/js/features/ncaam-picks-fetcher.js?v=34.00.1',
-      'assets/js/features/nfl-picks-fetcher.js?v=34.00.1',
-      'assets/js/features/ncaaf-picks-fetcher.js?v=34.00.1',
-    ]);
-
-    // Batch 2: Snapshot/Export (load when idle)
-    LazyScriptLoader.loadWhenIdle([
-      'assets/js/features/picks-snapshot-manager.js?v=34.00.0',
-      'assets/js/features/picks-export-manager.js?v=34.00.0',
-      'assets/js/features/snapshot-export-ui.js?v=34.00.0',
-    ]);
-
-    // Batch 3: Manual entry & sportsbooks (load when idle)
-    LazyScriptLoader.loadWhenIdle([
-      'assets/js/features/pick-parser.js?v=34.00.0',
-      'assets/js/features/manual-pick-modal.js?v=34.00.0',
-      'assets/js/features/sportsbooks-import-handler.js?v=34.00.0',
-    ]);
-
-    // Batch 4: Mobile enhancements (load when idle)
-    LazyScriptLoader.loadWhenIdle('assets/js/weekly-lineup-mobile.js?v=34.00.0');
-
-    // Batch 5: OCR & advanced features (load after 2s idle)
-    setTimeout(() => {
-      LazyScriptLoader.loadWhenIdle([
-        'assets/js/features/pdf-parser.js?v=34.00.0',
-        'assets/js/features/image-ocr-parser.js?v=34.00.0',
-        'assets/js/features/blob-storage-archiver.js?v=34.00.0',
-        'assets/js/features/history-manager.js?v=34.00.0',
-      ]);
-    }, 2000);
-  });
+  // Lazy-load only heavy OCR/parsing features when idle (core features already loaded)
+  if (window.LazyScriptLoader) {
+    window.addEventListener('load', () => {
+      // These are truly optional features that can wait
+      setTimeout(() => {
+        window.LazyScriptLoader.loadWhenIdle([
+          'assets/js/features/pdf-parser.js?v=34.00.0',
+          'assets/js/features/image-ocr-parser.js?v=34.00.0',
+        ]);
+      }, 3000);
+    });
+  }
 </script>
 
 </body>
