@@ -36,6 +36,9 @@ venv/
 *.temp
 nul
 
+# Azurite local emulator state
+__azurite_db*.json
+
 # Generated datasets / caches (do not commit)
 pick-analysis-tracker/cache/
 pick-analysis-tracker/output/
