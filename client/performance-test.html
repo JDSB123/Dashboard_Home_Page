@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Test - Weekly Lineup Navigation</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #0a0f1a;
+            color: #e0e0e0;
+        }
+        .test-card {
+            background: #1a1f2e;
+            border: 1px solid #2a3f5f;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        h1 { color: #4a9eff; }
+        h2 { color: #6ab0ff; font-size: 1.2em; margin-top: 0; }
+        .metric { 
+            display: flex; 
+            justify-content: space-between; 
+            padding: 8px 0; 
+            border-bottom: 1px solid #2a3f5f;
+        }
+        .metric:last-child { border-bottom: none; }
+        .label { color: #a0a0a0; }
+        .value { 
+            font-weight: 600; 
+            color: #4a9eff;
+        }
+        .value.good { color: #4ade80; }
+        .value.warning { color: #fbbf24; }
+        .value.error { color: #f87171; }
+        button {
+            background: #4a9eff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        button:hover { background: #3a8eef; }
+        .status { 
+            padding: 12px; 
+            border-radius: 6px; 
+            margin-top: 10px;
+            background: #1a2f1a;
+            color: #4ade80;
+        }
+        .status.loading { background: #2a2f3a; color: #fbbf24; }
+        .status.error { background: #2f1a1a; color: #f87171; }
+        code {
+            background: #0a0f1a;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚀 Weekly Lineup Performance Test</h1>
+    
+    <div class="test-card">
+        <h2>Service Worker Status</h2>
+        <div id="sw-status" class="status loading">Checking...</div>
+    </div>
+
+    <div class="test-card">
+        <h2>Cache Manager Status</h2>
+        <div id="cache-status" class="status loading">Checking...</div>
+        <div id="cache-stats" style="margin-top: 10px;"></div>
+    </div>
+
+    <div class="test-card">
+        <h2>Lazy Script Loader Status</h2>
+        <div id="lazy-status" class="status loading">Checking...</div>
+    </div>
+
+    <div class="test-card">
+        <h2>Navigation Performance</h2>
+        <p>Test page navigation speed with and without caching:</p>
+        <button onclick="testNavigation()">Test Navigation to Weekly Lineup</button>
+        <button onclick="clearAllCaches()">Clear All Caches</button>
+        <div id="nav-results" style="margin-top: 15px;"></div>
+    </div>
+
+    <div class="test-card">
+        <h2>Performance Metrics</h2>
+        <div id="metrics"></div>
+    </div>
+
+    <script>
+        // Check Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistration('/').then(reg => {
+                const status = document.getElementById('sw-status');
+                if (reg) {
+                    status.textContent = '✅ Service Worker registered and active';
+                    status.className = 'status';
+                } else {
+                    status.textContent = '⚠️ Service Worker not registered (reload page after navigating from index.html)';
+                    status.className = 'status warning';
+                }
+            });
+        } else {
+            document.getElementById('sw-status').textContent = '❌ Service Worker not supported';
+            document.getElementById('sw-status').className = 'status error';
+        }
+
+        // Check Cache Manager
+        if (window.DataCacheManager) {
+            document.getElementById('cache-status').textContent = '✅ DataCacheManager loaded';
+            document.getElementById('cache-status').className = 'status';
+            
+            const stats = window.DataCacheManager.getStats();
+            document.getElementById('cache-stats').innerHTML = `
+                <div class="metric">
+                    <span class="label">Cache Entries:</span>
+                    <span class="value">${stats.entries}</span>
+                </div>
+                <div class="metric">
+                    <span class="label">Cache Size:</span>
+                    <span class="value">${stats.sizeKB} KB</span>
+                </div>
+            `;
+        } else {
+            document.getElementById('cache-status').textContent = '❌ DataCacheManager not loaded';
+            document.getElementById('cache-status').className = 'status error';
+        }
+
+        // Check Lazy Script Loader
+        if (window.LazyScriptLoader) {
+            document.getElementById('lazy-status').textContent = '✅ LazyScriptLoader loaded';
+            document.getElementById('lazy-status').className = 'status';
+        } else {
+            document.getElementById('lazy-status').textContent = '❌ LazyScriptLoader not loaded';
+            document.getElementById('lazy-status').className = 'status error';
+        }
+
+        // Performance metrics
+        if (window.performance && performance.timing) {
+            const timing = performance.timing;
+            const metrics = {
+                'DNS Lookup': timing.domainLookupEnd - timing.domainLookupStart,
+                'TCP Connection': timing.connectEnd - timing.connectStart,
+                'DOM Content Loaded': timing.domContentLoadedEventEnd - timing.navigationStart,
+                'Page Load Complete': timing.loadEventEnd - timing.navigationStart,
+                'DOM Interactive': timing.domInteractive - timing.navigationStart,
+            };
+
+            let html = '';
+            for (const [label, value] of Object.entries(metrics)) {
+                if (value > 0) {
+                    const className = value < 500 ? 'good' : value < 1000 ? 'warning' : 'error';
+                    html += `
+                        <div class="metric">
+                            <span class="label">${label}:</span>
+                            <span class="value ${className}">${value}ms</span>
+                        </div>
+                    `;
+                }
+            }
+            document.getElementById('metrics').innerHTML = html || '<p>No metrics available yet</p>';
+        }
+
+        function testNavigation() {
+            const results = document.getElementById('nav-results');
+            results.innerHTML = '<div class="status loading">Opening Weekly Lineup in new tab...</div>';
+            
+            const start = performance.now();
+            window.open('weekly-lineup.html', '_blank');
+            
+            setTimeout(() => {
+                const elapsed = performance.now() - start;
+                results.innerHTML = `
+                    <div class="status">
+                        Tab opened in ${elapsed.toFixed(0)}ms<br>
+                        <small>Check the new tab for actual load time. With service worker + cache, subsequent loads should be near-instant.</small>
+                    </div>
+                `;
+            }, 100);
+        }
+
+        function clearAllCaches() {
+            if (window.DataCacheManager) {
+                window.DataCacheManager.clear();
+            }
+            if ('caches' in window) {
+                caches.keys().then(keys => {
+                    keys.forEach(key => caches.delete(key));
+                });
+            }
+            alert('All caches cleared! Reload the page to test fresh load performance.');
+        }
+    </script>
+</body>
+</html>

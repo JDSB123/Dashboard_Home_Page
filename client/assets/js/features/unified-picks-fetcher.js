@@ -148,6 +148,21 @@
      * Check if cache is valid for the given parameters
      */
     const isCacheValid = (league, date) => {
+        // First check localStorage via DataCacheManager if available
+        if (window.DataCacheManager) {
+            const cacheKey = `picks_${league}_${date}`;
+            const cached = window.DataCacheManager.get(cacheKey);
+            if (cached) {
+                debugLog('[UNIFIED-FETCHER] Found valid cache in localStorage');
+                picksCache.data = cached;
+                picksCache.timestamp = Date.now();
+                picksCache.date = date;
+                picksCache.league = league;
+                return true;
+            }
+        }
+
+        // Fallback to in-memory cache
         return picksCache.data &&
                picksCache.league === league &&
                picksCache.date === date &&
@@ -267,6 +282,13 @@
             }
         };
 
+        // Store in localStorage via DataCacheManager (5 min TTL)
+        if (window.DataCacheManager) {
+            const cacheKey = `picks_${league}_${date}`;
+            window.DataCacheManager.set(cacheKey, response, 5 * 60 * 1000);
+        }
+
+        // Also store in memory cache
         picksCache.data = response;
         picksCache.timestamp = Date.now();
         picksCache.date = date;
