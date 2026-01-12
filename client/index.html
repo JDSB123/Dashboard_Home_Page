@@ -88,9 +88,15 @@
     <!-- Core dashboard interactions: KPI tiles, sorting -->
     <script src="assets/js/core/debug-config.js?v=34.00.0" defer></script>
     <script src="assets/js/features/manual-upload.js" defer></script>
+    <script src="assets/js/features/sportsbook-selection-handler.js?v=34.00.0" defer></script>
     
     <!-- Page Transition Handler (smooth navigation with loading state) -->
     <script src="assets/js/utils/page-transition-handler.js?v=1.0.0" defer></script>
+    <!-- Prefetch Weekly Lineup assets to speed up navigation -->
+    <link rel="prefetch" href="weekly-lineup.html" as="document">
+    <link rel="prefetch" href="assets/JB_Bearish_Market_FULL_page.png" as="image">
+    <link rel="prefetch" href="dist/bundle.min.css" as="style">
+    <link rel="prefetch" href="assets/js/weekly-lineup-mobile.js?v=34.00.0" as="script">
 </head>
 <body class="page-active-picks" style="background-color:#030b16">
 <noscript>
@@ -609,6 +615,18 @@
     
     <!-- Sportsbook Connector -->
     <script src="assets/js/features/sportsbook-connector.js?v=34.00.0" defer></script>
+
+        <!-- Service worker registration and idle prefetch -->
+        <script>
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('/sw.js').catch(() => {});
+                });
+            }
+            (window.requestIdleCallback || function(cb){setTimeout(cb, 100)})(function(){
+                try { fetch('/weekly-lineup.html', { mode: 'no-cors' }).catch(()=>{}); } catch(e) {}
+            });
+        </script>
 
 </body>
 </html>

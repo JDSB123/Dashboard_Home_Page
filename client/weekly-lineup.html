@@ -591,5 +591,13 @@
 <!-- Sportsbook Connector -->
 <script src="assets/js/features/sportsbook-connector.js?v=34.00.0" defer></script>
 
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').catch(() => {});
+    });
+  }
+</script>
+
 </body>
 </html>

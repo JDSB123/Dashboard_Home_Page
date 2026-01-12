@@ -3,6 +3,61 @@
  * Properly formats picks to match the dashboard template structure
  */
 
+// League Detection Maps
+const NFL_TEAMS = [
+    'raiders', 'broncos', 'cowboys', 'eagles', 'patriots', 'chiefs', 'chiefs', '49ers', 'niners', 
+    'packers', 'steelers', 'ravens', 'dolphins', 'jets', 'bills', 'colts', 'titans', 'texans', 
+    'jaguars', 'saints', 'buccanee', 'falcons', 'panthers', 'vikings', 'lions', 'bears', 
+    'cardinals', 'rams', 'seahawks', 'chargers', 'bengals', 'browns', 'ravens'
+];
+
+const NBA_TEAMS = [
+    'suns', 'clippers', 'lakers', 'warriors', 'celtics', 'heat', 'knicks', 'spurs', 
+    'mavericks', '76ers', 'nets', 'kings', 'grizzlies', 'rockets', 'timberwolves', 
+    'nuggets', 'pelicans', 'trail blazers', 'jazz', 'bucks', 'cavaliers', 'hawks', 
+    'raptors', 'pacers', 'pistons', 'bulls', 'hornets'
+];
+
+const COLLEGE_BASKETBALL_TEAMS = [
+    'georgia southern', 'appalachian st', 'appalachian state', 'uconn', 'connecticut', 
+    'butler', 'abilene', 'oral roberts', 'marist', 'georgia tech', 'east tenn', 
+    'north carolina', 'unc', 'duke', 'missouri st'
+];
+
+const COLLEGE_FOOTBALL_TEAMS = [
+    'utsa', 'south florida', 'cal poly', 'montana st', 'arizona'
+];
+
+function detectLeagueFromTeams(gameStr, awayTeam, homeTeam) {
+    const str = (gameStr || '').toLowerCase();
+    const away = (awayTeam || '').toLowerCase();
+    const home = (homeTeam || '').toLowerCase();
+    const combined = `${away} ${home}`.toLowerCase();
+    
+    // Check NBA teams first
+    if (NBA_TEAMS.some(team => combined.includes(team))) {
+        return 'nba';
+    }
+    
+    // Check NFL teams
+    if (NFL_TEAMS.some(team => combined.includes(team))) {
+        return 'nfl';
+    }
+    
+    // Check College Basketball
+    if (COLLEGE_BASKETBALL_TEAMS.some(team => combined.includes(team))) {
+        return 'ncaab';
+    }
+    
+    // Check College Football
+    if (COLLEGE_FOOTBALL_TEAMS.some(team => combined.includes(team))) {
+        return 'ncaaf';
+    }
+    
+    // Default to NFL
+    return 'nfl';
+}
+
 // Team abbreviation to full name mapping
 const teamMap = {
     'raiders': { full: 'Las Vegas Raiders', abbr: 'LV', logo: 'lv' },
@@ -1595,15 +1650,13 @@ function buildPickRow(pick, index) {
         margin: marginText
     });
 
-    // Determine league
+    // Determine league - intelligently detect from team names
     const leagueFromPick = pick.league || pick.sport || '';
     let league = leagueFromPick ? leagueFromPick.toString().toLowerCase() : '';
-    if (!league && pick.game && (pick.game.includes('Suns') || pick.game.includes('Clippers'))) {
-        league = 'nba';
-    } else if (!league && pick.game && (pick.game.includes('Georgia') || pick.game.includes('UTSA') || pick.game.includes('Appalachian'))) {
-        league = 'ncaaf'; // Use normalized value for college football
-    } else if (!league) {
-        league = 'nfl';
+    
+    if (!league) {
+        // Use helper function to detect league from teams
+        league = detectLeagueFromTeams(pick.game, awayTeamName, homeTeamName);
     }
 
     // Normalize league values to match filter dropdown options
@@ -1615,7 +1668,9 @@ function buildPickRow(pick, index) {
         'cbb': 'ncaab',
         'college basketball': 'ncaab',
         'ncaa basketball': 'ncaab',
-        'ncaam': 'ncaab'
+        'ncaam': 'ncaab',
+        'ncaab': 'ncaab',
+        'ncaa': 'ncaab'
     };
     if (leagueNormMap[league]) {
         league = leagueNormMap[league];
