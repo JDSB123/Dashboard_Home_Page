@@ -2097,13 +2097,41 @@ async function loadTeamRecords(options = {}) {
 }
 
 /**
- * Load picks from database
+ * Load picks from Azure Cosmos DB via PicksService (enterprise-grade storage)
+ * Falls back to localStorage if API unavailable
  */
 async function loadPicksFromDatabase() {
     try {
-        // Check if API is available
+        // Check if PicksService is available (enterprise Azure storage)
+        if (window.PicksService) {
+            console.log('[DB LOADER] Loading picks from Azure Cosmos DB via PicksService...');
+            
+            // Check if migration from localStorage is needed
+            const migrationStatus = window.PicksService.checkMigrationNeeded();
+            if (migrationStatus.needed) {
+                console.log(`[DB LOADER] Found ${migrationStatus.count} picks in localStorage, migrating to Azure...`);
+                const migrationResult = await window.PicksService.migrateFromLocalStorage();
+                console.log('[DB LOADER] Migration result:', migrationResult);
+            }
+            
+            // Fetch picks from Azure
+            const picks = await window.PicksService.getAll({ limit: 200 });
+            
+            if (picks && picks.length > 0) {
+                console.log(`[DB LOADER] ✅ Loaded ${picks.length} picks from Azure Cosmos DB`);
+                
+                // Transform picks to match expected format
+                return picks.map(pick => ({
+                    ...pick,
+                    awayLogo: pick.awayLogo || getTeamLogo(pick.awayTeam, pick.sport),
+                    homeLogo: pick.homeLogo || getTeamLogo(pick.homeTeam, pick.sport)
+                }));
+            }
+        }
+        
+        // Fallback: Check legacy API config
         if (!window.APP_CONFIG || !window.APP_CONFIG.API_BASE_URL) {
-            console.log('[DB LOADER] API not configured, using LocalPicksManager');
+            console.log('[DB LOADER] API not configured, falling back to localStorage');
             return null;
         }
 
@@ -2117,9 +2145,7 @@ async function loadPicksFromDatabase() {
         const response = await fetch(`${apiUrl}/get-picks?limit=100`);
 
         if (!response.ok) {
-            // 404 is expected when get-picks endpoint doesn't exist
-            // Dashboard uses LocalPicksManager for storage instead
-            console.log('[DB LOADER] API endpoint not available (expected). Using LocalPicksManager. Status:', response.status);
+            console.log('[DB LOADER] Legacy API not available, falling back to localStorage. Status:', response.status);
             return null;
         }
 
@@ -2134,7 +2160,7 @@ async function loadPicksFromDatabase() {
         }
         const picks = data.picks || [];
 
-        console.log(`Loaded ${picks.length} picks from database`);
+        console.log(`Loaded ${picks.length} picks from legacy database`);
 
         // Transform picks to match expected format
         return picks.map(pick => ({
@@ -2143,8 +2169,7 @@ async function loadPicksFromDatabase() {
             homeLogo: pick.homeLogo || getTeamLogo(pick.homeTeam, pick.sport)
         }));
     } catch (error) {
-        console.warn('Failed to load picks from database:', error);
-        // Don't show error for expected failures (network/CORS)
+        console.warn('[DB LOADER] Failed to load picks from database:', error);
         if (window.ErrorHandler && !error.message?.includes('Failed to fetch') && !error.message?.includes('CORS')) {
             window.ErrorHandler.handleApi(error, 'Load picks from database');
         }
@@ -2221,7 +2246,7 @@ function initializeDeleteButtons() {
     const tbody = document.getElementById('picks-tbody');
     if (!tbody) return;
     
-    tbody.addEventListener('click', (e) => {
+    tbody.addEventListener('click', async (e) => {
         const deleteBtn = e.target.closest('.delete-pick-btn');
         if (!deleteBtn) return;
         
@@ -2232,10 +2257,26 @@ function initializeDeleteButtons() {
         
         // Confirm deletion
         if (confirm('Remove this pick from the dashboard?')) {
-            // Try LocalPicksManager first
             const pickIndex = deleteBtn.dataset.pickIndex;
-            if (window.LocalPicksManager && pickIndex !== undefined) {
-                // Get pick ID from row or index
+            const pickId = row.dataset.pickId || deleteBtn.dataset.pickId;
+            
+            // Try PicksService first (Azure Cosmos DB)
+            if (window.PicksService && pickId) {
+                try {
+                    await window.PicksService.remove(pickId);
+                    console.log('[PICKS] Deleted pick from Azure:', pickId);
+                } catch (error) {
+                    console.warn('[PICKS] Failed to delete from Azure, trying localStorage:', error);
+                    // Fall back to LocalPicksManager
+                    if (window.LocalPicksManager && pickIndex !== undefined) {
+                        const picks = window.LocalPicksManager.getAll ? window.LocalPicksManager.getAll() : [];
+                        if (picks[pickIndex] && picks[pickIndex].id) {
+                            window.LocalPicksManager.delete(picks[pickIndex].id);
+                        }
+                    }
+                }
+            } else if (window.LocalPicksManager && pickIndex !== undefined) {
+                // Fallback to LocalPicksManager
                 const picks = window.LocalPicksManager.getAll ? window.LocalPicksManager.getAll() : [];
                 if (picks[pickIndex] && picks[pickIndex].id) {
                     window.LocalPicksManager.delete(picks[pickIndex].id);
@@ -2244,7 +2285,7 @@ function initializeDeleteButtons() {
             
             // Remove row from DOM
             row.remove();
-            console.log('[PICKS] Removed pick at index:', pickIndex);
+            console.log('[PICKS] Removed pick from UI:', pickId || pickIndex);
             
             // Update KPI tiles if available
             if (window.KPICalculator && window.KPICalculator.recalculateLiveKPI) {
