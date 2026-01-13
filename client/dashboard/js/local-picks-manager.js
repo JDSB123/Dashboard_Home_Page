@@ -242,72 +242,72 @@
     // Fallback to hardcoded data for backward compatibility
 
     const TEAM_DATA_FALLBACK = {
-        // NBA Teams
-        'san antonio spurs': { abbr: 'SAS', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/sa.png' },
-        'spurs': { abbr: 'SAS', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/sa.png' },
-        'new york knicks': { abbr: 'NYK', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/ny.png' },
-        'knicks': { abbr: 'NYK', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/ny.png' },
-        'los angeles lakers': { abbr: 'LAL', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/lal.png' },
-        'lakers': { abbr: 'LAL', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/lal.png' },
-        'golden state warriors': { abbr: 'GSW', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/gs.png' },
-        'warriors': { abbr: 'GSW', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/gs.png' },
-        'boston celtics': { abbr: 'BOS', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/bos.png' },
-        'celtics': { abbr: 'BOS', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/bos.png' },
-        'miami heat': { abbr: 'MIA', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/mia.png' },
-        'heat': { abbr: 'MIA', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/mia.png' },
-        'dallas mavericks': { abbr: 'DAL', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/dal.png' },
-        'mavericks': { abbr: 'DAL', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/dal.png' },
-        'mavs': { abbr: 'DAL', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/dal.png' },
-        'denver nuggets': { abbr: 'DEN', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/den.png' },
-        'nuggets': { abbr: 'DEN', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/den.png' },
-        'phoenix suns': { abbr: 'PHX', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/phx.png' },
-        'suns': { abbr: 'PHX', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/phx.png' },
-        'milwaukee bucks': { abbr: 'MIL', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/mil.png' },
-        'bucks': { abbr: 'MIL', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/mil.png' },
-        'philadelphia 76ers': { abbr: 'PHI', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/phi.png' },
-        '76ers': { abbr: 'PHI', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/phi.png' },
-        'sixers': { abbr: 'PHI', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/phi.png' },
-        'brooklyn nets': { abbr: 'BKN', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/bkn.png' },
-        'nets': { abbr: 'BKN', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/bkn.png' },
-        'chicago bulls': { abbr: 'CHI', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/chi.png' },
-        'bulls': { abbr: 'CHI', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/chi.png' },
-        'cleveland cavaliers': { abbr: 'CLE', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/cle.png' },
-        'cavaliers': { abbr: 'CLE', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/cle.png' },
-        'cavs': { abbr: 'CLE', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/cle.png' },
-        'atlanta hawks': { abbr: 'ATL', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/atl.png' },
-        'hawks': { abbr: 'ATL', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/atl.png' },
-        'toronto raptors': { abbr: 'TOR', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/tor.png' },
-        'raptors': { abbr: 'TOR', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/tor.png' },
-        'orlando magic': { abbr: 'ORL', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/orl.png' },
-        'magic': { abbr: 'ORL', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/orl.png' },
-        'indiana pacers': { abbr: 'IND', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/ind.png' },
-        'pacers': { abbr: 'IND', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/ind.png' },
-        'detroit pistons': { abbr: 'DET', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/det.png' },
-        'pistons': { abbr: 'DET', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/det.png' },
-        'charlotte hornets': { abbr: 'CHA', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/cha.png' },
-        'hornets': { abbr: 'CHA', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/cha.png' },
-        'washington wizards': { abbr: 'WAS', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/wsh.png' },
-        'wizards': { abbr: 'WAS', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/wsh.png' },
-        'memphis grizzlies': { abbr: 'MEM', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/mem.png' },
-        'grizzlies': { abbr: 'MEM', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/mem.png' },
-        'new orleans pelicans': { abbr: 'NOP', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/no.png' },
-        'pelicans': { abbr: 'NOP', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/no.png' },
-        'houston rockets': { abbr: 'HOU', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/hou.png' },
-        'rockets': { abbr: 'HOU', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/hou.png' },
-        'minnesota timberwolves': { abbr: 'MIN', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/min.png' },
-        'timberwolves': { abbr: 'MIN', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/min.png' },
-        'wolves': { abbr: 'MIN', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/min.png' },
-        'oklahoma city thunder': { abbr: 'OKC', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/okc.png' },
-        'thunder': { abbr: 'OKC', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/okc.png' },
-        'portland trail blazers': { abbr: 'POR', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/por.png' },
-        'trail blazers': { abbr: 'POR', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/por.png' },
-        'blazers': { abbr: 'POR', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/por.png' },
-        'utah jazz': { abbr: 'UTA', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/utah.png' },
-        'jazz': { abbr: 'UTA', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/utah.png' },
-        'sacramento kings': { abbr: 'SAC', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/sac.png' },
-        'kings': { abbr: 'SAC', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/sac.png' },
-        'la clippers': { abbr: 'LAC', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/lac.png' },
-        'clippers': { abbr: 'LAC', logo: 'https://a.espncdn.com/i/teamlogos/nba/500/lac.png' },
+        // NBA Teams - logos now loaded via LogoLoader
+        'san antonio spurs': { abbr: 'SAS', league: 'nba' },
+        'spurs': { abbr: 'SAS', league: 'nba' },
+        'new york knicks': { abbr: 'NYK', league: 'nba' },
+        'knicks': { abbr: 'NYK', league: 'nba' },
+        'los angeles lakers': { abbr: 'LAL', league: 'nba' },
+        'lakers': { abbr: 'LAL', league: 'nba' },
+        'golden state warriors': { abbr: 'GSW', league: 'nba' },
+        'warriors': { abbr: 'GSW', league: 'nba' },
+        'boston celtics': { abbr: 'BOS', league: 'nba' },
+        'celtics': { abbr: 'BOS', league: 'nba' },
+        'miami heat': { abbr: 'MIA', league: 'nba' },
+        'heat': { abbr: 'MIA', league: 'nba' },
+        'dallas mavericks': { abbr: 'DAL', league: 'nba' },
+        'mavericks': { abbr: 'DAL', league: 'nba' },
+        'mavs': { abbr: 'DAL', league: 'nba' },
+        'denver nuggets': { abbr: 'DEN', league: 'nba' },
+        'nuggets': { abbr: 'DEN', league: 'nba' },
+        'phoenix suns': { abbr: 'PHX', league: 'nba' },
+        'suns': { abbr: 'PHX', league: 'nba' },
+        'milwaukee bucks': { abbr: 'MIL', league: 'nba' },
+        'bucks': { abbr: 'MIL', league: 'nba' },
+        'philadelphia 76ers': { abbr: 'PHI', league: 'nba' },
+        '76ers': { abbr: 'PHI', league: 'nba' },
+        'sixers': { abbr: 'PHI', league: 'nba' },
+        'brooklyn nets': { abbr: 'BKN', league: 'nba' },
+        'nets': { abbr: 'BKN', league: 'nba' },
+        'chicago bulls': { abbr: 'CHI', league: 'nba' },
+        'bulls': { abbr: 'CHI', league: 'nba' },
+        'cleveland cavaliers': { abbr: 'CLE', league: 'nba' },
+        'cavaliers': { abbr: 'CLE', league: 'nba' },
+        'cavs': { abbr: 'CLE', league: 'nba' },
+        'atlanta hawks': { abbr: 'ATL', league: 'nba' },
+        'hawks': { abbr: 'ATL', league: 'nba' },
+        'toronto raptors': { abbr: 'TOR', league: 'nba' },
+        'raptors': { abbr: 'TOR', league: 'nba' },
+        'orlando magic': { abbr: 'ORL', league: 'nba' },
+        'magic': { abbr: 'ORL', league: 'nba' },
+        'indiana pacers': { abbr: 'IND', league: 'nba' },
+        'pacers': { abbr: 'IND', league: 'nba' },
+        'detroit pistons': { abbr: 'DET', league: 'nba' },
+        'pistons': { abbr: 'DET', league: 'nba' },
+        'charlotte hornets': { abbr: 'CHA', league: 'nba' },
+        'hornets': { abbr: 'CHA', league: 'nba' },
+        'washington wizards': { abbr: 'WAS', league: 'nba' },
+        'wizards': { abbr: 'WAS', league: 'nba' },
+        'memphis grizzlies': { abbr: 'MEM', league: 'nba' },
+        'grizzlies': { abbr: 'MEM', league: 'nba' },
+        'new orleans pelicans': { abbr: 'NOP', league: 'nba' },
+        'pelicans': { abbr: 'NOP', league: 'nba' },
+        'houston rockets': { abbr: 'HOU', league: 'nba' },
+        'rockets': { abbr: 'HOU', league: 'nba' },
+        'minnesota timberwolves': { abbr: 'MIN', league: 'nba' },
+        'timberwolves': { abbr: 'MIN', league: 'nba' },
+        'wolves': { abbr: 'MIN', league: 'nba' },
+        'oklahoma city thunder': { abbr: 'OKC', league: 'nba' },
+        'thunder': { abbr: 'OKC', league: 'nba' },
+        'portland trail blazers': { abbr: 'POR', league: 'nba' },
+        'trail blazers': { abbr: 'POR', league: 'nba' },
+        'blazers': { abbr: 'POR', league: 'nba' },
+        'utah jazz': { abbr: 'UTA', league: 'nba' },
+        'jazz': { abbr: 'UTA', league: 'nba' },
+        'sacramento kings': { abbr: 'SAC', league: 'nba' },
+        'kings': { abbr: 'SAC', league: 'nba' },
+        'la clippers': { abbr: 'LAC', league: 'nba' },
+        'clippers': { abbr: 'LAC', league: 'nba' },
         
         // NCAAB Teams (from today's picks) - Full names and abbreviations
         'butler': { abbr: 'BUT', fullName: 'Butler Bulldogs', logo: 'https://a.espncdn.com/i/teamlogos/ncaa/500/2086.png' },
@@ -439,6 +439,27 @@
         'vegas': { abbr: 'LV', fullName: 'Las Vegas Raiders', logo: 'https://a.espncdn.com/i/teamlogos/nfl/500/lv.png' }
     };
 
+    /**
+     * Get team logo URL using LogoLoader (Azure Blob Storage)
+     * @param {string} teamAbbr - Team abbreviation (e.g., 'LAL', 'BUF')
+     * @param {string} league - League identifier ('nba', 'nfl', 'ncaam', etc.)
+     * @param {string} logoId - Optional ESPN logo ID for NCAA teams
+     * @returns {string} Logo URL
+     */
+    function getTeamLogoUrl(teamAbbr, league, logoId) {
+        if (!window.LogoLoader || !teamAbbr) return '';
+        
+        // For NCAA teams, we may need to use logoId
+        if ((league === 'ncaam' || league === 'ncaaf') && logoId) {
+            // LogoLoader expects teamId, for NCAA it's the numeric ID
+            return window.LogoLoader.getLogoUrl(league, logoId);
+        }
+        
+        // For NBA/NFL, use the abbreviation (lowercase)
+        const teamId = teamAbbr.toLowerCase();
+        return window.LogoLoader.getLogoUrl(league, teamId);
+    }
+
     async function getTeamInfo(teamName) {
         if (!teamName) return { abbr: 'N/A', fullName: '', logo: '' };
         
@@ -458,7 +479,10 @@
         const lower = teamName.toLowerCase().trim();
         const data = TEAM_DATA_FALLBACK[lower];
         if (data) {
-            return { abbr: data.abbr, fullName: data.fullName || teamName, logo: data.logo };
+            // Use LogoLoader to get logo URL instead of hardcoded ESPN URL
+            const league = data.league || 'nba'; // Default to NBA if not specified
+            const logo = getTeamLogoUrl(data.abbr, league, data.logoId);
+            return { abbr: data.abbr, fullName: data.fullName || teamName, logo: logo };
         }
         return { abbr: teamName.substring(0, 3).toUpperCase(), fullName: teamName, logo: '' };
     }
@@ -469,7 +493,10 @@
         const lower = teamName.toLowerCase().trim();
         const data = TEAM_DATA_FALLBACK[lower];
         if (data) {
-            return { abbr: data.abbr, fullName: data.fullName || teamName, logo: data.logo };
+            // Use LogoLoader to get logo URL instead of hardcoded ESPN URL
+            const league = data.league || 'nba'; // Default to NBA if not specified
+            const logo = getTeamLogoUrl(data.abbr, league, data.logoId);
+            return { abbr: data.abbr, fullName: data.fullName || teamName, logo: logo };
         }
         return { abbr: teamName.substring(0, 3).toUpperCase(), fullName: teamName, logo: '' };
     }
@@ -611,23 +638,45 @@
         return date;
     }
 
-    const LEAGUE_LOGOS = {
-        'NBA': 'https://a.espncdn.com/i/teamlogos/leagues/500/nba.png',
-        'NFL': 'https://a.espncdn.com/i/teamlogos/leagues/500/nfl.png',
-        // NCAA Men's Basketball - using local cached logo
-        'NCAAB': 'assets/logo_ncaam_bball.png',
-        'NCAAM': 'assets/logo_ncaam_bball.png',
-        "NCAA MEN'S BASKETBALL": 'assets/logo_ncaam_bball.png',
-        'CBB': 'assets/logo_ncaam_bball.png',
-        // NCAA Football - using local cached logo
-        'NCAAF': 'assets/logo_ncaa_football.png',
-        'COLLEGE FOOTBALL': 'assets/logo_ncaa_football.png',
-        'CFB': 'assets/logo_ncaa_football.png',
-        // Other pro leagues
-        'MLB': 'https://a.espncdn.com/i/teamlogos/leagues/500/mlb.png',
-        'NHL': 'https://a.espncdn.com/i/teamlogos/leagues/500/nhl.png',
-        'MLS': 'https://a.espncdn.com/i/teamlogos/leagues/500/mls.png'
-    };
+    // League logos now served via LogoLoader (Azure Blob + static assets)
+    // LogoLoader automatically handles fallbacks and caching
+    function getLeagueLogo(league) {
+        if (!league) return '';
+        const leagueUpper = league.toUpperCase();
+        
+        // Use LogoLoader if available
+        if (window.LogoLoader && typeof window.LogoLoader.getLeagueLogoUrl === 'function') {
+            // Map variations to standard league names
+            const leagueMap = {
+                'NCAAB': 'ncaam',
+                'NCAAM': 'ncaam',
+                "NCAA MEN'S BASKETBALL": 'ncaam',
+                'CBB': 'ncaam',
+                'NCAAF': 'ncaaf',
+                'COLLEGE FOOTBALL': 'ncaaf',
+                'CFB': 'ncaaf',
+                'NBA': 'nba',
+                'NFL': 'nfl',
+                'MLB': 'mlb',
+                'NHL': 'nhl',
+                'MLS': 'mls'
+            };
+            const standardLeague = leagueMap[leagueUpper] || leagueUpper.toLowerCase();
+            return window.LogoLoader.getLeagueLogoUrl(standardLeague);
+        }
+        
+        // Legacy fallback (should rarely be used)
+        const LEAGUE_LOGOS_FALLBACK = {
+            'NBA': '/assets/nba-logo.png',
+            'NFL': '/assets/nfl-logo.png',
+            'NCAAB': '/assets/ncaam-logo.png',
+            'NCAAM': '/assets/ncaam-logo.png',
+            'NCAAF': '/assets/ncaaf-logo.png',
+            'MLB': '/assets/mlb-logo.png',
+            'NHL': '/assets/nhl-logo.png'
+        };
+        return LEAGUE_LOGOS_FALLBACK[leagueUpper] || '';
+    }
 
     function renderLeagueCell(sport) {
         // Convert to uppercase for lookup (LEAGUE_LOGOS keys are uppercase)
@@ -643,10 +692,8 @@
             'NHL': 'NHL'
         };
         const displayText = displayMap[sportUpper] || sportUpper;
-        // Try multiple key variations for logo lookup
-        const logo = LEAGUE_LOGOS[sportUpper] || 
-                    LEAGUE_LOGOS[displayText] || 
-                    LEAGUE_LOGOS[sportUpper === 'NCAAAB' ? 'NCAAM' : sportUpper] || '';
+        // Get logo via LogoLoader
+        const logo = getLeagueLogo(sportUpper);
         return `
             <div class="league-cell">
                 ${logo ? `<img src="${logo}" class="league-logo" alt="${displayText}" onerror="this.style.display='none'">` : ''}
