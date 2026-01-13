@@ -576,7 +576,68 @@
     <script src="assets/js/modules/picks-table-renderer.js?v=34.00.0" defer></script>
     <!-- NOTE: active-picks-modular.js deprecated - using dashboard-init.js instead -->
     <script src="dashboard/js/kpi-calculator.js?v=34.00.0" defer></script>
-    <script src="dashboard/js/picks-service.js?v=34.00.0" defer></script>
+
+        <script src="dashboard/js/picks-service.js?v=34.00.0" defer></script>
+        <script>
+        // Modular date range filter logic
+        document.addEventListener('DOMContentLoaded', function() {
+            const rangeDropdown = document.getElementById('date-range-dropdown');
+            const rangeLabel = document.getElementById('date-range-label');
+            const picksTbody = document.getElementById('picks-tbody');
+            function fetchAndRenderPicks(range) {
+                let fetchPromise;
+                switch (range) {
+                    case 'active': fetchPromise = window.PicksService.getActive(); break;
+                    case 'today': fetchPromise = window.PicksService.getToday(); break;
+                    case 'settled': fetchPromise = window.PicksService.getSettled(); break;
+                    case 'week': {
+                        const now = new Date();
+                        const start = new Date(now.setDate(now.getDate() - now.getDay()));
+                        const end = new Date(now.setDate(start.getDate() + 6));
+                        fetchPromise = window.PicksService.getByDateRange(
+                            start.toISOString().split('T')[0],
+                            end.toISOString().split('T')[0]
+                        );
+                        break;
+                    }
+                    // Add more cases as needed
+                    default: fetchPromise = window.PicksService.getAll();
+                }
+                fetchPromise.then(picks => {
+                    picksTbody.innerHTML = '';
+                    picks.forEach(pick => {
+                        // Modular row rendering (simplified)
+                        const tr = document.createElement('tr');
+                        tr.setAttribute('data-league', pick.league || '');
+                        tr.setAttribute('data-segment', pick.segment || '');
+                        tr.setAttribute('data-pick-type', pick.pickType || '');
+                        tr.setAttribute('data-status', pick.status || '');
+                        tr.innerHTML = `
+                            <td>${pick.date || ''}</td>
+                            <td>${pick.league || ''}</td>
+                            <td>${pick.matchup || ''}</td>
+                            <td>${pick.segment || ''}</td>
+                            <td>${pick.pick || ''}</td>
+                            <td>${pick.risk || ''}</td>
+                            <td>${pick.score || ''}</td>
+                            <td>${pick.status || ''}</td>
+                            <td>${pick.pnl || ''}</td>
+                        `;
+                        picksTbody.appendChild(tr);
+                    });
+                });
+            }
+            rangeDropdown.addEventListener('click', function(e) {
+                if (e.target.classList.contains('date-range-option')) {
+                    const range = e.target.getAttribute('data-range');
+                    rangeLabel.textContent = e.target.textContent;
+                    fetchAndRenderPicks(range);
+                }
+            });
+            // Initial load
+            fetchAndRenderPicks('active');
+        });
+        </script>
     <script src="dashboard/js/smart-load-picks.js?v=34.00.0" defer></script>
     <script src="assets/js/core/navigation.js?v=34.00.0" defer></script>
     <script src="dashboard/js/status-logic.js?v=34.00.0" defer></script>

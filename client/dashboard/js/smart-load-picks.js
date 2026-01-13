@@ -3,30 +3,89 @@
  * Properly formats picks to match the dashboard template structure
  */
 
-// League Detection Maps
-const NFL_TEAMS = [
-    'raiders', 'broncos', 'cowboys', 'eagles', 'patriots', 'chiefs', 'chiefs', '49ers', 'niners', 
-    'packers', 'steelers', 'ravens', 'dolphins', 'jets', 'bills', 'colts', 'titans', 'texans', 
-    'jaguars', 'saints', 'buccanee', 'falcons', 'panthers', 'vikings', 'lions', 'bears', 
-    'cardinals', 'rams', 'seahawks', 'chargers', 'bengals', 'browns', 'ravens'
-];
 
-const NBA_TEAMS = [
-    'suns', 'clippers', 'lakers', 'warriors', 'celtics', 'heat', 'knicks', 'spurs', 
-    'mavericks', '76ers', 'nets', 'kings', 'grizzlies', 'rockets', 'timberwolves', 
-    'nuggets', 'pelicans', 'trail blazers', 'jazz', 'bucks', 'cavaliers', 'hawks', 
-    'raptors', 'pacers', 'pistons', 'bulls', 'hornets'
-];
+// Modular League/Team Registry
+const LEAGUE_REGISTRY = {
+    nfl: {
+        teams: [
+            'bills', 'patriots', 'jets', 'dolphins', 'ravens', 'bengals', 'browns', 'steelers',
+            'jaguars', 'colts', 'titans', 'texans', 'chiefs', 'chargers', 'raiders', 'broncos',
+            'cowboys', 'eagles', 'giants', 'commanders', 'packers', 'vikings', 'lions', 'bears',
+            'saints', 'buccaneers', 'falcons', 'panthers', '49ers', 'rams', 'seahawks', 'cardinals'
+        ],
+        logoPath: 'team-logos/nfl-500-',
+        display: 'NFL',
+        color: '#1d3557'
+    },
+    nba: {
+        teams: [
+            'suns', 'clippers', 'lakers', 'warriors', 'celtics', 'heat', 'knicks', 'spurs',
+            'mavericks', '76ers', 'nets', 'kings', 'grizzlies', 'rockets', 'timberwolves',
+            'nuggets', 'pelicans', 'trail blazers', 'jazz', 'bucks', 'cavaliers', 'hawks',
+            'raptors', 'pacers', 'pistons', 'bulls', 'hornets'
+        ],
+        logoPath: 'team-logos/nba-500-',
+        display: 'NBA',
+        color: '#0a2342'
+    },
+    ncaab: {
+        teams: [
+            'georgia southern', 'appalachian st', 'appalachian state', 'uconn', 'connecticut',
+            'butler', 'abilene', 'oral roberts', 'marist', 'georgia tech', 'east tenn',
+            'north carolina', 'unc', 'duke', 'missouri st'
+        ],
+        logoPath: 'team-logos/ncaam-500-',
+        display: 'NCAAM',
+        color: '#264653'
+    },
+    ncaaf: {
+        teams: [
+            'utsa', 'south florida', 'cal poly', 'montana st', 'arizona'
+        ],
+        logoPath: 'team-logos/ncaaf-500-',
+        display: 'NCAAF',
+        color: '#2a9d8f'
+    }
+};
 
-const COLLEGE_BASKETBALL_TEAMS = [
-    'georgia southern', 'appalachian st', 'appalachian state', 'uconn', 'connecticut', 
-    'butler', 'abilene', 'oral roberts', 'marist', 'georgia tech', 'east tenn', 
-    'north carolina', 'unc', 'duke', 'missouri st'
-];
+function detectLeagueFromTeams(gameStr, awayTeam, homeTeam) {
+    const str = (gameStr || '').toLowerCase();
+    const away = (awayTeam || '').toLowerCase();
+    const home = (homeTeam || '').toLowerCase();
+    const combined = `${away} ${home}`.toLowerCase();
+    for (const [league, config] of Object.entries(LEAGUE_REGISTRY)) {
+        if (config.teams.some(team => combined.includes(team))) {
+            return league;
+        }
+    }
+    // Default fallback
+    return 'nfl';
+}
 
-const COLLEGE_FOOTBALL_TEAMS = [
-    'utsa', 'south florida', 'cal poly', 'montana st', 'arizona'
-];
+// Modular team mapping for full name, abbreviation, logo, and league
+const TEAM_MAP = {
+    // NFL
+    'bills': { full: 'Buffalo Bills', abbr: 'BUF', logo: 'bills', league: 'nfl' },
+    'jaguars': { full: 'Jacksonville Jaguars', abbr: 'JAX', logo: 'jaguars', league: 'nfl' },
+    'patriots': { full: 'New England Patriots', abbr: 'NE', logo: 'patriots', league: 'nfl' },
+    'jets': { full: 'New York Jets', abbr: 'NYJ', logo: 'jets', league: 'nfl' },
+    'dolphins': { full: 'Miami Dolphins', abbr: 'MIA', logo: 'dolphins', league: 'nfl' },
+    // ... add all NFL teams here
+    // NBA
+    'suns': { full: 'Phoenix Suns', abbr: 'PHX', logo: 'suns', league: 'nba' },
+    'clippers': { full: 'Los Angeles Clippers', abbr: 'LAC', logo: 'clippers', league: 'nba' },
+    // ... add all NBA teams here
+    // NCAAM
+    'georgia southern': { full: 'Georgia Southern', abbr: 'GASO', logo: 'georgia_southern', league: 'ncaab' },
+    // ... add all NCAAM teams here
+    // NCAAF
+    'utsa': { full: 'UTSA', abbr: 'UTSA', logo: 'utsa', league: 'ncaaf' },
+    // ... add all NCAAF teams here
+};
+
+function getTeamInfo(teamKey) {
+    return TEAM_MAP[teamKey?.toLowerCase()] || { full: teamKey, abbr: teamKey, logo: teamKey, league: null };
+}
 
 function detectLeagueFromTeams(gameStr, awayTeam, homeTeam) {
     const str = (gameStr || '').toLowerCase();
@@ -58,17 +117,8 @@ function detectLeagueFromTeams(gameStr, awayTeam, homeTeam) {
     return 'nfl';
 }
 
-// Team abbreviation to full name mapping
-const teamMap = {
-    'raiders': { full: 'Las Vegas Raiders', abbr: 'LV', logo: 'lv' },
-    'broncos': { full: 'Denver Broncos', abbr: 'DEN', logo: 'den' },
-    'suns': { full: 'Phoenix Suns', abbr: 'PHX', logo: 'phx', league: 'nba' },
-    'clippers': { full: 'Los Angeles Clippers', abbr: 'LAC', logo: 'lac', league: 'nba' },
-    'georgia southern': { full: 'Georgia Southern', abbr: 'GASO', logo: 'gaso', league: 'college' },
-    'appalachian st': { full: 'Appalachian State', abbr: 'APP', logo: 'app', league: 'college' },
-    'utsa': { full: 'UTSA', abbr: 'UTSA', logo: 'utsa', league: 'college' },
-    'south florida': { full: 'South Florida', abbr: 'USF', logo: 'usf', league: 'college' }
-};
+
+// Use getTeamInfo(teamKey) for all team display logic
 
 let teamRecordsCache = null;
 let teamRecordsPromise = null;

@@ -1,0 +1,13 @@
+{
+  "Logos": {
+    "Downloaded": 58,
+    "Uploaded": 58,
+    "Failed": 1,
+    "Skipped": 0
+  },
+  "BlobStorageUrl": "https://gbsvorchestratorstorage.blob.core.windows.net/team-logos",
+  "Container": "team-logos",
+  "TempDirectory": "C:\\Users\\JB\\AppData\\Local\\Temp\\team-logos-20260112-205308",
+  "Timestamp": "2026-01-12 20:58:21",
+  "StorageAccount": "gbsvorchestratorstorage"
+}

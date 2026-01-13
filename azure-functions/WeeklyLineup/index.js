@@ -140,7 +140,28 @@ function normalizeResponse(sport, data) {
     // Handle different response formats
     if (data.plays) {
         // NBA format
-        normalized.picks = data.plays;
+        // Patch: Ensure awayTeam/homeTeam are set for each pick
+        normalized.picks = data.plays.map(pick => {
+            let patchedPick = { ...pick };
+            // If awayTeam or homeTeam missing or 'Unknown', try to parse from matchup/game string
+            if ((!patchedPick.awayTeam || patchedPick.awayTeam === 'Unknown') || (!patchedPick.homeTeam || patchedPick.homeTeam === 'Unknown')) {
+                const matchup = patchedPick.matchup || patchedPick.game || '';
+                // Try to parse "TeamA @ TeamB" or "TeamA vs TeamB"
+                let away = '', home = '';
+                const atMatch = matchup.match(/^(.*?)\s*@\s*(.*?)$/);
+                const vsMatch = matchup.match(/^(.*?)\s+vs\.?\s+(.*?)$/i);
+                if (atMatch) {
+                    away = atMatch[1].trim();
+                    home = atMatch[2].trim();
+                } else if (vsMatch) {
+                    away = vsMatch[1].trim();
+                    home = vsMatch[2].trim();
+                }
+                if (away && (!patchedPick.awayTeam || patchedPick.awayTeam === 'Unknown')) patchedPick.awayTeam = away;
+                if (home && (!patchedPick.homeTeam || patchedPick.homeTeam === 'Unknown')) patchedPick.homeTeam = home;
+            }
+            return patchedPick;
+        });
         normalized.total_plays = data.total_plays || data.plays.length;
     } else if (data.picks) {
         // NCAAM format
@@ -217,7 +238,49 @@ module.exports = async function (context, req) {
     } catch (error) {
         context.log.error(`WeeklyLineup error for ${sport}:`, error.message);
 
-        // Determine appropriate error response
+        // NFL fallback: try Scoreboard proxy if main endpoint fails
+        if (sport === 'nfl') {
+            try {
+                // Use Scoreboard proxy for NFL scores/picks
+                const scoreboardUrl = `${process.env.SCOREBOARD_API_URL || 'https://gbsv-orchestrator.azurewebsites.net/api/scoreboard/nfl'}?date=${date}`;
+                context.log(`[WeeklyLineup] NFL fallback to Scoreboard: ${scoreboardUrl}`);
+                const scoreboardResp = await axios.get(scoreboardUrl, { timeout: 20000 });
+                // Transform scoreboard data to picks format
+                const picks = Array.isArray(scoreboardResp.data) ? scoreboardResp.data.map(game => ({
+                    league: 'NFL',
+                    sport: 'NFL',
+                    game: `${game.AwayTeam} @ ${game.HomeTeam}`,
+                    awayTeam: game.AwayTeam,
+                    homeTeam: game.HomeTeam,
+                    gameDate: game.Day,
+                    gameTime: game.DateTime,
+                    status: game.Status,
+                    segment: 'Full Game',
+                    result: '',
+                    model: '',
+                    source: 'scoreboard',
+                    // Add more fields as needed
+                })) : [];
+                const normalizedData = {
+                    sport: 'NFL',
+                    date,
+                    generated_at: new Date().toISOString(),
+                    version: 'scoreboard-fallback',
+                    picks,
+                    total_plays: picks.length
+                };
+                context.res = {
+                    status: 200,
+                    headers: { 'Content-Type': 'application/json', ...corsHeaders },
+                    body: normalizedData
+                };
+                return;
+            } catch (fallbackErr) {
+                context.log.error(`[WeeklyLineup] NFL fallback failed:`, fallbackErr.message);
+                // Continue to error response below
+            }
+        }
+        // ...existing error handling code...
         let status = 500;
         let errorBody = {
             error: 'Failed to fetch picks',

@@ -207,15 +207,24 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         // Check NBA teams first
         const nbaData = NBA_TEAMS[lower];
         if (nbaData) {
-            return { abbr: nbaData.abbr, logo: nbaData.logo };
+            // Use Azure Blob Storage for logo
+            const league = 'nba';
+            const teamId = nbaData.abbr.toLowerCase();
+            const logo = window.LogoLoader ? window.LogoLoader.getLogoUrl(league, teamId) : '';
+            return { abbr: nbaData.abbr, logo };
         }
 
         // Then check NCAAB teams
         const ncaabData = NCAAB_TEAMS[lower];
         if (ncaabData) {
-            return { abbr: ncaabData.abbr, logo: ncaabData.logo };
+            // Use Azure Blob Storage for logo
+            const league = 'ncaam';
+            const teamId = ncaabData.abbr.toLowerCase();
+            const logo = window.LogoLoader ? window.LogoLoader.getLogoUrl(league, teamId) : '';
+            return { abbr: ncaabData.abbr, logo };
         }
 
+        // Default: fallback abbr, no logo
         return { abbr: teamName.substring(0, 4).toUpperCase(), logo: '' };
     }
 
@@ -1296,13 +1305,44 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             return str.replace(/\bUNDE\b/gi, 'UNDER');
         };
 
-        // Format date - handle both date string and pre-formatted date
+        // Format date in CST (Central Time) - always show as CST
         const formatDate = (dateStr) => {
             if (!dateStr) return 'TBD';
-            if (dateStr.match(/^\w{3},\s\w{3}\s\d+$/)) return dateStr;
+            // Try to parse and convert to CST
             const d = new Date(dateStr);
             if (isNaN(d)) return dateStr;
-            return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+            // Convert to CST (America/Chicago)
+            try {
+                return d.toLocaleDateString('en-US', {
+                    weekday: 'short', month: 'short', day: 'numeric',
+                    timeZone: 'America/Chicago'
+                });
+            } catch (e) {
+                // fallback if timeZone not supported
+                return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+            }
+        };
+
+        // Format time in CST (Central Time)
+        const formatTime = (timeStr, dateStr) => {
+            // If timeStr is already formatted, use it
+            if (!timeStr) return 'TBD';
+            // Try to parse as a time on the given date
+            let d;
+            if (dateStr) {
+                d = new Date(dateStr + 'T' + timeStr);
+            } else {
+                d = new Date('1970-01-01T' + timeStr);
+            }
+            if (isNaN(d)) return timeStr;
+            try {
+                return d.toLocaleTimeString('en-US', {
+                    hour: '2-digit', minute: '2-digit', hour12: true,
+                    timeZone: 'America/Chicago'
+                }) + ' CST';
+            } catch (e) {
+                return d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }) + ' CST';
+            }
         };
 
         // Get team info with logos (escape for XSS protection)
@@ -1338,18 +1378,18 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         };
 
-        // Create logo HTML
+        // Create logo HTML (robust fallback)
         const awayLogoHtml = awayInfo.logo
             ? `<img src="${awayInfo.logo}" class="team-logo" loading="eager" alt="${awayInfo.abbr}" onerror="this.style.display='none'">`
-            : '';
+            : `<span class="team-logo-missing">?</span>`;
         const homeLogoHtml = homeInfo.logo
             ? `<img src="${homeInfo.logo}" class="team-logo" loading="eager" alt="${homeInfo.abbr}" onerror="this.style.display='none'">`
-            : '';
+            : `<span class="team-logo-missing">?</span>`;
         const pickLogoHtml = pickInfo.logo
             ? `<img src="${pickInfo.logo}" class="pick-team-logo" loading="eager" alt="${pickInfo.abbr}" onerror="this.style.display='none'">`
             : '';
 
-        // Matchup HTML with logos
+        // Matchup HTML with logos and records, always show both teams if available
         const isSingleTeamBet = !pick.homeTeam || pick.homeTeam === 'TBD';
 
         const awayTeamHtml = `
@@ -1675,7 +1715,8 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         }
 
         // League cell HTML with logo
-        const leagueLogo = LEAGUE_LOGOS[sport] || '';
+        // Use LogoLoader for league logo
+        const leagueLogo = window.LogoLoader ? window.LogoLoader.getLeagueLogoUrl(sport) : '';
         const leagueCellHtml = `
             <div class="league-cell">
                 ${leagueLogo ? `<img src="${leagueLogo}" class="league-logo" loading="eager" alt="${sport}" onerror="this.style.display='none'">` : ''}
@@ -1686,7 +1727,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             <td data-label="Date/Time">
                 <div class="datetime-cell">
                     <span class="date-value">${formatDate(gameDate)}</span>
-                    <span class="time-value">${gameTime}</span>
+                    <span class="time-value">${formatTime(pick.time || pick.gameTime, gameDate)}</span>
                 </div>
             </td>
             <td data-label="League" class="center">
