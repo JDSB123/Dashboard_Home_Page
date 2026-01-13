@@ -601,12 +601,18 @@
 <script src="assets/js/features/sportsbook-connector.js?v=34.00.0" defer></script>
 
 <script>
-  // Service worker registration
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js').catch(() => {});
-    });
-  }
+    // Service worker registration (versioned to bust caches)
+    (function(){
+        try {
+            if ('serviceWorker' in navigator) {
+                var swUrl = '/sw.js?v=2.0.1';
+                window.addEventListener('load', function(){
+                    navigator.serviceWorker.register(swUrl).catch(function(){});
+                });
+                navigator.serviceWorker.addEventListener('controllerchange', function(){ /* no-op */ });
+            }
+        } catch(e) {}
+    })();
 
   // Lazy-load only heavy OCR/parsing features when idle (core features already loaded)
   if (window.LazyScriptLoader) {

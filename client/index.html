@@ -627,14 +627,20 @@
 
         <!-- Service worker registration and idle prefetch -->
         <script>
-            if ('serviceWorker' in navigator) {
-                window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('/sw.js').catch(() => {});
+            (function(){
+                try {
+                    if ('serviceWorker' in navigator) {
+                        var swUrl = '/sw.js?v=2.0.1';
+                        window.addEventListener('load', function() {
+                            navigator.serviceWorker.register(swUrl).catch(function(){});
+                        });
+                        navigator.serviceWorker.addEventListener('controllerchange', function(){ /* no-op */ });
+                    }
+                } catch(e) {}
+                (window.requestIdleCallback || function(cb){setTimeout(cb, 100)})(function(){
+                    try { fetch('/weekly-lineup.html', { mode: 'no-cors' }).catch(function(){}); } catch(e) {}
                 });
-            }
-            (window.requestIdleCallback || function(cb){setTimeout(cb, 100)})(function(){
-                try { fetch('/weekly-lineup.html', { mode: 'no-cors' }).catch(()=>{}); } catch(e) {}
-            });
+            })();
         </script>
 
 </body>
