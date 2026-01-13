@@ -61,7 +61,24 @@ async function cacheFirst(request) {
     }
     return response;
   } catch (err) {
-    return cached; // fallback to cache if available
+    // Return cached if available, otherwise return offline response
+    if (cached) return cached;
+    // For images, return a 1x1 transparent PNG instead of erroring
+    if (request.destination === 'image') {
+      return new Response(
+        new Uint8Array([
+          0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00, 0x00, 0x00,
+          0x0d, 0x49, 0x48, 0x44, 0x52, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00,
+          0x00, 0x01, 0x08, 0x06, 0x00, 0x00, 0x00, 0x1f, 0x15, 0xc4, 0x89,
+          0x00, 0x00, 0x00, 0x0d, 0x49, 0x44, 0x41, 0x54, 0x08, 0x5b, 0x63,
+          0xf8, 0x0f, 0x00, 0x00, 0x01, 0x01, 0x01, 0x00, 0x1b, 0xb6, 0xee,
+          0x56, 0x00, 0x00, 0x00, 0x00, 0x49, 0x45, 0x4e, 0x44, 0xae, 0x42,
+          0x60, 0x82
+        ]),
+        { status: 200, headers: { 'Content-Type': 'image/png' } }
+      );
+    }
+    throw err;
   }
 }
 
@@ -85,6 +102,12 @@ async function networkFirst(request) {
 self.addEventListener('fetch', (event) => {
   const req = event.request;
   const url = new URL(req.url);
+  
+  // Skip cross-origin requests entirely
+  if (url.origin !== self.location.origin) {
+    return;
+  }
+  
   // HTML navigations
   if (req.mode === 'navigate' || (req.headers.get('accept') || '').includes('text/html')) {
     event.respondWith(networkFirst(req));
