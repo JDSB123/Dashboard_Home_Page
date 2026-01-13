@@ -48,12 +48,20 @@ window.LogoLoader = (() => {
 
   /**
    * Get league logo URL (served as static asset)
-   * @param {string} league - 'nba', 'nfl'
+   * @param {string} league - 'nba', 'nfl', 'ncaam', 'ncaaf'
    * @returns {string} Logo URL
    */
   function getLeagueLogoUrl(league) {
     // League logos are static assets in /assets/
-    return `/assets/${league}-logo.png`;
+    // Normalize league name for NCAA variants
+    const normalizedLeague = league.toLowerCase();
+    if (normalizedLeague === 'ncaab' || normalizedLeague === 'ncaa-basketball') {
+      return '/assets/ncaam-logo.png';
+    }
+    if (normalizedLeague === 'ncaa-football') {
+      return '/assets/ncaaf-logo.png';
+    }
+    return `/assets/${normalizedLeague}-logo.png`;
   }
 
   /**
