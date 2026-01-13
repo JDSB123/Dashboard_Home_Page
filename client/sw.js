@@ -11,7 +11,10 @@ const EXTERNAL_DOMAINS = [
   'site.api.espn.com',
   'fonts.googleapis.com',
   'fonts.gstatic.com',
-  'cdnjs.cloudflare.com'
+  'cdnjs.cloudflare.com',
+  // Never intercept Azure Blob Storage or Front Door CDN
+  'blob.core.windows.net',
+  'azurefd.net'
 ];
 
 // Assets to pre-cache (weekly lineup critical)
