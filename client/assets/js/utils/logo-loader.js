@@ -17,16 +17,21 @@ window.LogoLoader = (() => {
   const logoCache = new Map();
   let resolvedBase = null;
 
-  // Resolve the first reachable base URL (HEAD ping on a known file)
+  // Resolve the first reachable base URL using an <img> probe to avoid connect-src CSP
   async function resolveBaseUrl() {
     if (resolvedBase) return resolvedBase;
     for (const base of CANDIDATE_BASES) {
       try {
-        const res = await fetch(`${base}/leagues-500-nba.png`, { method: 'HEAD', cache: 'no-store' });
-        if (res.ok) {
-          resolvedBase = base;
-          return resolvedBase;
-        }
+        await new Promise((resolve, reject) => {
+          const img = new Image();
+          img.onload = () => resolve();
+          img.onerror = () => reject(new Error('probe failed'));
+          // Cache-bust to ensure we actually test reachability
+          const ts = Date.now();
+          img.src = `${base}/leagues-500-nba.png?probe=${ts}`;
+        });
+        resolvedBase = base;
+        return resolvedBase;
       } catch (_) {
         // try next
       }

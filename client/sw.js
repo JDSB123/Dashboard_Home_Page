@@ -1,5 +1,5 @@
 /* Simple service worker for asset caching */
-const VERSION = 'v2.0.0';
+const VERSION = 'v2.0.1';
 const CORE_CACHE = `core-${VERSION}`;
 const ASSET_CACHE = `assets-${VERSION}`;
 
@@ -31,6 +31,8 @@ const PRECACHE_URLS = [
 ];
 
 self.addEventListener('install', (event) => {
+  // Activate updated SW immediately to avoid stale CSP/logic in old workers
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CORE_CACHE).then((cache) => cache.addAll(PRECACHE_URLS))
   );
