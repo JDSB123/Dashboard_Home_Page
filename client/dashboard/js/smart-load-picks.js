@@ -2153,6 +2153,11 @@ async function loadPicksFromDatabase() {
 }
 
 function initializePicksAndRecords() {
+    // Clean up old picks from before today (if any exist in localStorage)
+    if (window.LocalPicksManager && window.LocalPicksManager.removeOldPicks) {
+        window.LocalPicksManager.removeOldPicks();
+    }
+
     // Try to load from database first, then fall back to API/localStorage picks
     // Note: In local development, database/get-picks endpoints may not exist
     // In that case, LocalPicksManager will handle loading from localStorage

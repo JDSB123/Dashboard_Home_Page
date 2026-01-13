@@ -1369,6 +1369,40 @@
         }
     }
 
+    /**
+     * Remove picks from before today (based on createdAt or gameDate)
+     * Keeps only picks created today or in the future
+     */
+    function removeOldPicks() {
+        const picks = getAllPicks();
+        if (picks.length === 0) return 0;
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Start of today
+
+        const filtered = picks.filter(pick => {
+            // Try createdAt first, fallback to gameDate
+            const dateStr = pick.createdAt || pick.gameDate || pick.date || '';
+            if (!dateStr) return true; // Keep if no date info
+
+            try {
+                const pickDate = new Date(dateStr);
+                pickDate.setHours(0, 0, 0, 0); // Start of pick date
+                return pickDate >= today; // Keep if today or later
+            } catch {
+                return true; // Keep if date parsing fails
+            }
+        });
+
+        const removed = picks.length - filtered.length;
+        if (removed > 0) {
+            console.log(`🧹 [LocalPicksManager] Removed ${removed} old picks (before today)`);
+            savePicks(filtered);
+        }
+
+        return removed;
+    }
+
     // Auto-initialize
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initialize);
@@ -1388,6 +1422,7 @@
         reEnrich: reEnrichExistingPicks,
         getUnitMultiplier,
         setUnitMultiplier,
+        removeOldPicks,
         // Debug helpers
         debug: () => {
             const picks = getAllPicks();
