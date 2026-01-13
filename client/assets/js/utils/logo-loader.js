@@ -8,17 +8,39 @@ window.LogoLoader = (() => {
   const CONFIG_BASE = (window.APP_CONFIG && window.APP_CONFIG.LOGO_BASE_URL) || null;
   const CONFIG_FALLBACK = (window.APP_CONFIG && window.APP_CONFIG.LOGO_FALLBACK_URL) || null;
   const AZURE_BLOB_URL = 'https://gbsvorchestratorstorage.blob.core.windows.net/team-logos';
-  const FALLBACKS = [CONFIG_BASE, CONFIG_FALLBACK, AZURE_BLOB_URL].filter(Boolean);
+  const CANDIDATE_BASES = [CONFIG_BASE, CONFIG_FALLBACK, AZURE_BLOB_URL].filter(Boolean);
 
   // ESPN CDN URL (last-resort fallback only)
   const ESPN_CDN_URL = 'https://a.espncdn.com/i/teamlogos';
   
   // Cache for loaded logos
   const logoCache = new Map();
+  let resolvedBase = null;
 
-  // Resolve the first available base URL
+  // Resolve the first reachable base URL (HEAD ping on a known file)
+  async function resolveBaseUrl() {
+    if (resolvedBase) return resolvedBase;
+    for (const base of CANDIDATE_BASES) {
+      try {
+        const res = await fetch(`${base}/leagues-500-nba.png`, { method: 'HEAD', cache: 'no-store' });
+        if (res.ok) {
+          resolvedBase = base;
+          return resolvedBase;
+        }
+      } catch (_) {
+        // try next
+      }
+    }
+    resolvedBase = CANDIDATE_BASES[0] || AZURE_BLOB_URL;
+    return resolvedBase;
+  }
+
+  // Kick off resolution asynchronously
+  resolveBaseUrl();
+
+  // Resolve the current best base (may still be resolving)
   function getBaseUrl() {
-    return FALLBACKS[0] || AZURE_BLOB_URL;
+    return resolvedBase || CANDIDATE_BASES[0] || AZURE_BLOB_URL;
   }
 
   /**
