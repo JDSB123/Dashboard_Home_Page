@@ -94,7 +94,8 @@ async function cacheFirst(request) {
         { status: 200, headers: { 'Content-Type': 'image/png' } }
       );
     }
-    throw err;
+    // For other assets, return a minimal error response to satisfy Response contract
+    return new Response('Offline', { status: 502, statusText: 'Offline' });
   }
 }
 
