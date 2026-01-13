@@ -7,7 +7,7 @@
     'use strict';
 
     // Date range state
-    let currentDateRange = 'all'; // Default to show all
+    let currentDateRange = 'active'; // Default to show active picks only
     let customStartDate = null;
     let customEndDate = null;
 
@@ -360,6 +360,13 @@
         const startDateInput = document.getElementById('date-range-start');
         const endDateInput = document.getElementById('date-range-end');
 
+        // Apply default filter on page load (shows active picks only)
+        // Use setTimeout to ensure table is rendered first
+        setTimeout(() => {
+            applyDateFilter(currentDateRange);
+            console.log(`[DateToggles] Applied default filter: ${currentDateRange}`);
+        }, 500);
+
         // Set default active state (for legacy buttons if present)
         const allTimeButton = document.querySelector('.date-toggle-btn[data-range="all"]');
         if (allTimeButton) {
@@ -701,6 +708,27 @@
         const now = new Date();
         let startDate, endDate;
 
+        // Handle status-based filters (active/settled) separately
+        if (range === 'active' || range === 'settled') {
+            // Apply status filter, not date filter
+            if (window.tableState && window.tableState.filters) {
+                window.tableState.filters.date = { start: null, end: null };
+                window.tableState.filters.status = range === 'active' 
+                    ? ['pending', 'live', 'on-track', 'at-risk']
+                    : ['win', 'won', 'loss', 'lost', 'push'];
+                if (window.updateTableWithFilters) {
+                    window.updateTableWithFilters();
+                }
+            }
+            updateKPIs();
+            return;
+        }
+
+        // Clear status filter for date-based filters
+        if (window.tableState && window.tableState.filters) {
+            window.tableState.filters.status = [];
+        }
+
         // Calculate date range
         switch(range) {
             case 'today':
@@ -834,10 +862,11 @@
 
     /**
      * Reset ALL filters (date, column filters, and sort)
+     * Returns to default "active" view (not all time)
      */
     function resetDateFilter() {
-        // 1. Reset date filter state
-        currentDateRange = 'all';
+        // 1. Reset to default filter state (active picks)
+        currentDateRange = 'active';
         customStartDate = null;
         customEndDate = null;
 
@@ -845,10 +874,24 @@
         const allButtons = document.querySelectorAll('.date-toggle-btn');
         allButtons.forEach(btn => btn.classList.remove('active'));
 
-        const allTimeButton = document.querySelector('.date-toggle-btn[data-range="all"]');
-        if (allTimeButton) {
-            allTimeButton.classList.add('active');
+        const activeButton = document.querySelector('.date-toggle-btn[data-range="active"]');
+        if (activeButton) {
+            activeButton.classList.add('active');
         }
+
+        // Update dropdown label
+        const label = document.getElementById('date-range-label');
+        if (label) {
+            label.textContent = 'Active';
+        }
+
+        // Update dropdown option states
+        const dropdownOptions = document.querySelectorAll('.date-range-option');
+        dropdownOptions.forEach(opt => {
+            const isActive = opt.dataset.range === 'active';
+            opt.classList.toggle('active', isActive);
+            opt.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        });
 
         // Hide custom range section
         const customRangeSection = document.querySelector('.custom-date-range');
@@ -868,7 +911,7 @@
                 team: [],
                 betType: [],
                 segment: [],
-                status: []
+                status: ['pending', 'live', 'on-track', 'at-risk'] // Default to active status filter
             };
             window.tableState.sort = { column: null, direction: 'asc' };
         }

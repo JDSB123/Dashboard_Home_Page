@@ -1369,38 +1369,106 @@
         }
     }
 
+    // ========== FILTERING HELPERS (read-only, don't modify storage) ==========
+
     /**
-     * Remove picks from before today (based on createdAt or gameDate)
-     * Keeps only picks created today or in the future
+     * Get active picks (pending or live status)
+     * These are picks that haven't been settled yet
      */
-    function removeOldPicks() {
+    function getActivePicks() {
         const picks = getAllPicks();
-        if (picks.length === 0) return 0;
+        return picks.filter(pick => {
+            const status = (pick.status || 'pending').toLowerCase();
+            return status === 'pending' || status === 'live' || status === 'on-track' || status === 'at-risk';
+        });
+    }
 
-        const today = new Date();
-        today.setHours(0, 0, 0, 0); // Start of today
+    /**
+     * Get settled picks (won, lost, push)
+     */
+    function getSettledPicks() {
+        const picks = getAllPicks();
+        return picks.filter(pick => {
+            const status = (pick.status || 'pending').toLowerCase();
+            return status === 'win' || status === 'won' || status === 'loss' || status === 'lost' || status === 'push';
+        });
+    }
 
-        const filtered = picks.filter(pick => {
-            // Try createdAt first, fallback to gameDate
-            const dateStr = pick.createdAt || pick.gameDate || pick.date || '';
-            if (!dateStr) return true; // Keep if no date info
+    /**
+     * Get picks by date range (doesn't delete, just filters)
+     * @param {Date|null} startDate - Start of range (inclusive)
+     * @param {Date|null} endDate - End of range (inclusive)
+     */
+    function getPicksByDateRange(startDate = null, endDate = null) {
+        const picks = getAllPicks();
+        if (!startDate && !endDate) return picks;
+
+        return picks.filter(pick => {
+            const dateStr = pick.gameDate || pick.createdAt || pick.date || '';
+            if (!dateStr) return true; // Include if no date info
 
             try {
                 const pickDate = new Date(dateStr);
-                pickDate.setHours(0, 0, 0, 0); // Start of pick date
-                return pickDate >= today; // Keep if today or later
+                if (startDate && pickDate < startDate) return false;
+                if (endDate && pickDate > endDate) return false;
+                return true;
             } catch {
-                return true; // Keep if date parsing fails
+                return true;
+            }
+        });
+    }
+
+    /**
+     * Get picks for today only
+     */
+    function getTodaysPicks() {
+        const now = new Date();
+        const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+        return getPicksByDateRange(startOfDay, endOfDay);
+    }
+
+    /**
+     * Archive old settled picks (move to separate storage key for analytics)
+     * Only call this manually or on a schedule, not on every page load
+     * @param {number} daysOld - Archive picks older than this many days (default 30)
+     */
+    function archiveOldPicks(daysOld = 30) {
+        const picks = getAllPicks();
+        const cutoffDate = new Date();
+        cutoffDate.setDate(cutoffDate.getDate() - daysOld);
+        cutoffDate.setHours(0, 0, 0, 0);
+
+        const toArchive = [];
+        const toKeep = [];
+
+        picks.forEach(pick => {
+            const status = (pick.status || 'pending').toLowerCase();
+            const isSettled = ['win', 'won', 'loss', 'lost', 'push'].includes(status);
+            const dateStr = pick.gameDate || pick.createdAt || '';
+            let pickDate = null;
+            
+            try {
+                pickDate = dateStr ? new Date(dateStr) : null;
+            } catch {}
+
+            // Archive if: settled AND older than cutoff
+            if (isSettled && pickDate && pickDate < cutoffDate) {
+                toArchive.push(pick);
+            } else {
+                toKeep.push(pick);
             }
         });
 
-        const removed = picks.length - filtered.length;
-        if (removed > 0) {
-            console.log(`🧹 [LocalPicksManager] Removed ${removed} old picks (before today)`);
-            savePicks(filtered);
+        if (toArchive.length > 0) {
+            // Save archived picks to separate key
+            const existingArchive = JSON.parse(localStorage.getItem('gbsv_picks_archive') || '[]');
+            localStorage.setItem('gbsv_picks_archive', JSON.stringify([...existingArchive, ...toArchive]));
+            savePicks(toKeep);
+            console.log(`📦 [LocalPicksManager] Archived ${toArchive.length} old settled picks`);
         }
 
-        return removed;
+        return toArchive.length;
     }
 
     // Auto-initialize
@@ -1413,6 +1481,10 @@
     // Export API
     window.LocalPicksManager = {
         getAll: getAllPicks,
+        getActive: getActivePicks,
+        getSettled: getSettledPicks,
+        getByDateRange: getPicksByDateRange,
+        getToday: getTodaysPicks,
         add: addPicks,
         parseAndAdd: parseAndAddPicks,
         clear: clearPicks,
@@ -1422,7 +1494,7 @@
         reEnrich: reEnrichExistingPicks,
         getUnitMultiplier,
         setUnitMultiplier,
-        removeOldPicks,
+        archiveOldPicks,
         // Debug helpers
         debug: () => {
             const picks = getAllPicks();

@@ -2153,10 +2153,9 @@ async function loadPicksFromDatabase() {
 }
 
 function initializePicksAndRecords() {
-    // Clean up old picks from before today (if any exist in localStorage)
-    if (window.LocalPicksManager && window.LocalPicksManager.removeOldPicks) {
-        window.LocalPicksManager.removeOldPicks();
-    }
+    // Note: We no longer auto-delete old picks - filtering is done at display time
+    // Historical picks are kept for PnL tracking and analytics
+    // Use LocalPicksManager.archiveOldPicks() manually to move old settled picks to archive
 
     // Try to load from database first, then fall back to API/localStorage picks
     // Note: In local development, database/get-picks endpoints may not exist

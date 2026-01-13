@@ -336,14 +336,16 @@
             <!-- ===== Date Range Selector (Compact Dropdown) ===== -->
             <div class="date-range-selector">
                 <button class="date-range-toggle" id="date-range-toggle" aria-expanded="false" aria-haspopup="listbox">
-                    <span class="date-range-label" id="date-range-label">Today</span>
+                    <span class="date-range-label" id="date-range-label">Active</span>
                     <span class="date-range-arrow">▼</span>
                 </button>
                 <div class="date-range-dropdown" id="date-range-dropdown" role="listbox" hidden>
-                    <button class="date-range-option active" data-range="today" role="option" aria-selected="true">Today</button>
+                    <button class="date-range-option active" data-range="active" role="option" aria-selected="true">Active Picks</button>
+                    <button class="date-range-option" data-range="today" role="option" aria-selected="false">Today</button>
                     <button class="date-range-option" data-range="tomorrow" role="option" aria-selected="false">Tomorrow</button>
                     <button class="date-range-option" data-range="week" role="option" aria-selected="false">This Week</button>
                     <div class="date-range-divider"></div>
+                    <button class="date-range-option" data-range="settled" role="option" aria-selected="false">Settled</button>
                     <button class="date-range-option" data-range="yesterday" role="option" aria-selected="false">Yesterday</button>
                     <button class="date-range-option" data-range="lastWeek" role="option" aria-selected="false">Last Week</button>
                     <button class="date-range-option" data-range="lastMonth" role="option" aria-selected="false">Last Month</button>
