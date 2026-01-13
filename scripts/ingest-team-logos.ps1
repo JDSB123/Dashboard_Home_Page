@@ -220,10 +220,8 @@ foreach ($logo in $logos) {
                 --container-name $ContainerName `
                 --name $logo.Name `
                 --file $logo.FullName `
-                --auth-mode login `
                 --overwrite `
-                --output none `
-                -q
+                --output none
             
             $script:UploadedCount++
             Write-Host "✓" -ForegroundColor Green
@@ -247,26 +245,19 @@ Write-Host "╚═════════════════════�
 
 if (-not $DryRun) {
     try {
-        $blobCount = az storage blob list `
+        $blobs = az storage blob list `
             --account-name $StorageAccountName `
             --container-name $ContainerName `
-            --auth-mode login `
-            --query "length(@)" `
-            -o tsv
+            --output json | ConvertFrom-Json
         
+        $blobCount = $blobs.Count
         Write-Host "Blobs in container: $blobCount" -ForegroundColor Cyan
         
-        $details = az storage blob list `
-            --account-name $StorageAccountName `
-            --container-name $ContainerName `
-            --auth-mode login `
-            --query "[].{name: name, size: properties.contentLength}" `
-            -o json | ConvertFrom-Json
-        
-        $totalSize = ($details | Measure-Object -Property size -Sum).Sum
-        $totalSizeMB = [math]::Round($totalSize / 1MB, 2)
-        
-        Write-Host "Total size: $totalSizeMB MB" -ForegroundColor Green
+        if ($blobs.Count -gt 0) {
+            $totalSize = ($blobs | Measure-Object -Property properties.contentLength -Sum).Sum
+            $totalSizeMB = [math]::Round($totalSize / 1MB, 2)
+            Write-Host "Total size: $totalSizeMB MB" -ForegroundColor Green
+        }
     }
     catch {
         Write-Host "⚠️  Could not verify uploads: $($_.Exception.Message)" -ForegroundColor Yellow
