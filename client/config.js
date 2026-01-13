@@ -21,8 +21,9 @@ window.APP_CONFIG = {
   AZURE_REGION: 'eastus',
 
   // API Configuration
-  API_BASE_URL: 'https://gbsv-model-orchestrator.azurewebsites.net/api',
+  API_BASE_URL: 'https://gbsv-orchestrator.azurewebsites.net/api',
   ORCHESTRATOR_URL: 'https://gbsv-orchestrator.wittypebble-41c11c65.eastus.azurecontainerapps.io',
+  FUNCTIONS_BASE_URL: 'https://gbsv-orchestrator.azurewebsites.net',
   API_BASE_FALLBACK: '',
 
   // Model API Endpoints (can be dynamically updated by model-endpoints-bootstrap.js)
@@ -41,6 +42,10 @@ window.APP_CONFIG = {
   NCAAF_API_URL: 'https://ncaaf-v5-prod.salmonwave-314d4ffe.eastus.azurecontainerapps.io',
   NHL_API_URL: '', // Placeholder - will be populated from registry when available
   MLB_API_URL: '', // Placeholder - will be populated from registry when available
+
+  // Static Assets (Front Door / CDN)
+  LOGO_BASE_URL: 'https://www.greenbiersportventures.com/team-logos', // Served via Front Door/custom domain
+  LOGO_FALLBACK_URL: 'https://gbsvorchestratorstorage.blob.core.windows.net/team-logos', // Direct blob fallback
 
   // Feature Flags
   AUTH_ENABLED: false,

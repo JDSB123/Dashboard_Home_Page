@@ -9,7 +9,7 @@ const PicksService = (function () {
     'use strict';
 
     // API Configuration
-    const API_BASE = window.GBSV_CONFIG?.FUNCTIONS_URL || 'https://gbsv-model-orchestrator.azurewebsites.net';
+    const API_BASE = window.GBSV_CONFIG?.FUNCTIONS_URL || 'https://gbsv-orchestrator.azurewebsites.net';
     const PICKS_ENDPOINT = `${API_BASE}/api/picks`;
 
     // Cache for performance (optional local caching)

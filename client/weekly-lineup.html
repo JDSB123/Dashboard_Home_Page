@@ -49,7 +49,8 @@
     <script src="assets/js/utils/data-cache-manager.js?v=34.00.0"></script>
     <script src="assets/js/utils/lazy-script-loader.js?v=34.00.0"></script>
     <!-- Logo loading from Azure Blob Storage -->
-    <script src="assets/js/utils/logo-loader.js?v=1.0.0"></script>
+    <script src="assets/js/utils/logo-loader.js?v=1.0.1" defer></script>
+    <script src="assets/js/utils/logo-url-rewriter.js?v=1.0.0" defer></script>
     
     <!-- Silence console output in production BEFORE any other deferred scripts run -->
     <script src="assets/js/core/debug-config.js?v=34.00.0" defer></script>
@@ -405,7 +406,7 @@
                             </div>
                             <div class="fetch-separator"></div>
                             <button class="ft-fetch-league-btn" data-fetch="nba" title="Fetch NBA">
-                                <img src="https://a.espncdn.com/i/teamlogos/leagues/500/nba.png" class="league-logo-sm" alt="NBA">
+                                <img src="/assets/nba-logo.png" class="league-logo-sm" alt="NBA">
                                 <span class="league-label">NBA</span>
                             </button>
                             <button class="ft-fetch-league-btn" data-fetch="ncaab" title="Fetch NCAAM">
@@ -413,7 +414,7 @@
                                 <span class="league-label">NCAAM</span>
                             </button>
                             <button class="ft-fetch-league-btn" data-fetch="nfl" title="Fetch NFL">
-                                <img src="https://a.espncdn.com/i/teamlogos/leagues/500/nfl.png" class="league-logo-sm" alt="NFL">
+                                <img src="/assets/nfl-logo.png" class="league-logo-sm" alt="NFL">
                                 <span class="league-label">NFL</span>
                             </button>
                             <button class="ft-fetch-league-btn" data-fetch="ncaaf" title="Fetch NCAAF">

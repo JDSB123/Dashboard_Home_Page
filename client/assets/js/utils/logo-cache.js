@@ -120,7 +120,7 @@
                 }
             }
 
-            // Fallback: Generate ESPN CDN URL directly
+            // Fallback: Generate CDN URL directly (uses LogoLoader to stay on our assets)
             const logoUrl = this.generateLogoUrl(teamName, league);
 
             // Cache the generated URL
@@ -140,25 +140,21 @@
             // Normalize team name
             const teamKey = this.normalizeTeamName(teamName, league);
 
-            // ESPN CDN URL patterns
-            if (league === 'nba') {
-                return `https://a.espncdn.com/i/teamlogos/nba/500/${teamKey}.png`;
-            } else if (league === 'nfl') {
-                return `https://a.espncdn.com/i/teamlogos/nfl/500/${teamKey}.png`;
-            } else if (league === 'ncaaf' || league === 'college') {
-                // NCAA teams need numeric IDs, use default for now
-                const ncaaId = this.getNCAATeamId(teamName);
-                if (ncaaId) {
-                    return `https://a.espncdn.com/i/teamlogos/ncaa/500/${ncaaId}.png`;
-                }
-                return `https://a.espncdn.com/i/teamlogos/ncaa/500/default.png`;
-            } else if (league === 'nhl') {
-                return `https://a.espncdn.com/i/teamlogos/nhl/500/${teamKey}.png`;
-            } else if (league === 'mlb') {
-                return `https://a.espncdn.com/i/teamlogos/mlb/500/${teamKey}.png`;
-            } else {
-                return `https://a.espncdn.com/i/teamlogos/${league}/500/${teamKey}.png`;
+            // Prefer centralized LogoLoader (Front Door/CDN aware)
+            if (window.LogoLoader && typeof window.LogoLoader.getLogoUrl === 'function') {
+                return window.LogoLoader.getLogoUrl(league, teamKey);
             }
+
+            // Fallback directly to blob/CDN using the same naming convention
+            const base = (window.APP_CONFIG && (window.APP_CONFIG.LOGO_BASE_URL || window.APP_CONFIG.LOGO_FALLBACK_URL)) ||
+                         'https://gbsvorchestratorstorage.blob.core.windows.net/team-logos';
+
+            if (league === 'ncaaf' || league === 'college') {
+                const ncaaId = this.getNCAATeamId(teamName) || 'default';
+                return `${base}/ncaa-500-${ncaaId}.png`;
+            }
+
+            return `${base}/${league}-500-${teamKey}.png`;
         }
 
         /**

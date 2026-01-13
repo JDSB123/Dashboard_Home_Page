@@ -4,14 +4,22 @@
  */
 
 window.LogoLoader = (() => {
-  // Azure Blob Storage URL
+  // Prefer custom Front Door / CDN host, then blob storage as fallback
+  const CONFIG_BASE = (window.APP_CONFIG && window.APP_CONFIG.LOGO_BASE_URL) || null;
+  const CONFIG_FALLBACK = (window.APP_CONFIG && window.APP_CONFIG.LOGO_FALLBACK_URL) || null;
   const AZURE_BLOB_URL = 'https://gbsvorchestratorstorage.blob.core.windows.net/team-logos';
-  
-  // ESPN CDN URL (fallback)
+  const FALLBACKS = [CONFIG_BASE, CONFIG_FALLBACK, AZURE_BLOB_URL].filter(Boolean);
+
+  // ESPN CDN URL (last-resort fallback only)
   const ESPN_CDN_URL = 'https://a.espncdn.com/i/teamlogos';
   
   // Cache for loaded logos
   const logoCache = new Map();
+
+  // Resolve the first available base URL
+  function getBaseUrl() {
+    return FALLBACKS[0] || AZURE_BLOB_URL;
+  }
 
   /**
    * Get logo URL for a team
@@ -38,8 +46,9 @@ window.LogoLoader = (() => {
 
     const folder = leagueMap[league] || league;
     
-    // Try Azure Blob first
-    let url = `${AZURE_BLOB_URL}/${folder}-500-${teamId}.png`;
+    // Try Front Door/CDN first, then blob fallback
+    const baseUrl = getBaseUrl();
+    let url = `${baseUrl}/${folder}-500-${teamId}.png`;
     
     // Store in cache
     logoCache.set(cacheKey, url);
@@ -82,7 +91,7 @@ window.LogoLoader = (() => {
   function getStats() {
     return {
       cached: logoCache.size,
-      storageUrl: AZURE_BLOB_URL,
+      storageUrl: getBaseUrl(),
       fallbackUrl: ESPN_CDN_URL
     };
   }

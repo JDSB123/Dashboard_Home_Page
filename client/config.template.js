@@ -23,6 +23,7 @@ window.APP_CONFIG = {
   // API Configuration
   API_BASE_URL: '__API_BASE_URL__',
   ORCHESTRATOR_URL: '__ORCHESTRATOR_URL__',
+  FUNCTIONS_BASE_URL: '__FUNCTIONS_BASE_URL__',
   API_BASE_FALLBACK: '__API_BASE_FALLBACK__',
 
   // Model API Endpoints (can be dynamically updated by model-endpoints-bootstrap.js)
@@ -41,6 +42,10 @@ window.APP_CONFIG = {
   NCAAF_API_URL: '__NCAAF_API_URL__',
   NHL_API_URL: '', // Placeholder - will be populated from registry when available
   MLB_API_URL: '', // Placeholder - will be populated from registry when available
+
+  // Static Assets (Front Door / CDN)
+  LOGO_BASE_URL: '__LOGO_BASE_URL__', // e.g. https://www.greenbiersportventures.com/team-logos
+  LOGO_FALLBACK_URL: '__LOGO_FALLBACK_URL__', // e.g. https://gbsvorchestratorstorage.blob.core.windows.net/team-logos
 
   // Feature Flags
   AUTH_ENABLED: false,
