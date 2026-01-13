@@ -169,10 +169,11 @@ function buildQuery(query) {
 
     const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
     const limit = parseInt(query.limit) || 100;
-    const orderBy = query.order === 'asc' ? 'ASC' : 'DESC';
 
+    // Use simple ORDER BY to avoid composite index requirement
+    // For multi-field sorting, would need composite index on Cosmos DB
     return {
-        query: `SELECT * FROM c ${whereClause} ORDER BY c.gameDate ${orderBy}, c.createdAt DESC OFFSET 0 LIMIT ${limit}`,
+        query: `SELECT * FROM c ${whereClause} ORDER BY c.gameDate DESC OFFSET 0 LIMIT ${limit}`,
         parameters
     };
 }
@@ -400,14 +401,15 @@ module.exports = async function (context, req) {
         };
 
     } catch (error) {
-        context.log.error('PicksAPI error:', error);
+        context.log.error('PicksAPI error:', error.message, error.stack);
         context.res = {
             status: 500,
             headers: corsHeaders,
             body: {
                 success: false,
                 error: 'Internal server error',
-                details: process.env.NODE_ENV === 'development' ? error.message : undefined
+                message: error.message,
+                details: process.env.NODE_ENV === 'development' ? error.stack : undefined
             }
         };
     }

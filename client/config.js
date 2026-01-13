@@ -60,10 +60,10 @@ window.APP_CONFIG = {
 // GBSV Configuration for Azure services
 window.GBSV_CONFIG = {
   // Azure Functions URL for picks API and other backend services
-  FUNCTIONS_URL: 'https://gbsv-model-orchestrator.azurewebsites.net',
+  FUNCTIONS_URL: 'https://gbsv-orchestrator.azurewebsites.net',
   
   // Cosmos DB picks storage (accessed via Azure Functions)
-  PICKS_API_ENDPOINT: 'https://gbsv-model-orchestrator.azurewebsites.net/api/picks'
+  PICKS_API_ENDPOINT: 'https://gbsv-orchestrator.azurewebsites.net/api/picks'
 };
 
 // Export for module usage if needed
