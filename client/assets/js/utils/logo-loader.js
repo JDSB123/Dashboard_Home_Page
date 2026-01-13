@@ -47,12 +47,13 @@ window.LogoLoader = (() => {
   }
 
   /**
-   * Get league logo URL
+   * Get league logo URL (served as static asset)
    * @param {string} league - 'nba', 'nfl'
    * @returns {string} Logo URL
    */
   function getLeagueLogoUrl(league) {
-    return `${AZURE_BLOB_URL}/leagues-500-${league}.png`;
+    // League logos are static assets in /assets/
+    return `/assets/${league}-logo.png`;
   }
 
   /**
