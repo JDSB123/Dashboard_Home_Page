@@ -299,65 +299,76 @@
         const allGames = [];
 
         try {
-            console.log('[AUTO-GAME-FETCHER] Fetching NCAAM games...');
-            const ncaamData = await fetchESPN('NCAAM');
-            const ncaamGames = parseESPNGames(ncaamData, 'NCAAM');
-            allGames.push(...ncaamGames);
-            console.log(`[AUTO-GAME-FETCHER] Found ${ncaamGames.length} NCAAM games`);
+            if (isEnabled('NCAAM')) {
+                console.log('[AUTO-GAME-FETCHER] Fetching NCAAM games...');
+                const ncaamData = await fetchESPN('NCAAM');
+                const ncaamGames = parseESPNGames(ncaamData, 'NCAAM');
+                allGames.push(...ncaamGames);
+                console.log(`[AUTO-GAME-FETCHER] Found ${ncaamGames.length} NCAAM games`);
+            }
         } catch (e) {
             console.error('[AUTO-GAME-FETCHER] Error fetching NCAAM:', e.message);
         }
 
         try {
-            console.log('[AUTO-GAME-FETCHER] Fetching NBA games...');
-            const nbaData = await fetchESPN('NBA');
-            const nbaGames = parseESPNGames(nbaData, 'NBA');
-            allGames.push(...nbaGames);
-            console.log(`[AUTO-GAME-FETCHER] Found ${nbaGames.length} NBA games`);
+            if (isEnabled('NBA')) {
+                console.log('[AUTO-GAME-FETCHER] Fetching NBA games...');
+                const nbaData = await fetchESPN('NBA');
+                const nbaGames = parseESPNGames(nbaData, 'NBA');
+                allGames.push(...nbaGames);
+                console.log(`[AUTO-GAME-FETCHER] Found ${nbaGames.length} NBA games`);
+            }
         } catch (e) {
             console.error('[AUTO-GAME-FETCHER] Error fetching NBA:', e.message);
         }
 
         // NFL: SportsDataIO primary, ESPN fallback
         try {
-            console.log('[AUTO-GAME-FETCHER] Fetching NFL games from SportsDataIO...');
-            const nflSportsData = await fetchSportsDataIO('nfl');
-            const nflGames = parseSportsDataIOGames(nflSportsData, 'NFL');
-            if (nflGames.length > 0) {
-                allGames.push(...nflGames);
-                console.log(`[AUTO-GAME-FETCHER] Found ${nflGames.length} NFL games (SportsDataIO)`);
-            } else {
-                throw new Error('No games from SportsDataIO');
+            if (isEnabled('NFL')) {
+                console.log('[AUTO-GAME-FETCHER] Fetching NFL games from SportsDataIO...');
+                const nflSportsData = await fetchSportsDataIO('nfl');
+                const nflGames = parseSportsDataIOGames(nflSportsData, 'NFL');
+                if (nflGames.length > 0) {
+                    allGames.push(...nflGames);
+                    console.log(`[AUTO-GAME-FETCHER] Found ${nflGames.length} NFL games (SportsDataIO)`);
+                } else {
+                    throw new Error('No games from SportsDataIO');
+                }
             }
         } catch (e) {
-            console.warn(`[AUTO-GAME-FETCHER] SportsDataIO NFL failed (${e.message}), trying ESPN...`);
-            try {
-                const nflData = await fetchESPN('NFL');
-                const nflGames = parseESPNGames(nflData, 'NFL');
-                allGames.push(...nflGames);
-                console.log(`[AUTO-GAME-FETCHER] Found ${nflGames.length} NFL games (ESPN fallback)`);
-            } catch (e2) {
-                console.error('[AUTO-GAME-FETCHER] Error fetching NFL from both sources:', e2.message);
+            if (isEnabled('NFL')) {
+                console.warn(`[AUTO-GAME-FETCHER] SportsDataIO NFL failed (${e.message}), trying ESPN...`);
+                try {
+                    const nflData = await fetchESPN('NFL');
+                    const nflGames = parseESPNGames(nflData, 'NFL');
+                    allGames.push(...nflGames);
+                    console.log(`[AUTO-GAME-FETCHER] Found ${nflGames.length} NFL games (ESPN fallback)`);
+                } catch (e2) {
+                    console.error('[AUTO-GAME-FETCHER] Error fetching NFL from both sources:', e2.message);
+                }
             }
         }
 
         // NCAAF: SportsDataIO primary, ESPN fallback
         try {
-            console.log('[AUTO-GAME-FETCHER] Fetching NCAAF games from SportsDataIO...');
-            const ncaafSportsData = await fetchSportsDataIO('cfb');
-            const ncaafGames = parseSportsDataIOGames(ncaafSportsData, 'NCAAF');
-            if (ncaafGames.length > 0) {
-                allGames.push(...ncaafGames);
-                console.log(`[AUTO-GAME-FETCHER] Found ${ncaafGames.length} NCAAF games (SportsDataIO)`);
-            } else {
-                throw new Error('No games from SportsDataIO');
+            if (isEnabled('NCAAF')) {
+                console.log('[AUTO-GAME-FETCHER] Fetching NCAAF games from SportsDataIO...');
+                const ncaafSportsData = await fetchSportsDataIO('cfb');
+                const ncaafGames = parseSportsDataIOGames(ncaafSportsData, 'NCAAF');
+                if (ncaafGames.length > 0) {
+                    allGames.push(...ncaafGames);
+                    console.log(`[AUTO-GAME-FETCHER] Found ${ncaafGames.length} NCAAF games (SportsDataIO)`);
+                } else {
+                    throw new Error('No games from SportsDataIO');
+                }
             }
         } catch (e) {
-            console.warn(`[AUTO-GAME-FETCHER] SportsDataIO NCAAF failed (${e.message}), trying ESPN...`);
-            try {
-                const ncaafData = await fetchESPN('NCAAF');
-                const ncaafGames = parseESPNGames(ncaafData, 'NCAAF');
-                allGames.push(...ncaafGames);
+            if (isEnabled('NCAAF')) {
+                console.warn(`[AUTO-GAME-FETCHER] SportsDataIO NCAAF failed (${e.message}), trying ESPN...`);
+                try {
+                    const ncaafData = await fetchESPN('NCAAF');
+                    const ncaafGames = parseESPNGames(ncaafData, 'NCAAF');
+                    allGames.push(...ncaafGames);
                 console.log(`[AUTO-GAME-FETCHER] Found ${ncaafGames.length} NCAAF games (ESPN fallback)`);
             } catch (e2) {
                 console.error('[AUTO-GAME-FETCHER] Error fetching NCAAF from both sources:', e2.message);
