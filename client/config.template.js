@@ -52,6 +52,9 @@ window.APP_CONFIG = {
   AUTH_ENABLED: false,
   DEBUG_MODE: false,
 
+  // Team Records API (disable to avoid 404s when endpoint is unavailable)
+  TEAM_RECORDS_API_ENABLED: false,
+
   // Repository Info
   REPO_URL: 'https://github.com/JDSB123/Dashboard_Home_Page',
   OWNER: 'jb@greenbiercapital.com',

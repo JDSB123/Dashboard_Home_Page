@@ -28,6 +28,18 @@ window.APP_CONFIG = {
   DYNAMIC_REGISTRY_ENABLED: true,
 
   // Model API Endpoints (can be dynamically updated by model-endpoints-bootstrap.js)
+  API_ENDPOINTS: {
+    NFL: 'https://gbsv-orchestrator.azurewebsites.net/api/picks/nfl',
+    NCAAF: 'https://gbsv-orchestrator.azurewebsites.net/api/picks/ncaaf',
+    NBA: 'https://gbsv-orchestrator.azurewebsites.net/api/picks/nba',
+    NCAAM: 'https://gbsv-orchestrator.azurewebsites.net/api/picks/ncaam',
+    NHL: 'https://gbsv-orchestrator.azurewebsites.net/api/picks/nhl',
+    MLB: 'https://gbsv-orchestrator.azurewebsites.net/api/picks/mlb'
+  },
+
+  // Feature Flags
+  WEEKLY_LINEUP_DISABLED_LEAGUES: ['NFL', 'NCAAF'],
+
   // These endpoints are used by:
   //   - Frontend fetchers (nba-picks-fetcher.js, etc.) for real-time Weekly Lineup display
   //   - Azure Function ModelJobProcessor for backend async job processing
@@ -54,6 +66,8 @@ window.APP_CONFIG = {
 
   // Database Sync - Enable to sync picks with Azure Cosmos DB
   ENABLE_DB_SYNC: true,
+  // Team Records API (disable to avoid 404s when endpoint is unavailable)
+  TEAM_RECORDS_API_ENABLED: false,
 
   // Repository Info
   REPO_URL: 'https://github.com/JDSB123/Dashboard_Home_Page',

@@ -33,11 +33,20 @@
      * Get the scoreboard proxy URL (Azure Functions)
      */
     function getScoreboardProxyUrl() {
-        // Primary: Azure Functions via Front Door or direct
+        // Primary: API base (Front Door/custom domain)
+        const apiBase = window.APP_CONFIG?.API_BASE_URL;
+        if (apiBase) {
+            const trimmed = apiBase.replace(/\/+$/, '');
+            return `${trimmed}/scoreboard`;
+        }
+
+        // Secondary: Functions base (Front Door or direct)
         const functionsBase = window.APP_CONFIG?.FUNCTIONS_BASE_URL;
         if (functionsBase) {
-            return `${functionsBase}/api/scoreboard`;
+            const trimmed = functionsBase.replace(/\/+$/, '');
+            return `${trimmed}/api/scoreboard`;
         }
+
         // Fallback: relative path (won't work for SportsDataIO)
         return '/api/scoreboard';
     }

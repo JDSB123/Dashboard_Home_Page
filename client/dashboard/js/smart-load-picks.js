@@ -2053,8 +2053,8 @@ async function loadTeamRecords(options = {}) {
 
     const loaderPromise = (async () => {
         try {
-            // Try to load from API first
-            if (window.APP_CONFIG?.API_BASE_URL) {
+            // Try to load from API first (only when explicitly enabled)
+            if (window.APP_CONFIG?.API_BASE_URL && window.APP_CONFIG?.TEAM_RECORDS_API_ENABLED === true) {
                 // Check if DB sync is enabled
                 if (window.APP_CONFIG?.ENABLE_DB_SYNC === false) {
                      // explicit false check to allow undefined to default to true/try
