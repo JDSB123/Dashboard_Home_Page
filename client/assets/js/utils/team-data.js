@@ -28,11 +28,11 @@
         'NFL': 'https://gbsvorchestratorstorage.blob.core.windows.net/team-logos/leagues-500-nfl.png',
         'NHL': 'https://gbsvorchestratorstorage.blob.core.windows.net/team-logos/leagues-500-nhl.png',
         'MLB': 'https://gbsvorchestratorstorage.blob.core.windows.net/team-logos/leagues-500-mlb.png',
-        'NCAAB': 'https://gbsvorchestratorstorage.blob.core.windows.net/team-logos/leagues-500-ncaam.png',
-        'NCAAM': 'https://gbsvorchestratorstorage.blob.core.windows.net/team-logos/leagues-500-ncaam.png',
-        'NCAAF': 'https://gbsvorchestratorstorage.blob.core.windows.net/team-logos/leagues-500-ncaaf.png',
-        'CBB': 'https://gbsvorchestratorstorage.blob.core.windows.net/team-logos/leagues-500-ncaam.png',
-        'CFB': 'https://gbsvorchestratorstorage.blob.core.windows.net/team-logos/leagues-500-ncaaf.png'
+        'NCAAB': '/assets/icons/league-ncaam.svg',
+        'NCAAM': '/assets/icons/league-ncaam.svg',
+        'NCAAF': '/assets/icons/league-ncaaf.svg',
+        'CBB': '/assets/icons/league-ncaam.svg',
+        'CFB': '/assets/icons/league-ncaaf.svg'
     };
 
     // ESPN team ID mappings for logos (NCAA uses numeric IDs)

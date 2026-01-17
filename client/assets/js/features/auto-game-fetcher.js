@@ -19,22 +19,24 @@
     const SCOREBOARD_INTERVAL_MAX_MS = 600000; // 10 minutes
 
     let todaysGamesCache = null;
-    let teamRecordsCache = {};  // Map of team name -> record string
-    let lastFetch = null;
-    const lastStandingsFetch = {
-        NBA: 0,
-        NFL: 0,
+            if (isEnabled('NCAAM')) {
+                console.log('[AUTO-GAME-FETCHER] Fetching NCAAM games...');
+                const ncaamData = await fetchESPN('NCAAM');
+                const ncaamGames = parseESPNGames(ncaamData, 'NCAAM');
+                allGames.push(...ncaamGames);
+                console.log(`[AUTO-GAME-FETCHER] Found ${ncaamGames.length} NCAAM games`);
         NCAAM: 0,
         NCAAF: 0
     };
     let scoreboardIntervalMs = SCOREBOARD_INTERVAL_INITIAL_MS;
 
     /**
-     * Get the scoreboard proxy URL (Azure Functions)
-     */
-    function getScoreboardProxyUrl() {
-        // Primary: API base (Front Door/custom domain)
-        const apiBase = window.APP_CONFIG?.API_BASE_URL;
+            if (isEnabled('NBA')) {
+                console.log('[AUTO-GAME-FETCHER] Fetching NBA games...');
+                const nbaData = await fetchESPN('NBA');
+                const nbaGames = parseESPNGames(nbaData, 'NBA');
+                allGames.push(...nbaGames);
+                console.log(`[AUTO-GAME-FETCHER] Found ${nbaGames.length} NBA games`);
         if (apiBase) {
             const trimmed = apiBase.replace(/\/+$/, '');
             return `${trimmed}/scoreboard`;
@@ -42,15 +44,16 @@
 
         // Secondary: Functions base (Front Door or direct)
         const functionsBase = window.APP_CONFIG?.FUNCTIONS_BASE_URL;
-        if (functionsBase) {
-            const trimmed = functionsBase.replace(/\/+$/, '');
-            return `${trimmed}/api/scoreboard`;
-        }
-
-        // Fallback: relative path (won't work for SportsDataIO)
-        return '/api/scoreboard';
-    }
-
+            if (isEnabled('NFL')) {
+                console.log('[AUTO-GAME-FETCHER] Fetching NFL games from SportsDataIO...');
+                const nflSportsData = await fetchSportsDataIO('nfl');
+                const nflGames = parseSportsDataIOGames(nflSportsData, 'NFL');
+                if (nflGames.length > 0) {
+                    allGames.push(...nflGames);
+                    console.log(`[AUTO-GAME-FETCHER] Found ${nflGames.length} NFL games (SportsDataIO)`);
+                } else {
+                    throw new Error('No games from SportsDataIO');
+                }
     /**
      * Fetch from SportsDataIO via Azure Functions proxy (avoids CORS)
      */
@@ -68,15 +71,16 @@
 
         return await response.json();
     }
-
-    /**
-     * Fetch standings from ESPN to get team records
-     */
-    async function fetchStandings(sport) {
-        const now = Date.now();
-        if (lastStandingsFetch[sport] && now - lastStandingsFetch[sport] < STANDINGS_TTL_MS) {
-            return;
-        }
+            if (isEnabled('NCAAF')) {
+                console.log('[AUTO-GAME-FETCHER] Fetching NCAAF games from SportsDataIO...');
+                const ncaafSportsData = await fetchSportsDataIO('cfb');
+                const ncaafGames = parseSportsDataIOGames(ncaafSportsData, 'NCAAF');
+                if (ncaafGames.length > 0) {
+                    allGames.push(...ncaafGames);
+                    console.log(`[AUTO-GAME-FETCHER] Found ${ncaafGames.length} NCAAF games (SportsDataIO)`);
+                } else {
+                    throw new Error('No games from SportsDataIO');
+                }
 
         const sportPath = sport === 'NBA' ? 'nba' :
                          sport === 'NFL' ? 'nfl' :

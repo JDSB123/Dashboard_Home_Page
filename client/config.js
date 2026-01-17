@@ -61,6 +61,9 @@ window.APP_CONFIG = {
   LOGO_FALLBACK_URL: 'https://gbsvorchestratorstorage.blob.core.windows.net/team-logos', // Direct blob fallback
 
   // Feature Flags
+  WEEKLY_LINEUP_DISABLED_LEAGUES: ['NFL', 'NCAAF'],
+
+  // Feature Flags
   AUTH_ENABLED: false,
   DEBUG_MODE: false,
 
@@ -76,6 +79,9 @@ window.APP_CONFIG = {
   // Note: External API keys (SportsDataIO, TheOddsAPI) are configured in Azure Function App Settings
   // All external API calls are proxied through Azure Functions for security
 };
+
+// Back-compat: some scripts read this directly
+window.WEEKLY_LINEUP_DISABLED_LEAGUES = window.APP_CONFIG.WEEKLY_LINEUP_DISABLED_LEAGUES;
 
 // GBSV Configuration for Azure services
 window.GBSV_CONFIG = {

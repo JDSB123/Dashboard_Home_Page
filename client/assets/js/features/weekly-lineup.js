@@ -256,13 +256,11 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
     // League logos
     const BASE_LEAGUE_LOGOS = {
-        'NCAAB': 'https://gbsvorchestratorstorage.blob.core.windows.net/team-logos/leagues-500-ncaam.png',
-        'NCAAM': 'https://gbsvorchestratorstorage.blob.core.windows.net/team-logos/leagues-500-ncaam.png',
-        'NCAAF': 'https://gbsvorchestratorstorage.blob.core.windows.net/team-logos/leagues-500-ncaaf.png',
+        'NCAAB': '/assets/icons/league-ncaam.svg',
+        'NCAAM': '/assets/icons/league-ncaam.svg',
+        'NCAAF': '/assets/icons/league-ncaaf.svg',
         'NBA': 'https://gbsvorchestratorstorage.blob.core.windows.net/team-logos/leagues-500-nba.png',
-        'NFL': 'https://gbsvorchestratorstorage.blob.core.windows.net/team-logos/leagues-500-nfl.png',
-        'NHL': 'https://gbsvorchestratorstorage.blob.core.windows.net/team-logos/leagues-500-nhl.png',
-        'MLB': 'https://gbsvorchestratorstorage.blob.core.windows.net/team-logos/leagues-500-mlb.png'
+        'NFL': 'https://gbsvorchestratorstorage.blob.core.windows.net/team-logos/leagues-500-nfl.png'
     };
 
     function resolveLeagueLogo(leagueKey) {
@@ -1372,7 +1370,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                 </div>
             </td>
             <td class="center col-market">
-                <span class="market-value">${escapeHtml(pick.marketOdds || pick.market || '-')}</span>
+                <span class="market-value">${escapeHtml(pick.modelSpread || pick.modelPrice || pick.predictedSpread || pick.predictedTotal || '-')}</span>
             </td>
             <td class="center col-edge">
                 <span class="edge-value edge-${edgeClass}">${edgeValue.toFixed(1)}%</span>
@@ -1766,7 +1764,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         row.setAttribute('data-segment', segment);
         row.setAttribute('data-matchup', `${awayTeamName} @ ${homeTeamName}`);
         row.setAttribute('data-market', pickOdds);
-        row.setAttribute('data-model', pick.modelPrice || '');
+        row.setAttribute('data-model', pick.modelSpread || pick.modelPrice || pick.predictedSpread || pick.predictedTotal || '');
         row.setAttribute('data-pick', pickTeamName);
 
         // Set additional data attributes for filtering

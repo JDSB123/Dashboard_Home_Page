@@ -286,9 +286,9 @@
             const logos = {
                 'NBA': 'https://gbsvorchestratorstorage.blob.core.windows.net/team-logos/leagues-500-nba.png',
                 'NFL': 'https://gbsvorchestratorstorage.blob.core.windows.net/team-logos/leagues-500-nfl.png',
-                'NCAAB': 'https://gbsvorchestratorstorage.blob.core.windows.net/team-logos/leagues-500-ncaam.png',
-                'NCAAM': 'https://gbsvorchestratorstorage.blob.core.windows.net/team-logos/leagues-500-ncaam.png',
-                'NCAAF': 'https://gbsvorchestratorstorage.blob.core.windows.net/team-logos/leagues-500-ncaaf.png'
+                'NCAAB': '/assets/icons/league-ncaam.svg',
+                'NCAAM': '/assets/icons/league-ncaam.svg',
+                'NCAAF': '/assets/icons/league-ncaaf.svg'
             };
             const src = logos[league?.toUpperCase()] || '';
             return src ? `<img src="${src}" alt="${league}" class="league-logo-sm" style="height:24px;">` : league || '';

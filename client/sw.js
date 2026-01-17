@@ -1,5 +1,5 @@
 /* Simple service worker for asset caching */
-const VERSION = 'v2.0.1';
+const VERSION = 'v2.0.2';
 const CORE_CACHE = `core-${VERSION}`;
 const ASSET_CACHE = `assets-${VERSION}`;
 
