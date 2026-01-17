@@ -6,14 +6,14 @@
     margin-right: 12px;
 }
 
-/* Enhanced Dropdown Items Readability */
+/* Enhanced Dropdown Items Readability - Dark Theme */
 .ft-dropdown-item {
     line-height: 1.4;
     white-space: nowrap;
 }
 
 .ft-dropdown-item strong {
-    color: #1a202c;
+    color: rgba(0, 214, 137, 0.9);
     font-weight: 600;
     margin-right: 4px;
 }
@@ -24,9 +24,13 @@
     font-size: 13px;
 }
 
-/* Snapshot Dropdown Specific Styles */
+/* Snapshot Dropdown Specific Styles - Dark Theme */
 .snapshot-dropdown-menu {
     padding: 0;
+    background: #0c1a2e;
+    border: 1px solid rgba(0, 214, 137, 0.2);
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 .snapshot-header {
@@ -34,78 +38,81 @@
     justify-content: space-between;
     align-items: center;
     padding: 12px 15px;
-    border-bottom: 1px solid #e2e8f0;
-    background: #f7fafc;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 20, 40, 0.6);
 }
 
 .snapshot-title {
     font-size: 13px;
     font-weight: 600;
-    color: #2d3748;
+    color: rgba(215, 225, 235, 0.95);
 }
 
 .snapshot-clear-btn {
     font-size: 11px;
-    padding: 4px 8px;
-    background: #fff;
-    border: 1px solid #cbd5e0;
+    padding: 4px 10px;
+    background: transparent;
+    border: 1px solid rgba(239, 68, 68, 0.3);
     border-radius: 4px;
-    color: #e53e3e;
+    color: #ef5050;
     cursor: pointer;
     transition: all 0.2s;
 }
 
 .snapshot-clear-btn:hover {
-    background: #fff5f5;
-    border-color: #fc8181;
+    background: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.5);
 }
 
 .snapshot-list {
     max-height: 350px;
     overflow-y: auto;
+    background: #0c1a2e;
 }
 
 .snapshot-date-group {
-    margin-bottom: 8px;
+    margin-bottom: 0;
 }
 
 .snapshot-date-label {
     padding: 8px 15px;
-    background: #edf2f7;
+    background: rgba(0, 30, 60, 0.8);
     font-size: 11px;
     font-weight: 600;
-    color: #4a5568;
+    color: rgba(0, 214, 137, 0.8);
     text-transform: uppercase;
     letter-spacing: 0.5px;
     position: sticky;
     top: 0;
     z-index: 1;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .snapshot-empty {
     padding: 30px 15px;
     text-align: center;
-    color: #a0aec0;
+    color: rgba(160, 175, 190, 0.6);
     font-size: 13px;
 }
 
 .snapshot-item {
     padding: 12px 15px;
-    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     cursor: pointer;
     transition: background 0.2s;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    background: transparent;
 }
 
 .snapshot-item:hover {
-    background: #f7fafc;
+    background: rgba(0, 214, 137, 0.08);
 }
 
 .snapshot-item.current {
-    background: #ebf8ff;
-    border-left: 3px solid #3182ce;
+    background: rgba(0, 214, 137, 0.12);
+    border-left: 3px solid #00d689;
 }
 
 .snapshot-info {
@@ -115,13 +122,13 @@
 .snapshot-time {
     font-size: 13px;
     font-weight: 600;
-    color: #2d3748;
+    color: rgba(230, 240, 250, 0.95);
     margin-bottom: 4px;
 }
 
 .snapshot-meta {
     font-size: 11px;
-    color: #718096;
+    color: rgba(160, 175, 190, 0.7);
     display: flex;
     gap: 10px;
 }
@@ -142,7 +149,7 @@
     padding: 4px 8px;
     background: transparent;
     border: none;
-    color: #a0aec0;
+    color: rgba(160, 175, 190, 0.5);
     cursor: pointer;
     border-radius: 4px;
     font-size: 16px;
@@ -151,13 +158,17 @@
 }
 
 .snapshot-delete-btn:hover {
-    background: #fff5f5;
-    color: #e53e3e;
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef5050;
 }
 
-/* Export Dropdown Specific Styles */
+/* Export Dropdown Specific Styles - Dark Theme */
 .export-dropdown-menu {
     min-width: 200px;
+    background: #0c1a2e;
+    border: 1px solid rgba(0, 214, 137, 0.2);
+    border-radius: 8px;
+    padding: 4px;
 }
 
 .export-item {
@@ -169,30 +180,37 @@
     border: none;
     text-align: left;
     cursor: pointer;
-    color: #2d3748;
+    color: rgba(215, 225, 235, 0.9);
     font-size: 13px;
-    transition: background 0.2s;
+    border-radius: 6px;
+    transition: all 0.2s;
 }
 
 .export-item:hover {
-    background: #f7fafc;
+    background: rgba(0, 214, 137, 0.1);
+    color: #fff;
 }
 
 .export-item svg {
     flex-shrink: 0;
+    opacity: 0.7;
 }
 
-/* Current Snapshot Badge */
+.export-item:hover svg {
+    opacity: 1;
+}
+
+/* Current Snapshot Badge - Dark Theme */
 .ft-current-snapshot {
     display: inline-flex;
     align-items: center;
     gap: 4px;
     padding: 4px 8px;
-    background: #ebf8ff;
-    border: 1px solid #90cdf4;
+    background: rgba(0, 214, 137, 0.1);
+    border: 1px solid rgba(0, 214, 137, 0.3);
     border-radius: 4px;
     font-size: 11px;
-    color: #2c5282;
+    color: #00d689;
     margin-right: 8px;
 }
 
@@ -208,20 +226,20 @@
     }
 }
 
-/* Scrollbar styling for snapshot list */
+/* Scrollbar styling for snapshot list - Dark Theme */
 .snapshot-list::-webkit-scrollbar {
     width: 6px;
 }
 
 .snapshot-list::-webkit-scrollbar-track {
-    background: #f7fafc;
+    background: rgba(0, 20, 40, 0.5);
 }
 
 .snapshot-list::-webkit-scrollbar-thumb {
-    background: #cbd5e0;
+    background: rgba(0, 214, 137, 0.3);
     border-radius: 3px;
 }
 
 .snapshot-list::-webkit-scrollbar-thumb:hover {
-    background: #a0aec0;
+    background: rgba(0, 214, 137, 0.5);
 }
