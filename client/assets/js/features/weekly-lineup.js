@@ -1452,7 +1452,9 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
         // Model Prediction - shows model's line/odds
         const getModelPredictionHtml = () => {
-            const modelPrice = escapeHtml(pick.modelPrice) || '-';
+            const modelPriceRaw = pick.modelPrice ?? pick.model_price ?? '';
+            const modelPrice = escapeHtml(modelPriceRaw);
+            const hasModelOdds = modelPrice && modelPrice !== '-' && modelPrice.toUpperCase() !== 'N/A';
             const modelSpread = escapeHtml(pick.modelSpread || pick.predictedSpread) || pickLabel || '';
             const teamAbbrev = isTeamPick ? pickInfo.abbr : normalizedPickTeamName;
             const logoHtml = isTeamPick && pickInfo.logo
@@ -1461,15 +1463,18 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
             if (pickType === 'ml') {
                 // ML: [Logo] DEN [ML] -180
-                return `<div class="prediction-cell">${logoHtml}<span class="pred-team">${teamAbbrev}</span><span class="pred-type-badge">ML</span><span class="pred-odds">${modelPrice}</span></div>`;
+                const oddsHtml = hasModelOdds ? `<span class="pred-odds">${modelPrice}</span>` : '';
+                return `<div class="prediction-cell">${logoHtml}<span class="pred-team">${teamAbbrev}</span><span class="pred-type-badge">ML</span>${oddsHtml}</div>`;
             } else if (pickType === 'spread') {
                 // Spread: [Logo] DEN -3.5 (-108)
-                return `<div class="prediction-cell">${logoHtml}<span class="pred-team">${teamAbbrev}</span><span class="pred-line">${modelSpread}</span><span class="pred-odds-muted">(${modelPrice})</span></div>`;
+                const oddsHtml = hasModelOdds ? `<span class="pred-odds-muted">(${modelPrice})</span>` : '';
+                return `<div class="prediction-cell">${logoHtml}<span class="pred-team">${teamAbbrev}</span><span class="pred-line">${modelSpread}</span>${oddsHtml}</div>`;
             } else if (pickType === 'total' || pickType === 'tt') {
                 // Total: Over 221.5 (-110)
-                return `<div class="prediction-cell"><span class="pred-direction">${teamAbbrev}</span><span class="pred-line">${modelSpread}</span><span class="pred-odds-muted">(${modelPrice})</span></div>`;
+                const oddsHtml = hasModelOdds ? `<span class="pred-odds-muted">(${modelPrice})</span>` : '';
+                return `<div class="prediction-cell"><span class="pred-direction">${teamAbbrev}</span><span class="pred-line">${modelSpread}</span>${oddsHtml}</div>`;
             }
-            return `<div class="prediction-cell"><span class="pred-odds">${modelPrice}</span></div>`;
+            return `<div class="prediction-cell"><span class="pred-odds">${hasModelOdds ? modelPrice : '-'}</span></div>`;
         };
 
         const modelPredictionHtml = getModelPredictionHtml();
@@ -1753,7 +1758,16 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                 </div>
             </td>
             <td data-label="Market" class="center col-market">
-                ${marketHtml}
+                <div class="market-stack">
+                    <div class="market-row market-row-model">
+                        <span class="market-label">Model</span>
+                        <div class="market-pick">${modelPredictionHtml}</div>
+                    </div>
+                    <div class="market-row market-row-market">
+                        <span class="market-label">Market</span>
+                        <div class="market-pick">${marketHtml}</div>
+                    </div>
+                </div>
             </td>
             <td data-label="Edge" class="center">
                 ${edgeDisplayHtml}
@@ -3079,21 +3093,28 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                 pickType = 'moneyline';
             }
 
-            // Model prediction (6th cell)
-            const modelCell = cells[5];
-            const modelPrediction = modelCell?.textContent?.trim() || '';
+            // Model prediction (Market column - stacked)
+            const marketColumnCell = cells[5];
+            const modelPrediction = marketColumnCell
+                ?.querySelector('.market-row-model')
+                ?.textContent
+                ?.replace(/^Model/i, '')
+                ?.trim() || '';
 
-            // Market line (7th cell)
-            const marketCell = cells[6];
-            const marketLine = marketCell?.textContent?.trim() || '';
+            // Market line (Market column - stacked)
+            const marketLine = marketColumnCell
+                ?.querySelector('.market-row-market')
+                ?.textContent
+                ?.replace(/^Market/i, '')
+                ?.trim() || '';
 
             // Edge (8th cell)
-            const edgeCell = cells[7];
+            const edgeCell = cells[6];
             const edgeText = edgeCell?.textContent?.trim() || '0';
             const edge = parseFloat(edgeText.replace(/[+%pts]/g, '')) || 0;
 
             // Fire rating (9th cell)
-            const fireCell = cells[8];
+            const fireCell = cells[7];
             const fireRating = fireCell?.textContent?.trim() || '';
 
             // Build the pick object for LocalPicksManager

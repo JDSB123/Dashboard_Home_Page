@@ -781,6 +781,28 @@ body.page-weekly-lineup .picks-table tbody tr:hover,
     text-align: center;
 }
 
+.weekly-lineup-table .market-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.weekly-lineup-table .market-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.weekly-lineup-table .market-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--neutral-400);
+}
+
 .weekly-lineup-table .market-value {
     font-family: var(--font-display, 'Oswald', sans-serif);
     font-weight: 500;
