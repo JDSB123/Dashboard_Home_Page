@@ -128,7 +128,7 @@ az signalr create \
 az signalr cors update \
   --name gbsv-signalr \
   --resource-group dashboard-gbsv-main-rg \
-  --allowed-origins "https://wittypebble-41c11c65.eastus.azurestaticapps.net"
+  --allowed-origins "https://www.greenbiersportventures.com"
 ```
 
 ### Step 7: Build and Deploy Orchestrator
@@ -201,7 +201,7 @@ curl -X POST "https://$ORCHESTRATOR_URL/api/registry/update" \
   -H "Content-Type: application/json" \
   -d '{
     "model": "nba",
-    "endpoint": "https://nba-gbsv-api.livelycoast-b48c3cb0.eastus.azurecontainerapps.io",
+    "endpoint": "https://www.greenbiersportventures.com",
     "version": "1.0.0"
   }'
 

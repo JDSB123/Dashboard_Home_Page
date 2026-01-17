@@ -153,7 +153,7 @@ az functionapp config appsettings set \
 Update `client/config.js` in the dashboard:
 
 ```javascript
-ORCHESTRATOR_URL: 'https://gbsv-orchestrator.azurewebsites.net/api',
+ORCHESTRATOR_URL: 'https://www.greenbiersportventures.com/api',
 SIGNALR_HUB_URL: 'https://gbsv-signalr.service.signalr.net',
 ```
 

@@ -2,19 +2,19 @@ const { TableClient } = require('@azure/data-tables');
 
 const DEFAULT_MODEL_CONFIG = {
     nba: {
-        endpoint: 'https://nba-gbsv-api.livelycoast-b48c3cb0.eastus.azurecontainerapps.io',
+        endpoint: 'https://www.greenbiersportventures.com',
         resourceGroup: 'nba-gbsv-model-rg'
     },
     ncaam: {
-        endpoint: 'https://ncaam-stable-prediction.wonderfulforest-c2d7d49a.centralus.azurecontainerapps.io',
+        endpoint: 'https://www.greenbiersportventures.com',
         resourceGroup: 'ncaam-gbsv-model-rg'
     },
     nfl: {
-        endpoint: 'https://nfl-api.purplegrass-5889a981.eastus.azurecontainerapps.io',
+        endpoint: 'https://www.greenbiersportventures.com',
         resourceGroup: 'nfl-gbsv-model-rg'
     },
     ncaaf: {
-        endpoint: 'https://ncaaf-v5-prod.salmonwave-314d4ffe.eastus.azurecontainerapps.io',
+        endpoint: 'https://www.greenbiersportventures.com',
         resourceGroup: 'ncaaf-gbsv-model-rg'
     }
 };

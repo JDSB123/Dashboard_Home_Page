@@ -154,10 +154,10 @@ az functionapp config appsettings set \
     "AzureSignalRConnectionString=$SIGNALR_CONNECTION" \
     "WEBSITE_RUN_FROM_PACKAGE=1" \
     "FUNCTIONS_WORKER_RUNTIME=node" \
-    "NBA_API_URL=https://nba-gbsv-api.livelycoast-b48c3cb0.eastus.azurecontainerapps.io" \
-    "NCAAM_API_URL=https://ncaam-stable-prediction.wonderfulforest-c2d7d49a.centralus.azurecontainerapps.io" \
-    "NFL_API_URL=https://nfl-api.purplegrass-5889a981.eastus.azurecontainerapps.io" \
-    "NCAAF_API_URL=https://ncaaf-v5-prod.salmonwave-314d4ffe.eastus.azurecontainerapps.io"
+    "NBA_API_URL=https://www.greenbiersportventures.com" \
+    "NCAAM_API_URL=https://www.greenbiersportventures.com" \
+    "NFL_API_URL=https://www.greenbiersportventures.com" \
+    "NCAAF_API_URL=https://www.greenbiersportventures.com"
 
 # Enable CORS
 echo "Configuring CORS..."

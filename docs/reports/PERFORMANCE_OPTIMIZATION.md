@@ -131,7 +131,7 @@
 
 4. Use `performance-test.html` to verify:
    ```
-   https://your-site.azurestaticapps.net/performance-test.html
+  https://www.greenbiersportventures.com/performance-test.html
    ```
 
 ## Rollback Plan

@@ -49,7 +49,7 @@ Created deployment automation scripts:
 
 1. Ensure Azure and ACR creds are set as GitHub secrets (see azure-functions/README.md).
 2. Push to `main` or manually run `.github/workflows/azure-functions-container.yml`.
-3. Note the Container App FQDN output by the workflow (e.g., `https://gbsv-orchestrator.<env>.azurecontainerapps.io`).
+3. Note the main domain output by the workflow (e.g., `https://www.greenbiersportventures.com`).
 
 ### Step 2: Configure SignalR Service
 

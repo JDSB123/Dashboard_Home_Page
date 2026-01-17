@@ -10,9 +10,9 @@
 
 ### ✅ **Orchestrator Status: HEALTHY**
 
-- **URL**: https://gbsv-orchestrator.wittypebble-41c11c65.eastus.azurecontainerapps.io
-- **Health Check**: https://gbsv-orchestrator.wittypebble-41c11c65.eastus.azurecontainerapps.io/api/health
-- **Registry**: https://gbsv-orchestrator.wittypebble-41c11c65.eastus.azurecontainerapps.io/api/registry
+- **URL**: https://www.greenbiersportventures.com
+- **Health Check**: https://www.greenbiersportventures.com/api/health
+- **Registry**: https://www.greenbiersportventures.com/api/registry
 - **Status**: All components healthy
 - **Environment**: Production
 
@@ -36,10 +36,10 @@
 
 | Model | Endpoint | Version | Status |
 |-------|----------|---------|--------|
-| **NBA** | https://nba-gbsv-api.livelycoast-b48c3cb0.eastus.azurecontainerapps.io | 33.0.8.0 | ✅ Healthy |
-| **NCAAM** | https://ncaam-stable-prediction.wonderfulforest-c2d7d49a.centralus.azurecontainerapps.io | 1.0.0 | ✅ Healthy |
-| **NFL** | https://nfl-api.purplegrass-5889a981.eastus.azurecontainerapps.io | 1.0.0 | ✅ Healthy |
-| **NCAAF** | https://ncaaf-v5-prod.salmonwave-314d4ffe.eastus.azurecontainerapps.io | 1.0.0 | ✅ Healthy |
+| **NBA** | https://www.greenbiersportventures.com | 33.0.8.0 | ✅ Healthy |
+| **NCAAM** | https://www.greenbiersportventures.com | 1.0.0 | ✅ Healthy |
+| **NFL** | https://www.greenbiersportventures.com | 1.0.0 | ✅ Healthy |
+| **NCAAF** | https://www.greenbiersportventures.com | 1.0.0 | ✅ Healthy |
 
 ---
 
@@ -67,14 +67,14 @@
 ## 🔗 Quick Access URLs
 
 ### API Endpoints
-- **Health**: https://gbsv-orchestrator.wittypebble-41c11c65.eastus.azurecontainerapps.io/api/health
-- **Registry**: https://gbsv-orchestrator.wittypebble-41c11c65.eastus.azurecontainerapps.io/api/registry
-- **Model Status**: https://gbsv-orchestrator.wittypebble-41c11c65.eastus.azurecontainerapps.io/api/status/{jobId}
-- **SignalR Info**: https://gbsv-orchestrator.wittypebble-41c11c65.eastus.azurecontainerapps.io/api/signalr/negotiate
+- **Health**: https://www.greenbiersportventures.com/api/health
+- **Registry**: https://www.greenbiersportventures.com/api/registry
+- **Model Status**: https://www.greenbiersportventures.com/api/status/{jobId}
+- **SignalR Info**: https://www.greenbiersportventures.com/api/signalr/negotiate
 
 ### Dashboard
-- **Production**: https://wittypebble-41c11c65.eastus.azurestaticapps.net
-- **Weekly Lineup**: https://wittypebble-41c11c65.eastus.azurestaticapps.net/weekly-lineup.html
+- **Production**: https://www.greenbiersportventures.com
+- **Weekly Lineup**: https://www.greenbiersportventures.com/weekly-lineup.html
 
 ### Azure Portal
 - **Resource Group**: [View in Portal](https://portal.azure.com/#@/resource/subscriptions/3a1a4a94-45a5-4f7c-8ada-97978221052c/resourceGroups/dashboard-gbsv-main-rg)

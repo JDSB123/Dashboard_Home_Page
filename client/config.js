@@ -22,8 +22,8 @@ window.APP_CONFIG = {
 
   // API Configuration
   API_BASE_URL: 'https://www.greenbiersportventures.com/api',
-  ORCHESTRATOR_URL: 'https://gbsv-orchestrator.wittypebble-41c11c65.eastus.azurecontainerapps.io',
-  FUNCTIONS_BASE_URL: 'https://gbsv-orchestrator.azurewebsites.net',
+  ORCHESTRATOR_URL: 'https://www.greenbiersportventures.com/api',
+  FUNCTIONS_BASE_URL: 'https://www.greenbiersportventures.com',
   API_BASE_FALLBACK: 'https://www.greenbiersportventures.com/api',
   DYNAMIC_REGISTRY_ENABLED: true,
 
@@ -34,13 +34,13 @@ window.APP_CONFIG = {
   //   - model-endpoints-bootstrap.js fetches latest from /api/registry on page load
 
   // NBA: Function App (primary) + Container App (fallback)
-  NBA_FUNCTION_URL: 'https://nba-picks-trigger.azurewebsites.net',  // Primary - Function App with /api/weekly-lineup/nba
-  NBA_API_URL: 'https://nba-gbsv-api.livelycoast-b48c3cb0.eastus.azurecontainerapps.io',  // Fallback - Container App
-  NCAAM_API_URL: 'https://ncaam-stable-prediction.wonderfulforest-c2d7d49a.centralus.azurecontainerapps.io',
+  NBA_FUNCTION_URL: 'https://www.greenbiersportventures.com/api/weekly-lineup/nba',  // Primary - Function App with /api/weekly-lineup/nba
+  NBA_API_URL: 'https://www.greenbiersportventures.com',  // Fallback - Front Door
+  NCAAM_API_URL: 'https://www.greenbiersportventures.com',
   // NFL: Function App (primary) + Container App (fallback)
-  NFL_FUNCTION_URL: 'https://nfl-picks-trigger.azurewebsites.net',  // Primary - Function App with /api/weekly-lineup/nfl
-  NFL_API_URL: 'https://nfl-api.purplegrass-5889a981.eastus.azurecontainerapps.io',  // Fallback - Container App
-  NCAAF_API_URL: 'https://ncaaf-v5-prod.salmonwave-314d4ffe.eastus.azurecontainerapps.io',
+  NFL_FUNCTION_URL: 'https://www.greenbiersportventures.com/api/weekly-lineup/nfl',  // Primary - Function App with /api/weekly-lineup/nfl
+  NFL_API_URL: 'https://www.greenbiersportventures.com',  // Fallback - Front Door
+  NCAAF_API_URL: 'https://www.greenbiersportventures.com',
   NHL_API_URL: '', // Placeholder - will be populated from registry when available
   MLB_API_URL: '', // Placeholder - will be populated from registry when available
 
@@ -66,10 +66,10 @@ window.APP_CONFIG = {
 // GBSV Configuration for Azure services
 window.GBSV_CONFIG = {
   // Azure Functions URL for picks API and other backend services
-  FUNCTIONS_URL: 'https://gbsv-orchestrator.azurewebsites.net',
+  FUNCTIONS_URL: 'https://www.greenbiersportventures.com',
 
   // Cosmos DB picks storage (accessed via Azure Functions)
-  PICKS_API_ENDPOINT: 'https://gbsv-orchestrator.azurewebsites.net/api/picks'
+  PICKS_API_ENDPOINT: 'https://www.greenbiersportventures.com/api/picks'
 };
 
 // Export for module usage if needed

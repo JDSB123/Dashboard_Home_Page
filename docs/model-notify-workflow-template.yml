@@ -13,7 +13,7 @@ permissions:
   contents: read
 
 env:
-  ORCHESTRATOR_URL: https://gbsv-orchestrator.wittypebble-41c11c65.eastus.azurecontainerapps.io/api
+  ORCHESTRATOR_URL: https://www.greenbiersportventures.com/api
 
 jobs:
   notify:

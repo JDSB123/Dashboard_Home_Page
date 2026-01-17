@@ -73,7 +73,7 @@ Each of your model repos (nba-gbsv-model, ncaam-gbsv-model, etc.) should **autom
 
 1. Go to that repo's GitHub Secrets settings
 2. Add these 3 secrets (if not already there):
-   - `ORCHESTRATOR_URL` = `https://gbsv-orchestrator.wittypebble-41c11c65.eastus.azurecontainerapps.io/api`
+  - `ORCHESTRATOR_URL` = `https://www.greenbiersportventures.com/api`
    - `ORCHESTRATOR_KEY` = *(ask your team or check Azure Portal → Container App → Auth)*
    - `AZURE_SUBSCRIPTION_ID` = *(your subscription ID)*
 

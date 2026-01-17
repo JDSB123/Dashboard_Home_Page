@@ -62,7 +62,7 @@ Go to repo → **Settings → Secrets and variables → Actions → New reposito
 Add these 3:
 | Name | Value |
 |------|-------|
-| `ORCHESTRATOR_URL` | `https://gbsv-orchestrator.wittypebble-41c11c65.eastus.azurecontainerapps.io/api` |
+| `ORCHESTRATOR_URL` | `https://www.greenbiersportventures.com/api` |
 | `ORCHESTRATOR_KEY` | _(ask your team or check Azure Portal)_ |
 | `AZURE_SUBSCRIPTION_ID` | _(Your Azure subscription ID)_ |
 

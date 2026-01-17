@@ -3,7 +3,6 @@ const { BlobServiceClient } = require("@azure/storage-blob");
 // CORS configuration
 const DEFAULT_ALLOWED_ORIGINS = [
     'https://www.greenbiersportventures.com',
-    'https://wittypebble-41c11c65.eastus.azurestaticapps.net',
     'http://localhost:3000',
     'http://localhost:8080'
 ];

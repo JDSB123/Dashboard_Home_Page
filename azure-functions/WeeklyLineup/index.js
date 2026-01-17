@@ -43,7 +43,6 @@ const SPORT_ENDPOINTS = {
 
 const ALLOWED_ORIGINS = getAllowedOrigins([
     'https://www.greenbiersportventures.com',
-    'https://wittypebble-41c11c65.eastus.azurestaticapps.net',
     'http://localhost:3000',
     'http://localhost:8080'
 ]);
