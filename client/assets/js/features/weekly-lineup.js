@@ -28,6 +28,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
     const WEEKLY_LINEUP_STORAGE_KEY = 'gbsv_weekly_lineup_picks';
     const TRACKED_PICKS_STORAGE_KEY = 'gbsv_tracked_weekly_picks';
     const ARCHIVED_PICKS_STORAGE_KEY = 'gbsv_archived_weekly_picks';
+    const WEEKLY_LINEUP_CLEANUP_KEY = 'gbsv_weekly_lineup_cleanup_v1';
 
     // ===== VIEW STATE =====
     let currentView = 'active'; // 'active' or 'history'
@@ -45,6 +46,68 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
     const log = (...args) => {
         if (debugEnabled) console.log(...args);
     };
+
+    // ===== CLEANUP PLACEHOLDER/SAMPLE DATA =====
+    const SAMPLE_SOURCE_KEYS = new Set(['demo', 'sample', 'mock', 'placeholder', 'fake', 'test', 'example']);
+
+    function isPlaceholderPick(pick) {
+        if (!pick || typeof pick !== 'object') return true;
+        if (pick.isDemo === true || pick.isSample === true || pick.isPlaceholder === true) return true;
+
+        const source = String(pick.source || '').toLowerCase();
+        if (SAMPLE_SOURCE_KEYS.has(source)) return true;
+
+        const sportsbook = String(pick.sportsbook || '').toLowerCase();
+        if (/(demo|sample|mock|placeholder|fake|test|example)/.test(sportsbook)) return true;
+
+        return false;
+    }
+
+    function filterPlaceholderPicks(picks) {
+        const list = Array.isArray(picks) ? picks : [];
+        const cleaned = list.filter((pick) => !isPlaceholderPick(pick));
+        return { cleaned, removed: list.length - cleaned.length };
+    }
+
+    function cleanupWeeklyLineupSampleData() {
+        if (localStorage.getItem(WEEKLY_LINEUP_CLEANUP_KEY)) return;
+
+        try {
+            const activeRaw = localStorage.getItem(WEEKLY_LINEUP_STORAGE_KEY);
+            if (activeRaw) {
+                const activeParsed = JSON.parse(activeRaw);
+                const { cleaned, removed } = filterPlaceholderPicks(activeParsed?.picks);
+                if (removed > 0) {
+                    if (cleaned.length === 0) {
+                        localStorage.removeItem(WEEKLY_LINEUP_STORAGE_KEY);
+                    } else {
+                        localStorage.setItem(WEEKLY_LINEUP_STORAGE_KEY, JSON.stringify({
+                            picks: cleaned,
+                            timestamp: activeParsed?.timestamp || new Date().toISOString()
+                        }));
+                    }
+                    log(`[Cleanup] Removed ${removed} placeholder picks from weekly lineup cache`);
+                }
+            }
+
+            const archivedRaw = localStorage.getItem(ARCHIVED_PICKS_STORAGE_KEY);
+            if (archivedRaw) {
+                const archivedParsed = JSON.parse(archivedRaw);
+                const { cleaned, removed } = filterPlaceholderPicks(archivedParsed?.picks);
+                if (removed > 0) {
+                    localStorage.setItem(ARCHIVED_PICKS_STORAGE_KEY, JSON.stringify({
+                        picks: cleaned,
+                        weeklyStats: archivedParsed?.weeklyStats || {}
+                    }));
+                    log(`[Cleanup] Removed ${removed} placeholder picks from weekly lineup archive`);
+                }
+            }
+        } catch (e) {
+            console.error('Error cleaning weekly lineup placeholder data:', e);
+        }
+
+        localStorage.setItem(WEEKLY_LINEUP_CLEANUP_KEY, 'done');
+    }
 
     // ===== NBA TEAM DATA =====
     const NBA_TEAMS = {
@@ -327,10 +390,10 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
      */
     function getTodayDateString() {
         const today = new Date();
-        return today.toLocaleDateString('en-US', { 
-            weekday: 'short', 
-            month: 'short', 
-            day: 'numeric' 
+        return today.toLocaleDateString('en-US', {
+            weekday: 'short',
+            month: 'short',
+            day: 'numeric'
         });
     }
 
@@ -365,7 +428,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         try {
             // Wait for UnifiedPicksFetcher to load (handles script load order)
             const fetcherReady = await waitForFetcher();
-            
+
             if (!fetcherReady) {
                 console.warn('[Weekly Lineup] UnifiedPicksFetcher not available after timeout');
                 showNoPicks('API fetcher failed to load. Please refresh the page.');
@@ -373,21 +436,31 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             }
 
             const result = await window.UnifiedPicksFetcher.fetchPicks('all', 'today');
-            
+
             if (result.picks && result.picks.length > 0) {
                 console.log(`[Weekly Lineup] ✅ Fetched ${result.picks.length} real picks from APIs`);
-                    
+
                     // Transform picks to table format and sort by edge
                     const formattedPicks = result.picks.map(pick => {
                         const edge = parseFloat(pick.edge) || 0;
                         const fireMeta = normalizeFireRating(pick.fire ?? pick.confidence ?? pick.fire_rating ?? pick.fireRating, edge);
+                        const rawMatchup = pick.matchup ?? pick.game ?? '';
+                        const matchupSource = typeof rawMatchup === 'string' ? rawMatchup : String(rawMatchup);
+                        const trimmedMatchup = matchupSource.trim();
+                        const parsedMatchup = parseMatchupString(trimmedMatchup);
+                        const awayField = pickTeamFromFields(pick, ['awayTeam', 'away_team', 'away', 'teamAway', 'team_away', 'awayTeamFull']);
+                        const homeField = pickTeamFromFields(pick, ['homeTeam', 'home_team', 'home', 'teamHome', 'team_home', 'homeTeamFull']);
+                        const awayTeam = awayField || parsedMatchup.away || '';
+                        const homeTeam = homeField || parsedMatchup.home || '';
+                        const matchupValue = trimmedMatchup || (awayTeam && homeTeam ? `${awayTeam} @ ${homeTeam}` : '');
 
                         return {
                             date: pick.date || getTodayDateString(),
                             time: pick.time || pick.gameTime || 'TBD',
                             sport: pick.sport || pick.league || 'NBA',
-                            awayTeam: pick.awayTeam || (pick.game ? pick.game.split(' @ ')[0] : ''),
-                            homeTeam: pick.homeTeam || (pick.game ? pick.game.split(' @ ')[1] : ''),
+                            awayTeam: awayTeam,
+                            homeTeam: homeTeam,
+                            matchup: matchupValue,
                             awayRecord: pick.awayRecord || pick.away_record || '',
                             homeRecord: pick.homeRecord || pick.home_record || '',
                             segment: normalizeSegment(pick.segment || pick.period || 'FG'),
@@ -412,10 +485,10 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                     formattedPicks.sort((a, b) => b.edge - a.edge);
                     populateWeeklyLineupTable(formattedPicks);
                     updateModelStamp(formattedPicks);
-                    
+
                     // Update last fetched timestamp
                     updateLastFetchedTime();
-                    
+
                     // Auto-save snapshot when picks are loaded
                     savePicksSnapshot(formattedPicks, 'auto-load');
                 } else {
@@ -494,10 +567,51 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             tbody.innerHTML = `<tr class="empty-state-row"><td colspan="9" class="empty-state-cell"><div class="empty-state"><span class="empty-icon">📊</span><span class="empty-message">${message}</span></div></td></tr>`;
         }
     }
-    
+
     // Alias for showEmptyState (used by unified-picks-fetcher.js)
     function showEmptyState(message) {
         showNoPicks(message);
+    }
+
+    function sanitizeTeamName(value) {
+        if (value === undefined || value === null) return '';
+        const text = value.toString().trim();
+        if (!text) return '';
+        return text.toLowerCase() === 'unknown' ? '' : text;
+    }
+
+    function pickTeamFromFields(pick, fields) {
+        if (!pick) return '';
+        for (const field of fields) {
+            const candidate = sanitizeTeamName(pick[field]);
+            if (candidate) return candidate;
+        }
+        return '';
+    }
+
+    function parseMatchupString(matchup) {
+        if (matchup === undefined || matchup === null) return { away: '', home: '' };
+        const normalized = matchup.toString().replace(/\s+/g, ' ').trim();
+        if (!normalized) return { away: '', home: '' };
+
+        const patterns = [
+            /^(.*?)\s*@\s*(.*?)$/i,
+            /^(.*?)\s+vs\.?\s+(.*?)$/i,
+            /^(.*?)\s+versus\s+(.*?)$/i,
+            /^(.*?)\s+at\s+(.*?)$/i
+        ];
+
+        for (const pattern of patterns) {
+            const match = normalized.match(pattern);
+            if (match && match[1] && match[2]) {
+                return {
+                    away: sanitizeTeamName(match[1]),
+                    home: sanitizeTeamName(match[2])
+                };
+            }
+        }
+
+        return { away: '', home: '' };
     }
 
     // ===== HELPER FUNCTIONS =====
@@ -596,10 +710,11 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
     function loadWeeklyLineupPicks() {
         try {
+            cleanupWeeklyLineupSampleData();
             const data = localStorage.getItem(WEEKLY_LINEUP_STORAGE_KEY);
             if (data) {
                 const parsed = JSON.parse(data);
-                
+
                 // Check cache expiry: clear if timestamp is from previous day
                 if (parsed.timestamp) {
                     const cachedDate = new Date(parsed.timestamp).toDateString();
@@ -610,10 +725,22 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                         return null;
                     }
                 }
-                
+
                 if (parsed.picks && Array.isArray(parsed.picks) && parsed.picks.length > 0) {
-                    log(`📂 Loaded ${parsed.picks.length} weekly lineup picks from localStorage (cached today)`);
-                    return parsed.picks;
+                    const { cleaned, removed } = filterPlaceholderPicks(parsed.picks);
+                    if (removed > 0) {
+                        log(`[Cleanup] Removed ${removed} placeholder picks from weekly lineup cache on load`);
+                        if (cleaned.length === 0) {
+                            localStorage.removeItem(WEEKLY_LINEUP_STORAGE_KEY);
+                            return null;
+                        }
+                        localStorage.setItem(WEEKLY_LINEUP_STORAGE_KEY, JSON.stringify({
+                            picks: cleaned,
+                            timestamp: parsed.timestamp || new Date().toISOString()
+                        }));
+                    }
+                    log(`📂 Loaded ${cleaned.length} weekly lineup picks from localStorage (cached today)`);
+                    return cleaned;
                 }
             }
         } catch (e) {
@@ -650,11 +777,20 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
      */
     function loadArchivedPicks() {
         try {
+            cleanupWeeklyLineupSampleData();
             const data = localStorage.getItem(ARCHIVED_PICKS_STORAGE_KEY);
             if (data) {
                 const parsed = JSON.parse(data);
+                const { cleaned, removed } = filterPlaceholderPicks(parsed.picks || []);
+                if (removed > 0) {
+                    log(`[Cleanup] Removed ${removed} placeholder picks from weekly lineup archive on load`);
+                    localStorage.setItem(ARCHIVED_PICKS_STORAGE_KEY, JSON.stringify({
+                        picks: cleaned,
+                        weeklyStats: parsed.weeklyStats || {}
+                    }));
+                }
                 return {
-                    picks: parsed.picks || [],
+                    picks: cleaned,
                     weeklyStats: parsed.weeklyStats || {}
                 };
             }
@@ -1298,7 +1434,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             div.textContent = str;
             return div.innerHTML;
         };
-        
+
         // Fix UNDE typo globally - applies to any string
         const fixUnde = (str) => {
             if (!str || typeof str !== 'string') return str;
@@ -1439,7 +1575,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             } else if (pick.pickDirection) {
                 directionText = pick.pickDirection.toUpperCase();
             }
-            
+
             // If pickLabel already contains OVER/UNDER, use it directly; otherwise prepend direction
             // Note: pickLabel is already HTML-escaped, so we don't escape again
             // Fix any remaining UNDE → UNDER (with or without space)
@@ -1539,18 +1675,18 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         const rationaleId = `wl-rationale-${idx}`;
         const rationaleRaw = (pick.rationale ?? pick.reason ?? pick.notes ?? pick.explanation ?? '').toString().trim();
         const modelStampRaw = (pick.modelStamp ?? pick.modelVersion ?? pick.modelTag ?? '').toString().trim();
-        
+
         // Build model prediction vs market comparison - cleaner format
         const modelPriceRaw = pick.modelPrice || pick.model_price || '';
         const modelLineRaw = pick.modelSpread || pick.predictedSpread || pick.modelLine || '';
         const modelTotal = pick.modelTotal || pick.predicted_total || '';
         const edgeValue = edge.toFixed(1);
-        
+
         // For totals, show the predicted total vs market total
         // For spreads, show the predicted spread vs market spread
         let modelDisplay = '-';
         let marketDisplay = '-';
-        
+
         if (!isTeamPick) {
             // Total pick - show totals
             const direction = normalizedPickTeamName.toUpperCase() === 'OVER' ? 'OVER' : 'UNDER';
@@ -1563,11 +1699,11 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             modelDisplay = modelLineRaw ? `${teamAbbr} ${modelLineRaw}` : `${teamAbbr} (${modelPriceRaw || '-'})`;
             marketDisplay = `${teamAbbr} ${escapeHtml(pick.line || '')}`;
         }
-        
+
         // Build comparison section - horizontal header row
         const hasModelLine = modelLineRaw || modelTotal;
         const hasMarketLine = pick.line;
-        
+
         // Single row: Model vs Market vs Edge
         let comparisonHtml = `
             <div class="details-header">
@@ -1584,26 +1720,26 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                     <span class="details-val edge-val">+${edgeValue}%</span>
                 </div>
             </div>`;
-        
+
         // Format rationale - clean bullet points, left-aligned
         const formatRationale = (text) => {
             if (!text) return '';
-            
+
             const escaped = escapeHtml(text);
             // Split on periods followed by space, newlines, or semicolons
             const points = escaped
                 .split(/(?<=[.!?])\s+|\n|;\s*/)
                 .map(s => s.trim())
                 .filter(s => s.length > 5 && !s.match(/^[A-Z]{2,4}$/)); // Filter out tiny fragments
-            
+
             if (points.length === 0) return '';
             if (points.length === 1) {
                 return `<div class="rationale-text">${points[0]}</div>`;
             }
-            
+
             return `<ul class="rationale-list">${points.map(p => `<li>${p}</li>`).join('')}</ul>`;
         };
-        
+
         const rationaleHtml = formatRationale(rationaleRaw);
         const modelStampHtml = modelStampRaw
             ? `<div class="details-footer">${escapeHtml(modelStampRaw)}</div>`
@@ -1656,7 +1792,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             if (changes.fire) {
                 changeItems.push(`Fire: ${changes.fire.from} → ${changes.fire.to}`);
             }
-            
+
             changeIndicatorsHtml = `
                 <div class="pick-change-alert" title="${changeItems.join(', ')}">
                     <span class="change-icon">⚠️</span>
@@ -1928,7 +2064,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             dropdown.style.visibility = 'hidden';
             dropdown.style.display = 'flex';
             const dropdownWidth = dropdown.offsetWidth || 300;
-            
+
             // Center on the column, but keep within viewport
             let left = thRect.left + (thRect.width / 2) - (dropdownWidth / 2);
             left = Math.max(16, Math.min(left, window.innerWidth - dropdownWidth - 16));
@@ -2098,7 +2234,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             if (firstFocusable) {
                 setTimeout(() => firstFocusable.focus(), 50);
             }
-            
+
             console.log('✅ [Weekly Lineup] Dropdown opened with inline styles');
         };
 
@@ -2410,12 +2546,12 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
         // Dropdown toggle logic
         const dropdowns = toolbar.querySelectorAll('.ft-dropdown');
-        
+
         dropdowns.forEach(dropdown => {
             const btn = dropdown.querySelector('.ft-dropdown-btn');
             const menu = dropdown.querySelector('.ft-dropdown-menu');
             if (!btn || !menu) return;
-            
+
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 // Close all other dropdowns
@@ -2529,7 +2665,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                 // Add loading state
                 btn.classList.add('loading');
                 const originalContent = btn.innerHTML;
-                
+
                 console.log(`🔄 [Weekly Lineup] Fetching picks: ${fetchType}`);
 
                 try {
@@ -2546,10 +2682,10 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                     }
 
                     const result = await window.UnifiedPicksFetcher.fetchPicks(
-                        fetchType === 'all' ? 'all' : fetchType, 
+                        fetchType === 'all' ? 'all' : fetchType,
                         'today'
                     );
-                    
+
                     let pickCount = 0;
                     if (result.picks && result.picks.length > 0) {
                         pickCount = result.picks.length;
@@ -2582,7 +2718,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                         populateWeeklyLineupTable(formattedPicks);
                         updateModelStamp(formattedPicks);
                         console.log(`[Weekly Lineup] ✅ Fetched ${result.picks.length} picks for ${fetchType}`);
-                        
+
                         // Auto-save snapshot when picks are manually fetched
                         savePicksSnapshot(formattedPicks, 'manual-fetch');
                     } else {
@@ -2601,7 +2737,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                     } else {
                         btn.innerHTML = '<span style="color:#fbbf24; font-size:0.6rem; font-weight:bold;">EMPTY</span>';
                     }
-                    
+
                     setTimeout(() => {
                         btn.innerHTML = originalContent;
                         btn.classList.remove('loading');
@@ -2616,7 +2752,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                 } catch (err) {
                     console.error('[Weekly Lineup] Fetch error:', err);
                     btn.innerHTML = '<span style="color:#ff6b6b; font-weight:bold;">✕</span>';
-                    
+
                     // Show error state in table
                     const tbody = document.querySelector('.weekly-lineup-table tbody');
                     if (tbody) {
@@ -2677,9 +2813,9 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                 // Fallback to checking children if row attribute is missing (legacy support)
                 const badge = row.querySelector('.league-badge, [data-league]');
                 const childLeague = badge ? (badge.dataset.league || badge.textContent.trim()).toLowerCase() : '';
-                
+
                 const lg = rowLeague || childLeague;
-                
+
                 if (!activeLeagues.includes(lg)) show = false;
             }
 
@@ -2687,8 +2823,8 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             if (show && activeEdges.length > 0) {
                 const edgeCell = row.cells[5];
                 const edgeVal = parseFloat((edgeCell?.textContent || '0').replace('%', '')) || 0;
-                const match = activeEdges.some(lvl => 
-                    (lvl === 'high' && edgeVal >= 5) || 
+                const match = activeEdges.some(lvl =>
+                    (lvl === 'high' && edgeVal >= 5) ||
                     (lvl === 'medium' && edgeVal >= 2 && edgeVal < 5) ||
                     (lvl === 'low' && edgeVal < 2)
                 );
@@ -2897,7 +3033,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         const notification = document.createElement('div');
         notification.className = `general-notification ${type}`;
         notification.textContent = message;
-        
+
         const colors = {
             success: 'linear-gradient(135deg, var(--emerald-600) 0%, var(--emerald-500) 100%)',
             error: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
@@ -2944,7 +3080,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
                 // Get pick index from row position
                 const rowIndex = Array.from(row.parentNode.children).indexOf(row);
-                
+
                 // Get pick data from stored picks array (more reliable than DOM parsing)
                 let pickData = null;
                 if (rowIndex >= 0 && allPicks && allPicks[rowIndex]) {
@@ -3197,7 +3333,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             const trackedPicks = existing ? JSON.parse(existing) : {};
             trackedPicks[pickId] = tracked;
             localStorage.setItem(TRACKED_PICKS_STORAGE_KEY, JSON.stringify(trackedPicks));
-            
+
             log(`📌 Saved tracking metadata for pick: ${pickId}`);
             return tracked;
         } catch (e) {
@@ -3214,7 +3350,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             const pickId = generatePickId(pick);
             const existing = localStorage.getItem(TRACKED_PICKS_STORAGE_KEY);
             if (!existing) return null;
-            
+
             const trackedPicks = JSON.parse(existing);
             return trackedPicks[pickId] || null;
         } catch (e) {
@@ -3259,7 +3395,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         // Try to get time from various sources
         if (pick.time && pick.time !== 'TBD') return pick.time;
         if (pick.gameTime) return pick.gameTime;
-        
+
         // Try to parse from date string
         if (pick.date && pick.date.includes(' ')) {
             const parts = pick.date.split(' ');
@@ -3267,7 +3403,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                 return parts.slice(1).join(' ');
             }
         }
-        
+
         // Default to current time + 1 hour as estimate
         const now = new Date();
         now.setHours(now.getHours() + 1);
@@ -3279,15 +3415,15 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
      */
     function determinePickDirection(pick) {
         if (pick.pickDirection) return pick.pickDirection;
-        
+
         const pickTeam = (pick.pickTeam || '').toUpperCase();
         const pickLabel = (pick.pick || '').toUpperCase();
-        
+
         if (pickTeam === 'OVER' || pickTeam === 'UNDER' || pickLabel.startsWith('OVER') || pickLabel.startsWith('UNDER')) {
             if (pickTeam === 'OVER' || pickLabel.startsWith('OVER')) return 'OVER';
             if (pickTeam === 'UNDER' || pickLabel.startsWith('UNDER')) return 'UNDER';
         }
-        
+
         return '';
     }
 
@@ -3307,7 +3443,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             if (diffMins < 60) return `${diffMins}m ago`;
             if (diffHours < 24) return `${diffHours}h ago`;
             if (diffDays < 7) return `${diffDays}d ago`;
-            
+
             return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
         } catch (e) {
             return 'Unknown';
@@ -3386,7 +3522,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
             showNotification(`Added ${pickData.pickTeam} ${pickData.line} to Dashboard`, 'success');
             console.log('[Weekly Lineup] Pick saved to localStorage:', pickData);
-            
+
             // Refresh the row to show tracking indicators
             const row = btn.closest('tr');
             if (row) {
@@ -3410,7 +3546,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
         try {
             const pickId = generatePickId(pickData);
-            
+
             // Remove from dashboard picks
             const existingData = localStorage.getItem(STORAGE_KEY);
             if (existingData) {
@@ -3593,7 +3729,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             log(`📂 Loading snapshot: ${snapshot.id}`);
             populateWeeklyLineupTable(snapshot.picks);
             updateModelStamp(snapshot.picks);
-            
+
             // Show notification
             showNotification(`Loaded snapshot from ${snapshot.timestampDisplay}`, 'info');
         }
@@ -3687,4 +3823,3 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
     log('✅ Weekly Lineup v33.01.0 loaded (with archive support)');
 })();
-

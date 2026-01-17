@@ -1276,7 +1276,7 @@
     // ========== CLEANUP SAMPLE DATA ==========
     
     function cleanupSampleData() {
-        const CLEANUP_VERSION_KEY = 'gbsv_cleanup_v4';  // Bump version to re-run cleanup
+        const CLEANUP_VERSION_KEY = 'gbsv_cleanup_v5';  // Bump version to re-run cleanup
 
         // Only run cleanup once per browser (per version)
         if (localStorage.getItem(CLEANUP_VERSION_KEY)) {
@@ -1293,6 +1293,8 @@
             return;
         }
 
+        const sampleSources = new Set(['demo', 'sample', 'mock', 'placeholder', 'fake', 'test', 'example']);
+
         // Filter out ONLY explicitly marked demo/sample picks - keep everything else
         const realPicks = picks.filter(pick => {
             // Remove if it has explicit demo/sample markers
@@ -1300,11 +1302,13 @@
                 return false;
             }
             // Remove if source is explicitly marked as demo/fake
-            if (pick.source === 'demo' || pick.source === 'fake') {
+            const source = String(pick.source || '').toLowerCase();
+            if (sampleSources.has(source)) {
                 return false;
             }
             // Remove Demo Book picks
-            if (pick.sportsbook === 'Demo Book') {
+            const sportsbook = String(pick.sportsbook || '').toLowerCase();
+            if (sportsbook === 'demo book' || /(demo|sample|mock|placeholder|fake|test|example)/.test(sportsbook)) {
                 return false;
             }
             // KEEP everything else - don't be aggressive with cleanup
