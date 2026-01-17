@@ -224,11 +224,12 @@
 
         // Build list of fetchers to run in parallel
         const fetchPromises = [];
+        const DISABLED_LEAGUES = new Set(window.WEEKLY_LINEUP_DISABLED_LEAGUES || ['NFL', 'NCAAF']);
         const leagueFetchers = [
             { name: 'NBA', fetcher: window.NBAPicksFetcher, match: leagueUpper === 'NBA' || league === 'all' },
             { name: 'NCAAM', fetcher: window.NCAAMPicksFetcher, match: leagueUpper === 'NCAAM' || leagueUpper === 'NCAAB' || league === 'all' },
-            { name: 'NFL', fetcher: window.NFLPicksFetcher, match: leagueUpper === 'NFL' || league === 'all' },
-            { name: 'NCAAF', fetcher: window.NCAAFPicksFetcher, match: leagueUpper === 'NCAAF' || league === 'all' },
+            { name: 'NFL', fetcher: window.NFLPicksFetcher, match: !(DISABLED_LEAGUES.has('NFL')) && (leagueUpper === 'NFL' || league === 'all') },
+            { name: 'NCAAF', fetcher: window.NCAAFPicksFetcher, match: !(DISABLED_LEAGUES.has('NCAAF')) && (leagueUpper === 'NCAAF' || league === 'all') },
             { name: 'NHL', fetcher: window.NHLPicksFetcher, match: leagueUpper === 'NHL' || league === 'all' },
             { name: 'MLB', fetcher: window.MLBPicksFetcher, match: leagueUpper === 'MLB' || league === 'all' }
         ];
