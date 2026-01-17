@@ -3474,6 +3474,28 @@ body.page-weekly-lineup .filter-title,
     color: var(--neutral-400);
 }
 
+.weekly-lineup-table .datetime-cell .sportsbook-value {
+    font-size: 0.72rem;
+    color: rgba(170, 190, 210, 0.9);
+    letter-spacing: 0.02em;
+    opacity: 0.9;
+}
+
+.weekly-lineup-table .datetime-cell .sportsbook-set-btn {
+    align-self: flex-start;
+    font-size: 0.72rem;
+    color: rgba(170, 190, 210, 0.95);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 6px;
+    padding: 0.15rem 0.4rem;
+    cursor: pointer;
+}
+
+.weekly-lineup-table .datetime-cell .sportsbook-set-btn:hover {
+    background: rgba(255, 255, 255, 0.10);
+}
+
 /* ==========================================================================
    TEAM LOGO STYLES (Matching Dashboard)
    ========================================================================== */

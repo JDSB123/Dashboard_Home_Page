@@ -14,7 +14,7 @@
    ========================================================================== */
 
 // Build version tracking
-const WL_BUILD = '33.01.0';
+const WL_BUILD = '34.00.3';
 window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
 (function() {
@@ -26,6 +26,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
     // ===== STORAGE FOR WEEKLY LINEUP PICKS =====
     const WEEKLY_LINEUP_STORAGE_KEY = 'gbsv_weekly_lineup_picks';
+    const WEEKLY_LINEUP_SPORTSBOOK_OVERRIDES_KEY = 'gbsv_weekly_lineup_sportsbook_overrides_v1';
     const TRACKED_PICKS_STORAGE_KEY = 'gbsv_tracked_weekly_picks';
     const ARCHIVED_PICKS_STORAGE_KEY = 'gbsv_archived_weekly_picks';
     const WEEKLY_LINEUP_CLEANUP_KEY = 'gbsv_weekly_lineup_cleanup_v1';
@@ -67,6 +68,74 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         const list = Array.isArray(picks) ? picks : [];
         const cleaned = list.filter((pick) => !isPlaceholderPick(pick));
         return { cleaned, removed: list.length - cleaned.length };
+    }
+
+    function normalizeSportsbookLabel(value) {
+        if (!value) return '';
+        const s = String(value).trim();
+        if (!s) return '';
+
+        // Normalize common internal keys to display names
+        const key = s.toLowerCase().replace(/\s+/g, '');
+        const map = {
+            hulkwager: 'Hulk Wager',
+            bombay711: 'Bombay 711',
+            kingofsports: 'King of Sports',
+            primetimeaction: 'Prime Time Action',
+            manual: 'Manual',
+            modelpick: 'Model Pick'
+        };
+        return map[key] || s;
+    }
+
+    function buildPickKey(pick) {
+        const sport = String(pick?.sport || pick?.league || '').toUpperCase().trim();
+        const date = String(pick?.date || pick?.gameDate || '').trim();
+        const time = String(pick?.time || pick?.gameTime || '').trim();
+        const away = String(pick?.awayTeam || '').toLowerCase().trim();
+        const home = String(pick?.homeTeam || '').toLowerCase().trim();
+        const pickTeam = String(pick?.pickTeam || pick?.pick || '').toLowerCase().trim();
+        const pickType = String(pick?.pickType || pick?.market || '').toLowerCase().trim();
+        const segment = String(pick?.segment || pick?.period || '').toLowerCase().trim();
+        const line = String(pick?.line || '').trim();
+        return [sport, date, time, away, home, pickTeam, pickType, segment, line].join('|');
+    }
+
+    function loadSportsbookOverrides() {
+        try {
+            const raw = localStorage.getItem(WEEKLY_LINEUP_SPORTSBOOK_OVERRIDES_KEY);
+            if (!raw) return {};
+            const parsed = JSON.parse(raw);
+            return parsed && typeof parsed === 'object' ? parsed : {};
+        } catch (_) {
+            return {};
+        }
+    }
+
+    function saveSportsbookOverrides(overrides) {
+        try {
+            localStorage.setItem(WEEKLY_LINEUP_SPORTSBOOK_OVERRIDES_KEY, JSON.stringify(overrides || {}));
+        } catch (_) {
+            // ignore
+        }
+    }
+
+    function getSportsbookOverride(pick) {
+        const overrides = loadSportsbookOverrides();
+        const key = buildPickKey(pick);
+        return overrides[key] || '';
+    }
+
+    function setSportsbookOverride(pick, sportsbook) {
+        const key = buildPickKey(pick);
+        const overrides = loadSportsbookOverrides();
+        const normalized = normalizeSportsbookLabel(sportsbook);
+        if (normalized) {
+            overrides[key] = normalized;
+        } else {
+            delete overrides[key];
+        }
+        saveSportsbookOverrides(overrides);
     }
 
     function cleanupWeeklyLineupSampleData() {
@@ -335,6 +404,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         initializeDateRangeSelector();
         initializeTrackerButtons();
         initializeRationaleToggles();
+        initializeSportsbookEditors();
         initializeViewToggle(); // Active/History toggle
 
         try {
@@ -464,7 +534,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                         const homeTeam = homeField || parsedMatchup.home || '';
                         const matchupValue = trimmedMatchup || (awayTeam && homeTeam ? `${awayTeam} @ ${homeTeam}` : '');
 
-                        return {
+                        const formatted = {
                             date: pick.date || getTodayDateString(),
                             time: pick.time || pick.gameTime || 'TBD',
                             sport: pick.sport || pick.league || 'NBA',
@@ -489,6 +559,15 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                             status: pick.status || 'pending',
                             sportsbook: pick.sportsbook || pick.book || ''
                         };
+
+                        // If the API didn’t provide a sportsbook, apply any saved override.
+                        if (!formatted.sportsbook) {
+                            formatted.sportsbook = getSportsbookOverride(formatted);
+                        } else {
+                            formatted.sportsbook = normalizeSportsbookLabel(formatted.sportsbook);
+                        }
+
+                        return formatted;
                     });
 
                     // Sort by edge (highest first)
@@ -1491,14 +1570,18 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             }
         };
 
-        // Get team info with logos (escape for XSS protection)
-        const awayTeamName = escapeHtml(pick.awayTeam) || 'TBD';
-        const homeTeamName = escapeHtml(pick.homeTeam) || 'TBD';
-        const pickTeamName = fixUnde(escapeHtml(pick.pickTeam)) || 'Unknown';
+        // Use raw team names for lookup/records (escaping is only for rendering).
+        const rawAwayTeam = (pick.awayTeam ?? '').toString().trim();
+        const rawHomeTeam = (pick.homeTeam ?? '').toString().trim();
+        const rawPickTeam = (pick.pickTeam ?? '').toString().trim();
 
-        const awayInfo = getTeamInfo(awayTeamName);
-        const homeInfo = getTeamInfo(homeTeamName);
-        const pickInfo = getTeamInfo(pickTeamName);
+        const awayTeamName = escapeHtml(rawAwayTeam) || 'TBD';
+        const homeTeamName = escapeHtml(rawHomeTeam) || 'TBD';
+        const pickTeamName = fixUnde(escapeHtml(rawPickTeam)) || 'Unknown';
+
+        const awayInfo = getTeamInfo(rawAwayTeam || awayTeamName);
+        const homeInfo = getTeamInfo(rawHomeTeam || homeTeamName);
+        const pickInfo = getTeamInfo(rawPickTeam || pickTeamName);
 
         // Get team records - try pick data first, then AutoGameFetcher
         const getRecord = (teamName) => {
@@ -1507,8 +1590,8 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             }
             return '';
         };
-        const awayRecord = escapeHtml(pick.awayRecord || getRecord(awayTeamName));
-        const homeRecord = escapeHtml(pick.homeRecord || getRecord(homeTeamName));
+        const awayRecord = escapeHtml(pick.awayRecord || getRecord(rawAwayTeam));
+        const homeRecord = escapeHtml(pick.homeRecord || getRecord(rawHomeTeam));
 
         // Build pick display (escape the label)
         const pickLabel = fixUnde(escapeHtml(buildPickLabel(pick)));
@@ -1558,7 +1641,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
         const matchupHtml = isSingleTeamBet
             ? `<div class="matchup-cell">${awayTeamHtml}</div>`
-            : `<div class="matchup-cell">${awayTeamHtml}<div class="vs-divider">@</div>${homeTeamHtml}</div>`;
+            : `<div class="matchup-cell">${awayTeamHtml}<div class="vs-divider">vs.</div>${homeTeamHtml}</div>`;
 
         const pickOdds = escapeHtml(pick.odds) || '-110';
 
@@ -1669,6 +1752,11 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         const gameDate = pick.date || pick.gameDate;
         const gameTime = escapeHtml(pick.time || pick.gameTime) || 'TBD';
 
+        const sportsbookLabel = normalizeSportsbookLabel(pick.sportsbook || pick.book || '');
+        const sportsbookHtml = sportsbookLabel
+            ? `<span class="sportsbook-value" title="Sportsbook">${escapeHtml(sportsbookLabel)}</span>`
+            : `<button type="button" class="sportsbook-set-btn" data-pick-key="${escapeHtml(buildPickKey(pick))}" title="Set sportsbook">+ Book</button>`;
+
         // Segment display
         const rawSegment = escapeHtml(pick.segment) || 'FG';
         const segment = normalizeSegment(rawSegment);
@@ -1766,6 +1854,8 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         row.setAttribute('data-market', pickOdds);
         row.setAttribute('data-model', pick.modelSpread || pick.modelPrice || pick.predictedSpread || pick.predictedTotal || '');
         row.setAttribute('data-pick', pickTeamName);
+        row.setAttribute('data-pick-key', buildPickKey(pick));
+        row.setAttribute('data-sportsbook', sportsbookLabel);
 
         // Set additional data attributes for filtering
         row.setAttribute('data-away', awayTeamName);
@@ -1879,6 +1969,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                 <div class="datetime-cell">
                     <span class="date-value">${formatDate(gameDate)}</span>
                     <span class="time-value">${formatTime(pick.time || pick.gameTime, gameDate)}</span>
+                    ${sportsbookHtml}
                 </div>
             </td>
             <td data-label="League" class="center">
@@ -1927,6 +2018,53 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         `;
 
         return row;
+    }
+
+    function initializeSportsbookEditors() {
+        const tbody = document.getElementById('picks-tbody') || document.querySelector('.weekly-lineup-table tbody');
+        if (!tbody) return;
+
+        const choices = [
+            'Hulk Wager',
+            'Bombay 711',
+            'King of Sports',
+            'Prime Time Action',
+            'Manual'
+        ];
+
+        tbody.addEventListener('click', function(e) {
+            const btn = e.target.closest('.sportsbook-set-btn');
+            if (!btn) return;
+
+            const pickKey = btn.getAttribute('data-pick-key');
+            if (!pickKey) return;
+
+            const pick = Array.isArray(allPicks) ? allPicks.find(p => buildPickKey(p) === pickKey) : null;
+            if (!pick) return;
+
+            const current = normalizeSportsbookLabel(pick.sportsbook || '');
+            const promptMsg = `Set sportsbook\n\nOptions: ${choices.join(', ')}\n\nEnter a sportsbook name:`;
+            const next = window.prompt(promptMsg, current || choices[0] || '');
+            if (next === null) return;
+
+            const normalized = normalizeSportsbookLabel(next);
+            pick.sportsbook = normalized;
+            setSportsbookOverride(pick, normalized);
+            saveWeeklyLineupPicks(allPicks);
+
+            // Update the cell in-place
+            try {
+                const container = btn.closest('.datetime-cell');
+                if (container) {
+                    const safe = window.PicksDOMUtils?.escapeHtml
+                        ? window.PicksDOMUtils.escapeHtml(normalized)
+                        : (() => { const d = document.createElement('div'); d.textContent = normalized; return d.innerHTML; })();
+                    btn.outerHTML = `<span class="sportsbook-value" title="Sportsbook">${safe}</span>`;
+                }
+            } catch (_) {}
+
+            showNotification(`Sportsbook set: ${normalized}`, 'success');
+        });
     }
 
 
