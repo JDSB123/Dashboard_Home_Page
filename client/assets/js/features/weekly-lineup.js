@@ -255,13 +255,23 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
     };
 
     // League logos
-    const LEAGUE_LOGOS = {
+    const BASE_LEAGUE_LOGOS = {
         'NCAAB': 'assets/logo_ncaam_bball.png',
         'NCAAM': 'assets/logo_ncaam_bball.png',
         'NCAAF': 'assets/logo_ncaa_football.png',
         'NBA': 'https://a.espncdn.com/i/teamlogos/leagues/500/nba.png',
         'NFL': 'https://a.espncdn.com/i/teamlogos/leagues/500/nfl.png'
     };
+
+    function resolveLeagueLogo(leagueKey) {
+        const normalizedKey = (leagueKey || '').toString().trim();
+        if (window.LogoLoader?.getLeagueLogoUrl) {
+            const remoteLogo = window.LogoLoader.getLeagueLogoUrl(normalizedKey);
+            if (remoteLogo) return remoteLogo;
+        }
+        const upperKey = normalizedKey.toUpperCase();
+        return BASE_LEAGUE_LOGOS[upperKey] || '';
+    }
 
     function getTeamInfo(teamName) {
         if (!teamName) return { abbr: 'N/A', logo: '' };
@@ -685,7 +695,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
     }
 
     function renderLeagueCell(sport) {
-        const logo = LEAGUE_LOGOS[sport] || '';
+        const logo = resolveLeagueLogo(sport);
         return `
             <div class="league-cell">
                 ${logo ? `<img src="${logo}" class="league-logo" loading="eager" alt="${sport}" onerror="this.style.display='none'">` : ''}
@@ -1290,7 +1300,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         // Get team info for logos
         const awayInfo = getTeamInfo(pick.awayTeam);
         const homeInfo = getTeamInfo(pick.homeTeam);
-        const leagueLogo = LEAGUE_LOGOS[pick.sport?.toUpperCase()] || '';
+        const leagueLogo = resolveLeagueLogo(pick.sport || pick.league || 'NBA');
 
         // Outcome badge
         const outcomeClass = pick.outcome || 'no-action';

@@ -88,9 +88,24 @@ window.LogoLoader = (() => {
    * @returns {string} Logo URL
    */
   function getLeagueLogoUrl(league) {
-    // League logos are static assets in /assets/
-    // Normalize league name for NCAA variants
-    const normalizedLeague = league.toLowerCase();
+    if (!league) return '';
+    const normalizedLeague = league.toString().toLowerCase();
+    const leagueFileMap = {
+      nba: 'leagues-500-nba.png',
+      nfl: 'leagues-500-nfl.png',
+      ncaab: 'leagues-500-ncaab.png',
+      ncaam: 'leagues-500-ncaab.png',
+      ncaaf: 'leagues-500-ncaaf.png',
+      'ncaa-basketball': 'leagues-500-ncaab.png',
+      'ncaa-football': 'leagues-500-ncaaf.png'
+    };
+    const fileName = leagueFileMap[normalizedLeague] || `leagues-500-${normalizedLeague}.png`;
+    const baseUrl = getBaseUrl();
+    if (baseUrl) {
+      return `${baseUrl}/${fileName}`;
+    }
+
+    // Fallback to static assets for older clients
     if (normalizedLeague === 'ncaab' || normalizedLeague === 'ncaa-basketball') {
       return '/assets/ncaam-logo.png';
     }
