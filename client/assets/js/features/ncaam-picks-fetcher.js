@@ -2,8 +2,8 @@
  * NCAAM Picks Fetcher v2.4
  * Fetches NCAAM model picks via Azure Front Door weekly-lineup route
  *
- * Primary Route: https://www.greenbiersportventures.com/api/weekly-lineup/ncaam
- * Fallback Route: https://www.greenbiersportventures.com/api/ncaam/api/picks/{date}
+ * Primary Route: {API_BASE_URL}/weekly-lineup/ncaam
+ * Fallback Route: {NCAAM_API_URL}/api/picks/{date}
  *
  * Container App: ncaam-stable-prediction (NCAAM-GBSV-MODEL-RG)
  * Endpoints:
@@ -17,10 +17,8 @@
     // Base API endpoint for weekly-lineup routes
     const getBaseApiUrl = () =>
         window.APP_CONFIG?.API_BASE_URL ||
-        'https://www.greenbiersportventures.com/api';
-
-    // Fallback: Direct Container App URL
-    const FALLBACK_NCAAM_API_URL = 'https://ncaam-stable-prediction.wonderfulforest-c2d7d49a.centralus.azurecontainerapps.io';
+        window.APP_CONFIG?.API_BASE_FALLBACK ||
+        `${window.location.origin}/api`;
 
     /**
      * Get the NCAAM Container App endpoint for fallback
@@ -31,7 +29,10 @@
         if (registryEndpoint) {
             return registryEndpoint;
         }
-        return FALLBACK_NCAAM_API_URL;
+        if (window.APP_CONFIG?.API_BASE_FALLBACK) {
+            return `${window.APP_CONFIG.API_BASE_FALLBACK}/ncaam`;
+        }
+        return '';
     }
 
     // Date-aware cache: { date: { data, timestamp } }
@@ -190,8 +191,8 @@
             const response = await fetchWithTimeout(url, 5000);
             if (response.ok) {
                 const data = await response.json();
-                return { 
-                    status: 'healthy', 
+                return {
+                    status: 'healthy',
                     ...data,
                     containerApp: endpoint,
                     source: window.APP_CONFIG?.NCAAM_API_URL ? 'registry' : 'fallback'

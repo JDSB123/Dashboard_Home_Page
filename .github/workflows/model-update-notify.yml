@@ -21,7 +21,7 @@ on:
         required: false
         type: boolean
         default: false
-  
+
   # Also trigger on model repository pushes
   repository_dispatch:
     types: [model-updated]
@@ -30,11 +30,18 @@ jobs:
   notify-dashboard:
     name: Notify Dashboard of Model Update
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        
+
+      - name: Azure login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
       - name: Extract model info from event
         id: model-info
         run: |
@@ -47,12 +54,12 @@ jobs:
             echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
             echo "trigger_execution=${{ github.event.inputs.trigger_execution }}" >> $GITHUB_OUTPUT
           fi
-      
+
       - name: Get Model Container App FQDN
         id: get-fqdn
         run: |
           MODEL_TYPE="${{ steps.model-info.outputs.model_type }}"
-          
+
           # Map model type to RG and app names
           case "$MODEL_TYPE" in
             nba)
@@ -76,18 +83,18 @@ jobs:
               exit 1
               ;;
           esac
-          
+
           echo "Model: $MODEL_TYPE"
           echo "RG: $RG_NAME"
           echo "App: $APP_NAME"
-          
+
           # Get the container app FQDN
           FQDN=$(az containerapp show \
             --name "$APP_NAME" \
             --resource-group "$RG_NAME" \
             --query 'properties.configuration.ingress.fqdn' \
             --output tsv 2>/dev/null)
-          
+
           if [ -z "$FQDN" ]; then
             echo "⚠️  Could not fetch FQDN from container app (may not exist yet)"
             # Use endpoint from environment variable as fallback
@@ -106,7 +113,7 @@ jobs:
                 ;;
             esac
           fi
-          
+
           ENDPOINT="https://$FQDN"
           echo "Endpoint: $ENDPOINT"
           echo "fqdn=$ENDPOINT" >> $GITHUB_OUTPUT
@@ -119,42 +126,42 @@ jobs:
           MODEL_TYPE="${{ steps.model-info.outputs.model_type }}"
           VERSION="${{ steps.model-info.outputs.version }}"
           ENDPOINT="${{ steps.get-fqdn.outputs.fqdn }}"
-          
+
           echo "Updating model registry:"
           echo "  Model: $MODEL_TYPE"
           echo "  Version: $VERSION"
           echo "  Endpoint: $ENDPOINT"
-          
+
           response=$(curl -X POST \
             "$ORCHESTRATOR_URL/registry/update" \
             -H "Content-Type: application/json" \
             -H "x-functions-key: $ORCHESTRATOR_KEY" \
             -d '{
-              "model": "'$MODEL_TYPE'", 
+              "model": "'$MODEL_TYPE'",
               "version": "'$VERSION'",
               "endpoint": "'$ENDPOINT'",
               "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'"
             }' \
             -w "\n%{http_code}")
-          
+
           http_code=$(echo "$response" | tail -n1)
           body=$(echo "$response" | head -n-1)
-          
+
           if [ "$http_code" != "200" ]; then
             echo "Failed to update registry. HTTP $http_code"
             echo "$body"
             exit 1
           fi
-          
+
           echo "✅ Registry updated successfully"
-      
+
       - name: Invalidate Dashboard Cache
         env:
           ORCHESTRATOR_URL: ${{ secrets.ORCHESTRATOR_URL }}
           ORCHESTRATOR_KEY: ${{ secrets.ORCHESTRATOR_KEY }}
         run: |
           echo "Invalidating cache for ${{ steps.model-info.outputs.model_type }}"
-          
+
           curl -X POST \
             "$ORCHESTRATOR_URL/cache/invalidate" \
             -H "Content-Type: application/json" \
@@ -162,7 +169,7 @@ jobs:
             -d '{
               "model": "${{ steps.model-info.outputs.model_type }}"
             }' || true
-      
+
       - name: Trigger Model Execution
         if: steps.model-info.outputs.trigger_execution == 'true'
         env:
@@ -170,13 +177,13 @@ jobs:
           ORCHESTRATOR_KEY: ${{ secrets.ORCHESTRATOR_KEY }}
         run: |
           echo "Triggering execution for ${{ steps.model-info.outputs.model_type }}"
-          
+
           response=$(curl -X POST \
             "$ORCHESTRATOR_URL/execute" \
             -H "Content-Type: application/json" \
             -H "x-functions-key: $ORCHESTRATOR_KEY" \
             -d '{
-              "model": "${{ steps.model-info.outputs.model_type }}", 
+              "model": "${{ steps.model-info.outputs.model_type }}",
               "params": {
                 "date": "today",
                 "source": "ci-cd-update",
@@ -184,10 +191,10 @@ jobs:
               }
             }' \
             -w "\n%{http_code}")
-          
+
           http_code=$(echo "$response" | tail -n1)
           body=$(echo "$response" | head -n-1)
-          
+
           if [ "$http_code" == "202" ]; then
             jobId=$(echo "$body" | jq -r '.jobId')
             echo "Model execution started. Job ID: $jobId"
@@ -196,7 +203,7 @@ jobs:
             echo "Failed to trigger execution. HTTP $http_code"
             echo "$body"
           fi
-      
+
       - name: Create deployment record
         uses: actions/github-script@v7
         with:
@@ -204,7 +211,7 @@ jobs:
             const model = '${{ steps.model-info.outputs.model_type }}';
             const version = '${{ steps.model-info.outputs.version }}';
             const triggered = '${{ steps.model-info.outputs.trigger_execution }}' === 'true';
-            
+
             const deployment = await github.rest.repos.createDeployment({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -220,7 +227,7 @@ jobs:
               environment: `${model}-model`,
               description: `Model ${model} updated to v${version}`
             });
-            
+
             await github.rest.repos.createDeploymentStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -229,7 +236,7 @@ jobs:
               environment_url: `${{ secrets.DASHBOARD_URL }}`,
               description: `Model ${model} v${version} deployed`
             });
-      
+
       - name: Send notification to Teams/Slack
         if: success()
         env:
@@ -275,16 +282,16 @@ jobs:
     name: Update Model Endpoints
     runs-on: ubuntu-latest
     if: github.event_name == 'repository_dispatch' && github.event.action == 'endpoint-updated'
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        
+
       - name: Update client/config.js
         run: |
           model_type="${{ github.event.client_payload.model_type }}"
           new_endpoint="${{ github.event.client_payload.endpoint }}"
-          
+
           case "$model_type" in
             nba)
               sed -i "s|NBA_API_URL: '.*'|NBA_API_URL: '$new_endpoint'|" client/config.js
@@ -299,7 +306,7 @@ jobs:
               sed -i "s|NCAAF_API_URL: '.*'|NCAAF_API_URL: '$new_endpoint'|" client/config.js
               ;;
           esac
-      
+
       - name: Commit and push changes
         if: github.event.client_payload.auto_commit == true
         run: |

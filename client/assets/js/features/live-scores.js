@@ -200,7 +200,7 @@
         getSportApiUrl(sport) {
             const sportUpper = sport.toUpperCase();
             const configKey = `${sportUpper}_API_URL`;
-            
+
             // Try to get from ModelEndpointResolver first
             if (window.ModelEndpointResolver?.getApiEndpoint) {
                 const resolvedEndpoint = window.ModelEndpointResolver.getApiEndpoint(sport);
@@ -208,21 +208,14 @@
                     return resolvedEndpoint;
                 }
             }
-            
+
             // Fall back to APP_CONFIG
             if (window.APP_CONFIG && window.APP_CONFIG[configKey]) {
                 return window.APP_CONFIG[configKey];
             }
-            
-            // Default fallbacks
-            const defaults = {
-                nba: 'https://www.greenbiersportventures.com/api/nba',
-                ncaam: 'https://www.greenbiersportventures.com/api/ncaam',
-                nfl: 'https://www.greenbiersportventures.com/api/nfl',
-                ncaaf: 'https://www.greenbiersportventures.com/api/ncaaf'
-            };
-            
-            return defaults[sport.toLowerCase()] || null;
+
+            const base = window.APP_CONFIG?.API_BASE_FALLBACK || window.APP_CONFIG?.API_BASE_URL || `${window.location.origin}/api`;
+            return base ? `${base}/${sport.toLowerCase()}` : null;
         }
 
         /**

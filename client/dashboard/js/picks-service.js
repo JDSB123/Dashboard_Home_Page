@@ -1,7 +1,7 @@
 /**
  * Azure Picks Service - Enterprise-grade pick storage via Azure Cosmos DB
  * Replaces localStorage-based LocalPicksManager
- * 
+ *
  * @module PicksService
  */
 
@@ -9,7 +9,13 @@ const PicksService = (function () {
     'use strict';
 
     // API Configuration
-    const API_BASE = window.GBSV_CONFIG?.FUNCTIONS_URL || 'https://gbsv-orchestrator.azurewebsites.net';
+    const apiBaseFromConfig =
+        window.GBSV_CONFIG?.FUNCTIONS_URL ||
+        window.APP_CONFIG?.FUNCTIONS_BASE_URL ||
+        (window.APP_CONFIG?.API_BASE_URL ? window.APP_CONFIG.API_BASE_URL.replace(/\/api$/, '') : '') ||
+        window.APP_CONFIG?.API_BASE_FALLBACK ||
+        window.location.origin;
+    const API_BASE = apiBaseFromConfig;
     const PICKS_ENDPOINT = `${API_BASE}/api/picks`;
 
     // Cache for performance (optional local caching)
@@ -22,7 +28,7 @@ const PicksService = (function () {
      */
     async function apiRequest(endpoint, options = {}) {
         const url = endpoint.startsWith('http') ? endpoint : `${PICKS_ENDPOINT}${endpoint}`;
-        
+
         const config = {
             method: options.method || 'GET',
             headers: {
@@ -74,7 +80,7 @@ const PicksService = (function () {
         });
 
         const query = params.toString() ? `?${params}` : '';
-        
+
         try {
             const response = await apiRequest(query);
             return response.picks || [];
@@ -173,9 +179,9 @@ const PicksService = (function () {
      */
     async function create(picks) {
         invalidateCache();
-        
+
         const body = Array.isArray(picks) ? picks : [picks];
-        
+
         try {
             const response = await apiRequest('', {
                 method: 'POST',
@@ -202,7 +208,7 @@ const PicksService = (function () {
      */
     async function update(id, updates) {
         invalidateCache();
-        
+
         try {
             const response = await apiRequest(`/${id}`, {
                 method: 'PATCH',
@@ -267,7 +273,7 @@ const PicksService = (function () {
      */
     async function remove(id) {
         invalidateCache();
-        
+
         try {
             await apiRequest(`/${id}`, { method: 'DELETE' });
 
@@ -369,7 +375,7 @@ const PicksService = (function () {
      */
     async function migrateFromLocalStorage() {
         const STORAGE_KEY = 'gbsv_picks';
-        
+
         try {
             const localData = localStorage.getItem(STORAGE_KEY);
             if (!localData) {
@@ -382,14 +388,14 @@ const PicksService = (function () {
             }
 
             console.log(`[PicksService] Migrating ${localPicks.length} picks from localStorage to Azure...`);
-            
+
             const result = await create(localPicks);
-            
+
             if (result.success) {
                 // Backup and clear localStorage
                 localStorage.setItem(`${STORAGE_KEY}_backup_${Date.now()}`, localData);
                 localStorage.removeItem(STORAGE_KEY);
-                
+
                 console.log(`[PicksService] Migration complete: ${result.created} picks migrated`);
                 return {
                     success: true,
@@ -415,7 +421,7 @@ const PicksService = (function () {
         try {
             const localData = localStorage.getItem(STORAGE_KEY);
             if (!localData) return { needed: false, count: 0 };
-            
+
             const localPicks = JSON.parse(localData);
             return {
                 needed: Array.isArray(localPicks) && localPicks.length > 0,

@@ -27,11 +27,13 @@ cd ..
 #### Start Functions Locally
 
 **Option A: Using VS Code Tasks** (Recommended)
+
 1. Open Command Palette (`Ctrl+Shift+P`)
 2. Run: `Tasks: Run Task`
 3. Select: `func: host start`
 
 **Option B: Terminal**
+
 ```powershell
 cd azure-functions
 func host start
@@ -75,8 +77,8 @@ Create `client/config.js` from `client/config.template.js`:
 
 ```javascript
 const config = {
-  apiBaseUrl: 'http://localhost:7071/api',
-  signalRUrl: 'http://localhost:7071',
+  apiBaseUrl: "http://localhost:7071/api",
+  signalRUrl: "http://localhost:7071",
   // ... other settings
 };
 ```
@@ -144,14 +146,16 @@ Breakpoints in `azure-functions/**/*.js` will now be hit.
 
 ### Functions won't start
 
-**Issue**: `The term 'func' is not recognized...`  
+**Issue**: `The term 'func' is not recognized...`
 **Fix**: Install Azure Functions Core Tools:
+
 ```powershell
 npm install -g azure-functions-core-tools@4
 ```
 
-**Issue**: `Cannot find module '@azure/...'`  
+**Issue**: `Cannot find module '@azure/...'`
 **Fix**: Reinstall dependencies:
+
 ```powershell
 cd azure-functions
 rm -r node_modules package-lock.json
@@ -160,8 +164,9 @@ npm install
 
 ### Port Already in Use
 
-**Issue**: `EADDRINUSE: address already in use :::7071`  
+**Issue**: `EADDRINUSE: address already in use :::7071`
 **Fix**: Stop existing Functions process or change port:
+
 ```powershell
 func host start --port 7072
 ```
@@ -196,7 +201,6 @@ Dashboard_main_local/
 ## Next Steps
 
 - Review [docs/DEPLOYMENT_COMPLETE_GUIDE.md](docs/DEPLOYMENT_COMPLETE_GUIDE.md) for deployment to Azure
-- Check [tracker_pnl/NEXT_STEPS.md](tracker_pnl/NEXT_STEPS.md) for pick tracking workflow
 - Explore [docs/](docs/) for feature-specific guides
 
 ## Additional Resources

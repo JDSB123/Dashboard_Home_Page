@@ -40,8 +40,6 @@ nul
 __azurite_db*.json
 
 # Generated datasets / caches (do not commit)
-pick-analysis-tracker/cache/
-pick-analysis-tracker/output/
 output/
 logs/
 telegram_history/
@@ -58,6 +56,3 @@ Dashboard_Home_Page/
 
 # One-off analysis scripts
 analyze_picks.py
-
-
-

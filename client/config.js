@@ -21,17 +21,18 @@ window.APP_CONFIG = {
   AZURE_REGION: 'eastus',
 
   // API Configuration
-  API_BASE_URL: 'https://gbsv-orchestrator.azurewebsites.net/api',
+  API_BASE_URL: 'https://www.greenbiersportventures.com/api',
   ORCHESTRATOR_URL: 'https://gbsv-orchestrator.wittypebble-41c11c65.eastus.azurecontainerapps.io',
   FUNCTIONS_BASE_URL: 'https://gbsv-orchestrator.azurewebsites.net',
-  API_BASE_FALLBACK: '',
+  API_BASE_FALLBACK: 'https://www.greenbiersportventures.com/api',
+  DYNAMIC_REGISTRY_ENABLED: true,
 
   // Model API Endpoints (can be dynamically updated by model-endpoints-bootstrap.js)
   // These endpoints are used by:
   //   - Frontend fetchers (nba-picks-fetcher.js, etc.) for real-time Weekly Lineup display
   //   - Azure Function ModelJobProcessor for backend async job processing
   //   - model-endpoints-bootstrap.js fetches latest from /api/registry on page load
-  
+
   // NBA: Function App (primary) + Container App (fallback)
   NBA_FUNCTION_URL: 'https://nba-picks-trigger.azurewebsites.net',  // Primary - Function App with /api/weekly-lineup/nba
   NBA_API_URL: 'https://nba-gbsv-api.livelycoast-b48c3cb0.eastus.azurecontainerapps.io',  // Fallback - Container App
@@ -66,7 +67,7 @@ window.APP_CONFIG = {
 window.GBSV_CONFIG = {
   // Azure Functions URL for picks API and other backend services
   FUNCTIONS_URL: 'https://gbsv-orchestrator.azurewebsites.net',
-  
+
   // Cosmos DB picks storage (accessed via Azure Functions)
   PICKS_API_ENDPOINT: 'https://gbsv-orchestrator.azurewebsites.net/api/picks'
 };
@@ -75,4 +76,3 @@ window.GBSV_CONFIG = {
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { APP_CONFIG: window.APP_CONFIG, GBSV_CONFIG: window.GBSV_CONFIG };
 }
-

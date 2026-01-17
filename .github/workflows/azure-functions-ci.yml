@@ -1,0 +1,27 @@
+name: Azure Functions CI
+
+on:
+  pull_request:
+    paths:
+      - 'azure-functions/**'
+      - '.github/workflows/azure-functions-ci.yml'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        working-directory: azure-functions
+        run: npm ci
+
+      - name: Run tests
+        working-directory: azure-functions
+        run: npm test

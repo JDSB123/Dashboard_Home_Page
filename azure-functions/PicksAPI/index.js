@@ -1,8 +1,9 @@
 const { CosmosClient } = require("@azure/cosmos");
+const { getAllowedOrigins, buildCorsHeaders } = require('../shared/http');
 
 /**
  * Picks API - Enterprise-grade Azure Cosmos DB storage
- * 
+ *
  * Routes:
  *   GET    /api/picks                - List all picks (with filters)
  *   GET    /api/picks/active         - List active/pending picks only
@@ -12,7 +13,7 @@ const { CosmosClient } = require("@azure/cosmos");
  *   PATCH  /api/picks/{id}           - Update pick status/result
  *   DELETE /api/picks/{id}           - Delete a pick
  *   DELETE /api/picks/clear          - Clear all picks (admin only)
- * 
+ *
  * Query Parameters:
  *   ?league=NBA                      - Filter by league
  *   ?status=pending                  - Filter by status
@@ -28,21 +29,7 @@ const DEFAULT_ALLOWED_ORIGINS = [
     'http://localhost:3000',
     'http://localhost:8080'
 ];
-const configuredOrigins = (process.env.CORS_ALLOWED_ORIGINS || '')
-    .split(',').map(o => o.trim()).filter(Boolean);
-const ALLOWED_ORIGINS = configuredOrigins.length > 0 ? configuredOrigins : DEFAULT_ALLOWED_ORIGINS;
-
-function buildCorsHeaders(req) {
-    const origin = req.headers?.origin;
-    const allowOrigin = origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
-    return {
-        'Access-Control-Allow-Origin': allowOrigin,
-        'Access-Control-Allow-Methods': 'GET,POST,PATCH,DELETE,OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, x-functions-key, Authorization',
-        'Access-Control-Max-Age': '86400',
-        'Vary': 'Origin'
-    };
-}
+const ALLOWED_ORIGINS = getAllowedOrigins(DEFAULT_ALLOWED_ORIGINS);
 
 // Cosmos DB client (lazy initialization)
 let cosmosClient = null;
@@ -179,7 +166,10 @@ function buildQuery(query) {
 }
 
 module.exports = async function (context, req) {
-    const corsHeaders = buildCorsHeaders(req);
+    const corsHeaders = buildCorsHeaders(req, ALLOWED_ORIGINS, {
+        methods: 'GET,POST,PATCH,DELETE,OPTIONS',
+        headers: 'Content-Type, x-functions-key, Authorization'
+    });
 
     // Handle preflight
     if (req.method === 'OPTIONS') {
@@ -221,7 +211,7 @@ module.exports = async function (context, req) {
         // Route: GET /api/picks/{id} - Get single pick
         if (req.method === 'GET' && action && action !== 'active' && action !== 'settled') {
             const pickId = action; // action is actually the ID in this case
-            
+
             // Query by id (since we don't know the partition key)
             const { resources } = await container.items
                 .query({
@@ -250,7 +240,7 @@ module.exports = async function (context, req) {
         // Route: POST /api/picks - Create pick(s)
         if (req.method === 'POST') {
             const body = req.body;
-            
+
             // Support both single pick and array of picks
             const picks = Array.isArray(body) ? body : (body.picks || [body]);
             const results = [];
@@ -345,7 +335,7 @@ module.exports = async function (context, req) {
                 // Get all picks and delete them
                 const { resources } = await container.items.query("SELECT c.id, c.league FROM c").fetchAll();
                 let deleted = 0;
-                
+
                 for (const pick of resources) {
                     try {
                         await container.item(pick.id, pick.league).delete();

@@ -5,7 +5,7 @@ This repo is a static front-end hosted on **Azure Static Web Apps** with a backe
 ## What should never be committed
 
 - Local config: `.claude/`, `.env`, `azure-functions/local.settings.json`
-- Generated caches/outputs: `pick-analysis-tracker/cache/`, `pick-analysis-tracker/output/`
+- Generated caches/outputs: `output/`, `logs/`, `telegram_history/`
 - Virtualenvs/caches: `.venv/`, `.mypy_cache/`
 
 ## Tagging (recommended)

@@ -1,7 +1,0 @@
-/* Navigation Gap Hotfix
-   Removes the 12px top gap between viewport and nav */
-
-.brand-nav {
-    top: 0 !important;
-    margin-top: 0 !important;
-}

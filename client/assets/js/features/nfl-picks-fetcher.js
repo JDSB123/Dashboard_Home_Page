@@ -2,7 +2,7 @@
  * NFL Picks Fetcher v1.2
  * Fetches NFL model picks via Azure Front Door weekly-lineup route
  *
- * Primary Route: https://www.greenbiersportventures.com/api/weekly-lineup/nfl
+ * Primary Route: {API_BASE_URL}/weekly-lineup/nfl
  * Fallback Route: Container App /api/v1/predictions/week/{season}/{week}
  */
 
@@ -12,13 +12,14 @@
     // Base API endpoint for weekly-lineup routes
     const getBaseApiUrl = () =>
         window.APP_CONFIG?.API_BASE_URL ||
-        'https://www.greenbiersportventures.com/api';
+        window.APP_CONFIG?.API_BASE_FALLBACK ||
+        `${window.location.origin}/api`;
 
     // Fallback: Direct Container App URL
     const getContainerEndpoint = () =>
         (window.ModelEndpointResolver?.getApiEndpoint('nfl')) ||
         window.APP_CONFIG?.NFL_API_URL ||
-        'https://nfl-api.purplegrass-5889a981.eastus.azurecontainerapps.io';
+        (window.APP_CONFIG?.API_BASE_FALLBACK ? `${window.APP_CONFIG.API_BASE_FALLBACK}/nfl` : '');
 
     let picksCache = null;
     let lastFetch = null;
@@ -189,7 +190,7 @@
      */
     const formatPickForTable = function(pick) {
         console.log('[NFL-FORMATTER] Raw pick from API:', pick);
-        
+
         const rawFire = (pick.fire_rating ?? pick.confidence ?? '').toString().trim();
         const upperFire = rawFire.toUpperCase();
         const fireMap = { MAX: 5, ELITE: 5, STRONG: 4, GOOD: 3, STANDARD: 2, LOW: 1 };
@@ -214,17 +215,17 @@
         // Extract team names
         const awayTeam = pick.away_team || pick.awayTeam || '';
         const homeTeam = pick.home_team || pick.homeTeam || '';
-        
+
         // Parse pick to extract team, type, direction, and line
         const pickDisplay = pick.pick_display || pick.pick || pick.recommendation || '';
         const marketType = (pick.market_type || pick.market || '').toLowerCase();
-        
+
         // Determine pick type and extract components
         let pickType = 'spread';
         let pickTeam = '';
         let pickDirection = '';
         let line = '';
-        
+
         if (marketType === 'moneyline' || marketType === 'ml') {
             pickType = 'ml';
             // For ML, pick is the team name
@@ -263,7 +264,7 @@
                 pickTeam = pickDisplay.trim();
             }
         }
-        
+
         // Calculate edge percentage
         let edgeValue = 0;
         if (typeof pick.edge === 'number') {
@@ -296,7 +297,7 @@
             modelStamp: pick.model_version || pick.modelVersion || pick.model_tag || pick.modelTag || '',
             modelVersion: pick.model_version || pick.modelVersion || pick.model_tag || pick.modelTag || ''
         };
-        
+
         console.log('[NFL-FORMATTER] Formatted pick:', formatted);
         return formatted;
     };

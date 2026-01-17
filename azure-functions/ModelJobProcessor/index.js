@@ -1,6 +1,5 @@
 const { TableClient } = require('@azure/data-tables');
 const { BlobServiceClient } = require('@azure/storage-blob');
-const { DefaultAzureCredential } = require('@azure/identity');
 const axios = require('axios');
 
 // Model-specific endpoint paths and configurations
@@ -107,17 +106,17 @@ module.exports = async function (context, jobMessage) {
 
         // Store results
         const results = response.data;
-        
+
         // If results are large, store in blob storage
         if (JSON.stringify(results).length > 30000) {
             const blobName = `${modelType}/${jobId}.json`;
             const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-            
+
             await blockBlobClient.upload(
                 JSON.stringify(results),
                 Buffer.byteLength(JSON.stringify(results))
             );
-            
+
             // Update job with blob reference
             await updateJobStatus(tableClient, modelType, jobId, 'completed', blobName);
         } else {
@@ -144,10 +143,10 @@ module.exports = async function (context, jobMessage) {
 
     } catch (error) {
         context.log.error(`Error processing job ${jobId}:`, error);
-        
+
         // Update job status to failed
         await updateJobStatus(tableClient, modelType, jobId, 'failed', null, null, error.message);
-        
+
         // Send error SignalR update
         context.bindings.signalRMessages = [{
             target: 'modelStatusUpdate',
@@ -173,11 +172,11 @@ async function updateJobStatus(tableClient, modelType, jobId, status, blobRef = 
     if (blobRef) {
         entity.resultsBlob = blobRef;
     }
-    
+
     if (results) {
         entity.results = JSON.stringify(results);
     }
-    
+
     if (error) {
         entity.error = error;
     }

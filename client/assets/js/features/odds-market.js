@@ -3,11 +3,11 @@
 /**
  * ODDS MARKET v33.00.0 - Vegas Elite Odds Comparison
  * Production release - Real API data only
- * 
+ *
  * Data Sources:
  * - NCAAF, NFL: SportsDataIO API (via Azure Functions)
  * - NBA, NCAAB, NHL: The Odds API (via Azure Functions)
- * 
+ *
  * Shows odds from major market sportsbooks for comparison.
  * Your connected books (Hulk Wager, etc.) are for PLACING bets.
  */
@@ -121,7 +121,7 @@
     async function loadLiveOdds() {
         state.games = [];
         state.lastRefresh = new Date();
-        
+
         // Show loading state
         const container = document.getElementById('odds-grid');
         if (container) {
@@ -129,17 +129,17 @@
         }
 
         try {
-            const API_BASE = window.APP_CONFIG?.API_BASE_URL || 'https://green-bier-picks-api.azurewebsites.net/api';
-            
+            const API_BASE = window.APP_CONFIG?.API_BASE_URL || window.APP_CONFIG?.API_BASE_FALLBACK || `${window.location.origin}/api`;
+
             // Fetch odds from Azure Functions proxy
             const response = await fetch(`${API_BASE}/odds/all`);
-            
+
             if (!response.ok) {
                 throw new Error(`API returned ${response.status}`);
             }
-            
+
             const data = await response.json();
-            
+
             if (data.games && data.games.length > 0) {
                 state.games = data.games;
                 console.log(`✅ Loaded ${state.games.length} games with live odds`);
@@ -151,7 +151,7 @@
             console.error('❌ Error fetching odds:', error);
             showNoOddsMessage('Unable to load odds. API may be unavailable.');
         }
-        
+
         updateRefreshTime();
         render();
     }
@@ -183,14 +183,14 @@
             // Books vary by 0 or 0.5 points - realistic market differences
             const spreadVar = [0, 0, 0, 0.5, -0.5][Math.floor(Math.random() * 5)];
             const totalVar = [0, 0, 0.5, -0.5][Math.floor(Math.random() * 4)];
-            
+
             // Juice varies between -105 and -115
             const juice = () => -110 + (Math.floor(Math.random() * 3) - 1) * 5; // -115, -110, or -105
-            
+
             // Calculate moneylines from spread (rough approximation)
             const awayML = calculateMoneyline(baseSpread + spreadVar);
             const homeML = calculateMoneyline(-(baseSpread + spreadVar));
-            
+
             books[book.key] = {
                 spread: {
                     away: { line: baseSpread + spreadVar, odds: juice(), movement: randomMovement() },
@@ -405,14 +405,14 @@
 
         const awayScore = game.isLive && game.liveData ? `<span class="team-score">${game.liveData.away}</span>` : '';
         const homeScore = game.isLive && game.liveData ? `<span class="team-score">${game.liveData.home}</span>` : '';
-        
+
         // Format records
         const awayRecordHtml = game.away.record ? `<span class="team-record">(${game.away.record})</span>` : '';
         const homeRecordHtml = game.home.record ? `<span class="team-record">(${game.home.record})</span>` : '';
 
         const booksHtml = SPORTSBOOKS.map(book => {
             const data = game.books[book.key];
-            
+
             // Handle N/A (no data from this book)
             if (!data) {
                 return `<div class="book-odds-col" data-book="${book.name}">
@@ -424,8 +424,8 @@
             let awayCellData, homeCellData;
 
             if (state.market === 'spread') {
-                awayCellData = { 
-                    line: formatLine(data.spread.away.line), 
+                awayCellData = {
+                    line: formatLine(data.spread.away.line),
                     odds: formatOdds(data.spread.away.odds),
                     movement: data.spread.away.movement,
                     isBest: bestOdds[game.id]?.spread?.away?.book === book.key,
@@ -433,8 +433,8 @@
                     rawLine: data.spread.away.line,
                     rawOdds: data.spread.away.odds
                 };
-                homeCellData = { 
-                    line: formatLine(data.spread.home.line), 
+                homeCellData = {
+                    line: formatLine(data.spread.home.line),
                     odds: formatOdds(data.spread.home.odds),
                     movement: data.spread.home.movement,
                     isBest: bestOdds[game.id]?.spread?.home?.book === book.key,
@@ -443,16 +443,16 @@
                     rawOdds: data.spread.home.odds
                 };
             } else if (state.market === 'moneyline') {
-                awayCellData = { 
-                    line: formatOdds(data.moneyline.away.odds), 
+                awayCellData = {
+                    line: formatOdds(data.moneyline.away.odds),
                     odds: '',
                     movement: data.moneyline.away.movement,
                     isBest: bestOdds[game.id]?.moneyline?.away?.book === book.key,
                     side: 'away',
                     rawOdds: data.moneyline.away.odds
                 };
-                homeCellData = { 
-                    line: formatOdds(data.moneyline.home.odds), 
+                homeCellData = {
+                    line: formatOdds(data.moneyline.home.odds),
                     odds: '',
                     movement: data.moneyline.home.movement,
                     isBest: bestOdds[game.id]?.moneyline?.home?.book === book.key,
@@ -460,8 +460,8 @@
                     rawOdds: data.moneyline.home.odds
                 };
             } else { // total
-                awayCellData = { 
-                    line: `O ${data.total.over.line}`, 
+                awayCellData = {
+                    line: `O ${data.total.over.line}`,
                     odds: formatOdds(data.total.over.odds),
                     movement: data.total.over.movement,
                     isBest: bestOdds[game.id]?.total?.over?.book === book.key,
@@ -469,8 +469,8 @@
                     rawLine: data.total.over.line,
                     rawOdds: data.total.over.odds
                 };
-                homeCellData = { 
-                    line: `U ${data.total.under.line}`, 
+                homeCellData = {
+                    line: `U ${data.total.under.line}`,
                     odds: formatOdds(data.total.under.odds),
                     movement: data.total.under.movement,
                     isBest: bestOdds[game.id]?.total?.under?.book === book.key,
@@ -517,10 +517,10 @@
     }
 
     function renderOddsCell(game, book, data) {
-        const movementIcon = data.movement === 'up' ? '<span class="line-movement up">↑</span>' : 
+        const movementIcon = data.movement === 'up' ? '<span class="line-movement up">↑</span>' :
                             data.movement === 'down' ? '<span class="line-movement down">↓</span>' : '';
-        
-        const isSelected = state.betSlip.some(s => 
+
+        const isSelected = state.betSlip.some(s =>
             s.gameId === game.id && s.book === book.key && s.side === data.side && s.market === state.market
         );
 
@@ -569,7 +569,7 @@
             risk: 100
         };
 
-        const existingIdx = state.betSlip.findIndex(s => 
+        const existingIdx = state.betSlip.findIndex(s =>
             s.gameId === data.gameId && s.book === data.book && s.side === data.side && s.market === data.market
         );
 

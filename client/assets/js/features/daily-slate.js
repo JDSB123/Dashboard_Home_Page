@@ -81,7 +81,7 @@
     async function fetchGamesFromApi() {
         // Try to fetch games from The Odds API or ESPN
         // Returns empty array if no odds API is configured
-        const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://www.greenbiersportventures.com/api';
+        const baseUrl = window.APP_CONFIG?.API_BASE_URL || window.APP_CONFIG?.API_BASE_FALLBACK || `${window.location.origin}/api`;
 
         try {
             // Try orchestrator odds endpoint first

@@ -29,7 +29,7 @@
 7. Appears in your dashboard
 
 **Technical Details:**
-- File: [client/assets/js/features/manual-pick-modal.js](client/assets/js/features/manual-pick-modal.js)
+- File: [manual-pick-modal.js](../client/assets/js/features/manual-pick-modal.js)
 - Uses event delegation for dynamically rendered table rows
 - Auto-injects buttons into table rows as they load
 - Integrates with LocalPicksManager for persistence
@@ -90,8 +90,8 @@
 - Amount parsing (50k → 50000, 50 → 50000, etc.)
 
 **Technical Details:**
-- File: [client/assets/js/features/pick-parser.js](client/assets/js/features/pick-parser.js) - Universal parser
-- File: [client/assets/js/features/sportsbooks-import-handler.js](client/assets/js/features/sportsbooks-import-handler.js) - Import UI handler
+- File: [pick-parser.js](../client/assets/js/features/pick-parser.js) - Universal parser
+- File: [sportsbooks-import-handler.js](../client/assets/js/features/sportsbooks-import-handler.js) - Import UI handler
 - Regex-based pattern matching for flexibility
 - Fallback parsing if primary format fails
 - Review modal for user confirmation
@@ -132,7 +132,7 @@
    - Status message styling
 
 ### Modified Files:
-1. **weekly-lineup.html**
+1. **[weekly-lineup.html](../client/weekly-lineup.html)**
    - Added script includes for pick-parser, manual-pick-modal, sportsbooks-import-handler
    - Added CSS includes for both modals
 

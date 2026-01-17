@@ -10,26 +10,30 @@
  */
 
 const axios = require('axios');
+const { getAllowedOrigins, buildCorsHeaders, sendResponse } = require('../shared/http');
+const { getModelDefaults, resolveModelEndpoint } = require('../shared/model-registry');
 
-// Container App endpoints (can be overridden via env vars)
+const MODEL_DEFAULTS = getModelDefaults({
+    nba: { endpoint: process.env.NBA_API_URL },
+    ncaam: { endpoint: process.env.NCAAM_API_URL },
+    nfl: { endpoint: process.env.NFL_API_URL },
+    ncaaf: { endpoint: process.env.NCAAF_API_URL }
+});
+
 const SPORT_ENDPOINTS = {
     nba: {
-        baseUrl: process.env.NBA_API_URL || 'https://nba-gbsv-api.livelycoast-b48c3cb0.eastus.azurecontainerapps.io',
         path: (date) => `/slate/${date || 'today'}/executive`
     },
     ncaam: {
-        baseUrl: process.env.NCAAM_API_URL || 'https://ncaam-stable-prediction.wonderfulforest-c2d7d49a.centralus.azurecontainerapps.io',
         path: (date) => `/api/picks/${date || 'today'}`
     },
     nfl: {
-        baseUrl: process.env.NFL_API_URL || 'https://nfl-api.purplegrass-5889a981.eastus.azurecontainerapps.io',
         path: (date) => {
             const { season, week } = getNFLSeasonWeek(date);
             return `/api/v1/predictions/week/${season}/${week}`;
         }
     },
     ncaaf: {
-        baseUrl: process.env.NCAAF_API_URL || 'https://ncaaf-v5-prod.salmonwave-314d4ffe.eastus.azurecontainerapps.io',
         path: (date) => {
             const { season, week } = getNCAAFSeasonWeek(date);
             return `/api/v1/predictions/week/${season}/${week}`;
@@ -37,32 +41,12 @@ const SPORT_ENDPOINTS = {
     }
 };
 
-// CORS configuration
-const DEFAULT_ALLOWED_ORIGINS = [
+const ALLOWED_ORIGINS = getAllowedOrigins([
     'https://www.greenbiersportventures.com',
     'https://wittypebble-41c11c65.eastus.azurestaticapps.net',
     'http://localhost:3000',
     'http://localhost:8080'
-];
-const configuredOrigins = (process.env.CORS_ALLOWED_ORIGINS || process.env.ALLOWED_ORIGINS || '')
-    .split(',')
-    .map(origin => origin.trim())
-    .filter(Boolean);
-const ALLOWED_ORIGINS = configuredOrigins.length > 0 ? configuredOrigins : DEFAULT_ALLOWED_ORIGINS;
-
-function buildCorsHeaders(req) {
-    const origin = req.headers?.origin;
-    const allowOrigin = origin && ALLOWED_ORIGINS.includes(origin)
-        ? origin
-        : ALLOWED_ORIGINS[0];
-
-    return {
-        'Access-Control-Allow-Origin': allowOrigin,
-        'Access-Control-Allow-Methods': 'GET,OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, x-functions-key',
-        'Vary': 'Origin'
-    };
-}
+]);
 
 /**
  * Calculate NFL season and week from date
@@ -190,32 +174,40 @@ function normalizeResponse(sport, data) {
 module.exports = async function (context, req) {
     const sport = (req.params.sport || '').toLowerCase();
     const date = req.query.date || 'today';
-    const corsHeaders = buildCorsHeaders(req);
+    const corsHeaders = buildCorsHeaders(req, ALLOWED_ORIGINS, {
+        methods: 'GET,OPTIONS',
+        headers: 'Content-Type, x-functions-key'
+    });
 
     context.log(`WeeklyLineup request: sport=${sport}, date=${date}`);
 
     // Handle preflight
     if (req.method === 'OPTIONS') {
-        context.res = { status: 204, headers: corsHeaders };
+        sendResponse(context, req, 204, null, {}, corsHeaders);
         return;
     }
 
     // Validate sport
     if (!sport || !SPORT_ENDPOINTS[sport]) {
-        context.res = {
-            status: 400,
-            headers: { 'Content-Type': 'application/json', ...corsHeaders },
-            body: {
-                error: 'Invalid sport',
-                message: `Valid sports: ${Object.keys(SPORT_ENDPOINTS).join(', ')}`,
-                sport: sport || 'none'
-            }
-        };
+        sendResponse(context, req, 400, {
+            error: 'Invalid sport',
+            message: `Valid sports: ${Object.keys(SPORT_ENDPOINTS).join(', ')}`,
+            sport: sport || 'none'
+        }, { 'Content-Type': 'application/json' }, corsHeaders);
+        return;
+    }
+
+    const baseUrl = await resolveModelEndpoint(sport, context, { defaults: MODEL_DEFAULTS });
+    if (!baseUrl) {
+        sendResponse(context, req, 500, {
+            error: 'No endpoint configured for requested sport',
+            sport: sport.toUpperCase()
+        }, { 'Content-Type': 'application/json' }, corsHeaders);
         return;
     }
 
     const endpoint = SPORT_ENDPOINTS[sport];
-    const url = `${endpoint.baseUrl}${endpoint.path(date)}`;
+    const url = `${baseUrl}${endpoint.path(date)}`;
 
     context.log(`Proxying to: ${url}`);
 
@@ -229,11 +221,7 @@ module.exports = async function (context, req) {
 
         const normalizedData = normalizeResponse(sport, response.data);
 
-        context.res = {
-            status: 200,
-            headers: { 'Content-Type': 'application/json', ...corsHeaders },
-            body: normalizedData
-        };
+        sendResponse(context, req, 200, normalizedData, { 'Content-Type': 'application/json' }, corsHeaders);
 
     } catch (error) {
         context.log.error(`WeeklyLineup error for ${sport}:`, error.message);
@@ -242,7 +230,14 @@ module.exports = async function (context, req) {
         if (sport === 'nfl') {
             try {
                 // Use Scoreboard proxy for NFL scores/picks
-                const scoreboardUrl = `${process.env.SCOREBOARD_API_URL || 'https://gbsv-orchestrator.azurewebsites.net/api/scoreboard/nfl'}?date=${date}`;
+                const scoreboardBase = process.env.SCOREBOARD_API_URL || process.env.ORCHESTRATOR_URL || process.env.FUNCTIONS_BASE_URL || '';
+                const normalizedBase = scoreboardBase.endsWith('/api/scoreboard/nfl')
+                    ? scoreboardBase
+                    : (scoreboardBase ? `${scoreboardBase.replace(/\/$/, '')}/api/scoreboard/nfl` : '');
+                if (!normalizedBase) {
+                    throw new Error('Scoreboard fallback base not configured');
+                }
+                const scoreboardUrl = `${normalizedBase}?date=${date}`;
                 context.log(`[WeeklyLineup] NFL fallback to Scoreboard: ${scoreboardUrl}`);
                 const scoreboardResp = await axios.get(scoreboardUrl, { timeout: 20000 });
                 // Transform scoreboard data to picks format
@@ -269,11 +264,7 @@ module.exports = async function (context, req) {
                     picks,
                     total_plays: picks.length
                 };
-                context.res = {
-                    status: 200,
-                    headers: { 'Content-Type': 'application/json', ...corsHeaders },
-                    body: normalizedData
-                };
+                sendResponse(context, req, 200, normalizedData, { 'Content-Type': 'application/json' }, corsHeaders);
                 return;
             } catch (fallbackErr) {
                 context.log.error(`[WeeklyLineup] NFL fallback failed:`, fallbackErr.message);
@@ -300,10 +291,6 @@ module.exports = async function (context, req) {
             errorBody.error = 'Service unavailable';
         }
 
-        context.res = {
-            status,
-            headers: { 'Content-Type': 'application/json', ...corsHeaders },
-            body: errorBody
-        };
+        sendResponse(context, req, status, errorBody, { 'Content-Type': 'application/json' }, corsHeaders);
     }
 };

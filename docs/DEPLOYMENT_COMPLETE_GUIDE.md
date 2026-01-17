@@ -25,7 +25,7 @@ git clone https://github.com/JDSB123/Dashboard_Home_Page.git
 cd Dashboard_Home_Page
 
 # 2. Run automated deployment
-.\deploy-all.ps1 -Environment production
+\scripts\deploy-all.ps1 -Environment production
 
 # 3. Follow the prompts and wait for completion
 ```
@@ -208,19 +208,9 @@ curl -X POST "https://$ORCHESTRATOR_URL/api/registry/update" \
 # Repeat for ncaam, nfl, ncaaf
 ```
 
-### Step 10: Setup Pick Analysis Integration
+### Step 10: Pick Analysis Integration (Optional)
 
-```bash
-# Install Python dependencies
-cd pick-analysis-tracker
-pip install -r requirements.txt
-
-# Test integration
-python integrate-with-dashboard.py \
-  --storage-connection "$STORAGE_CONNECTION" \
-  --orchestrator-url "https://$ORCHESTRATOR_URL" \
-  --input-file temp_1226_input.csv
-```
+Pick-analysis tooling was removed from this repository during cleanup. If you need it, use the tracker tools under `tracker_pnl/` or restore from your external analytics repo.
 
 ## 🔍 Verification Steps
 
@@ -231,13 +221,14 @@ curl https://[orchestrator-url]/api/health
 ```
 
 Expected response:
+
 ```json
 {
   "status": "healthy",
   "checks": {
-    "storage": {"status": "healthy"},
-    "signalr": {"status": "healthy"},
-    "monitoring": {"status": "healthy"}
+    "storage": { "status": "healthy" },
+    "signalr": { "status": "healthy" },
+    "monitoring": { "status": "healthy" }
   }
 }
 ```
@@ -267,15 +258,15 @@ curl -X POST https://[orchestrator-url]/api/orchestrate \
 
 Add these secrets to your GitHub repository:
 
-| Secret Name | Value | Description |
-|-------------|-------|-------------|
-| `AZURE_CLIENT_ID` | Service Principal ID | For Azure authentication |
-| `AZURE_TENANT_ID` | Azure Tenant ID | Directory ID |
-| `AZURE_SUBSCRIPTION_ID` | Subscription ID | Target subscription |
-| `ACR_LOGIN_SERVER` | gbsvregistry.azurecr.io | Container registry URL |
-| `ACR_USERNAME` | gbsvregistry | Registry username |
-| `ACR_PASSWORD` | [password] | Registry password |
-| `ORCHESTRATOR_URL` | https://[url]/api | Orchestrator API endpoint |
+| Secret Name             | Value                   | Description               |
+| ----------------------- | ----------------------- | ------------------------- |
+| `AZURE_CLIENT_ID`       | Service Principal ID    | For Azure authentication  |
+| `AZURE_TENANT_ID`       | Azure Tenant ID         | Directory ID              |
+| `AZURE_SUBSCRIPTION_ID` | Subscription ID         | Target subscription       |
+| `ACR_LOGIN_SERVER`      | gbsvregistry.azurecr.io | Container registry URL    |
+| `ACR_USERNAME`          | gbsvregistry            | Registry username         |
+| `ACR_PASSWORD`          | [password]              | Registry password         |
+| `ORCHESTRATOR_URL`      | https://[url]/api       | Orchestrator API endpoint |
 
 ## 📊 Monitoring Setup
 
@@ -307,6 +298,7 @@ az monitor metrics alert create \
 ### Common Issues
 
 #### 1. Container App Not Starting
+
 ```bash
 # Check logs
 az containerapp logs show \
@@ -321,6 +313,7 @@ az containerapp show \
 ```
 
 #### 2. Storage Connection Issues
+
 ```bash
 # Verify connection string
 az storage account show-connection-string \
@@ -332,6 +325,7 @@ az storage table list --connection-string "[connection-string]"
 ```
 
 #### 3. RBAC Permission Denied
+
 ```bash
 # Check role assignments
 az role assignment list \
@@ -340,6 +334,7 @@ az role assignment list \
 ```
 
 #### 4. SignalR Connection Failed
+
 ```bash
 # Check CORS settings
 az signalr cors show \

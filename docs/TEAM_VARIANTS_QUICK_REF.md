@@ -3,7 +3,7 @@
 ## 📁 Files Created
 
 ```
-assets/data/team-variants/
+../client/assets/data/team-variants/
 ├── nfl_team_variants.json    (35 KB - 32 teams, 2002-2025)
 ├── nba_team_variants.json    (5 KB - 30 teams + historical)
 ├── metadata.json             (1 KB - data provenance)
@@ -163,9 +163,9 @@ python scripts/extract_team_variants.py
 
 ## 📚 Documentation
 
-- **Full Guide**: [`README.md`](assets/data/team-variants/README.md)
-- **Summary Report**: [`TEAM_VARIANTS_SUMMARY.md`](TEAM_VARIANTS_SUMMARY.md)
-- **Metadata**: [`metadata.json`](assets/data/team-variants/metadata.json)
+- **Full Guide**: [README.md](../client/assets/data/team-variants/README.md)
+- **Summary Report**: [TEAM_VARIANTS_SUMMARY.md](TEAM_VARIANTS_SUMMARY.md)
+- **Metadata**: [metadata.json](../client/assets/data/team-variants/metadata.json)
 
 ## 🎁 Notable Historical Changes
 

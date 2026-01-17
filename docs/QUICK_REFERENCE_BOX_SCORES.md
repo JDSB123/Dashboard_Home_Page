@@ -10,9 +10,7 @@ All components deployed and tested. Ready for production use.
 
 | File | Purpose | Status |
 |------|---------|--------|
-| `scripts/fetch_completed_boxes.py` | Main fetcher script (400+ lines) | ✅ Tested |
-| `scripts/telegram_notifier.py` | Telegram integration | ✅ Ready |
-| `scripts/BOX_SCORE_FETCHER_SETUP.md` | Setup guide | ✅ Complete |
+| `tracker_pnl/fetch_box_scores.py` | Main fetcher script | ✅ Tested |
 | `BOX_SCORE_ENDPOINTS_TRACKING.md` | API reference | ✅ Reference |
 
 ---
@@ -24,10 +22,10 @@ All components deployed and tested. Ready for production use.
 pip install requests urllib3
 
 # Run immediately
-python scripts/fetch_completed_boxes.py
+python tracker_pnl/fetch_box_scores.py
 
 # With Telegram (if configured)
-python scripts/fetch_completed_boxes.py --telegram
+python tracker_pnl/fetch_box_scores.py --telegram
 ```
 
 ---
@@ -72,22 +70,22 @@ logs/box_scores_20260107_110314.log
 ### Pattern 2: Manual Fetch
 ```bash
 # Yesterday (default)
-python scripts/fetch_completed_boxes.py
+python tracker_pnl/fetch_box_scores.py
 
 # Specific date
-python scripts/fetch_completed_boxes.py --date 2026-01-06
+python tracker_pnl/fetch_box_scores.py --date 2026-01-06
 
 # Date range
-python scripts/fetch_completed_boxes.py --start 2026-01-01 --end 2026-01-06
+python tracker_pnl/fetch_box_scores.py --start 2026-01-01 --end 2026-01-06
 ```
 
 ### Pattern 3: With Notifications
 ```bash
 # Send Telegram message after fetch
-python scripts/fetch_completed_boxes.py --telegram
+python tracker_pnl/fetch_box_scores.py --telegram
 
 # Verbose logging
-python scripts/fetch_completed_boxes.py -v
+python tracker_pnl/fetch_box_scores.py -v
 ```
 
 ---
@@ -97,7 +95,7 @@ python scripts/fetch_completed_boxes.py -v
 ### Minimal Setup (NBA/NCAAM Only)
 ```bash
 # Just run it - ESPN API needs no auth
-python scripts/fetch_completed_boxes.py
+python tracker_pnl/fetch_box_scores.py
 ```
 
 ### Full Setup (All Sports + Telegram)
@@ -234,8 +232,7 @@ print(df['home_win'].mean())  # ~58% (historical)
 
 ## References
 
-- **Full Setup Guide:** [BOX_SCORE_FETCHER_SETUP.md](BOX_SCORE_FETCHER_SETUP.md)
-- **API Evaluation:** [BOX_SCORE_ENDPOINTS_TRACKING.md](../BOX_SCORE_ENDPOINTS_TRACKING.md)
+- **API Evaluation:** [BOX_SCORE_ENDPOINTS_TRACKING.md](BOX_SCORE_ENDPOINTS_TRACKING.md)
 - **Source Code:** `scripts/fetch_completed_boxes.py`
 - **Commit:** `bced39f` - feat: implement unified box score fetcher
 

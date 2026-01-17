@@ -2,8 +2,8 @@
  * NBA Picks Fetcher v2.3
  * Fetches NBA model picks via Azure Front Door weekly-lineup route
  *
- * Primary Route: https://www.greenbiersportventures.com/api/weekly-lineup/nba
- * Fallback Route: https://www.greenbiersportventures.com/api/nba/slate/{date}/executive
+ * Primary Route: {API_BASE_URL}/weekly-lineup/nba
+ * Fallback Route: {NBA_API_URL}/slate/{date}/executive
  *
  * The weekly-lineup route is the canonical path that proxies to the Container App
  */
@@ -14,13 +14,14 @@
     // Base API endpoint for weekly-lineup routes (NOT sport-specific)
     const getBaseApiUrl = () =>
         window.APP_CONFIG?.API_BASE_URL ||
-        'https://www.greenbiersportventures.com/api';
+        window.APP_CONFIG?.API_BASE_FALLBACK ||
+        `${window.location.origin}/api`;
 
     // Sport-specific endpoint for direct Container App access (fallback)
     const getNbaContainerEndpoint = () =>
         (window.ModelEndpointResolver?.getApiEndpoint('nba')) ||
         window.APP_CONFIG?.NBA_API_URL ||
-        'https://www.greenbiersportventures.com/api/nba';
+        (window.APP_CONFIG?.API_BASE_FALLBACK ? `${window.APP_CONFIG.API_BASE_FALLBACK}/nba` : '');
 
     let picksCache = null;
     let lastFetch = null;
@@ -70,7 +71,7 @@
 
         try {
             // Primary: Weekly-lineup route (canonical path through orchestrator)
-            // Route: https://www.greenbiersportventures.com/api/weekly-lineup/nba
+            // Route: {API_BASE_URL}/weekly-lineup/nba
             const baseUrl = getBaseApiUrl();
             const primaryEndpoint = `${baseUrl}/weekly-lineup/nba`;
 
@@ -139,10 +140,10 @@
 
         const home = play.home_team || play.home || 'Unknown';
         const away = play.away_team || play.away || 'Unknown';
-        
+
         // Sometimes raw feed has explicit matchup string
         const matchup = play.matchup || `${away} @ ${home}`;
-        
+
         // Determine pick display text - extract team/direction from pick field
         let pickText = play.pick || play.selection || play.feature_name || play.model_feature || 'N/A';
         // Cleanup pick text if it's too raw (e.g. "home_spread_-5.5" -> "Home -5.5")
@@ -153,7 +154,7 @@
         // Extract pick team (e.g., "Home", "Away", or specific team name)
         let pickTeam = '';
         let pickType = 'spread';
-        
+
         if (pickText && typeof pickText === 'string') {
             const upper = pickText.toUpperCase();
             if (upper.includes('OVER') || upper.includes('O ')) {

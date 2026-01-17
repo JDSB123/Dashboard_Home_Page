@@ -2,7 +2,7 @@
  * NCAAF Picks Fetcher v1.1
  * Fetches NCAAF model picks via Azure Front Door weekly-lineup route
  *
- * Primary Route: https://www.greenbiersportventures.com/api/weekly-lineup/ncaaf
+ * Primary Route: {API_BASE_URL}/weekly-lineup/ncaaf
  * Fallback Route: Container App /api/v1/predictions/week/{season}/{week}
  */
 
@@ -12,13 +12,14 @@
     // Base API endpoint for weekly-lineup routes
     const getBaseApiUrl = () =>
         window.APP_CONFIG?.API_BASE_URL ||
-        'https://www.greenbiersportventures.com/api';
+        window.APP_CONFIG?.API_BASE_FALLBACK ||
+        `${window.location.origin}/api`;
 
     // Fallback: Direct Container App URL
     const getContainerEndpoint = () =>
         (window.ModelEndpointResolver?.getApiEndpoint('ncaaf')) ||
         window.APP_CONFIG?.NCAAF_API_URL ||
-        'https://ncaaf-v5-prod.salmonwave-314d4ffe.eastus.azurecontainerapps.io';
+        (window.APP_CONFIG?.API_BASE_FALLBACK ? `${window.APP_CONFIG.API_BASE_FALLBACK}/ncaaf` : '');
 
     let picksCache = null;
     let lastFetch = null;

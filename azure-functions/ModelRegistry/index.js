@@ -1,56 +1,27 @@
 const { TableClient } = require('@azure/data-tables');
+const { getAllowedOrigins, buildCorsHeaders, sendResponse } = require('../shared/http');
+const { getModelDefaults } = require('../shared/model-registry');
 
-const MODEL_ENDPOINTS = {
-    nba: process.env.NBA_API_URL || 'https://nba-gbsv-api.livelycoast-b48c3cb0.eastus.azurecontainerapps.io',
-    ncaam: process.env.NCAAM_API_URL || 'https://ncaam-stable-prediction.wonderfulforest-c2d7d49a.centralus.azurecontainerapps.io',
-    nfl: process.env.NFL_API_URL || 'https://nfl-api.purplegrass-5889a981.eastus.azurecontainerapps.io',
-    ncaaf: process.env.NCAAF_API_URL || 'https://ncaaf-v5-prod.salmonwave-314d4ffe.eastus.azurecontainerapps.io'
-};
+const MODEL_ENDPOINTS = getModelDefaults({
+    nba: { endpoint: process.env.NBA_API_URL },
+    ncaam: { endpoint: process.env.NCAAM_API_URL },
+    nfl: { endpoint: process.env.NFL_API_URL },
+    ncaaf: { endpoint: process.env.NCAAF_API_URL }
+});
 
-const DEFAULT_ALLOWED_ORIGINS = ['*'];
-const configuredOrigins = (process.env.CORS_ALLOWED_ORIGINS || '')
-    .split(',')
-    .map(origin => origin.trim())
-    .filter(Boolean);
-const ALLOWED_ORIGINS = configuredOrigins.length > 0 ? configuredOrigins : DEFAULT_ALLOWED_ORIGINS;
-
-function buildCorsHeaders(req) {
-    const origin = req.headers?.origin;
-    const allowOrigin = ALLOWED_ORIGINS.includes('*')
-        ? '*'
-        : (origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0] || '*');
-
-    const headers = {
-        'Access-Control-Allow-Origin': allowOrigin,
-        'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, x-functions-key',
-        'Access-Control-Max-Age': '86400'
-    };
-
-    if (allowOrigin !== '*') {
-        headers['Vary'] = 'Origin';
-    }
-
-    return headers;
-}
-
-function sendResponse(context, req, status, body, extraHeaders = {}) {
-    context.res = {
-        status,
-        headers: {
-            ...buildCorsHeaders(req),
-            ...extraHeaders
-        },
-        body
-    };
-}
+const ALLOWED_ORIGINS = getAllowedOrigins(['*']);
 
 module.exports = async function (context, req) {
     const action = context.bindingData.action || 'get';
+    const corsHeaders = buildCorsHeaders(req, ALLOWED_ORIGINS, {
+        methods: 'GET,POST,OPTIONS',
+        headers: 'Content-Type, x-functions-key',
+        maxAge: '86400'
+    });
 
     try {
         if (req.method === 'OPTIONS') {
-            sendResponse(context, req, 204, null);
+            sendResponse(context, req, 204, null, {}, corsHeaders);
             return;
         }
 
@@ -62,7 +33,7 @@ module.exports = async function (context, req) {
         if (req.method === 'GET' || action === 'get') {
             // Return current model registry
             const registry = {};
-            
+
             try {
                 const entities = tableClient.listEntities();
                 for await (const entity of entities) {
@@ -82,16 +53,16 @@ module.exports = async function (context, req) {
             }
 
             // Include default endpoints for models not in registry
-            for (const [model, endpoint] of Object.entries(MODEL_ENDPOINTS)) {
+            for (const [model, entry] of Object.entries(MODEL_ENDPOINTS)) {
                 if (!registry[model]) {
                     registry[model] = {
                         version: '1.0.0',
-                        endpoint: endpoint,
+                        endpoint: entry.endpoint,
                         lastUpdated: new Date().toISOString(),
                         healthy: true,
                         source: 'default'
                     };
-                    context.log(`[ModelRegistry] Using default endpoint for ${model}: ${endpoint}`);
+                    context.log(`[ModelRegistry] Using default endpoint for ${model}: ${entry.endpoint}`);
                 } else {
                     registry[model].source = 'registry';
                 }
@@ -100,14 +71,14 @@ module.exports = async function (context, req) {
             sendResponse(context, req, 200, registry, {
                 'Content-Type': 'application/json',
                 'Cache-Control': 'public, max-age=60'
-            });
+            }, corsHeaders);
 
         } else if (req.method === 'POST' && action === 'update') {
             // Update model registry entry
             const { model, version, endpoint } = req.body;
 
             if (!model) {
-                sendResponse(context, req, 400, { error: 'Model type is required' });
+                sendResponse(context, req, 400, { error: 'Model type is required' }, {}, corsHeaders);
                 return;
             }
 
@@ -115,7 +86,7 @@ module.exports = async function (context, req) {
                 partitionKey: model.toLowerCase(),
                 rowKey: 'current',
                 version: version || '1.0.0',
-                endpoint: endpoint || MODEL_ENDPOINTS[model.toLowerCase()],
+                endpoint: endpoint || MODEL_ENDPOINTS[model.toLowerCase()]?.endpoint,
                 lastUpdated: new Date().toISOString(),
                 healthy: true
             };
@@ -126,10 +97,10 @@ module.exports = async function (context, req) {
                 message: 'Registry updated successfully',
                 model: model,
                 version: version
-            });
+            }, {}, corsHeaders);
 
         } else {
-            sendResponse(context, req, 400, { error: 'Invalid action' });
+            sendResponse(context, req, 400, { error: 'Invalid action' }, {}, corsHeaders);
         }
 
     } catch (error) {
@@ -137,6 +108,6 @@ module.exports = async function (context, req) {
         sendResponse(context, req, 500, {
             error: 'Internal server error',
             message: error.message
-        });
+        }, {}, corsHeaders);
     }
 };
