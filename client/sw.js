@@ -1,5 +1,5 @@
 /* Simple service worker for asset caching */
-const VERSION = 'v2.0.2';
+const VERSION = 'v2.0.3';
 const CORE_CACHE = `core-${VERSION}`;
 const ASSET_CACHE = `assets-${VERSION}`;
 
@@ -19,9 +19,6 @@ const EXTERNAL_DOMAINS = [
 
 // Assets to pre-cache (weekly lineup critical)
 const PRECACHE_URLS = [
-  '/',
-  '/index.html',
-  '/weekly-lineup.html',
   '/dist/bundle.min.css',
   '/dist/core.min.js',
   '/dist/dashboard.min.js',
@@ -31,10 +28,16 @@ const PRECACHE_URLS = [
 ];
 
 self.addEventListener('install', (event) => {
-  // Activate updated SW immediately to avoid stale CSP/logic in old workers
+  // Activate updated SW immediately to avoid stale CSP/logic in old workers.
+  // Precache is best-effort so a single 404 doesn't block activation.
   self.skipWaiting();
   event.waitUntil(
-    caches.open(CORE_CACHE).then((cache) => cache.addAll(PRECACHE_URLS))
+    (async () => {
+      const cache = await caches.open(ASSET_CACHE);
+      await Promise.allSettled(
+        PRECACHE_URLS.map((url) => cache.add(new Request(url, { cache: 'reload' })))
+      );
+    })()
   );
 });
 
@@ -59,6 +62,18 @@ self.addEventListener('activate', (event) => {
   );
 });
 
+function shouldBypassCaching(url) {
+  // Never cache HTML or root-level runtime scripts/config.
+  if (url.pathname === '/sw.js') return true;
+  if (url.pathname.endsWith('.html') || url.pathname === '/' || url.pathname === '/index.html') return true;
+  if (url.pathname === '/config.js' || url.pathname.startsWith('/config.')) return true;
+  return false;
+}
+
+function isCacheableAssetPath(url) {
+  return url.pathname.startsWith('/assets/') || url.pathname.startsWith('/dist/');
+}
+
 // Helper: cache-first for static assets
 async function cacheFirst(request) {
   const cache = await caches.open(ASSET_CACHE);
@@ -66,12 +81,15 @@ async function cacheFirst(request) {
   if (cached) return cached;
   try {
     const response = await fetch(request);
+    const cacheControl = (response && response.headers && response.headers.get('Cache-Control')) || '';
+    const doNotStore = /no-store|no-cache|max-age=0|must-revalidate/i.test(cacheControl);
     // Only cache successful, same-origin GET requests
     if (
       response &&
       response.status === 200 &&
       request.method === 'GET' &&
-      new URL(request.url).origin === self.location.origin
+      new URL(request.url).origin === self.location.origin &&
+      !doNotStore
     ) {
       cache.put(request, response.clone());
     }
@@ -99,20 +117,24 @@ async function cacheFirst(request) {
   }
 }
 
-// Helper: network-first for HTML navigations
-async function networkFirst(request) {
+// Helper: network-first for HTML navigations (no stale HTML trapping)
+async function networkFirstNavigation(event) {
+  const request = event.request;
   const cache = await caches.open(CORE_CACHE);
   try {
-    const preload = await (self.registration.navigationPreload?.getState ? null : null);
-    const response = await fetch(request);
+    const preload = await event.preloadResponse;
+    if (preload) return preload;
+
+    // Force a real revalidation to avoid browser HTTP cache returning stale HTML.
+    const response = await fetch(new Request(request, { cache: 'reload' }));
     if (response && response.status === 200) {
-      cache.put(request, response.clone());
+      cache.put('/index.html', response.clone());
     }
     return response;
   } catch (err) {
-    const cached = await cache.match(request);
+    const cached = await cache.match('/index.html');
     if (cached) return cached;
-    throw err;
+    return new Response('Offline', { status: 502, statusText: 'Offline' });
   }
 }
 
@@ -133,13 +155,20 @@ self.addEventListener('fetch', (event) => {
   
   // HTML navigations
   if (req.mode === 'navigate' || (req.headers.get('accept') || '').includes('text/html')) {
-    event.respondWith(networkFirst(req));
+    event.respondWith(networkFirstNavigation(event));
     return;
   }
-  // Static assets: CSS/JS/images
-  if (/\.(css|js|png|jpg|jpeg|svg|webp)$/i.test(url.pathname)) {
+  // Never cache these (avoid trapping users on old JS/config)
+  if (shouldBypassCaching(url)) {
+    event.respondWith(fetch(new Request(req, { cache: 'reload' })));
+    return;
+  }
+
+  // Cache only known static asset folders (safe to cache long-term)
+  if (isCacheableAssetPath(url) && /\.(css|js|png|jpg|jpeg|svg|webp)$/i.test(url.pathname)) {
     event.respondWith(cacheFirst(req));
     return;
   }
-  // Default: pass-through
+
+  // Default: pass-through (no SW caching)
 });
