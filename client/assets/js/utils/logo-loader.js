@@ -90,14 +90,19 @@ window.LogoLoader = (() => {
   function getLeagueLogoUrl(league) {
     if (!league) return '';
     const normalizedLeague = league.toString().toLowerCase();
+
+    // NCAA league icons are not guaranteed to exist in blob storage.
+    // Use local, non-copyright SVG icons instead.
+    if (normalizedLeague === 'ncaab' || normalizedLeague === 'ncaam' || normalizedLeague === 'ncaa-basketball') {
+      return '/assets/icons/league-ncaam.svg';
+    }
+    if (normalizedLeague === 'ncaaf' || normalizedLeague === 'ncaa-football') {
+      return '/assets/icons/league-ncaaf.svg';
+    }
+
     const leagueFileMap = {
       nba: 'leagues-500-nba.png',
-      nfl: 'leagues-500-nfl.png',
-      ncaab: 'leagues-500-ncaab.png',
-      ncaam: 'leagues-500-ncaab.png',
-      ncaaf: 'leagues-500-ncaaf.png',
-      'ncaa-basketball': 'leagues-500-ncaab.png',
-      'ncaa-football': 'leagues-500-ncaaf.png'
+      nfl: 'leagues-500-nfl.png'
     };
     const fileName = leagueFileMap[normalizedLeague] || `leagues-500-${normalizedLeague}.png`;
     const baseUrl = getBaseUrl();
@@ -106,12 +111,6 @@ window.LogoLoader = (() => {
     }
 
     // Fallback to static assets for older clients
-    if (normalizedLeague === 'ncaab' || normalizedLeague === 'ncaa-basketball') {
-      return '/assets/ncaam-logo.png';
-    }
-    if (normalizedLeague === 'ncaa-football') {
-      return '/assets/ncaaf-logo.png';
-    }
     return `/assets/${normalizedLeague}-logo.png`;
   }
 
