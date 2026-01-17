@@ -1,0 +1,50 @@
+{
+  "name": "Dashboard Development",
+  "image": "mcr.microsoft.com/devcontainers/universal:latest",
+  "remoteUser": "codespace",
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-azuretools.vscode-azure-static-web-apps",
+        "ms-azuretools.azure-account",
+        "ms-azuretools.vscode-cosmosdb",
+        "es128.prettier-plus-formatterx",
+        "dbaeumer.vscode-eslint",
+        "ritwickdey.LiveServer",
+        "ms-vscode.live-server"
+      ],
+      "settings": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "es128.prettier-plus-formatterx",
+        "[html]": {
+          "editor.defaultFormatter": "es128.prettier-plus-formatterx"
+        },
+        "[javascript]": {
+          "editor.defaultFormatter": "es128.prettier-plus-formatterx"
+        },
+        "[css]": {
+          "editor.defaultFormatter": "es128.prettier-plus-formatterx"
+        }
+      }
+    }
+  },
+  "postCreateCommand": "echo 'Dashboard codespace ready! Run: python3 -m http.server 8000'",
+  "forwardPorts": [8000, 3000, 5000],
+  "portsAttributes": {
+    "8000": {
+      "label": "HTTP Server",
+      "onAutoForward": "notify"
+    },
+    "3000": {
+      "label": "Dev Server",
+      "onAutoForward": "notify"
+    },
+    "5000": {
+      "label": "Flask/Backend",
+      "onAutoForward": "notify"
+    }
+  }
+}
