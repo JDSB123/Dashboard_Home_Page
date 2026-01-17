@@ -325,9 +325,9 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
     // League logos - local fallbacks that always work (relative paths from client folder)
     const LOCAL_LEAGUE_LOGOS = {
-        'NCAAB': 'assets/icons/league-ncaam.svg',
-        'NCAAM': 'assets/icons/league-ncaam.svg',
-        'NCAAF': 'assets/icons/league-ncaaf.svg',
+        'NCAAB': 'assets/ncaam-logo.png',
+        'NCAAM': 'assets/ncaam-logo.png',
+        'NCAAF': 'assets/ncaaf-logo.png',
         'NBA': 'assets/nba-logo.png',
         'NFL': 'assets/nfl-logo.png'
     };
