@@ -281,14 +281,20 @@
             return todaysGamesCache;
         }
 
+        // Feature flags for disabled leagues
+        const disabledLeagues = new Set(window.APP_CONFIG?.WEEKLY_LINEUP_DISABLED_LEAGUES || window.WEEKLY_LINEUP_DISABLED_LEAGUES || ['NFL', 'NCAAF']); // Default disabled if not config
+        const isEnabled = (league) => !disabledLeagues.has(league);
+
         // FIRST: Fetch standings (cached) to get team records
         console.log('[AUTO-GAME-FETCHER] Fetching team standings for records (cached)...');
-        await Promise.all([
-            fetchStandings('NBA'),
-            fetchStandings('NFL'),
-            fetchStandings('NCAAM'),
-            fetchStandings('NCAAF')
-        ]);
+        
+        const standingsPromises = [];
+        if (isEnabled('NBA')) standingsPromises.push(fetchStandings('NBA'));
+        if (isEnabled('NFL')) standingsPromises.push(fetchStandings('NFL'));
+        if (isEnabled('NCAAM')) standingsPromises.push(fetchStandings('NCAAM'));
+        if (isEnabled('NCAAF')) standingsPromises.push(fetchStandings('NCAAF'));
+
+        await Promise.all(standingsPromises);
 
         const allGames = [];
 
