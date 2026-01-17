@@ -4,7 +4,9 @@ const { BlobServiceClient } = require("@azure/storage-blob");
 const DEFAULT_ALLOWED_ORIGINS = [
     'https://www.greenbiersportventures.com',
     'http://localhost:3000',
-    'http://localhost:8080'
+    'http://localhost:8080',
+    'http://127.0.0.1:5500',
+    'http://localhost:5500'
 ];
 const configuredOrigins = (process.env.CORS_ALLOWED_ORIGINS || process.env.ALLOWED_ORIGINS || '')
     .split(',')
