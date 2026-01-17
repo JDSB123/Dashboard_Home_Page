@@ -19,18 +19,21 @@ TEAM_VARIANTS_SUMMARY.md      (Comprehensive summary report)
 ## 🚀 Quick Start
 
 ### Load Data in JavaScript
+
 ```javascript
 // Load NFL teams
-const nflTeams = await fetch('assets/data/team-variants/nfl_team_variants.json')
-  .then(r => r.json());
+const nflTeams = await fetch(
+  "assets/data/team-variants/nfl_team_variants.json",
+).then((r) => r.json());
 
 // Get team info
-const cardinals = nflTeams['ARI'];
-console.log(cardinals.names[0]);  // "Arizona Cardinals"
-console.log(cardinals.abbreviations);  // ["ARI", "CRD", ...]
+const cardinals = nflTeams["ARI"];
+console.log(cardinals.names[0]); // "Arizona Cardinals"
+console.log(cardinals.abbreviations); // ["ARI", "CRD", ...]
 ```
 
 ### Load Data in Python
+
 ```python
 import json
 
@@ -45,6 +48,7 @@ print(nets['historical'])  # Shows "New Jersey Nets"
 ```
 
 ### Use Lookup Utility (Python)
+
 ```python
 from scripts.team_variant_lookup import TeamVariantLookup
 
@@ -61,22 +65,24 @@ print(abbrev)  # "BKN"
 
 ## 📊 Data Coverage
 
-| League | Teams | File Size | Coverage | Historical |
-|--------|-------|-----------|----------|------------|
+| League | Teams | File Size | Coverage    | Historical |
+| ------ | ----- | --------- | ----------- | ---------- |
 | NFL    | 32    | 35 KB     | ⭐⭐⭐⭐⭐  | 2002-2025  |
-| NBA    | 30    | 5 KB      | ⭐⭐⭐⭐   | Complete   |
+| NBA    | 30    | 5 KB      | ⭐⭐⭐⭐    | Complete   |
 | CFB    | -     | -         | ⚠️ Need Key | Current    |
 | NCAAM  | -     | -         | ℹ️ Pending  | Current    |
 
 ## 🔑 Key Features
 
 ### NFL Data
-✅ Multiple abbreviation systems (ESPN, PFR, PFF)  
-✅ Season-by-season tracking (2002-2025)  
-✅ Historical changes (relocations, name changes)  
-✅ Nicknames, locations, full names  
+
+✅ Multiple abbreviation systems (ESPN, PFR, PFF)
+✅ Season-by-season tracking (2002-2025)
+✅ Historical changes (relocations, name changes)
+✅ Nicknames, locations, full names
 
 **Example - Las Vegas Raiders**:
+
 ```json
 {
   "LV": {
@@ -93,20 +99,20 @@ print(abbrev)  # "BKN"
 ```
 
 ### NBA Data
-✅ Current 30 franchises  
-✅ Multiple abbreviation variants  
-✅ Historical relocations and name changes  
-✅ Team nicknames and locations  
+
+✅ Current 30 franchises
+✅ Multiple abbreviation variants
+✅ Historical relocations and name changes
+✅ Team nicknames and locations
 
 **Example - Brooklyn Nets**:
+
 ```json
 {
   "BKN": {
     "name": "Brooklyn Nets",
     "abbreviations": ["BKN", "BRK"],
-    "historical": [
-      {"name": "New Jersey Nets", "years": "1977-2012"}
-    ]
+    "historical": [{ "name": "New Jersey Nets", "years": "1977-2012" }]
   }
 }
 ```
@@ -114,6 +120,7 @@ print(abbrev)  # "BKN"
 ## 🎯 Common Use Cases
 
 ### 1. Normalize Team Names
+
 ```python
 # Problem: Multiple ways to refer to same team
 inputs = ["ARI", "CRD", "Cardinals", "Arizona"]
@@ -126,6 +133,7 @@ for inp in inputs:
 ```
 
 ### 2. Historical Tracking
+
 ```python
 # Find team name changes
 team = lookup.find_nba_team("BKN")
@@ -135,28 +143,31 @@ for hist in team.get('historical', []):
 ```
 
 ### 3. Abbreviation Mapping
+
 ```javascript
 // Map various abbreviations to standard form
 const abbrevMap = {};
 for (const [key, team] of Object.entries(nflTeams)) {
-    team.abbreviations.forEach(abbrev => {
-        abbrevMap[abbrev] = key;
-    });
+  team.abbreviations.forEach((abbrev) => {
+    abbrevMap[abbrev] = key;
+  });
 }
 
-console.log(abbrevMap['CRD']);  // "ARI"
-console.log(abbrevMap['ARI']);  // "ARI"
+console.log(abbrevMap["CRD"]); // "ARI"
+console.log(abbrevMap["ARI"]); // "ARI"
 ```
 
 ## 🔄 Update Instructions
 
 ### Refresh All Data
+
 ```bash
 cd C:\Users\JB\green-bier-ventures\DASHBOARD_main
 python scripts/extract_team_variants.py
 ```
 
 ### Add CFB Data (requires API key)
+
 1. Get free key: https://collegefootballdata.com/key
 2. Set environment variable: `CFBD_API_KEY=your-key`
 3. Re-run extraction script
@@ -170,12 +181,14 @@ python scripts/extract_team_variants.py
 ## 🎁 Notable Historical Changes
 
 ### NFL
+
 - 2020: Oakland Raiders → **Las Vegas Raiders**
 - 2017: San Diego Chargers → **Los Angeles Chargers**
 - 2016: St. Louis Rams → **Los Angeles Rams**
 - 2022: Washington Football Team → **Washington Commanders**
 
 ### NBA
+
 - 2012: New Jersey Nets → **Brooklyn Nets**
 - 2014: Charlotte Bobcats → **Charlotte Hornets**
 - 2013: New Orleans Hornets → **New Orleans Pelicans**
@@ -191,6 +204,7 @@ python scripts/extract_team_variants.py
 ## ✅ Checklist
 
 ### What's Complete
+
 - ✅ NFL team data extracted and cached
 - ✅ NBA team data extracted and cached
 - ✅ Documentation created
@@ -199,6 +213,7 @@ python scripts/extract_team_variants.py
 - ✅ Metadata file created
 
 ### What's Pending
+
 - ⚠️ CFB data (needs API key)
 - ℹ️ NCAAM data (optional)
 - 📋 Integration with existing team-config.json
@@ -214,6 +229,6 @@ python scripts/extract_team_variants.py
 
 ---
 
-**Generated**: December 24, 2024  
-**Status**: ✅ Production Ready  
+**Generated**: December 24, 2024
+**Status**: ✅ Production Ready
 **Next Update**: March 2025 (before NFL Draft)

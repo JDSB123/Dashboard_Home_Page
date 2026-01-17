@@ -8,10 +8,10 @@ All components deployed and tested. Ready for production use.
 
 ## Files Created
 
-| File | Purpose | Status |
-|------|---------|--------|
-| `tracker_pnl/fetch_box_scores.py` | Main fetcher script | ✅ Tested |
-| `BOX_SCORE_ENDPOINTS_TRACKING.md` | API reference | ✅ Reference |
+| File                              | Purpose             | Status       |
+| --------------------------------- | ------------------- | ------------ |
+| `tracker_pnl/fetch_box_scores.py` | Main fetcher script | ✅ Tested    |
+| `BOX_SCORE_ENDPOINTS_TRACKING.md` | API reference       | ✅ Reference |
 
 ---
 
@@ -43,6 +43,7 @@ SportsDataIO (NFL/NCAAF) ┘     (Status=Final)   (By sport/date)
 ## Output Examples
 
 ### Fetch Results
+
 ```
 ✅ NBA      | Total:  6 | Completed:  6 | Saved:  6
 ✅ NCAAM    | Total: 29 | Completed: 29 | Saved: 29
@@ -51,6 +52,7 @@ SportsDataIO (NFL/NCAAF) ┘     (Status=Final)   (By sport/date)
 ```
 
 ### Files Generated
+
 ```
 output/box_scores/NBA/2026-01-06.json
 output/box_scores/NCAAM/2026-01-06.json
@@ -62,12 +64,14 @@ logs/box_scores_20260107_110314.log
 ## Usage Patterns
 
 ### Pattern 1: Daily Schedule
+
 ```bash
 # Add to crontab (2 AM daily)
 0 2 * * * python /path/to/scripts/fetch_completed_boxes.py --telegram
 ```
 
 ### Pattern 2: Manual Fetch
+
 ```bash
 # Yesterday (default)
 python tracker_pnl/fetch_box_scores.py
@@ -80,6 +84,7 @@ python tracker_pnl/fetch_box_scores.py --start 2026-01-01 --end 2026-01-06
 ```
 
 ### Pattern 3: With Notifications
+
 ```bash
 # Send Telegram message after fetch
 python tracker_pnl/fetch_box_scores.py --telegram
@@ -93,12 +98,14 @@ python tracker_pnl/fetch_box_scores.py -v
 ## Configuration
 
 ### Minimal Setup (NBA/NCAAM Only)
+
 ```bash
 # Just run it - ESPN API needs no auth
 python tracker_pnl/fetch_box_scores.py
 ```
 
 ### Full Setup (All Sports + Telegram)
+
 ```bash
 # Set environment variables
 export SDIO_KEY="your_api_key"
@@ -113,34 +120,34 @@ python scripts/fetch_completed_boxes.py --telegram
 
 ## Data Quality
 
-| Aspect | Status |
-|--------|--------|
-| Games Coverage | ✅ All official games |
-| Score Accuracy | ✅ Q-by-Q verified |
-| Real-time | ⚠️ Completed games only (not live) |
-| Historical | ✅ 90+ days available |
-| Player Stats | ⚠️ Not included (team stats only) |
+| Aspect         | Status                             |
+| -------------- | ---------------------------------- |
+| Games Coverage | ✅ All official games              |
+| Score Accuracy | ✅ Q-by-Q verified                 |
+| Real-time      | ⚠️ Completed games only (not live) |
+| Historical     | ✅ 90+ days available              |
+| Player Stats   | ⚠️ Not included (team stats only)  |
 
 ---
 
 ## Reliability
 
-| Component | Uptime | Rate Limit | Retry |
-|-----------|--------|-----------|-------|
-| ESPN API | 99.9% | None | 3x auto |
-| SportsDataIO | 99.95% | 10/sec | 3x auto |
-| Telegram | 99.8% | 30/sec | 3x auto |
+| Component    | Uptime | Rate Limit | Retry   |
+| ------------ | ------ | ---------- | ------- |
+| ESPN API     | 99.9%  | None       | 3x auto |
+| SportsDataIO | 99.95% | 10/sec     | 3x auto |
+| Telegram     | 99.8%  | 30/sec     | 3x auto |
 
 ---
 
 ## API Keys Required?
 
-| Sport | API | Auth | Free |
-|-------|-----|------|------|
-| NBA | ESPN | ❌ None | ✅ Yes |
-| NCAAM | ESPN | ❌ None | ✅ Yes |
-| NFL | SDIO | ✅ Key | ❌ Paid |
-| NCAAF | SDIO | ✅ Key | ❌ Paid |
+| Sport | API  | Auth    | Free    |
+| ----- | ---- | ------- | ------- |
+| NBA   | ESPN | ❌ None | ✅ Yes  |
+| NCAAM | ESPN | ❌ None | ✅ Yes  |
+| NFL   | SDIO | ✅ Key  | ❌ Paid |
+| NCAAF | SDIO | ✅ Key  | ❌ Paid |
 
 ---
 
@@ -160,6 +167,7 @@ Total:  ~7-10 seconds
 ## Logs
 
 Every run creates a timestamped log:
+
 ```
 logs/box_scores_20260107_110314.log
 
@@ -183,6 +191,7 @@ Example:
 ## Integration Examples
 
 ### Load in Python
+
 ```python
 from pathlib import Path
 import json
@@ -196,13 +205,15 @@ for game in scores:
 ```
 
 ### Use in Dashboard
+
 ```javascript
 // Fetch latest NBA scores
-const response = await fetch('/api/box-scores/NBA/latest');
+const response = await fetch("/api/box-scores/NBA/latest");
 const games = await response.json();
 ```
 
 ### Pandas Analysis
+
 ```python
 import pandas as pd
 import json
@@ -240,15 +251,15 @@ print(df['home_win'].mean())  # ~58% (historical)
 
 ## Support
 
-| Issue | Solution |
-|-------|----------|
-| "No module named requests" | `pip install requests` |
-| "SDIO_KEY not set" | Normal if you don't have API key; NBA/NCAAM still work |
-| "Telegram not working" | Set env vars; check chat ID format |
-| Empty output | Games may not be completed; try next day |
+| Issue                      | Solution                                               |
+| -------------------------- | ------------------------------------------------------ |
+| "No module named requests" | `pip install requests`                                 |
+| "SDIO_KEY not set"         | Normal if you don't have API key; NBA/NCAAM still work |
+| "Telegram not working"     | Set env vars; check chat ID format                     |
+| Empty output               | Games may not be completed; try next day               |
 
 ---
 
-**Status:** ✅ **PRODUCTION READY**  
-**Last Updated:** January 7, 2026  
+**Status:** ✅ **PRODUCTION READY**
+**Last Updated:** January 7, 2026
 **Tested:** ESPN API (NBA/NCAAM) ✅ | SportsDataIO (NFL/NCAAF) ✅ | Telegram (Optional) ✅

@@ -5,12 +5,14 @@
 ### **Option A: Row-Level "+" Button (Weekly Lineup)**
 
 **What it does:**
+
 - Green "+" button appears on each game row in the Weekly Lineup table
 - Click opens a modal form to manually enter a pick
 - Form pre-fills with league/matchup from the table row
 - Real-time "To Win" calculation based on odds & risk
 
 **Form Fields:**
+
 - League (NBA, NFL, NCAAM, NCAAF)
 - Matchup (e.g., "Lakers vs Celtics")
 - Pick (e.g., "Lakers -3.5" or "Over 225.5")
@@ -20,6 +22,7 @@
 - Fire Rating (1-5 🔥)
 
 **How it works:**
+
 1. View game in Weekly Lineup
 2. Click green "+" button on the row
 3. Modal opens with form
@@ -29,6 +32,7 @@
 7. Appears in your dashboard
 
 **Technical Details:**
+
 - File: [manual-pick-modal.js](../client/assets/js/features/manual-pick-modal.js)
 - Uses event delegation for dynamically rendered table rows
 - Auto-injects buttons into table rows as they load
@@ -39,6 +43,7 @@
 ### **Option B: Enhanced Sportsbooks Import (Dropdown)**
 
 **What it does:**
+
 - Improved paste/upload interface in the sportsbooks dropdown
 - Supports multiple text formats for pick entry
 - File upload with drag-and-drop
@@ -47,22 +52,26 @@
 **Supported Input Formats:**
 
 1. **Simple Format:**
+
    ```
    Lakers -3.5 -110 $50k
    ```
 
 2. **Natural Language:**
+
    ```
    Lakers -3.5 at -110 odds, $50k risk
    Lakers spread -3.5 for $50 to risk
    ```
 
 3. **CSV:**
+
    ```
    NBA,Lakers vs Celtics,Lakers -3.5,-110,50000,FG,3
    ```
 
 4. **Telegram Style:**
+
    ```
    🔥🔥🔥 Lakers -3.5 -110 | $50k
    ```
@@ -75,6 +84,7 @@
    - CSV files
 
 **Workflow:**
+
 1. Click "Sports Books" dropdown → "Import Picks" section
 2. Paste text OR drag/drop file OR use file picker
 3. Click "Upload Pasted Content" or "Upload Selected Files"
@@ -84,12 +94,14 @@
 7. Picks added to dashboard (no grading status yet)
 
 **Automatic Detection:**
+
 - League detection from team names (Lakers → NBA, Chiefs → NFL, etc.)
 - Segment detection from text (1H, 2H, FG, etc.)
 - Fire rating detection from emojis (🔥🔥 = 2 fire)
 - Amount parsing (50k → 50000, 50 → 50000, etc.)
 
 **Technical Details:**
+
 - File: [pick-parser.js](../client/assets/js/features/pick-parser.js) - Universal parser
 - File: [sportsbooks-import-handler.js](../client/assets/js/features/sportsbooks-import-handler.js) - Import UI handler
 - Regex-based pattern matching for flexibility
@@ -101,6 +113,7 @@
 ## Files Added/Modified
 
 ### New Files:
+
 1. **pick-parser.js** (220 lines)
    - Universal pick format parser
    - Supports 4+ input formats
@@ -132,6 +145,7 @@
    - Status message styling
 
 ### Modified Files:
+
 1. **[weekly-lineup.html](../client/weekly-lineup.html)**
    - Added script includes for pick-parser, manual-pick-modal, sportsbooks-import-handler
    - Added CSS includes for both modals
@@ -141,6 +155,7 @@
 ## Usage Examples
 
 ### **Option A - Adding a Pick via Row Button:**
+
 ```
 1. View Weekly Lineup
 2. See "Lakers -3.5" in table row
@@ -159,6 +174,7 @@
 ```
 
 ### **Option B - Pasting a Pick:**
+
 ```
 1. Open Sports Books dropdown → Import Picks
 2. Paste this text:
@@ -176,6 +192,7 @@
 ```
 
 ### **Option B - Uploading a CSV:**
+
 ```
 CSV Content:
 League,Matchup,Pick,Odds,Risk,Segment
@@ -193,6 +210,7 @@ NBA,Nuggets vs Warriors,Over 225.5,-115,75000,FG
 ## Integration with Existing Systems
 
 ### **Data Flow:**
+
 ```
 Manual Entry (Option A or B)
     ↓
@@ -223,6 +241,7 @@ Later migrated to Cosmos DB (when ready)
 ```
 
 ### **Pick Status Flow:**
+
 1. **pending** - Just added, not graded yet
 2. **win** - Graded as Win
 3. **loss** - Graded as Loss

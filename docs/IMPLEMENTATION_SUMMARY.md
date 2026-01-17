@@ -3,6 +3,7 @@
 ## Overview
 
 Successfully implemented a comprehensive model integration architecture for the GBSV Dashboard that enables:
+
 - Dashboard-triggered model execution across Azure Resource Groups
 - Real-time status updates for running models
 - Automatic CI/CD integration for model updates
@@ -29,6 +30,7 @@ Dashboard-triggered model execution UI has been removed (no “Run Analysis” b
 ### 3. CI/CD Pipeline
 
 Created GitHub Actions workflow (`.github/workflows/model-update-notify.yml`) that:
+
 - Accepts model update notifications
 - Updates model registry
 - Invalidates caches
@@ -39,6 +41,7 @@ Created GitHub Actions workflow (`.github/workflows/model-update-notify.yml`) th
 ### 4. Deployment Scripts
 
 Created deployment automation scripts:
+
 - **`azure-functions/deploy.sh`** - Bash script for Linux/Mac
 - **`azure-functions/deploy.ps1`** - PowerShell script for Windows
 - **`azure-functions/README.md`** - Comprehensive deployment guide
@@ -85,6 +88,7 @@ az role assignment create \
 ### Step 4: Update Model Container Apps
 
 Each model Container App needs these endpoints:
+
 - `POST /execute` - Trigger model execution
 - `GET /status/{jobId}` - Check execution status
 - `GET /results/{jobId}` - Retrieve results
@@ -93,6 +97,7 @@ Each model Container App needs these endpoints:
 ### Step 5: Configure GitHub Secrets
 
 Add these secrets to your GitHub repository:
+
 - `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`
 - `ACR_LOGIN_SERVER`, `ACR_USERNAME`, `ACR_PASSWORD`
 - `AZURE_FUNCTIONS_STORAGE_CONNECTION`, `AZURE_SIGNALR_CONNECTION_STRING`, `APPINSIGHTS_CONNECTION_STRING`
@@ -122,6 +127,7 @@ git push
 ### Triggering via CI/CD
 
 From GitHub Actions:
+
 1. Go to Actions tab
 2. Select "Model Update Notification"
 3. Click "Run workflow"
@@ -129,6 +135,7 @@ From GitHub Actions:
 5. Optionally trigger immediate execution
 
 Via API:
+
 ```bash
 curl -X POST https://api.github.com/repos/YOUR_ORG/Dashboard_Home_Page/dispatches \
   -H "Authorization: token YOUR_TOKEN" \
@@ -184,6 +191,7 @@ The implementation maintains your specified RG structure:
 ## Troubleshooting
 
 If model execution fails:
+
 1. Check Function App logs in Azure Portal
 2. Verify RBAC permissions are granted
 3. Ensure model Container Apps are running
@@ -193,6 +201,7 @@ If model execution fails:
 ## Support
 
 For questions or issues:
+
 - Review `azure-functions/README.md` for detailed troubleshooting
 - Check Azure Portal logs and metrics
 - Contact: jb@greenbiercapital.com

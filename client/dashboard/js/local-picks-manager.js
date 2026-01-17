@@ -44,7 +44,7 @@
         const enrichedPicks = newPicks.map((pick, idx) => {
             // Normalize league/sport values
             let sport = (pick.sport || pick.league || 'NBA').toUpperCase();
-            
+
             // Map league variants to standard values
             const leagueMap = {
                 'NCAAM': 'NCAAB',
@@ -61,11 +61,11 @@
                 'NHL': 'NHL'
             };
             sport = leagueMap[sport] || sport;
-            
+
             // Ensure awayTeam and homeTeam are set correctly
             let awayTeam = pick.awayTeam || '';
             let homeTeam = pick.homeTeam || '';
-            
+
             // If game field exists, try to parse it
             if (pick.game && !awayTeam && !homeTeam) {
                 const parts = pick.game.split(/\s*(?:@|vs\.?|versus)\s*/i);
@@ -74,19 +74,19 @@
                     homeTeam = parts[1].trim();
                 }
             }
-            
+
             // Normalize pick direction for totals
             let pickDirection = pick.pickDirection || '';
             if (pickDirection) {
                 pickDirection = pickDirection.replace(/^UNDE\b/i, 'UNDER').toUpperCase();
             }
-            
+
             // Ensure pickType is normalized
             let pickType = (pick.pickType || 'spread').toLowerCase();
             if (pickType === 'ml') pickType = 'moneyline';
             if (pickType === 'tt') pickType = 'team-total';
             if (pickType === 'ou') pickType = 'total';
-            
+
             return {
                 ...pick,
                 id: pick.id || `pick_${Date.now()}_${idx}_${Math.random().toString(36).substring(7)}`,
@@ -308,7 +308,7 @@
         'kings': { abbr: 'SAC', league: 'nba' },
         'la clippers': { abbr: 'LAC', league: 'nba' },
         'clippers': { abbr: 'LAC', league: 'nba' },
-        
+
         // NCAAB Teams (from today's picks) - Full names and abbreviations
         'butler': { abbr: 'BUT', fullName: 'Butler Bulldogs', league: 'ncaam', logoId: '2086' },
         'butler bulldogs': { abbr: 'BUT', fullName: 'Butler Bulldogs', league: 'ncaam', logoId: '2086' },
@@ -344,7 +344,7 @@
         'unc': { abbr: 'UNC', fullName: 'North Carolina Tar Heels', league: 'ncaam', logoId: '153' },
         'north carolina tar heels': { abbr: 'UNC', fullName: 'North Carolina Tar Heels', league: 'ncaam', logoId: '153' },
         'tar heels': { abbr: 'UNC', fullName: 'North Carolina Tar Heels', league: 'ncaam', logoId: '153' },
-        
+
         // NFL Teams
         'buffalo bills': { abbr: 'BUF', fullName: 'Buffalo Bills', league: 'nfl' },
         'bills': { abbr: 'BUF', fullName: 'Buffalo Bills', league: 'nfl' },
@@ -448,13 +448,13 @@
      */
     function getTeamLogoUrl(teamAbbr, league, logoId) {
         if (!window.LogoLoader || !teamAbbr) return '';
-        
+
         // For NCAA teams, we may need to use logoId
         if ((league === 'ncaam' || league === 'ncaaf') && logoId) {
             // LogoLoader expects teamId, for NCAA it's the numeric ID
             return window.LogoLoader.getLogoUrl(league, logoId);
         }
-        
+
         // For NBA/NFL, use the abbreviation (lowercase)
         const teamId = teamAbbr.toLowerCase();
         return window.LogoLoader.getLogoUrl(league, teamId);
@@ -462,7 +462,7 @@
 
     async function getTeamInfo(teamName) {
         if (!teamName) return { abbr: 'N/A', fullName: '', logo: '' };
-        
+
         // Try to use TeamDataLoader if available
         if (window.TeamDataLoader && typeof window.TeamDataLoader.getTeamInfo === 'function') {
             try {
@@ -474,7 +474,7 @@
                 console.warn('[LocalPicksManager] TeamDataLoader failed, using fallback:', e);
             }
         }
-        
+
         // Fallback to hardcoded data
         const lower = teamName.toLowerCase().trim();
         const data = TEAM_DATA_FALLBACK[lower];
@@ -486,7 +486,7 @@
         }
         return { abbr: teamName.substring(0, 3).toUpperCase(), fullName: teamName, logo: '' };
     }
-    
+
     // Synchronous version for backward compatibility (uses fallback)
     function getTeamInfoSync(teamName) {
         if (!teamName) return { abbr: 'N/A', fullName: '', logo: '' };
@@ -514,7 +514,7 @@
 
         // Parse content
         const picks = window.PickStandardizer.standardize(content);
-        
+
         if (picks.length === 0) {
             console.warn('No picks could be parsed from content');
             return [];
@@ -552,10 +552,10 @@
 
         // Add to storage
         const added = addPicks(enrichedPicks);
-        
+
         // Refresh the table
         refreshPicksTable();
-        
+
         return added;
     }
 
@@ -595,7 +595,7 @@
                     enriched.gameStatus = game.status;
                     enriched.game = `${game.awayTeam} @ ${game.homeTeam}`;
                 } else {
-                    console.warn(`❌ No game found for "${teamToFind}" - available teams:`, 
+                    console.warn(`❌ No game found for "${teamToFind}" - available teams:`,
                         todaysGames.flatMap(g => [g.awayTeam, g.homeTeam]));
                 }
             }
@@ -643,7 +643,7 @@
     function getLeagueLogo(league) {
         if (!league) return '';
         const leagueUpper = league.toUpperCase();
-        
+
         // Use LogoLoader if available
         if (window.LogoLoader && typeof window.LogoLoader.getLeagueLogoUrl === 'function') {
             // Map variations to standard league names
@@ -664,7 +664,7 @@
             const standardLeague = leagueMap[leagueUpper] || leagueUpper.toLowerCase();
             return window.LogoLoader.getLeagueLogoUrl(standardLeague);
         }
-        
+
         // Legacy fallback (should rarely be used)
         const LEAGUE_LOGOS_FALLBACK = {
             'NBA': '/assets/nba-logo.png',
@@ -743,12 +743,12 @@
         if (window.ZebraStripes?.applyPicksTableZebraStripes) {
             setTimeout(() => window.ZebraStripes.applyPicksTableZebraStripes(), 50);
         }
-        
+
         // Re-apply filters if they exist
         if (window.DashboardFilters && typeof window.DashboardFilters.applyFilters === 'function') {
             setTimeout(() => window.DashboardFilters.applyFilters(), 50);
         }
-        
+
         // Re-apply filter pills if available
         if (window.DashboardFilterPills && typeof window.DashboardFilterPills.applyFilters === 'function') {
             setTimeout(() => window.DashboardFilterPills.applyFilters(), 50);
@@ -788,7 +788,7 @@
 
         // Attach sportsbook dropdown event handlers
         attachSportsbookDropdownListeners();
-        
+
         // Attach risk/win amount edit handlers
         attachRiskWinEditListeners();
     }
@@ -808,13 +808,13 @@
     function handleSportsbookChange(event) {
         const pickId = event.target.getAttribute('data-pick-id');
         const newSportsbook = event.target.value;
-        
+
         if (!pickId) return;
-        
+
         // Update the pick's sportsbook
         const picks = getAllPicks();
         const pick = picks.find(p => p.id === pickId);
-        
+
         if (pick) {
             pick.sportsbook = newSportsbook;
             savePicks(picks);
@@ -827,12 +827,12 @@
     function attachRiskWinEditListeners() {
         const riskInputs = document.querySelectorAll('.editable-risk');
         const winInputs = document.querySelectorAll('.editable-win');
-        
+
         riskInputs.forEach(input => {
             input.removeEventListener('change', handleRiskChange);
             input.addEventListener('change', handleRiskChange);
         });
-        
+
         winInputs.forEach(input => {
             input.removeEventListener('change', handleWinChange);
             input.addEventListener('change', handleWinChange);
@@ -842,12 +842,12 @@
     function handleRiskChange(event) {
         const pickId = event.target.getAttribute('data-pick-id');
         const newRisk = parseFloat(event.target.value) || 0;
-        
+
         if (!pickId) return;
-        
+
         const picks = getAllPicks();
         const pick = picks.find(p => p.id === pickId);
-        
+
         if (pick) {
             pick.risk = Math.round(newRisk);
             savePicks(picks);
@@ -858,12 +858,12 @@
     function handleWinChange(event) {
         const pickId = event.target.getAttribute('data-pick-id');
         const newWin = parseFloat(event.target.value) || 0;
-        
+
         if (!pickId) return;
-        
+
         const picks = getAllPicks();
         const pick = picks.find(p => p.id === pickId);
-        
+
         if (pick) {
             pick.win = Math.round(newWin);
             savePicks(picks);
@@ -963,17 +963,17 @@
 
         const isSingleTeamBet = !pick.homeTeam || homeTeam === 'TBD';
 
-        const awayLogoHtml = awayInfo.logo 
+        const awayLogoHtml = awayInfo.logo
             ? `<img src="${awayInfo.logo}" class="team-logo" alt="${awayInfo.abbr}" onerror="this.style.display='none'">`
             : '';
-        const homeLogoHtml = homeInfo.logo 
+        const homeLogoHtml = homeInfo.logo
             ? `<img src="${homeInfo.logo}" class="team-logo" alt="${homeInfo.abbr}" onerror="this.style.display='none'">`
             : '';
         const pickLogoHtml = pickTeamInfo.logo
             ? `<img src="${pickTeamInfo.logo}" class="pick-team-logo" alt="${pickTeamInfo.abbr}" onerror="this.style.display='none'">`
             : '';
 
-        const matchupHtml = isSingleTeamBet 
+        const matchupHtml = isSingleTeamBet
             ? `<div class="matchup-cell">
                     <div class="team-line">
                         ${awayLogoHtml}
@@ -1016,7 +1016,7 @@
                 <div class="boxscore-cell header-cell">Q3</div>
                 <div class="boxscore-cell header-cell">Q4</div>
                 <div class="boxscore-cell header-cell">T</div>`;
-            
+
             awayBoxRow = `
                 <div class="boxscore-row">
                     <div class="boxscore-cell team-cell">
@@ -1052,7 +1052,7 @@
                 <div class="boxscore-cell header-cell">1H</div>
                 <div class="boxscore-cell header-cell">2H</div>
                 <div class="boxscore-cell header-cell">T</div>`;
-            
+
             awayBoxRow = `
                 <div class="boxscore-row">
                     <div class="boxscore-cell team-cell">
@@ -1157,18 +1157,18 @@
             <td class="center">
                 <div class="currency-combined currency-stacked editable-amounts">
                     <div class="currency-risk-row">
-                        <input type="number" 
-                               class="editable-risk" 
-                               value="${Math.round(pick.risk || 50000)}" 
+                        <input type="number"
+                               class="editable-risk"
+                               value="${Math.round(pick.risk || 50000)}"
                                data-pick-id="${pick.id}"
                                aria-label="Risk amount"
                                min="0"
                                step="1000">
                         <span class="currency-separator"> /</span>
                     </div>
-                    <input type="number" 
-                           class="editable-win" 
-                           value="${Math.round(pick.win || 50000)}" 
+                    <input type="number"
+                           class="editable-win"
+                           value="${Math.round(pick.win || 50000)}"
                            data-pick-id="${pick.id}"
                            aria-label="Win amount"
                            min="0"
@@ -1224,7 +1224,7 @@
         try {
             await window.AutoGameFetcher.fetchTodaysGames();
             const todaysGames = window.AutoGameFetcher.getTodaysGames() || [];
-            
+
             if (todaysGames.length === 0) {
                 console.log('📭 No games today to enrich with');
                 return;
@@ -1274,7 +1274,7 @@
     // Real picks come from weekly-lineup page and model APIs only.
 
     // ========== CLEANUP SAMPLE DATA ==========
-    
+
     function cleanupSampleData() {
         const CLEANUP_VERSION_KEY = 'gbsv_cleanup_v5';  // Bump version to re-run cleanup
 
@@ -1345,10 +1345,10 @@
 
     function initialize() {
         console.log('🏠 LocalPicksManager v33.01.0 initialized (real data only)');
-        
+
         // Clean up any legacy sample/demo data
         cleanupSampleData();
-        
+
         // NO DEMO DATA: Production version uses only real picks from weekly-lineup
         // importTodaysPicks(); -- DISABLED: No sample/placeholder data in production
 
@@ -1451,7 +1451,7 @@
             const isSettled = ['win', 'won', 'loss', 'lost', 'push'].includes(status);
             const dateStr = pick.gameDate || pick.createdAt || '';
             let pickDate = null;
-            
+
             try {
                 pickDate = dateStr ? new Date(dateStr) : null;
             } catch {}

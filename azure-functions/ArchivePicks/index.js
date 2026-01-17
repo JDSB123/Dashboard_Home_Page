@@ -80,7 +80,7 @@ module.exports = async function (context, req) {
     try {
         // Get connection string from environment (loaded from Key Vault)
         const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
-        
+
         if (!connectionString) {
             context.log.error('AZURE_STORAGE_CONNECTION_STRING not configured');
             context.res = {
@@ -120,7 +120,7 @@ module.exports = async function (context, req) {
         // Upload to blob
         const blockBlobClient = containerClient.getBlockBlobClient(blobName);
         const content = JSON.stringify(archiveData, null, 2);
-        
+
         await blockBlobClient.upload(content, Buffer.byteLength(content), {
             blobHTTPHeaders: {
                 blobContentType: 'application/json'

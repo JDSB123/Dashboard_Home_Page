@@ -37,7 +37,7 @@ body.page-weekly-lineup {
     --weekly-border: rgba(80, 100, 130, 0.25);
     --weekly-text: #e6f2f6;
     --dashboard-topline-height: 91px; /* 20% bump from 76px for logo/text */
-    
+
     /* Force Garamond typography for table */
     --table-font: var(--font-body);
 
@@ -109,7 +109,7 @@ body.page-weekly-lineup .nav-link {
 body.page-weekly-lineup .nav-link:hover,
 body.page-weekly-lineup .nav-link:focus-visible {
     color: #00e6a3 !important;
-    text-shadow: 
+    text-shadow:
         0 0 8px rgba(0, 214, 137, 0.5),
         0 1px 2px rgba(0, 31, 63, 0.9) !important;
     background: linear-gradient(135deg, rgba(0, 214, 137, 0.1), rgba(0, 31, 63, 0.1)) !important;
@@ -117,7 +117,7 @@ body.page-weekly-lineup .nav-link:focus-visible {
 
 body.page-weekly-lineup .nav-link.active {
     color: #00e6a3 !important;
-    text-shadow: 
+    text-shadow:
         0 0 6px rgba(0, 214, 137, 0.4),
         0 1px 2px rgba(0, 31, 63, 0.9) !important;
     background: linear-gradient(135deg, rgba(0, 214, 137, 0.15), rgba(0, 31, 63, 0.15)) !important;
@@ -311,51 +311,51 @@ body.page-weekly-lineup .table-container,
    1: Date/Time  2: League  3: Matchup  4: Segment  5: Pick  6: Edge  7: Fire  8: Track
    Override base component min-widths and apply fixed widths to both th and td */
 .weekly-lineup-table thead th:nth-child(1),
-.weekly-lineup-table tbody td:nth-child(1) { 
-    width: 12% !important; 
-    min-width: 120px !important; 
+.weekly-lineup-table tbody td:nth-child(1) {
+    width: 12% !important;
+    min-width: 120px !important;
     max-width: 12% !important;
 }   /* Date & Time (CST) */
 .weekly-lineup-table thead th:nth-child(2),
-.weekly-lineup-table tbody td:nth-child(2) { 
-    width: 6% !important; 
-    min-width: 65px !important; 
+.weekly-lineup-table tbody td:nth-child(2) {
+    width: 6% !important;
+    min-width: 65px !important;
     max-width: 6% !important;
 }   /* League */
 .weekly-lineup-table thead th:nth-child(3),
-.weekly-lineup-table tbody td:nth-child(3) { 
-    width: 25% !important; 
-    min-width: 220px !important; 
+.weekly-lineup-table tbody td:nth-child(3) {
+    width: 25% !important;
+    min-width: 220px !important;
     max-width: 25% !important;
 }  /* Matchup */
 .weekly-lineup-table thead th:nth-child(4),
-.weekly-lineup-table tbody td:nth-child(4) { 
-    width: 8% !important; 
-    min-width: 80px !important; 
+.weekly-lineup-table tbody td:nth-child(4) {
+    width: 8% !important;
+    min-width: 80px !important;
     max-width: 8% !important;
 }   /* Segment */
 .weekly-lineup-table thead th:nth-child(5),
-.weekly-lineup-table tbody td:nth-child(5) { 
-    width: 18% !important; 
-    min-width: 160px !important; 
+.weekly-lineup-table tbody td:nth-child(5) {
+    width: 18% !important;
+    min-width: 160px !important;
     max-width: 18% !important;
 }  /* Pick */
 .weekly-lineup-table thead th:nth-child(6),
-.weekly-lineup-table tbody td:nth-child(6) { 
-    width: 8% !important; 
-    min-width: 75px !important; 
+.weekly-lineup-table tbody td:nth-child(6) {
+    width: 8% !important;
+    min-width: 75px !important;
     max-width: 8% !important;
 }  /* Edge */
 .weekly-lineup-table thead th:nth-child(7),
-.weekly-lineup-table tbody td:nth-child(7) { 
-    width: 15% !important; 
-    min-width: 130px !important; 
+.weekly-lineup-table tbody td:nth-child(7) {
+    width: 15% !important;
+    min-width: 130px !important;
     max-width: 15% !important;
 }  /* Fire */
 .weekly-lineup-table thead th:nth-child(8),
-.weekly-lineup-table tbody td:nth-child(8) { 
-    width: 8% !important; 
-    min-width: 70px !important; 
+.weekly-lineup-table tbody td:nth-child(8) {
+    width: 8% !important;
+    min-width: 70px !important;
     max-width: 8% !important;
 }   /* Track */
 
@@ -2288,7 +2288,7 @@ body.page-weekly-lineup .filter-title,
     font-size: 0.875rem;
     color: var(--emerald-300);
     font-weight: 500;
-    box-shadow: 
+    box-shadow:
         0 2px 8px rgba(0, 0, 0, 0.2),
         0 0 12px rgba(0, 214, 137, 0.15);
     transition: all 0.2s ease;
@@ -2311,7 +2311,7 @@ body.page-weekly-lineup .filter-title,
         rgba(0, 214, 137, 0.25) 0%,
         rgba(0, 180, 120, 0.2) 100%);
     border-color: rgba(0, 214, 137, 0.7);
-    box-shadow: 
+    box-shadow:
         0 4px 12px rgba(0, 0, 0, 0.3),
         0 0 16px rgba(0, 214, 137, 0.25);
     transform: translateY(-1px);
@@ -2576,8 +2576,8 @@ body.page-weekly-lineup .filter-title,
     background: rgba(10, 20, 30, 0.98); /* Deep dark blue-grey, not pitch black */
     border: 1px solid rgba(0, 214, 137, 0.25);
     border-radius: 6px;
-    box-shadow: 
-        0 16px 48px rgba(0, 0, 0, 0.75), 
+    box-shadow:
+        0 16px 48px rgba(0, 0, 0, 0.75),
         0 4px 12px rgba(0, 0, 0, 0.5),
         0 0 0 1px rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(20px);
@@ -2790,8 +2790,8 @@ body.page-weekly-lineup .filter-title,
    ========================================================================== */
 
 .page-weekly-lineup .parsed-picks-container {
-    background: linear-gradient(180deg, 
-        rgba(8, 16, 32, 0.95) 0%, 
+    background: linear-gradient(180deg,
+        rgba(8, 16, 32, 0.95) 0%,
         rgba(4, 10, 22, 0.98) 100%);
     border: 1px solid rgba(0, 214, 137, 0.15);
     border-radius: 8px;
@@ -2805,8 +2805,8 @@ body.page-weekly-lineup .filter-title,
     justify-content: space-between;
     align-items: center;
     padding: 0.75rem 1rem;
-    background: linear-gradient(90deg, 
-        rgba(0, 214, 137, 0.12) 0%, 
+    background: linear-gradient(90deg,
+        rgba(0, 214, 137, 0.12) 0%,
         rgba(0, 180, 120, 0.05) 50%,
         transparent 100%);
     border-bottom: 1px solid rgba(0, 214, 137, 0.2);
@@ -2869,8 +2869,8 @@ body.page-weekly-lineup .filter-title,
 .page-weekly-lineup .parsed-pick-item {
     display: flex;
     flex-direction: column;
-    background: linear-gradient(145deg, 
-        rgba(20, 35, 60, 0.8) 0%, 
+    background: linear-gradient(145deg,
+        rgba(20, 35, 60, 0.8) 0%,
         rgba(12, 24, 45, 0.9) 100%);
     border: 1px solid rgba(80, 120, 180, 0.2);
     border-radius: 6px;
@@ -2887,11 +2887,11 @@ body.page-weekly-lineup .filter-title,
 }
 
 .page-weekly-lineup .parsed-pick-item.selected {
-    background: linear-gradient(145deg, 
-        rgba(0, 60, 40, 0.6) 0%, 
+    background: linear-gradient(145deg,
+        rgba(0, 60, 40, 0.6) 0%,
         rgba(0, 40, 30, 0.8) 100%);
     border-color: var(--emerald-500);
-    box-shadow: 
+    box-shadow:
         0 0 20px rgba(0, 214, 137, 0.2),
         inset 0 0 30px rgba(0, 214, 137, 0.05);
 }
@@ -3049,8 +3049,8 @@ body.page-weekly-lineup .filter-title,
     width: 100%;
     max-width: 600px;
     max-height: 90vh;
-    background: linear-gradient(180deg, 
-        rgba(10, 20, 35, 0.98) 0%, 
+    background: linear-gradient(180deg,
+        rgba(10, 20, 35, 0.98) 0%,
         rgba(5, 12, 25, 0.98) 100%);
     border: 1px solid rgba(0, 214, 137, 0.3);
     border-radius: 16px;
@@ -3327,25 +3327,25 @@ body.page-weekly-lineup .filter-title,
     .page-weekly-lineup .kpi-tiles-row {
         flex-wrap: wrap;
     }
-    
+
     .page-weekly-lineup .kpi-tiles-row .kpi-tiles {
         flex: 1 1 100%;
         justify-content: center;
     }
-    
+
     .import-tile {
         flex: 1 1 100%;
         justify-content: center;
         margin-top: 0.5rem;
     }
-    
+
     .import-tile-btn {
         width: 100%;
         flex-direction: row;
         gap: 0.75rem;
         padding: 0.875rem 1.5rem;
     }
-    
+
     .import-tile-sublabel {
         display: none;
     }
@@ -4172,7 +4172,7 @@ body.page-weekly-lineup .th-filter-btn[aria-expanded="true"],
     background: #0a0a0a !important; /* Pure matte black */
     border: 1px solid #333 !important; /* Subtle dark grey border */
     border-radius: 6px !important;
-    box-shadow: 
+    box-shadow:
         0 12px 32px rgba(0, 0, 0, 0.9),
         0 2px 4px rgba(0, 0, 0, 0.5) !important;
 }

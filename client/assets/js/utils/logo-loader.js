@@ -12,7 +12,7 @@ window.LogoLoader = (() => {
 
   // ESPN CDN URL (last-resort fallback only)
   const ESPN_CDN_URL = 'https://a.espncdn.com/i/teamlogos';
-  
+
   // Cache for loaded logos
   const logoCache = new Map();
   let resolvedBase = null;
@@ -56,7 +56,7 @@ window.LogoLoader = (() => {
    */
   function getLogoUrl(league, teamId) {
     const cacheKey = `${league}-${teamId}`;
-    
+
     if (logoCache.has(cacheKey)) {
       return logoCache.get(cacheKey);
     }
@@ -72,11 +72,11 @@ window.LogoLoader = (() => {
     };
 
     const folder = leagueMap[league] || league;
-    
+
     // Try Front Door/CDN first, then blob fallback
     const baseUrl = getBaseUrl();
     let url = `${baseUrl}/${folder}-500-${teamId}.png`;
-    
+
     // Store in cache
     logoCache.set(cacheKey, url);
     return url;

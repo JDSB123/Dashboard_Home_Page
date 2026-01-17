@@ -3,14 +3,16 @@
 ## Changes Made
 
 ### 1. Service Worker for Asset Caching
+
 - **File**: `client/sw.js` (NEW)
 - **Purpose**: Cache static assets (CSS/JS/images) and HTML pages for instant repeat loads
-- **Strategy**: 
+- **Strategy**:
   - Cache-first for static assets (CSS, JS, images)
   - Network-first for HTML navigation
   - Automatic cache invalidation on version change
 
 ### 2. Data Cache Manager
+
 - **File**: `client/assets/js/utils/data-cache-manager.js` (NEW)
 - **Purpose**: localStorage-based API response caching with TTL
 - **Features**:
@@ -20,11 +22,13 @@
   - Cache statistics and management API
 
 ### 3. Lazy Script Loader
+
 - **File**: `client/assets/js/utils/lazy-script-loader.js` (NEW)
 - **Purpose**: Defer non-critical scripts until after page interactive
 - **Benefits**: Reduces initial JavaScript parse/execution time by ~60%
 
 ### 4. Optimized Script Loading Order
+
 - **File**: `client/weekly-lineup.html` (MODIFIED)
 - **Changes**:
   - Performance utilities load first (cache manager, lazy loader)
@@ -37,6 +41,7 @@
     5. OCR & advanced features (2s delay)
 
 ### 5. Enhanced Unified Picks Fetcher
+
 - **File**: `client/assets/js/features/unified-picks-fetcher.js` (MODIFIED)
 - **Changes**:
   - Integrated DataCacheManager for persistent cache
@@ -45,6 +50,7 @@
   - Reduces redundant API calls when navigating between pages
 
 ### 6. Prefetch Hints on Dashboard
+
 - **File**: `client/index.html` (MODIFIED)
 - **Changes**:
   - Added `<link rel="prefetch">` for weekly-lineup.html, CSS, images
@@ -53,6 +59,7 @@
   - Reduces perceived load time when clicking Weekly Lineup link
 
 ### 7. Aggressive Caching Headers
+
 - **File**: `client/staticwebapp.config.json` (MODIFIED)
 - **Changes**:
   - `/dist/*`: `Cache-Control: public, max-age=31536000, immutable` (1 year)
@@ -62,11 +69,13 @@
   - Relies on query string versioning (`?v=34.00.0`) for cache busting
 
 ### 8. Loading Skeleton CSS
+
 - **File**: `client/assets/css/components/loading-skeleton.css` (NEW)
 - **Purpose**: Provide instant visual feedback during navigation
 - **Includes**: Skeleton rows, page transition overlay, spinner animation
 
 ### 9. Performance Test Page
+
 - **File**: `client/performance-test.html` (NEW)
 - **Purpose**: Validate optimizations and measure improvements
 - **Features**:
@@ -78,16 +87,19 @@
 ## Expected Performance Improvements
 
 ### First Load (Cold Cache)
+
 - **Before**: 3-5 seconds (loading all scripts, API calls, images)
 - **After**: 2-3 seconds (lazy-loaded non-critical scripts)
 - **Improvement**: ~40% faster Time to Interactive
 
 ### Subsequent Navigation (Warm Cache)
+
 - **Before**: 2-4 seconds (re-downloading assets, re-fetching APIs)
 - **After**: 200-500ms (cached assets, cached API responses)
 - **Improvement**: ~85% faster, feels near-instant
 
 ### API Request Reduction
+
 - **Before**: Full API fetch on every page visit
 - **After**: Cached responses for 5 minutes
 - **Benefit**: Reduces Azure Functions costs, improves UX
@@ -95,11 +107,15 @@
 ## Testing Instructions
 
 ### Local Testing
+
 1. Serve the client folder over HTTP (service workers require HTTP/HTTPS):
+
    ```powershell
    npx http-server client -p 8080
    ```
+
    or
+
    ```powershell
    npm install -g serve
    serve client -p 8080
@@ -131,12 +147,13 @@
 
 4. Use `performance-test.html` to verify:
    ```
-  https://www.greenbiersportventures.com/performance-test.html
+   https://www.greenbiersportventures.com/performance-test.html
    ```
 
 ## Rollback Plan
 
 If issues arise, revert these commits:
+
 - Service worker can be disabled by removing registration calls
 - Lazy loading can be disabled by restoring original `<script defer>` tags
 - Cache headers can be reverted in `staticwebapp.config.json`
@@ -151,6 +168,7 @@ If issues arise, revert these commits:
 ## Monitoring
 
 Watch for:
+
 - Cache hit rate (localStorage entries growing)
 - Reduced Azure Functions invocations (fewer API calls)
 - Lower bandwidth usage (static assets from cache)
@@ -166,6 +184,6 @@ Watch for:
 
 ---
 
-**Deployed by**: GitHub Copilot  
-**Date**: January 12, 2026  
+**Deployed by**: GitHub Copilot
+**Date**: January 12, 2026
 **Status**: ✅ Ready for Production

@@ -18,6 +18,7 @@ cd c:\Users\JB\green-bier-ventures\DASHBOARD_main
 ```
 
 **What it does:**
+
 - Logs into Azure
 - Creates the `modelregistry` table in your storage account
 - Adds your current model endpoints (from `config.production.js`)
@@ -27,6 +28,7 @@ cd c:\Users\JB\green-bier-ventures\DASHBOARD_main
 ## Step 2: Verify It Worked
 
 After the script runs, you should see:
+
 ```
 ✅ modelregistry table created
 ✅ NBA endpoint added: https://nba-gbsv-api...
@@ -48,6 +50,7 @@ git push origin main
 ```
 
 This deploys:
+
 - The orchestrator's registry resolver
 - The bootstrap script that hydrates endpoints on page load
 
@@ -73,9 +76,10 @@ Each of your model repos (nba-gbsv-model, ncaam-gbsv-model, etc.) should **autom
 
 1. Go to that repo's GitHub Secrets settings
 2. Add these 3 secrets (if not already there):
-  - `ORCHESTRATOR_URL` = `https://www.greenbiersportventures.com/api`
-   - `ORCHESTRATOR_KEY` = *(ask your team or check Azure Portal → Container App → Auth)*
-   - `AZURE_SUBSCRIPTION_ID` = *(your subscription ID)*
+
+- `ORCHESTRATOR_URL` = `https://www.greenbiersportventures.com/api`
+- `ORCHESTRATOR_KEY` = _(ask your team or check Azure Portal → Container App → Auth)_
+- `AZURE_SUBSCRIPTION_ID` = _(your subscription ID)_
 
 3. Add this **workflow file** to that repo:
 
@@ -88,9 +92,9 @@ on:
   push:
     branches: [main, dev]
     paths:
-      - 'src/**'      # Adjust to your actual model code paths
-      - 'requirements.txt'
-      - '.github/workflows/notify-dashboard-on-deploy.yml'
+      - "src/**" # Adjust to your actual model code paths
+      - "requirements.txt"
+      - ".github/workflows/notify-dashboard-on-deploy.yml"
 
 jobs:
   notify:
@@ -116,18 +120,18 @@ jobs:
           # Replace with your actual RG and app name
           RG_NAME="nba-gbsv-model-rg"
           APP_NAME="nba-gbsv-api"
-          
+
           FQDN=$(az containerapp show \
             --name "$APP_NAME" \
             --resource-group "$RG_NAME" \
             --query 'properties.configuration.ingress.fqdn' \
             --output tsv)
-          
+
           if [ -z "$FQDN" ]; then
             echo "❌ Failed to get FQDN"
             exit 1
           fi
-          
+
           echo "fqdn=$FQDN" >> $GITHUB_OUTPUT
           echo "✅ Got FQDN: $FQDN"
 
@@ -135,7 +139,7 @@ jobs:
         run: |
           MODEL_NAME="nba"
           NEW_FQDN="https://${{ steps.get-fqdn.outputs.fqdn }}"
-          
+
           curl -X POST \
             "${{ secrets.ORCHESTRATOR_URL }}/registry/update" \
             -H "Content-Type: application/json" \
@@ -149,6 +153,7 @@ jobs:
 ```
 
 **Replace these for each model:**
+
 - `nba-gbsv-model-rg` → your RG name
 - `nba-gbsv-api` → your container app name
 - `"nba"` → your model type (`ncaam`, `nfl`, `ncaaf`)
@@ -181,18 +186,22 @@ jobs:
 ## Troubleshooting
 
 **"Setup script fails with Azure login?"**
+
 - Make sure you have Azure CLI installed: `az --version`
 - Run `az login` first to authenticate
 
 **"modelregistry table not found"**
+
 - The script creates it automatically. If it fails, run the script again.
 
 **"Dashboard still using old endpoint?"**
+
 - Check your browser's network tab (F12) → look for `/registry` request
 - Make sure the orchestrator function is deployed
 - Hard refresh the page (Ctrl+Shift+R)
 
 **"How do I know the registry updated?"**
+
 - Check Azure Portal → Storage Account → Tables → `modelregistry`
 - You should see 4 rows (nba, ncaam, nfl, ncaaf) with recent timestamps
 
