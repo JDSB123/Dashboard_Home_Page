@@ -212,7 +212,7 @@ class NavigationManager {
     
     setupSyncHandlers(menu) {
         const syncBtns = menu.querySelectorAll(
-            '.sportsbook-fetch-btn-compact, .sportsbook-fetch-btn-sleek, .sportsbook-fetch-inline'
+            '.sportsbook-fetch-btn-compact, .sportsbook-fetch-compact, .sportsbook-fetch-btn-sleek, .sportsbook-fetch-inline'
         );
         
         syncBtns.forEach(btn => {
