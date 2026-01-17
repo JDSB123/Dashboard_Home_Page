@@ -256,11 +256,13 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
     // League logos
     const BASE_LEAGUE_LOGOS = {
-        'NCAAB': 'assets/logo_ncaam_bball.png',
-        'NCAAM': 'assets/logo_ncaam_bball.png',
-        'NCAAF': 'assets/logo_ncaa_football.png',
-        'NBA': 'https://a.espncdn.com/i/teamlogos/leagues/500/nba.png',
-        'NFL': 'https://a.espncdn.com/i/teamlogos/leagues/500/nfl.png'
+        'NCAAB': 'https://gbsvorchestratorstorage.blob.core.windows.net/team-logos/leagues-500-ncaam.png',
+        'NCAAM': 'https://gbsvorchestratorstorage.blob.core.windows.net/team-logos/leagues-500-ncaam.png',
+        'NCAAF': 'https://gbsvorchestratorstorage.blob.core.windows.net/team-logos/leagues-500-ncaaf.png',
+        'NBA': 'https://gbsvorchestratorstorage.blob.core.windows.net/team-logos/leagues-500-nba.png',
+        'NFL': 'https://gbsvorchestratorstorage.blob.core.windows.net/team-logos/leagues-500-nfl.png',
+        'NHL': 'https://gbsvorchestratorstorage.blob.core.windows.net/team-logos/leagues-500-nhl.png',
+        'MLB': 'https://gbsvorchestratorstorage.blob.core.windows.net/team-logos/leagues-500-mlb.png'
     };
 
     function resolveLeagueLogo(leagueKey) {
