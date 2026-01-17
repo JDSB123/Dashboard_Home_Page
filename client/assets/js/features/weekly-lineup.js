@@ -14,7 +14,7 @@
    ========================================================================== */
 
 // Build version tracking
-const WL_BUILD = '34.00.4';
+const WL_BUILD = '34.00.6';
 window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
 (function() {
@@ -323,23 +323,28 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         'long beach st': { abbr: 'LBSU', id: '299', logo: 'https://a.espncdn.com/i/teamlogos/ncaa/500/299.png' }
     };
 
-    // League logos
-    const BASE_LEAGUE_LOGOS = {
-        'NCAAB': '/assets/icons/league-ncaam.svg',
-        'NCAAM': '/assets/icons/league-ncaam.svg',
-        'NCAAF': '/assets/icons/league-ncaaf.svg',
-        'NBA': 'https://gbsvorchestratorstorage.blob.core.windows.net/team-logos/leagues-500-nba.png',
-        'NFL': 'https://gbsvorchestratorstorage.blob.core.windows.net/team-logos/leagues-500-nfl.png'
+    // League logos - local fallbacks that always work (relative paths from client folder)
+    const LOCAL_LEAGUE_LOGOS = {
+        'NCAAB': 'assets/icons/league-ncaam.svg',
+        'NCAAM': 'assets/icons/league-ncaam.svg',
+        'NCAAF': 'assets/icons/league-ncaaf.svg',
+        'NBA': 'assets/nba-logo.png',
+        'NFL': 'assets/nfl-logo.png'
     };
 
     function resolveLeagueLogo(leagueKey) {
         const normalizedKey = (leagueKey || '').toString().trim();
+        const upperKey = normalizedKey.toUpperCase();
+        // Always prefer local assets for reliability
+        if (LOCAL_LEAGUE_LOGOS[upperKey]) {
+            return LOCAL_LEAGUE_LOGOS[upperKey];
+        }
+        // Try LogoLoader for other leagues
         if (window.LogoLoader?.getLeagueLogoUrl) {
             const remoteLogo = window.LogoLoader.getLeagueLogoUrl(normalizedKey);
             if (remoteLogo) return remoteLogo;
         }
-        const upperKey = normalizedKey.toUpperCase();
-        return BASE_LEAGUE_LOGOS[upperKey] || '';
+        return '';
     }
 
     function getTeamInfo(teamName) {
@@ -1533,9 +1538,18 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         // Format date in CST (Central Time) - always show as CST
         const formatDate = (dateStr) => {
             if (!dateStr) return 'TBD';
-            // Try to parse and convert to CST
-            const d = new Date(dateStr);
-            if (isNaN(d)) return dateStr;
+            // Handle MM/DD format (e.g., "01/17") by assuming current year
+            let d;
+            const mmddMatch = dateStr.match(/^(\d{1,2})\/(\d{1,2})$/);
+            if (mmddMatch) {
+                const month = parseInt(mmddMatch[1], 10) - 1; // JS months are 0-indexed
+                const day = parseInt(mmddMatch[2], 10);
+                const year = new Date().getFullYear();
+                d = new Date(year, month, day);
+            } else {
+                d = new Date(dateStr);
+            }
+            if (isNaN(d)) return 'TBD'; // Don't return raw unparseable string
             // Convert to CST (America/Chicago)
             try {
                 return d.toLocaleDateString('en-US', {

@@ -1,10 +1,11 @@
 /**
- * Auto Game Fetcher v2.2
+ * Auto Game Fetcher v2.3
  * Automatically fetches today's games and validates pick games
  * Prevents betting on finished/invalid games
  * v2.0: Fetches standings for team records (W-L)
  * v2.1: SportsDataIO as primary source for NFL/NCAAF (more accurate)
  * v2.2: Use Azure Functions proxy for SportsDataIO (avoids CORS)
+ * v2.3: Fixed corrupted file structure
  */
 
 (function() {
@@ -19,24 +20,22 @@
     const SCOREBOARD_INTERVAL_MAX_MS = 600000; // 10 minutes
 
     let todaysGamesCache = null;
-            if (isEnabled('NCAAM')) {
-                console.log('[AUTO-GAME-FETCHER] Fetching NCAAM games...');
-                const ncaamData = await fetchESPN('NCAAM');
-                const ncaamGames = parseESPNGames(ncaamData, 'NCAAM');
-                allGames.push(...ncaamGames);
-                console.log(`[AUTO-GAME-FETCHER] Found ${ncaamGames.length} NCAAM games`);
+    let teamRecordsCache = {};
+    let lastFetch = null;
+    const lastStandingsFetch = {
+        NBA: 0,
+        NFL: 0,
         NCAAM: 0,
         NCAAF: 0
     };
     let scoreboardIntervalMs = SCOREBOARD_INTERVAL_INITIAL_MS;
 
     /**
-            if (isEnabled('NBA')) {
-                console.log('[AUTO-GAME-FETCHER] Fetching NBA games...');
-                const nbaData = await fetchESPN('NBA');
-                const nbaGames = parseESPNGames(nbaData, 'NBA');
-                allGames.push(...nbaGames);
-                console.log(`[AUTO-GAME-FETCHER] Found ${nbaGames.length} NBA games`);
+     * Get scoreboard proxy URL from config
+     */
+    function getScoreboardProxyUrl() {
+        // Primary: API base (Front Door)
+        const apiBase = window.APP_CONFIG?.API_BASE_URL;
         if (apiBase) {
             const trimmed = apiBase.replace(/\/+$/, '');
             return `${trimmed}/scoreboard`;
@@ -44,16 +43,15 @@
 
         // Secondary: Functions base (Front Door or direct)
         const functionsBase = window.APP_CONFIG?.FUNCTIONS_BASE_URL;
-            if (isEnabled('NFL')) {
-                console.log('[AUTO-GAME-FETCHER] Fetching NFL games from SportsDataIO...');
-                const nflSportsData = await fetchSportsDataIO('nfl');
-                const nflGames = parseSportsDataIOGames(nflSportsData, 'NFL');
-                if (nflGames.length > 0) {
-                    allGames.push(...nflGames);
-                    console.log(`[AUTO-GAME-FETCHER] Found ${nflGames.length} NFL games (SportsDataIO)`);
-                } else {
-                    throw new Error('No games from SportsDataIO');
-                }
+        if (functionsBase) {
+            const trimmed = functionsBase.replace(/\/+$/, '');
+            return `${trimmed}/scoreboard`;
+        }
+
+        // Fallback: relative path
+        return '/api/scoreboard';
+    }
+
     /**
      * Fetch from SportsDataIO via Azure Functions proxy (avoids CORS)
      */
@@ -71,16 +69,15 @@
 
         return await response.json();
     }
-            if (isEnabled('NCAAF')) {
-                console.log('[AUTO-GAME-FETCHER] Fetching NCAAF games from SportsDataIO...');
-                const ncaafSportsData = await fetchSportsDataIO('cfb');
-                const ncaafGames = parseSportsDataIOGames(ncaafSportsData, 'NCAAF');
-                if (ncaafGames.length > 0) {
-                    allGames.push(...ncaafGames);
-                    console.log(`[AUTO-GAME-FETCHER] Found ${ncaafGames.length} NCAAF games (SportsDataIO)`);
-                } else {
-                    throw new Error('No games from SportsDataIO');
-                }
+
+    /**
+     * Fetch standings from ESPN to get team records
+     */
+    async function fetchStandings(sport) {
+        const now = Date.now();
+        if (lastStandingsFetch[sport] && now - lastStandingsFetch[sport] < STANDINGS_TTL_MS) {
+            return;
+        }
 
         const sportPath = sport === 'NBA' ? 'nba' :
                          sport === 'NFL' ? 'nfl' :
@@ -286,7 +283,7 @@
         }
 
         // Feature flags for disabled leagues
-        const disabledLeagues = new Set(window.APP_CONFIG?.WEEKLY_LINEUP_DISABLED_LEAGUES || window.WEEKLY_LINEUP_DISABLED_LEAGUES || ['NFL', 'NCAAF']); // Default disabled if not config
+        const disabledLeagues = new Set(window.APP_CONFIG?.WEEKLY_LINEUP_DISABLED_LEAGUES || window.WEEKLY_LINEUP_DISABLED_LEAGUES || ['NFL', 'NCAAF']);
         const isEnabled = (league) => !disabledLeagues.has(league);
 
         // FIRST: Fetch standings (cached) to get team records
@@ -302,6 +299,7 @@
 
         const allGames = [];
 
+        // NCAAM via ESPN
         try {
             if (isEnabled('NCAAM')) {
                 console.log('[AUTO-GAME-FETCHER] Fetching NCAAM games...');
@@ -314,6 +312,7 @@
             console.error('[AUTO-GAME-FETCHER] Error fetching NCAAM:', e.message);
         }
 
+        // NBA via ESPN
         try {
             if (isEnabled('NBA')) {
                 console.log('[AUTO-GAME-FETCHER] Fetching NBA games...');
@@ -373,9 +372,10 @@
                     const ncaafData = await fetchESPN('NCAAF');
                     const ncaafGames = parseESPNGames(ncaafData, 'NCAAF');
                     allGames.push(...ncaafGames);
-                console.log(`[AUTO-GAME-FETCHER] Found ${ncaafGames.length} NCAAF games (ESPN fallback)`);
-            } catch (e2) {
-                console.error('[AUTO-GAME-FETCHER] Error fetching NCAAF from both sources:', e2.message);
+                    console.log(`[AUTO-GAME-FETCHER] Found ${ncaafGames.length} NCAAF games (ESPN fallback)`);
+                } catch (e2) {
+                    console.error('[AUTO-GAME-FETCHER] Error fetching NCAAF from both sources:', e2.message);
+                }
             }
         }
 
@@ -438,6 +438,9 @@
         return `Scheduled for ${game.time}`;
     }
 
+    /**
+     * Schedule scoreboard refresh with exponential backoff
+     */
     async function scheduleScoreboardRefresh() {
         try {
             await fetchTodaysGames(true);
@@ -471,6 +474,6 @@
         getRecordsCache: () => teamRecordsCache
     };
 
-    console.log('✅ AutoGameFetcher v2.2 loaded - NFL/NCAAF: SportsDataIO via proxy | NBA/NCAAM: ESPN');
+    console.log('✅ AutoGameFetcher v2.3 loaded - NFL/NCAAF: SportsDataIO via proxy | NBA/NCAAM: ESPN');
 
 })();

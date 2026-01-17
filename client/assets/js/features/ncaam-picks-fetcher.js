@@ -249,26 +249,50 @@
 
         // Parse time from "12/25 11:10 AM" format
         let timeStr = pick.time_cst || '';
+        let dateStr = '';
         if (timeStr.includes(' ')) {
             const timeParts = timeStr.split(' ');
+            dateStr = timeParts[0]; // "12/25"
             timeStr = timeParts.slice(1).join(' '); // "11:10 AM"
+        }
+
+        // Extract away and home team from matchup or individual fields
+        const awayTeam = pick.away_team || (pick.matchup ? pick.matchup.split(' @ ')[0] : '') || '';
+        const homeTeam = pick.home_team || (pick.matchup ? pick.matchup.split(' @ ')[1] : '') || '';
+
+        // Determine pickTeam - the team/direction being picked
+        let pickTeam = pick.pick || '';
+        let pickDirection = '';
+        const upperPick = pickTeam.toUpperCase();
+        if (upperPick === 'OVER' || upperPick === 'UNDER') {
+            pickDirection = upperPick;
         }
 
         return {
             sport: 'NCAAM',
-            game: pick.matchup || `${pick.away_team} @ ${pick.home_team}`,
-            pick: pick.pick || '',
+            date: dateStr || new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+            time: timeStr,
+            awayTeam: awayTeam,
+            homeTeam: homeTeam,
+            game: pick.matchup || `${awayTeam} @ ${homeTeam}`,
+            pick: pickTeam,
+            pickTeam: pickTeam,
+            pickDirection: pickDirection,
+            pickType: marketType,
             odds: pick.pick_odds || '-110',
             edge: edgeValue,
             confidence: fireNum,
-            time: timeStr,
+            fire: fireNum,
+            fireLabel: fireNum === 5 ? 'MAX' : '',
             market: marketType,
-            period: pick.period || 'FG',
+            segment: pick.period || 'FG',
             line: pick.market_line || '',
             modelPrice: pick.model_line || '',
+            modelSpread: pick.model_line || '',
             fire_rating: pick.fire_rating || '',
             rationale: pick.rationale || pick.reason || pick.analysis || pick.notes || pick.executive_summary || '',
-            modelVersion: pick.model_version || pick.modelVersion || pick.model_tag || pick.modelTag || ''
+            modelVersion: pick.model_version || pick.modelVersion || pick.model_tag || pick.modelTag || '',
+            modelStamp: pick.model_version || pick.modelVersion || pick.model_tag || pick.modelTag || ''
         };
     };
 

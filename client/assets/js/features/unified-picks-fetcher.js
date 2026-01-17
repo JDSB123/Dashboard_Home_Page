@@ -340,10 +340,16 @@
         if (window.WeeklyLineup?.populateTable && result.picks.length > 0) {
             // Transform picks to the format expected by populateWeeklyLineupTable
             const formattedPicks = result.picks.map(pick => {
-                // Parse game string "Away @ Home" to get teams
-                const gameParts = (pick.game || '').split(' @ ');
-                const awayTeam = gameParts[0] || '';
-                const homeTeam = gameParts[1] || '';
+                // Use awayTeam/homeTeam if provided, otherwise parse from game string
+                let awayTeam = pick.awayTeam || '';
+                let homeTeam = pick.homeTeam || '';
+
+                // Fallback: Parse game string "Away @ Home" to get teams
+                if (!awayTeam || !homeTeam) {
+                    const gameParts = (pick.game || '').split(' @ ');
+                    awayTeam = awayTeam || (gameParts[0] || '').trim();
+                    homeTeam = homeTeam || (gameParts[1] || '').trim();
+                }
 
                 // Parse edge percentage string to number
                 let edgeNum = 0;
@@ -359,17 +365,19 @@
                 );
 
                 return {
-                    date: new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }),
+                    date: pick.date || new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }),
                     time: pick.time || '',
                     sport: pick.sport || 'NBA',
                     awayTeam: awayTeam,
                     homeTeam: homeTeam,
-                    segment: pick.period || 'FG',
-                    pickTeam: pick.pick || '',
-                    pickType: (pick.market || 'spread').toLowerCase(),
+                    segment: pick.segment || pick.period || 'FG',
+                    pickTeam: pick.pickTeam || pick.pick || '',
+                    pickType: (pick.pickType || pick.market || 'spread').toLowerCase(),
+                    pickDirection: pick.pickDirection || '',
                     line: pick.line || '',
                     odds: pick.odds || '-110',
                     modelPrice: pick.modelPrice || '',
+                    modelSpread: pick.modelSpread || pick.modelPrice || '',
                     edge: edgeNum,
                     fire: fireMeta.fire,
                     fireLabel: pick.fireLabel || fireMeta.fireLabel,
