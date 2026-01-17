@@ -98,7 +98,7 @@
             if (!response.ok) return;
 
             const data = await response.json();
-            
+
             // Parse standings - structure: children[].standings.entries[]
             const conferences = data.children || [];
             for (const conf of conferences) {
@@ -110,10 +110,10 @@
                     const stats = entry.stats || [];
                     const winsObj = stats.find(s => s.name === 'wins');
                     const lossesObj = stats.find(s => s.name === 'losses');
-                    
+
                     const wins = winsObj?.displayValue || winsObj?.value || '0';
                     const losses = lossesObj?.displayValue || lossesObj?.value || '0';
-                    
+
                     teamRecordsCache[teamName.toLowerCase()] = `${wins}-${losses}`;
                 }
             }
@@ -291,7 +291,7 @@
 
         // FIRST: Fetch standings (cached) to get team records
         console.log('[AUTO-GAME-FETCHER] Fetching team standings for records (cached)...');
-        
+
         const standingsPromises = [];
         if (isEnabled('NBA')) standingsPromises.push(fetchStandings('NBA'));
         if (isEnabled('NFL')) standingsPromises.push(fetchStandings('NFL'));

@@ -14,7 +14,7 @@
    ========================================================================== */
 
 // Build version tracking
-const WL_BUILD = '34.00.3';
+const WL_BUILD = '34.00.4';
 window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
 (function() {
@@ -2024,46 +2024,107 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         const tbody = document.getElementById('picks-tbody') || document.querySelector('.weekly-lineup-table tbody');
         if (!tbody) return;
 
-        const choices = [
+        // Standard Sportsbooks + Custom ones
+        const SPORTSBOOK_OPTIONS = [
             'Hulk Wager',
             'Bombay 711',
             'King of Sports',
             'Prime Time Action',
+            'DraftKings',
+            'FanDuel',
+            'BetMGM',
+            'Caesars',
+            'BetRivers',
+            'PointsBet',
+            'Hard Rock',
+            'Circa',
             'Manual'
         ];
 
+        // Handler for "+ Book" button click - Transition to Dropdown
+        // AND Handler for clicking existing "Cemented" book to edit
         tbody.addEventListener('click', function(e) {
             const btn = e.target.closest('.sportsbook-set-btn');
-            if (!btn) return;
+            const cemented = e.target.closest('.sportsbook-value');
 
-            const pickKey = btn.getAttribute('data-pick-key');
-            if (!pickKey) return;
+            let targetEl = null;
+            let pickKey = null;
+            let currentVal = '';
 
+            // If clicking the button
+            if (btn) {
+                targetEl = btn;
+                pickKey = btn.getAttribute('data-pick-key');
+            }
+            // If clicking an existing book (to edit)
+            else if (cemented) {
+                targetEl = cemented;
+                // Look up to the TR to find the key
+                const tr = cemented.closest('tr');
+                if (tr) pickKey = tr.getAttribute('data-pick-key');
+                currentVal = cemented.textContent;
+            }
+
+            if (!targetEl || !pickKey) return;
+
+            // Find the pick object
             const pick = Array.isArray(allPicks) ? allPicks.find(p => buildPickKey(p) === pickKey) : null;
             if (!pick) return;
 
-            const current = normalizeSportsbookLabel(pick.sportsbook || '');
-            const promptMsg = `Set sportsbook\n\nOptions: ${choices.join(', ')}\n\nEnter a sportsbook name:`;
-            const next = window.prompt(promptMsg, current || choices[0] || '');
-            if (next === null) return;
+            // Create Select Element
+            const select = document.createElement('select');
+            select.className = 'sportsbook-select';
 
-            const normalized = normalizeSportsbookLabel(next);
-            pick.sportsbook = normalized;
-            setSportsbookOverride(pick, normalized);
-            saveWeeklyLineupPicks(allPicks);
+            // Add default/placeholder
+            const defaultOpt = document.createElement('option');
+            defaultOpt.value = '';
+            defaultOpt.textContent = 'Select Book...';
+            select.appendChild(defaultOpt);
 
-            // Update the cell in-place
-            try {
-                const container = btn.closest('.datetime-cell');
-                if (container) {
-                    const safe = window.PicksDOMUtils?.escapeHtml
-                        ? window.PicksDOMUtils.escapeHtml(normalized)
-                        : (() => { const d = document.createElement('div'); d.textContent = normalized; return d.innerHTML; })();
-                    btn.outerHTML = `<span class="sportsbook-value" title="Sportsbook">${safe}</span>`;
+            SPORTSBOOK_OPTIONS.forEach(book => {
+                const opt = document.createElement('option');
+                opt.value = book;
+                opt.textContent = book;
+                // Pre-select if matches
+                if (currentVal && normalizeSportsbookLabel(book).toLowerCase() === normalizeSportsbookLabel(currentVal).toLowerCase()) {
+                    opt.selected = true;
                 }
-            } catch (_) {}
+                select.appendChild(opt);
+            });
 
-            showNotification(`Sportsbook set: ${normalized}`, 'success');
+            // Replace the target (button or span) with the select
+            targetEl.parentNode.replaceChild(select, targetEl);
+            select.focus();
+
+            // Handle Selection
+            const handleSelection = () => {
+                const val = select.value;
+                if (val) {
+                    setSportsbookOverride(pick, val);
+                    // Update in-memory pick
+                    pick.sportsbook = val;
+                    // Rerender table to "Cement" it
+                    populateWeeklyLineupTable(allPicks);
+                } else {
+                    // If empty/cancelled, just rerender to restore previous state
+                     populateWeeklyLineupTable(allPicks);
+                }
+            };
+
+            // Commit on change
+            select.addEventListener('change', handleSelection);
+
+            // On blur, if no change event fired (user clicked away), we should restore.
+            // But 'change' fires before blur if value changed.
+            // If value didn't change (user dismissed), blur fires.
+            select.addEventListener('blur', function() {
+                // Short timeout to allow change event to process first if needed
+                setTimeout(() => {
+                    if (document.contains(select)) { // If still in DOM (change didn't remove it)
+                        populateWeeklyLineupTable(allPicks);
+                    }
+                }, 100);
+            });
         });
     }
 

@@ -92,27 +92,27 @@ function detectLeagueFromTeams(gameStr, awayTeam, homeTeam) {
     const away = (awayTeam || '').toLowerCase();
     const home = (homeTeam || '').toLowerCase();
     const combined = `${away} ${home}`.toLowerCase();
-    
+
     // Check NBA teams first
     if (NBA_TEAMS.some(team => combined.includes(team))) {
         return 'nba';
     }
-    
+
     // Check NFL teams
     if (NFL_TEAMS.some(team => combined.includes(team))) {
         return 'nfl';
     }
-    
+
     // Check College Basketball
     if (COLLEGE_BASKETBALL_TEAMS.some(team => combined.includes(team))) {
         return 'ncaab';
     }
-    
+
     // Check College Football
     if (COLLEGE_FOOTBALL_TEAMS.some(team => combined.includes(team))) {
         return 'ncaaf';
     }
-    
+
     // Default to NFL
     return 'nfl';
 }
@@ -453,14 +453,14 @@ function generatePickDisplay(parsedPick, teamLogo, teamAbbr, teamName, coverage 
      * - Team Total: Logo + "Raiders O 15 (-125)"
      * - Moneyline: Logo + "Raiders (-125)"
      * - Spread: Logo + "Raiders +2.7 (-110)"
-     * 
+     *
      * Adds live status arrows (↑/↓) based on coverage for live picks
      */
-    
+
     // Determine live status arrow
     let liveArrow = '';
     const isLive = statusClass === 'on-track' || statusClass === 'at-risk' || statusClass === 'live';
-    
+
     if (isLive && coverage) {
         if (typeof coverage.diff === 'number') {
             if (coverage.diff > 0) {
@@ -1226,19 +1226,19 @@ function calculatePickMargin(parsedPick, result, game) {
      * Returns margin string like "Covered by 5 pts" or "Lost by 3 pts"
      */
     if (!result || !parsedPick) return null;
-    
+
     // Extract scores from result
     const scoreMatch = result.match(/(\d+)-(\d+)|(\d+)\s*-\s*(\d+)/);
     if (!scoreMatch) return null;
-    
+
     const awayScore = parseInt(scoreMatch[1] || scoreMatch[3]);
     const homeScore = parseInt(scoreMatch[2] || scoreMatch[4]);
-    
+
     if (isNaN(awayScore) || isNaN(homeScore)) return null;
-    
+
     const actualDiff = awayScore - homeScore; // positive = away won
     const actualTotal = awayScore + homeScore;
-    
+
     // Determine which team was picked (away or home)
     let isPickedAway = false;
     if (parsedPick.pickTeam && game) {
@@ -1247,7 +1247,7 @@ function calculatePickMargin(parsedPick, result, game) {
         const awayLower = teams.away.toLowerCase();
         isPickedAway = awayLower.includes(pickTeamLower) || pickTeamLower.includes(awayLower);
     }
-    
+
     // Calculate margin based on pick type
     if (parsedPick.pickType === 'Spread' && parsedPick.line) {
         const spread = parseFloat(parsedPick.line);
@@ -1261,7 +1261,7 @@ function calculatePickMargin(parsedPick, result, game) {
             // Home team + spread vs away team
             coverMargin = (homeScore + spread) - awayScore;
         }
-        
+
         const absMargin = Math.abs(coverMargin);
         if (coverMargin > 0) {
             return `Covered by ${absMargin.toFixed(1)} pts`;
@@ -1273,7 +1273,7 @@ function calculatePickMargin(parsedPick, result, game) {
     } else if (parsedPick.pickType === 'Over' || parsedPick.pickType === 'Under') {
         const line = parseFloat(parsedPick.line);
         if (isNaN(line)) return null;
-        
+
         const margin = Math.abs(actualTotal - line);
         if (parsedPick.pickType === 'Over') {
             if (actualTotal > line) {
@@ -1300,7 +1300,7 @@ function calculatePickMargin(parsedPick, result, game) {
         } else {
             margin = homeScore - awayScore;
         }
-        
+
         const absMargin = Math.abs(margin);
         if (margin > 0) {
             return `Won by ${absMargin} pts`;
@@ -1310,7 +1310,7 @@ function calculatePickMargin(parsedPick, result, game) {
             return 'Tied';
         }
     }
-    
+
     return null;
 }
 
@@ -1320,11 +1320,11 @@ function buildStatusBadgeHTML({ statusClass, label, tooltip, info, extraClass = 
     const safeTooltip = tooltip ? escapeHtmlForStatus(tooltip) : '';
     const safeInfo = info ? escapeHtmlForStatus(info) : '';
     const safeMargin = margin ? escapeHtmlForStatus(margin) : '';
-    
+
     // Only include info if it's meaningful (has wins or losses, not just "0W-0L-XP")
     const hasWinOrLoss = safeInfo && /(^|[^\d])([1-9]\d*)W|(^|[^\d])([1-9]\d*)L/.test(safeInfo);
     const shouldShowInfo = safeInfo && hasWinOrLoss;
-    
+
     const tooltipAttr = safeTooltip ? ` data-blurb="${safeTooltip}"` : '';
     const infoAttr = shouldShowInfo ? ` data-status-info="${safeInfo}"` : '';
     const marginAttr = safeMargin ? ` data-margin="${safeMargin}"` : '';
@@ -1341,12 +1341,12 @@ function formatGameTimeStatus(statusClass, liveInfo, result, status, countdown, 
      * - LIVE + period/time for live games
      * - Countdown or "Starts in X" for pending games
      */
-    
+
     // Final games
     if (statusClass === 'win' || statusClass === 'lost' || statusClass === 'final') {
         return '<span class="game-time-status final">FINAL</span>';
     }
-    
+
     // Live games - show LIVE indicator + period/time
     if (statusClass === 'on-track' || statusClass === 'at-risk' || statusClass === 'live') {
         let timeText = '';
@@ -1372,7 +1372,7 @@ function formatGameTimeStatus(statusClass, liveInfo, result, status, countdown, 
                 timeText = liveInfo.clock;
             }
         }
-        
+
         // Fallback to result if available
         if (!timeText && result) {
             const periodMatch = result.match(/(Q\d+|OT|1ST|2ND|3RD|4TH|1H|2H)/i);
@@ -1385,19 +1385,19 @@ function formatGameTimeStatus(statusClass, liveInfo, result, status, countdown, 
                 timeText = clockMatch[1];
             }
         }
-        
+
         if (timeText) {
             return `<span class="live-indicator">LIVE</span><span class="game-time-status">${escapeHtmlForStatus(timeText)}</span>`;
         } else {
             return '<span class="live-indicator">LIVE</span><span class="game-time-status">LIVE</span>';
         }
     }
-    
+
     // Pending games - show countdown or start time
     if (countdown) {
         return `<span class="game-time-status countdown">${escapeHtmlForStatus(countdown)}</span>`;
     }
-    
+
     if (start) {
         // Check if it's a countdown format
         if (start.includes('Starts in') || start.includes('starts in')) {
@@ -1406,16 +1406,16 @@ function formatGameTimeStatus(statusClass, liveInfo, result, status, countdown, 
         // Otherwise show as start time
         return `<span class="game-time-status countdown">${escapeHtmlForStatus(start)}</span>`;
     }
-    
+
     // Default fallback
     if (result) {
         return `<span class="game-time-status">${escapeHtmlForStatus(result)}</span>`;
     }
-    
+
     if (status) {
         return `<span class="game-time-status">${escapeHtmlForStatus(status)}</span>`;
     }
-    
+
     return '<span class="game-time-status">—</span>';
 }
 
@@ -1703,7 +1703,7 @@ function buildPickRow(pick, index) {
     // Determine league - intelligently detect from team names
     const leagueFromPick = pick.league || pick.sport || '';
     let league = leagueFromPick ? leagueFromPick.toString().toLowerCase() : '';
-    
+
     if (!league) {
         // Use helper function to detect league from teams
         league = detectLeagueFromTeams(pick.game, awayTeamName, homeTeamName);
@@ -1922,7 +1922,7 @@ async function loadAndAppendPicks() {
     console.log('[PICKS LOADER] Starting to load picks...');
     try {
         const apiUrl = window.APP_CONFIG?.API_BASE_URL || '/api';
-        
+
         // Check if database sync is enabled (default to false if not specified)
         if (window.APP_CONFIG?.ENABLE_DB_SYNC === false) {
              console.log('[PICKS LOADER] DB sync disabled in config - skipping API fetch');
@@ -2098,7 +2098,7 @@ async function loadTeamRecords(options = {}) {
                     Object.keys(data).forEach(league => {
                         Object.assign(records, data[league]);
                     });
-                    
+
                     const normalized = {};
                     Object.keys(records).forEach(key => {
                         normalized[key.toUpperCase()] = records[key];
@@ -2155,7 +2155,7 @@ async function loadPicksFromDatabase() {
         // Check if PicksService is available (enterprise Azure storage)
         if (window.PicksService) {
             console.log('[DB LOADER] Loading picks from Azure Cosmos DB via PicksService...');
-            
+
             // Check if migration from localStorage is needed
             const migrationStatus = window.PicksService.checkMigrationNeeded();
             if (migrationStatus.needed) {
@@ -2163,13 +2163,13 @@ async function loadPicksFromDatabase() {
                 const migrationResult = await window.PicksService.migrateFromLocalStorage();
                 console.log('[DB LOADER] Migration result:', migrationResult);
             }
-            
+
             // Fetch picks from Azure
             const picks = await window.PicksService.getAll({ limit: 200 });
-            
+
             if (picks && picks.length > 0) {
                 console.log(`[DB LOADER] ✅ Loaded ${picks.length} picks from Azure Cosmos DB`);
-                
+
                 // Transform picks to match expected format
                 return picks.map(pick => ({
                     ...pick,
@@ -2178,7 +2178,7 @@ async function loadPicksFromDatabase() {
                 }));
             }
         }
-        
+
         // Fallback: Check legacy API config
         if (!window.APP_CONFIG || !window.APP_CONFIG.API_BASE_URL) {
             console.log('[DB LOADER] API not configured, falling back to localStorage');
@@ -2270,10 +2270,10 @@ if (document.readyState === 'loading') {
         if (recordsPromise && typeof recordsPromise.catch === 'function') {
             recordsPromise.catch(error => console.warn('[RECORDS] Initial team records load failed:', error));
         }
-        
+
         // Load picks from database/API/localStorage
         initializePicksAndRecords();
-        
+
         // Initialize delete buttons
         initializeDeleteButtons();
     });
@@ -2283,10 +2283,10 @@ if (document.readyState === 'loading') {
     if (recordsPromise && typeof recordsPromise.catch === 'function') {
         recordsPromise.catch(error => console.warn('[RECORDS] Initial team records load failed:', error));
     }
-    
+
     // Load picks from database/API/localStorage
     initializePicksAndRecords();
-    
+
     // Initialize delete buttons
     initializeDeleteButtons();
 }
@@ -2295,21 +2295,21 @@ if (document.readyState === 'loading') {
 function initializeDeleteButtons() {
     const tbody = document.getElementById('picks-tbody');
     if (!tbody) return;
-    
+
     tbody.addEventListener('click', async (e) => {
         const deleteBtn = e.target.closest('.delete-pick-btn');
         if (!deleteBtn) return;
-        
+
         e.stopPropagation();
-        
+
         const row = deleteBtn.closest('tr');
         if (!row) return;
-        
+
         // Confirm deletion
         if (confirm('Remove this pick from the dashboard?')) {
             const pickIndex = deleteBtn.dataset.pickIndex;
             const pickId = row.dataset.pickId || deleteBtn.dataset.pickId;
-            
+
             // Try PicksService first (Azure Cosmos DB)
             if (window.PicksService && pickId) {
                 try {
@@ -2332,18 +2332,18 @@ function initializeDeleteButtons() {
                     window.LocalPicksManager.delete(picks[pickIndex].id);
                 }
             }
-            
+
             // Remove row from DOM
             row.remove();
             console.log('[PICKS] Removed pick from UI:', pickId || pickIndex);
-            
+
             // Update KPI tiles if available
             if (window.KPICalculator && window.KPICalculator.recalculateLiveKPI) {
                 window.KPICalculator.recalculateLiveKPI();
             }
         }
     });
-    
+
     console.log('[PICKS] Delete button handlers initialized');
 }
 

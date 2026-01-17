@@ -21,10 +21,10 @@
          */
         init() {
             if (this.initialized) return;
-            
+
             // Hook into existing view toggle
             this._enhanceViewToggle();
-            
+
             this.initialized = true;
             console.log('📚 History Manager initialized');
         }
@@ -63,7 +63,7 @@
 
             try {
                 const weeks = await this.fetchAvailableWeeks();
-                
+
                 if (!weeks || weeks.length === 0) {
                     // Fall back to localStorage
                     console.log('📚 No blob archives found, using localStorage');
@@ -94,7 +94,7 @@
          */
         async fetchAvailableWeeks() {
             const response = await fetch(`${getApiBase()}/api/archive-picks/list`);
-            
+
             if (!response.ok) {
                 throw new Error(`Failed to fetch weeks: ${response.status}`);
             }
@@ -126,7 +126,7 @@
 
             try {
                 const response = await fetch(`${getApiBase()}/api/archive-picks/${weekId}`);
-                
+
                 if (!response.ok) {
                     throw new Error(`Failed to fetch week: ${response.status}`);
                 }
@@ -152,7 +152,7 @@
          */
         _renderWeekSelector(weeks) {
             let statsBar = document.querySelector('.history-stats-bar');
-            
+
             if (!statsBar) {
                 statsBar = document.createElement('div');
                 statsBar.className = 'history-stats-bar';
@@ -300,9 +300,9 @@
         _formatMatchup(pick) {
             const away = pick.awayTeam || pick.team1 || '';
             const home = pick.homeTeam || pick.team2 || '';
-            
+
             if (!away && !home) return pick.matchup || '';
-            
+
             return `<div class="matchup-cell">
                 <span class="team-away">${away}</span>
                 <span class="vs">@</span>

@@ -141,18 +141,18 @@ async function networkFirstNavigation(event) {
 self.addEventListener('fetch', (event) => {
   const req = event.request;
   const url = new URL(req.url);
-  
+
   // Skip cross-origin requests entirely - let browser handle them
   if (url.origin !== self.location.origin) {
     // Don't call event.respondWith() - just return to let browser handle
     return;
   }
-  
+
   // Double-check: skip any ESPN/external CDN requests that slip through
   if (EXTERNAL_DOMAINS.some(domain => url.hostname.includes(domain))) {
     return;
   }
-  
+
   // HTML navigations
   if (req.mode === 'navigate' || (req.headers.get('accept') || '').includes('text/html')) {
     event.respondWith(networkFirstNavigation(event));

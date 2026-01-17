@@ -24,13 +24,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Green Bier Sport Ventures — Dashboard v4.1</title>
-    
+
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="assets/Logo%208.5.png?v=20251216">
-    
+
     <!-- Preload critical background image -->
     <link rel="preload" as="image" href="assets/JB_Bearish_Market_FULL_page.png">
-    
+
     <!-- Google Fonts: Athletic Prestige Design -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
@@ -81,13 +81,13 @@
     <!-- Logo loading from Azure Blob Storage -->
     <script src="assets/js/utils/logo-loader.js?v=1.0.1" defer></script>
     <script src="assets/js/utils/logo-url-rewriter.js?v=1.0.0" defer></script>
-    
+
     <!-- Error Handler (must load early for global error handling) -->
     <script src="assets/js/utils/error-handler.js?v=34.00.0" defer></script>
-    
+
     <!-- Team Data Loader (loads external team data) -->
     <script src="assets/js/utils/team-data-loader.js?v=34.00.0" defer></script>
-    
+
     <!-- Filter State Persistence (saves/restores filter state) -->
     <script src="assets/js/utils/filter-state-persistence.js?v=34.00.0" defer></script>
 
@@ -95,7 +95,7 @@
     <script src="assets/js/core/debug-config.js?v=34.00.0" defer></script>
     <script src="assets/js/features/manual-upload.js" defer></script>
     <script src="assets/js/features/sportsbook-selection-handler.js?v=34.00.0" defer></script>
-    
+
     <!-- Page Transition Handler (smooth navigation with loading state) -->
     <script src="assets/js/utils/page-transition-handler.js?v=1.0.0" defer></script>
     <!-- Prefetch Weekly Lineup assets to speed up navigation -->
@@ -277,7 +277,7 @@
 </nav>
 
     <main class="main-container">
-        
+
         <!-- ===== Topline Header ===== -->
         <header class="dashboard-topline">
             <div class="brand-header-inline">
@@ -289,7 +289,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="kpi-tiles">
                 <!-- KPI Tile 1: Projected PnL -->
                 <div class="kpi-tile" data-tile-id="1" data-action="flip-tile" role="button" tabindex="0" aria-label="Projected PnL KPI, click to flip">
@@ -356,7 +356,7 @@
                     <button class="date-range-option" data-range="sinceInception" role="option" aria-selected="false">Since Inception</button>
                     <button class="date-range-option" data-range="all" role="option" aria-selected="false">All Time</button>
                 </div>
-                
+
                 <!-- Custom Calendar Dropdown Card -->
                 <div class="custom-calendar-card" id="custom-calendar-card" hidden>
                     <div class="calendar-card-header">
@@ -398,7 +398,7 @@
                     </div>
                 </div>
             </div>
-            
+
         </header>
 
         <!-- ===== Main Dashboard Layout ===== -->
@@ -552,18 +552,18 @@
             </table>
         </div>
         </div><!-- /.main-dashboard-layout -->
-        
+
     </main>
-    
+
     <!-- ===== Back to Top Button ===== -->
     <button class="back-to-top" id="back-to-top" aria-label="Back to top"></button>
-    
+
     <!-- ===== INLINE SCRIPT REMOVED ===== -->
     <!-- All functionality moved to external JS files in assets/ -->
-    
-    
-    
-    
+
+
+
+
     <!-- Modular JS Architecture -->
     <script src="assets/js/modules/zebra-stripes.js?v=20251224-3" defer></script>
 
@@ -660,7 +660,7 @@
 
     <!-- Dashboard Initialization (KPI tiles, flip, refresh) -->
     <script src="dashboard/js/dashboard-init.js?v=34.00.0" defer></script>
-    
+
     <!-- Dashboard Filter Pills Handler -->
     <script src="dashboard/js/dashboard-filter-pills.js?v=34.00.0" defer></script>
 
@@ -669,20 +669,20 @@
 
     <!-- Logo Cache for Performance -->
     <script src="assets/js/utils/logo-cache.js?v=34.00.0" defer></script>
-    
+
     <!-- Weekly Lineup ↔ Dashboard Sync Bridge -->
     <script src="assets/js/utils/weekly-lineup-sync.js?v=34.00.0" defer></script>
-    
+
     <!-- Mobile Navigation Drawer -->
     <script src="assets/js/mobile/mobile-nav-drawer.js?v=34.00.0" defer></script>
-    
+
     <!-- Real-time Updates via SignalR -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.min.js"></script>
     <script src="assets/js/core/signalr-client.js?v=34.00.0" defer></script>
-    
+
     <!-- Authentication -->
     <script src="assets/js/core/auth-client.js?v=34.00.0" defer></script>
-    
+
     <!-- Sportsbook Connector -->
     <script src="assets/js/features/sportsbook-connector.js?v=34.00.0" defer></script>
 

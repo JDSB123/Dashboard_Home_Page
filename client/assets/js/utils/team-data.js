@@ -44,7 +44,7 @@
         'mia': 'mia', 'mil': 'mil', 'min': 'min', 'nop': 'no', 'nyk': 'ny',
         'okc': 'okc', 'orl': 'orl', 'phi': 'phi', 'phx': 'phx', 'por': 'por',
         'sac': 'sac', 'sas': 'sa', 'tor': 'tor', 'uta': 'utah', 'was': 'wsh',
-        
+
         // NFL uses lowercase abbreviations
         'ari': 'ari', 'bal': 'bal', 'buf': 'buf', 'car': 'car', 'cin': 'cin',
         'gb': 'gb', 'hou': 'hou', 'jax': 'jax', 'kc': 'kc', 'lv': 'lv',
@@ -56,7 +56,7 @@
         'duke': '150', 'unc': '153', 'uk': '96', 'ku': '2305', 'msu': '127',
         'iu': '84', 'cuse': '183', 'conn': '41', 'ucla': '26', 'lou': '97',
         'gonz': '2250', 'baylor': '239',
-        
+
         // NCAA common teams
         'georgia southern': '290', 'appalachian st': '2026', 'utsa': '2636',
         'south florida': '58', 'butler': '2086', 'uconn': '41',
@@ -76,7 +76,7 @@
             try {
                 const response = await fetch('assets/data/team-config.json');
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                
+
                 teamConfig = await response.json();
                 buildLookupTable();
                 isLoaded = true;
@@ -119,17 +119,17 @@
 
                 // Index by abbreviation
                 teamLookup[abbr.toLowerCase()] = entry;
-                
+
                 // Index by full name
                 if (team.fullName) {
                     teamLookup[team.fullName.toLowerCase()] = entry;
                 }
-                
+
                 // Index by name only
                 if (team.name) {
                     teamLookup[team.name.toLowerCase()] = entry;
                 }
-                
+
                 // Index by city + name
                 if (team.city && team.name) {
                     teamLookup[`${team.city} ${team.name}`.toLowerCase()] = entry;
@@ -147,7 +147,7 @@
 
         // Get ESPN ID mapping
         const espnId = ESPN_TEAM_IDS[teamId.toLowerCase()] || teamId.toLowerCase();
-        
+
         return template.replace('{id}', espnId);
     }
 
@@ -174,7 +174,7 @@
         if (!teamName) return { abbr: 'N/A', name: '', fullName: '', logo: '', league: '' };
 
         const key = teamName.toLowerCase().trim();
-        
+
         // Direct lookup
         if (teamLookup[key]) {
             return teamLookup[key];
@@ -202,12 +202,12 @@
      */
     function generateAbbreviation(name) {
         if (!name) return 'N/A';
-        
+
         const words = name.trim().split(/\s+/).filter(Boolean);
         if (words.length === 1) {
             return words[0].substring(0, 3).toUpperCase();
         }
-        
+
         // Use first letters of each word
         const abbr = words.map(w => w[0]).join('').toUpperCase();
         return abbr.length >= 2 && abbr.length <= 4 ? abbr : words[0].substring(0, 3).toUpperCase();
@@ -229,11 +229,11 @@
 
         // Fallback to direct URL generation
         if (league) {
-            const id = ESPN_TEAM_IDS[teamName.toLowerCase()] || 
+            const id = ESPN_TEAM_IDS[teamName.toLowerCase()] ||
                        teamName.toLowerCase().replace(/\s+/g, '').substring(0, 3);
             return getTeamLogoUrl(id, league);
         }
-        
+
         return '';
     }
 
@@ -321,4 +321,3 @@
 
     console.log('[TeamData] Module loaded');
 })();
-
