@@ -692,9 +692,74 @@
                 try {
                     if ('serviceWorker' in navigator) {
                         var swUrl = '/sw.js?v=2.0.3';
+                        var expectedSwVersion = 'v2.0.3';
+
+                        async function hardResetCachesAndReload() {
+                            try {
+                                var regs = await navigator.serviceWorker.getRegistrations();
+                                await Promise.all(regs.map(function(r){ return r.unregister(); }));
+                            } catch(e) {}
+                            try {
+                                if (window.caches && caches.keys) {
+                                    var keys = await caches.keys();
+                                    await Promise.all(keys.map(function(k){ return caches.delete(k); }));
+                                }
+                            } catch(e) {}
+                            try {
+                                // Force a truly fresh navigation
+                                var url = new URL(window.location.href);
+                                url.searchParams.set('r', String(Date.now()));
+                                window.location.replace(url.toString());
+                            } catch(e) {
+                                window.location.reload();
+                            }
+                        }
+
+                        function getSwVersion(controller) {
+                            return new Promise(function(resolve){
+                                try {
+                                    if (!controller) return resolve(null);
+                                    var channel = new MessageChannel();
+                                    channel.port1.onmessage = function(evt){
+                                        resolve((evt && evt.data && evt.data.version) || null);
+                                    };
+                                    controller.postMessage({ type: 'GET_VERSION' }, [channel.port2]);
+                                    setTimeout(function(){ resolve(null); }, 1500);
+                                } catch(e) {
+                                    resolve(null);
+                                }
+                            });
+                        }
+
+                        async function ensureFreshClient() {
+                            // Manual escape hatch: /index.html?reset=1
+                            try {
+                                var params = new URLSearchParams(window.location.search);
+                                if (params.get('reset') === '1') {
+                                    await hardResetCachesAndReload();
+                                    return;
+                                }
+                            } catch(e) {}
+
+                            // If an older SW is controlling the page, reset automatically.
+                            try {
+                                var controller = navigator.serviceWorker.controller;
+                                var activeVersion = await getSwVersion(controller);
+                                if (activeVersion && activeVersion !== expectedSwVersion) {
+                                    await hardResetCachesAndReload();
+                                }
+                            } catch(e) {}
+                        }
+
                         window.addEventListener('load', function() {
                             navigator.serviceWorker.register(swUrl, { updateViaCache: 'none' }).then(function(reg){
                                 try { reg.update(); } catch(e) {}
+                                try {
+                                    if (reg.waiting) {
+                                        reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+                                    }
+                                } catch(e) {}
+                                ensureFreshClient();
                             }).catch(function(){});
                         });
                         navigator.serviceWorker.addEventListener('controllerchange', function(){ /* no-op */ });

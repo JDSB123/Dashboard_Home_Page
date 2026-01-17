@@ -172,3 +172,19 @@ self.addEventListener('fetch', (event) => {
 
   // Default: pass-through (no SW caching)
 });
+
+// Allow pages to query the running SW version and trigger lifecycle actions.
+self.addEventListener('message', (event) => {
+  const data = event.data || {};
+
+  if (data && data.type === 'GET_VERSION') {
+    const port = event.ports && event.ports[0];
+    if (port) port.postMessage({ version: VERSION });
+    return;
+  }
+
+  if (data && data.type === 'SKIP_WAITING') {
+    try { self.skipWaiting(); } catch (e) {}
+    return;
+  }
+});
