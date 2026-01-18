@@ -14,7 +14,7 @@
    ========================================================================== */
 
 // Build version tracking
-const WL_BUILD = '34.00.6';
+const WL_BUILD = '34.00.8';
 window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
 (function() {
@@ -1621,77 +1621,52 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         };
 
-        // Create logo HTML (robust fallback)
-        const awayLogoHtml = awayInfo.logo
-            ? `<img src="${awayInfo.logo}" class="team-logo" loading="eager" alt="${awayInfo.abbr}" onerror="this.style.display='none'">`
-            : `<span class="team-logo-missing">?</span>`;
-        const homeLogoHtml = homeInfo.logo
-            ? `<img src="${homeInfo.logo}" class="team-logo" loading="eager" alt="${homeInfo.abbr}" onerror="this.style.display='none'">`
-            : `<span class="team-logo-missing">?</span>`;
-        const pickLogoHtml = pickInfo.logo
-            ? `<img src="${pickInfo.logo}" class="pick-team-logo" loading="eager" alt="${pickInfo.abbr}" onerror="this.style.display='none'">`
-            : '';
-
-        // Matchup HTML with logos and records, always show both teams if available
-        const isSingleTeamBet = !pick.homeTeam || pick.homeTeam === 'TBD';
-
-        const awayTeamHtml = `
-            <div class="team-line team-away">
-                ${awayLogoHtml}
-                <div class="team-name-wrapper">
-                    <span class="team-name-full">${awayTeamName}</span>
-                    <span class="team-record">${awayRecord ? `(${awayRecord})` : ''}</span>
-                </div>
-            </div>`;
-
-        const homeTeamHtml = `
-            <div class="team-line team-home">
-                ${homeLogoHtml}
-                <div class="team-name-wrapper">
-                    <span class="team-name-full">${homeTeamName}</span>
-                    <span class="team-record">${homeRecord ? `(${homeRecord})` : ''}</span>
-                </div>
-            </div>`;
-
-        const matchupHtml = isSingleTeamBet
-            ? `<div class="matchup-cell">${awayTeamHtml}</div>`
-            : `<div class="matchup-cell">${awayTeamHtml}<div class="vs-divider">vs.</div>${homeTeamHtml}</div>`;
+        const rawMatchupText = ((pick.matchup ?? pick.game ?? '')).toString().trim();
+        const hasAwayName = Boolean(rawAwayTeam);
+        const hasHomeName = Boolean(rawHomeTeam);
+        const fallbackRawMatchup = hasAwayName && hasHomeName
+            ? `${rawAwayTeam} @ ${rawHomeTeam}`
+            : hasAwayName
+                ? rawAwayTeam
+                : hasHomeName
+                    ? rawHomeTeam
+                    : 'TBD';
+        const rowMatchupValue = rawMatchupText || fallbackRawMatchup;
+        const matchupHtml = `<div class="matchup-text">${escapeHtml(rowMatchupValue)}</div>`;
 
         const pickOdds = escapeHtml(pick.odds) || '-110';
+        const pickLabelText = pickLabel || 'TBD';
+        const pickLineOnlyText = (() => {
+            const rawLine = (pick.line ?? '').toString().trim();
 
-        // Pick cell - unified structure: [Logo] Subject Value (Juice)
-        let pickCellHtml;
-        if (isTeamPick) {
-            if (pickType === 'ml') {
-                // Moneyline: [Logo] DEN ML -260
-                pickCellHtml = `<div class="pick-cell">${pickLogoHtml}<span class="pick-subject">${pickInfo.abbr}</span><span class="pick-label">ML</span><span class="pick-value">${pickOdds}</span></div>`;
-            } else {
-                // Spread: [Logo] DEN -5.5 (-110)
-                pickCellHtml = `<div class="pick-cell">${pickLogoHtml}<span class="pick-subject">${pickInfo.abbr}</span><span class="pick-value">${pickLabel}</span><span class="pick-juice">(${pickOdds})</span></div>`;
-            }
-        } else {
-            // Over/Under: OVER 218.5 (-110) or UNDER 261.5 (-110)
-            // Ensure proper capitalization and fix "UNDE" typo
-            let directionText = '';
-            if (normalizedPickTeamName && (normalizedPickTeamName.toUpperCase() === 'OVER' || normalizedPickTeamName.toUpperCase() === 'UNDER')) {
-                directionText = normalizedPickTeamName.toUpperCase();
-            } else if (pickLabel.toUpperCase().startsWith('OVER')) {
-                directionText = 'OVER';
-            } else if (pickLabel.toUpperCase().startsWith('UNDER') || pickLabel.toUpperCase().startsWith('UNDE')) {
-                directionText = 'UNDER';
-            } else if (pick.pickDirection) {
-                directionText = pick.pickDirection.toUpperCase();
+            if (pickType === 'ml' || pickType === 'moneyline') {
+                return 'ML';
             }
 
-            // If pickLabel already contains OVER/UNDER, use it directly; otherwise prepend direction
-            // Note: pickLabel is already HTML-escaped, so we don't escape again
-            // Fix any remaining UNDE → UNDER (with or without space)
-            let displayLabel = pickLabel.replace(/^UNDE\b/gi, 'UNDER');
-            if (!displayLabel.toUpperCase().startsWith('OVER') && !displayLabel.toUpperCase().startsWith('UNDER')) {
-                displayLabel = directionText ? `${escapeHtml(directionText)} ${displayLabel}` : displayLabel;
+            if (pickType === 'total' || pickType === 'tt') {
+                const dirRaw = (pick.pickDirection || pick.pick_direction || pick.pickTeam || pick.pick || '').toString().trim();
+                let dirUpper = dirRaw.toUpperCase();
+                if (dirUpper !== 'OVER' && dirUpper !== 'UNDER') {
+                    if (/\bunder\b/i.test(pickLabelText)) dirUpper = 'UNDER';
+                    else if (/\bover\b/i.test(pickLabelText)) dirUpper = 'OVER';
+                    else dirUpper = '';
+                }
+
+                const dirLabel = dirUpper ? (dirUpper === 'OVER' ? 'Over' : 'Under') : '';
+                const lineValue = rawLine || pickLabelText.replace(/^\s*(Over|Under)\s*/i, '').trim();
+                return [dirLabel, lineValue].filter(Boolean).join(' ').trim() || 'Total';
             }
-            pickCellHtml = `<div class="pick-cell"><span class="pick-value">${displayLabel}</span><span class="pick-juice">(${pickOdds})</span></div>`;
-        }
+
+            // Spread (default): show just the number/line, no team
+            return rawLine || pickLabelText;
+        })();
+
+        const pickCellHtml = `
+            <div class="pick-line-group">
+                <span class="pick-line">${escapeHtml(pickLineOnlyText)}</span>
+                <span class="pick-juice">(${pickOdds})</span>
+            </div>
+        `;
 
         // Model Prediction - shows model's line/odds
         const getModelPredictionHtml = () => {
@@ -2008,16 +1983,9 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                     </div>
                 </div>
             </td>
-            <td data-label="Market" class="center col-market">
-                <div class="market-stack">
-                    <div class="market-row market-row-model">
-                        <span class="market-label">Model</span>
-                        <div class="market-pick">${modelPredictionHtml}</div>
-                    </div>
-                    <div class="market-row market-row-market">
-                        <span class="market-label">Market</span>
-                        <div class="market-pick">${marketHtml}</div>
-                    </div>
+            <td data-label="Model" class="center col-market">
+                <div class="model-cell">
+                    ${modelPredictionHtml}
                 </div>
             </td>
             <td data-label="Edge" class="center">
@@ -3437,7 +3405,10 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             const pickTeam = pickCell?.querySelector('.pick-team')?.textContent?.trim() ||
                             pickCell?.querySelector('.team-name')?.textContent?.trim() || '';
             const pickLine = pickCell?.querySelector('.pick-line')?.textContent?.trim() || '';
-            const pickOdds = pickCell?.querySelector('.pick-odds')?.textContent?.replace(/[()]/g, '').trim() || '-110';
+            const pickOdds = (
+                pickCell?.querySelector('.pick-odds')?.textContent ||
+                pickCell?.querySelector('.pick-juice')?.textContent || ''
+            ).replace(/[()]/g, '').trim() || '-110';
 
             // Determine pick type from line
             let pickType = 'spread';
@@ -3452,20 +3423,15 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                 pickType = 'moneyline';
             }
 
-            // Model prediction (Market column - stacked)
-            const marketColumnCell = cells[5];
-            const modelPrediction = marketColumnCell
-                ?.querySelector('.market-row-model')
+            // Model prediction (Model column)
+            const modelColumnCell = cells[5];
+            const modelPrediction = modelColumnCell
+                ?.querySelector('.prediction-cell')
                 ?.textContent
-                ?.replace(/^Model/i, '')
-                ?.trim() || '';
+                ?.trim() || modelColumnCell?.textContent?.trim() || '';
 
-            // Market line (Market column - stacked)
-            const marketLine = marketColumnCell
-                ?.querySelector('.market-row-market')
-                ?.textContent
-                ?.replace(/^Market/i, '')
-                ?.trim() || '';
+            // Market line (fallback to displayed pick line)
+            const marketLine = pickLine || '';
 
             // Edge (8th cell)
             const edgeCell = cells[6];
@@ -3540,18 +3506,20 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             // Normalize fire rating (could be fire or fireRating)
             const fireValue = pick.fire !== undefined ? pick.fire : (pick.fireRating || 0);
             const tracked = {
-                pickId: pickId,
-                trackedAt: trackedAt || new Date().toISOString(),
-                originalLine: (pick.line || '').trim(),
-                originalOdds: (pick.odds || '').trim(),
+                pickId,
+                trackedAt,
+                originalLine: (pick.line || '').toString().trim(),
+                originalOdds: (pick.odds || '').toString().trim(),
                 originalEdge: parseFloat(pick.edge) || 0,
                 originalFire: fireValue,
-                matchup: `${pick.awayTeam || ''} @ ${pick.homeTeam || ''}`,
-                pickTeam: pick.pickTeam || '',
-                segment: pick.segment || 'FG',
-                sport: pick.sport || ''
+                sport: (pick.sport || pick.league || '').toString().toUpperCase(),
+                awayTeam: (pick.awayTeam || '').toString(),
+                homeTeam: (pick.homeTeam || '').toString(),
+                pickTeam: (pick.pickTeam || pick.pick || '').toString(),
+                segment: (pick.segment || pick.period || 'FG').toString(),
+                pickType: (pick.pickType || pick.market || '').toString(),
+                source: 'weekly-lineup'
             };
-
             const existing = localStorage.getItem(TRACKED_PICKS_STORAGE_KEY);
             const trackedPicks = existing ? JSON.parse(existing) : {};
             trackedPicks[pickId] = tracked;

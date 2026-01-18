@@ -574,8 +574,8 @@ body.page-weekly-lineup .picks-table tbody tr:hover,
     white-space: nowrap;
 }
 
-/* Center the Recommended Pick column (3rd column) */
-.weekly-lineup-table tbody td:nth-child(3) {
+/* Center the Pick column (5th column) */
+.weekly-lineup-table tbody td:nth-child(5) {
     text-align: center;
 }
 
@@ -593,6 +593,16 @@ body.page-weekly-lineup .picks-table tbody tr:hover,
     display: flex;
     align-items: center;
     gap: 0.375rem;
+    white-space: nowrap;
+}
+
+/* Simplified matchup formatting (single clean line) */
+.weekly-lineup-table .matchup-text {
+    font-family: var(--font-display, 'Oswald', sans-serif);
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: rgba(232, 240, 242, 0.96);
+    letter-spacing: 0.02em;
     white-space: nowrap;
 }
 
@@ -625,6 +635,34 @@ body.page-weekly-lineup .picks-table tbody tr:hover,
     align-items: center;
     gap: 0.5rem;
     white-space: nowrap;
+}
+
+/* Simplified pick formatting (line + odds only, no team text) */
+.weekly-lineup-table .pick-line-group {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.35rem;
+    white-space: nowrap;
+}
+
+.weekly-lineup-table .pick-line-group .pick-line {
+    font-family: var(--font-display, 'Oswald', sans-serif);
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: rgba(242, 247, 250, 0.98);
+}
+
+.weekly-lineup-table .pick-line-group .pick-juice {
+    font-family: var(--font-mono, 'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace);
+    font-weight: 500;
+    font-size: 0.78rem;
+    color: rgba(180, 195, 210, 0.95);
+}
+
+/* Model column: keep compact */
+.weekly-lineup-table .model-cell {
+    display: flex;
+    justify-content: center;
 }
 
 .weekly-lineup-table .pick-inline .pick-team-logo {
