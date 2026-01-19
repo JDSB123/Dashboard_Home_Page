@@ -1,20 +1,13 @@
 /* ==========================================================================
-   WEEKLY LINEUP PAGE JAVASCRIPT v33.01.0
-   ==========================================================================
-   Production release - Real API data only, no mock data
-   Today's Picks - Model outputs with Edge/Fire ratings
-   Matches dashboard styling with team logos and sorting
-
-   v33.01.0 - Added Archive/History feature:
-   - Auto-archives picks when games are completed
-   - Tracks outcomes (W/L/P) for all picks including non-dashboard ones
-   - Active/History view toggle
-   - Weekly stats summary with win rate
-   - Filter by week in history view
-   ========================================================================== */
+    WEEKLY LINEUP PAGE JAVASCRIPT v34.01.0
+    ==========================================================================
+    Production release - Real API picks only (no model/placeholder data)
+    Weekly Lineup pulls live picks from the Picks API (Cosmos-backed)
+    Matches dashboard styling with team logos and sorting
+    ========================================================================== */
 
 // Build version tracking
-const WL_BUILD = '34.00.8';
+const WL_BUILD = '34.01.0';
 window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
 (function() {
@@ -31,8 +24,8 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
     const ARCHIVED_PICKS_STORAGE_KEY = 'gbsv_archived_weekly_picks';
     const WEEKLY_LINEUP_CLEANUP_KEY = 'gbsv_weekly_lineup_cleanup_v1';
 
-    // ===== VIEW STATE =====
-    let currentView = 'active'; // 'active' or 'history'
+    // Legacy view state (history/archives not used in production flow)
+    let currentView = 'active';
 
     // ===== SCRIPT LOADING VERIFICATION =====
 
@@ -49,7 +42,10 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
     };
 
     // ===== CLEANUP PLACEHOLDER/SAMPLE DATA =====
-    const SAMPLE_SOURCE_KEYS = new Set(['demo', 'sample', 'mock', 'placeholder', 'fake', 'test', 'example']);
+    const SAMPLE_SOURCE_KEYS = new Set([
+        'demo', 'sample', 'mock', 'placeholder', 'fake', 'test', 'example',
+        'manual', 'upload', 'import', 'snapshot'
+    ]);
 
     function isPlaceholderPick(pick) {
         if (!pick || typeof pick !== 'object') return true;
@@ -82,8 +78,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             bombay711: 'Bombay 711',
             kingofsports: 'King of Sports',
             primetimeaction: 'Prime Time Action',
-            manual: 'Manual',
-            modelpick: 'Model Pick'
+            manual: 'Manual'
         };
         return map[key] || s;
     }
@@ -376,7 +371,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
     }
 
     // ===== SORTING STATE =====
-    let currentSort = { column: 'edge', direction: 'desc' };
+    let currentSort = { column: 'date', direction: 'asc' };
     let allPicks = [];  // Store all picks for sorting
 
     // ===== SHARED CONSTANTS (must be declared before initialization runs) =====
@@ -390,9 +385,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
     const lastFetchTimes = {
         all: null,
         nba: null,
-        ncaab: null,
-        nfl: null,
-        ncaaf: null
+        ncaab: null
     };
 
     // ===== INITIALIZATION =====
@@ -410,18 +403,13 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         initializeTrackerButtons();
         initializeRationaleToggles();
         initializeSportsbookEditors();
-        initializeViewToggle(); // Active/History toggle
 
         try {
             log('[Weekly Lineup] Starting initialization...');
 
-            // Archive expired picks on page load
-            archiveExpiredPicks();
-
-            // v33.01.1: Auto-fetch fresh picks on page load (production behavior)
-            // Always fetch fresh data from API to ensure latest picks are shown
-            log('🚀 [Weekly Lineup] Auto-fetching fresh picks from API...');
-            loadModelOutputs();
+            // Always fetch fresh data from Picks API to ensure real picks are shown
+            log('🚀 [Weekly Lineup] Auto-fetching live picks from Picks API...');
+            loadLivePicks();
 
             // Initialize filter system
             requestAnimationFrame(() => {
@@ -482,125 +470,110 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         });
     }
 
-    // ===== WAIT FOR FETCHER HELPER =====
-    /**
-     * Wait for UnifiedPicksFetcher to be available
-     * Retries up to 20 times with 250ms delay (5 seconds total)
-     */
-    async function waitForFetcher(maxRetries = 20, delay = 250) {
-        for (let i = 0; i < maxRetries; i++) {
-            if (window.UnifiedPicksFetcher && window.UnifiedPicksFetcher.fetchPicks) {
-                return true;
-            }
-            await new Promise(resolve => setTimeout(resolve, delay));
-        }
-        return false;
+    // ===== LOAD LIVE PICKS (PICKS API) =====
+    const REAL_PICK_LEAGUES = ['NBA', 'NCAAB'];
+    const DEFAULT_PICK_LIMIT = 250;
+
+    function getPicksApiBase() {
+        if (window.GBSV_CONFIG?.PICKS_API_ENDPOINT) return window.GBSV_CONFIG.PICKS_API_ENDPOINT;
+        if (window.APP_CONFIG?.API_BASE_URL) return `${window.APP_CONFIG.API_BASE_URL}/picks`;
+        return '/api/picks';
     }
 
-    // ===== LOAD MODEL OUTPUTS (TODAY'S PICKS) =====
-    /**
-     * v33.00.0 - Production: Fetch real picks from Azure Container Apps APIs
-     * No mock/placeholder data - uses unified-picks-fetcher.js
-     */
-    async function loadModelOutputs() {
-        log('🔄 Loading today\'s model picks from APIs...');
+    async function fetchLeaguePicks(league) {
+        const base = getPicksApiBase();
+        const url = `${base}/active?league=${encodeURIComponent(league)}&limit=${DEFAULT_PICK_LIMIT}`;
+        const response = await fetch(url, { headers: { Accept: 'application/json' } });
+        if (!response.ok) {
+            throw new Error(`Picks API ${league} request failed (${response.status})`);
+        }
+        const data = await response.json();
+        return Array.isArray(data?.picks) ? data.picks : [];
+    }
+
+    function formatMatchup(awayTeam, homeTeam, fallback) {
+        const away = sanitizeTeamName(awayTeam);
+        const home = sanitizeTeamName(homeTeam);
+        if (away && home) return `${away} @ ${home}`;
+        return sanitizeTeamName(fallback) || '';
+    }
+
+    function normalizeLeagueDisplay(league) {
+        const upper = (league || '').toString().toUpperCase();
+        if (upper === 'NCAAB') return 'NCAAM';
+        return upper;
+    }
+
+    async function loadLivePicks(leagues = REAL_PICK_LEAGUES) {
+        log('🔄 Loading live picks from Picks API...');
 
         const tbody = document.querySelector('.weekly-lineup-table tbody');
         if (tbody) {
-            tbody.innerHTML = '<tr class="empty-state-row"><td colspan="9" class="empty-state-cell"><div class="empty-state"><span class="empty-icon">📊</span><span class="empty-message">Loading picks...</span></div></td></tr>';
+            tbody.innerHTML = '<tr class="empty-state-row"><td colspan="6" class="empty-state-cell"><div class="empty-state"><span class="empty-icon">📊</span><span class="empty-message">Loading picks...</span></div></td></tr>';
         }
 
         try {
-            // Wait for UnifiedPicksFetcher to load (handles script load order)
-            const fetcherReady = await waitForFetcher();
+            const results = await Promise.allSettled(leagues.map(fetchLeaguePicks));
+            const combined = [];
 
-            if (!fetcherReady) {
-                console.warn('[Weekly Lineup] UnifiedPicksFetcher not available after timeout');
-                showNoPicks('API fetcher failed to load. Please refresh the page.');
-                return;
+            results.forEach((result, idx) => {
+                if (result.status === 'fulfilled') {
+                    combined.push(...result.value);
+                } else {
+                    console.warn(`[Weekly Lineup] ${leagues[idx]} API error:`, result.reason?.message || result.reason);
+                }
+            });
+
+            const { cleaned, removed } = filterPlaceholderPicks(combined);
+            if (removed > 0) {
+                log(`[Weekly Lineup] Removed ${removed} non-production picks`);
             }
 
-            const result = await window.UnifiedPicksFetcher.fetchPicks('all', 'today');
+            const formattedPicks = cleaned
+                .map((pick) => {
+                    const league = normalizeLeagueDisplay(pick.league || pick.sport);
+                    const matchup = formatMatchup(pick.awayTeam, pick.homeTeam, pick.game || pick.matchup || '');
+                    if (!league || !matchup) return null;
 
-            if (result.picks && result.picks.length > 0) {
-                console.log(`[Weekly Lineup] ✅ Fetched ${result.picks.length} real picks from APIs`);
+                    const leagueKey = (league || '').toString().toLowerCase() === 'ncaab' ? 'ncaab' : (league || '').toString().toLowerCase();
+                    return {
+                        date: pick.gameDate || pick.date || '',
+                        time: pick.gameTime || pick.time || '',
+                        sport: league,
+                        leagueKey,
+                        awayTeam: pick.awayTeam || '',
+                        homeTeam: pick.homeTeam || '',
+                        matchup,
+                        awayRecord: pick.awayRecord || pick.away_record || '',
+                        homeRecord: pick.homeRecord || pick.home_record || '',
+                        segment: normalizeSegment(pick.segment || pick.period || 'full'),
+                        pickTeam: pick.pickTeam || pick.team || pick.pick || '',
+                        pickType: normalizePickType(pick.pickType || pick.market || 'spread'),
+                        pickDirection: pick.pickDirection || pick.pick_direction || '',
+                        line: pick.line || '',
+                        odds: pick.odds || pick.price || '',
+                        rationale: pick.rationale || pick.reason || pick.notes || pick.explanation || '',
+                        status: pick.status || 'pending',
+                        sportsbook: normalizeSportsbookLabel(pick.sportsbook || pick.book || '')
+                    };
+                })
+                .filter(Boolean)
+                .filter((pick) => pick.odds || pick.line || pick.pickType === 'ml');
 
-                    // Transform picks to table format and sort by edge
-                    const formattedPicks = result.picks.map(pick => {
-                        const edge = parseFloat(pick.edge) || 0;
-                        const fireMeta = normalizeFireRating(pick.fire ?? pick.confidence ?? pick.fire_rating ?? pick.fireRating, edge);
-                        const rawMatchup = pick.matchup ?? pick.game ?? '';
-                        const matchupSource = typeof rawMatchup === 'string' ? rawMatchup : String(rawMatchup);
-                        const trimmedMatchup = matchupSource.trim();
-                        const parsedMatchup = parseMatchupString(trimmedMatchup);
-                        const awayField = pickTeamFromFields(pick, ['awayTeam', 'away_team', 'away', 'teamAway', 'team_away', 'awayTeamFull']);
-                        const homeField = pickTeamFromFields(pick, ['homeTeam', 'home_team', 'home', 'teamHome', 'team_home', 'homeTeamFull']);
-                        const awayTeam = awayField || parsedMatchup.away || '';
-                        const homeTeam = homeField || parsedMatchup.home || '';
-                        const matchupValue = trimmedMatchup || (awayTeam && homeTeam ? `${awayTeam} @ ${homeTeam}` : '');
-
-                        const formatted = {
-                            date: pick.date || getTodayDateString(),
-                            time: pick.time || pick.gameTime || 'TBD',
-                            sport: pick.sport || pick.league || 'NBA',
-                            awayTeam: awayTeam,
-                            homeTeam: homeTeam,
-                            matchup: matchupValue,
-                            awayRecord: pick.awayRecord || pick.away_record || '',
-                            homeRecord: pick.homeRecord || pick.home_record || '',
-                            segment: normalizeSegment(pick.segment || pick.period || 'FG'),
-                            pickTeam: pick.pickTeam || pick.pick || '',
-                            pickType: normalizePickType(pick.pickType || pick.market || 'spread'),
-                            pickDirection: pick.pickDirection || pick.pick_direction || '',
-                            line: pick.line || '',
-                            odds: pick.odds || '-110',
-                            modelPrice: pick.modelPrice || pick.model_price || '',
-                            modelSpread: pick.modelSpread || pick.model_spread || pick.predictedSpread || '',
-                            edge: edge,
-                            fire: fireMeta.fire,
-                            fireLabel: pick.fireLabel || fireMeta.fireLabel,
-                            rationale: pick.rationale || pick.reason || pick.notes || pick.explanation || '',
-                            modelStamp: pick.modelStamp || pick.model_version || pick.modelVersion || pick.modelTag || '',
-                            status: pick.status || 'pending',
-                            sportsbook: pick.sportsbook || pick.book || ''
-                        };
-
-                        // If the API didn’t provide a sportsbook, apply any saved override.
-                        if (!formatted.sportsbook) {
-                            formatted.sportsbook = getSportsbookOverride(formatted);
-                        } else {
-                            formatted.sportsbook = normalizeSportsbookLabel(formatted.sportsbook);
-                        }
-
-                        return formatted;
-                    });
-
-                    // Sort by edge (highest first)
-                    formattedPicks.sort((a, b) => b.edge - a.edge);
-                    populateWeeklyLineupTable(formattedPicks);
-                    updateModelStamp(formattedPicks);
-
-                    // Update last fetched timestamp
-                    updateLastFetchedTime();
-
-                    // Auto-save snapshot when picks are loaded
-                    savePicksSnapshot(formattedPicks, 'auto-load');
-                } else {
-                    console.log('[Weekly Lineup] ⚠️ No picks returned from APIs');
-                    showNoPicks('No picks available for today. Check back later or fetch manually.');
-                    updateModelStamp([]);
-                }
-
-                // Log any errors
-                if (result.errors && result.errors.length > 0) {
-                    result.errors.forEach(err => {
-                        console.warn(`[Weekly Lineup] ${err.league} API error:`, err.error);
-                    });
-                }
+            if (formattedPicks.length > 0) {
+                console.log(`[Weekly Lineup] ✅ Loaded ${formattedPicks.length} picks from Picks API`);
+                populateWeeklyLineupTable(formattedPicks);
+                updateLastFetchedTime();
+                return formattedPicks.length;
+            } else {
+                console.log('[Weekly Lineup] ⚠️ No picks returned from Picks API');
+                showNoPicks('No picks available. Check back later.');
+                return 0;
+            }
         } catch (error) {
             console.error('[Weekly Lineup] ❌ Error fetching picks:', error);
-            showNoPicks('Error loading picks. Please try the Fetch button to retry.');
-            updateModelStamp([]);
+            showNoPicks('Error loading picks. Please try again.');
+            return 0;
         }
     }
 
@@ -618,47 +591,10 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         }
     }
 
-    function updateModelStamp(picks) {
-        const el = document.getElementById('ft-model-stamp');
-        if (!el) return;
-
-        if (!Array.isArray(picks) || picks.length === 0) {
-            el.textContent = 'Models: --';
-            el.title = 'Model build/tag used for the currently displayed picks';
-            return;
-        }
-
-        const stampsBySport = new Map();
-        picks.forEach((pick) => {
-            const sport = (pick.sport || '').toString().toUpperCase().trim();
-            const stamp = (pick.modelStamp || pick.modelVersion || pick.modelTag || '').toString().trim();
-            if (!sport || !stamp) return;
-
-            if (!stampsBySport.has(sport)) stampsBySport.set(sport, new Set());
-            stampsBySport.get(sport).add(stamp);
-        });
-
-        const parts = Array.from(stampsBySport.entries())
-            .sort((a, b) => a[0].localeCompare(b[0]))
-            .map(([sport, stamps]) => {
-                const list = Array.from(stamps);
-                return `${sport}: ${list.length === 1 ? list[0] : 'mixed'}`;
-            });
-
-        el.textContent = parts.length ? `Models: ${parts.join(' | ')}` : 'Models: unknown';
-
-        const titleLines = Array.from(stampsBySport.entries())
-            .sort((a, b) => a[0].localeCompare(b[0]))
-            .map(([sport, stamps]) => `${sport}: ${Array.from(stamps).join(', ')}`);
-        el.title = titleLines.length
-            ? `Model build/tag used for the currently displayed picks\n${titleLines.join('\n')}`
-            : 'Model build/tag used for the currently displayed picks';
-    }
-
     function showNoPicks(message) {
         const tbody = document.querySelector('.weekly-lineup-table tbody');
         if (tbody) {
-            tbody.innerHTML = `<tr class="empty-state-row"><td colspan="9" class="empty-state-cell"><div class="empty-state"><span class="empty-icon">📊</span><span class="empty-message">${message}</span></div></td></tr>`;
+            tbody.innerHTML = `<tr class="empty-state-row"><td colspan="6" class="empty-state-cell"><div class="empty-state"><span class="empty-icon">📊</span><span class="empty-message">${message}</span></div></td></tr>`;
         }
     }
 
@@ -1344,7 +1280,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
         // Show empty state if no archived picks
         if (!filteredPicks || filteredPicks.length === 0) {
-            tbody.innerHTML = '<tr class="empty-state-row"><td colspan="9" class="empty-state-cell"><div class="empty-state"><span class="empty-icon">📦</span><span class="empty-message">No archived picks yet. Completed games will appear here.</span></div></td></tr>';
+            tbody.innerHTML = '<tr class="empty-state-row"><td colspan="6" class="empty-state-cell"><div class="empty-state"><span class="empty-icon">📦</span><span class="empty-message">No archived picks yet. Completed games will appear here.</span></div></td></tr>';
             return;
         }
 
@@ -1398,15 +1334,6 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             ? '<span class="tracked-indicator" title="Sent to Dashboard">✓</span>'
             : '';
 
-        // Fire display
-        const fireValue = pick.fire || pick.fireRating || 0;
-        const fireEmojis = '🔥'.repeat(Math.min(fireValue, 5));
-        const fireLabel = pick.fireLabel || ['', '', 'Warm', 'Warm', 'Hot', 'Max'][fireValue] || '';
-
-        // Edge class
-        const edgeValue = parseFloat(pick.edge) || 0;
-        const edgeClass = edgeValue >= 5 ? 'high' : edgeValue >= 2 ? 'medium' : 'low';
-
         // Segment display
         const segmentDisplay = pick.segment === '1H' ? '1st Half'
             : pick.segment === '2H' ? '2nd Half'
@@ -1453,15 +1380,6 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                     <span class="pick-display">${pickDisplay}</span>
                 </div>
             </td>
-            <td class="center col-market">
-                <span class="market-value">${escapeHtml(pick.modelSpread || pick.modelPrice || pick.predictedSpread || pick.predictedTotal || '-')}</span>
-            </td>
-            <td class="center col-edge">
-                <span class="edge-value edge-${edgeClass}">${edgeValue.toFixed(1)}%</span>
-            </td>
-            <td class="center col-fire">
-                <span class="fire-display" title="${fireLabel}">${fireEmojis || '-'}</span>
-            </td>
             <td class="center col-track">
                 <span class="outcome-badge ${outcomeClass}">${outcomeLabel}</span>
                 ${trackedHtml}
@@ -1479,15 +1397,12 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         // Store picks for sorting
         allPicks = picks;
 
-        // Save picks to localStorage for persistence across page refreshes
-        saveWeeklyLineupPicks(picks);
-
         // Clear placeholder/stale rows
         tbody.innerHTML = '';
 
         // Show empty state if no picks
         if (!picks || picks.length === 0) {
-            tbody.innerHTML = '<tr class="empty-state-row"><td colspan="9" class="empty-state-cell"><div class="empty-state"><span class="empty-icon">📊</span><span class="empty-message">No picks available. Try fetching again or check back later.</span></div></td></tr>';
+            tbody.innerHTML = '<tr class="empty-state-row"><td colspan="6" class="empty-state-cell"><div class="empty-state"><span class="empty-icon">📊</span><span class="empty-message">No picks available. Check back later.</span></div></td></tr>';
             log('📊 No picks to display');
             return;
         }
@@ -1537,7 +1452,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
         // Format date in CST (Central Time) - always show as CST
         const formatDate = (dateStr) => {
-            if (!dateStr) return 'TBD';
+            if (!dateStr) return '';
             // Handle MM/DD format (e.g., "01/17") by assuming current year
             let d;
             const mmddMatch = dateStr.match(/^(\d{1,2})\/(\d{1,2})$/);
@@ -1549,7 +1464,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             } else {
                 d = new Date(dateStr);
             }
-            if (isNaN(d)) return 'TBD'; // Don't return raw unparseable string
+            if (isNaN(d)) return '';
             // Convert to CST (America/Chicago)
             try {
                 return d.toLocaleDateString('en-US', {
@@ -1565,7 +1480,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         // Format time in CST (Central Time)
         const formatTime = (timeStr, dateStr) => {
             // If timeStr is already formatted, use it
-            if (!timeStr) return 'TBD';
+            if (!timeStr) return '';
             // Try to parse as a time on the given date
             let d;
             if (dateStr) {
@@ -1573,7 +1488,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             } else {
                 d = new Date('1970-01-01T' + timeStr);
             }
-            if (isNaN(d)) return timeStr;
+            if (isNaN(d)) return '';
             try {
                 return d.toLocaleTimeString('en-US', {
                     hour: '2-digit', minute: '2-digit', hour12: true,
@@ -1589,9 +1504,9 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         const rawHomeTeam = (pick.homeTeam ?? '').toString().trim();
         const rawPickTeam = (pick.pickTeam ?? '').toString().trim();
 
-        const awayTeamName = escapeHtml(rawAwayTeam) || 'TBD';
-        const homeTeamName = escapeHtml(rawHomeTeam) || 'TBD';
-        const pickTeamName = fixUnde(escapeHtml(rawPickTeam)) || 'Unknown';
+        const awayTeamName = escapeHtml(rawAwayTeam) || '';
+        const homeTeamName = escapeHtml(rawHomeTeam) || '';
+        const pickTeamName = fixUnde(escapeHtml(rawPickTeam)) || '';
 
         const awayInfo = getTeamInfo(rawAwayTeam || awayTeamName);
         const homeInfo = getTeamInfo(rawHomeTeam || homeTeamName);
@@ -1622,20 +1537,11 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         };
 
         const rawMatchupText = ((pick.matchup ?? pick.game ?? '')).toString().trim();
-        const hasAwayName = Boolean(rawAwayTeam);
-        const hasHomeName = Boolean(rawHomeTeam);
-        const fallbackRawMatchup = hasAwayName && hasHomeName
-            ? `${rawAwayTeam} @ ${rawHomeTeam}`
-            : hasAwayName
-                ? rawAwayTeam
-                : hasHomeName
-                    ? rawHomeTeam
-                    : 'TBD';
-        const rowMatchupValue = rawMatchupText || fallbackRawMatchup;
+        const rowMatchupValue = formatMatchup(rawAwayTeam, rawHomeTeam, rawMatchupText);
         const matchupHtml = `<div class="matchup-text">${escapeHtml(rowMatchupValue)}</div>`;
 
-        const pickOdds = escapeHtml(pick.odds) || '-110';
-        const pickLabelText = pickLabel || 'TBD';
+        const pickOdds = escapeHtml(pick.odds) || '';
+        const pickLabelText = pickLabel || '';
         const pickLineOnlyText = (() => {
             const rawLine = (pick.line ?? '').toString().trim();
 
@@ -1664,82 +1570,15 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         const pickCellHtml = `
             <div class="pick-line-group">
                 <span class="pick-line">${escapeHtml(pickLineOnlyText)}</span>
-                <span class="pick-juice">(${pickOdds})</span>
+                ${pickOdds ? `<span class="pick-juice">(${pickOdds})</span>` : ''}
             </div>
         `;
 
-        // Model Prediction - shows model's line/odds
-        const getModelPredictionHtml = () => {
-            const modelPriceRaw = pick.modelPrice ?? pick.model_price ?? '';
-            const modelPrice = escapeHtml(modelPriceRaw);
-            const hasModelOdds = modelPrice && modelPrice !== '-' && modelPrice.toUpperCase() !== 'N/A';
-            const modelSpread = escapeHtml(pick.modelSpread || pick.predictedSpread) || pickLabel || '';
-            const teamAbbrev = isTeamPick ? pickInfo.abbr : normalizedPickTeamName;
-            const logoHtml = isTeamPick && pickInfo.logo
-                ? `<img src="${pickInfo.logo}" class="prediction-logo" loading="eager" alt="${teamAbbrev}" onerror="this.style.display='none'">`
-                : '';
 
-            if (pickType === 'ml') {
-                // ML: [Logo] DEN [ML] -180
-                const oddsHtml = hasModelOdds ? `<span class="pred-odds">${modelPrice}</span>` : '';
-                return `<div class="prediction-cell">${logoHtml}<span class="pred-team">${teamAbbrev}</span><span class="pred-type-badge">ML</span>${oddsHtml}</div>`;
-            } else if (pickType === 'spread') {
-                // Spread: [Logo] DEN -3.5 (-108)
-                const oddsHtml = hasModelOdds ? `<span class="pred-odds-muted">(${modelPrice})</span>` : '';
-                return `<div class="prediction-cell">${logoHtml}<span class="pred-team">${teamAbbrev}</span><span class="pred-line">${modelSpread}</span>${oddsHtml}</div>`;
-            } else if (pickType === 'total' || pickType === 'tt') {
-                // Total: Over 221.5 (-110)
-                const oddsHtml = hasModelOdds ? `<span class="pred-odds-muted">(${modelPrice})</span>` : '';
-                return `<div class="prediction-cell"><span class="pred-direction">${teamAbbrev}</span><span class="pred-line">${modelSpread}</span>${oddsHtml}</div>`;
-            }
-            return `<div class="prediction-cell"><span class="pred-odds">${hasModelOdds ? modelPrice : '-'}</span></div>`;
-        };
-
-        const modelPredictionHtml = getModelPredictionHtml();
-
-        // Market Odds - actual market line for comparison
-        const getMarketHtml = () => {
-            const teamAbbrev = isTeamPick ? pickInfo.abbr : normalizedPickTeamName;
-            const logoHtml = isTeamPick && pickInfo.logo
-                ? `<img src="${pickInfo.logo}" class="prediction-logo" loading="eager" alt="${teamAbbrev}" onerror="this.style.display='none'">`
-                : '';
-
-            if (pickType === 'ml') {
-                // ML: [Logo] DEN [ML] -260
-                return `<div class="prediction-cell">${logoHtml}<span class="pred-team">${teamAbbrev}</span><span class="pred-type-badge">ML</span><span class="pred-odds">${pickOdds}</span></div>`;
-            } else if (pickType === 'spread') {
-                // Spread: [Logo] DEN -5.5 (-110)
-                return `<div class="prediction-cell">${logoHtml}<span class="pred-team">${teamAbbrev}</span><span class="pred-line">${pickLabel}</span><span class="pred-odds-muted">(${pickOdds})</span></div>`;
-            } else if (pickType === 'total' || pickType === 'tt') {
-                // Total: Over 221.5 (-110)
-                return `<div class="prediction-cell"><span class="pred-direction">${teamAbbrev}</span><span class="pred-line">${pickLabel}</span><span class="pred-odds-muted">(${pickOdds})</span></div>`;
-            }
-            return `<div class="prediction-cell"><span class="pred-odds">${pickOdds}</span></div>`;
-        };
-
-        const marketHtml = getMarketHtml();
-
-        // Edge and Fire rating
-        const edge = parseFloat(pick.edge) || 0;
-        const normalizedFire = normalizeFireRating(pick.fire ?? pick.confidence ?? pick.fire_rating ?? pick.fireRating, edge);
-        const fire = normalizedFire.fire;
-        const fireLabel = escapeHtml(pick.fireLabel || normalizedFire.fireLabel) || '';
-
-        // Generate fire emoji display with styled MAX badge
-        const fireEmojis = '🔥'.repeat(fire);
-        const fireDisplay = fireLabel ? `${fireEmojis} <span class="fire-max-badge">${fireLabel}</span>` : fireEmojis;
-
-        // Edge color class based on value
-        const getEdgeClass = (edgeVal) => {
-            if (edgeVal >= 10) return 'edge-hot';
-            if (edgeVal >= 5) return 'edge-good';
-            if (edgeVal >= 2.5) return 'edge-ok';
-            return 'edge-low';
-        };
-
-        const sport = escapeHtml((pick.sport || 'NCAAB').toUpperCase());
+        const sport = escapeHtml((pick.sport || pick.league || '').toString().toUpperCase());
+        const leagueKey = (pick.leagueKey || pick.league || pick.sport || '').toString().toLowerCase();
         const gameDate = pick.date || pick.gameDate;
-        const gameTime = escapeHtml(pick.time || pick.gameTime) || 'TBD';
+        const gameTime = escapeHtml(pick.time || pick.gameTime) || '';
 
         const sportsbookLabel = normalizeSportsbookLabel(pick.sportsbook || pick.book || '');
         const sportsbookHtml = sportsbookLabel
@@ -1747,7 +1586,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             : `<button type="button" class="sportsbook-set-btn" data-pick-key="${escapeHtml(buildPickKey(pick))}" title="Set sportsbook">+ Book</button>`;
 
         // Segment display
-        const rawSegment = escapeHtml(pick.segment) || 'FG';
+        const rawSegment = escapeHtml(pick.segment) || '';
         const segment = normalizeSegment(rawSegment);
         const getSegmentDisplay = (seg) => {
             const segmentMap = {
@@ -1758,55 +1597,11 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             return segmentMap[seg] || rawSegment;
         };
 
-        // Rationale + model version stamp (when provided by APIs)
+        // Rationale (if provided by API)
         const rationaleId = `wl-rationale-${idx}`;
         const rationaleRaw = (pick.rationale ?? pick.reason ?? pick.notes ?? pick.explanation ?? '').toString().trim();
-        const modelStampRaw = (pick.modelStamp ?? pick.modelVersion ?? pick.modelTag ?? '').toString().trim();
 
-        // Build model prediction vs market comparison - cleaner format
-        const modelPriceRaw = pick.modelPrice || pick.model_price || '';
-        const modelLineRaw = pick.modelSpread || pick.predictedSpread || pick.modelLine || '';
-        const modelTotal = pick.modelTotal || pick.predicted_total || '';
-        const edgeValue = edge.toFixed(1);
-
-        // For totals, show the predicted total vs market total
-        // For spreads, show the predicted spread vs market spread
-        let modelDisplay = '-';
-        let marketDisplay = '-';
-
-        if (!isTeamPick) {
-            // Total pick - show totals
-            const direction = normalizedPickTeamName.toUpperCase() === 'OVER' ? 'OVER' : 'UNDER';
-            const marketTotal = pick.line || '';
-            modelDisplay = modelTotal ? `${direction} ${modelTotal}` : `${direction} (model: ${modelPriceRaw || '-'})`;
-            marketDisplay = `${direction} ${marketTotal}`;
-        } else {
-            // Team pick - show spread/line
-            const teamAbbr = escapeHtml(pickInfo.abbr || pickTeamName);
-            modelDisplay = modelLineRaw ? `${teamAbbr} ${modelLineRaw}` : `${teamAbbr} (${modelPriceRaw || '-'})`;
-            marketDisplay = `${teamAbbr} ${escapeHtml(pick.line || '')}`;
-        }
-
-        // Build comparison section - horizontal header row
-        const hasModelLine = modelLineRaw || modelTotal;
-        const hasMarketLine = pick.line;
-
-        // Single row: Model vs Market vs Edge
-        let comparisonHtml = `
-            <div class="details-header">
-                <div class="details-col">
-                    <span class="details-label">Model</span>
-                    <span class="details-val model-val">${hasModelLine ? (modelLineRaw || modelTotal) : '-'}</span>
-                </div>
-                <div class="details-col">
-                    <span class="details-label">Market</span>
-                    <span class="details-val market-val">${hasMarketLine ? pick.line : '-'} <span class="odds-tag">${pickOdds}</span></span>
-                </div>
-                <div class="details-col">
-                    <span class="details-label">Edge</span>
-                    <span class="details-val edge-val">+${edgeValue}%</span>
-                </div>
-            </div>`;
+        const comparisonHtml = '';
 
         // Format rationale - clean bullet points, left-aligned
         const formatRationale = (text) => {
@@ -1828,20 +1623,13 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         };
 
         const rationaleHtml = formatRationale(rationaleRaw);
-        const modelStampHtml = modelStampRaw
-            ? `<div class="details-footer">${escapeHtml(modelStampRaw)}</div>`
-            : '';
 
         // Set data attributes for sorting and filtering
-        row.setAttribute('data-edge', edge);
-        row.setAttribute('data-fire', fire);
         row.setAttribute('data-time', gameTime);
         row.setAttribute('data-pick-type', pickType);
-        row.setAttribute('data-league', sport);
+        row.setAttribute('data-league', leagueKey || sport.toLowerCase());
         row.setAttribute('data-segment', segment);
         row.setAttribute('data-matchup', `${awayTeamName} @ ${homeTeamName}`);
-        row.setAttribute('data-market', pickOdds);
-        row.setAttribute('data-model', pick.modelSpread || pick.modelPrice || pick.predictedSpread || pick.predictedTotal || '');
         row.setAttribute('data-pick', pickTeamName);
         row.setAttribute('data-pick-key', buildPickKey(pick));
         row.setAttribute('data-sportsbook', sportsbookLabel);
@@ -1875,12 +1663,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             if (changes.odds) {
                 changeItems.push(`Odds: ${changes.odds.from} → ${changes.odds.to}`);
             }
-            if (changes.edge) {
-                changeItems.push(`Edge: ${changes.edge.from.toFixed(1)}% → ${changes.edge.to.toFixed(1)}%`);
-            }
-            if (changes.fire) {
-                changeItems.push(`Fire: ${changes.fire.from} → ${changes.fire.to}`);
-            }
+            // Only line/odds changes are tracked
 
             changeIndicatorsHtml = `
                 <div class="pick-change-alert" title="${changeItems.join(', ')}">
@@ -1933,17 +1716,6 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             }
         }
 
-        // Update edge display if changed
-        let edgeDisplayHtml = `<span class="edge-value ${getEdgeClass(edge)}">+${edge.toFixed(1)}</span>`;
-        if (changes && changes.edge) {
-            edgeDisplayHtml = `
-                <div class="edge-value-wrapper">
-                    <span class="edge-value ${getEdgeClass(edge)} value-changed" title="Was: ${changes.edge.from.toFixed(1)}%">+${edge.toFixed(1)}</span>
-                    <span class="edge-change-indicator">⚠️</span>
-                </div>
-            `;
-        }
-
         // League cell HTML with logo
         // Use LogoLoader for league logo
         const leagueLogo = window.LogoLoader ? window.LogoLoader.getLeagueLogoUrl(sport) : '';
@@ -1979,20 +1751,8 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                     <div class="rationale-panel" id="${rationaleId}" hidden>
                         ${comparisonHtml}
                         ${rationaleHtml ? `<div class="rationale-body">${rationaleHtml}</div>` : ''}
-                        ${modelStampHtml}
                     </div>
                 </div>
-            </td>
-            <td data-label="Model" class="center col-market">
-                <div class="model-cell">
-                    ${modelPredictionHtml}
-                </div>
-            </td>
-            <td data-label="Edge" class="center">
-                ${edgeDisplayHtml}
-            </td>
-            <td data-label="Fire" class="center">
-                <span class="fire-rating">${fireDisplay}</span>
             </td>
             <td data-label="Track" class="center">
                 ${isTracked ? trackingStatusHtml : '<button class="tracker-btn" type="button">+</button>'}
@@ -2181,23 +1941,9 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                 endDate = new Date(today);
                 endDate.setDate(today.getDate() + 7);
                 break;
-            case 'custom':
-                // Would open a date picker modal
-                return;
-        }
-
-        // Apply date filter logic here
-    }
-
-    // ===== FILTER INITIALIZATION =====
-    function initializeFilters() {
-        filterInitAttempts++;
-        log(`[Weekly Lineup] initializeFilters() attempt ${filterInitAttempts}`);
 
         const table = document.querySelector('.weekly-lineup-table');
         if (!table) {
-            if (filterInitAttempts < MAX_FILTER_INIT_ATTEMPTS) {
-                setTimeout(initializeFilters, 200);
             }
             return;
         }
@@ -2318,7 +2064,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
                 // Make "All" span full width (avoids awkward empty cells)
                 const allBtns = grid.querySelectorAll(
-                    '.filter-opt[data-segment="all"], .filter-opt[data-market="all"], .filter-opt[data-model="all"], .filter-opt[data-odds="all"], .filter-opt[data-edge="all"], .filter-opt[data-fire="all"]'
+                    '.filter-opt[data-segment="all"], .filter-opt[data-pick="all"], .filter-opt[data-league="all"]'
                 );
                 allBtns.forEach((btn) => btn.style.setProperty('grid-column', '1 / -1', 'important'));
             });
@@ -2543,36 +2289,6 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             });
         });
 
-        // Edge filter chips (exclusive selection)
-        document.querySelectorAll('.filter-opt[data-edge]').forEach(chip => {
-            chip.addEventListener('click', function(e) {
-                e.stopPropagation();
-                const edgeValue = this.getAttribute('data-edge');
-                console.log('🎯 [Weekly Lineup] Edge chip clicked:', edgeValue);
-
-                const parent = this.closest('.filter-grid') || this.parentElement;
-                parent.querySelectorAll('.filter-opt[data-edge]').forEach(c => c.classList.remove('active'));
-                this.classList.add('active');
-
-                applyTableFilter('edge', edgeValue === 'all' ? '' : edgeValue);
-            });
-        });
-
-        // Fire filter chips (exclusive selection)
-        document.querySelectorAll('.filter-opt[data-fire]').forEach(chip => {
-            chip.addEventListener('click', function(e) {
-                e.stopPropagation();
-                const fireValue = this.getAttribute('data-fire');
-                console.log('🔥 [Weekly Lineup] Fire chip clicked:', fireValue);
-
-                const parent = this.closest('.filter-grid') || this.parentElement;
-                parent.querySelectorAll('.filter-opt[data-fire]').forEach(c => c.classList.remove('active'));
-                this.classList.add('active');
-
-                applyTableFilter('fire', fireValue === 'all' ? '' : fireValue);
-            });
-        });
-
         // Filter quick actions (Select All / Clear)
         document.querySelectorAll('.filter-action-btn').forEach(btn => {
             btn.addEventListener('click', function(e) {
@@ -2585,19 +2301,19 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                 if (action === 'select-all') {
                     // Find and activate the "all" option
                     const allChip = dropdown.querySelector(
-                        '.league-pill[data-league=\"all\"], .segment-pill[data-segment=\"all\"], .pick-pill[data-pick=\"all\"], .edge-pill[data-edge=\"all\"], .fire-pill[data-fire=\"all\"], [data-league=\"all\"], [data-market=\"all\"], [data-segment=\"all\"], [data-edge=\"all\"], [data-fire=\"all\"]'
+                        '.league-pill[data-league=\"all\"], .segment-pill[data-segment=\"all\"], .pick-pill[data-pick=\"all\"], [data-league=\"all\"], [data-market=\"all\"], [data-segment=\"all\"]'
                     );
                     if (allChip) {
                         allChip.click();
                     }
                 } else if (action === 'clear') {
                     // Clear all active states and show all rows
-                    dropdown.querySelectorAll('.league-pill, .segment-pill, .pick-pill, .edge-pill, .fire-pill, .league-chip, .filter-opt[data-market], .filter-opt[data-segment], .filter-opt[data-edge], .filter-opt[data-fire]').forEach(chip => {
+                    dropdown.querySelectorAll('.league-pill, .segment-pill, .pick-pill, .league-chip, .filter-opt[data-market], .filter-opt[data-segment]').forEach(chip => {
                         chip.classList.remove('active');
                     });
                     // Activate "all" option if exists
                     const allChip = dropdown.querySelector(
-                        '.league-pill[data-league=\"all\"], .segment-pill[data-segment=\"all\"], .pick-pill[data-pick=\"all\"], .edge-pill[data-edge=\"all\"], .fire-pill[data-fire=\"all\"], [data-league=\"all\"], [data-market=\"all\"], [data-segment=\"all\"], [data-edge=\"all\"], [data-fire=\"all\"]'
+                        '.league-pill[data-league=\"all\"], .segment-pill[data-segment=\"all\"], .pick-pill[data-pick=\"all\"], [data-league=\"all\"], [data-market=\"all\"], [data-segment=\"all\"]'
                     );
                     if (allChip) {
                         allChip.classList.add('active');
@@ -2607,7 +2323,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             });
         });
 
-        // Weekly Lineup header pill filters (league/segment/pick/edge/fire)
+        // Weekly Lineup header pill filters (league/segment/pick)
         const setExclusiveActive = (btn, selector) => {
             const parent = btn.parentElement;
             parent?.querySelectorAll(selector)?.forEach((el) => el.classList.remove('active'));
@@ -2638,22 +2354,6 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             });
         });
 
-        document.querySelectorAll('.edge-pill[data-edge]').forEach((pill) => {
-            pill.addEventListener('click', (e) => {
-                e.stopPropagation();
-                setExclusiveActive(pill, '.edge-pill[data-edge]');
-                applyTableFilter();
-            });
-        });
-
-        document.querySelectorAll('.fire-pill[data-fire]').forEach((pill) => {
-            pill.addEventListener('click', (e) => {
-                e.stopPropagation();
-                setExclusiveActive(pill, '.fire-pill[data-fire]');
-                applyTableFilter();
-            });
-        });
-
         console.log('✅ [Weekly Lineup] Filter chip handlers complete');
     }
 
@@ -2674,8 +2374,6 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             const activeLeague = normalizeLeagueKey(document.querySelector('.league-pill.active')?.getAttribute('data-league') || 'all');
             const activeSegment = (document.querySelector('.segment-pill.active')?.getAttribute('data-segment') || 'all').toString().trim().toLowerCase();
             const activePickType = (document.querySelector('.pick-pill.active')?.getAttribute('data-pick') || 'all').toString().trim().toLowerCase();
-            const activeEdge = (document.querySelector('.edge-pill.active')?.getAttribute('data-edge') || 'all').toString().trim().toLowerCase();
-            const activeFire = (document.querySelector('.fire-pill.active')?.getAttribute('data-fire') || 'all').toString().trim().toLowerCase();
 
             // League filter
             if (activeLeague && activeLeague !== 'all') {
@@ -2699,21 +2397,6 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                 if (rowPickType !== activePickType) {
                     show = false;
                 }
-            }
-
-            // Edge filter (high/medium/low)
-            if (show && activeEdge && activeEdge !== 'all') {
-                const rowEdge = parseFloat(row.getAttribute('data-edge')) || 0;
-                if (activeEdge === 'high' && rowEdge < 5) show = false;
-                else if (activeEdge === 'medium' && (rowEdge < 2 || rowEdge >= 5)) show = false;
-                else if (activeEdge === 'low' && rowEdge >= 2) show = false;
-            }
-
-            // Fire filter (exact 1-5)
-            if (show && activeFire && activeFire !== 'all') {
-                const rowFire = parseInt(row.getAttribute('data-fire'), 10) || 0;
-                const selectedFire = parseInt(activeFire, 10) || 0;
-                if (selectedFire && rowFire !== selectedFire) show = false;
             }
 
             row.style.display = show ? '' : 'none';
@@ -2774,29 +2457,6 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             });
         });
 
-        // Edge dropdown items (multi-select)
-        toolbar.querySelectorAll('#edge-dropdown-menu .ft-dropdown-item').forEach(item => {
-            item.addEventListener('click', () => {
-                item.classList.toggle('active');
-                const menu = item.closest('.ft-dropdown-menu');
-                const btn = menu.previousElementSibling;
-                const activeCount = menu.querySelectorAll('.ft-dropdown-item.active').length;
-                btn.textContent = activeCount > 0 ? `📊 Edge (${activeCount}) ▾` : '📊 Edge ▾';
-                applyToolbarFilters();
-            });
-        });
-
-        // Fire dropdown items (multi-select)
-        toolbar.querySelectorAll('#fire-dropdown-menu .ft-dropdown-item').forEach(item => {
-            item.addEventListener('click', () => {
-                item.classList.toggle('active');
-                const menu = item.closest('.ft-dropdown-menu');
-                const btn = menu.previousElementSibling;
-                const activeCount = menu.querySelectorAll('.ft-dropdown-item.active').length;
-                btn.textContent = activeCount > 0 ? `🔥 Fire (${activeCount}) ▾` : '🔥 Fire ▾';
-                applyToolbarFilters();
-            });
-        });
 
         // Segment dropdown items (multi-select)
         toolbar.querySelectorAll('#segment-dropdown-menu .ft-dropdown-item').forEach(item => {
@@ -2827,12 +2487,6 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         clearBtn?.addEventListener('click', () => {
             // Clear league pills
             toolbar.querySelectorAll('.ft-league').forEach(p => p.classList.remove('active'));
-            // Clear edge dropdown
-            toolbar.querySelectorAll('#edge-dropdown-menu .ft-dropdown-item').forEach(i => i.classList.remove('active'));
-            document.getElementById('edge-dropdown-btn').textContent = '📊 Edge ▾';
-            // Clear fire dropdown
-            toolbar.querySelectorAll('#fire-dropdown-menu .ft-dropdown-item').forEach(i => i.classList.remove('active'));
-            document.getElementById('fire-dropdown-btn').textContent = '🔥 Fire ▾';
             // Clear segment dropdown
             toolbar.querySelectorAll('#segment-dropdown-menu .ft-dropdown-item').forEach(i => i.classList.remove('active'));
             document.getElementById('segment-dropdown-btn').textContent = '⏱ Segment ▾';
@@ -2860,64 +2514,17 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                 console.log(`🔄 [Weekly Lineup] Fetching picks: ${fetchType}`);
 
                 try {
-                    // Wait for fetcher if not ready
-                    const fetcherReady = await waitForFetcher(10, 200);
-                    if (!fetcherReady) {
-                        throw new Error('Fetcher not available');
-                    }
-
                     // Show loading state in table
                     const tbody = document.querySelector('.weekly-lineup-table tbody');
                     if (tbody) {
-                        tbody.innerHTML = '<tr class="empty-state-row"><td colspan="9" class="empty-state-cell"><div class="empty-state"><span class="empty-icon">📊</span><span class="empty-message">Loading picks...</span></div></td></tr>';
+                        tbody.innerHTML = '<tr class="empty-state-row"><td colspan="6" class="empty-state-cell"><div class="empty-state"><span class="empty-icon">📊</span><span class="empty-message">Loading picks...</span></div></td></tr>';
                     }
 
-                    const result = await window.UnifiedPicksFetcher.fetchPicks(
-                        fetchType === 'all' ? 'all' : fetchType,
-                        'today'
-                    );
+                    const leagues = fetchType === 'all'
+                        ? REAL_PICK_LEAGUES
+                        : [fetchType.toUpperCase() === 'NCAAB' ? 'NCAAB' : fetchType.toUpperCase()];
 
-                    let pickCount = 0;
-                    if (result.picks && result.picks.length > 0) {
-                        pickCount = result.picks.length;
-                        // Add fetched picks to table
-                        const formattedPicks = result.picks.map(pick => {
-                            const edge = parseFloat(pick.edge) || 0;
-                            const fireMeta = normalizeFireRating(pick.fire ?? pick.confidence ?? pick.fire_rating ?? pick.fireRating, edge);
-
-                            return {
-                                date: pick.date || getTodayDateString(),
-                                time: pick.time || 'TBD',
-                                sport: pick.sport || pick.league || 'NBA',
-                                awayTeam: pick.awayTeam || (pick.game ? pick.game.split(' @ ')[0] : ''),
-                                homeTeam: pick.homeTeam || (pick.game ? pick.game.split(' @ ')[1] : ''),
-                                segment: normalizeSegment(pick.segment || pick.period || 'FG'),
-                                pickTeam: pick.pickTeam || pick.pick || '',
-                                pickType: normalizePickType(pick.pickType || pick.market || 'spread'),
-                                line: pick.line || '',
-                                odds: pick.odds || '-110',
-                                modelPrice: pick.modelPrice || pick.model_price || '',
-                                edge: edge,
-                                fire: fireMeta.fire,
-                                fireLabel: pick.fireLabel || fireMeta.fireLabel,
-                                rationale: pick.rationale || pick.reason || pick.notes || pick.explanation || '',
-                                modelStamp: pick.modelStamp || pick.model_version || pick.modelVersion || pick.modelTag || '',
-                                status: pick.status || 'pending'
-                            };
-                        });
-                        formattedPicks.sort((a, b) => b.edge - a.edge);
-                        populateWeeklyLineupTable(formattedPicks);
-                        updateModelStamp(formattedPicks);
-                        console.log(`[Weekly Lineup] ✅ Fetched ${result.picks.length} picks for ${fetchType}`);
-
-                        // Auto-save snapshot when picks are manually fetched
-                        savePicksSnapshot(formattedPicks, 'manual-fetch');
-                    } else {
-                        // Show empty state when no picks returned
-                        populateWeeklyLineupTable([]);
-                        updateModelStamp([]);
-                        console.log(`[Weekly Lineup] ⚠️ No picks returned for ${fetchType}`);
-                    }
+                    const pickCount = await loadLivePicks(leagues);
 
                     // Update last fetched timestamp with count
                     updateLastFetchedTime(fetchType, pickCount);
@@ -2934,12 +2541,6 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                         btn.classList.remove('loading');
                     }, 2000);
 
-                    // Log any errors
-                    if (result.errors?.length > 0) {
-                        result.errors.forEach(err => {
-                            console.warn(`[Weekly Lineup] ${err.league} API error:`, err.error);
-                        });
-                    }
                 } catch (err) {
                     console.error('[Weekly Lineup] Fetch error:', err);
                     btn.innerHTML = '<span style="color:#ff6b6b; font-weight:bold;">✕</span>';
@@ -2970,16 +2571,6 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             activeLeagues.push(p.dataset.league.toLowerCase());
         });
 
-        const activeEdges = [];
-        toolbar.querySelectorAll('#edge-dropdown-menu .ft-dropdown-item.active').forEach(i => {
-            activeEdges.push(i.dataset.v);
-        });
-
-        const activeFires = [];
-        toolbar.querySelectorAll('#fire-dropdown-menu .ft-dropdown-item.active').forEach(i => {
-            activeFires.push(i.dataset.v);
-        });
-
         const activeSegments = [];
         toolbar.querySelectorAll('#segment-dropdown-menu .ft-dropdown-item.active').forEach(i => {
             activeSegments.push(i.dataset.v.toUpperCase());
@@ -2990,7 +2581,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             activePickTypes.push(i.dataset.v.toLowerCase());
         });
 
-        console.log(`🔍 [Toolbar Filter] Leagues: ${activeLeagues.join(',')||'all'}, Edges: ${activeEdges.join(',')||'all'}, Fires: ${activeFires.join(',')||'all'}, Segments: ${activeSegments.join(',')||'all'}, PickTypes: ${activePickTypes.join(',')||'all'}`);
+        console.log(`🔍 [Toolbar Filter] Leagues: ${activeLeagues.join(',')||'all'}, Segments: ${activeSegments.join(',')||'all'}, PickTypes: ${activePickTypes.join(',')||'all'}`);
 
         // Filter rows
         let visibleCount = 0;
@@ -3010,27 +2601,9 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                 if (!activeLeagues.includes(lg)) show = false;
             }
 
-            // Edge filter
-            if (show && activeEdges.length > 0) {
-                const edgeCell = row.cells[5];
-                const edgeVal = parseFloat((edgeCell?.textContent || '0').replace('%', '')) || 0;
-                const match = activeEdges.some(lvl =>
-                    (lvl === 'high' && edgeVal >= 5) ||
-                    (lvl === 'medium' && edgeVal >= 2 && edgeVal < 5) ||
-                    (lvl === 'low' && edgeVal < 2)
-                );
-                if (!match) show = false;
-            }
-
-            // Fire filter
-            if (show && activeFires.length > 0) {
-                const rowFire = parseInt(row.getAttribute('data-fire') || '0', 10) || 0;
-                if (!activeFires.includes(String(rowFire))) show = false;
-            }
-
             // Segment filter
             if (show && activeSegments.length > 0) {
-                const rowSegment = (row.getAttribute('data-segment') || 'FG').toUpperCase();
+                const rowSegment = (row.getAttribute('data-segment') || 'full').toUpperCase();
                 if (!activeSegments.includes(rowSegment)) show = false;
             }
 
@@ -3197,22 +2770,8 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             }
             case 'segment':
                 return row.getAttribute('data-segment') || '';
-            case 'edge':
-                // Use data attribute for numeric sorting
-                return parseFloat(row.getAttribute('data-edge')) || 0;
-            case 'market':
-            case 'odds': {
-                const marketStr = row.getAttribute('data-market') || '';
-                return parseInt(marketStr.replace(/[^\d-+]/g, '')) || 0;
-            }
-            case 'model': {
-                const modelVal = row.getAttribute('data-model') || '';
-                return parseFloat(modelVal.toString().replace(/[^\d.-]/g, '')) || 0;
-            }
             case 'pick':
                 return row.getAttribute('data-pick') || '';
-            case 'fire':
-                return parseInt(row.getAttribute('data-fire')) || 0;
             default:
                 return '';
         }
@@ -3359,6 +2918,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
             // Time cell (first cell)
             const timeCell = cells[0];
+            const date = timeCell?.querySelector('.date-value')?.textContent?.trim() || '';
             const time = timeCell?.querySelector('.time-value')?.textContent?.trim() ||
                          timeCell?.textContent?.trim() || '';
 
@@ -3398,7 +2958,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
             // Segment (4th cell)
             const segmentCell = cells[3];
-            const segment = segmentCell?.textContent?.trim() || 'FG';
+            const segment = segmentCell?.textContent?.trim() || '';
 
             // Pick (5th cell) - contains team and line
             const pickCell = cells[4];
@@ -3408,7 +2968,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             const pickOdds = (
                 pickCell?.querySelector('.pick-odds')?.textContent ||
                 pickCell?.querySelector('.pick-juice')?.textContent || ''
-            ).replace(/[()]/g, '').trim() || '-110';
+            ).replace(/[()]/g, '').trim() || '';
 
             // Determine pick type from line
             let pickType = 'spread';
@@ -3423,24 +2983,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                 pickType = 'moneyline';
             }
 
-            // Model prediction (Model column)
-            const modelColumnCell = cells[5];
-            const modelPrediction = modelColumnCell
-                ?.querySelector('.prediction-cell')
-                ?.textContent
-                ?.trim() || modelColumnCell?.textContent?.trim() || '';
-
-            // Market line (fallback to displayed pick line)
             const marketLine = pickLine || '';
-
-            // Edge (8th cell)
-            const edgeCell = cells[6];
-            const edgeText = edgeCell?.textContent?.trim() || '0';
-            const edge = parseFloat(edgeText.replace(/[+%pts]/g, '')) || 0;
-
-            // Fire rating (9th cell)
-            const fireCell = cells[7];
-            const fireRating = fireCell?.textContent?.trim() || '';
 
             // Build the pick object for LocalPicksManager
             return {
@@ -3456,13 +2999,10 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                 odds: pickOdds,
                 segment: segment,
                 gameTime: time,
-                gameDate: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-                modelPrediction: modelPrediction,
+                gameDate: date,
                 marketLine: marketLine,
-                edge: edge,
-                fireRating: fireRating,
-                risk: 100,  // Default risk amount
-                win: calculateWin(100, pickOdds),
+                risk: 0,
+                win: 0,
                 status: 'pending',
                 source: 'weekly-lineup'
             };
@@ -3503,15 +3043,11 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
     function saveTrackingMetadata(pick, trackedAt) {
         try {
             const pickId = generatePickId(pick);
-            // Normalize fire rating (could be fire or fireRating)
-            const fireValue = pick.fire !== undefined ? pick.fire : (pick.fireRating || 0);
             const tracked = {
                 pickId,
                 trackedAt,
                 originalLine: (pick.line || '').toString().trim(),
                 originalOdds: (pick.odds || '').toString().trim(),
-                originalEdge: parseFloat(pick.edge) || 0,
-                originalFire: fireValue,
                 sport: (pick.sport || pick.league || '').toString().toUpperCase(),
                 awayTeam: (pick.awayTeam || '').toString(),
                 homeTeam: (pick.homeTeam || '').toString(),
@@ -3559,21 +3095,11 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         const changes = {};
         const currentLine = (pick.line || '').trim();
         const currentOdds = (pick.odds || '').trim();
-        const currentEdge = parseFloat(pick.edge) || 0;
-        // Normalize fire rating (could be fire or fireRating)
-        const currentFire = pick.fire !== undefined ? pick.fire : (pick.fireRating || 0);
-
         if (currentLine !== tracked.originalLine && currentLine && tracked.originalLine) {
             changes.line = { from: tracked.originalLine, to: currentLine };
         }
         if (currentOdds !== tracked.originalOdds && currentOdds && tracked.originalOdds) {
             changes.odds = { from: tracked.originalOdds, to: currentOdds };
-        }
-        if (Math.abs(currentEdge - tracked.originalEdge) > 0.1) {
-            changes.edge = { from: tracked.originalEdge, to: currentEdge };
-        }
-        if (currentFire !== tracked.originalFire) {
-            changes.fire = { from: tracked.originalFire, to: currentFire };
         }
 
         return Object.keys(changes).length > 0 ? changes : null;
@@ -3584,7 +3110,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
      */
     function formatGameTime(pick) {
         // Try to get time from various sources
-        if (pick.time && pick.time !== 'TBD') return pick.time;
+        if (pick.time) return pick.time;
         if (pick.gameTime) return pick.gameTime;
 
         // Try to parse from date string
@@ -3667,7 +3193,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                 createdAt: trackedAt,
                 // Date/Time - dashboard expects gameDate and gameTime
                 gameDate: pickData.date || getTodayDateString(),
-                gameTime: pickData.time && pickData.time !== 'TBD' ? pickData.time : formatGameTime(pickData),
+                gameTime: pickData.time || '',
                 // Teams
                 awayTeam: pickData.awayTeam || '',
                 homeTeam: pickData.homeTeam || '',
@@ -3679,17 +3205,11 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                 pickDirection: pickData.pickDirection || determinePickDirection(pickData),
                 line: pickData.line || '',
                 odds: pickData.odds || '-110',
-                // Model info
-                edge: pickData.edge || 0,
-                fire: pickData.fire || 0,
-                fireLabel: pickData.fireLabel || '',
-                modelPrice: pickData.modelPrice || '',
                 rationale: pickData.rationale || '',
-                modelStamp: pickData.modelStamp || '',
                 // Metadata
                 sport: pickData.sport || 'NBA',
                 segment: pickData.segment || 'FG',
-                status: 'pending',
+                status: pickData.status || 'pending',
                 sportsbook: pickData.sportsbook || ''
             };
 
@@ -3890,55 +3410,15 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
         }
     }
 
-    // ===== SNAPSHOT INTEGRATION =====
-    /**
-     * Save picks snapshot using PicksSnapshotManager
-     * @param {Array} picks - Picks to save
-     * @param {string} source - Source of the snapshot
-     */
-    function savePicksSnapshot(picks, source = 'manual') {
-        try {
-            if (window.PicksSnapshotManager && Array.isArray(picks) && picks.length > 0) {
-                const snapshotId = window.PicksSnapshotManager.saveSnapshot(picks, source);
-                if (snapshotId) {
-                    log(`📸 Snapshot saved: ${snapshotId} (${picks.length} picks)`);
-                    // Dispatch event for UI updates
-                    document.dispatchEvent(new CustomEvent('picks-updated', {
-                        detail: { picks, snapshotId }
-                    }));
-                }
-            }
-        } catch (error) {
-            console.error('Failed to save snapshot:', error);
-        }
-    }
-
-    // Listen for snapshot load events
-    document.addEventListener('load-snapshot', (e) => {
-        const snapshot = e.detail?.snapshot;
-        if (snapshot && snapshot.picks) {
-            log(`📂 Loading snapshot: ${snapshot.id}`);
-            populateWeeklyLineupTable(snapshot.picks);
-            updateModelStamp(snapshot.picks);
-
-            // Show notification
-            showNotification(`Loaded snapshot from ${snapshot.timestampDisplay}`, 'info');
-        }
-    });
-
     // Export for external use
     window.WeeklyLineup = {
-        loadModelOutputs,
+        loadLivePicks,
         populateTable: populateWeeklyLineupTable,
         showNotification,
         showEmptyState,
         showNoPicks,
         addPickToDashboard,
         removePickFromDashboard,
-        // Archive functions
-        archiveExpiredPicks,
-        syncArchivedOutcomes,
-        forceArchiveAllPicks,
         // New: Sync bridge - get current active picks for Dashboard
         getActivePicks: () => allPicks || [],
         exportToDashboard: () => {
@@ -3962,7 +3442,7 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
 
             const DASHBOARD_KEY = 'gbsv_picks';
             const dashboardPicks = picks.map((pick, idx) => ({
-                id: `pick_${Date.now()}_${idx}_${Math.random().toString(36).substring(7)}`,
+                id: pick.id || generatePickId(pick),
                 pickTeam: pick.pickTeam || pick.pick || '',
                 awayTeam: pick.awayTeam || '',
                 homeTeam: pick.homeTeam || '',
@@ -3973,15 +3453,13 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
                 segment: pick.segment || 'Full Game',
                 pickType: pick.pickType || 'spread',
                 line: pick.line || '',
-                odds: pick.odds || '-110',
-                risk: 50000, // Default 1 unit = $50k
-                win: 45455, // Default at -110 odds
-                edge: pick.edge || 0,
-                fire: pick.fire || 0,
+                odds: pick.odds || '',
+                risk: pick.risk || 0,
+                win: pick.toWin || pick.win || 0,
                 status: 'pending',
-                gameDate: pick.date || new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }),
-                gameTime: pick.time || 'TBD',
-                sportsbook: 'Model Pick',
+                gameDate: pick.date || pick.gameDate || '',
+                gameTime: pick.time || pick.gameTime || '',
+                sportsbook: pick.sportsbook || '',
                 source: 'weekly-lineup-sync',
                 createdAt: new Date().toISOString()
             }));
@@ -3993,24 +3471,8 @@ window.__WEEKLY_LINEUP_BUILD__ = WL_BUILD;
             return dashboardPicks.length;
         },
         // Sync: Dashboard can call this to push results back
-        syncDashboardOutcomes: (dashboardPicks) => {
-            // Update archived picks with outcomes from Dashboard
-            if (!Array.isArray(dashboardPicks)) return;
-            log('[Weekly Lineup] Syncing outcomes from Dashboard...');
-            dashboardPicks.forEach(dbPick => {
-                if (dbPick.status && ['win', 'loss', 'push'].includes(dbPick.status.toLowerCase())) {
-                    const pickId = generatePickId(dbPick);
-                    updateArchivedPickOutcome(pickId, dbPick.status.toLowerCase());
-                }
-            });
-        },
-        clearArchivedPicks,
-        getWeeklyStatsSummary,
-        loadArchivedPicks,
-        updateArchivedPickOutcome,
-        // Snapshot function
-        savePicksSnapshot
+        syncDashboardOutcomes: () => {}
     };
 
-    log('✅ Weekly Lineup v33.01.0 loaded (with archive support)');
+    log('✅ Weekly Lineup loaded (live picks only)');
 })();

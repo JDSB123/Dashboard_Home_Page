@@ -35,9 +35,7 @@
     <!-- CSS: Bundled for performance -->
     <link rel="stylesheet" href="dist/bundle.min.css?v=34.00.0">
     <!-- CSS: Page specific overrides -->
-    <link rel="stylesheet" href="assets/css/pages/weekly-lineup.css?v=34.00.8">
-    <!-- Snapshot & Export Controls Styles -->
-    <link rel="stylesheet" href="assets/css/components/snapshot-export-controls.css?v=34.00.7">
+    <link rel="stylesheet" href="assets/css/pages/weekly-lineup.css?v=34.00.9">
     <!-- Mobile Responsive Styles (includes consolidated hotfixes) -->
     <link rel="stylesheet" href="assets/css/components/mobile-responsive.css?v=34.00.0">
     <!-- COMPLETE MOBILE OVERHAUL - This MUST be loaded LAST to override everything -->
@@ -55,31 +53,15 @@
     <!-- Silence console output in production BEFORE any other deferred scripts run -->
     <script src="assets/js/core/debug-config.js?v=34.00.0" defer></script>
     <script src="config.js?v=34.00.2" defer></script>
-    <script src="assets/js/features/model-endpoints-bootstrap.js?v=34.00.1" defer></script>
 
     <!-- Page Transition Handler (smooth navigation with loading state) -->
     <script src="assets/js/utils/page-transition-handler.js?v=1.0.0" defer></script>
 
-    <!-- Model API Fetchers - v34.00.1 Production -->
+    <!-- Real Picks API Helpers -->
     <script src="assets/js/features/auto-game-fetcher.js?v=34.00.2" defer></script>
-    <script src="assets/js/features/nba-picks-fetcher.js?v=34.00.1" defer></script>
-    <script src="assets/js/features/ncaam-picks-fetcher.js?v=34.00.2" defer></script>
-    <script src="assets/js/features/nfl-picks-fetcher.js?v=34.00.1" defer></script>
-    <script src="assets/js/features/ncaaf-picks-fetcher.js?v=34.00.1" defer></script>
-    <script src="assets/js/features/unified-picks-fetcher.js?v=34.00.2" defer></script>
-    <!-- Snapshot & Export Managers - v34.00.0 -->
-    <script src="assets/js/features/picks-snapshot-manager.js?v=34.00.0" defer></script>
-    <script src="assets/js/features/picks-export-manager.js?v=34.00.0" defer></script>
-    <script src="assets/js/features/snapshot-export-ui.js?v=34.00.0" defer></script>
     <!-- Complete Mobile Experience -->
     <script src="assets/js/weekly-lineup-mobile.js?v=34.00.0" defer></script>
 
-    <!-- Manual Pick Entry - Option A & B -->
-    <script src="assets/js/features/pick-parser.js?v=34.00.0" defer></script>
-    <script src="assets/js/features/manual-pick-modal.js?v=34.00.0" defer></script>
-    <script src="assets/js/features/sportsbooks-import-handler.js?v=34.00.0" defer></script>
-    <link rel="stylesheet" href="assets/css/components/manual-pick-modal.css?v=34.00.0">
-    <link rel="stylesheet" href="assets/css/components/sportsbooks-import.css?v=34.00.0">
 
     <!-- Critical Mobile Styles - Inline for immediate effect -->
     <style>
@@ -200,60 +182,6 @@
                         </form>
                     </div>
                 </section>
-                <section class="sportsbook-card upload-picks-card" aria-labelledby="upload-picks-title">
-                    <div class="sportsbook-card-header">
-                        <div class="sportsbook-name-group">
-                            <span class="connection-status connected"></span>
-                            <span class="sportsbook-name" id="upload-picks-title">Upload Picks</span>
-                        </div>
-                        <div class="sportsbook-meta-compact">
-                            <span class="sportsbook-last-sync">Attach slips or paste text</span>
-                        </div>
-                    </div>
-                    <div class="sportsbook-upload-shell">
-                        <div class="upload-destination">
-                            <label for="upload-sportsbook-select" class="upload-label">Assign sportsbook</label>
-                            <select id="upload-sportsbook-select" class="sportsbook-select" aria-label="Assign uploaded picks to a sportsbook">
-                                <option value="">Select Book...</option>
-                                <option value="hulkwager">Hulk Wager</option>
-                                <option value="bombay711">Bombay 711</option>
-                                <option value="kingofsports">King of Sports</option>
-                                <option value="primetimeaction">Prime Time Action</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-                        <div class="sportsbook-actions-compact" id="action-buttons" style="display: none;">
-                            <div class="action-btn-cta">Choose an option to add picks</div>
-                            <button class="action-btn-compact add-book-btn-compact" type="button">+ Add Book</button>
-                            <button class="action-btn-compact import-picks-btn" type="button">Upload Picks</button>
-                        </div>
-                        <div class="import-options-popup" id="import-options">
-                            <div class="import-header">
-                                <div class="import-title-group">
-                                    <span class="import-title">Upload Picks</span>
-                                    <span class="import-subtitle">Drag in bet slips or paste picks below.</span>
-                                </div>
-                                <button type="button" class="import-back-btn" aria-label="Back to sportsbook list">Back</button>
-                            </div>
-                            <label for="file-upload" class="import-option-item import-file-zone" id="drop-zone">
-                                <span class="import-option-label">Upload Files</span>
-                                <span class="import-option-desc">PDFs, images, HTML, or text files</span>
-                                <input type="file" id="file-upload" name="picks-file" accept=".pdf,.jpg,.jpeg,.png,.html,.htm,.txt,.csv" multiple class="file-input-hidden">
-                            </label>
-                            <div id="file-list"></div>
-                            <button type="button" id="upload-files-btn" class="paste-action-btn paste-process-btn" style="display: none;">Upload Selected Files</button>
-                            <div class="import-paste-container">
-                                <label for="paste-area" class="import-paste-label">Paste HTML or Text</label>
-                                <textarea id="paste-area" class="import-paste-textarea" placeholder="Paste picks (e.g., Lakers -3.5 -110 $200)" rows="4"></textarea>
-                                <div class="import-paste-actions">
-                                    <button type="button" class="paste-action-btn paste-process-btn" id="upload-paste-btn">Upload Pasted Content</button>
-                                    <button type="button" class="paste-action-btn paste-clear-btn">Clear</button>
-                                </div>
-                            </div>
-                            <div id="upload-status"></div>
-                        </div>
-                    </div>
-                </section>
             </div>
         </li>
     </ul>
@@ -273,61 +201,20 @@
             </div>
         </div>
 
-        <div class="parsed-picks-container" id="parsed-picks-container" hidden>
-            <div class="parsed-picks-header"><h2 class="parsed-picks-title">Parsed Picks <span class="parsed-count" id="parsed-picks-count">(0)</span></h2><div class="parsed-picks-actions"><button type="button" class="select-all-btn" id="select-all-picks">Select All</button><button type="button" class="clear-selection-btn" id="clear-selection">Clear Selection</button></div></div>
-            <div class="parsed-picks-list" id="parsed-picks-list"></div>
-            <div class="parsed-picks-footer"><div class="selected-summary"><span id="selected-count">0</span> picks selected</div><button type="button" class="add-bets-btn" id="add-bets-btn" disabled>Add Bets & Send to Dashboard</button></div>
-        </div>
-
-        <div class="bet-modal-overlay" id="bet-modal-overlay" hidden>
-            <div class="bet-modal" id="bet-modal"><div class="bet-modal-header"><h2>Enter Bet Amounts</h2><button type="button" class="bet-modal-close" id="close-bet-modal">✕</button></div><div class="bet-modal-content"><div class="bet-unit-config"><label>Unit Value: $</label><input type="number" id="unit-value" value="1000" min="1" step="100"><span class="unit-hint">(e.g., $1 input = $1,000 actual)</span></div><div class="bet-input-mode"><label class="mode-option"><input type="radio" name="bet-mode" value="risk" checked><span>Enter $ At Risk</span></label><label class="mode-option"><input type="radio" name="bet-mode" value="win"><span>Enter To Win</span></label></div><div class="selected-picks-bet-list" id="selected-picks-bet-list"></div></div><div class="bet-modal-footer"><button type="button" class="bet-modal-btn cancel" id="cancel-bets">Cancel</button><button type="button" class="bet-modal-btn confirm" id="confirm-bets">Add to Dashboard</button></div></div>
-        </div>
-
         <!-- Filter Toolbar (Moved outside wrapper to avoid background film) -->
         <div class="toolbar-container toolbar-layout">
             <div class="filter-toolbar" id="filter-toolbar">
                 <div class="ft-left">
-                    <!-- View Toggle: Active/History -->
-                    <div class="ft-view-toggle" id="view-toggle">
-                        <button class="ft-view-btn active" data-view="active" title="Today's active picks">Active</button>
-                        <button class="ft-view-btn" data-view="history" title="Archived picks history">History</button>
-                    </div>
-                    <span class="ft-divider"></span>
                     <!-- League pills -->
                     <button class="ft-pill ft-league" data-league="nba">NBA</button>
                     <button class="ft-pill ft-league" data-league="ncaab">NCAAM</button>
-                    <button class="ft-pill ft-league" data-league="nfl">NFL</button>
-                    <button class="ft-pill ft-league" data-league="ncaaf">NCAAF</button>
-                    <button class="ft-pill ft-league" data-league="nhl">NHL</button>
-                    <!-- Edge dropdown -->
-                    <div class="ft-dropdown">
-                        <button class="ft-dropdown-btn ft-edge-btn" id="edge-dropdown-btn"><svg class="edge-svg" viewBox="0 0 16 16" fill="currentColor"><path d="M4 14V9h2v5H4zm3 0V6h2v8H7zm3 0V2h2v12h-2z"/></svg>Edge ▾</button>
-                        <div class="ft-dropdown-menu" id="edge-dropdown-menu">
-                            <button class="ft-dropdown-item edge-item edge-high" data-f="edge" data-v="high">Best (5%+)</button>
-                            <button class="ft-dropdown-item edge-item edge-medium" data-f="edge" data-v="medium">Good (2-5%)</button>
-                            <button class="ft-dropdown-item edge-item edge-low" data-f="edge" data-v="low">Low (&lt;2%)</button>
-                        </div>
-                    </div>
-                    <!-- Fire dropdown -->
-                    <div class="ft-dropdown">
-                        <button class="ft-dropdown-btn" id="fire-dropdown-btn">🔥 Fire ▾</button>
-                        <div class="ft-dropdown-menu" id="fire-dropdown-menu">
-                            <button class="ft-dropdown-item" data-f="fire" data-v="5">🔥🔥🔥🔥🔥 Max</button>
-                            <button class="ft-dropdown-item" data-f="fire" data-v="4">🔥🔥🔥🔥 Hot</button>
-                            <button class="ft-dropdown-item" data-f="fire" data-v="3">🔥🔥🔥 Warm</button>
-                            <button class="ft-dropdown-item" data-f="fire" data-v="2">🔥🔥</button>
-                            <button class="ft-dropdown-item" data-f="fire" data-v="1">🔥</button>
-                        </div>
-                    </div>
                     <!-- Segment dropdown -->
                     <div class="ft-dropdown">
                         <button class="ft-dropdown-btn" id="segment-dropdown-btn">Segment ▾</button>
                         <div class="ft-dropdown-menu" id="segment-dropdown-menu">
-                            <button class="ft-dropdown-item" data-f="segment" data-v="FG"><strong>FG</strong> · Full Game</button>
-                            <button class="ft-dropdown-item" data-f="segment" data-v="1H"><strong>1H</strong> · First Half</button>
-                            <button class="ft-dropdown-item" data-f="segment" data-v="2H"><strong>2H</strong> · Second Half</button>
-                            <button class="ft-dropdown-item" data-f="segment" data-v="1Q"><strong>1Q</strong> · First Quarter</button>
-                            <button class="ft-dropdown-item" data-f="segment" data-v="2Q"><strong>2Q</strong> · Second Quarter</button>
+                            <button class="ft-dropdown-item" data-f="segment" data-v="full"><strong>FG</strong> · Full Game</button>
+                            <button class="ft-dropdown-item" data-f="segment" data-v="1h"><strong>1H</strong> · First Half</button>
+                            <button class="ft-dropdown-item" data-f="segment" data-v="2h"><strong>2H</strong> · Second Half</button>
                         </div>
                     </div>
                     <!-- Pick Type dropdown -->
@@ -343,55 +230,6 @@
                     <button class="ft-clear" id="ft-clear">✕ Clear</button>
                 </div>
                 <div class="ft-right">
-                    <!-- Snapshot & Export Controls -->
-                    <div class="snapshot-export-controls">
-                        <!-- Snapshot History Dropdown -->
-                        <div class="ft-dropdown">
-                            <button class="ft-dropdown-btn" id="snapshot-dropdown-btn" title="View lineup snapshots">
-                                History ▾
-                            </button>
-                            <div class="ft-dropdown-menu snapshot-dropdown-menu" id="snapshot-dropdown-menu" style="min-width: 280px; max-height: 400px; overflow-y: auto;">
-                                <div class="snapshot-header">
-                                    <span class="snapshot-title">Lineup Snapshots</span>
-                                    <button class="snapshot-clear-btn" id="clear-snapshots-btn" title="Clear all snapshots">Clear All</button>
-                                </div>
-                                <div class="snapshot-list" id="snapshot-list">
-                                    <div class="snapshot-empty">No snapshots saved yet</div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Export Dropdown -->
-                        <div class="ft-dropdown">
-                            <button class="ft-dropdown-btn" id="export-dropdown-btn" title="Export picks">
-                                <svg viewBox="0 0 16 16" fill="currentColor" style="width:14px;height:14px;margin-right:4px;">
-                                    <path d="M8.5 11.5l3-3h-2v-5h-3v5h-2l3 3zm-4.5 2h8v1h-8v-1z"/>
-                                </svg>
-                                Export ▾
-                            </button>
-                            <div class="ft-dropdown-menu export-dropdown-menu" id="export-dropdown-menu">
-                                <button class="ft-dropdown-item export-item" id="export-html">
-                                    <svg viewBox="0 0 16 16" fill="currentColor" style="width:14px;height:14px;margin-right:6px;">
-                                        <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z"/>
-                                    </svg>
-                                    Export as HTML
-                                </button>
-                                <button class="ft-dropdown-item export-item" id="export-csv">
-                                    <svg viewBox="0 0 16 16" fill="currentColor" style="width:14px;height:14px;margin-right:6px;">
-                                        <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/>
-                                        <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
-                                    </svg>
-                                    Export as Excel (CSV)
-                                </button>
-                                <button class="ft-dropdown-item export-item" id="export-pdf">
-                                    <svg viewBox="0 0 16 16" fill="currentColor" style="width:14px;height:14px;margin-right:6px;">
-                                        <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/>
-                                        <path d="M4.603 14.087a.81.81 0 0 1-.438-.42c-.195-.388-.13-.776.08-1.102.198-.307.526-.568.897-.787a7.68 7.68 0 0 1 1.482-.645 19.697 19.697 0 0 0 1.062-2.227 7.269 7.269 0 0 1-.43-1.295c-.086-.4-.119-.796-.046-1.136.075-.354.274-.672.65-.823.192-.077.4-.12.602-.077a.7.7 0 0 1 .477.365c.088.164.12.356.127.538.007.188-.012.396-.047.614-.084.51-.27 1.134-.52 1.794a10.954 10.954 0 0 0 .98 1.686 5.753 5.753 0 0 1 1.334.05c.364.066.734.195.96.465.12.144.193.32.2.518.007.192-.047.382-.138.563a1.04 1.04 0 0 1-.354.416.856.856 0 0 1-.51.138c-.331-.014-.654-.196-.933-.417a5.712 5.712 0 0 1-.911-.95 11.651 11.651 0 0 0-1.997.406 11.307 11.307 0 0 1-1.02 1.51c-.292.35-.609.656-.927.787a.793.793 0 0 1-.58.029zm1.379-1.901c-.166.076-.32.156-.459.238-.328.194-.541.383-.647.547-.094.145-.096.25-.04.361.01.022.02.036.026.044a.266.266 0 0 0 .035-.012c.137-.056.355-.235.635-.572a8.18 8.18 0 0 0 .45-.606zm1.64-1.33a12.71 12.71 0 0 1 1.01-.193 11.744 11.744 0 0 1-.51-.858 20.801 20.801 0 0 1-.5 1.05zm2.446.45c.15.163.296.3.435.41.24.19.407.253.498.256a.107.107 0 0 0 .07-.015.307.307 0 0 0 .094-.125.436.436 0 0 0 .059-.2.095.095 0 0 0-.026-.063c-.052-.062-.2-.152-.518-.209a3.876 3.876 0 0 0-.612-.053zM8.078 7.8a6.7 6.7 0 0 0 .2-.828c.031-.188.043-.343.038-.465a.613.613 0 0 0-.032-.198.517.517 0 0 0-.145.04c-.087.035-.158.106-.196.283-.04.192-.03.469.046.822.024.111.054.227.09.346z"/>
-                                    </svg>
-                                    Export as PDF
-                                </button>
-                            </div>
-                        </div>
-                    </div>
                     <div class="fetch-controls-wrapper">
                         <div class="ft-fetch-buttons">
                             <div class="ft-all-group">
@@ -402,7 +240,6 @@
                                     <span>All</span>
                                 </button>
                                 <span class="ft-last-refreshed" id="ft-last-refreshed">Last: <span class="sync-time">-</span></span>
-                                <span class="ft-model-stamp" id="ft-model-stamp" title="Model build/tag used for the currently displayed picks">Models: --</span>
                             </div>
                             <div class="fetch-separator"></div>
                             <button class="ft-fetch-league-btn" data-fetch="nba" title="Fetch NBA">
@@ -412,14 +249,6 @@
                             <button class="ft-fetch-league-btn" data-fetch="ncaab" title="Fetch NCAAM">
                                 <img src="assets/ncaam-logo.png" class="league-logo-sm" alt="NCAAM">
                                 <span class="league-label">NCAAM</span>
-                            </button>
-                            <button class="ft-fetch-league-btn" data-fetch="nfl" title="Fetch NFL">
-                                <img src="assets/nfl-logo.png" class="league-logo-sm" alt="NFL">
-                                <span class="league-label">NFL</span>
-                            </button>
-                            <button class="ft-fetch-league-btn" data-fetch="ncaaf" title="Fetch NCAAF">
-                                <img src="assets/ncaaf-logo.png" class="league-logo-sm" alt="NCAAF">
-                                <span class="league-label">NCAAF</span>
                             </button>
                         </div>
                     </div>
@@ -437,15 +266,12 @@
         <div class="table-container weekly-lineup-table-wrapper">
             <table class="picks-table weekly-lineup-table" aria-label="Today's picks - sorted by edge">
                 <colgroup>
-                    <col style="width: 10%;"><!-- Date/Time -->
-                    <col style="width: 6%;"><!-- League -->
-                    <col style="width: 22%;"><!-- Matchup -->
-                    <col style="width: 7%;"><!-- Segment -->
-                    <col style="width: 16%;"><!-- Pick -->
-                    <col style="width: 9%;"><!-- Market -->
-                    <col style="width: 7%;"><!-- Edge -->
-                    <col style="width: 15%;"><!-- Fire -->
-                    <col style="width: 8%;"><!-- Track -->
+                    <col style="width: 12%;"><!-- Date/Time -->
+                    <col style="width: 7%;"><!-- League -->
+                    <col style="width: 30%;"><!-- Matchup -->
+                    <col style="width: 10%;"><!-- Segment -->
+                    <col style="width: 25%;"><!-- Pick -->
+                    <col style="width: 16%;"><!-- Track -->
                 </colgroup>
                 <thead>
                     <tr>
@@ -471,7 +297,7 @@
                             </div>
                             <div class="th-filter-dropdown nav-panel-dropdown filter-integrated" id="filter-league" role="dialog" hidden>
                                 <div class="filter-header-integrated"><span class="filter-title">League</span><div class="filter-quick-actions"><button class="filter-action-btn" data-action="select-all">All</button><button class="filter-action-btn" data-action="clear">Clear</button></div></div>
-                                <div class="filter-section-compact"><div class="league-pills"><button class="league-pill active" data-league="all">All</button><button class="league-pill" data-league="nba">NBA</button><button class="league-pill" data-league="nfl">NFL</button><button class="league-pill" data-league="ncaab">NCAAB</button><button class="league-pill" data-league="ncaaf">NCAAF</button><button class="league-pill" data-league="nhl">NHL</button><button class="league-pill" data-league="mlb">MLB</button></div></div>
+                                <div class="filter-section-compact"><div class="league-pills"><button class="league-pill active" data-league="all">All</button><button class="league-pill" data-league="nba">NBA</button><button class="league-pill" data-league="ncaab">NCAAB</button></div></div>
                             </div>
                         </th>
                         <th scope="col" data-sort="matchup" class="col-matchup">
@@ -502,31 +328,6 @@
                             <div class="th-filter-dropdown nav-panel-dropdown filter-integrated" id="filter-pick" role="dialog" hidden>
                                 <div class="filter-header-integrated"><span class="filter-title">Pick Type</span><div class="filter-quick-actions"><button class="filter-action-btn" data-action="select-all">All</button><button class="filter-action-btn" data-action="clear">Clear</button></div></div>
                                 <div class="filter-section-compact"><div class="pick-type-pills"><button class="pick-pill active" data-pick="all">All</button><button class="pick-pill" data-pick="spread">Spread</button><button class="pick-pill" data-pick="ml">Moneyline</button><button class="pick-pill" data-pick="total">Total</button><button class="pick-pill" data-pick="tt">Team Total</button></div></div>
-                            </div>
-                        </th>
-                        <th scope="col" data-sort="model" class="center col-market">
-                            <div class="th-header-shell">
-                                <button class="th-sort-btn" aria-label="Sort by model"><span class="header-main-text">Model</span><span class="sort-icon" aria-hidden="true">▲</span></button>
-                            </div>
-                        </th>
-                        <th scope="col" data-sort="edge" class="center col-edge">
-                            <div class="th-header-shell">
-                                <button class="th-sort-btn" aria-label="Sort by edge"><span class="header-main-text">Edge</span><span class="sort-icon" aria-hidden="true">▲</span></button>
-                                <button class="th-filter-btn" data-filter="edge" aria-label="Filter by edge" aria-expanded="false" aria-controls="filter-edge" type="button"></button>
-                            </div>
-                            <div class="th-filter-dropdown nav-panel-dropdown filter-integrated" id="filter-edge" role="dialog" hidden>
-                                <div class="filter-header-integrated"><span class="filter-title">Edge</span><div class="filter-quick-actions"><button class="filter-action-btn" data-action="select-all">All</button><button class="filter-action-btn" data-action="clear">Clear</button></div></div>
-                                <div class="filter-section-compact"><div class="edge-pills"><button class="edge-pill active" data-edge="all">All</button><button class="edge-pill" data-edge="high">High (5%+)</button><button class="edge-pill" data-edge="medium">Medium (2-5%)</button><button class="edge-pill" data-edge="low">Low (&lt;2%)</button></div></div>
-                            </div>
-                        </th>
-                        <th scope="col" data-sort="fire" class="center col-fire">
-                            <div class="th-header-shell">
-                                <button class="th-sort-btn" aria-label="Sort by fire rating"><span class="header-main-text">Fire</span><span class="sort-icon" aria-hidden="true">▲</span></button>
-                                <button class="th-filter-btn" data-filter="fire" aria-label="Filter by fire rating" aria-expanded="false" aria-controls="filter-fire" type="button"></button>
-                            </div>
-                            <div class="th-filter-dropdown nav-panel-dropdown filter-integrated" id="filter-fire" role="dialog" hidden>
-                                <div class="filter-header-integrated"><span class="filter-title">Fire Rating</span><div class="filter-quick-actions"><button class="filter-action-btn" data-action="select-all">All</button><button class="filter-action-btn" data-action="clear">Clear</button></div></div>
-                                <div class="filter-section-compact"><div class="fire-pills"><button class="fire-pill active" data-fire="all">All</button><button class="fire-pill" data-fire="5">🔥🔥🔥🔥🔥</button><button class="fire-pill" data-fire="4">🔥🔥🔥🔥</button><button class="fire-pill" data-fire="3">🔥🔥🔥</button><button class="fire-pill" data-fire="2">🔥🔥</button><button class="fire-pill" data-fire="1">🔥</button></div></div>
                             </div>
                         </th>
                         <th scope="col" class="tracker-column center col-track">
@@ -571,7 +372,7 @@
 <script src="assets/js/utils/weekly-lineup-sync.js?v=34.00.0" defer></script>
 
 <script src="assets/js/features/live-scores.js?v=34.00.1" defer></script>
-<script src="assets/js/features/weekly-lineup.js?v=34.00.8" defer></script>
+<script src="assets/js/features/weekly-lineup.js?v=34.01.0" defer></script>
 <script src="assets/js/modules/picks-state-manager.js?v=33.00.4" defer></script>
 <script src="assets/js/modules/picks-table-renderer.js?v=33.00.4" defer></script>
 <script src="assets/js/modules/picks-filter-manager.js?v=33.00.4" defer></script>
