@@ -22,6 +22,13 @@ npm install
 cd ..
 ```
 
+### 1b. Environment & Secrets
+
+- Local/dev: `cp .env.example .env` and fill in values (gitignored).
+- Codespaces: set secrets in GitHub -> Repository -> Settings -> Codespaces -> Secrets.
+- Optional: run `scripts/gh_secret_sync.py` to pull secret names from GitHub and prompt for local values.
+- Optional: set `GH_TOKEN` and `AZURE_CLIENT_SECRET` as Codespaces secrets to enable non-interactive CLI auth on start.
+
 ### 2. Local Development with Azure Functions
 
 #### Start Functions Locally

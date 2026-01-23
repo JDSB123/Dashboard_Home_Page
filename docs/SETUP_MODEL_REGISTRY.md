@@ -78,7 +78,7 @@ Each of your model repos (nba-gbsv-model, ncaam-gbsv-model, etc.) should **autom
 2. Add these 3 secrets (if not already there):
 
 - `ORCHESTRATOR_URL` = `https://www.greenbiersportventures.com/api`
-- `ORCHESTRATOR_KEY` = _(ask your team or check Azure Portal → Container App → Auth)_
+- `ORCHESTRATOR_FUNCTIONS_KEY` = _(ask your team or check Azure Portal → Container App → Auth)_
 - `AZURE_SUBSCRIPTION_ID` = _(your subscription ID)_
 
 3. Add this **workflow file** to that repo:
@@ -108,7 +108,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Azure Login
-        uses: azure/login@v1
+        uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}

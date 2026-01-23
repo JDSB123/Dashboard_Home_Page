@@ -17,13 +17,20 @@ Run this before executing any data-pipeline script:
 
 ```powershell
 # Option A – Load from .env file (local development)
-# First create .env from env.template: copy env.template .env
+# First create .env from .env.example: copy .env.example .env
 # Then edit .env with your actual values
 . .\scripts\load-secrets.ps1
 
 # Option B – Pull from Azure Key Vault (production-ready, recommended)
 . .\scripts\load-secrets.ps1 -FromKeyVault -VaultName "dashboard-gbsv-kv"
 ```
+
+## Codespaces and GitHub Secrets
+
+- **Codespaces**: Store secrets in GitHub -> Repository -> Settings -> Codespaces -> Secrets. These are injected as env vars automatically.
+- **GitHub Actions**: Store CI/CD secrets in repo secrets and map them in workflows.
+- **Local/dev sync**: Use `scripts/gh_secret_sync.py` to pull secret names from GitHub and prompt for local values.
+- **Auto-auth**: Set `GH_TOKEN` for GitHub CLI and (optionally) `AZURE_CLIENT_SECRET` to enable non-interactive logins in Codespaces.
 
 ## Strategy
 1. **Store secrets in Key Vault** if not already present. Use the names above (or your chosen aliases) so the pipelines can resolve them consistently.
@@ -33,7 +40,7 @@ Run this before executing any data-pipeline script:
    $env:SDIO_KEY = (az keyvault secret show --vault-name $vault --name sportsdataio-nfl-ncaaf --query value -o tsv)
    $env:ODDS_API_KEY = (az keyvault secret show --vault-name $vault --name oddsapi-main --query value -o tsv)
    ```
-3. **Local development**: Create a `.env` file from `env.template` and fill in your values. This file is gitignored.
+3. **Local development**: Create a `.env` file from `.env.example` and fill in your values, or run `scripts/gh_secret_sync.py`. This file is gitignored.
 4. **Azure Functions**: Configure app settings in Azure Portal or via deployment scripts to reference Key Vault secrets.
 5. **Audit**: if a fetch fails due to missing keys, the log now reports which env var was absent. Add that var back to the Key Vault / environment and rerun.
 
@@ -53,6 +60,10 @@ az keyvault secret set --vault-name $vault --name "basketball-api" --value "YOUR
 az keyvault secret set --vault-name $vault --name "actionnetwork-user" --value "YOUR_EMAIL_HERE"
 az keyvault secret set --vault-name $vault --name "actionnetwork-password" --value "YOUR_PASSWORD_HERE"
 ```
+
+## Safety Reminder
+
+Enable GitHub secret scanning on the repository for an additional safety net.
 
 ## Data Pipeline Output
 

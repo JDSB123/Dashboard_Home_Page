@@ -48,6 +48,10 @@ Behavior:
 - Pull requests create/update a preview environment and close it when the PR is closed
 - Pushes to `main` also build/push the orchestrator container and deploy/update the Container App (requires ACR + Azure credentials secrets)
 
+## CI/CD setup guide
+
+See [docs/CI_CD_SETUP.md](docs/CI_CD_SETUP.md) for the required GitHub secrets and OIDC setup guidance.
+
 ## Local dev
 
 Any static server works. Examples:

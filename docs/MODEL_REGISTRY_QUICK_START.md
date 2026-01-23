@@ -63,7 +63,7 @@ Add these 3:
 | Name | Value |
 |------|-------|
 | `ORCHESTRATOR_URL` | `https://www.greenbiersportventures.com/api` |
-| `ORCHESTRATOR_KEY` | _(ask your team or check Azure Portal)_ |
+| `ORCHESTRATOR_FUNCTIONS_KEY` | _(ask your team or check Azure Portal)_ |
 | `AZURE_SUBSCRIPTION_ID` | _(Your Azure subscription ID)_ |
 
 ### B. Add Workflow File

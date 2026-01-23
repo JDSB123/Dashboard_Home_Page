@@ -44,8 +44,8 @@ if (-not $FromKeyVault) {
         }
         Write-Host "  ✅ Loaded secrets from .env file" -ForegroundColor Green
     } else {
-        Write-Host "  ⚠️ No .env file found. Create one from env.template or use -FromKeyVault" -ForegroundColor Red
-        Write-Host "  Run: copy env.template .env  then fill in your values" -ForegroundColor Yellow
+        Write-Host "  ⚠️ No .env file found. Create one from .env.example or use -FromKeyVault" -ForegroundColor Red
+        Write-Host "  Run: copy .env.example .env  then fill in your values" -ForegroundColor Yellow
         return
     }
 }

@@ -35,20 +35,11 @@ jobs:
   validate:
     name: Validate Bicep Templates
     runs-on: ubuntu-latest
-    env:
-      HAS_CREDS: ${{ secrets.AZURE_CREDENTIALS }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Azure Login (Client Secret)
-        if: ${{ env.HAS_CREDS != '' }}
-        uses: azure/login@v2
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
       - name: Azure Login (OIDC)
-        if: ${{ env.HAS_CREDS == '' }}
         uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
@@ -65,8 +56,6 @@ jobs:
     needs: validate
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment }}
-    env:
-      HAS_CREDS: ${{ secrets.AZURE_CREDENTIALS }}
     
     outputs:
       frontDoorHostname: ${{ steps.deploy.outputs.frontDoorHostname }}
@@ -76,14 +65,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Azure Login (Client Secret)
-        if: ${{ env.HAS_CREDS != '' }}
-        uses: azure/login@v2
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
       - name: Azure Login (OIDC)
-        if: ${{ env.HAS_CREDS == '' }}
         uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}

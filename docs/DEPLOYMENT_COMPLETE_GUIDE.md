@@ -44,7 +44,7 @@ cd Dashboard_Home_Page
 
 ```bash
 # Copy environment template
-cp env.template .env
+cp .env.example .env
 
 # Edit .env with your values
 # IMPORTANT: Update all placeholder values
@@ -185,6 +185,13 @@ for RG in nba-gbsv-model-rg ncaam-gbsv-model-rg nfl-gbsv-model-rg ncaaf-gbsv-mod
     --role Contributor \
     --scope "/subscriptions/YOUR_SUBSCRIPTION_ID/resourceGroups/$RG"
 done
+
+# Allow the orchestrator to pull images from ACR using managed identity
+ACR_ID=$(az acr show --name gbsvregistry --query id -o tsv)
+az role assignment create \
+  --assignee $IDENTITY_ID \
+  --role AcrPull \
+  --scope "$ACR_ID"
 ```
 
 ### Step 9: Initialize Model Registry
@@ -264,8 +271,8 @@ Add these secrets to your GitHub repository:
 | `AZURE_TENANT_ID`       | Azure Tenant ID         | Directory ID              |
 | `AZURE_SUBSCRIPTION_ID` | Subscription ID         | Target subscription       |
 | `ACR_LOGIN_SERVER`      | gbsvregistry.azurecr.io | Container registry URL    |
-| `ACR_USERNAME`          | gbsvregistry            | Registry username         |
-| `ACR_PASSWORD`          | [password]              | Registry password         |
+| `ACR_USERNAME`          | gbsvregistry            | Registry username (optional fallback) |
+| `ACR_PASSWORD`          | [password]              | Registry password (optional fallback) |
 | `ORCHESTRATOR_URL`      | https://[url]/api       | Orchestrator API endpoint |
 
 ## 📊 Monitoring Setup

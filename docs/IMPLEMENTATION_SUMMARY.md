@@ -99,7 +99,7 @@ Each model Container App needs these endpoints:
 Add these secrets to your GitHub repository:
 
 - `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`
-- `ACR_LOGIN_SERVER`, `ACR_USERNAME`, `ACR_PASSWORD`
+- `ACR_LOGIN_SERVER` (required), `ACR_USERNAME`, `ACR_PASSWORD` (optional fallback)
 - `AZURE_FUNCTIONS_STORAGE_CONNECTION`, `AZURE_SIGNALR_CONNECTION_STRING`, `APPINSIGHTS_CONNECTION_STRING`
 - `DASHBOARD_URL` - Your dashboard URL
 - `NOTIFICATION_WEBHOOK_URL` - Teams/Slack webhook (optional)

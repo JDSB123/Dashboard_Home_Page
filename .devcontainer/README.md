@@ -47,10 +47,14 @@ live-server --port=8000
 
 ## Configuration
 
-Edit `.devcontainer.env` to set:
+Use `.env.example` → `.env` for local/dev configuration. In Codespaces, prefer repository Codespaces secrets (auto-injected as env vars).
+
 - Azure subscription/resource group IDs
 - API endpoint URLs (for connecting to the backend orchestrator)
 - Cosmos DB credentials (if using emulator)
+
+Optional: run `scripts/gh_secret_sync.py` to pull secret names from GitHub and prompt for local values.
+Optional: set `GH_TOKEN` and `AZURE_CLIENT_SECRET` as Codespaces secrets to enable non-interactive CLI auth on start.
 
 ## VS Code Extensions
 
@@ -81,6 +85,7 @@ Ctrl+Shift+` → Select "Devcontainer Log" tab
 - **Keep workspaces clean**: Delete unused codespaces to save hours
 - **Terminal integration**: Full terminal access inside VS Code
 - **Git integration**: Git already configured; ready to commit/push
+- **Dependencies**: After changing `requirements.txt` or `requirements-dev.txt`, rebuild the devcontainer to bake dependencies into the image
 
 ## Next Steps
 

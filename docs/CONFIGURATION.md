@@ -12,7 +12,7 @@ Runtime settings live in client/config.js (and the template client/config.templa
 
 ## Backend (Azure Functions)
 
-Environment variables are listed in env.template. Key settings:
+Environment variables are listed in .env.example. Key settings:
 
 - AzureWebJobsStorage
 - MODEL_REGISTRY_TABLE / MODEL_EXECUTIONS_TABLE
