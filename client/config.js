@@ -5,7 +5,7 @@
  * Repository:  github.com/JDSB123/Dashboard_Home_Page
  * Azure RG:    Dashboard_Home_Page (eastus)
  * Owner:       jb@greenbiercapital.com
- * Version:     34.00.0
+ * Version:     34.00.1
  * ═══════════════════════════════════════════════════════════════════════════
  */
 
@@ -13,7 +13,7 @@
 window.APP_CONFIG = {
   // Project Identification
   PROJECT_NAME: 'Dashboard_Home_Page',
-  VERSION: '34.00.0',
+  VERSION: '34.00.1',
   ENVIRONMENT: 'production',
 
   // Azure Configuration
@@ -31,7 +31,7 @@ window.APP_CONFIG = {
   API_ENDPOINTS: {
     NFL: 'https://gbsv-orchestrator.azurewebsites.net/api/picks/nfl',
     NCAAF: 'https://gbsv-orchestrator.azurewebsites.net/api/picks/ncaaf',
-    NBA: 'https://gbsv-orchestrator.azurewebsites.net/api/picks/nba',
+    NBA: 'https://gbsvnbav2.nicedesert-7a4811c4.eastus.azurecontainerapps.io/picks',
     NCAAM: 'https://gbsv-orchestrator.azurewebsites.net/api/picks/ncaam',
     NHL: 'https://gbsv-orchestrator.azurewebsites.net/api/picks/nhl',
     MLB: 'https://gbsv-orchestrator.azurewebsites.net/api/picks/mlb'
@@ -47,7 +47,7 @@ window.APP_CONFIG = {
 
   // NBA: Function App (primary) + Container App (fallback)
   NBA_FUNCTION_URL: 'https://www.greenbiersportventures.com/api/weekly-lineup/nba',  // Primary - Function App with /api/weekly-lineup/nba
-  NBA_API_URL: 'https://www.greenbiersportventures.com',  // Fallback - Front Door
+  NBA_API_URL: 'https://gbsvnbav2.nicedesert-7a4811c4.eastus.azurecontainerapps.io',  // Fallback - v2 Container App
   NCAAM_API_URL: 'https://www.greenbiersportventures.com',
   // NFL: Function App (primary) + Container App (fallback)
   NFL_FUNCTION_URL: 'https://www.greenbiersportventures.com/api/weekly-lineup/nfl',  // Primary - Function App with /api/weekly-lineup/nfl
@@ -89,7 +89,7 @@ window.GBSV_CONFIG = {
   FUNCTIONS_URL: 'https://www.greenbiersportventures.com',
 
   // Cosmos DB picks storage (accessed via Azure Functions)
-  PICKS_API_ENDPOINT: 'https://www.greenbiersportventures.com/api/picks'
+  PICKS_API_ENDPOINT: 'https://gbsvnbav2.nicedesert-7a4811c4.eastus.azurecontainerapps.io/picks'
 };
 
 // Export for module usage if needed
