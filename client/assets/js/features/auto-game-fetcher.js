@@ -1,11 +1,12 @@
 /**
- * Auto Game Fetcher v2.3
+ * Auto Game Fetcher v2.4
  * Automatically fetches today's games and validates pick games
  * Prevents betting on finished/invalid games
  * v2.0: Fetches standings for team records (W-L)
  * v2.1: SportsDataIO as primary source for NFL/NCAAF (more accurate)
  * v2.2: Use Azure Functions proxy for SportsDataIO (avoids CORS)
  * v2.3: Fixed corrupted file structure
+ * v2.4: Version bump to bypass cache
  */
 
 (function() {
@@ -474,6 +475,6 @@
         getRecordsCache: () => teamRecordsCache
     };
 
-    console.log('✅ AutoGameFetcher v2.3 loaded - NFL/NCAAF: SportsDataIO via proxy | NBA/NCAAM: ESPN');
+    console.log('✅ AutoGameFetcher v2.4 loaded - NFL/NCAAF: SportsDataIO via proxy | NBA/NCAAM: ESPN');
 
 })();
