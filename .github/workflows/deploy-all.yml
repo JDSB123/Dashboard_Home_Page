@@ -1,5 +1,7 @@
 name: Deploy Full Stack (Front Door + Orchestrator + Static Web App)
 
+# NOTE: Push runs use job-level defaults to avoid missing workflow_dispatch inputs.
+
 on:
   push:
     branches: [main]
