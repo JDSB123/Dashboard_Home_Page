@@ -67,6 +67,7 @@
         },
         "azurite.location": "${containerWorkspaceFolder}/AzuriteConfig",
         "azurite.silent": true,
+        "github.codespaces.idleTimeoutMinutes": 240,
         "files.associations": {
           "*.json": "jsonc"
         },
@@ -120,6 +121,8 @@
   "updateContentCommand": "npm install -g azure-functions-core-tools@4 --unsafe-perm true",
   "waitFor": "updateContentCommand",
   "containerEnv": {
-    "CODESPACE_NAME": "dashboard-gbsv-dev-codespace"
+    "CODESPACE_NAME": "dashboard-gbsv-dev-codespace",
+    "AZURE_RESOURCE_GROUP": "dashboard-gbsv-main-rg",
+    "AZURE_LOCATION": "eastus"
   }
 }

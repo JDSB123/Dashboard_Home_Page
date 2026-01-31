@@ -15,7 +15,7 @@
     z-index: 100; /* Above content but not extreme */
     display: flex;
     align-items: center;
-    pointer-events: none;
+    pointer-events: auto;
     margin: 0 !important;
     background: transparent;
     border-bottom: none;
@@ -1298,4 +1298,3 @@ body.page-active-picks .nav-link[aria-current="page"] {
     flex: 2;
     padding: 6px 12px;
 }
-

@@ -23,6 +23,7 @@ html, body {
 .brand-nav {
     top: 0 !important;
     margin-top: 0 !important;
+    pointer-events: auto;
 }
 
 /* Nav Spacing Hotfix - Fix excessive padding and tight spacing */

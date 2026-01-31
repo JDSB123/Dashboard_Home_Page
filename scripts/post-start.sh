@@ -8,6 +8,10 @@ ENV_FILE="$ROOT_DIR/.env"
 
 printf "\nRunning post-start checks...\n"
 
+# Start background heartbeat to keep codespace alive
+nohup bash -c 'while true; do echo "Heartbeat: $(date)" >> /tmp/keep_alive.log; sleep 600; done' > /dev/null 2>&1 &
+printf "Started background heartbeat process\n"
+
 declare -A ENV_FILE_VALUES=()
 
 if [ -f "$ENV_EXAMPLE" ] && [ ! -f "$ENV_FILE" ]; then
@@ -149,6 +153,16 @@ fi
 
 if [ -x "$ROOT_DIR/scripts/ensure-all-access.sh" ]; then
   "$ROOT_DIR/scripts/ensure-all-access.sh" || true
+fi
+
+# Synchronize with Key Vault (Single Source of Truth)
+if [ -x "$ROOT_DIR/scripts/load-secrets.sh" ]; then
+  if az account show >/dev/null 2>&1; then
+    bash "$ROOT_DIR/scripts/load-secrets.sh" || true
+  else
+    printf "\n⚠️ Azure CLI not logged in. Secrets from Key Vault cannot be pulled automatically.\n"
+    printf "   Run 'az login' to enable sustainable secret management.\n"
+  fi
 fi
 
 printf "Post-start checks complete.\n\n"

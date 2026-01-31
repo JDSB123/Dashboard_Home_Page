@@ -17,7 +17,7 @@ window.APP_CONFIG = {
   ENVIRONMENT: 'production',
 
   // Azure Configuration
-  AZURE_RESOURCE_GROUP: 'Dashboard_Home_Page',
+  AZURE_RESOURCE_GROUP: 'dashboard-gbsv-main-rg',
   AZURE_REGION: 'eastus',
 
   // API Configuration

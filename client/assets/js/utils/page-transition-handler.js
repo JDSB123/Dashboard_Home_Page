@@ -16,10 +16,13 @@
             this.setupNavLinkHandlers();
             this.setupLinkPrefetch();
             this.setupHistoryHandler();
-            
+
             // Clean up loading state on page load complete
             window.addEventListener('load', () => this.hideLoading());
             document.addEventListener('DOMContentLoaded', () => this.hideLoading());
+
+            // Safety: ensure overlay never lingers on slow loads
+            setTimeout(() => this.hideLoading(), 1500);
         },
 
         createLoadingOverlay() {
@@ -35,7 +38,7 @@
                     </div>
                 `;
                 document.body.appendChild(overlay);
-                
+
                 // Add styles if not already present
                 if (!document.getElementById('page-transition-styles')) {
                     const style = document.createElement('style');
@@ -132,16 +135,16 @@
             document.addEventListener('click', (e) => {
                 // Find nav link in the clicked element or its parents
                 const navLink = e.target.closest('a.nav-link');
-                
+
                 if (navLink && !navLink.hasAttribute('aria-disabled')) {
                     const href = navLink.getAttribute('href');
-                    
+
                     // Only intercept internal navigation
                     if (href && !href.startsWith('http') && !href.startsWith('#')) {
                         // Check if it's a different page
                         const currentPage = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
                         const targetPage = (href.split('/').pop() || 'index.html').toLowerCase();
-                        
+
                         if (currentPage !== targetPage) {
                             e.preventDefault();
                             this.transitionToPage(href);
@@ -153,10 +156,10 @@
 
         transitionToPage(url) {
             if (this.isLoading) return;
-            
+
             this.isLoading = true;
             this.showLoading();
-            
+
             // Add a small delay to ensure loading state is visible
             // then navigate
             setTimeout(() => {
@@ -180,7 +183,7 @@
         setupLinkPrefetch() {
             // Prefetch nav links on hover
             const navLinks = document.querySelectorAll('a.nav-link');
-            
+
             navLinks.forEach(link => {
                 link.addEventListener('mouseenter', () => {
                     const href = link.getAttribute('href');

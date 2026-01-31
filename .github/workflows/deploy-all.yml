@@ -1,6 +1,12 @@
 name: Deploy Full Stack (Front Door + Orchestrator + Static Web App)
 
 on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'docs/**'
+      - 'README.md'
+      - '.env.example'
   workflow_dispatch:
     inputs:
       environment:
@@ -50,8 +56,73 @@ env:
   NCAAF_API_URL: https://ncaaf-v5-prod.salmonwave-314d4ffe.eastus.azurecontainerapps.io
 
 jobs:
+  validate:
+    name: Validation & Linting
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Bicep Lint & Validate
+        run: |
+          az bicep build --file infra/main.bicep
+          az deployment group validate \
+            --resource-group ${{ env.RESOURCE_GROUP }} \
+            --template-file infra/main.bicep \
+            --parameters environment=prod \
+            --parameters enableWaf=true
+
+  quality:
+    name: Frontend Quality & Accessibility
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install http-server & pa11y-ci
+        run: npm install -g http-server pa11y-ci
+
+      - name: Run Accessibility Audit
+        run: |
+          http-server client -p 8080 &
+          sleep 5
+          pa11y-ci --sitemap http://localhost:8080/index.html || true
+
+  test-functions:
+    name: Azure Functions Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: azure-functions/package-lock.json
+
+      - name: Install dependencies
+        run: cd azure-functions && npm install
+
+      - name: Run tests with coverage
+        run: cd azure-functions && npm run test:coverage
+
   frontdoor:
     name: Deploy Front Door
+    needs: [validate, quality, test-functions]
     runs-on: ubuntu-latest
     outputs:
       frontDoorName: ${{ steps.deploy.outputs.frontDoorName }}
