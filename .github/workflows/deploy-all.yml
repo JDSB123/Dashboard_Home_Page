@@ -54,11 +54,11 @@ env:
   NCAAM_API_URL: https://ncaam-stable-prediction.wonderfulforest-c2d7d49a.centralus.azurecontainerapps.io
   NFL_API_URL: https://nfl-api.purplegrass-5889a981.eastus.azurecontainerapps.io
   NCAAF_API_URL: https://ncaaf-v5-prod.salmonwave-314d4ffe.eastus.azurecontainerapps.io
-  DEPLOY_ENV: ${{ github.event.inputs.environment || 'prod' }}
-  SKIP_WAF: ${{ github.event.inputs.skip_waf || 'false' }}
-  DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
-  ENABLE_CUSTOM_DOMAIN: ${{ github.event.inputs.enable_custom_domain || 'true' }}
-  CUSTOM_DOMAIN_NAME: ${{ github.event.inputs.custom_domain_name || 'www.greenbiersportventures.com' }}
+  DEPLOY_ENV: "${{ github.event.inputs.environment || 'prod' }}"
+  SKIP_WAF: "${{ github.event.inputs.skip_waf || 'false' }}"
+  DRY_RUN: "${{ github.event.inputs.dry_run || 'false' }}"
+  ENABLE_CUSTOM_DOMAIN: "${{ github.event.inputs.enable_custom_domain || 'true' }}"
+  CUSTOM_DOMAIN_NAME: "${{ github.event.inputs.custom_domain_name || 'www.greenbiersportventures.com' }}"
 
 jobs:
   validate:
