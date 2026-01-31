@@ -221,31 +221,55 @@ jobs:
           FRONTDOOR_ENDPOINT: ${{ needs.frontdoor.outputs.endpointName }}
           CUSTOM_DOMAIN_NAME: ${{ env.CUSTOM_DOMAIN_NAME }}
         run: |
-          DEPLOYMENT_NAME="customdomain-${{ env.DEPLOY_ENV }}-$(date +%Y%m%d-%H%M%S)"
-
-          az deployment group create \
+          EXISTING_DOMAIN_NAME=$(az afd custom-domain list \
+            --profile-name "$FRONTDOOR_PROFILE" \
             --resource-group "$RESOURCE_GROUP" \
-            --name $DEPLOYMENT_NAME \
-            --template-file infra/custom-domain.bicep \
-            --parameters frontDoorProfileName="$FRONTDOOR_PROFILE" \
-            --parameters frontDoorEndpointName="$FRONTDOOR_ENDPOINT" \
-            --parameters customDomainName="$CUSTOM_DOMAIN_NAME"
+            --query "[?hostName=='$CUSTOM_DOMAIN_NAME'].name | [0]" -o tsv)
 
-          DNS_TXT_NAME=$(az deployment group show \
-            --resource-group "$RESOURCE_GROUP" \
-            --name $DEPLOYMENT_NAME \
-            --query properties.outputs.dnsTxtRecordName.value -o tsv)
+          if [ -n "$EXISTING_DOMAIN_NAME" ]; then
+            echo "Custom domain already exists: $EXISTING_DOMAIN_NAME"
+            CUSTOM_DOMAIN_RESOURCE_NAME="$EXISTING_DOMAIN_NAME"
+            DNS_TXT_NAME="_dnsauth.${CUSTOM_DOMAIN_NAME}"
+            DNS_TXT_VALUE=$(az afd custom-domain show \
+              --profile-name "$FRONTDOOR_PROFILE" \
+              --resource-group "$RESOURCE_GROUP" \
+              --custom-domain-name "$CUSTOM_DOMAIN_RESOURCE_NAME" \
+              --query validationProperties.validationToken -o tsv)
+            DNS_CNAME_TARGET=$(az afd endpoint show \
+              --profile-name "$FRONTDOOR_PROFILE" \
+              --resource-group "$RESOURCE_GROUP" \
+              --endpoint-name "$FRONTDOOR_ENDPOINT" \
+              --query hostName -o tsv)
+          else
+            DEPLOYMENT_NAME="customdomain-${{ env.DEPLOY_ENV }}-$(date +%Y%m%d-%H%M%S)"
 
-          DNS_TXT_VALUE=$(az deployment group show \
-            --resource-group "$RESOURCE_GROUP" \
-            --name $DEPLOYMENT_NAME \
-            --query properties.outputs.dnsTxtRecordValue.value -o tsv)
+            az deployment group create \
+              --resource-group "$RESOURCE_GROUP" \
+              --name $DEPLOYMENT_NAME \
+              --template-file infra/custom-domain.bicep \
+              --parameters frontDoorProfileName="$FRONTDOOR_PROFILE" \
+              --parameters frontDoorEndpointName="$FRONTDOOR_ENDPOINT" \
+              --parameters customDomainName="$CUSTOM_DOMAIN_NAME"
 
-          DNS_CNAME_TARGET=$(az deployment group show \
-            --resource-group "$RESOURCE_GROUP" \
-            --name $DEPLOYMENT_NAME \
-            --query properties.outputs.dnsCnameTarget.value -o tsv)
+            CUSTOM_DOMAIN_RESOURCE_NAME=$(echo "$CUSTOM_DOMAIN_NAME" | tr '._' '--')
 
+            DNS_TXT_NAME=$(az deployment group show \
+              --resource-group "$RESOURCE_GROUP" \
+              --name $DEPLOYMENT_NAME \
+              --query properties.outputs.dnsTxtRecordName.value -o tsv)
+
+            DNS_TXT_VALUE=$(az deployment group show \
+              --resource-group "$RESOURCE_GROUP" \
+              --name $DEPLOYMENT_NAME \
+              --query properties.outputs.dnsTxtRecordValue.value -o tsv)
+
+            DNS_CNAME_TARGET=$(az deployment group show \
+              --resource-group "$RESOURCE_GROUP" \
+              --name $DEPLOYMENT_NAME \
+              --query properties.outputs.dnsCnameTarget.value -o tsv)
+          fi
+
+          echo "customDomainResourceName=$CUSTOM_DOMAIN_RESOURCE_NAME" >> $GITHUB_OUTPUT
           echo "dnsTxtName=$DNS_TXT_NAME" >> $GITHUB_OUTPUT
           echo "dnsTxtValue=$DNS_TXT_VALUE" >> $GITHUB_OUTPUT
           echo "dnsCnameTarget=$DNS_CNAME_TARGET" >> $GITHUB_OUTPUT
@@ -261,14 +285,24 @@ jobs:
           FRONTDOOR_PROFILE: ${{ needs.frontdoor.outputs.frontDoorName }}
           FRONTDOOR_ENDPOINT: ${{ needs.frontdoor.outputs.endpointName }}
           CUSTOM_DOMAIN_NAME: ${{ env.CUSTOM_DOMAIN_NAME }}
+          CUSTOM_DOMAIN_RESOURCE_NAME: ${{ steps.customdomain.outputs.customDomainResourceName }}
         run: |
-          CUSTOM_DOMAIN_RESOURCE_NAME=$(echo "$CUSTOM_DOMAIN_NAME" | tr '._' '--')
+          if [ -z "$CUSTOM_DOMAIN_RESOURCE_NAME" ]; then
+            CUSTOM_DOMAIN_RESOURCE_NAME=$(az afd custom-domain list \
+              --profile-name "$FRONTDOOR_PROFILE" \
+              --resource-group "$RESOURCE_GROUP" \
+              --query "[?hostName=='$CUSTOM_DOMAIN_NAME'].name | [0]" -o tsv)
+          fi
+
+          if [ -z "$CUSTOM_DOMAIN_RESOURCE_NAME" ]; then
+            CUSTOM_DOMAIN_RESOURCE_NAME=$(echo "$CUSTOM_DOMAIN_NAME" | tr '._' '--')
+          fi
 
           VALIDATION_STATE=$(az afd custom-domain show \
             --profile-name "$FRONTDOOR_PROFILE" \
             --resource-group "$RESOURCE_GROUP" \
             --custom-domain-name "$CUSTOM_DOMAIN_RESOURCE_NAME" \
-            --query properties.validationProperties.validationState -o tsv)
+            --query domainValidationState -o tsv)
 
           if [ "$VALIDATION_STATE" != "Approved" ]; then
             echo "Custom domain not validated yet: $VALIDATION_STATE" >&2
