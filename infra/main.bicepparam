@@ -6,7 +6,6 @@ using './main.bicep'
 
 param environment = 'prod'
 param location = 'global'
-param customDomainName = 'www.greenbiersportventures.com'
 param enableWaf = true
 param skuName = 'Standard_AzureFrontDoor'
 
