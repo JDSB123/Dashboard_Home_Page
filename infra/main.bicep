@@ -15,12 +15,6 @@ param environment string = 'prod'
 @description('Azure region for Front Door (global service)')
 param location string = 'global'
 
-@description('Resource group location for regional resources')
-param resourceGroupLocation string = resourceGroup().location
-
-@description('Custom domain name (e.g., www.greenbiersportventures.com)')
-param customDomainName string = 'www.greenbiersportventures.com'
-
 @description('Enable WAF policy')
 param enableWaf bool = true
 
@@ -386,7 +380,7 @@ resource ruleCanonicalHost 'Microsoft.Cdn/profiles/ruleSets/rules@2024-02-01' = 
         name: 'RequestHeader'
         parameters: {
           typeName: 'DeliveryRuleRequestHeaderConditionParameters'
-          headerName: 'Host'
+          selector: 'Host'
           operator: 'Equal'
           negateCondition: true
           matchValues: [
