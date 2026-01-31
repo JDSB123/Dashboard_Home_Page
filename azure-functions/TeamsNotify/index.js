@@ -1,4 +1,5 @@
 const axios = require("axios");
+const { validateSharedKey } = require('../shared/auth');
 
 /**
  * Teams Webhook Notification Function
@@ -17,6 +18,12 @@ module.exports = async function (context, req) {
 
     if (req.method !== 'POST') {
         context.res = { status: 405, body: { error: 'Method not allowed' } };
+        return;
+    }
+
+    const auth = validateSharedKey(req, context, { requireEnv: 'REQUIRE_NOTIFY_KEY' });
+    if (!auth.ok) {
+        context.res = { status: 401, body: { error: auth.reason } };
         return;
     }
 

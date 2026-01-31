@@ -149,10 +149,10 @@ $settings = @(
     "AzureSignalRConnectionString=$SignalRConnectionString",
     "WEBSITE_RUN_FROM_PACKAGE=1",
     "FUNCTIONS_WORKER_RUNTIME=node",
-    "NBA_API_URL=https://www.greenbiersportventures.com",
-    "NCAAM_API_URL=https://www.greenbiersportventures.com",
-    "NFL_API_URL=https://www.greenbiersportventures.com",
-    "NCAAF_API_URL=https://www.greenbiersportventures.com"
+    "NBA_API_URL=https://www.greenbiersportventures.com/api/nba",
+    "NCAAM_API_URL=https://www.greenbiersportventures.com/api/ncaam",
+    "NFL_API_URL=https://www.greenbiersportventures.com/api/nfl",
+    "NCAAF_API_URL=https://www.greenbiersportventures.com/api/ncaaf"
 )
 
 az functionapp config appsettings set `

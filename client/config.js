@@ -48,11 +48,11 @@ window.APP_CONFIG = {
   // NBA: Function App (primary) + Container App (fallback)
   NBA_FUNCTION_URL: 'https://www.greenbiersportventures.com/api/weekly-lineup/nba',  // Primary - Function App with /api/weekly-lineup/nba
   NBA_API_URL: 'https://gbsvnbav2.nicedesert-7a4811c4.eastus.azurecontainerapps.io',  // Fallback - v2 Container App
-  NCAAM_API_URL: 'https://www.greenbiersportventures.com',
+  NCAAM_API_URL: 'https://www.greenbiersportventures.com/api/ncaam',
   // NFL: Function App (primary) + Container App (fallback)
   NFL_FUNCTION_URL: 'https://www.greenbiersportventures.com/api/weekly-lineup/nfl',  // Primary - Function App with /api/weekly-lineup/nfl
-  NFL_API_URL: 'https://www.greenbiersportventures.com',  // Fallback - Front Door
-  NCAAF_API_URL: 'https://www.greenbiersportventures.com',
+  NFL_API_URL: 'https://www.greenbiersportventures.com/api/nfl',  // Fallback - Front Door
+  NCAAF_API_URL: 'https://www.greenbiersportventures.com/api/ncaaf',
   NHL_API_URL: '', // Placeholder - will be populated from registry when available
   MLB_API_URL: '', // Placeholder - will be populated from registry when available
 

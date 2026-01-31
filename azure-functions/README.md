@@ -36,7 +36,7 @@ Deploy the Functions backend as a container via Azure Container Apps using the G
 
 - `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`
 - `ACR_LOGIN_SERVER`, `ACR_USERNAME`, `ACR_PASSWORD`
-- `AZURE_FUNCTIONS_STORAGE_CONNECTION`, `AZURE_SIGNALR_CONNECTION_STRING`, `APPINSIGHTS_CONNECTION_STRING`
+- `AzureWebJobsStorage` (or `AZURE_STORAGE_CONNECTION_STRING`), `AZURE_SIGNALR_CONNECTION_STRING`, `APPINSIGHTS_CONNECTION_STRING`
 
 2. Push to `main` or run `.github/workflows/azure-functions-container.yml` manually.
 3. After deploy, grab the Container App FQDN (workflow outputs it) and set `API_BASE_URL` in `client/config.js` to `https://<fqdn>/api`.

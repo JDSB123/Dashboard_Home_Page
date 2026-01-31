@@ -54,9 +54,10 @@ module.exports = async function (context, req) {
 
     try {
         // Query Table Storage for job status
+        const tableName = process.env.MODEL_EXECUTIONS_TABLE || 'modelexecutions';
         const tableClient = TableClient.fromConnectionString(
             process.env.AzureWebJobsStorage,
-            'modelexecutions'
+            tableName
         );
 
         // Query across all partitions (model types)

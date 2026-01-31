@@ -35,7 +35,7 @@ function buildCorsHeaders(req) {
  * Returns list of available week archives
  */
 async function listWeeks(context, corsHeaders) {
-    const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
+    const connectionString = process.env.AzureWebJobsStorage || process.env.AZURE_STORAGE_CONNECTION_STRING;
 
     if (!connectionString) {
         context.res = { status: 500, headers: corsHeaders, body: { error: 'Storage not configured' } };
@@ -82,7 +82,7 @@ async function listWeeks(context, corsHeaders) {
  * Returns all picks for a specific week
  */
 async function getWeek(context, weekId, corsHeaders) {
-    const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
+    const connectionString = process.env.AzureWebJobsStorage || process.env.AZURE_STORAGE_CONNECTION_STRING;
 
     if (!connectionString) {
         context.res = { status: 500, headers: corsHeaders, body: { error: 'Storage not configured' } };

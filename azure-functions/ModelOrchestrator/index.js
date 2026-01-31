@@ -2,6 +2,7 @@ const { TableClient } = require('@azure/data-tables');
 const { v4: uuidv4 } = require('uuid');
 const { getAllowedOrigins, buildCorsHeaders, sendResponse } = require('../shared/http');
 const { getModelDefaults, resolveModelEndpoint } = require('../shared/model-registry');
+const { validateSharedKey } = require('../shared/auth');
 
 // Model configuration defaults (overridden by registry table when present)
 const MODEL_CONFIG = getModelDefaults();
@@ -21,6 +22,12 @@ module.exports = async function (context, req) {
     try {
         if (req.method === 'OPTIONS') {
             sendResponse(context, req, 204, null, {}, corsHeaders);
+            return;
+        }
+
+        const auth = validateSharedKey(req, context, { requireEnv: 'REQUIRE_EXECUTE_KEY' });
+        if (!auth.ok) {
+            sendResponse(context, req, 401, { error: auth.reason }, {}, corsHeaders);
             return;
         }
 
@@ -56,9 +63,19 @@ module.exports = async function (context, req) {
         const timestamp = new Date().toISOString();
 
         // Create job record in Table Storage
+        const storageConnection = process.env.AzureWebJobsStorage || process.env.AZURE_STORAGE_CONNECTION_STRING;
+        if (!storageConnection) {
+            sendResponse(context, req, 500, {
+                error: 'Storage not configured',
+                message: 'AzureWebJobsStorage (or AZURE_STORAGE_CONNECTION_STRING) is required'
+            }, {}, corsHeaders);
+            return;
+        }
+
+        const tableName = process.env.MODEL_EXECUTIONS_TABLE || 'modelexecutions';
         const tableClient = TableClient.fromConnectionString(
-            STORAGE_CONNECTION,
-            'modelexecutions'
+            storageConnection,
+            tableName
         );
 
         const jobEntity = {

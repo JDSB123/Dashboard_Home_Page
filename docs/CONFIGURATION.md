@@ -20,6 +20,14 @@ Environment variables are listed in .env.example. Key settings:
 - CORS_ALLOWED_ORIGINS
 - ORCHESTRATOR_URL / FUNCTIONS_BASE_URL / API_BASE_URL
 
+Optional auth guards (set to true to require a shared key on write endpoints):
+
+- REQUIRE_EXECUTE_KEY
+- REQUIRE_REGISTRY_WRITE_KEY
+- REQUIRE_PICKS_WRITE_KEY
+- REQUIRE_ARCHIVE_WRITE_KEY
+- REQUIRE_NOTIFY_KEY
+
 ## Model Registry
 
 Model endpoints should be managed through the registry whenever possible. The registry is hydrated by:

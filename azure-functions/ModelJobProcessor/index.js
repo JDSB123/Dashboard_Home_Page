@@ -33,7 +33,7 @@ function getModelApiConfig(modelType, endpoint, params) {
         case 'nfl':
             // NFL uses /api/v1/predictions/week/{season}/{week}
             const nflSeason = params.season || currentYear;
-            const nflWeek = params.week || Math.min(currentWeek - 35, 18); // NFL starts ~week 36
+            const nflWeek = params.week || Math.max(1, Math.min(currentWeek - 35, 18)); // NFL starts ~week 36
             return {
                 url: `${endpoint}/api/v1/predictions/week/${nflSeason}/${nflWeek}`,
                 method: 'GET',
@@ -43,7 +43,7 @@ function getModelApiConfig(modelType, endpoint, params) {
         case 'ncaaf':
             // NCAAF uses /api/v1/predictions/week/{season}/{week}
             const ncaafSeason = params.season || currentYear;
-            const ncaafWeek = params.week || Math.min(currentWeek - 35, 15); // NCAAF starts ~week 35
+            const ncaafWeek = params.week || Math.max(1, Math.min(currentWeek - 35, 15)); // NCAAF starts ~week 35
             return {
                 url: `${endpoint}/api/v1/predictions/week/${ncaafSeason}/${ncaafWeek}`,
                 method: 'GET',
@@ -66,9 +66,10 @@ module.exports = async function (context, jobMessage) {
     context.log(`Processing job ${jobId} for model ${modelType}`);
 
     // Initialize Table Storage client
+    const tableName = process.env.MODEL_EXECUTIONS_TABLE || 'modelexecutions';
     const tableClient = TableClient.fromConnectionString(
         process.env.AzureWebJobsStorage,
-        'modelexecutions'
+        tableName
     );
 
     // Initialize Blob Storage client for large results

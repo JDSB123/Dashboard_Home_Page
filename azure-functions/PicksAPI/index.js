@@ -1,5 +1,6 @@
 const { CosmosClient } = require("@azure/cosmos");
 const { getAllowedOrigins, buildCorsHeaders } = require('../shared/http');
+const { validateSharedKey } = require('../shared/auth');
 
 /**
  * Picks API - Enterprise-grade Azure Cosmos DB storage
@@ -182,6 +183,19 @@ module.exports = async function (context, req) {
     const id = context.bindingData.id || '';
 
     try {
+        const isWrite = ['POST', 'PATCH', 'DELETE'].includes(req.method);
+        if (isWrite) {
+            const auth = validateSharedKey(req, context, { requireEnv: 'REQUIRE_PICKS_WRITE_KEY' });
+            if (!auth.ok) {
+                context.res = {
+                    status: 401,
+                    headers: corsHeaders,
+                    body: { success: false, error: auth.reason }
+                };
+                return;
+            }
+        }
+
         const container = await getContainer();
 
         // Route: GET /api/picks or GET /api/picks/active or GET /api/picks/settled

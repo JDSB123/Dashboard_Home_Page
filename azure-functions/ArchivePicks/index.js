@@ -1,4 +1,5 @@
 const { BlobServiceClient } = require("@azure/storage-blob");
+const { validateSharedKey } = require('../shared/auth');
 
 // CORS configuration
 const DEFAULT_ALLOWED_ORIGINS = [
@@ -59,6 +60,12 @@ module.exports = async function (context, req) {
         return;
     }
 
+    const auth = validateSharedKey(req, context, { requireEnv: 'REQUIRE_ARCHIVE_WRITE_KEY' });
+    if (!auth.ok) {
+        context.res = { status: 401, headers: corsHeaders, body: { error: auth.reason } };
+        return;
+    }
+
     const { picks, weekId, slateDate } = req.body || {};
 
     if (!picks || !Array.isArray(picks)) {
@@ -81,10 +88,10 @@ module.exports = async function (context, req) {
 
     try {
         // Get connection string from environment (loaded from Key Vault)
-        const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
+        const connectionString = process.env.AzureWebJobsStorage || process.env.AZURE_STORAGE_CONNECTION_STRING;
 
         if (!connectionString) {
-            context.log.error('AZURE_STORAGE_CONNECTION_STRING not configured');
+            context.log.error('Storage connection string not configured');
             context.res = {
                 status: 500,
                 headers: corsHeaders,

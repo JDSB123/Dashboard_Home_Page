@@ -1,6 +1,7 @@
 const { TableClient } = require('@azure/data-tables');
 const { getAllowedOrigins, buildCorsHeaders, sendResponse } = require('../shared/http');
 const { getModelDefaults } = require('../shared/model-registry');
+const { validateSharedKey } = require('../shared/auth');
 
 const MODEL_ENDPOINTS = getModelDefaults({
     nba: { endpoint: process.env.NBA_API_URL },
@@ -25,9 +26,10 @@ module.exports = async function (context, req) {
             return;
         }
 
+        const tableName = process.env.MODEL_REGISTRY_TABLE || 'modelregistry';
         const tableClient = TableClient.fromConnectionString(
             process.env.AzureWebJobsStorage,
-            'modelregistry'
+            tableName
         );
 
         if (req.method === 'GET' || action === 'get') {
@@ -74,6 +76,12 @@ module.exports = async function (context, req) {
             }, corsHeaders);
 
         } else if (req.method === 'POST' && action === 'update') {
+            const auth = validateSharedKey(req, context, { requireEnv: 'REQUIRE_REGISTRY_WRITE_KEY' });
+            if (!auth.ok) {
+                sendResponse(context, req, 401, { error: auth.reason }, {}, corsHeaders);
+                return;
+            }
+
             // Update model registry entry
             const { model, version, endpoint } = req.body;
 
