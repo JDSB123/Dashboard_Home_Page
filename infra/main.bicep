@@ -374,7 +374,7 @@ resource ruleCanonicalHost 'Microsoft.Cdn/profiles/ruleSets/rules@2024-02-01' = 
   parent: ruleSet
   name: 'EnforceCanonicalHost'
   properties: {
-    order: 1
+    order: 0
     conditions: [
       {
         name: 'RequestHeader'
@@ -407,9 +407,9 @@ resource ruleCanonicalHost 'Microsoft.Cdn/profiles/ruleSets/rules@2024-02-01' = 
 // Rule to strip /api/nba prefix when forwarding to NBA backend
 resource ruleNbaRewrite 'Microsoft.Cdn/profiles/ruleSets/rules@2024-02-01' = {
   parent: ruleSet
-  name: 'RewriteNbaPath'
+  name: 'RewriteNBA'
   properties: {
-    order: 2
+    order: 1
     conditions: [
       {
         name: 'UrlPath'
@@ -438,7 +438,7 @@ resource ruleNbaRewrite 'Microsoft.Cdn/profiles/ruleSets/rules@2024-02-01' = {
 // Rule to strip /api/ncaam prefix
 resource ruleNcaamRewrite 'Microsoft.Cdn/profiles/ruleSets/rules@2024-02-01' = {
   parent: ruleSet
-  name: 'RewriteNcaamPath'
+  name: 'RewriteNCAAM'
   properties: {
     order: 3
     conditions: [
@@ -469,9 +469,9 @@ resource ruleNcaamRewrite 'Microsoft.Cdn/profiles/ruleSets/rules@2024-02-01' = {
 // Rule to strip /api/nfl prefix
 resource ruleNflRewrite 'Microsoft.Cdn/profiles/ruleSets/rules@2024-02-01' = {
   parent: ruleSet
-  name: 'RewriteNflPath'
+  name: 'RewriteNFL'
   properties: {
-    order: 4
+    order: 2
     conditions: [
       {
         name: 'UrlPath'
@@ -500,9 +500,9 @@ resource ruleNflRewrite 'Microsoft.Cdn/profiles/ruleSets/rules@2024-02-01' = {
 // Rule to strip /api/ncaaf prefix
 resource ruleNcaafRewrite 'Microsoft.Cdn/profiles/ruleSets/rules@2024-02-01' = {
   parent: ruleSet
-  name: 'RewriteNcaafPath'
+  name: 'RewriteNCAAF'
   properties: {
-    order: 5
+    order: 4
     conditions: [
       {
         name: 'UrlPath'
