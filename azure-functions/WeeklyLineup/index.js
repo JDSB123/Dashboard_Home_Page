@@ -3,7 +3,7 @@
  * Proxies picks requests to sport-specific Container Apps
  *
  * Routes:
- *   GET /api/weekly-lineup/nba   -> NBA Container App /slate/today/executive
+ *   GET /api/weekly-lineup/nba   -> NBA Container App /api/run/nbav3
  *   GET /api/weekly-lineup/ncaam -> NCAAM Container App /api/picks/today
  *   GET /api/weekly-lineup/nfl   -> NFL Container App /api/v1/predictions/week/{season}/{week}
  *   GET /api/weekly-lineup/ncaaf -> NCAAF Container App /api/v1/predictions/week/{season}/{week}
@@ -22,7 +22,7 @@ const MODEL_DEFAULTS = getModelDefaults({
 
 const SPORT_ENDPOINTS = {
     nba: {
-        path: (date) => `/slate/${date || 'today'}/executive`
+        path: (date) => `/api/run/nbav3?mode=sync`
     },
     ncaam: {
         path: (date) => `/api/picks/${date || 'today'}`
@@ -149,9 +149,15 @@ function normalizeResponse(sport, data) {
         });
         normalized.total_plays = data.total_plays || data.plays.length;
     } else if (data.picks) {
-        // NCAAM format
+        // NCAAM/NBA v3 format - picks array
         normalized.picks = data.picks;
         normalized.total_plays = data.total_picks || data.picks.length;
+    } else if (data.playerProps) {
+        // NBA v3 format - playerProps array (primary data)
+        normalized.picks = data.playerProps || [];
+        normalized.playerProps = data.playerProps;
+        normalized.total_plays = data.playerProps?.length || 0;
+        normalized.generatedAt = data.generatedAtCst || data.generatedAt;
     } else if (data.predictions) {
         // NFL/NCAAF format
         normalized.picks = data.predictions;
