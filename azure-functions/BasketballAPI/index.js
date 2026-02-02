@@ -3,7 +3,7 @@ const axios = require("axios");
 /**
  * Basketball API Proxy
  * Routes requests to Basketball API with server-side API key
- * 
+ *
  * GET /api/basketball-api/{league}/games?date=YYYY-MM-DD
  * GET /api/basketball-api/{league}/game/{gameId}/live
  * GET /api/basketball-api/{league}/standings?season=YYYY
@@ -12,133 +12,132 @@ const axios = require("axios");
  * GET /api/basketball-api/health
  */
 module.exports = async function (context, req) {
-    context.log('Basketball API proxy request:', req.params, req.query);
+  context.log("Basketball API proxy request:", req.params, req.query);
 
-    const apiKey = process.env.BASKETBALL_API_KEY;
-    const baseUrl = 'https://api-basketball.p.rapidapi.com'; // Adjust based on actual API
+  const apiKey = process.env.BASKETBALL_API_KEY;
+  const baseUrl = "https://api-basketball.p.rapidapi.com"; // Adjust based on actual API
 
-    if (!apiKey) {
-        context.log.error('BASKETBALL_API_KEY not configured');
-        context.res = {
-            status: 500,
-            body: { error: 'API not configured' }
-        };
-        return;
-    }
+  if (!apiKey) {
+    context.log.error("BASKETBALL_API_KEY not configured");
+    context.res = {
+      status: 500,
+      body: { error: "API not configured" },
+    };
+    return;
+  }
 
-    // Parse route
-    const pathParts = (req.params.path || '').split('/').filter(Boolean);
-    
-    // Health check
-    if (pathParts[0] === 'health') {
-        context.res = {
-            status: 200,
-            body: { status: 'ok', timestamp: new Date().toISOString() }
-        };
-        return;
-    }
+  // Parse route
+  const pathParts = (req.params.path || "").split("/").filter(Boolean);
 
-    const league = pathParts[0]; // 'nba' or 'ncaam'
-    const action = pathParts[1]; // 'games', 'game', 'standings', 'team', 'odds'
+  // Health check
+  if (pathParts[0] === "health") {
+    context.res = {
+      status: 200,
+      body: { status: "ok", timestamp: new Date().toISOString() },
+    };
+    return;
+  }
 
-    if (!league || !['nba', 'ncaam'].includes(league.toLowerCase())) {
-        context.res = {
-            status: 400,
-            body: { error: 'Invalid league. Use nba or ncaam.' }
-        };
-        return;
-    }
+  const league = pathParts[0]; // 'nba' or 'ncaam'
+  const action = pathParts[1]; // 'games', 'game', 'standings', 'team', 'odds'
 
-    try {
-        let apiEndpoint = '';
-        const params = { ...req.query };
-        
-        // Map league to API league ID
-        const leagueId = league.toLowerCase() === 'nba' ? 12 : 116; // Adjust based on API
+  if (!league || !["nba", "ncaam"].includes(league.toLowerCase())) {
+    context.res = {
+      status: 400,
+      body: { error: "Invalid league. Use nba or ncaam." },
+    };
+    return;
+  }
 
-        switch (action) {
-            case 'games':
-                apiEndpoint = '/games';
-                params.league = leagueId;
-                params.date = req.query.date;
-                break;
+  try {
+    let apiEndpoint = "";
+    const params = { ...req.query };
 
-            case 'game':
-                const gameId = pathParts[2];
-                if (!gameId) {
-                    context.res = { status: 400, body: { error: 'Game ID required' } };
-                    return;
-                }
-                apiEndpoint = `/games/${gameId}`;
-                break;
+    // Map league to API league ID
+    const leagueId = league.toLowerCase() === "nba" ? 12 : 116; // Adjust based on API
 
-            case 'standings':
-                apiEndpoint = '/standings';
-                params.league = leagueId;
-                params.season = req.query.season || new Date().getFullYear();
-                break;
+    switch (action) {
+      case "games":
+        apiEndpoint = "/games";
+        params.league = leagueId;
+        params.date = req.query.date;
+        break;
 
-            case 'team':
-                const teamId = pathParts[2];
-                if (!teamId) {
-                    context.res = { status: 400, body: { error: 'Team ID required' } };
-                    return;
-                }
-                apiEndpoint = `/statistics/teams?team=${teamId}&league=${leagueId}`;
-                break;
-
-            case 'odds':
-                apiEndpoint = '/odds';
-                params.league = leagueId;
-                break;
-
-            default:
-                context.res = {
-                    status: 400,
-                    body: { error: 'Invalid action. Use games, game, standings, team, or odds.' }
-                };
-                return;
+      case "game":
+        const gameId = pathParts[2];
+        if (!gameId) {
+          context.res = { status: 400, body: { error: "Game ID required" } };
+          return;
         }
+        apiEndpoint = `/games/${gameId}`;
+        break;
 
-        // Make API request
-        const response = await axios.get(`${baseUrl}${apiEndpoint}`, {
-            headers: {
-                'X-RapidAPI-Key': apiKey,
-                'X-RapidAPI-Host': 'api-basketball.p.rapidapi.com'
-            },
-            params
-        });
+      case "standings":
+        apiEndpoint = "/standings";
+        params.league = leagueId;
+        params.season = req.query.season || new Date().getFullYear();
+        break;
 
-        context.res = {
-            status: 200,
-            headers: {
-                'Content-Type': 'application/json',
-                'Cache-Control': 'public, max-age=60' // 1 minute cache
-            },
-            body: response.data
-        };
-
-    } catch (error) {
-        context.log.error('Basketball API error:', error.response?.data || error.message);
-
-        if (error.response?.status === 429) {
-            context.res = {
-                status: 429,
-                body: { error: 'Rate limit exceeded. Try again later.' }
-            };
-        } else if (error.response?.status === 401) {
-            context.res = {
-                status: 500,
-                body: { error: 'API authentication failed' }
-            };
-        } else {
-            context.res = {
-                status: error.response?.status || 500,
-                body: { 
-                    error: 'Failed to fetch data',
-                    details: error.message 
-                }
-            };
+      case "team":
+        const teamId = pathParts[2];
+        if (!teamId) {
+          context.res = { status: 400, body: { error: "Team ID required" } };
+          return;
         }
+        apiEndpoint = `/statistics/teams?team=${teamId}&league=${leagueId}`;
+        break;
+
+      case "odds":
+        apiEndpoint = "/odds";
+        params.league = leagueId;
+        break;
+
+      default:
+        context.res = {
+          status: 400,
+          body: { error: "Invalid action. Use games, game, standings, team, or odds." },
+        };
+        return;
     }
+
+    // Make API request
+    const response = await axios.get(`${baseUrl}${apiEndpoint}`, {
+      headers: {
+        "X-RapidAPI-Key": apiKey,
+        "X-RapidAPI-Host": "api-basketball.p.rapidapi.com",
+      },
+      params,
+    });
+
+    context.res = {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control": "public, max-age=60", // 1 minute cache
+      },
+      body: response.data,
+    };
+  } catch (error) {
+    context.log.error("Basketball API error:", error.response?.data || error.message);
+
+    if (error.response?.status === 429) {
+      context.res = {
+        status: 429,
+        body: { error: "Rate limit exceeded. Try again later." },
+      };
+    } else if (error.response?.status === 401) {
+      context.res = {
+        status: 500,
+        body: { error: "API authentication failed" },
+      };
+    } else {
+      context.res = {
+        status: error.response?.status || 500,
+        body: {
+          error: "Failed to fetch data",
+          details: error.message,
+        },
+      };
+    }
+  }
 };

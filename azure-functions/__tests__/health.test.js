@@ -45,7 +45,7 @@ describe("Health function", () => {
   test("returns 503 when an error occurs", async () => {
     // Set up environment for storage check
     process.env.AzureWebJobsStorage = "UseDevelopmentStorage=true";
-    
+
     // Re-require modules to get fresh state with updated mock
     jest.resetModules();
     jest.doMock("@azure/data-tables", () => ({
@@ -68,4 +68,3 @@ describe("Health function", () => {
     expect(context.res.body.status).toBe("unhealthy");
   });
 });
-
