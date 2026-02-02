@@ -24,6 +24,16 @@ The service principal should have:
 - **Contributor** on the resource group
 - **AcrPush** on the ACR registry
 
+### Shared Infrastructure
+
+The **ACR** (`gbsvregistry`) is now a centralized registry for all GBSV services.
+
+The **NBA API** is currently deployed as:
+- **ACA**: `gbsv-nbav3-aca`
+- **Default URL**: `https://gbsv-nbav3-aca.wittypebble-41c11c65.eastus.azurecontainerapps.io`
+
+Ensure the `NBA_API_URL` secret is set in the **Dashboard** repo if you want to override the default.
+
 ### Static Web Apps
 
 - `AZURE_STATIC_WEB_APPS_API_TOKEN`

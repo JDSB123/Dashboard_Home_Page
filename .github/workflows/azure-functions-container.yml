@@ -15,7 +15,7 @@ env:
   CONTAINER_APP_NAME: gbsv-orchestrator
   IMAGE_NAME: gbsv-orchestrator
   ACR_LOGIN_SERVER: ${{ secrets.ACR_LOGIN_SERVER }}
-  NBA_API_URL: ${{ secrets.NBA_API_URL || 'https://nba-gbsv-api.livelycoast-b48c3cb0.eastus.azurecontainerapps.io' }}
+  NBA_API_URL: ${{ secrets.NBA_API_URL || 'https://gbsv-nbav3-aca.wittypebble-41c11c65.eastus.azurecontainerapps.io' }}
   NCAAM_API_URL: https://ncaam-stable-prediction.wonderfulforest-c2d7d49a.centralus.azurecontainerapps.io
   NFL_API_URL: https://nfl-api.purplegrass-5889a981.eastus.azurecontainerapps.io
   NCAAF_API_URL: https://ncaaf-v5-prod.salmonwave-314d4ffe.eastus.azurecontainerapps.io
