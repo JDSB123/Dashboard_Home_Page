@@ -53,6 +53,8 @@
 
     "workbench.startupEditor": "none",
     "security.workspace.trust.enabled": true,
+    
+    "task.allowAutomaticTasks": "on",
 
     "java.enabled": false,
     "jupyter.experiments.enabled": false
@@ -87,6 +89,65 @@
   "tasks": {
     "version": "2.0.0",
     "tasks": [
+      {
+        "label": "Check Azure Login",
+        "type": "shell",
+        "command": "az account show 2>$null; if ($LASTEXITCODE -ne 0) { Write-Host 'Azure CLI not logged in. Running az login...'; az login }",
+        "presentation": {
+          "reveal": "silent",
+          "close": true
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "Install Python Dependencies",
+        "type": "shell",
+        "command": "if (Test-Path '${workspaceFolder:Dashboard}/.venv') { & '${workspaceFolder:Dashboard}/.venv/Scripts/Activate.ps1'; pip install -q -r requirements.txt 2>$null } else { Write-Host 'Python venv not found, skipping...' }",
+        "presentation": {
+          "reveal": "silent",
+          "close": true
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "Install NPM Dependencies",
+        "type": "shell",
+        "command": "cd '${workspaceFolder:Dashboard}/azure-functions'; if (Test-Path 'package.json') { npm install --silent }",
+        "presentation": {
+          "reveal": "silent",
+          "close": true
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "Restore .NET Dependencies",
+        "type": "shell",
+        "command": "cd '${workspaceFolder:NBA_GBSV_Workspace}/gbsv_nba_git_v3.0'; dotnet restore --verbosity quiet",
+        "presentation": {
+          "reveal": "silent",
+          "close": true
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "Workspace Initialization",
+        "dependsOn": [
+          "Check Azure Login",
+          "Install Python Dependencies",
+          "Install NPM Dependencies",
+          "Restore .NET Dependencies"
+        ],
+        "dependsOrder": "parallel",
+        "runOptions": {
+          "runOn": "folderOpen"
+        },
+        "presentation": {
+          "reveal": "silent",
+          "panel": "shared",
+          "close": true
+        },
+        "problemMatcher": []
+      },
       {
         "label": "Start Azurite",
         "type": "shell",
