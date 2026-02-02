@@ -16,7 +16,7 @@
     "@azure/keyvault-secrets": "^4.7.0",
     "@azure/storage-queue": "^12.15.0",
     "@azure/data-tables": "^13.2.2",
-    "@azure/storage-blob": "^12.17.0",
+    "@azure/storage-blob": "^12.30.0",
     "@microsoft/signalr": "^7.0.0",
     "axios": "^1.6.2",
     "form-data": "^4.0.0"
