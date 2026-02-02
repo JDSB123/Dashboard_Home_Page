@@ -4,6 +4,9 @@ node_modules/
 # Build outputs
 build/
 
+# Project-local dev toolchain caches
+.dev/
+
 # IDE
 
 .idea/

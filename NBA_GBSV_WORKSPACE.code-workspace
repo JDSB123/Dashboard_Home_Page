@@ -12,12 +12,6 @@
   "profile": "Profile-VS-GBSV",
   "settings": {
     "terminal.integrated.env.windows": {
-      "NUGET_PACKAGES": "C:\\Users\\JDSB\\.nuget\\packages",
-      "PIP_CACHE_DIR": "C:\\Users\\JDSB\\.cache\\pip",
-      "npm_config_cache": "C:\\Users\\JDSB\\.npm-cache",
-      "DOTNET_ROOT": "C:\\Users\\JDSB\\.dotnet",
-      "PATH": "C:\\Users\\JDSB\\.dotnet;${env:PATH}",
-      "AZURE_CONFIG_DIR": "C:\\Users\\JDSB\\.azure",
       "AZURE_DEV_COLLECT_TELEMETRY": "no"
     },
 
@@ -40,13 +34,7 @@
     "azure.showSignedInEmail": false,
     "azure-account.authenticationProvider": "auto",
 
-    "dotnet.defaultSolution": "${workspaceFolder:NBA_GBSV_Workspace}/gbsv_nba_git_v3.0/gbsv_nba_git_v3.0.sln",
-    "dotnet.dotnetPath": "C:\\Users\\JDSB\\.dotnet\\dotnet.exe",
-    "dotnet.server.dotnetPath": "C:\\Users\\JDSB\\.dotnet\\dotnet.exe",
-    "csharp.dotnetPath": "C:\\Users\\JDSB\\.dotnet\\dotnet.exe",
-    "dotnet.server.runtimeEnvironment": {
-      "DOTNET_ROOT": "C:\\Users\\JDSB\\.dotnet"
-    },
+    "dotnet.defaultSolution": "${workspaceFolder:NBA_GBSV_Workspace}/gbsv_nba_git_v3.0.sln",
     "omnisharp.enableRoslynAnalyzers": false,
     "csharp.suppressDotnetRestoreNotification": true,
 

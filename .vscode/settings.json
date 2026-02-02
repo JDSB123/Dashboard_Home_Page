@@ -7,9 +7,25 @@
         "debug.overrideEngine": "claude-sonnet-4.5"
     },
     "azureFunctions.deploySubpath": "Dashboard_Home_Page\\azure-functions",
-  "dotnet.dotnetPath": "C:\\Users\\JDSB\\.dotnet\\dotnet.exe",
-  "dotnet.server.dotnetPath": "C:\\Users\\JDSB\\.dotnet\\dotnet.exe",
-  "csharp.dotnetPath": "C:\\Users\\JDSB\\.dotnet\\dotnet.exe",
+  "terminal.integrated.env.windows": {
+    "DOTNET_ROOT": "${workspaceFolder}/.dev/dotnet",
+    "NUGET_PACKAGES": "${workspaceFolder}/.dev/nuget",
+    "GOROOT": "${workspaceFolder}/.dev/go-sdk/go",
+    "GOPATH": "${workspaceFolder}/.dev/go",
+    "GOCACHE": "${workspaceFolder}/.dev/go-build",
+    "CARGO_HOME": "${workspaceFolder}/.dev/cargo",
+    "RUSTUP_HOME": "${workspaceFolder}/.dev/rustup",
+    "PIP_CACHE_DIR": "${workspaceFolder}/.dev/pip-cache",
+    "npm_config_cache": "${workspaceFolder}/.dev/npm-cache",
+    "AZURE_CONFIG_DIR": "${workspaceFolder}/.dev/azure",
+    "PATH": "${workspaceFolder}/.dev/dotnet;${workspaceFolder}/.dev/go-sdk/go/bin;${workspaceFolder}/.dev/go/bin;${workspaceFolder}/.dev/cargo/bin;${env:PATH}"
+  },
+  "dotnet.dotnetPath": "${workspaceFolder}/.dev/dotnet/dotnet.exe",
+  "dotnet.server.dotnetPath": "${workspaceFolder}/.dev/dotnet/dotnet.exe",
+  "csharp.dotnetPath": "${workspaceFolder}/.dev/dotnet/dotnet.exe",
+  "dotnet.server.runtimeEnvironment": {
+    "DOTNET_ROOT": "${workspaceFolder}/.dev/dotnet"
+  },
     "azureFunctions.postDeployTask": "npm install (functions)",
     "azureFunctions.projectLanguage": "JavaScript",
     "azureFunctions.projectRuntime": "~4",

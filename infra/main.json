@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.40.2.10011",
-      "templateHash": "6465901898074808844"
+      "templateHash": "8987562571220806478"
     }
   },
   "parameters": {
@@ -37,13 +37,13 @@
     },
     "skuName": {
       "type": "string",
-      "defaultValue": "Standard_AzureFrontDoor",
+      "defaultValue": "Premium_AzureFrontDoor",
       "allowedValues": [
         "Standard_AzureFrontDoor",
         "Premium_AzureFrontDoor"
       ],
       "metadata": {
-        "description": "Front Door SKU"
+        "description": "Front Door SKU - Premium includes WAF managed rules (OWASP, Bot Manager)"
       }
     },
     "staticWebAppHostname": {
@@ -51,13 +51,6 @@
       "defaultValue": "proud-cliff-008e2e20f.2.azurestaticapps.net",
       "metadata": {
         "description": "Static Web App hostname"
-      }
-    },
-    "orchestratorHostname": {
-      "type": "string",
-      "defaultValue": "gbsv-orchestrator.wittypebble-41c11c65.eastus.azurecontainerapps.io",
-      "metadata": {
-        "description": "Orchestrator Container App hostname"
       }
     },
     "nbaApiHostname": {
@@ -94,7 +87,6 @@
     "wafPolicyName": "[format('gbsvwafpolicy{0}', parameters('environment'))]",
     "endpointName": "[format('gbsv-endpoint-{0}', parameters('environment'))]",
     "originGroupDashboard": "og-dashboard",
-    "originGroupOrchestrator": "og-orchestrator",
     "originGroupNba": "og-nba-api",
     "originGroupNcaam": "og-ncaam-api",
     "originGroupNfl": "og-nfl-api",
@@ -117,10 +109,24 @@
           "customBlockResponseStatusCode": 403,
           "customBlockResponseBody": "[base64('{\"error\": \"Request blocked by WAF policy\"}')]"
         },
+        "managedRules": {
+          "managedRuleSets": [
+            {
+              "ruleSetType": "Microsoft_DefaultRuleSet",
+              "ruleSetVersion": "2.1",
+              "ruleSetAction": "Block"
+            },
+            {
+              "ruleSetType": "Microsoft_BotManagerRuleSet",
+              "ruleSetVersion": "1.0",
+              "ruleSetAction": "Block"
+            }
+          ]
+        },
         "customRules": {
           "rules": [
             {
-              "name": "RateLimitRule",
+              "name": "RateLimitSportEndpoints",
               "priority": 100,
               "ruleType": "RateLimitRule",
               "rateLimitDurationInMinutes": 1,
@@ -128,9 +134,26 @@
               "matchConditions": [
                 {
                   "matchVariable": "RequestUri",
-                  "operator": "Contains",
+                  "operator": "RegEx",
                   "matchValue": [
-                    "/api/"
+                    "^/(nba|ncaam|nfl|ncaaf)/"
+                  ]
+                }
+              ],
+              "action": "Block"
+            },
+            {
+              "name": "RateLimitPredictions",
+              "priority": 200,
+              "ruleType": "RateLimitRule",
+              "rateLimitDurationInMinutes": 1,
+              "rateLimitThreshold": 100,
+              "matchConditions": [
+                {
+                  "matchVariable": "RequestUri",
+                  "operator": "RegEx",
+                  "matchValue": [
+                    "^/(nba|ncaam|nfl|ncaaf)/predictions"
                   ]
                 }
               ],
@@ -149,7 +172,7 @@
         "name": "[parameters('skuName')]"
       },
       "properties": {
-        "originResponseTimeoutSeconds": 60
+        "originResponseTimeoutSeconds": 240
       },
       "tags": {
         "environment": "[parameters('environment')]",
@@ -183,28 +206,6 @@
           "probeRequestType": "HEAD",
           "probeProtocol": "Https",
           "probeIntervalInSeconds": 100
-        },
-        "sessionAffinityState": "Disabled"
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Cdn/profiles', variables('frontDoorName'))]"
-      ]
-    },
-    {
-      "type": "Microsoft.Cdn/profiles/originGroups",
-      "apiVersion": "2024-02-01",
-      "name": "[format('{0}/{1}', variables('frontDoorName'), variables('originGroupOrchestrator'))]",
-      "properties": {
-        "loadBalancingSettings": {
-          "sampleSize": 4,
-          "successfulSamplesRequired": 3,
-          "additionalLatencyInMilliseconds": 50
-        },
-        "healthProbeSettings": {
-          "probePath": "/api/health",
-          "probeRequestType": "GET",
-          "probeProtocol": "Https",
-          "probeIntervalInSeconds": 30
         },
         "sessionAffinityState": "Disabled"
       },
@@ -321,24 +322,6 @@
     {
       "type": "Microsoft.Cdn/profiles/originGroups/origins",
       "apiVersion": "2024-02-01",
-      "name": "[format('{0}/{1}/{2}', variables('frontDoorName'), variables('originGroupOrchestrator'), 'origin-orchestrator')]",
-      "properties": {
-        "hostName": "[parameters('orchestratorHostname')]",
-        "httpPort": 80,
-        "httpsPort": 443,
-        "originHostHeader": "[parameters('orchestratorHostname')]",
-        "priority": 1,
-        "weight": 1000,
-        "enabledState": "Enabled",
-        "enforceCertificateNameCheck": true
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupOrchestrator'))]"
-      ]
-    },
-    {
-      "type": "Microsoft.Cdn/profiles/originGroups/origins",
-      "apiVersion": "2024-02-01",
       "name": "[format('{0}/{1}/{2}', variables('frontDoorName'), variables('originGroupNba'), 'origin-nba-api')]",
       "properties": {
         "hostName": "[parameters('nbaApiHostname')]",
@@ -421,7 +404,7 @@
       "apiVersion": "2024-02-01",
       "name": "[format('{0}/{1}/{2}', variables('frontDoorName'), 'UrlRewriteRules', 'EnforceCanonicalHost')]",
       "properties": {
-        "order": 1,
+        "order": 0,
         "conditions": [
           {
             "name": "RequestHeader",
@@ -454,162 +437,13 @@
       ]
     },
     {
-      "type": "Microsoft.Cdn/profiles/ruleSets/rules",
-      "apiVersion": "2024-02-01",
-      "name": "[format('{0}/{1}/{2}', variables('frontDoorName'), 'UrlRewriteRules', 'RewriteNbaPath')]",
-      "properties": {
-        "order": 2,
-        "conditions": [
-          {
-            "name": "UrlPath",
-            "parameters": {
-              "typeName": "DeliveryRuleUrlPathMatchConditionParameters",
-              "operator": "BeginsWith",
-              "matchValues": [
-                "/api/nba/"
-              ],
-              "transforms": [
-                "Lowercase"
-              ]
-            }
-          }
-        ],
-        "actions": [
-          {
-            "name": "UrlRewrite",
-            "parameters": {
-              "typeName": "DeliveryRuleUrlRewriteActionParameters",
-              "sourcePattern": "/api/nba/",
-              "destination": "/",
-              "preserveUnmatchedPath": true
-            }
-          }
-        ]
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Cdn/profiles/ruleSets', variables('frontDoorName'), 'UrlRewriteRules')]"
-      ]
-    },
-    {
-      "type": "Microsoft.Cdn/profiles/ruleSets/rules",
-      "apiVersion": "2024-02-01",
-      "name": "[format('{0}/{1}/{2}', variables('frontDoorName'), 'UrlRewriteRules', 'RewriteNcaamPath')]",
-      "properties": {
-        "order": 3,
-        "conditions": [
-          {
-            "name": "UrlPath",
-            "parameters": {
-              "typeName": "DeliveryRuleUrlPathMatchConditionParameters",
-              "operator": "BeginsWith",
-              "matchValues": [
-                "/api/ncaam/"
-              ],
-              "transforms": [
-                "Lowercase"
-              ]
-            }
-          }
-        ],
-        "actions": [
-          {
-            "name": "UrlRewrite",
-            "parameters": {
-              "typeName": "DeliveryRuleUrlRewriteActionParameters",
-              "sourcePattern": "/api/ncaam/",
-              "destination": "/",
-              "preserveUnmatchedPath": true
-            }
-          }
-        ]
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Cdn/profiles/ruleSets', variables('frontDoorName'), 'UrlRewriteRules')]"
-      ]
-    },
-    {
-      "type": "Microsoft.Cdn/profiles/ruleSets/rules",
-      "apiVersion": "2024-02-01",
-      "name": "[format('{0}/{1}/{2}', variables('frontDoorName'), 'UrlRewriteRules', 'RewriteNflPath')]",
-      "properties": {
-        "order": 4,
-        "conditions": [
-          {
-            "name": "UrlPath",
-            "parameters": {
-              "typeName": "DeliveryRuleUrlPathMatchConditionParameters",
-              "operator": "BeginsWith",
-              "matchValues": [
-                "/api/nfl/"
-              ],
-              "transforms": [
-                "Lowercase"
-              ]
-            }
-          }
-        ],
-        "actions": [
-          {
-            "name": "UrlRewrite",
-            "parameters": {
-              "typeName": "DeliveryRuleUrlRewriteActionParameters",
-              "sourcePattern": "/api/nfl/",
-              "destination": "/",
-              "preserveUnmatchedPath": true
-            }
-          }
-        ]
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Cdn/profiles/ruleSets', variables('frontDoorName'), 'UrlRewriteRules')]"
-      ]
-    },
-    {
-      "type": "Microsoft.Cdn/profiles/ruleSets/rules",
-      "apiVersion": "2024-02-01",
-      "name": "[format('{0}/{1}/{2}', variables('frontDoorName'), 'UrlRewriteRules', 'RewriteNcaafPath')]",
-      "properties": {
-        "order": 5,
-        "conditions": [
-          {
-            "name": "UrlPath",
-            "parameters": {
-              "typeName": "DeliveryRuleUrlPathMatchConditionParameters",
-              "operator": "BeginsWith",
-              "matchValues": [
-                "/api/ncaaf/"
-              ],
-              "transforms": [
-                "Lowercase"
-              ]
-            }
-          }
-        ],
-        "actions": [
-          {
-            "name": "UrlRewrite",
-            "parameters": {
-              "typeName": "DeliveryRuleUrlRewriteActionParameters",
-              "sourcePattern": "/api/ncaaf/",
-              "destination": "/",
-              "preserveUnmatchedPath": true
-            }
-          }
-        ]
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Cdn/profiles/ruleSets', variables('frontDoorName'), 'UrlRewriteRules')]"
-      ]
-    },
-    {
       "type": "Microsoft.Cdn/profiles/afdEndpoints/routes",
       "apiVersion": "2024-02-01",
-      "name": "[format('{0}/{1}/{2}', variables('frontDoorName'), variables('endpointName'), 'route-nba-api')]",
+      "name": "[format('{0}/{1}/{2}', variables('frontDoorName'), variables('endpointName'), 'route-nba')]",
       "properties": {
         "originGroup": {
           "id": "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupNba'))]"
         },
-        "originPath": "/",
         "ruleSets": [
           {
             "id": "[resourceId('Microsoft.Cdn/profiles/ruleSets', variables('frontDoorName'), 'UrlRewriteRules')]"
@@ -619,7 +453,7 @@
           "Https"
         ],
         "patternsToMatch": [
-          "/api/nba/*"
+          "/nba/*"
         ],
         "forwardingProtocol": "HttpsOnly",
         "linkToDefaultDomain": "Enabled",
@@ -630,19 +464,17 @@
         "[resourceId('Microsoft.Cdn/profiles/afdEndpoints', variables('frontDoorName'), variables('endpointName'))]",
         "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupNba'))]",
         "[resourceId('Microsoft.Cdn/profiles/originGroups/origins', variables('frontDoorName'), variables('originGroupNba'), 'origin-nba-api')]",
-        "[resourceId('Microsoft.Cdn/profiles/ruleSets/rules', variables('frontDoorName'), 'UrlRewriteRules', 'RewriteNbaPath')]",
         "[resourceId('Microsoft.Cdn/profiles/ruleSets', variables('frontDoorName'), 'UrlRewriteRules')]"
       ]
     },
     {
       "type": "Microsoft.Cdn/profiles/afdEndpoints/routes",
       "apiVersion": "2024-02-01",
-      "name": "[format('{0}/{1}/{2}', variables('frontDoorName'), variables('endpointName'), 'route-ncaam-api')]",
+      "name": "[format('{0}/{1}/{2}', variables('frontDoorName'), variables('endpointName'), 'route-ncaam')]",
       "properties": {
         "originGroup": {
           "id": "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupNcaam'))]"
         },
-        "originPath": "/",
         "ruleSets": [
           {
             "id": "[resourceId('Microsoft.Cdn/profiles/ruleSets', variables('frontDoorName'), 'UrlRewriteRules')]"
@@ -652,7 +484,7 @@
           "Https"
         ],
         "patternsToMatch": [
-          "/api/ncaam/*"
+          "/ncaam/*"
         ],
         "forwardingProtocol": "HttpsOnly",
         "linkToDefaultDomain": "Enabled",
@@ -663,19 +495,17 @@
         "[resourceId('Microsoft.Cdn/profiles/afdEndpoints', variables('frontDoorName'), variables('endpointName'))]",
         "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupNcaam'))]",
         "[resourceId('Microsoft.Cdn/profiles/originGroups/origins', variables('frontDoorName'), variables('originGroupNcaam'), 'origin-ncaam-api')]",
-        "[resourceId('Microsoft.Cdn/profiles/ruleSets/rules', variables('frontDoorName'), 'UrlRewriteRules', 'RewriteNcaamPath')]",
         "[resourceId('Microsoft.Cdn/profiles/ruleSets', variables('frontDoorName'), 'UrlRewriteRules')]"
       ]
     },
     {
       "type": "Microsoft.Cdn/profiles/afdEndpoints/routes",
       "apiVersion": "2024-02-01",
-      "name": "[format('{0}/{1}/{2}', variables('frontDoorName'), variables('endpointName'), 'route-nfl-api')]",
+      "name": "[format('{0}/{1}/{2}', variables('frontDoorName'), variables('endpointName'), 'route-nfl')]",
       "properties": {
         "originGroup": {
           "id": "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupNfl'))]"
         },
-        "originPath": "/",
         "ruleSets": [
           {
             "id": "[resourceId('Microsoft.Cdn/profiles/ruleSets', variables('frontDoorName'), 'UrlRewriteRules')]"
@@ -685,7 +515,7 @@
           "Https"
         ],
         "patternsToMatch": [
-          "/api/nfl/*"
+          "/nfl/*"
         ],
         "forwardingProtocol": "HttpsOnly",
         "linkToDefaultDomain": "Enabled",
@@ -696,19 +526,17 @@
         "[resourceId('Microsoft.Cdn/profiles/afdEndpoints', variables('frontDoorName'), variables('endpointName'))]",
         "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupNfl'))]",
         "[resourceId('Microsoft.Cdn/profiles/originGroups/origins', variables('frontDoorName'), variables('originGroupNfl'), 'origin-nfl-api')]",
-        "[resourceId('Microsoft.Cdn/profiles/ruleSets/rules', variables('frontDoorName'), 'UrlRewriteRules', 'RewriteNflPath')]",
         "[resourceId('Microsoft.Cdn/profiles/ruleSets', variables('frontDoorName'), 'UrlRewriteRules')]"
       ]
     },
     {
       "type": "Microsoft.Cdn/profiles/afdEndpoints/routes",
       "apiVersion": "2024-02-01",
-      "name": "[format('{0}/{1}/{2}', variables('frontDoorName'), variables('endpointName'), 'route-ncaaf-api')]",
+      "name": "[format('{0}/{1}/{2}', variables('frontDoorName'), variables('endpointName'), 'route-ncaaf')]",
       "properties": {
         "originGroup": {
           "id": "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupNcaaf'))]"
         },
-        "originPath": "/",
         "ruleSets": [
           {
             "id": "[resourceId('Microsoft.Cdn/profiles/ruleSets', variables('frontDoorName'), 'UrlRewriteRules')]"
@@ -718,7 +546,7 @@
           "Https"
         ],
         "patternsToMatch": [
-          "/api/ncaaf/*"
+          "/ncaaf/*"
         ],
         "forwardingProtocol": "HttpsOnly",
         "linkToDefaultDomain": "Enabled",
@@ -729,37 +557,7 @@
         "[resourceId('Microsoft.Cdn/profiles/afdEndpoints', variables('frontDoorName'), variables('endpointName'))]",
         "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupNcaaf'))]",
         "[resourceId('Microsoft.Cdn/profiles/originGroups/origins', variables('frontDoorName'), variables('originGroupNcaaf'), 'origin-ncaaf-api')]",
-        "[resourceId('Microsoft.Cdn/profiles/ruleSets/rules', variables('frontDoorName'), 'UrlRewriteRules', 'RewriteNcaafPath')]",
         "[resourceId('Microsoft.Cdn/profiles/ruleSets', variables('frontDoorName'), 'UrlRewriteRules')]"
-      ]
-    },
-    {
-      "type": "Microsoft.Cdn/profiles/afdEndpoints/routes",
-      "apiVersion": "2024-02-01",
-      "name": "[format('{0}/{1}/{2}', variables('frontDoorName'), variables('endpointName'), 'route-orchestrator-api')]",
-      "properties": {
-        "originGroup": {
-          "id": "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupOrchestrator'))]"
-        },
-        "supportedProtocols": [
-          "Https"
-        ],
-        "patternsToMatch": [
-          "/api/*"
-        ],
-        "forwardingProtocol": "HttpsOnly",
-        "linkToDefaultDomain": "Enabled",
-        "httpsRedirect": "Enabled",
-        "enabledState": "Enabled"
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Cdn/profiles/afdEndpoints', variables('frontDoorName'), variables('endpointName'))]",
-        "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupOrchestrator'))]",
-        "[resourceId('Microsoft.Cdn/profiles/originGroups/origins', variables('frontDoorName'), variables('originGroupOrchestrator'), 'origin-orchestrator')]",
-        "[resourceId('Microsoft.Cdn/profiles/afdEndpoints/routes', variables('frontDoorName'), variables('endpointName'), 'route-nba-api')]",
-        "[resourceId('Microsoft.Cdn/profiles/afdEndpoints/routes', variables('frontDoorName'), variables('endpointName'), 'route-ncaaf-api')]",
-        "[resourceId('Microsoft.Cdn/profiles/afdEndpoints/routes', variables('frontDoorName'), variables('endpointName'), 'route-ncaam-api')]",
-        "[resourceId('Microsoft.Cdn/profiles/afdEndpoints/routes', variables('frontDoorName'), variables('endpointName'), 'route-nfl-api')]"
       ]
     },
     {
@@ -799,7 +597,10 @@
         "[resourceId('Microsoft.Cdn/profiles/afdEndpoints', variables('frontDoorName'), variables('endpointName'))]",
         "[resourceId('Microsoft.Cdn/profiles/originGroups/origins', variables('frontDoorName'), variables('originGroupDashboard'), 'origin-dashboard')]",
         "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupDashboard'))]",
-        "[resourceId('Microsoft.Cdn/profiles/afdEndpoints/routes', variables('frontDoorName'), variables('endpointName'), 'route-orchestrator-api')]"
+        "[resourceId('Microsoft.Cdn/profiles/afdEndpoints/routes', variables('frontDoorName'), variables('endpointName'), 'route-nba')]",
+        "[resourceId('Microsoft.Cdn/profiles/afdEndpoints/routes', variables('frontDoorName'), variables('endpointName'), 'route-ncaaf')]",
+        "[resourceId('Microsoft.Cdn/profiles/afdEndpoints/routes', variables('frontDoorName'), variables('endpointName'), 'route-ncaam')]",
+        "[resourceId('Microsoft.Cdn/profiles/afdEndpoints/routes', variables('frontDoorName'), variables('endpointName'), 'route-nfl')]"
       ]
     },
     {

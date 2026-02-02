@@ -18,9 +18,9 @@ param location string = 'global'
 @description('Enable WAF policy')
 param enableWaf bool = true
 
-@description('Front Door SKU')
+@description('Front Door SKU - Premium includes WAF managed rules (OWASP, Bot Manager)')
 @allowed(['Standard_AzureFrontDoor', 'Premium_AzureFrontDoor'])
-param skuName string = 'Standard_AzureFrontDoor'
+param skuName string = 'Premium_AzureFrontDoor'
 
 // ════════════════════════════════════════════════════════════════════════════
 // Backend Origins Configuration
@@ -29,8 +29,9 @@ param skuName string = 'Standard_AzureFrontDoor'
 @description('Static Web App hostname')
 param staticWebAppHostname string = 'proud-cliff-008e2e20f.2.azurestaticapps.net'
 
-@description('Orchestrator Container App hostname')
-param orchestratorHostname string = 'gbsv-orchestrator.wittypebble-41c11c65.eastus.azurecontainerapps.io'
+// NOTE: Dashboard Orchestrator REMOVED - redundant
+// Each sport API has built-in async queue processing at /{sport}/predictions
+// No need for orchestrator middleman
 
 @description('NBA API Container App hostname')
 param nbaApiHostname string = 'nba-gbsv-api.livelycoast-b48c3cb0.eastus.azurecontainerapps.io'
@@ -54,16 +55,13 @@ var endpointName = 'gbsv-endpoint-${environment}'
 
 // Origin group names
 var originGroupDashboard = 'og-dashboard'
-var originGroupOrchestrator = 'og-orchestrator'
 var originGroupNba = 'og-nba-api'
 var originGroupNcaam = 'og-ncaam-api'
 var originGroupNfl = 'og-nfl-api'
 var originGroupNcaaf = 'og-ncaaf-api'
 
 // ════════════════════════════════════════════════════════════════════════════
-// WAF Policy
-// NOTE: Standard SKU does not support managed rule sets (OWASP, Bot Manager).
-// Only custom rules (rate limiting) are used. Upgrade to Premium for full WAF.
+// WAF Policy (Premium - Full OWASP + Bot Manager protection)
 // ════════════════════════════════════════════════════════════════════════════
 
 resource wafPolicy 'Microsoft.Network/FrontDoorWebApplicationFirewallPolicies@2024-02-01' = if (enableWaf) {
@@ -79,12 +77,25 @@ resource wafPolicy 'Microsoft.Network/FrontDoorWebApplicationFirewallPolicies@20
       customBlockResponseStatusCode: 403
       customBlockResponseBody: base64('{"error": "Request blocked by WAF policy"}')
     }
-    // NOTE: managedRules removed - requires Premium SKU (~$330/month vs $35/month)
-    // To enable managed rules (OWASP, Bot Manager), change skuName to 'Premium_AzureFrontDoor'
+    // Premium SKU - Full managed rule sets enabled
+    managedRules: {
+      managedRuleSets: [
+        {
+          ruleSetType: 'Microsoft_DefaultRuleSet'
+          ruleSetVersion: '2.1'
+          ruleSetAction: 'Block'
+        }
+        {
+          ruleSetType: 'Microsoft_BotManagerRuleSet'
+          ruleSetVersion: '1.0'
+          ruleSetAction: 'Block'
+        }
+      ]
+    }
     customRules: {
       rules: [
         {
-          name: 'RateLimitRule'
+          name: 'RateLimitSportEndpoints'
           priority: 100
           ruleType: 'RateLimitRule'
           rateLimitDurationInMinutes: 1
@@ -92,8 +103,23 @@ resource wafPolicy 'Microsoft.Network/FrontDoorWebApplicationFirewallPolicies@20
           matchConditions: [
             {
               matchVariable: 'RequestUri'
-              operator: 'Contains'
-              matchValue: ['/api/']
+              operator: 'RegEx'
+              matchValue: ['^/(nba|ncaam|nfl|ncaaf)/']
+            }
+          ]
+          action: 'Block'
+        }
+        {
+          name: 'RateLimitPredictions'
+          priority: 200
+          ruleType: 'RateLimitRule'
+          rateLimitDurationInMinutes: 1
+          rateLimitThreshold: 100 // Stricter limit for expensive prediction endpoints
+          matchConditions: [
+            {
+              matchVariable: 'RequestUri'
+              operator: 'RegEx'
+              matchValue: ['^/(nba|ncaam|nfl|ncaaf)/predictions']
             }
           ]
           action: 'Block'
@@ -114,7 +140,7 @@ resource frontDoorProfile 'Microsoft.Cdn/profiles@2024-02-01' = {
     name: skuName
   }
   properties: {
-    originResponseTimeoutSeconds: 60
+    originResponseTimeoutSeconds: 240 // Extended for full slate processing (10-15 games)
   }
   tags: {
     environment: environment
@@ -154,26 +180,6 @@ resource originGroupDashboardResource 'Microsoft.Cdn/profiles/originGroups@2024-
       probeRequestType: 'HEAD'
       probeProtocol: 'Https'
       probeIntervalInSeconds: 100
-    }
-    sessionAffinityState: 'Disabled'
-  }
-}
-
-// Orchestrator API Origin Group
-resource originGroupOrchestratorResource 'Microsoft.Cdn/profiles/originGroups@2024-02-01' = {
-  parent: frontDoorProfile
-  name: originGroupOrchestrator
-  properties: {
-    loadBalancingSettings: {
-      sampleSize: 4
-      successfulSamplesRequired: 3
-      additionalLatencyInMilliseconds: 50
-    }
-    healthProbeSettings: {
-      probePath: '/api/health'
-      probeRequestType: 'GET'
-      probeProtocol: 'Https'
-      probeIntervalInSeconds: 30
     }
     sessionAffinityState: 'Disabled'
   }
@@ -272,22 +278,6 @@ resource originDashboard 'Microsoft.Cdn/profiles/originGroups/origins@2024-02-01
     httpPort: 80
     httpsPort: 443
     originHostHeader: staticWebAppHostname
-    priority: 1
-    weight: 1000
-    enabledState: 'Enabled'
-    enforceCertificateNameCheck: true
-  }
-}
-
-// Orchestrator Origin
-resource originOrchestrator 'Microsoft.Cdn/profiles/originGroups/origins@2024-02-01' = {
-  parent: originGroupOrchestratorResource
-  name: 'origin-orchestrator'
-  properties: {
-    hostName: orchestratorHostname
-    httpPort: 80
-    httpsPort: 443
-    originHostHeader: orchestratorHostname
     priority: 1
     weight: 1000
     enabledState: 'Enabled'
@@ -404,150 +394,36 @@ resource ruleCanonicalHost 'Microsoft.Cdn/profiles/ruleSets/rules@2024-02-01' = 
   }
 }
 
-// Rule to strip /api/nba prefix when forwarding to NBA backend
-resource ruleNbaRewrite 'Microsoft.Cdn/profiles/ruleSets/rules@2024-02-01' = {
-  parent: ruleSet
-  name: 'RewriteNBA'
-  properties: {
-    order: 1
-    conditions: [
-      {
-        name: 'UrlPath'
-        parameters: {
-          typeName: 'DeliveryRuleUrlPathMatchConditionParameters'
-          operator: 'BeginsWith'
-          matchValues: ['/api/nba/']
-          transforms: ['Lowercase']
-        }
-      }
-    ]
-    actions: [
-      {
-        name: 'UrlRewrite'
-        parameters: {
-          typeName: 'DeliveryRuleUrlRewriteActionParameters'
-          sourcePattern: '/api/nba/'
-          destination: '/'
-          preserveUnmatchedPath: true
-        }
-      }
-    ]
-  }
-}
-
-// Rule to strip /api/ncaam prefix
-resource ruleNcaamRewrite 'Microsoft.Cdn/profiles/ruleSets/rules@2024-02-01' = {
-  parent: ruleSet
-  name: 'RewriteNCAAM'
-  properties: {
-    order: 3
-    conditions: [
-      {
-        name: 'UrlPath'
-        parameters: {
-          typeName: 'DeliveryRuleUrlPathMatchConditionParameters'
-          operator: 'BeginsWith'
-          matchValues: ['/api/ncaam/']
-          transforms: ['Lowercase']
-        }
-      }
-    ]
-    actions: [
-      {
-        name: 'UrlRewrite'
-        parameters: {
-          typeName: 'DeliveryRuleUrlRewriteActionParameters'
-          sourcePattern: '/api/ncaam/'
-          destination: '/'
-          preserveUnmatchedPath: true
-        }
-      }
-    ]
-  }
-}
-
-// Rule to strip /api/nfl prefix
-resource ruleNflRewrite 'Microsoft.Cdn/profiles/ruleSets/rules@2024-02-01' = {
-  parent: ruleSet
-  name: 'RewriteNFL'
-  properties: {
-    order: 2
-    conditions: [
-      {
-        name: 'UrlPath'
-        parameters: {
-          typeName: 'DeliveryRuleUrlPathMatchConditionParameters'
-          operator: 'BeginsWith'
-          matchValues: ['/api/nfl/']
-          transforms: ['Lowercase']
-        }
-      }
-    ]
-    actions: [
-      {
-        name: 'UrlRewrite'
-        parameters: {
-          typeName: 'DeliveryRuleUrlRewriteActionParameters'
-          sourcePattern: '/api/nfl/'
-          destination: '/'
-          preserveUnmatchedPath: true
-        }
-      }
-    ]
-  }
-}
-
-// Rule to strip /api/ncaaf prefix
-resource ruleNcaafRewrite 'Microsoft.Cdn/profiles/ruleSets/rules@2024-02-01' = {
-  parent: ruleSet
-  name: 'RewriteNCAAF'
-  properties: {
-    order: 4
-    conditions: [
-      {
-        name: 'UrlPath'
-        parameters: {
-          typeName: 'DeliveryRuleUrlPathMatchConditionParameters'
-          operator: 'BeginsWith'
-          matchValues: ['/api/ncaaf/']
-          transforms: ['Lowercase']
-        }
-      }
-    ]
-    actions: [
-      {
-        name: 'UrlRewrite'
-        parameters: {
-          typeName: 'DeliveryRuleUrlRewriteActionParameters'
-          sourcePattern: '/api/ncaaf/'
-          destination: '/'
-          preserveUnmatchedPath: true
-        }
-      }
-    ]
-  }
-}
+// NOTE: No URL rewrite rules needed for sport routes
+// Front Door routes /{sport}/* directly to sport APIs
+// Sport APIs expect paths like /nba/predictions, /health, etc. at root
 
 // ════════════════════════════════════════════════════════════════════════════
-// Routes
+// Routes (Direct Sport Routing - No /api/ prefix)
+// ════════════════════════════════════════════════════════════════════════════
+// URL Pattern: www.greenbiersportventures.com/{sport}/predictions
+// Examples:
+//   - /nba/predictions   → NBA API
+//   - /ncaam/predictions → NCAAM API
+//   - /nfl/predictions   → NFL API
+//   - /ncaaf/predictions → NCAAF API
 // ════════════════════════════════════════════════════════════════════════════
 
-// NBA API Route (/api/nba/*)
+// NBA API Route (/nba/*)
 resource routeNbaApi 'Microsoft.Cdn/profiles/afdEndpoints/routes@2024-02-01' = {
   parent: frontDoorEndpoint
-  name: 'route-nba-api'
+  name: 'route-nba'
   properties: {
     originGroup: {
       id: originGroupNbaResource.id
     }
-    originPath: '/'
     ruleSets: [
       {
         id: ruleSet.id
       }
     ]
     supportedProtocols: ['Https']
-    patternsToMatch: ['/api/nba/*']
+    patternsToMatch: ['/nba/*']
     forwardingProtocol: 'HttpsOnly'
     linkToDefaultDomain: 'Enabled'
     httpsRedirect: 'Enabled'
@@ -555,26 +431,24 @@ resource routeNbaApi 'Microsoft.Cdn/profiles/afdEndpoints/routes@2024-02-01' = {
   }
   dependsOn: [
     originNba
-    ruleNbaRewrite
   ]
 }
 
-// NCAAM API Route (/api/ncaam/*)
+// NCAAM API Route (/ncaam/*)
 resource routeNcaamApi 'Microsoft.Cdn/profiles/afdEndpoints/routes@2024-02-01' = {
   parent: frontDoorEndpoint
-  name: 'route-ncaam-api'
+  name: 'route-ncaam'
   properties: {
     originGroup: {
       id: originGroupNcaamResource.id
     }
-    originPath: '/'
     ruleSets: [
       {
         id: ruleSet.id
       }
     ]
     supportedProtocols: ['Https']
-    patternsToMatch: ['/api/ncaam/*']
+    patternsToMatch: ['/ncaam/*']
     forwardingProtocol: 'HttpsOnly'
     linkToDefaultDomain: 'Enabled'
     httpsRedirect: 'Enabled'
@@ -582,26 +456,24 @@ resource routeNcaamApi 'Microsoft.Cdn/profiles/afdEndpoints/routes@2024-02-01' =
   }
   dependsOn: [
     originNcaam
-    ruleNcaamRewrite
   ]
 }
 
-// NFL API Route (/api/nfl/*)
+// NFL API Route (/nfl/*)
 resource routeNflApi 'Microsoft.Cdn/profiles/afdEndpoints/routes@2024-02-01' = {
   parent: frontDoorEndpoint
-  name: 'route-nfl-api'
+  name: 'route-nfl'
   properties: {
     originGroup: {
       id: originGroupNflResource.id
     }
-    originPath: '/'
     ruleSets: [
       {
         id: ruleSet.id
       }
     ]
     supportedProtocols: ['Https']
-    patternsToMatch: ['/api/nfl/*']
+    patternsToMatch: ['/nfl/*']
     forwardingProtocol: 'HttpsOnly'
     linkToDefaultDomain: 'Enabled'
     httpsRedirect: 'Enabled'
@@ -609,26 +481,24 @@ resource routeNflApi 'Microsoft.Cdn/profiles/afdEndpoints/routes@2024-02-01' = {
   }
   dependsOn: [
     originNfl
-    ruleNflRewrite
   ]
 }
 
-// NCAAF API Route (/api/ncaaf/*)
+// NCAAF API Route (/ncaaf/*)
 resource routeNcaafApi 'Microsoft.Cdn/profiles/afdEndpoints/routes@2024-02-01' = {
   parent: frontDoorEndpoint
-  name: 'route-ncaaf-api'
+  name: 'route-ncaaf'
   properties: {
     originGroup: {
       id: originGroupNcaafResource.id
     }
-    originPath: '/'
     ruleSets: [
       {
         id: ruleSet.id
       }
     ]
     supportedProtocols: ['Https']
-    patternsToMatch: ['/api/ncaaf/*']
+    patternsToMatch: ['/ncaaf/*']
     forwardingProtocol: 'HttpsOnly'
     linkToDefaultDomain: 'Enabled'
     httpsRedirect: 'Enabled'
@@ -636,36 +506,10 @@ resource routeNcaafApi 'Microsoft.Cdn/profiles/afdEndpoints/routes@2024-02-01' =
   }
   dependsOn: [
     originNcaaf
-    ruleNcaafRewrite
   ]
 }
 
-// Orchestrator API Route (/api/*) - catches all other /api/ requests
-resource routeOrchestratorApi 'Microsoft.Cdn/profiles/afdEndpoints/routes@2024-02-01' = {
-  parent: frontDoorEndpoint
-  name: 'route-orchestrator-api'
-  properties: {
-    originGroup: {
-      id: originGroupOrchestratorResource.id
-    }
-    supportedProtocols: ['Https']
-    patternsToMatch: ['/api/*']
-    forwardingProtocol: 'HttpsOnly'
-    linkToDefaultDomain: 'Enabled'
-    httpsRedirect: 'Enabled'
-    enabledState: 'Enabled'
-  }
-  dependsOn: [
-    originOrchestrator
-    // Ensure sport-specific routes are created first (more specific routes take precedence)
-    routeNbaApi
-    routeNcaamApi
-    routeNflApi
-    routeNcaafApi
-  ]
-}
-
-// Dashboard Route (/*) - default catch-all
+// Dashboard Route (/*) - default catch-all for Static Web App
 resource routeDashboard 'Microsoft.Cdn/profiles/afdEndpoints/routes@2024-02-01' = {
   parent: frontDoorEndpoint
   name: 'route-dashboard'
@@ -695,7 +539,11 @@ resource routeDashboard 'Microsoft.Cdn/profiles/afdEndpoints/routes@2024-02-01' 
   }
   dependsOn: [
     originDashboard
-    routeOrchestratorApi
+    // Ensure sport routes are created first (more specific patterns take precedence)
+    routeNbaApi
+    routeNcaamApi
+    routeNflApi
+    routeNcaafApi
   ]
 }
 

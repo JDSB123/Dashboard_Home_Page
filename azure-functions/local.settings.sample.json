@@ -3,7 +3,34 @@
   "Values": {
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_WORKER_RUNTIME": "node",
-    "FUNCTIONS_EXTENSION_VERSION": "~4"
+    "FUNCTIONS_EXTENSION_VERSION": "~4",
+
+    "_comment_apis": "=== API KEYS ===",
+    "SDIO_KEY": "YOUR_SPORTSDATAIO_KEY",
+    "ODDS_API_KEY": "YOUR_ODDS_API_KEY",
+    "BASKETBALL_API_KEY": "YOUR_BASKETBALL_API_KEY",
+
+    "_comment_cosmos": "=== COSMOS DB ===",
+    "COSMOS_ENDPOINT": "https://your-account.documents.azure.com:443/",
+    "COSMOS_KEY": "YOUR_COSMOS_KEY",
+    "COSMOS_DATABASE": "picks-db",
+    "COSMOS_CONTAINER": "picks",
+
+    "_comment_signalr": "=== SIGNALR ===",
+    "AZURE_SIGNALR_CONNECTION_STRING": "Endpoint=https://your-signalr.service.signalr.net;AccessKey=xxx",
+
+    "_comment_vision": "=== AZURE VISION (OCR) ===",
+    "AZURE_VISION_ENDPOINT": "https://your-vision.cognitiveservices.azure.com/",
+    "AZURE_VISION_KEY": "YOUR_VISION_KEY",
+
+    "_comment_storage": "=== AZURE STORAGE ===",
+    "AZURE_STORAGE_CONNECTION_STRING": "DefaultEndpointsProtocol=https;AccountName=xxx",
+
+    "_comment_model_apis": "=== MODEL API URLS ===",
+    "NBA_API_URL": "https://nba-gbsv-api.xxx.azurecontainerapps.io",
+    "NCAAM_API_URL": "https://ncaam-api.xxx.azurecontainerapps.io",
+    "NFL_API_URL": "https://nfl-api.xxx.azurecontainerapps.io",
+    "NCAAF_API_URL": "https://ncaaf-api.xxx.azurecontainerapps.io"
   },
   "Host": {
     "CORS": "*",

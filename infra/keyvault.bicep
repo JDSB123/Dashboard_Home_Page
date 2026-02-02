@@ -39,45 +39,51 @@ resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' = {
     tenantId: tenantId
     sku: {
       family: 'A'
-      name: 'standard'
+      name: 'premium' // Premium tier - HSM-backed keys, higher throughput
     }
     enabledForDeployment: false
     enabledForDiskEncryption: false
     enabledForTemplateDeployment: true
     enableSoftDelete: true
     softDeleteRetentionInDays: softDeleteRetentionDays
+    enablePurgeProtection: true // Prevents permanent deletion
     enableRbacAuthorization: false // Using access policies
-    accessPolicies: concat([
-      // Admin access - full control
-      {
-        tenantId: tenantId
-        objectId: adminObjectId
-        permissions: {
-          secrets: [
-            'get'
-            'list'
-            'set'
-            'delete'
-            'backup'
-            'restore'
-            'recover'
-            'purge'
-          ]
+    accessPolicies: concat(
+      [
+        // Admin access - full control
+        {
+          tenantId: tenantId
+          objectId: adminObjectId
+          permissions: {
+            secrets: [
+              'get'
+              'list'
+              'set'
+              'delete'
+              'backup'
+              'restore'
+              'recover'
+              'purge'
+            ]
+          }
         }
-      }
-    ], functionsIdentityObjectId != '' ? [
-      // Azure Functions runtime access - read-only
-      {
-        tenantId: tenantId
-        objectId: functionsIdentityObjectId
-        permissions: {
-          secrets: [
-            'get'
-            'list'
+      ],
+      functionsIdentityObjectId != ''
+        ? [
+            // Azure Functions runtime access - read-only
+            {
+              tenantId: tenantId
+              objectId: functionsIdentityObjectId
+              permissions: {
+                secrets: [
+                  'get'
+                  'list'
+                ]
+              }
+            }
           ]
-        }
-      }
-    ] : [])
+        : []
+    )
     networkAcls: {
       defaultAction: 'Allow'
       bypass: 'AzureServices'

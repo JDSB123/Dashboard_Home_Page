@@ -1,70 +1,64 @@
-const { TableClient } = require('@azure/data-tables');
+/**
+ * Sport Model Endpoints
+ *
+ * URL Pattern: www.greenbiersportventures.com/{sport}/predictions
+ * Direct routing via Front Door - no /api/ prefix
+ *
+ * Endpoints configured via:
+ * - Environment variables (NBA_API_URL, NFL_API_URL, etc.)
+ * - Falls back to Front Door routes
+ */
 
-const DEFAULT_MODEL_CONFIG = {
-    nba: {
-        endpoint: 'https://www.greenbiersportventures.com/api/nba',
-        resourceGroup: 'nba-gbsv-model-rg'
-    },
-    ncaam: {
-        endpoint: 'https://www.greenbiersportventures.com/api/ncaam',
-        resourceGroup: 'ncaam-gbsv-model-rg'
-    },
-    nfl: {
-        endpoint: 'https://www.greenbiersportventures.com/api/nfl',
-        resourceGroup: 'nfl-gbsv-model-rg'
-    },
-    ncaaf: {
-        endpoint: 'https://www.greenbiersportventures.com/api/ncaaf',
-        resourceGroup: 'ncaaf-gbsv-model-rg'
-    }
+const FRONT_DOOR_BASE = "https://www.greenbiersportventures.com";
+
+// Default sport endpoints (via Front Door)
+const DEFAULT_ENDPOINTS = {
+  nba: `${FRONT_DOOR_BASE}/nba`,
+  ncaam: `${FRONT_DOOR_BASE}/ncaam`,
+  nfl: `${FRONT_DOOR_BASE}/nfl`,
+  ncaaf: `${FRONT_DOOR_BASE}/ncaaf`,
 };
 
+/**
+ * Get sport endpoint configuration
+ * @param {Object} overrides - Optional endpoint overrides from env vars
+ */
 function getModelDefaults(overrides = {}) {
-    return {
-        ...DEFAULT_MODEL_CONFIG,
-        ...(overrides || {})
-    };
+  return {
+    nba: { endpoint: overrides?.nba?.endpoint || process.env.NBA_API_URL || DEFAULT_ENDPOINTS.nba },
+    ncaam: {
+      endpoint: overrides?.ncaam?.endpoint || process.env.NCAAM_API_URL || DEFAULT_ENDPOINTS.ncaam,
+    },
+    nfl: { endpoint: overrides?.nfl?.endpoint || process.env.NFL_API_URL || DEFAULT_ENDPOINTS.nfl },
+    ncaaf: {
+      endpoint: overrides?.ncaaf?.endpoint || process.env.NCAAF_API_URL || DEFAULT_ENDPOINTS.ncaaf,
+    },
+  };
 }
 
-async function resolveModelEndpoint(modelType, context, options = {}) {
-    const modelConfig = getModelDefaults(options.defaults);
-    const storageConnection = options.storageConnection || process.env.AzureWebJobsStorage;
-    const tableName = options.tableName || process.env.MODEL_REGISTRY_TABLE || 'modelregistry';
+/**
+ * Resolve endpoint for a sport
+ * @param {string} sport - Sport key (nba, nfl, ncaam, ncaaf)
+ * @param {Object} context - Azure Function context (for logging)
+ * @param {Object} options - Optional configuration
+ */
+function resolveModelEndpoint(sport, context = null, options = {}) {
+  const config = getModelDefaults(options.defaults);
+  const sportKey = sport?.toLowerCase();
 
-    if (!modelType || !modelConfig[modelType]) {
-        return null;
+  if (!sportKey || !config[sportKey]) {
+    if (context?.log) {
+      context.log.warn(`[model-registry] Unknown sport: ${sport}`);
     }
+    return null;
+  }
 
-    if (!storageConnection) {
-        if (context?.log) {
-            context.log.warn('AzureWebJobsStorage not configured; falling back to defaults');
-        }
-        return modelConfig[modelType].endpoint;
-    }
-
-    try {
-        const registryClient = TableClient.fromConnectionString(storageConnection, tableName);
-        const registry = registryClient.listEntities({
-            queryOptions: {
-                filter: `PartitionKey eq '${modelType}' and RowKey eq 'current'`
-            }
-        });
-
-        for await (const entity of registry) {
-            if (entity.endpoint) {
-                return entity.endpoint;
-            }
-        }
-    } catch (err) {
-        if (context?.log) {
-            context.log.warn('Model registry lookup failed; using defaults', err.message);
-        }
-    }
-
-    return modelConfig[modelType].endpoint;
+  return config[sportKey].endpoint;
 }
 
 module.exports = {
-    getModelDefaults,
-    resolveModelEndpoint
+  getModelDefaults,
+  resolveModelEndpoint,
+  DEFAULT_ENDPOINTS,
+  FRONT_DOOR_BASE,
 };
