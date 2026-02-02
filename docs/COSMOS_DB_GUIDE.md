@@ -1,19 +1,23 @@
 # Cosmos DB Picks Archival - Implementation Guide
 
 ## Overview
+
 Azure Cosmos DB is now your permanent archive for:
+
 - **Picks**: Individual predictions (one document per pick)
 - **Metrics**: Aggregated stats (win rate, ROE, PnL by league/season)
 
 ## Infrastructure
 
 ### Account
+
 - **Name**: gbsv-picks-db
 - **Endpoint**: https://gbsv-picks-db.documents.azure.com:443/
 - **Region**: East US
 - **Pricing**: ~$25-50/month (serverless, pay-per-request)
 
 ### Database & Collections
+
 - **Database**: picks-db
 - **Collections**:
   - `picks` - Partition key: `/league`
@@ -30,12 +34,12 @@ Azure Cosmos DB is now your permanent archive for:
   "matchup": "Lakers vs Celtics",
   "pick": "Lakers -3.5",
   "odds": -110,
-  "risk": 100.00,
+  "risk": 100.0,
   "to_win": 90.91,
   "segment": "1H",
   "result": "WIN",
   "pnl": 90.91,
-  "model": "nba-gbsv-api v2.1",
+  "model": "gbsv-nbav3-aca v3.0",
   "timestamp": "2025-12-28T14:30:00Z",
   "hit_miss": "HIT"
 }
@@ -52,11 +56,11 @@ Azure Cosmos DB is now your permanent archive for:
   "wins": 71,
   "losses": 56,
   "pushes": 0,
-  "win_rate": 0.5590,
-  "total_risk": 12700.00,
-  "total_pnl": 1205.50,
+  "win_rate": 0.559,
+  "total_risk": 12700.0,
+  "total_pnl": 1205.5,
   "roe": 0.0948,
-  "avg_odds": -108.00,
+  "avg_odds": -108.0,
   "timestamp": "2025-12-28T14:30:00Z"
 }
 ```
@@ -64,6 +68,7 @@ Azure Cosmos DB is now your permanent archive for:
 ## Usage with Python
 
 ### Setup Environment Variables
+
 ```bash
 # In your shell or .env file
 export COSMOS_ENDPOINT="https://gbsv-picks-db.documents.azure.com:443/"
@@ -91,7 +96,7 @@ pick = {
     "result": "WIN",
     "pnl": 90.91,
     "segment": "1H",
-    "model": "nba-gbsv-api v2.1"
+    "model": "gbsv-nbav3-aca v3.0"
 }
 client.insert_pick(pick)
 
@@ -203,15 +208,20 @@ client.upsert_metrics({
 ```javascript
 // In your dashboard frontend (client/picks-metrics.js)
 async function getMetrics(league, season) {
-    const response = await fetch(`/api/metrics?league=${league}&season=${season}`);
-    return response.json();
+  const response = await fetch(
+    `/api/metrics?league=${league}&season=${season}`,
+  );
+  return response.json();
 }
 
 async function displayMetrics() {
-    const nba = await getMetrics('NBA', 2025);
-    document.getElementById('nba-roe').textContent = `${(nba.roe * 100).toFixed(2)}%`;
-    document.getElementById('nba-winrate').textContent = `${(nba.win_rate * 100).toFixed(1)}%`;
-    document.getElementById('nba-pnl').textContent = `$${nba.total_pnl.toFixed(2)}`;
+  const nba = await getMetrics("NBA", 2025);
+  document.getElementById("nba-roe").textContent =
+    `${(nba.roe * 100).toFixed(2)}%`;
+  document.getElementById("nba-winrate").textContent =
+    `${(nba.win_rate * 100).toFixed(1)}%`;
+  document.getElementById("nba-pnl").textContent =
+    `$${nba.total_pnl.toFixed(2)}`;
 }
 ```
 
@@ -223,18 +233,18 @@ const { CosmosClient } = require("@azure/cosmos");
 
 module.exports = async function (context, req) {
     const { league, season } = req.query;
-    
+
     const client = new CosmosClient({
         endpoint: process.env.COSMOS_ENDPOINT,
         key: process.env.COSMOS_KEY
     });
-    
+
     const database = client.getDatabase("picks-db");
     const container = database.getContainer("metrics");
-    
+
     const query = `SELECT * FROM c WHERE c.league = '${league}' AND c.season = ${season}`;
     const { resources } = await container.items.query(query).fetchAll();
-    
+
     context.res = {
         status: 200,
         body: resources[0] || {}
@@ -245,6 +255,7 @@ module.exports = async function (context, req) {
 ## Querying Cosmos DB
 
 ### Via Azure Portal
+
 1. Go to Azure Portal → gbsv-picks-db
 2. Click "Data Explorer"
 3. Select picks-db → picks
@@ -263,8 +274,8 @@ SELECT * FROM c WHERE c.league = "NBA" AND c.result = "WIN"
 SELECT * FROM c WHERE c.risk > 500 ORDER BY c.pnl DESC
 
 -- Picks by segment
-SELECT c.segment, COUNT(1) as count, SUM(c.pnl) as total_pnl 
-FROM c WHERE c.league = "NBA" 
+SELECT c.segment, COUNT(1) as count, SUM(c.pnl) as total_pnl
+FROM c WHERE c.league = "NBA"
 GROUP BY c.segment
 ```
 
@@ -279,12 +290,12 @@ GROUP BY c.segment
 
 ## Cost Estimate
 
-| Operation | Cost |
-|-----------|------|
-| ~3,000 picks/season | $0.12 |
-| ~10 metric docs | $0.0001 |
-| 1,000 reads/day | ~$5/month |
-| **Total monthly** | **~$25-50** |
+| Operation           | Cost        |
+| ------------------- | ----------- |
+| ~3,000 picks/season | $0.12       |
+| ~10 metric docs     | $0.0001     |
+| 1,000 reads/day     | ~$5/month   |
+| **Total monthly**   | **~$25-50** |
 
 (Prices vary based on usage - serverless, pay-per-request)
 

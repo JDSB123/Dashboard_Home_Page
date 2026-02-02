@@ -68,7 +68,7 @@ jobs:
           case "$MODEL_TYPE" in
             nba)
               RG_NAME="nba-gbsv-model-rg"
-              APP_NAME="nba-gbsv-api"
+              APP_NAME="gbsv-nbav3-aca"
               ;;
             ncaam)
               RG_NAME="ncaam-gbsv-model-rg"
@@ -104,7 +104,7 @@ jobs:
             # Use endpoint from environment variable as fallback
             case "$MODEL_TYPE" in
               nba)
-                FQDN="nba-gbsv-api.livelycoast-b48c3cb0.eastus.azurecontainerapps.io"
+                FQDN="gbsv-nbav3-aca.wittypebble-41c11c65.eastus.azurecontainerapps.io"
                 ;;
               ncaam)
                 FQDN="ncaam-stable-prediction.wonderfulforest-c2d7d49a.centralus.azurecontainerapps.io"

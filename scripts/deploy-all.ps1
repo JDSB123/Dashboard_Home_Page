@@ -55,7 +55,7 @@ function Write-Section {
 
 function Test-Prerequisites {
     Write-Section "Checking Prerequisites"
-    
+
     $requirements = @(
         @{Name = "Azure CLI"; Command = "az"; MinVersion = "2.50.0"},
         @{Name = "Docker"; Command = "docker"; MinVersion = "20.10.0"},
@@ -63,7 +63,7 @@ function Test-Prerequisites {
         @{Name = "Node.js"; Command = "node"; MinVersion = "18.0.0"},
         @{Name = "PowerShell"; Command = "pwsh"; MinVersion = "7.0.0"}
     )
-    
+
     $failed = $false
     foreach ($req in $requirements) {
         try {
@@ -76,11 +76,11 @@ function Test-Prerequisites {
             $failed = $true
         }
     }
-    
+
     if ($failed) {
         throw "Prerequisites check failed. Please install missing components."
     }
-    
+
     # Check Azure login
     try {
         $account = az account show 2>$null | ConvertFrom-Json
@@ -93,7 +93,7 @@ function Test-Prerequisites {
 
 function Get-Configuration {
     Write-Section "Loading Configuration"
-    
+
     $configFile = Join-Path $PSScriptRoot "deployment-config.json"
     if (-not (Test-Path $configFile)) {
         Write-Status "Creating default configuration..." -Type Warning
@@ -121,9 +121,9 @@ function Get-Configuration {
             }
             models = @{
                 nba = @{
-                    resourceGroup = "nba-gbsv-model-rg"
-                    containerApp = "nba-gbsv-api"
-                    endpoint = "https://nba-gbsv-api.livelycoast-b48c3cb0.eastus.azurecontainerapps.io"
+                    resourceGroup = "dashboard-gbsv-main-rg"
+                    containerApp = "gbsv-nbav3-aca"
+                    endpoint = "https://gbsv-nbav3-aca.wittypebble-41c11c65.eastus.azurecontainerapps.io"
                     functionUrl = "https://nba-picks-trigger.azurewebsites.net"
                 }
                 ncaam = @{
@@ -151,7 +151,7 @@ function Get-Configuration {
         }
         $defaultConfig | ConvertTo-Json -Depth 10 | Set-Content $configFile
     }
-    
+
     $config = Get-Content $configFile | ConvertFrom-Json
     Write-Status "Configuration loaded from $configFile" -Type Success
     return $config
@@ -159,12 +159,12 @@ function Get-Configuration {
 
 function Deploy-StorageAccount {
     param($Config)
-    
+
     Write-Section "Deploying Storage Account"
-    
+
     $storageAccount = $Config.orchestrator.storageAccount
     $rg = $Config.resourceGroup
-    
+
     # Check if storage account exists
     $exists = az storage account show --name $storageAccount --resource-group $rg 2>$null
     if (-not $exists) {
@@ -179,13 +179,13 @@ function Deploy-StorageAccount {
     } else {
         Write-Status "Storage account already exists: $storageAccount" -Type Success
     }
-    
+
     # Get connection string
     $connectionString = az storage account show-connection-string `
         --name $storageAccount `
         --resource-group $rg `
         --query connectionString -o tsv
-    
+
     # Create tables
     $tables = @($Config.orchestrator.registryTable, $Config.orchestrator.executionsTable)
     foreach ($table in $tables) {
@@ -193,7 +193,7 @@ function Deploy-StorageAccount {
             --name $table `
             --connection-string $connectionString `
             --query exists -o tsv
-        
+
         if ($tableExists -ne "true") {
             Write-Status "Creating table: $table" -Type Info
             az storage table create `
@@ -203,7 +203,7 @@ function Deploy-StorageAccount {
             Write-Status "Table already exists: $table" -Type Success
         }
     }
-    
+
     # Create blob containers
     $containers = @("model-results", "model-logs", "model-artifacts")
     foreach ($container in $containers) {
@@ -211,7 +211,7 @@ function Deploy-StorageAccount {
             --name $container `
             --connection-string $connectionString `
             --query exists -o tsv
-        
+
         if ($containerExists -ne "true") {
             Write-Status "Creating container: $container" -Type Info
             az storage container create `
@@ -222,18 +222,18 @@ function Deploy-StorageAccount {
             Write-Status "Container already exists: $container" -Type Success
         }
     }
-    
+
     return $connectionString
 }
 
 function Deploy-SignalR {
     param($Config)
-    
+
     Write-Section "Deploying SignalR Service"
-    
+
     $signalr = $Config.signalr
     $rg = $Config.resourceGroup
-    
+
     # Check if SignalR exists
     $exists = az signalr show --name $signalr.name --resource-group $rg 2>$null
     if (-not $exists) {
@@ -247,36 +247,36 @@ function Deploy-SignalR {
     } else {
         Write-Status "SignalR service already exists: $($signalr.name)" -Type Success
     }
-    
+
     # Get connection string
     $signalrConnection = az signalr key show `
         --name $signalr.name `
         --resource-group $rg `
         --query primaryConnectionString -o tsv
-    
+
     # Configure CORS
     Write-Status "Configuring SignalR CORS..." -Type Info
     az signalr cors update `
         --name $signalr.name `
         --resource-group $rg `
         --allowed-origins $Config.dashboard.url "http://localhost:*"
-    
+
     return $signalrConnection
 }
 
 function Deploy-Monitoring {
     param($Config)
-    
+
     Write-Section "Deploying Monitoring Resources"
-    
+
     $monitoring = $Config.monitoring
     $rg = $Config.resourceGroup
-    
+
     # Create Log Analytics workspace
     $workspaceExists = az monitor log-analytics workspace show `
         --workspace-name $monitoring.logAnalytics `
         --resource-group $rg 2>$null
-    
+
     if (-not $workspaceExists) {
         Write-Status "Creating Log Analytics workspace: $($monitoring.logAnalytics)" -Type Info
         az monitor log-analytics workspace create `
@@ -287,12 +287,12 @@ function Deploy-Monitoring {
     } else {
         Write-Status "Log Analytics workspace already exists: $($monitoring.logAnalytics)" -Type Success
     }
-    
+
     # Create Application Insights
     $appInsightsExists = az monitor app-insights component show `
         --app $monitoring.appInsights `
         --resource-group $rg 2>$null
-    
+
     if (-not $appInsightsExists) {
         Write-Status "Creating Application Insights: $($monitoring.appInsights)" -Type Info
         az monitor app-insights component create `
@@ -304,18 +304,18 @@ function Deploy-Monitoring {
     } else {
         Write-Status "Application Insights already exists: $($monitoring.appInsights)" -Type Success
     }
-    
+
     # Get instrumentation key and connection string
     $instrumentationKey = az monitor app-insights component show `
         --app $monitoring.appInsights `
         --resource-group $rg `
         --query instrumentationKey -o tsv
-    
+
     $appInsightsConnection = az monitor app-insights component show `
         --app $monitoring.appInsights `
         --resource-group $rg `
         --query connectionString -o tsv
-    
+
     return @{
         InstrumentationKey = $instrumentationKey
         ConnectionString = $appInsightsConnection
@@ -324,31 +324,31 @@ function Deploy-Monitoring {
 
 function Deploy-ContainerAppEnvironment {
     param($Config)
-    
+
     Write-Section "Deploying Container App Environment"
-    
+
     $envName = $Config.orchestrator.containerAppEnvironment
     $rg = $Config.resourceGroup
-    
+
     # Check if environment exists
     $exists = az containerapp env show `
         --name $envName `
         --resource-group $rg 2>$null
-    
+
     if (-not $exists) {
         Write-Status "Creating Container App Environment: $envName" -Type Info
-        
+
         # Get Log Analytics workspace details
         $workspaceId = az monitor log-analytics workspace show `
             --workspace-name $Config.monitoring.logAnalytics `
             --resource-group $rg `
             --query customerId -o tsv
-        
+
         $workspaceKey = az monitor log-analytics workspace get-shared-keys `
             --workspace-name $Config.monitoring.logAnalytics `
             --resource-group $rg `
             --query primarySharedKey -o tsv
-        
+
         az containerapp env create `
             --name $envName `
             --resource-group $rg `
@@ -362,11 +362,11 @@ function Deploy-ContainerAppEnvironment {
 
 function Build-OrchestratorImage {
     param($Config)
-    
+
     Write-Section "Building Orchestrator Docker Image"
-    
+
     $dockerfilePath = Join-Path $PSScriptRoot "azure-functions" "Dockerfile"
-    
+
     if (-not (Test-Path $dockerfilePath)) {
         Write-Status "Creating Dockerfile..." -Type Info
         @"
@@ -394,13 +394,13 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
 EXPOSE 80
 "@ | Set-Content $dockerfilePath
     }
-    
+
     # Build image
     $imageName = "gbsv-orchestrator"
     $imageTag = "$($Config.environment)-$(Get-Date -Format 'yyyyMMdd-HHmmss')"
-    
+
     Write-Status "Building Docker image: ${imageName}:${imageTag}" -Type Info
-    
+
     Push-Location (Join-Path $PSScriptRoot "azure-functions")
     try {
         docker build -t "${imageName}:${imageTag}" -t "${imageName}:latest" .
@@ -408,7 +408,7 @@ EXPOSE 80
     } finally {
         Pop-Location
     }
-    
+
     return @{
         Name = $imageName
         Tag = $imageTag
@@ -417,17 +417,17 @@ EXPOSE 80
 
 function Deploy-OrchestratorContainerApp {
     param($Config, $Image, $StorageConnection, $SignalRConnection, $AppInsights)
-    
+
     Write-Section "Deploying Orchestrator Container App"
-    
+
     $appName = $Config.orchestrator.name
     $rg = $Config.resourceGroup
     $envName = $Config.orchestrator.containerAppEnvironment
-    
+
     # Create container registry if needed
     $acrName = "gbsvregistry"
     $acrExists = az acr show --name $acrName --resource-group $rg 2>$null
-    
+
     if (-not $acrExists) {
         Write-Status "Creating Azure Container Registry: $acrName" -Type Info
         az acr create `
@@ -437,19 +437,19 @@ function Deploy-OrchestratorContainerApp {
             --sku Basic `
             --admin-enabled true
     }
-    
+
     # Push image to ACR
     Write-Status "Pushing image to ACR..." -Type Info
     $acrLoginServer = az acr show --name $acrName --resource-group $rg --query loginServer -o tsv
     $acrPassword = az acr credential show --name $acrName --resource-group $rg --query "passwords[0].value" -o tsv
-    
+
     docker tag "$($Image.Name):$($Image.Tag)" "$acrLoginServer/$($Image.Name):$($Image.Tag)"
     docker login $acrLoginServer -u $acrName -p $acrPassword
     docker push "$acrLoginServer/$($Image.Name):$($Image.Tag)"
-    
+
     # Deploy or update Container App
     $appExists = az containerapp show --name $appName --resource-group $rg 2>$null
-    
+
     $envVars = @(
         "AzureWebJobsStorage=$StorageConnection",
         "AZURE_SIGNALR_CONNECTION_STRING=$SignalRConnection",
@@ -463,10 +463,10 @@ function Deploy-OrchestratorContainerApp {
         "CORS_ALLOWED_ORIGINS=$($Config.dashboard.url)",
         "ENVIRONMENT=$($Config.environment)"
     )
-    
+
     if (-not $appExists) {
         Write-Status "Creating Container App: $appName" -Type Info
-        
+
         az containerapp create `
             --name $appName `
             --resource-group $rg `
@@ -484,62 +484,62 @@ function Deploy-OrchestratorContainerApp {
             --env-vars $envVars
     } else {
         Write-Status "Updating Container App: $appName" -Type Info
-        
+
         az containerapp update `
             --name $appName `
             --resource-group $rg `
             --image "$acrLoginServer/$($Image.Name):$($Image.Tag)" `
             --set-env-vars $envVars
     }
-    
+
     # Get the app URL
     $appUrl = az containerapp show `
         --name $appName `
         --resource-group $rg `
         --query "properties.configuration.ingress.fqdn" -o tsv
-    
+
     return "https://$appUrl"
 }
 
 function Setup-RBAC {
     param($Config)
-    
+
     Write-Section "Setting Up RBAC Permissions"
-    
+
     $appName = $Config.orchestrator.name
     $rg = $Config.resourceGroup
-    
+
     # Enable managed identity
     Write-Status "Enabling managed identity for $appName" -Type Info
     az containerapp identity assign `
         --name $appName `
         --resource-group $rg `
         --system-assigned
-    
+
     # Get the identity principal ID
     $identityId = az containerapp identity show `
         --name $appName `
         --resource-group $rg `
         --query principalId -o tsv
-    
+
     if (-not $identityId) {
         Write-Status "Failed to get managed identity ID" -Type Error
         return
     }
-    
+
     Write-Status "Managed Identity ID: $identityId" -Type Success
-    
+
     # Grant permissions to each model resource group
     foreach ($model in $Config.models.PSObject.Properties) {
         $modelRg = $model.Value.resourceGroup
         Write-Status "Granting Contributor role to $modelRg" -Type Info
-        
+
         az role assignment create `
             --assignee $identityId `
             --role "Contributor" `
             --scope "/subscriptions/$($Config.subscriptionId)/resourceGroups/$modelRg" 2>$null
     }
-    
+
     # Grant Storage Blob Data Contributor to storage account
     Write-Status "Granting Storage Blob Data Contributor role" -Type Info
     az role assignment create `
@@ -550,17 +550,17 @@ function Setup-RBAC {
 
 function Initialize-ModelRegistry {
     param($Config, $StorageConnection)
-    
+
     Write-Section "Initializing Model Registry"
-    
+
     $registryTable = $Config.orchestrator.registryTable
-    
+
     foreach ($model in $Config.models.PSObject.Properties) {
         $modelName = $model.Name
         $modelConfig = $model.Value
-        
+
         Write-Status "Registering $modelName endpoint: $($modelConfig.endpoint)" -Type Info
-        
+
         # Create registry entry using Azure CLI
         $entity = @{
             PartitionKey = $modelName
@@ -570,39 +570,39 @@ function Initialize-ModelRegistry {
             lastUpdated = (Get-Date -Format "yyyy-MM-ddTHH:mm:ssZ")
             healthy = $true
         } | ConvertTo-Json -Compress
-        
+
         # Use Azure CLI to add entity (PowerShell native storage commands are limited)
         $tempFile = [System.IO.Path]::GetTempFileName()
         $entity | Set-Content $tempFile
-        
+
         az storage entity insert `
             --table-name $registryTable `
             --connection-string $StorageConnection `
             --entity "@$tempFile" `
             --if-match "*" 2>$null
-        
+
         Remove-Item $tempFile
     }
-    
+
     Write-Status "Model registry initialized with all endpoints" -Type Success
 }
 
 function Create-Alerts {
     param($Config, $OrchestratorUrl)
-    
+
     Write-Section "Creating Monitoring Alerts"
-    
+
     $rg = $Config.resourceGroup
     $actionGroupName = $Config.monitoring.alertActionGroup
-    
+
     # Create action group
     $actionGroupExists = az monitor action-group show `
         --name $actionGroupName `
         --resource-group $rg 2>$null
-    
+
     if (-not $actionGroupExists) {
         Write-Status "Creating action group: $actionGroupName" -Type Info
-        
+
         # You should update this with actual email/webhook
         az monitor action-group create `
             --name $actionGroupName `
@@ -610,7 +610,7 @@ function Create-Alerts {
             --short-name "GBSV" `
             --email-receiver admin-email jb@greenbiercapital.com
     }
-    
+
     # Create alerts
     $alerts = @(
         @{
@@ -632,33 +632,33 @@ function Create-Alerts {
             Severity = 3
         }
     )
-    
+
     foreach ($alert in $alerts) {
         Write-Status "Creating alert: $($alert.Name)" -Type Info
         # Note: Alert creation syntax varies by metric type
         # This is a simplified example
     }
-    
+
     Write-Status "Monitoring alerts configured" -Type Success
 }
 
 function Update-DashboardConfig {
     param($Config, $OrchestratorUrl)
-    
+
     Write-Section "Updating Dashboard Configuration"
-    
+
     $templateFile = Join-Path $PSScriptRoot "client/config.template.js"
     $targetFile = Join-Path $PSScriptRoot "client/config.js"
-    
+
     if (Test-Path $templateFile) {
         Write-Status "Generating config.js from template..." -Type Info
-        
+
         $content = Get-Content $templateFile -Raw
-        
+
         # Replace placeholders
         $content = $content.Replace('__API_BASE_URL__', "$OrchestratorUrl/api")
         $content = $content.Replace('__ORCHESTRATOR_URL__', $OrchestratorUrl)
-        
+
         # In a real scenario, you'd pull these from the Config object or Azure
         $content = $content.Replace('__NBA_FUNCTION_URL__', $Config.models.nba.functionUrl)
         $content = $content.Replace('__NBA_API_URL__', $Config.models.nba.endpoint)
@@ -668,7 +668,7 @@ function Update-DashboardConfig {
         $content = $content.Replace('__NCAAF_API_URL__', $Config.models.ncaaf.endpoint)
 
         $content | Set-Content $targetFile
-        
+
         Write-Status "Dashboard configuration (config.js) generated successfully" -Type Success
     } else {
         Write-Status "client/config.template.js not found - cannot generate config" -Type Error
@@ -677,9 +677,9 @@ function Update-DashboardConfig {
 
 function Generate-DeploymentReport {
     param($Config, $OrchestratorUrl, $DeploymentTime)
-    
+
     Write-Section "Deployment Summary"
-    
+
     $report = @"
 ========================================================================
 DEPLOYMENT COMPLETED SUCCESSFULLY
@@ -723,9 +723,9 @@ NEXT STEPS:
 
 ========================================================================
 "@
-    
+
     Write-Host $report -ForegroundColor Green
-    
+
     # Save report to file
     $reportFile = Join-Path $PSScriptRoot "deployment-report-$(Get-Date -Format 'yyyyMMdd-HHmmss').txt"
     $report | Set-Content $reportFile
@@ -735,7 +735,7 @@ NEXT STEPS:
 # Main execution
 try {
     $startTime = Get-Date
-    
+
     Write-Host @"
 
   ╔═══════════════════════════════════════════════════════════╗
@@ -744,30 +744,30 @@ try {
   ╚═══════════════════════════════════════════════════════════╝
 
 "@ -ForegroundColor Cyan
-    
+
     # Check prerequisites
     if (-not $SkipPrereqCheck) {
         Test-Prerequisites
     }
-    
+
     # Load configuration
     $config = Get-Configuration
-    
+
     # Deploy storage
     $storageConnection = Deploy-StorageAccount -Config $config
-    
+
     # Deploy SignalR
     $signalrConnection = Deploy-SignalR -Config $config
-    
+
     # Deploy monitoring
     $appInsights = Deploy-Monitoring -Config $config
-    
+
     # Deploy Container App Environment
     Deploy-ContainerAppEnvironment -Config $config
-    
+
     # Build orchestrator image
     $image = Build-OrchestratorImage -Config $config
-    
+
     # Deploy orchestrator
     $orchestratorUrl = Deploy-OrchestratorContainerApp `
         -Config $config `
@@ -775,26 +775,26 @@ try {
         -StorageConnection $storageConnection `
         -SignalRConnection $signalrConnection `
         -AppInsights $appInsights
-    
+
     # Setup RBAC
     Setup-RBAC -Config $config
-    
+
     # Initialize model registry
     Initialize-ModelRegistry -Config $config -StorageConnection $storageConnection
-    
+
     # Create alerts
     Create-Alerts -Config $config -OrchestratorUrl $orchestratorUrl
-    
+
     # Update dashboard config
     Update-DashboardConfig -Config $config -OrchestratorUrl $orchestratorUrl
-    
+
     # Generate report
     $deploymentTime = (Get-Date) - $startTime
     Generate-DeploymentReport `
         -Config $config `
         -OrchestratorUrl $orchestratorUrl `
         -DeploymentTime $deploymentTime.ToString("hh\:mm\:ss")
-    
+
 } catch {
     Write-Status "Deployment failed: $_" -Type Error
     Write-Status $_.ScriptStackTrace -Type Error

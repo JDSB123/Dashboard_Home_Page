@@ -10,7 +10,7 @@
     pwsh ./scripts/sync-model-registry.ps1 `
       -SubscriptionId 00000000-0000-0000-0000-000000000000 `
       -OrchestratorUrl https://gbsv-orchestrator.wittypebble-41c11c65.eastus.azurecontainerapps.io/api `
-      -ModelsJson '[{"model":"nba","resourceGroup":"nba-gbsv-model-rg","appName":"nba-gbsv-api"}]'
+      -ModelsJson '[{"model":"nba","resourceGroup":"dashboard-gbsv-main-rg","appName":"gbsv-nbav3-aca"}]'
 .NOTES
     Requires Azure CLI authenticated to the subscription that holds the model Container Apps.
 #>
@@ -27,7 +27,7 @@ $ErrorActionPreference = "Stop"
 
 # Default models; override with -ModelsJson if your RG/app names differ.
 $defaultModels = @(
-    @{ model = "nba";   resourceGroup = "nba-gbsv-model-rg";   appName = "nba-gbsv-api" },
+    @{ model = "nba";   resourceGroup = "dashboard-gbsv-main-rg";   appName = "gbsv-nbav3-aca" },
     @{ model = "ncaam"; resourceGroup = "ncaam-gbsv-model-rg"; appName = "ncaam-stable-prediction" },
     @{ model = "nfl";   resourceGroup = "nfl-gbsv-model-rg";   appName = "nfl-api" },
     @{ model = "ncaaf"; resourceGroup = "ncaaf-gbsv-model-rg"; appName = "ncaaf-v5-prod" }

@@ -31,9 +31,9 @@
       "endpoint": "https://ncaaf-v5-prod.salmonwave-314d4ffe.eastus.azurecontainerapps.io"
     },
     "nba": {
-      "resourceGroup": "nba-gbsv-model-rg",
-      "containerApp": "nba-gbsv-api",
-      "endpoint": "https://nba-gbsv-api.livelycoast-b48c3cb0.eastus.azurecontainerapps.io",
+      "resourceGroup": "dashboard-gbsv-main-rg",
+      "containerApp": "gbsv-nbav3-aca",
+      "endpoint": "https://gbsv-nbav3-aca.wittypebble-41c11c65.eastus.azurecontainerapps.io",
       "functionUrl": "https://nba-picks-trigger.azurewebsites.net"
     }
   },

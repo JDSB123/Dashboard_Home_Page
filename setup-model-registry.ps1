@@ -26,7 +26,8 @@ try {
         throw "Azure CLI not found"
     }
     Write-Host "✅ Azure CLI found" -ForegroundColor Green
-} catch {
+}
+catch {
     Write-Host "❌ Azure CLI not installed. Install from: https://learn.microsoft.com/cli/azure/" -ForegroundColor Red
     exit 1
 }
@@ -44,21 +45,21 @@ Write-Host "✅ Logged in as: $($account.user.name)" -ForegroundColor Green
 # Step 3: Get Storage Account Name
 if (!$StorageAccountName) {
     Write-Host "[3/5] Finding storage account..." -ForegroundColor Yellow
-    
+
     if (!$SubscriptionId) {
         $SubscriptionId = $account.id
     }
-    
+
     $storageAccounts = az storage account list `
         --resource-group $ResourceGroup `
         --subscription $SubscriptionId `
         --output json | ConvertFrom-Json
-    
+
     if ($storageAccounts.Count -eq 0) {
         Write-Host "❌ No storage accounts found in RG: $ResourceGroup" -ForegroundColor Red
         exit 1
     }
-    
+
     $StorageAccountName = $storageAccounts[0].name
 }
 
@@ -92,7 +93,8 @@ if (!$tableExists.exists) {
         --name "modelregistry" `
         --output none
     Write-Host "✅ Table created" -ForegroundColor Green
-} else {
+}
+else {
     Write-Host "✅ Table already exists" -ForegroundColor Green
 }
 
@@ -100,7 +102,7 @@ if (!$tableExists.exists) {
 Write-Host "[5/5] Seeding endpoints from client/config.js..." -ForegroundColor Yellow
 
 $endpoints = @(
-    @{ model = "nba"; endpoint = "https://nba-gbsv-api.livelycoast-b48c3cb0.eastus.azurecontainerapps.io" }
+    @{ model = "nba"; endpoint = "https://gbsv-nbav3-aca.wittypebble-41c11c65.eastus.azurecontainerapps.io" }
     @{ model = "ncaam"; endpoint = "https://ncaam-stable-prediction.wonderfulforest-c2d7d49a.centralus.azurecontainerapps.io" }
     @{ model = "nfl"; endpoint = "https://nfl-api.purplegrass-5889a981.eastus.azurecontainerapps.io" }
     @{ model = "ncaaf"; endpoint = "https://ncaaf-v5-prod.salmonwave-314d4ffe.eastus.azurecontainerapps.io" }
@@ -110,7 +112,7 @@ $timestamp = (Get-Date -AsUTC).ToString("o")
 
 foreach ($ep in $endpoints) {
     Write-Host "  ⏳ Adding $($ep.model)..." -ForegroundColor Cyan
-    
+
     # Use az storage entity insert/merge to add/update the entity
     try {
         az storage entity insert `
@@ -119,7 +121,8 @@ foreach ($ep in $endpoints) {
             --table-name "modelregistry" `
             --entity PartitionKey=$($ep.model) RowKey="current" endpoint=$($ep.endpoint) version="1.0.0" lastUpdated="$timestamp" healthy=true `
             --output none
-    } catch {
+    }
+    catch {
         Write-Host "    Entity exists, updating..." -ForegroundColor DarkGray
         az storage entity merge `
             --account-name $StorageAccountName `
@@ -128,7 +131,7 @@ foreach ($ep in $endpoints) {
             --entity PartitionKey=$($ep.model) RowKey="current" endpoint=$($ep.endpoint) version="1.0.0" lastUpdated="$timestamp" healthy=true `
             --output none
     }
-    
+
     Write-Host "  ✅ $($ep.model): $($ep.endpoint)" -ForegroundColor Green
 }
 

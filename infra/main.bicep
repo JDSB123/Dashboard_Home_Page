@@ -34,7 +34,7 @@ param staticWebAppHostname string = 'proud-cliff-008e2e20f.2.azurestaticapps.net
 // No need for orchestrator middleman
 
 @description('NBA API Container App hostname')
-param nbaApiHostname string = 'nba-gbsv-api.livelycoast-b48c3cb0.eastus.azurecontainerapps.io'
+param nbaApiHostname string = 'gbsv-nbav3-aca.wittypebble-41c11c65.eastus.azurecontainerapps.io'
 
 @description('NCAAM API Container App hostname')
 param ncaamApiHostname string = 'ncaam-stable-prediction.wonderfulforest-c2d7d49a.centralus.azurecontainerapps.io'

@@ -29,6 +29,7 @@ The service principal should have:
 The **ACR** (`gbsvregistry`) is now a centralized registry for all GBSV services.
 
 The **NBA API** is currently deployed as:
+
 - **ACA**: `gbsv-nbav3-aca`
 - **Default URL**: `https://gbsv-nbav3-aca.wittypebble-41c11c65.eastus.azurecontainerapps.io`
 

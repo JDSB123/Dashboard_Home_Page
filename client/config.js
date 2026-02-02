@@ -29,12 +29,12 @@ window.APP_CONFIG = {
 
   // Model API Endpoints (can be dynamically updated by model-endpoints-bootstrap.js)
   API_ENDPOINTS: {
-    NFL: "https://gbsv-orchestrator.azurewebsites.net/api/picks/nfl",
-    NCAAF: "https://gbsv-orchestrator.azurewebsites.net/api/picks/ncaaf",
-    NBA: "https://gbsvnbav2.nicedesert-7a4811c4.eastus.azurecontainerapps.io/picks",
-    NCAAM: "https://gbsv-orchestrator.azurewebsites.net/api/picks/ncaam",
-    NHL: "https://gbsv-orchestrator.azurewebsites.net/api/picks/nhl",
-    MLB: "https://gbsv-orchestrator.azurewebsites.net/api/picks/mlb",
+    NFL: "https://www.greenbiersportventures.com/nfl/predictions",
+    NCAAF: "https://www.greenbiersportventures.com/ncaaf/predictions",
+    NBA: "https://www.greenbiersportventures.com/nba/predictions",
+    NCAAM: "https://www.greenbiersportventures.com/ncaam/predictions",
+    NHL: "https://www.greenbiersportventures.com/nhl/predictions",
+    MLB: "https://www.greenbiersportventures.com/mlb/predictions",
   },
 
   // Feature Flags
@@ -47,10 +47,10 @@ window.APP_CONFIG = {
 
   // Sport Prediction APIs - Direct routing via Front Door: /{sport}/predictions
   // No /api/ prefix - clean URL pattern
-  NBA_API_URL: "https://www.greenbiersportventures.com/nba",
-  NCAAM_API_URL: "https://www.greenbiersportventures.com/ncaam",
-  NFL_API_URL: "https://www.greenbiersportventures.com/nfl",
-  NCAAF_API_URL: "https://www.greenbiersportventures.com/ncaaf",
+  NBA_API_URL: "https://www.greenbiersportventures.com/nba/predictions",
+  NCAAM_API_URL: "https://www.greenbiersportventures.com/ncaam/predictions",
+  NFL_API_URL: "https://www.greenbiersportventures.com/nfl/predictions",
+  NCAAF_API_URL: "https://www.greenbiersportventures.com/ncaaf/predictions",
   NHL_API_URL: "", // Placeholder - will be populated from registry when available
   MLB_API_URL: "", // Placeholder - will be populated from registry when available
 
@@ -89,8 +89,7 @@ window.GBSV_CONFIG = {
   FUNCTIONS_URL: "https://www.greenbiersportventures.com",
 
   // Cosmos DB picks storage (accessed via Azure Functions)
-  PICKS_API_ENDPOINT:
-    "https://gbsvnbav2.nicedesert-7a4811c4.eastus.azurecontainerapps.io/picks",
+  PICKS_API_ENDPOINT: "https://www.greenbiersportventures.com/nba/picks",
 };
 
 // Export for module usage if needed
