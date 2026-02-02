@@ -1,7 +1,7 @@
 {
   "folders": [
     {
-      "name": "NBA GBSV Model",
+      "name": "NBA_GBSV_Workspace",
       "path": "..\\nba_gbsv_local_v3.0"
     },
     {
@@ -41,6 +41,12 @@
     "azure-account.authenticationProvider": "auto",
 
     "dotnet.defaultSolution": "${workspaceFolder:NBA_GBSV_Workspace}/gbsv_nba_git_v3.0/gbsv_nba_git_v3.0.sln",
+    "dotnet.dotnetPath": "C:\\Users\\JDSB\\AppData\\Local\\Microsoft\\dotnet\\dotnet.exe",
+    "dotnet.server.dotnetPath": "C:\\Users\\JDSB\\AppData\\Local\\Microsoft\\dotnet\\dotnet.exe",
+    "csharp.dotnetPath": "C:\\Users\\JDSB\\AppData\\Local\\Microsoft\\dotnet\\dotnet.exe",
+    "dotnet.server.runtimeEnvironment": {
+      "DOTNET_ROOT": "C:\\Users\\JDSB\\AppData\\Local\\Microsoft\\dotnet"
+    },
     "omnisharp.enableRoslynAnalyzers": false,
     "csharp.suppressDotnetRestoreNotification": true,
 
@@ -60,14 +66,16 @@
     },
     "azure.reauthenticate": false,
     "azure.tenant": "persistent",
-    
+
     "workbench.startupEditor": "none",
     "security.workspace.trust.enabled": true,
-    
+
     "task.allowAutomaticTasks": "on",
 
     "java.enabled": false,
-    "jupyter.experiments.enabled": false
+    "jupyter.experiments.enabled": false,
+    "devContainers.showStartNotifications": false,
+    "remote.SSH.showLoginTerminal": false
   },
   "extensions": {
     "recommendations": [
@@ -77,11 +85,17 @@
       "ms-vscode.azure-account",
       "azurite.azurite",
       "ms-dotnettools.csharp",
+      "ms-dotnettools.csdevkit",
       "ms-python.python",
+      "ms-azuretools.vscode-bicep",
+      "ms-azuretools.vscode-azurestaticwebapps",
+      "ms-azuretools.vscode-cosmosdb",
+      "ms-vscode.PowerShell",
+      "esbenp.prettier-vscode",
+      "streetsidesoftware.code-spell-checker",
       "github.copilot",
       "github.copilot-chat",
       "dbaeumer.vscode-eslint",
-      "ms-azuretools.vscode-docker",
       "eamodio.gitlens",
       "rangav.vscode-thunder-client"
     ]
@@ -142,7 +156,7 @@
       {
         "label": "Restore .NET Dependencies",
         "type": "shell",
-        "command": "cd '${workspaceFolder:NBA_GBSV_Workspace}/gbsv_nba_git_v3.0'; dotnet restore --verbosity quiet",
+        "command": "cd '${workspaceFolder:NBA_GBSV_Workspace}/gbsv_nba_git_v3.0'; & 'C:\\Users\\JDSB\\AppData\\Local\\Microsoft\\dotnet\\dotnet.exe' restore --verbosity quiet",
         "presentation": {
           "reveal": "silent",
           "close": true
@@ -179,7 +193,7 @@
       {
         "label": "Start NBA API",
         "type": "shell",
-        "command": "cd ${workspaceFolder:NBA_GBSV_Workspace}/gbsv_nba_git_v3.0 && func start --port 7071",
+        "command": "$env:DOTNET_ROOT='C:\\Users\\JDSB\\AppData\\Local\\Microsoft\\dotnet'; cd ${workspaceFolder:NBA_GBSV_Workspace}/gbsv_nba_git_v3.0 && func start --port 7071",
         "dependsOn": "Start Azurite",
         "isBackground": true,
         "problemMatcher": []
