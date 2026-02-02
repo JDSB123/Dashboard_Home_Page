@@ -7,9 +7,9 @@
         "debug.overrideEngine": "claude-sonnet-4.5"
     },
     "azureFunctions.deploySubpath": "Dashboard_Home_Page\\azure-functions",
-    "dotnet.dotnetPath": "C:\\Users\\JDSB\\AppData\\Local\\Microsoft\\dotnet\\dotnet.exe",
-    "dotnet.server.dotnetPath": "C:\\Users\\JDSB\\AppData\\Local\\Microsoft\\dotnet\\dotnet.exe",
-    "csharp.dotnetPath": "C:\\Users\\JDSB\\AppData\\Local\\Microsoft\\dotnet\\dotnet.exe",
+  "dotnet.dotnetPath": "C:\\Users\\JDSB\\.dotnet\\dotnet.exe",
+  "dotnet.server.dotnetPath": "C:\\Users\\JDSB\\.dotnet\\dotnet.exe",
+  "csharp.dotnetPath": "C:\\Users\\JDSB\\.dotnet\\dotnet.exe",
     "azureFunctions.postDeployTask": "npm install (functions)",
     "azureFunctions.projectLanguage": "JavaScript",
     "azureFunctions.projectRuntime": "~4",

@@ -15,8 +15,8 @@
       "NUGET_PACKAGES": "C:\\Users\\JDSB\\.nuget\\packages",
       "PIP_CACHE_DIR": "C:\\Users\\JDSB\\.cache\\pip",
       "npm_config_cache": "C:\\Users\\JDSB\\.npm-cache",
-      "DOTNET_ROOT": "C:\\Users\\JDSB\\AppData\\Local\\Microsoft\\dotnet",
-      "PATH": "C:\\Users\\JDSB\\AppData\\Local\\Microsoft\\dotnet;${env:PATH}",
+      "DOTNET_ROOT": "C:\\Users\\JDSB\\.dotnet",
+      "PATH": "C:\\Users\\JDSB\\.dotnet;${env:PATH}",
       "AZURE_CONFIG_DIR": "C:\\Users\\JDSB\\.azure",
       "AZURE_DEV_COLLECT_TELEMETRY": "no"
     },
@@ -41,11 +41,11 @@
     "azure-account.authenticationProvider": "auto",
 
     "dotnet.defaultSolution": "${workspaceFolder:NBA_GBSV_Workspace}/gbsv_nba_git_v3.0/gbsv_nba_git_v3.0.sln",
-    "dotnet.dotnetPath": "C:\\Users\\JDSB\\AppData\\Local\\Microsoft\\dotnet\\dotnet.exe",
-    "dotnet.server.dotnetPath": "C:\\Users\\JDSB\\AppData\\Local\\Microsoft\\dotnet\\dotnet.exe",
-    "csharp.dotnetPath": "C:\\Users\\JDSB\\AppData\\Local\\Microsoft\\dotnet\\dotnet.exe",
+    "dotnet.dotnetPath": "C:\\Users\\JDSB\\.dotnet\\dotnet.exe",
+    "dotnet.server.dotnetPath": "C:\\Users\\JDSB\\.dotnet\\dotnet.exe",
+    "csharp.dotnetPath": "C:\\Users\\JDSB\\.dotnet\\dotnet.exe",
     "dotnet.server.runtimeEnvironment": {
-      "DOTNET_ROOT": "C:\\Users\\JDSB\\AppData\\Local\\Microsoft\\dotnet"
+      "DOTNET_ROOT": "C:\\Users\\JDSB\\.dotnet"
     },
     "omnisharp.enableRoslynAnalyzers": false,
     "csharp.suppressDotnetRestoreNotification": true,
@@ -156,7 +156,7 @@
       {
         "label": "Restore .NET Dependencies",
         "type": "shell",
-        "command": "cd '${workspaceFolder:NBA_GBSV_Workspace}/gbsv_nba_git_v3.0'; & 'C:\\Users\\JDSB\\AppData\\Local\\Microsoft\\dotnet\\dotnet.exe' restore --verbosity quiet",
+        "command": "cd '${workspaceFolder:NBA_GBSV_Workspace}/gbsv_nba_git_v3.0'; & 'C:\\Users\\JDSB\\.dotnet\\dotnet.exe' restore --verbosity quiet",
         "presentation": {
           "reveal": "silent",
           "close": true
@@ -193,7 +193,7 @@
       {
         "label": "Start NBA API",
         "type": "shell",
-        "command": "$env:DOTNET_ROOT='C:\\Users\\JDSB\\AppData\\Local\\Microsoft\\dotnet'; cd ${workspaceFolder:NBA_GBSV_Workspace}/gbsv_nba_git_v3.0 && func start --port 7071",
+        "command": "$env:DOTNET_ROOT='C:\\Users\\JDSB\\.dotnet'; cd ${workspaceFolder:NBA_GBSV_Workspace}/gbsv_nba_git_v3.0 && func start --port 7071",
         "dependsOn": "Start Azurite",
         "isBackground": true,
         "problemMatcher": []
