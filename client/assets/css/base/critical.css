@@ -1,0 +1,31 @@
+/* Critical base styles extracted from inline blocks to allow stricter CSP */
+html,
+body {
+  background-color: #030b16 !important;
+  margin: 0;
+  padding: 0;
+}
+
+body.page-active-picks {
+  background-image: url("/assets/JB_Bearish_Market_FULL_page.png");
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+body.page-weekly-lineup {
+  background-image: url("/assets/JB_Bearish_Market_FULL_page.png");
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+body.page-odds-market {
+  background-image: url("/assets/JB_Bearish_Market_FULL_page.png");
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}

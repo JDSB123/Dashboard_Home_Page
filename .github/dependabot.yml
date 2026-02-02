@@ -1,0 +1,8 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/azure-functions"
+    schedule: { interval: "weekly" }
+  - package-ecosystem: "pip"
+    directory: "/data-pipeline"
+    schedule: { interval: "weekly" }

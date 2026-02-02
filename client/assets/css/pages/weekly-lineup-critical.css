@@ -1,0 +1,20 @@
+/* Critical mobile overrides extracted from inline <style> for CSP hardening */
+@media (max-width: 767px) {
+  body.page-weekly-lineup .filter-toolbar,
+  body.page-weekly-lineup .toolbar-layout,
+  body.page-weekly-lineup .dashboard-topline,
+  body.page-weekly-lineup .unified-filter,
+  body.page-weekly-lineup .date-toggle-group,
+  body.page-weekly-lineup .export-import-controls {
+    display: none !important;
+  }
+
+  body.page-weekly-lineup {
+    padding-top: 48px !important;
+  }
+
+  body.page-weekly-lineup .main-container {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}

@@ -118,8 +118,7 @@
     "memory": "8gb",
     "storage": "32gb"
   },
-  "updateContentCommand": "npm install -g azure-functions-core-tools@4 --unsafe-perm true",
-  "waitFor": "updateContentCommand",
+
   "containerEnv": {
     "CODESPACE_NAME": "dashboard-gbsv-dev-codespace",
     "AZURE_RESOURCE_GROUP": "dashboard-gbsv-main-rg",

@@ -1,48 +1,41 @@
-<!DOCTYPE html>
+<!doctype html>
 <!--
   WEEKLY LINEUP PAGE (v33.00.0)
   Production release - Real picks only, no stale data
 -->
-<html lang="en" style="background-color:#030b16">
-<head>
-    <!-- Critical inline styles - prevent white flash on initial load -->
-    <style>
-        html, body {
-            background-color: #030b16 !important;
-            margin: 0;
-            padding: 0;
-        }
-        body.page-weekly-lineup {
-            background-image: url('/assets/JB_Bearish_Market_FULL_page.png');
-            background-size: cover;
-            background-position: center top;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-        }
-    </style>
-    <meta name="theme-color" content="#030b16">
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://fonts.googleapis.com https://fonts.gstatic.com https://proud-cliff-008e2e20f.2.azurestaticapps.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://*.blob.core.windows.net https://*.azurestaticapps.net https://www.greenbiersportventures.com https://greenbiersportventures.com; connect-src 'self' https://*.azurewebsites.net https://*.azurecontainerapps.io https://*.azurefd.net https://www.greenbiersportventures.com https://greenbiersportventures.com;">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<html lang="en">
+  <head>
+    <!-- Critical styles moved to external CSS for CSP hardening -->
+    <link rel="stylesheet" href="assets/css/base/critical.css?v=1" />
+    <meta name="theme-color" content="#030b16" />
+    <meta charset="utf-8" />
+    <!-- Page-level CSP meta removed to defer to SWA global CSP -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>Bears & Bulls — Today's Picks</title>
-    <link rel="icon" type="image/png" href="assets/Logo%208.5.png?v=20251216">
+    <link rel="icon" type="image/png" href="assets/Logo%208.5.png?v=20251216" />
 
     <!-- Preload critical background image -->
-    <link rel="preload" as="image" href="assets/JB_Bearish_Market_FULL_page.png">
+    <link rel="preload" as="image" href="assets/JB_Bearish_Market_FULL_page.png" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&amp;family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Oswald:wght@500;600;700&amp;family=Bebas+Neue&amp;family=Inter:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;family=Exo+2:wght@400;500;600&amp;family=Roboto+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&amp;family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Oswald:wght@500;600;700&amp;family=Bebas+Neue&amp;family=Inter:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;family=Exo+2:wght@400;500;600&amp;family=Roboto+Mono:wght@400;500&amp;display=swap"
+      rel="stylesheet"
+    />
     <!-- CSS: Bundled for performance -->
-    <link rel="stylesheet" href="dist/bundle.min.css?v=34.00.0">
+    <link rel="stylesheet" href="dist/bundle.min.css?v=34.00.0" />
     <!-- CSS: Page specific overrides -->
-    <link rel="stylesheet" href="assets/css/pages/weekly-lineup.css?v=34.00.9">
+    <link rel="stylesheet" href="assets/css/pages/weekly-lineup.css?v=34.00.9" />
     <!-- Mobile Responsive Styles (includes consolidated hotfixes) -->
-    <link rel="stylesheet" href="assets/css/components/mobile-responsive.css?v=34.00.0">
+    <link rel="stylesheet" href="assets/css/components/mobile-responsive.css?v=34.00.0" />
     <!-- COMPLETE MOBILE OVERHAUL - This MUST be loaded LAST to override everything -->
-    <link rel="stylesheet" href="assets/css/weekly-lineup-mobile-complete.css?v=34.00.0">
+    <link rel="stylesheet" href="assets/css/weekly-lineup-mobile-complete.css?v=34.00.0" />
     <!-- Loading Skeleton for instant visual feedback -->
-    <link rel="stylesheet" href="assets/css/components/loading-skeleton.css?v=1.0.0">
+    <link rel="stylesheet" href="assets/css/components/loading-skeleton.css?v=1.0.0" />
+    <!-- Utility and column width helpers -->
+    <link rel="stylesheet" href="assets/css/base/utilities.css?v=1" />
+    <link rel="stylesheet" href="assets/css/components/table-columns.css?v=1" />
 
     <!-- CRITICAL: Performance utilities (load first) -->
     <script src="assets/js/utils/data-cache-manager.js?v=34.00.0"></script>
@@ -54,6 +47,7 @@
     <!-- Silence console output in production BEFORE any other deferred scripts run -->
     <script src="assets/js/core/debug-config.js?v=34.00.0" defer></script>
     <script src="config.js?v=34.00.2" defer></script>
+    <script src="assets/js/init/disable-form-submit.js?v=1" defer></script>
 
     <!-- Page Transition Handler (smooth navigation with loading state) -->
     <script src="assets/js/utils/page-transition-handler.js?v=1.0.0" defer></script>
@@ -63,437 +57,718 @@
     <!-- Complete Mobile Experience -->
     <script src="assets/js/weekly-lineup-mobile.js?v=34.00.0" defer></script>
 
-
-    <!-- Critical Mobile Styles - Inline for immediate effect -->
-    <style>
-        @media (max-width: 767px) {
-            /* Immediate mobile overrides */
-            body.page-weekly-lineup .filter-toolbar,
-            body.page-weekly-lineup .toolbar-layout,
-            body.page-weekly-lineup .dashboard-topline,
-            body.page-weekly-lineup .unified-filter,
-            body.page-weekly-lineup .date-toggle-group,
-            body.page-weekly-lineup .export-import-controls {
-                display: none !important;
-            }
-
-            body.page-weekly-lineup {
-                padding-top: 48px !important;
-            }
-
-            body.page-weekly-lineup .main-container {
-                margin: 0 !important;
-                padding: 0 !important;
-            }
-        }
-    </style>
-</head>
-<body class="page-glow page-weekly-lineup" style="background-color:#030b16">
-<noscript>
-    <div class="noscript-warning" role="alert">
+    <!-- Critical Mobile Styles moved to external file -->
+    <link rel="stylesheet" href="assets/css/pages/weekly-lineup-critical.css?v=1" />
+  </head>
+  <body class="page-glow page-weekly-lineup">
+    <noscript>
+      <div class="noscript-warning" role="alert">
         <strong>JavaScript Required:</strong> This dashboard requires JavaScript.
-    </div>
-</noscript>
+      </div>
+    </noscript>
 
-<nav class="brand-nav" role="navigation" aria-label="Main navigation">
-    <ul class="nav-links" aria-label="Primary">
+    <nav class="brand-nav" role="navigation" aria-label="Main navigation">
+      <ul class="nav-links" aria-label="Primary">
         <li><a href="index.html" class="nav-link">Dashboard</a></li>
         <li><a href="weekly-lineup.html" class="nav-link" aria-current="page">Weekly Lineup</a></li>
         <li><a href="odds-market.html" class="nav-link">Odds Market</a></li>
         <li class="nav-dropdown">
-            <button class="nav-link nav-dropdown-trigger" id="sportsbooks-trigger" aria-expanded="false" aria-haspopup="true" aria-controls="sportsbooks-menu">Sports Books</button>
-            <div class="nav-dropdown-menu" id="sportsbooks-menu" aria-labelledby="sportsbooks-trigger" role="region" aria-label="Connected sportsbooks" hidden>
-                <section class="sportsbook-card" data-book="hulkwager">
-                    <div class="sportsbook-card-header">
-                        <div class="sportsbook-name-group">
-                            <span class="connection-status disconnected"></span>
-                            <span class="sportsbook-name">Hulk Wager</span>
-                        </div>
-                        <div class="sportsbook-meta-compact">
-                            <span class="sportsbook-last-sync">Last: <span class="sync-time">--</span></span>
-                            <button type="button" class="sportsbook-fetch-compact" data-book="hulkwager" aria-label="Fetch picks from Hulk Wager">
-                                <span class="fetch-icon">&#8635;</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="sportsbook-actions-row">
-                        <form class="sportsbook-credentials-group" autocomplete="off" onsubmit="return false;">
-                            <input type="text" id="hulk-username" class="credential-input-compact" placeholder="Username" aria-label="Hulk Wager username" autocomplete="username">
-                            <input type="password" id="hulk-password" class="credential-input-compact" placeholder="Password" aria-label="Hulk Wager password" autocomplete="current-password">
-                        </form>
-                    </div>
-                </section>
-                <section class="sportsbook-card" data-book="bombay711">
-                    <div class="sportsbook-card-header">
-                        <div class="sportsbook-name-group">
-                            <span class="connection-status disconnected"></span>
-                            <span class="sportsbook-name">Bombay 711</span>
-                        </div>
-                        <div class="sportsbook-meta-compact">
-                            <span class="sportsbook-last-sync">Last: <span class="sync-time">--</span></span>
-                            <button type="button" class="sportsbook-fetch-compact" data-book="bombay711" aria-label="Fetch picks from Bombay 711">
-                                <span class="fetch-icon">&#8635;</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="sportsbook-actions-row">
-                        <form class="sportsbook-credentials-group" autocomplete="off" onsubmit="return false;">
-                            <input type="text" id="bombay-username" class="credential-input-compact" placeholder="Username" aria-label="Bombay 711 username" autocomplete="username">
-                            <input type="password" id="bombay-password" class="credential-input-compact" placeholder="Password" aria-label="Bombay 711 password" autocomplete="current-password">
-                        </form>
-                    </div>
-                </section>
-                <section class="sportsbook-card" data-book="kingofsports">
-                    <div class="sportsbook-card-header">
-                        <div class="sportsbook-name-group">
-                            <span class="connection-status disconnected"></span>
-                            <span class="sportsbook-name">King of Sports</span>
-                        </div>
-                        <div class="sportsbook-meta-compact">
-                            <span class="sportsbook-last-sync">Last: <span class="sync-time">--</span></span>
-                            <button type="button" class="sportsbook-fetch-compact" data-book="kingofsports" aria-label="Fetch picks from King of Sports">
-                                <span class="fetch-icon">&#8635;</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="sportsbook-actions-row">
-                        <form class="sportsbook-credentials-group" autocomplete="off" onsubmit="return false;">
-                            <input type="text" id="kingofsports-username" class="credential-input-compact" placeholder="Username" aria-label="King of Sports username" autocomplete="username">
-                            <input type="password" id="kingofsports-password" class="credential-input-compact" placeholder="Password" aria-label="King of Sports password" autocomplete="current-password">
-                        </form>
-                    </div>
-                </section>
-                <section class="sportsbook-card" data-book="primetimeaction">
-                    <div class="sportsbook-card-header">
-                        <div class="sportsbook-name-group">
-                            <span class="connection-status disconnected"></span>
-                            <span class="sportsbook-name">Prime Time Action</span>
-                        </div>
-                        <div class="sportsbook-meta-compact">
-                            <span class="sportsbook-last-sync">Last: <span class="sync-time">--</span></span>
-                            <button type="button" class="sportsbook-fetch-compact" data-book="primetimeaction" aria-label="Fetch picks from Prime Time Action">
-                                <span class="fetch-icon">&#8635;</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="sportsbook-actions-row">
-                        <form class="sportsbook-credentials-group" autocomplete="off" onsubmit="return false;">
-                            <input type="text" id="primetimeaction-username" class="credential-input-compact" placeholder="Username" aria-label="Prime Time Action username" autocomplete="username">
-                            <input type="password" id="primetimeaction-password" class="credential-input-compact" placeholder="Password" aria-label="Prime Time Action password" autocomplete="current-password">
-                        </form>
-                    </div>
-                </section>
-            </div>
-        </li>
-    </ul>
-</nav>
-
-<main class="main-container">
-    <div id="dashboard" class="main-dashboard-layout">
-        <div class="dashboard-topline">
-            <div class="brand-header-inline" role="banner">
-                <img src="assets/Logo%208.5.png?v=20251216" alt="Bears & Bulls" class="brand-logo-inline" loading="eager">
-                <div class="brand-content-inline">
-                    <div class="brand-text-stacked">
-                        <span class="brand-line-1">Bears & Bulls</span>
-                        <span class="brand-line-2"><span class="brand-word">WEEKLY LINEUP</span></span>
-                    </div>
+          <button
+            class="nav-link nav-dropdown-trigger"
+            id="sportsbooks-trigger"
+            aria-expanded="false"
+            aria-haspopup="true"
+            aria-controls="sportsbooks-menu"
+          >
+            Sports Books
+          </button>
+          <div
+            class="nav-dropdown-menu"
+            id="sportsbooks-menu"
+            aria-labelledby="sportsbooks-trigger"
+            role="region"
+            aria-label="Connected sportsbooks"
+            hidden
+          >
+            <section class="sportsbook-card" data-book="hulkwager">
+              <div class="sportsbook-card-header">
+                <div class="sportsbook-name-group">
+                  <span class="connection-status disconnected"></span>
+                  <span class="sportsbook-name">Hulk Wager</span>
                 </div>
+                <div class="sportsbook-meta-compact">
+                  <span class="sportsbook-last-sync">Last: <span class="sync-time">--</span></span>
+                  <button
+                    type="button"
+                    class="sportsbook-fetch-compact"
+                    data-book="hulkwager"
+                    aria-label="Fetch picks from Hulk Wager"
+                  >
+                    <span class="fetch-icon">&#8635;</span>
+                  </button>
+                </div>
+              </div>
+              <div class="sportsbook-actions-row">
+                <form class="sportsbook-credentials-group" autocomplete="off">
+                  <input
+                    type="text"
+                    id="hulk-username"
+                    class="credential-input-compact"
+                    placeholder="Username"
+                    aria-label="Hulk Wager username"
+                    autocomplete="username"
+                  />
+                  <input
+                    type="password"
+                    id="hulk-password"
+                    class="credential-input-compact"
+                    placeholder="Password"
+                    aria-label="Hulk Wager password"
+                    autocomplete="current-password"
+                  />
+                </form>
+              </div>
+            </section>
+            <section class="sportsbook-card" data-book="bombay711">
+              <div class="sportsbook-card-header">
+                <div class="sportsbook-name-group">
+                  <span class="connection-status disconnected"></span>
+                  <span class="sportsbook-name">Bombay 711</span>
+                </div>
+                <div class="sportsbook-meta-compact">
+                  <span class="sportsbook-last-sync">Last: <span class="sync-time">--</span></span>
+                  <button
+                    type="button"
+                    class="sportsbook-fetch-compact"
+                    data-book="bombay711"
+                    aria-label="Fetch picks from Bombay 711"
+                  >
+                    <span class="fetch-icon">&#8635;</span>
+                  </button>
+                </div>
+              </div>
+              <div class="sportsbook-actions-row">
+                <form class="sportsbook-credentials-group" autocomplete="off">
+                  <input
+                    type="text"
+                    id="bombay-username"
+                    class="credential-input-compact"
+                    placeholder="Username"
+                    aria-label="Bombay 711 username"
+                    autocomplete="username"
+                  />
+                  <input
+                    type="password"
+                    id="bombay-password"
+                    class="credential-input-compact"
+                    placeholder="Password"
+                    aria-label="Bombay 711 password"
+                    autocomplete="current-password"
+                  />
+                </form>
+              </div>
+            </section>
+            <section class="sportsbook-card" data-book="kingofsports">
+              <div class="sportsbook-card-header">
+                <div class="sportsbook-name-group">
+                  <span class="connection-status disconnected"></span>
+                  <span class="sportsbook-name">King of Sports</span>
+                </div>
+                <div class="sportsbook-meta-compact">
+                  <span class="sportsbook-last-sync">Last: <span class="sync-time">--</span></span>
+                  <button
+                    type="button"
+                    class="sportsbook-fetch-compact"
+                    data-book="kingofsports"
+                    aria-label="Fetch picks from King of Sports"
+                  >
+                    <span class="fetch-icon">&#8635;</span>
+                  </button>
+                </div>
+              </div>
+              <div class="sportsbook-actions-row">
+                <form class="sportsbook-credentials-group" autocomplete="off">
+                  <input
+                    type="text"
+                    id="kingofsports-username"
+                    class="credential-input-compact"
+                    placeholder="Username"
+                    aria-label="King of Sports username"
+                    autocomplete="username"
+                  />
+                  <input
+                    type="password"
+                    id="kingofsports-password"
+                    class="credential-input-compact"
+                    placeholder="Password"
+                    aria-label="King of Sports password"
+                    autocomplete="current-password"
+                  />
+                </form>
+              </div>
+            </section>
+            <section class="sportsbook-card" data-book="primetimeaction">
+              <div class="sportsbook-card-header">
+                <div class="sportsbook-name-group">
+                  <span class="connection-status disconnected"></span>
+                  <span class="sportsbook-name">Prime Time Action</span>
+                </div>
+                <div class="sportsbook-meta-compact">
+                  <span class="sportsbook-last-sync">Last: <span class="sync-time">--</span></span>
+                  <button
+                    type="button"
+                    class="sportsbook-fetch-compact"
+                    data-book="primetimeaction"
+                    aria-label="Fetch picks from Prime Time Action"
+                  >
+                    <span class="fetch-icon">&#8635;</span>
+                  </button>
+                </div>
+              </div>
+              <div class="sportsbook-actions-row">
+                <form class="sportsbook-credentials-group" autocomplete="off">
+                  <input
+                    type="text"
+                    id="primetimeaction-username"
+                    class="credential-input-compact"
+                    placeholder="Username"
+                    aria-label="Prime Time Action username"
+                    autocomplete="username"
+                  />
+                  <input
+                    type="password"
+                    id="primetimeaction-password"
+                    class="credential-input-compact"
+                    placeholder="Password"
+                    aria-label="Prime Time Action password"
+                    autocomplete="current-password"
+                  />
+                </form>
+              </div>
+            </section>
+          </div>
+        </li>
+      </ul>
+    </nav>
+
+    <main class="main-container">
+      <div id="dashboard" class="main-dashboard-layout">
+        <div class="dashboard-topline">
+          <div class="brand-header-inline" role="banner">
+            <img
+              src="assets/Logo%208.5.png?v=20251216"
+              alt="Bears & Bulls"
+              class="brand-logo-inline"
+              loading="eager"
+            />
+            <div class="brand-content-inline">
+              <div class="brand-text-stacked">
+                <span class="brand-line-1">Bears & Bulls</span>
+                <span class="brand-line-2"><span class="brand-word">WEEKLY LINEUP</span></span>
+              </div>
             </div>
+          </div>
         </div>
 
         <!-- Filter Toolbar (Moved outside wrapper to avoid background film) -->
         <div class="toolbar-container toolbar-layout">
-            <div class="filter-toolbar" id="filter-toolbar">
-                <div class="ft-left">
-                    <!-- League pills -->
-                    <button class="ft-pill ft-league" data-league="nba">NBA</button>
-                    <button class="ft-pill ft-league" data-league="ncaab">NCAAM</button>
-                    <!-- Segment dropdown -->
-                    <div class="ft-dropdown">
-                        <button class="ft-dropdown-btn" id="segment-dropdown-btn">Segment ▾</button>
-                        <div class="ft-dropdown-menu" id="segment-dropdown-menu">
-                            <button class="ft-dropdown-item" data-f="segment" data-v="full"><strong>FG</strong> · Full Game</button>
-                            <button class="ft-dropdown-item" data-f="segment" data-v="1h"><strong>1H</strong> · First Half</button>
-                            <button class="ft-dropdown-item" data-f="segment" data-v="2h"><strong>2H</strong> · Second Half</button>
-                        </div>
-                    </div>
-                    <!-- Pick Type dropdown -->
-                    <div class="ft-dropdown">
-                        <button class="ft-dropdown-btn" id="picktype-dropdown-btn">Pick Type ▾</button>
-                        <div class="ft-dropdown-menu" id="picktype-dropdown-menu">
-                            <button class="ft-dropdown-item" data-f="pick-type" data-v="spread"><strong>Spread</strong> · Point spread betting</button>
-                            <button class="ft-dropdown-item" data-f="pick-type" data-v="moneyline"><strong>Moneyline</strong> · Win/loss only</button>
-                            <button class="ft-dropdown-item" data-f="pick-type" data-v="total"><strong>Total</strong> · Over/Under points</button>
-                            <button class="ft-dropdown-item" data-f="pick-type" data-v="team-total"><strong>Team Total</strong> · Single team O/U</button>
-                        </div>
-                    </div>
-                    <button class="ft-clear" id="ft-clear">✕ Clear</button>
+          <div class="filter-toolbar" id="filter-toolbar">
+            <div class="ft-left">
+              <!-- League pills -->
+              <button class="ft-pill ft-league" data-league="nba">NBA</button>
+              <button class="ft-pill ft-league" data-league="ncaab">NCAAM</button>
+              <!-- Segment dropdown -->
+              <div class="ft-dropdown">
+                <button class="ft-dropdown-btn" id="segment-dropdown-btn">Segment ▾</button>
+                <div class="ft-dropdown-menu" id="segment-dropdown-menu">
+                  <button class="ft-dropdown-item" data-f="segment" data-v="full">
+                    <strong>FG</strong> · Full Game
+                  </button>
+                  <button class="ft-dropdown-item" data-f="segment" data-v="1h">
+                    <strong>1H</strong> · First Half
+                  </button>
+                  <button class="ft-dropdown-item" data-f="segment" data-v="2h">
+                    <strong>2H</strong> · Second Half
+                  </button>
                 </div>
-                <div class="ft-right">
-                    <div class="fetch-controls-wrapper">
-                        <div class="ft-fetch-buttons">
-                            <div class="ft-all-group">
-                                <button class="ft-fetch-league-btn ft-fetch-all" data-fetch="all" title="Refresh All">
-                                    <svg class="refresh-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
-                                    </svg>
-                                    <span>All</span>
-                                </button>
-                                <span class="ft-last-refreshed" id="ft-last-refreshed">Last: <span class="sync-time">-</span></span>
-                            </div>
-                            <div class="fetch-separator"></div>
-                            <button class="ft-fetch-league-btn" data-fetch="nba" title="Fetch NBA">
-                                <img src="assets/nba-logo.png" class="league-logo-sm" alt="NBA">
-                                <span class="league-label">NBA</span>
-                            </button>
-                            <button class="ft-fetch-league-btn" data-fetch="ncaab" title="Fetch NCAAM">
-                                <img src="assets/ncaam-logo.png" class="league-logo-sm" alt="NCAAM">
-                                <span class="league-label">NCAAM</span>
-                            </button>
-                        </div>
-                    </div>
+              </div>
+              <!-- Pick Type dropdown -->
+              <div class="ft-dropdown">
+                <button class="ft-dropdown-btn" id="picktype-dropdown-btn">Pick Type ▾</button>
+                <div class="ft-dropdown-menu" id="picktype-dropdown-menu">
+                  <button class="ft-dropdown-item" data-f="pick-type" data-v="spread">
+                    <strong>Spread</strong> · Point spread betting
+                  </button>
+                  <button class="ft-dropdown-item" data-f="pick-type" data-v="moneyline">
+                    <strong>Moneyline</strong> · Win/loss only
+                  </button>
+                  <button class="ft-dropdown-item" data-f="pick-type" data-v="total">
+                    <strong>Total</strong> · Over/Under points
+                  </button>
+                  <button class="ft-dropdown-item" data-f="pick-type" data-v="team-total">
+                    <strong>Team Total</strong> · Single team O/U
+                  </button>
                 </div>
+              </div>
+              <button class="ft-clear" id="ft-clear">✕ Clear</button>
             </div>
+            <div class="ft-right">
+              <div class="fetch-controls-wrapper">
+                <div class="ft-fetch-buttons">
+                  <div class="ft-all-group">
+                    <button
+                      class="ft-fetch-league-btn ft-fetch-all"
+                      data-fetch="all"
+                      title="Refresh All"
+                    >
+                      <svg
+                        class="refresh-icon"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <path
+                          d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"
+                        />
+                      </svg>
+                      <span>All</span>
+                    </button>
+                    <span class="ft-last-refreshed" id="ft-last-refreshed"
+                      >Last: <span class="sync-time">-</span></span
+                    >
+                  </div>
+                  <div class="fetch-separator"></div>
+                  <button class="ft-fetch-league-btn" data-fetch="nba" title="Fetch NBA">
+                    <img src="assets/nba-logo.png" class="league-logo-sm" alt="NBA" />
+                    <span class="league-label">NBA</span>
+                  </button>
+                  <button class="ft-fetch-league-btn" data-fetch="ncaab" title="Fetch NCAAM">
+                    <img src="assets/ncaam-logo.png" class="league-logo-sm" alt="NCAAM" />
+                    <span class="league-label">NCAAM</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Filter Chips (Moved outside wrapper to avoid background film) -->
         <div class="chips-container toolbar-layout">
-            <div class="table-filter-chips-wrapper">
-                <div class="table-filter-chips filter-chips" id="table-filter-chips" aria-live="polite" data-has-chips="false"></div>
-            </div>
+          <div class="table-filter-chips-wrapper">
+            <div
+              class="table-filter-chips filter-chips"
+              id="table-filter-chips"
+              aria-live="polite"
+              data-has-chips="false"
+            ></div>
+          </div>
         </div>
 
         <div class="table-container weekly-lineup-table-wrapper">
-            <table class="picks-table weekly-lineup-table" aria-label="Today's picks - sorted by edge">
-                <colgroup>
-                    <col style="width: 12%;"><!-- Date/Time -->
-                    <col style="width: 7%;"><!-- League -->
-                    <col style="width: 30%;"><!-- Matchup -->
-                    <col style="width: 10%;"><!-- Segment -->
-                    <col style="width: 25%;"><!-- Pick -->
-                    <col style="width: 16%;"><!-- Track -->
-                </colgroup>
-                <thead>
-                    <tr>
-                        <th scope="col" data-sort="date" class="col-datetime">
-                            <div class="th-header-shell">
-                                <button class="th-sort-btn" aria-label="Sort by date and time (CST)">
-                                    <span class="header-main-text">Date & Time</span>
-                                    <span class="header-subtext">(CST)</span>
-                                    <span class="sort-icon" aria-hidden="true">▲</span>
-                                </button>
-                                <button class="th-filter-btn" data-filter="datetime" aria-label="Filter by date and time" aria-expanded="false" aria-controls="filter-datetime" type="button"></button>
-                            </div>
-                            <div class="th-filter-dropdown nav-panel-dropdown date-filter-compact" id="filter-datetime" role="dialog" hidden>
-                                <div class="filter-header-integrated"><span class="filter-title">Date & Time</span><div class="filter-quick-actions"><button class="filter-action-btn" data-action="select-all">All</button><button class="filter-action-btn" data-action="clear">Clear</button></div></div>
-                                <div class="date-range-selector"><button class="date-range-btn active" data-range="today">Today</button><button class="date-range-btn" data-range="tomorrow">Tomorrow</button><button class="date-range-btn" data-range="week">This Week</button></div>
-                                <div class="filter-section-compact"><div class="section-label">Time Slots</div><div class="time-slots"><button class="time-slot active" data-time="morning">Morning</button><button class="time-slot active" data-time="afternoon">Afternoon</button><button class="time-slot active" data-time="evening">Evening</button><button class="time-slot active" data-time="primetime">Primetime</button><button class="time-slot active" data-time="late">Late Night</button></div></div>
-                            </div>
-                        </th>
-                        <th scope="col" data-sort="league" class="center col-league">
-                            <div class="th-header-shell">
-                                <button class="th-sort-btn" aria-label="Sort by league"><span class="header-main-text">League</span><span class="sort-icon" aria-hidden="true">▲</span></button>
-                                <button class="th-filter-btn" data-filter="league" aria-label="Filter by league" aria-expanded="false" aria-controls="filter-league" type="button"></button>
-                            </div>
-                            <div class="th-filter-dropdown nav-panel-dropdown filter-integrated" id="filter-league" role="dialog" hidden>
-                                <div class="filter-header-integrated"><span class="filter-title">League</span><div class="filter-quick-actions"><button class="filter-action-btn" data-action="select-all">All</button><button class="filter-action-btn" data-action="clear">Clear</button></div></div>
-                                <div class="filter-section-compact"><div class="league-pills"><button class="league-pill active" data-league="all">All</button><button class="league-pill" data-league="nba">NBA</button><button class="league-pill" data-league="ncaab">NCAAB</button></div></div>
-                            </div>
-                        </th>
-                        <th scope="col" data-sort="matchup" class="col-matchup">
-                            <div class="th-header-shell">
-                                <button class="th-sort-btn" aria-label="Sort by Matchup"><span class="header-main-text">Matchup</span><span class="header-subtext">(Away vs. Home)</span><span class="sort-icon" aria-hidden="true">▲</span></button>
-                                <button class="th-filter-btn" data-filter="matchup" aria-label="Filter by matchup" aria-expanded="false" aria-controls="filter-matchup" type="button"></button>
-                            </div>
-                            <div class="th-filter-dropdown nav-panel-dropdown filter-integrated" id="filter-matchup" role="dialog" hidden>
-                                <div class="filter-header-integrated"><span class="filter-title">Matchup</span><div class="filter-quick-actions"><button class="filter-action-btn" data-action="select-all">All</button><button class="filter-action-btn" data-action="clear">Clear</button></div></div>
-                                <div class="filter-section-compact"><div class="teams-search-box"><input type="text" class="team-search" placeholder="Search teams..." aria-label="Search teams"></div><div class="teams-grid" data-team-filter-groups></div></div>
-                            </div>
-                        </th>
-                        <th scope="col" data-sort="segment" class="center col-segment">
-                            <div class="th-header-shell">
-                                <button class="th-sort-btn" aria-label="Sort by segment"><span class="header-main-text">Segment</span><span class="sort-icon" aria-hidden="true">▲</span></button>
-                                <button class="th-filter-btn" data-filter="segment" aria-label="Filter by segment" aria-expanded="false" aria-controls="filter-segment" type="button"></button>
-                            </div>
-                            <div class="th-filter-dropdown nav-panel-dropdown filter-integrated" id="filter-segment" role="dialog" hidden>
-                                <div class="filter-header-integrated"><span class="filter-title">Segment</span><div class="filter-quick-actions"><button class="filter-action-btn" data-action="select-all">All</button><button class="filter-action-btn" data-action="clear">Clear</button></div></div>
-                                <div class="filter-section-compact"><div class="segment-pills"><button class="segment-pill active" data-segment="all">All</button><button class="segment-pill" data-segment="full">Full Game</button><button class="segment-pill" data-segment="1h">1st Half</button><button class="segment-pill" data-segment="2h">2nd Half</button></div></div>
-                            </div>
-                        </th>
-                        <th scope="col" data-sort="pick" class="col-pick">
-                            <div class="th-header-shell">
-                                <button class="th-sort-btn" aria-label="Sort by pick"><span class="header-main-text">Pick</span><span class="sort-icon" aria-hidden="true">▲</span></button>
-                                <button class="th-filter-btn" data-filter="pick" aria-label="Filter by pick type" aria-expanded="false" aria-controls="filter-pick" type="button"></button>
-                            </div>
-                            <div class="th-filter-dropdown nav-panel-dropdown filter-integrated" id="filter-pick" role="dialog" hidden>
-                                <div class="filter-header-integrated"><span class="filter-title">Pick Type</span><div class="filter-quick-actions"><button class="filter-action-btn" data-action="select-all">All</button><button class="filter-action-btn" data-action="clear">Clear</button></div></div>
-                                <div class="filter-section-compact"><div class="pick-type-pills"><button class="pick-pill active" data-pick="all">All</button><button class="pick-pill" data-pick="spread">Spread</button><button class="pick-pill" data-pick="ml">Moneyline</button><button class="pick-pill" data-pick="total">Total</button><button class="pick-pill" data-pick="tt">Team Total</button></div></div>
-                            </div>
-                        </th>
-                        <th scope="col" class="tracker-column center col-track">
-                            <div class="th-header-shell"><span class="header-main-text">Track</span></div>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody id="picks-tbody">
-                    <tr class="empty-state-row">
-                        <td colspan="9" class="empty-state-cell">
-                            <div class="empty-state">
-                                <span class="empty-icon">📊</span>
-                                <span class="empty-message">No picks fetched yet. Click Fetch to load picks.</span>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+          <table
+            class="picks-table weekly-lineup-table"
+            aria-label="Today's picks - sorted by edge"
+          >
+            <colgroup>
+              <col class="w-12" />
+              <!-- Date/Time -->
+              <col class="w-7" />
+              <!-- League -->
+              <col class="w-30" />
+              <!-- Matchup -->
+              <col class="w-10" />
+              <!-- Segment -->
+              <col class="w-25" />
+              <!-- Pick -->
+              <col class="w-16" />
+              <!-- Track -->
+            </colgroup>
+            <thead>
+              <tr>
+                <th scope="col" data-sort="date" class="col-datetime">
+                  <div class="th-header-shell">
+                    <button class="th-sort-btn" aria-label="Sort by date and time (CST)">
+                      <span class="header-main-text">Date & Time</span>
+                      <span class="header-subtext">(CST)</span>
+                      <span class="sort-icon" aria-hidden="true">▲</span>
+                    </button>
+                    <button
+                      class="th-filter-btn"
+                      data-filter="datetime"
+                      aria-label="Filter by date and time"
+                      aria-expanded="false"
+                      aria-controls="filter-datetime"
+                      type="button"
+                    ></button>
+                  </div>
+                  <div
+                    class="th-filter-dropdown nav-panel-dropdown date-filter-compact"
+                    id="filter-datetime"
+                    role="dialog"
+                    hidden
+                  >
+                    <div class="filter-header-integrated">
+                      <span class="filter-title">Date & Time</span>
+                      <div class="filter-quick-actions">
+                        <button class="filter-action-btn" data-action="select-all">All</button
+                        ><button class="filter-action-btn" data-action="clear">Clear</button>
+                      </div>
+                    </div>
+                    <div class="date-range-selector">
+                      <button class="date-range-btn active" data-range="today">Today</button
+                      ><button class="date-range-btn" data-range="tomorrow">Tomorrow</button
+                      ><button class="date-range-btn" data-range="week">This Week</button>
+                    </div>
+                    <div class="filter-section-compact">
+                      <div class="section-label">Time Slots</div>
+                      <div class="time-slots">
+                        <button class="time-slot active" data-time="morning">Morning</button
+                        ><button class="time-slot active" data-time="afternoon">Afternoon</button
+                        ><button class="time-slot active" data-time="evening">Evening</button
+                        ><button class="time-slot active" data-time="primetime">Primetime</button
+                        ><button class="time-slot active" data-time="late">Late Night</button>
+                      </div>
+                    </div>
+                  </div>
+                </th>
+                <th scope="col" data-sort="league" class="center col-league">
+                  <div class="th-header-shell">
+                    <button class="th-sort-btn" aria-label="Sort by league">
+                      <span class="header-main-text">League</span
+                      ><span class="sort-icon" aria-hidden="true">▲</span>
+                    </button>
+                    <button
+                      class="th-filter-btn"
+                      data-filter="league"
+                      aria-label="Filter by league"
+                      aria-expanded="false"
+                      aria-controls="filter-league"
+                      type="button"
+                    ></button>
+                  </div>
+                  <div
+                    class="th-filter-dropdown nav-panel-dropdown filter-integrated"
+                    id="filter-league"
+                    role="dialog"
+                    hidden
+                  >
+                    <div class="filter-header-integrated">
+                      <span class="filter-title">League</span>
+                      <div class="filter-quick-actions">
+                        <button class="filter-action-btn" data-action="select-all">All</button
+                        ><button class="filter-action-btn" data-action="clear">Clear</button>
+                      </div>
+                    </div>
+                    <div class="filter-section-compact">
+                      <div class="league-pills">
+                        <button class="league-pill active" data-league="all">All</button
+                        ><button class="league-pill" data-league="nba">NBA</button
+                        ><button class="league-pill" data-league="ncaab">NCAAB</button>
+                      </div>
+                    </div>
+                  </div>
+                </th>
+                <th scope="col" data-sort="matchup" class="col-matchup">
+                  <div class="th-header-shell">
+                    <button class="th-sort-btn" aria-label="Sort by Matchup">
+                      <span class="header-main-text">Matchup</span
+                      ><span class="header-subtext">(Away vs. Home)</span
+                      ><span class="sort-icon" aria-hidden="true">▲</span>
+                    </button>
+                    <button
+                      class="th-filter-btn"
+                      data-filter="matchup"
+                      aria-label="Filter by matchup"
+                      aria-expanded="false"
+                      aria-controls="filter-matchup"
+                      type="button"
+                    ></button>
+                  </div>
+                  <div
+                    class="th-filter-dropdown nav-panel-dropdown filter-integrated"
+                    id="filter-matchup"
+                    role="dialog"
+                    hidden
+                  >
+                    <div class="filter-header-integrated">
+                      <span class="filter-title">Matchup</span>
+                      <div class="filter-quick-actions">
+                        <button class="filter-action-btn" data-action="select-all">All</button
+                        ><button class="filter-action-btn" data-action="clear">Clear</button>
+                      </div>
+                    </div>
+                    <div class="filter-section-compact">
+                      <div class="teams-search-box">
+                        <input
+                          type="text"
+                          class="team-search"
+                          placeholder="Search teams..."
+                          aria-label="Search teams"
+                        />
+                      </div>
+                      <div class="teams-grid" data-team-filter-groups></div>
+                    </div>
+                  </div>
+                </th>
+                <th scope="col" data-sort="segment" class="center col-segment">
+                  <div class="th-header-shell">
+                    <button class="th-sort-btn" aria-label="Sort by segment">
+                      <span class="header-main-text">Segment</span
+                      ><span class="sort-icon" aria-hidden="true">▲</span>
+                    </button>
+                    <button
+                      class="th-filter-btn"
+                      data-filter="segment"
+                      aria-label="Filter by segment"
+                      aria-expanded="false"
+                      aria-controls="filter-segment"
+                      type="button"
+                    ></button>
+                  </div>
+                  <div
+                    class="th-filter-dropdown nav-panel-dropdown filter-integrated"
+                    id="filter-segment"
+                    role="dialog"
+                    hidden
+                  >
+                    <div class="filter-header-integrated">
+                      <span class="filter-title">Segment</span>
+                      <div class="filter-quick-actions">
+                        <button class="filter-action-btn" data-action="select-all">All</button
+                        ><button class="filter-action-btn" data-action="clear">Clear</button>
+                      </div>
+                    </div>
+                    <div class="filter-section-compact">
+                      <div class="segment-pills">
+                        <button class="segment-pill active" data-segment="all">All</button
+                        ><button class="segment-pill" data-segment="full">Full Game</button
+                        ><button class="segment-pill" data-segment="1h">1st Half</button
+                        ><button class="segment-pill" data-segment="2h">2nd Half</button>
+                      </div>
+                    </div>
+                  </div>
+                </th>
+                <th scope="col" data-sort="pick" class="col-pick">
+                  <div class="th-header-shell">
+                    <button class="th-sort-btn" aria-label="Sort by pick">
+                      <span class="header-main-text">Pick</span
+                      ><span class="sort-icon" aria-hidden="true">▲</span>
+                    </button>
+                    <button
+                      class="th-filter-btn"
+                      data-filter="pick"
+                      aria-label="Filter by pick type"
+                      aria-expanded="false"
+                      aria-controls="filter-pick"
+                      type="button"
+                    ></button>
+                  </div>
+                  <div
+                    class="th-filter-dropdown nav-panel-dropdown filter-integrated"
+                    id="filter-pick"
+                    role="dialog"
+                    hidden
+                  >
+                    <div class="filter-header-integrated">
+                      <span class="filter-title">Pick Type</span>
+                      <div class="filter-quick-actions">
+                        <button class="filter-action-btn" data-action="select-all">All</button
+                        ><button class="filter-action-btn" data-action="clear">Clear</button>
+                      </div>
+                    </div>
+                    <div class="filter-section-compact">
+                      <div class="pick-type-pills">
+                        <button class="pick-pill active" data-pick="all">All</button
+                        ><button class="pick-pill" data-pick="spread">Spread</button
+                        ><button class="pick-pill" data-pick="ml">Moneyline</button
+                        ><button class="pick-pill" data-pick="total">Total</button
+                        ><button class="pick-pill" data-pick="tt">Team Total</button>
+                      </div>
+                    </div>
+                  </div>
+                </th>
+                <th scope="col" class="tracker-column center col-track">
+                  <div class="th-header-shell"><span class="header-main-text">Track</span></div>
+                </th>
+              </tr>
+            </thead>
+            <tbody id="picks-tbody">
+              <tr class="empty-state-row">
+                <td colspan="9" class="empty-state-cell">
+                  <div class="empty-state">
+                    <span class="empty-icon">📊</span>
+                    <span class="empty-message"
+                      >No picks fetched yet. Click Fetch to load picks.</span
+                    >
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
+      </div>
+    </main>
+
+    <!-- Mobile Fetch FAB (phones only) -->
+    <div class="mobile-fab-menu" id="mobile-fetch-menu" hidden>
+      <h4>Fetch Picks</h4>
+      <div class="fab-list">
+        <button class="fab-item" data-fetch="all">All</button>
+        <button class="fab-item" data-fetch="nba">NBA</button>
+        <button class="fab-item" data-fetch="ncaab">NCAAM</button>
+        <button class="fab-item" data-fetch="nfl">NFL</button>
+        <button class="fab-item" data-fetch="ncaaf">NCAAF</button>
+      </div>
     </div>
-</main>
+    <button class="mobile-fab" id="mobile-fetch-fab" aria-label="Fetch picks">↻</button>
 
-<!-- Mobile Fetch FAB (phones only) -->
-<div class="mobile-fab-menu" id="mobile-fetch-menu" hidden>
-  <h4>Fetch Picks</h4>
-  <div class="fab-list">
-    <button class="fab-item" data-fetch="all">All</button>
-    <button class="fab-item" data-fetch="nba">NBA</button>
-    <button class="fab-item" data-fetch="ncaab">NCAAM</button>
-    <button class="fab-item" data-fetch="nfl">NFL</button>
-    <button class="fab-item" data-fetch="ncaaf">NCAAF</button>
-  </div>
-</div>
-<button class="mobile-fab" id="mobile-fetch-fab" aria-label="Fetch picks">↻</button>
+    <script src="assets/js/utils/shared-utils.js?v=33.00.4" defer></script>
+    <script src="assets/js/core/navigation.js?v=33.00.4" defer></script>
+    <script src="assets/js/modules/picks-dom-utils.js?v=33.00.4" defer></script>
+    <script src="assets/js/utils/logo-cache.js?v=33.00.4" defer></script>
 
-<script src="assets/js/utils/shared-utils.js?v=33.00.4" defer></script>
-<script src="assets/js/core/navigation.js?v=33.00.4" defer></script>
-<script src="assets/js/modules/picks-dom-utils.js?v=33.00.4" defer></script>
-<script src="assets/js/utils/logo-cache.js?v=33.00.4" defer></script>
+    <!-- Weekly Lineup ↔ Dashboard Sync Bridge -->
+    <script src="assets/js/utils/weekly-lineup-sync.js?v=34.00.0" defer></script>
 
-<!-- Weekly Lineup ↔ Dashboard Sync Bridge -->
-<script src="assets/js/utils/weekly-lineup-sync.js?v=34.00.0" defer></script>
+    <script src="assets/js/features/live-scores.js?v=34.00.1" defer></script>
+    <script src="assets/js/features/weekly-lineup.js?v=34.01.1" defer></script>
+    <script src="assets/js/modules/picks-state-manager.js?v=33.00.4" defer></script>
+    <script src="assets/js/modules/picks-table-renderer.js?v=33.00.4" defer></script>
+    <script src="assets/js/modules/picks-filter-manager.js?v=33.00.4" defer></script>
+    <script src="assets/js/mobile/mobile-enhancements.js?v=1.0.0" defer></script>
+    <!-- Mobile Navigation Drawer -->
+    <script src="assets/js/mobile/mobile-nav-drawer.js?v=34.00.0" defer></script>
 
-<script src="assets/js/features/live-scores.js?v=34.00.1" defer></script>
-<script src="assets/js/features/weekly-lineup.js?v=34.01.1" defer></script>
-<script src="assets/js/modules/picks-state-manager.js?v=33.00.4" defer></script>
-<script src="assets/js/modules/picks-table-renderer.js?v=33.00.4" defer></script>
-<script src="assets/js/modules/picks-filter-manager.js?v=33.00.4" defer></script>
-<script src="assets/js/mobile/mobile-enhancements.js?v=1.0.0" defer></script>
-<!-- Mobile Navigation Drawer -->
-<script src="assets/js/mobile/mobile-nav-drawer.js?v=34.00.0" defer></script>
+    <!-- Pick Management Scripts (needed for manual entry and upload) -->
+    <script src="assets/js/features/pick-standardizer.js?v=34.00.0" defer></script>
+    <script src="dashboard/js/local-picks-manager.js?v=34.00.0" defer></script>
 
-<!-- Pick Management Scripts (needed for manual entry and upload) -->
-<script src="assets/js/features/pick-standardizer.js?v=34.00.0" defer></script>
-<script src="dashboard/js/local-picks-manager.js?v=34.00.0" defer></script>
+    <!-- Real-time Updates via SignalR -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.min.js"></script>
+    <script src="assets/js/core/signalr-client.js?v=34.00.0" defer></script>
+    <!-- Authentication -->
+    <script src="assets/js/core/auth-client.js?v=34.00.0" defer></script>
+    <!-- Blob Storage Archival -->
+    <script src="assets/js/features/bubble-storage-archiver.js?v=34.00.0" defer></script>
+    <!-- History Manager (Azure Blob Archive) -->
+    <script src="assets/js/features/history-manager.js?v=34.00.0" defer></script>
+    <!-- File Import - PDF & Image OCR Parsing -->
+    <script src="assets/js/features/pdf-parser.js?v=34.00.0" defer></script>
+    <script src="assets/js/features/image-ocr-parser.js?v=34.00.0" defer></script>
+    <!-- Basketball API Secondary Data Source -->
+    <script src="assets/js/features/basketball-api-client.js?v=34.00.0" defer></script>
+    <!-- Sportsbook Connector -->
+    <script src="assets/js/features/sportsbook-connector.js?v=34.00.0" defer></script>
 
-<!-- Real-time Updates via SignalR -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.min.js"></script>
-<script src="assets/js/core/signalr-client.js?v=34.00.0" defer></script>
-<!-- Authentication -->
-<script src="assets/js/core/auth-client.js?v=34.00.0" defer></script>
-<!-- Blob Storage Archival -->
-<script src="assets/js/features/bubble-storage-archiver.js?v=34.00.0" defer></script>
-<!-- History Manager (Azure Blob Archive) -->
-<script src="assets/js/features/history-manager.js?v=34.00.0" defer></script>
-<!-- File Import - PDF & Image OCR Parsing -->
-<script src="assets/js/features/pdf-parser.js?v=34.00.0" defer></script>
-<script src="assets/js/features/image-ocr-parser.js?v=34.00.0" defer></script>
-<!-- Basketball API Secondary Data Source -->
-<script src="assets/js/features/basketball-api-client.js?v=34.00.0" defer></script>
-<!-- Sportsbook Connector -->
-<script src="assets/js/features/sportsbook-connector.js?v=34.00.0" defer></script>
-
-<script>
-    // Service worker registration (versioned to bust caches)
-    (function(){
+    <script>
+      // Service worker registration (versioned to bust caches)
+      (function () {
         try {
-            if ('serviceWorker' in navigator) {
-                var swUrl = '/sw.js?v=2.0.3';
+          if ("serviceWorker" in navigator) {
+            var swUrl = "/sw.js?v=2.0.3";
 
-                var expectedSwVersion = 'v2.0.3';
+            var expectedSwVersion = "v2.0.3";
 
-                async function hardResetCachesAndReload() {
-                    try {
-                        var regs = await navigator.serviceWorker.getRegistrations();
-                        await Promise.all(regs.map(function(r){ return r.unregister(); }));
-                    } catch(e) {}
-                    try {
-                        if (window.caches && caches.keys) {
-                            var keys = await caches.keys();
-                            await Promise.all(keys.map(function(k){ return caches.delete(k); }));
-                        }
-                    } catch(e) {}
-                    try {
-                        var url = new URL(window.location.href);
-                        url.searchParams.set('r', String(Date.now()));
-                        window.location.replace(url.toString());
-                    } catch(e) {
-                        window.location.reload();
-                    }
+            async function hardResetCachesAndReload() {
+              try {
+                var regs = await navigator.serviceWorker.getRegistrations();
+                await Promise.all(
+                  regs.map(function (r) {
+                    return r.unregister();
+                  })
+                );
+              } catch (e) {}
+              try {
+                if (window.caches && caches.keys) {
+                  var keys = await caches.keys();
+                  await Promise.all(
+                    keys.map(function (k) {
+                      return caches.delete(k);
+                    })
+                  );
                 }
-
-                function getSwVersion(controller) {
-                    return new Promise(function(resolve){
-                        try {
-                            if (!controller) return resolve(null);
-                            var channel = new MessageChannel();
-                            channel.port1.onmessage = function(evt){
-                                resolve((evt && evt.data && evt.data.version) || null);
-                            };
-                            controller.postMessage({ type: 'GET_VERSION' }, [channel.port2]);
-                            setTimeout(function(){ resolve(null); }, 1500);
-                        } catch(e) {
-                            resolve(null);
-                        }
-                    });
-                }
-
-                async function ensureFreshClient() {
-                    try {
-                        var params = new URLSearchParams(window.location.search);
-                        if (params.get('reset') === '1') {
-                            await hardResetCachesAndReload();
-                            return;
-                        }
-                    } catch(e) {}
-
-                    try {
-                        var controller = navigator.serviceWorker.controller;
-                        var activeVersion = await getSwVersion(controller);
-                        if (activeVersion && activeVersion !== expectedSwVersion) {
-                            await hardResetCachesAndReload();
-                        }
-                    } catch(e) {}
-                }
-
-                window.addEventListener('load', function(){
-                    navigator.serviceWorker.register(swUrl, { updateViaCache: 'none' }).then(function(reg){
-                        try { reg.update(); } catch(e) {}
-                        try {
-                            if (reg.waiting) {
-                                reg.waiting.postMessage({ type: 'SKIP_WAITING' });
-                            }
-                        } catch(e) {}
-                        ensureFreshClient();
-                    }).catch(function(){});
-                });
-                navigator.serviceWorker.addEventListener('controllerchange', function(){ /* no-op */ });
+              } catch (e) {}
+              try {
+                var url = new URL(window.location.href);
+                url.searchParams.set("r", String(Date.now()));
+                window.location.replace(url.toString());
+              } catch (e) {
+                window.location.reload();
+              }
             }
-        } catch(e) {}
-    })();
 
-  // Lazy-load only heavy OCR/parsing features when idle (core features already loaded)
-  if (window.LazyScriptLoader) {
-    window.addEventListener('load', () => {
-      // These are truly optional features that can wait
-      setTimeout(() => {
-        window.LazyScriptLoader.loadWhenIdle([
-          'assets/js/features/pdf-parser.js?v=34.00.0',
-          'assets/js/features/image-ocr-parser.js?v=34.00.0',
-        ]);
-      }, 3000);
-    });
-  }
-</script>
+            function getSwVersion(controller) {
+              return new Promise(function (resolve) {
+                try {
+                  if (!controller) return resolve(null);
+                  var channel = new MessageChannel();
+                  channel.port1.onmessage = function (evt) {
+                    resolve((evt && evt.data && evt.data.version) || null);
+                  };
+                  controller.postMessage({ type: "GET_VERSION" }, [channel.port2]);
+                  setTimeout(function () {
+                    resolve(null);
+                  }, 1500);
+                } catch (e) {
+                  resolve(null);
+                }
+              });
+            }
 
-</body>
+            async function ensureFreshClient() {
+              try {
+                var params = new URLSearchParams(window.location.search);
+                if (params.get("reset") === "1") {
+                  await hardResetCachesAndReload();
+                  return;
+                }
+              } catch (e) {}
+
+              try {
+                var controller = navigator.serviceWorker.controller;
+                var activeVersion = await getSwVersion(controller);
+                if (activeVersion && activeVersion !== expectedSwVersion) {
+                  await hardResetCachesAndReload();
+                }
+              } catch (e) {}
+            }
+
+            window.addEventListener("load", function () {
+              navigator.serviceWorker
+                .register(swUrl, { updateViaCache: "none" })
+                .then(function (reg) {
+                  try {
+                    reg.update();
+                  } catch (e) {}
+                  try {
+                    if (reg.waiting) {
+                      reg.waiting.postMessage({ type: "SKIP_WAITING" });
+                    }
+                  } catch (e) {}
+                  ensureFreshClient();
+                })
+                .catch(function () {});
+            });
+            navigator.serviceWorker.addEventListener("controllerchange", function () {
+              /* no-op */
+            });
+          }
+        } catch (e) {}
+      })();
+
+      // Lazy-load only heavy OCR/parsing features when idle (core features already loaded)
+      if (window.LazyScriptLoader) {
+        window.addEventListener("load", () => {
+          // These are truly optional features that can wait
+          setTimeout(() => {
+            window.LazyScriptLoader.loadWhenIdle([
+              "assets/js/features/pdf-parser.js?v=34.00.0",
+              "assets/js/features/image-ocr-parser.js?v=34.00.0"
+            ]);
+          }, 3000);
+        });
+      }
+    </script>
+  </body>
 </html>

@@ -1,0 +1,120 @@
+{
+  "folders": [
+    {
+      "name": "NBA GBSV Model",
+      "path": "..\\nba_gbsv_local_v3.0"
+    },
+    {
+      "name": "Dashboard",
+      "path": "."
+    }
+  ],
+  "profile": "Profile-VS-GBSV",
+  "settings": {
+    "terminal.integrated.env.windows": {
+      "NUGET_PACKAGES": "C:\\Users\\JDSB\\.nuget\\packages",
+      "PIP_CACHE_DIR": "C:\\Users\\JDSB\\.cache\\pip",
+      "npm_config_cache": "C:\\Users\\JDSB\\.npm-cache",
+      "DOTNET_ROOT": "C:\\Users\\JDSB\\AppData\\Local\\Microsoft\\dotnet",
+      "PATH": "C:\\Users\\JDSB\\AppData\\Local\\Microsoft\\dotnet;${env:PATH}",
+      "AZURE_CONFIG_DIR": "C:\\Users\\JDSB\\.azure",
+      "AZURE_DEV_COLLECT_TELEMETRY": "no"
+    },
+
+    "extensions.ignoreRecommendations": false,
+    "extensions.autoUpdate": true,
+    "update.showReleaseNotes": false,
+
+    "azurite.location": "${workspaceFolder:NBA_GBSV_Workspace}/.azurite",
+    "azurite.silent": true,
+    "azurite.blobHost": "127.0.0.1",
+    "azurite.queueHost": "127.0.0.1",
+    "azurite.tableHost": "127.0.0.1",
+
+    "azureFunctions.projectRuntime": "~4",
+    "azureFunctions.showProjectWarning": false,
+    "azureFunctions.suppressProject": true,
+    "azureFunctions.showDeployConfirmation": false,
+    "azureFunctions.enableOutputTimestamps": false,
+
+    "azure.showSignedInEmail": false,
+    "azure-account.authenticationProvider": "auto",
+
+    "dotnet.defaultSolution": "${workspaceFolder:NBA_GBSV_Workspace}/gbsv_nba_git_v3.0/gbsv_nba_git_v3.0.sln",
+    "omnisharp.enableRoslynAnalyzers": false,
+    "csharp.suppressDotnetRestoreNotification": true,
+
+    "python.defaultInterpreterPath": "${workspaceFolder:Dashboard}/.venv/Scripts/python.exe",
+    "python.analysis.autoImportCompletions": true,
+
+    "git.confirmSync": false,
+    "git.autofetch": false,
+    "git.enableSmartCommit": true,
+
+    "workbench.startupEditor": "none",
+    "security.workspace.trust.enabled": true,
+    
+    "java.enabled": false,
+    "jupyter.experiments.enabled": false
+  },
+  "extensions": {
+    "recommendations": [
+      "ms-azuretools.vscode-azurefunctions",
+      "ms-azuretools.vscode-azurestorage",
+      "ms-azuretools.azure-dev",
+      "ms-vscode.azure-account",
+      "azurite.azurite",
+      "ms-dotnettools.csharp",
+      "ms-python.python",
+      "github.copilot",
+      "github.copilot-chat",
+      "dbaeumer.vscode-eslint",
+      "ms-azuretools.vscode-docker",
+      "eamodio.gitlens",
+      "rangav.vscode-thunder-client"
+    ]
+  },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [],
+    "compounds": [
+      {
+        "name": "Full Stack (Azurite + NBA API + Dashboard)",
+        "configurations": []
+      }
+    ]
+  },
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Start Azurite",
+        "type": "shell",
+        "command": "azurite --silent --location ${workspaceFolder:NBA_GBSV_Workspace}/.azurite --blobHost 127.0.0.1 --queueHost 127.0.0.1 --tableHost 127.0.0.1",
+        "isBackground": true,
+        "problemMatcher": []
+      },
+      {
+        "label": "Start NBA API",
+        "type": "shell",
+        "command": "cd ${workspaceFolder:NBA_GBSV_Workspace}/gbsv_nba_git_v3.0 && func start --port 7071",
+        "dependsOn": "Start Azurite",
+        "isBackground": true,
+        "problemMatcher": []
+      },
+      {
+        "label": "Start Dashboard Functions",
+        "type": "shell",
+        "command": "cd ${workspaceFolder:Dashboard}/azure-functions && func start --port 7072",
+        "dependsOn": "Start Azurite",
+        "isBackground": true,
+        "problemMatcher": []
+      },
+      {
+        "label": "Full Stack Start",
+        "dependsOn": ["Start Azurite", "Start NBA API", "Start Dashboard Functions"],
+        "problemMatcher": []
+      }
+    ]
+  }
+}

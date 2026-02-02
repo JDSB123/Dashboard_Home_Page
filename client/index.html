@@ -1,74 +1,67 @@
-<!DOCTYPE html>
+<!doctype html>
 <!--
   GREEN BIER DASHBOARD v4.1
   Main dashboard landing page - Predictive Analytics
 -->
-<html lang="en" style="background-color:#030b16">
-<head>
-    <!-- Critical inline styles - prevent white flash on initial load -->
-    <style>
-        html, body {
-            background-color: #030b16 !important;
-            margin: 0;
-            padding: 0;
-        }
-        body.page-active-picks {
-            background-image: url('/assets/JB_Bearish_Market_FULL_page.png');
-            background-size: cover;
-            background-position: center top;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-        }
-    </style>
-    <meta name="theme-color" content="#030b16">
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://fonts.googleapis.com https://fonts.gstatic.com https://proud-cliff-008e2e20f.2.azurestaticapps.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://*.blob.core.windows.net https://*.azurestaticapps.net; connect-src 'self' https://*.azurewebsites.net https://*.azurecontainerapps.io https://*.azurefd.net;">
+<html lang="en">
+  <head>
+    <!-- Critical styles moved to external CSS for CSP hardening -->
+    <link rel="stylesheet" href="assets/css/base/critical.css?v=1" />
+    <meta name="theme-color" content="#030b16" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <!-- Page-level CSP meta removed to defer to SWA global CSP -->
     <title>Green Bier Sport Ventures — Dashboard v4.1</title>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="assets/Logo%208.5.png?v=20251216">
+    <link rel="icon" type="image/png" href="assets/Logo%208.5.png?v=20251216" />
 
     <!-- Preload critical background image -->
-    <link rel="preload" as="image" href="assets/JB_Bearish_Market_FULL_page.png">
+    <link rel="preload" as="image" href="assets/JB_Bearish_Market_FULL_page.png" />
 
     <!-- Google Fonts: Athletic Prestige Design -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&amp;family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Oswald:wght@500;600;700&amp;family=Bebas+Neue&amp;family=Inter:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;family=Exo+2:wght@400;500;600&amp;family=Roboto+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&amp;family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Oswald:wght@500;600;700&amp;family=Bebas+Neue&amp;family=Inter:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;family=Exo+2:wght@400;500;600&amp;family=Roboto+Mono:wght@400;500&amp;display=swap"
+      rel="stylesheet"
+    />
     <!-- CSS Architecture: Direct Modular Imports (No Orchestrator) -->
     <!-- Cache version: 34.00.0 - Standardized versioning + consolidated hotfixes -->
 
     <!-- 1. Design Tokens (colors, typography, spacing) -->
-    <link rel="stylesheet" href="assets/css/base/variables.css?v=34.00.0">
+    <link rel="stylesheet" href="assets/css/base/variables.css?v=34.00.0" />
 
     <!-- 2. Global Resets & Utilities -->
-    <link rel="stylesheet" href="assets/css/base/reset.css?v=34.00.0">
+    <link rel="stylesheet" href="assets/css/base/reset.css?v=34.00.0" />
 
     <!-- 3. Page Layout Structure -->
-    <link rel="stylesheet" href="assets/css/layout/page-layout.css?v=34.00.0">
+    <link rel="stylesheet" href="assets/css/layout/page-layout.css?v=34.00.0" />
 
     <!-- 4. Navigation & Header Components -->
-    <link rel="stylesheet" href="assets/css/components/navigation.css?v=34.00.0">
-    <link rel="stylesheet" href="assets/css/components/brand-header.css?v=34.00.0">
+    <link rel="stylesheet" href="assets/css/components/navigation.css?v=34.00.0" />
+    <link rel="stylesheet" href="assets/css/components/brand-header.css?v=34.00.0" />
 
     <!-- 5. Interactive Components -->
-    <link rel="stylesheet" href="assets/css/components/kpi-tiles.css?v=34.00.0">
-    <link rel="stylesheet" href="assets/css/components/date-toggles.css?v=34.00.0">
+    <link rel="stylesheet" href="assets/css/components/kpi-tiles.css?v=34.00.0" />
+    <link rel="stylesheet" href="assets/css/components/date-toggles.css?v=34.00.0" />
 
     <!-- 6. Table System Components -->
-    <link rel="stylesheet" href="assets/css/components/picks-table.css?v=34.00.0">
-    <link rel="stylesheet" href="assets/css/components/boxscores.css?v=34.00.0">
-    <link rel="stylesheet" href="assets/css/components/status-badges.css?v=34.00.0">
+    <link rel="stylesheet" href="assets/css/components/picks-table.css?v=34.00.0" />
+    <link rel="stylesheet" href="assets/css/components/boxscores.css?v=34.00.0" />
+    <link rel="stylesheet" href="assets/css/components/status-badges.css?v=34.00.0" />
 
     <!-- 7. Utility & Color Systems -->
-    <link rel="stylesheet" href="assets/css/components/segment-colors.css?v=34.00.0">
+    <link rel="stylesheet" href="assets/css/components/segment-colors.css?v=34.00.0" />
 
     <!-- 8. Dashboard-specific styles (self-contained) -->
-    <link rel="stylesheet" href="assets/css/pages/dashboard.css?v=34.00.0">
+    <link rel="stylesheet" href="assets/css/pages/dashboard.css?v=34.00.0" />
 
     <!-- 9. Mobile Responsive Styles (includes consolidated hotfixes) -->
-    <link rel="stylesheet" href="assets/css/components/mobile-responsive.css?v=34.00.0">
+    <link rel="stylesheet" href="assets/css/components/mobile-responsive.css?v=34.00.0" />
+    <!-- Utility and column width helpers -->
+    <link rel="stylesheet" href="assets/css/base/utilities.css?v=1" />
+    <link rel="stylesheet" href="assets/css/components/table-columns.css?v=1" />
 
     <!-- Dashboard styles consolidated in assets/css/pages/dashboard.css v5.1 -->
 
@@ -94,466 +87,780 @@
 
     <!-- Core dashboard interactions: KPI tiles, sorting -->
     <script src="assets/js/core/debug-config.js?v=34.00.0" defer></script>
+    <script src="assets/js/init/disable-form-submit.js?v=1" defer></script>
     <script src="assets/js/features/manual-upload.js" defer></script>
     <script src="assets/js/features/sportsbook-selection-handler.js?v=34.00.0" defer></script>
 
     <!-- Page Transition Handler (smooth navigation with loading state) -->
     <script src="assets/js/utils/page-transition-handler.js?v=1.0.0" defer></script>
     <!-- Prefetch Weekly Lineup assets to speed up navigation -->
-    <link rel="prefetch" href="weekly-lineup.html" as="document">
-    <link rel="prefetch" href="assets/JB_Bearish_Market_FULL_page.png" as="image">
-    <link rel="prefetch" href="dist/bundle.min.css" as="style">
-    <link rel="prefetch" href="assets/js/weekly-lineup-mobile.js?v=34.00.0" as="script">
-</head>
-<body class="page-active-picks" style="background-color:#030b16">
-<noscript>
-    <div class="noscript-warning" role="alert">
+    <link rel="prefetch" href="weekly-lineup.html" as="document" />
+    <link rel="prefetch" href="assets/JB_Bearish_Market_FULL_page.png" as="image" />
+    <link rel="prefetch" href="dist/bundle.min.css" as="style" />
+    <link rel="prefetch" href="assets/js/weekly-lineup-mobile.js?v=34.00.0" as="script" />
+  </head>
+  <body class="page-active-picks">
+    <noscript>
+      <div class="noscript-warning" role="alert">
         <strong>JavaScript Required:</strong> This dashboard requires JavaScript.
-    </div>
-</noscript>
+      </div>
+    </noscript>
 
-<nav class="brand-nav" role="navigation" aria-label="Main navigation">
-    <ul class="nav-links" aria-label="Primary">
+    <nav class="brand-nav" role="navigation" aria-label="Main navigation">
+      <ul class="nav-links" aria-label="Primary">
         <li>
-            <a href="index.html" class="nav-link" aria-current="page">Dashboard</a>
+          <a href="index.html" class="nav-link" aria-current="page">Dashboard</a>
         </li>
         <li>
-            <a href="weekly-lineup.html" class="nav-link">Weekly Lineup</a>
+          <a href="weekly-lineup.html" class="nav-link">Weekly Lineup</a>
         </li>
         <li>
-            <a href="odds-market.html" class="nav-link">Odds Market</a>
+          <a href="odds-market.html" class="nav-link">Odds Market</a>
         </li>
         <li class="nav-dropdown">
-            <button class="nav-link nav-dropdown-trigger" id="sportsbooks-trigger" aria-expanded="false" aria-haspopup="true" aria-controls="sportsbooks-menu">Sports Books</button>
-            <!-- Sportsbook Dropdown Menu -->
-            <div class="nav-dropdown-menu" id="sportsbooks-menu" aria-labelledby="sportsbooks-trigger" role="region" aria-label="Connected sportsbooks" hidden>
-                <!-- Hulk Wager -->
-                <section class="sportsbook-card" data-book="hulkwager" aria-labelledby="nav-sportsbook-hulkwager-name">
-                    <div class="sportsbook-card-header">
-                        <div class="sportsbook-name-group" id="nav-sportsbook-hulkwager-name">
-                            <span class="connection-status disconnected"></span>
-                            <span class="sportsbook-name">Hulk Wager</span>
-                        </div>
-                        <div class="sportsbook-meta-compact">
-                            <span class="sportsbook-last-sync">Last: <span class="sync-time">--</span></span>
-                            <button type="button" class="sportsbook-fetch-compact" data-book="hulkwager" aria-label="Fetch picks from Hulk Wager">
-                                <span class="fetch-icon">↻</span>
-                            </button>
-                        </div>
-                    </div>
-                    <form class="sportsbook-actions-row" onsubmit="return false;">
-                        <div class="sportsbook-credentials-group">
-                            <input type="text" id="nav-hulk-username" class="credential-input-compact" placeholder="Username" name="nav-hulkwager-login" autocomplete="off" spellcheck="false" data-form-type="other" inputmode="text" aria-label="Hulk Wager username">
-                            <input type="password" id="nav-hulk-password" class="credential-input-compact" placeholder="Password" name="nav-hulkwager-secret" autocomplete="new-password" spellcheck="false" data-form-type="other" inputmode="text" aria-label="Hulk Wager password">
-                        </div>
-                    </form>
-                </section>
-                <!-- Bombay 711 -->
-                <section class="sportsbook-card" data-book="bombay711" aria-labelledby="nav-sportsbook-bombay711-name">
-                    <div class="sportsbook-card-header">
-                        <div class="sportsbook-name-group" id="nav-sportsbook-bombay711-name">
-                            <span class="connection-status disconnected"></span>
-                            <span class="sportsbook-name">Bombay 711</span>
-                        </div>
-                        <div class="sportsbook-meta-compact">
-                            <span class="sportsbook-last-sync">Last: <span class="sync-time">--</span></span>
-                            <button type="button" class="sportsbook-fetch-compact" data-book="bombay711" aria-label="Fetch picks from Bombay 711">
-                                <span class="fetch-icon">↻</span>
-                            </button>
-                        </div>
-                    </div>
-                    <form class="sportsbook-actions-row" onsubmit="return false;">
-                        <div class="sportsbook-credentials-group">
-                            <input type="text" id="nav-bombay-username" class="credential-input-compact" placeholder="Username" name="nav-bombay711-login" autocomplete="off" spellcheck="false" data-form-type="other" inputmode="text" aria-label="Bombay 711 username">
-                            <input type="password" id="nav-bombay-password" class="credential-input-compact" placeholder="Password" name="nav-bombay711-secret" autocomplete="new-password" spellcheck="false" data-form-type="other" inputmode="text" aria-label="Bombay 711 password">
-                        </div>
-                    </form>
-                </section>
-                <!-- King of Sports -->
-                <section class="sportsbook-card" data-book="kingofsports" aria-labelledby="nav-sportsbook-kingofsports-name">
-                    <div class="sportsbook-card-header">
-                        <div class="sportsbook-name-group" id="nav-sportsbook-kingofsports-name">
-                            <span class="connection-status disconnected"></span>
-                            <span class="sportsbook-name">King of Sports</span>
-                        </div>
-                        <div class="sportsbook-meta-compact">
-                            <span class="sportsbook-last-sync">Last: <span class="sync-time">--</span></span>
-                            <button type="button" class="sportsbook-fetch-compact" data-book="kingofsports" aria-label="Fetch picks from King of Sports">
-                                <span class="fetch-icon">↻</span>
-                            </button>
-                        </div>
-                    </div>
-                    <form class="sportsbook-actions-row" onsubmit="return false;">
-                        <div class="sportsbook-credentials-group">
-                            <input type="text" id="nav-kingofsports-username" class="credential-input-compact" placeholder="Username" name="nav-kingofsports-login" autocomplete="off" spellcheck="false" data-form-type="other" inputmode="text" aria-label="King of Sports username">
-                            <input type="password" id="nav-kingofsports-password" class="credential-input-compact" placeholder="Password" name="nav-kingofsports-secret" autocomplete="new-password" spellcheck="false" data-form-type="other" inputmode="text" aria-label="King of Sports password">
-                        </div>
-                    </form>
-                </section>
-                <!-- Prime Time Action -->
-                <section class="sportsbook-card" data-book="primetimeaction" aria-labelledby="nav-sportsbook-primetimeaction-name">
-                    <div class="sportsbook-card-header">
-                        <div class="sportsbook-name-group" id="nav-sportsbook-primetimeaction-name">
-                            <span class="connection-status disconnected"></span>
-                            <span class="sportsbook-name">Prime Time Action</span>
-                        </div>
-                        <div class="sportsbook-meta-compact">
-                            <span class="sportsbook-last-sync">Last: <span class="sync-time">--</span></span>
-                            <button type="button" class="sportsbook-fetch-compact" data-book="primetimeaction" aria-label="Fetch picks from Prime Time Action">
-                                <span class="fetch-icon">↻</span>
-                            </button>
-                        </div>
-                    </div>
-                    <form class="sportsbook-actions-row" onsubmit="return false;">
-                        <div class="sportsbook-credentials-group">
-                            <input type="text" id="nav-primetime-username" class="credential-input-compact" placeholder="Username" name="nav-primetimeaction-login" autocomplete="off" spellcheck="false" data-form-type="other" inputmode="text" aria-label="Prime Time Action username">
-                            <input type="password" id="nav-primetime-password" class="credential-input-compact" placeholder="Password" name="nav-primetimeaction-secret" autocomplete="new-password" spellcheck="false" data-form-type="other" inputmode="text" aria-label="Prime Time Action password">
-                        </div>
-                    </form>
-                </section>
-
-                <!-- Upload Section Divider -->
-                <div class="dropdown-section-divider">
-                    <span class="divider-label">Upload Picks</span>
+          <button
+            class="nav-link nav-dropdown-trigger"
+            id="sportsbooks-trigger"
+            aria-expanded="false"
+            aria-haspopup="true"
+            aria-controls="sportsbooks-menu"
+          >
+            Sports Books
+          </button>
+          <!-- Sportsbook Dropdown Menu -->
+          <div
+            class="nav-dropdown-menu"
+            id="sportsbooks-menu"
+            aria-labelledby="sportsbooks-trigger"
+            role="region"
+            aria-label="Connected sportsbooks"
+            hidden
+          >
+            <!-- Hulk Wager -->
+            <section
+              class="sportsbook-card"
+              data-book="hulkwager"
+              aria-labelledby="nav-sportsbook-hulkwager-name"
+            >
+              <div class="sportsbook-card-header">
+                <div class="sportsbook-name-group" id="nav-sportsbook-hulkwager-name">
+                  <span class="connection-status disconnected"></span>
+                  <span class="sportsbook-name">Hulk Wager</span>
                 </div>
+                <div class="sportsbook-meta-compact">
+                  <span class="sportsbook-last-sync">Last: <span class="sync-time">--</span></span>
+                  <button
+                    type="button"
+                    class="sportsbook-fetch-compact"
+                    data-book="hulkwager"
+                    aria-label="Fetch picks from Hulk Wager"
+                  >
+                    <span class="fetch-icon">↻</span>
+                  </button>
+                </div>
+              </div>
+              <form class="sportsbook-actions-row">
+                <div class="sportsbook-credentials-group">
+                  <input
+                    type="text"
+                    id="nav-hulk-username"
+                    class="credential-input-compact"
+                    placeholder="Username"
+                    name="nav-hulkwager-login"
+                    autocomplete="off"
+                    spellcheck="false"
+                    data-form-type="other"
+                    inputmode="text"
+                    aria-label="Hulk Wager username"
+                  />
+                  <input
+                    type="password"
+                    id="nav-hulk-password"
+                    class="credential-input-compact"
+                    placeholder="Password"
+                    name="nav-hulkwager-secret"
+                    autocomplete="new-password"
+                    spellcheck="false"
+                    data-form-type="other"
+                    inputmode="text"
+                    aria-label="Hulk Wager password"
+                  />
+                </div>
+              </form>
+            </section>
+            <!-- Bombay 711 -->
+            <section
+              class="sportsbook-card"
+              data-book="bombay711"
+              aria-labelledby="nav-sportsbook-bombay711-name"
+            >
+              <div class="sportsbook-card-header">
+                <div class="sportsbook-name-group" id="nav-sportsbook-bombay711-name">
+                  <span class="connection-status disconnected"></span>
+                  <span class="sportsbook-name">Bombay 711</span>
+                </div>
+                <div class="sportsbook-meta-compact">
+                  <span class="sportsbook-last-sync">Last: <span class="sync-time">--</span></span>
+                  <button
+                    type="button"
+                    class="sportsbook-fetch-compact"
+                    data-book="bombay711"
+                    aria-label="Fetch picks from Bombay 711"
+                  >
+                    <span class="fetch-icon">↻</span>
+                  </button>
+                </div>
+              </div>
+              <form class="sportsbook-actions-row">
+                <div class="sportsbook-credentials-group">
+                  <input
+                    type="text"
+                    id="nav-bombay-username"
+                    class="credential-input-compact"
+                    placeholder="Username"
+                    name="nav-bombay711-login"
+                    autocomplete="off"
+                    spellcheck="false"
+                    data-form-type="other"
+                    inputmode="text"
+                    aria-label="Bombay 711 username"
+                  />
+                  <input
+                    type="password"
+                    id="nav-bombay-password"
+                    class="credential-input-compact"
+                    placeholder="Password"
+                    name="nav-bombay711-secret"
+                    autocomplete="new-password"
+                    spellcheck="false"
+                    data-form-type="other"
+                    inputmode="text"
+                    aria-label="Bombay 711 password"
+                  />
+                </div>
+              </form>
+            </section>
+            <!-- King of Sports -->
+            <section
+              class="sportsbook-card"
+              data-book="kingofsports"
+              aria-labelledby="nav-sportsbook-kingofsports-name"
+            >
+              <div class="sportsbook-card-header">
+                <div class="sportsbook-name-group" id="nav-sportsbook-kingofsports-name">
+                  <span class="connection-status disconnected"></span>
+                  <span class="sportsbook-name">King of Sports</span>
+                </div>
+                <div class="sportsbook-meta-compact">
+                  <span class="sportsbook-last-sync">Last: <span class="sync-time">--</span></span>
+                  <button
+                    type="button"
+                    class="sportsbook-fetch-compact"
+                    data-book="kingofsports"
+                    aria-label="Fetch picks from King of Sports"
+                  >
+                    <span class="fetch-icon">↻</span>
+                  </button>
+                </div>
+              </div>
+              <form class="sportsbook-actions-row">
+                <div class="sportsbook-credentials-group">
+                  <input
+                    type="text"
+                    id="nav-kingofsports-username"
+                    class="credential-input-compact"
+                    placeholder="Username"
+                    name="nav-kingofsports-login"
+                    autocomplete="off"
+                    spellcheck="false"
+                    data-form-type="other"
+                    inputmode="text"
+                    aria-label="King of Sports username"
+                  />
+                  <input
+                    type="password"
+                    id="nav-kingofsports-password"
+                    class="credential-input-compact"
+                    placeholder="Password"
+                    name="nav-kingofsports-secret"
+                    autocomplete="new-password"
+                    spellcheck="false"
+                    data-form-type="other"
+                    inputmode="text"
+                    aria-label="King of Sports password"
+                  />
+                </div>
+              </form>
+            </section>
+            <!-- Prime Time Action -->
+            <section
+              class="sportsbook-card"
+              data-book="primetimeaction"
+              aria-labelledby="nav-sportsbook-primetimeaction-name"
+            >
+              <div class="sportsbook-card-header">
+                <div class="sportsbook-name-group" id="nav-sportsbook-primetimeaction-name">
+                  <span class="connection-status disconnected"></span>
+                  <span class="sportsbook-name">Prime Time Action</span>
+                </div>
+                <div class="sportsbook-meta-compact">
+                  <span class="sportsbook-last-sync">Last: <span class="sync-time">--</span></span>
+                  <button
+                    type="button"
+                    class="sportsbook-fetch-compact"
+                    data-book="primetimeaction"
+                    aria-label="Fetch picks from Prime Time Action"
+                  >
+                    <span class="fetch-icon">↻</span>
+                  </button>
+                </div>
+              </div>
+              <form class="sportsbook-actions-row">
+                <div class="sportsbook-credentials-group">
+                  <input
+                    type="text"
+                    id="nav-primetime-username"
+                    class="credential-input-compact"
+                    placeholder="Username"
+                    name="nav-primetimeaction-login"
+                    autocomplete="off"
+                    spellcheck="false"
+                    data-form-type="other"
+                    inputmode="text"
+                    aria-label="Prime Time Action username"
+                  />
+                  <input
+                    type="password"
+                    id="nav-primetime-password"
+                    class="credential-input-compact"
+                    placeholder="Password"
+                    name="nav-primetimeaction-secret"
+                    autocomplete="new-password"
+                    spellcheck="false"
+                    data-form-type="other"
+                    inputmode="text"
+                    aria-label="Prime Time Action password"
+                  />
+                </div>
+              </form>
+            </section>
 
-                <!-- Manual Upload -->
-                <section class="sportsbook-card upload-picks-card" aria-labelledby="upload-picks-title">
-                    <div class="sportsbook-card-header">
-                        <div class="sportsbook-name-group">
-                            <span class="connection-status connected"></span>
-                            <span class="sportsbook-name" id="upload-picks-title">Upload Picks</span>
-                        </div>
-                        <div class="sportsbook-meta-compact">
-                            <span class="sportsbook-last-sync">Attach slips or paste text</span>
-                        </div>
-                    </div>
-                    <div class="sportsbook-upload-shell">
-                        <div class="upload-destination">
-                            <label for="upload-sportsbook-select" class="upload-label">Assign sportsbook</label>
-                            <select id="upload-sportsbook-select" class="sportsbook-select" aria-label="Assign uploaded picks to a sportsbook">
-                                <option value="">Select Book...</option>
-                                <option value="hulkwager">Hulk Wager</option>
-                                <option value="bombay711">Bombay 711</option>
-                                <option value="kingofsports">King of Sports</option>
-                                <option value="primetimeaction">Prime Time Action</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-                        <div class="sportsbook-actions-compact" id="action-buttons" style="display: none;">
-                            <div class="action-btn-cta">Choose an option to add picks</div>
-                            <button class="action-btn-compact add-book-btn-compact" type="button">+ Add Book</button>
-                            <button class="action-btn-compact import-picks-btn" type="button">Upload Picks</button>
-                        </div>
-                        <div class="import-options-popup" id="import-options">
-                            <div class="import-header">
-                                <div class="import-title-group">
-                                    <span class="import-title">Upload Picks</span>
-                                    <span class="import-subtitle">Drag in bet slips or paste picks below.</span>
-                                </div>
-                                <button type="button" class="import-back-btn" aria-label="Back to sportsbook list">Back</button>
-                            </div>
-                            <label for="file-upload" class="import-option-item import-file-zone" id="drop-zone">
-                                <span class="import-option-label">Upload Files</span>
-                                <span class="import-option-desc">PDFs, images, HTML, or text files</span>
-                                <input type="file" id="file-upload" name="picks-file" accept=".pdf,.jpg,.jpeg,.png,.html,.htm,.txt,.csv" multiple="" class="file-input-hidden">
-                            </label>
-                            <div id="file-list"></div>
-                            <button type="button" id="upload-files-btn" class="paste-action-btn paste-process-btn" style="display: none;">Upload Selected Files</button>
-                            <div class="import-paste-container">
-                                <label for="paste-area" class="import-paste-label">Paste HTML or Text</label>
-                                <textarea id="paste-area" class="import-paste-textarea" placeholder="Paste picks (e.g., Lakers -3.5 -110 $200)" rows="4"></textarea>
-                                <div class="import-paste-actions">
-                                    <button type="button" class="paste-action-btn paste-process-btn" id="upload-paste-btn">Upload Pasted Content</button>
-                                    <button type="button" class="paste-action-btn paste-clear-btn">Clear</button>
-                                </div>
-                            </div>
-                            <div id="upload-status"></div>
-                        </div>
-                    </div>
-                </section>
+            <!-- Upload Section Divider -->
+            <div class="dropdown-section-divider">
+              <span class="divider-label">Upload Picks</span>
             </div>
+
+            <!-- Manual Upload -->
+            <section class="sportsbook-card upload-picks-card" aria-labelledby="upload-picks-title">
+              <div class="sportsbook-card-header">
+                <div class="sportsbook-name-group">
+                  <span class="connection-status connected"></span>
+                  <span class="sportsbook-name" id="upload-picks-title">Upload Picks</span>
+                </div>
+                <div class="sportsbook-meta-compact">
+                  <span class="sportsbook-last-sync">Attach slips or paste text</span>
+                </div>
+              </div>
+              <div class="sportsbook-upload-shell">
+                <div class="upload-destination">
+                  <label for="upload-sportsbook-select" class="upload-label"
+                    >Assign sportsbook</label
+                  >
+                  <select
+                    id="upload-sportsbook-select"
+                    class="sportsbook-select"
+                    aria-label="Assign uploaded picks to a sportsbook"
+                  >
+                    <option value="">Select Book...</option>
+                    <option value="hulkwager">Hulk Wager</option>
+                    <option value="bombay711">Bombay 711</option>
+                    <option value="kingofsports">King of Sports</option>
+                    <option value="primetimeaction">Prime Time Action</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+                <div class="sportsbook-actions-compact is-hidden" id="action-buttons">
+                  <div class="action-btn-cta">Choose an option to add picks</div>
+                  <button class="action-btn-compact add-book-btn-compact" type="button">
+                    + Add Book
+                  </button>
+                  <button class="action-btn-compact import-picks-btn" type="button">
+                    Upload Picks
+                  </button>
+                </div>
+                <div class="import-options-popup" id="import-options">
+                  <div class="import-header">
+                    <div class="import-title-group">
+                      <span class="import-title">Upload Picks</span>
+                      <span class="import-subtitle">Drag in bet slips or paste picks below.</span>
+                    </div>
+                    <button
+                      type="button"
+                      class="import-back-btn"
+                      aria-label="Back to sportsbook list"
+                    >
+                      Back
+                    </button>
+                  </div>
+                  <label
+                    for="file-upload"
+                    class="import-option-item import-file-zone"
+                    id="drop-zone"
+                  >
+                    <span class="import-option-label">Upload Files</span>
+                    <span class="import-option-desc">PDFs, images, HTML, or text files</span>
+                    <input
+                      type="file"
+                      id="file-upload"
+                      name="picks-file"
+                      accept=".pdf,.jpg,.jpeg,.png,.html,.htm,.txt,.csv"
+                      multiple=""
+                      class="file-input-hidden"
+                    />
+                  </label>
+                  <div id="file-list"></div>
+                  <button
+                    type="button"
+                    id="upload-files-btn"
+                    class="paste-action-btn paste-process-btn is-hidden"
+                  >
+                    Upload Selected Files
+                  </button>
+                  <div class="import-paste-container">
+                    <label for="paste-area" class="import-paste-label">Paste HTML or Text</label>
+                    <textarea
+                      id="paste-area"
+                      class="import-paste-textarea"
+                      placeholder="Paste picks (e.g., Lakers -3.5 -110 $200)"
+                      rows="4"
+                    ></textarea>
+                    <div class="import-paste-actions">
+                      <button
+                        type="button"
+                        class="paste-action-btn paste-process-btn"
+                        id="upload-paste-btn"
+                      >
+                        Upload Pasted Content
+                      </button>
+                      <button type="button" class="paste-action-btn paste-clear-btn">Clear</button>
+                    </div>
+                  </div>
+                  <div id="upload-status"></div>
+                </div>
+              </div>
+            </section>
+          </div>
         </li>
-    </ul>
-</nav>
+      </ul>
+    </nav>
 
     <main class="main-container">
-
-        <!-- ===== Topline Header ===== -->
-        <header class="dashboard-topline">
-            <div class="brand-header-inline">
-                <img class="brand-logo-inline" src="assets/Logo%208.5.png?v=20251216" alt="Green Bier Sport Ventures Logo" loading="eager">
-                <div class="brand-content-inline">
-                    <div class="brand-text-stacked">
-                        <span class="brand-line-1">Green Bier</span>
-                        <span class="brand-line-2"><span class="brand-word">Sport</span> <span class="brand-word">Ventures</span></span>
-                    </div>
-                </div>
+      <!-- ===== Topline Header ===== -->
+      <header class="dashboard-topline">
+        <div class="brand-header-inline">
+          <img
+            class="brand-logo-inline"
+            src="assets/Logo%208.5.png?v=20251216"
+            alt="Green Bier Sport Ventures Logo"
+            loading="eager"
+          />
+          <div class="brand-content-inline">
+            <div class="brand-text-stacked">
+              <span class="brand-line-1">Green Bier</span>
+              <span class="brand-line-2"
+                ><span class="brand-word">Sport</span>
+                <span class="brand-word">Ventures</span></span
+              >
             </div>
-
-            <div class="kpi-tiles">
-                <!-- KPI Tile 1: Projected PnL -->
-                <div class="kpi-tile" data-tile-id="1" data-action="flip-tile" role="button" tabindex="0" aria-label="Projected PnL KPI, click to flip">
-                    <div class="kpi-tile-layer active">
-                        <div class="kpi-label">Proj. PnL</div>
-                        <div class="kpi-value positive">+$0</div>
-                        <div class="kpi-subtext">0 Active Picks</div>
-                    </div>
-                    <div class="kpi-tile-layer">
-                        <div class="kpi-label">Net Profit</div>
-                        <div class="kpi-value">$0</div>
-                        <div class="kpi-subtext">Season Total</div>
-                    </div>
-                </div>
-
-                <!-- KPI Tile 2: Win Rate -->
-                <div class="kpi-tile" data-tile-id="2" data-action="flip-tile" role="button" tabindex="0" aria-label="Win Rate KPI, click to flip">
-                    <div class="kpi-tile-layer active">
-                        <div class="kpi-label">Win Rate</div>
-                        <div class="kpi-value">0%</div>
-                        <div class="kpi-subtext">0-0-0 Record</div>
-                    </div>
-                    <div class="kpi-tile-layer">
-                        <div class="kpi-label">ROI</div>
-                        <div class="kpi-value">0%</div>
-                        <div class="kpi-subtext">Total Return</div>
-                    </div>
-                </div>
-
-                <!-- KPI Tile 3: Active Volume -->
-                <div class="kpi-tile" data-tile-id="3" data-action="flip-tile" role="button" tabindex="0" aria-label="Active Volume KPI, click to flip">
-                    <div class="kpi-tile-layer active">
-                        <div class="kpi-label">Volume</div>
-                        <div class="kpi-value">$0</div>
-                        <div class="kpi-subtext">Total at Risk</div>
-                    </div>
-                    <div class="kpi-tile-layer">
-                        <div class="kpi-label">To Win</div>
-                        <div class="kpi-value">$0</div>
-                        <div class="kpi-subtext">Potential Win</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ===== Date Range Selector (Compact Dropdown) ===== -->
-            <div class="date-range-selector">
-                <button class="date-range-toggle" id="date-range-toggle" aria-expanded="false" aria-haspopup="listbox">
-                    <span class="date-range-label" id="date-range-label">Active</span>
-                    <span class="date-range-arrow">▼</span>
-                </button>
-                <div class="date-range-dropdown" id="date-range-dropdown" role="listbox" hidden>
-                    <button class="date-range-option active" data-range="active" role="option" aria-selected="true">Active Picks</button>
-                    <button class="date-range-option" data-range="today" role="option" aria-selected="false">Today</button>
-                    <button class="date-range-option" data-range="tomorrow" role="option" aria-selected="false">Tomorrow</button>
-                    <button class="date-range-option" data-range="week" role="option" aria-selected="false">This Week</button>
-                    <div class="date-range-divider"></div>
-                    <button class="date-range-option" data-range="settled" role="option" aria-selected="false">Settled</button>
-                    <button class="date-range-option" data-range="yesterday" role="option" aria-selected="false">Yesterday</button>
-                    <button class="date-range-option" data-range="lastWeek" role="option" aria-selected="false">Last Week</button>
-                    <button class="date-range-option" data-range="lastMonth" role="option" aria-selected="false">Last Month</button>
-                    <button class="date-range-option" data-range="last30days" role="option" aria-selected="false">Last 30 Days</button>
-                    <div class="date-range-divider"></div>
-                    <button class="date-range-option" data-range="custom" role="option" aria-selected="false" id="custom-range-trigger">Custom Range</button>
-                    <button class="date-range-option" data-range="sinceInception" role="option" aria-selected="false">Since Inception</button>
-                    <button class="date-range-option" data-range="all" role="option" aria-selected="false">All Time</button>
-                </div>
-
-                <!-- Custom Calendar Dropdown Card -->
-                <div class="custom-calendar-card" id="custom-calendar-card" hidden>
-                    <div class="calendar-card-header">
-                        <span class="calendar-card-title">Select Date Range</span>
-                        <button class="calendar-card-close" id="calendar-card-close" aria-label="Close calendar">×</button>
-                    </div>
-                    <div class="calendar-card-body">
-                        <div class="calendar-date-targets">
-                            <button class="date-target-btn active" data-target="start" id="target-start">
-                                <span class="date-target-label">From</span>
-                                <span class="date-target-value" id="date-range-start-display">—</span>
-                            </button>
-                            <button class="date-target-btn" data-target="end" id="target-end">
-                                <span class="date-target-label">To</span>
-                                <span class="date-target-value" id="date-range-end-display">—</span>
-                            </button>
-                        </div>
-                        <div class="custom-calendar">
-                            <div class="custom-calendar-header">
-                                <button class="calendar-nav prev" aria-label="Previous month">‹</button>
-                                <div class="calendar-month-label" id="custom-calendar-month">January 2025</div>
-                                <button class="calendar-nav next" aria-label="Next month">›</button>
-                            </div>
-                            <div class="calendar-weekdays">
-                                <span>S</span>
-                                <span>M</span>
-                                <span>T</span>
-                                <span>W</span>
-                                <span>T</span>
-                                <span>F</span>
-                                <span>S</span>
-                            </div>
-                            <div class="calendar-days" id="custom-calendar-days"></div>
-                        </div>
-                        <div class="calendar-card-actions">
-                            <button class="calendar-action-btn calendar-clear-btn" id="calendar-clear-btn">Clear</button>
-                            <button class="calendar-action-btn calendar-apply-btn" id="calendar-apply-btn">Apply</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </header>
-
-        <!-- ===== Main Dashboard Layout ===== -->
-        <div class="main-dashboard-layout">
-
-            <!-- Filter Toolbar -->
-            <div class="toolbar-container toolbar-layout">
-                <div class="filter-toolbar" id="filter-toolbar">
-                    <div class="ft-left">
-                        <!-- League pills -->
-                        <button class="ft-pill ft-league active" data-league="all">All</button>
-                        <button class="ft-pill ft-league" data-league="nba">NBA</button>
-                        <button class="ft-pill ft-league" data-league="ncaab">NCAAM</button>
-                        <button class="ft-pill ft-league" data-league="nfl">NFL</button>
-                        <button class="ft-pill ft-league" data-league="ncaaf">NCAAF</button>
-                        <button class="ft-pill ft-league" data-league="nhl">NHL</button>
-                        <button class="ft-pill ft-league" data-league="mlb">MLB</button>
-                        <!-- Segment dropdown -->
-                        <div class="ft-dropdown">
-                            <button class="ft-dropdown-btn" id="segment-dropdown-btn">Segment ▾</button>
-                            <div class="ft-dropdown-menu" id="segment-dropdown-menu">
-                                <button class="ft-dropdown-item active" data-f="segment" data-v="all">All Segments</button>
-                                <button class="ft-dropdown-item" data-f="segment" data-v="full">Full Game</button>
-                                <button class="ft-dropdown-item" data-f="segment" data-v="1h">1st Half</button>
-                                <button class="ft-dropdown-item" data-f="segment" data-v="2h">2nd Half</button>
-                            </div>
-                        </div>
-                        <!-- Pick type dropdown -->
-                        <div class="ft-dropdown">
-                            <button class="ft-dropdown-btn" id="pick-dropdown-btn">Pick Type ▾</button>
-                            <div class="ft-dropdown-menu" id="pick-dropdown-menu">
-                                <button class="ft-dropdown-item active" data-f="pick" data-v="all">All Picks</button>
-                                <button class="ft-dropdown-item" data-f="pick" data-v="spread">Spread</button>
-                                <button class="ft-dropdown-item" data-f="pick" data-v="ml">Moneyline</button>
-                                <button class="ft-dropdown-item" data-f="pick" data-v="total">Total</button>
-                                <button class="ft-dropdown-item" data-f="pick" data-v="tt">Team Total</button>
-                            </div>
-                        </div>
-                        <!-- Status dropdown -->
-                        <div class="ft-dropdown">
-                            <button class="ft-dropdown-btn" id="status-dropdown-btn">Status ▾</button>
-                            <div class="ft-dropdown-menu" id="status-dropdown-menu">
-                                <button class="ft-dropdown-item active" data-f="status" data-v="all">All Status</button>
-                                <button class="ft-dropdown-item" data-f="status" data-v="pending">Pending</button>
-                                <button class="ft-dropdown-item" data-f="status" data-v="win">Won</button>
-                                <button class="ft-dropdown-item" data-f="status" data-v="loss">Lost</button>
-                                <button class="ft-dropdown-item" data-f="status" data-v="push">Push</button>
-                            </div>
-                        </div>
-                        <button class="ft-clear" id="ft-clear">✕ Clear</button>
-                    </div>
-                </div>
-            </div>
-
-
-            <!-- ===== Active Picks Table ===== -->
-            <div class="table-container">
-                <table class="picks-table" id="picks-table">
-                    <colgroup>
-                        <col style="width: 10%;"><!-- Date/Time -->
-                        <col style="width: 6%;"><!-- League -->
-                        <col style="width: 16%;"><!-- Matchup -->
-                        <col style="width: 7%;"><!-- Segment -->
-                        <col style="width: 14%;"><!-- Pick -->
-                        <col style="width: 10%;"><!-- Risk/Win -->
-                        <col style="width: 17%;"><!-- Box Score -->
-                        <col style="width: 8%;"><!-- Status -->
-                        <col style="width: 12%;"><!-- $ Won / $ Lost -->
-                    </colgroup>
-                    <thead>
-                        <tr>
-                            <th scope="col" class="col-datetime sortable" data-sort="date">
-                                <div class="th-header-shell">
-                                    <button type="button" class="th-sort-btn" aria-label="Sort by date and time">
-                                        <span class="header-main-text">Date & Time</span>
-                                        <span class="header-subtext">(CST)</span>
-                                        <span class="sort-icon" aria-hidden="true">▲</span>
-                                    </button>
-                                </div>
-                            </th>
-                            <th scope="col" class="center col-league sortable" data-sort="league">
-                                <div class="th-header-shell">
-                                    <button class="th-sort-btn" aria-label="Sort by league">
-                                        <span class="header-main-text">League</span>
-                                        <span class="sort-icon" aria-hidden="true">▲</span>
-                                    </button>
-                                </div>
-                            </th>
-                            <th scope="col" class="sortable col-matchup" data-sort="matchup">
-                                <div class="th-header-shell">
-                                    <button class="th-sort-btn" aria-label="Sort by Matchup">
-                                        <span class="header-main-text">Matchup</span>
-                                        <span class="header-subtext">Away vs Home</span>
-                                        <span class="sort-icon" aria-hidden="true">▲</span>
-                                    </button>
-                                </div>
-                            </th>
-                            <th scope="col" class="center col-segment sortable" data-sort="segment">
-                                <div class="th-header-shell">
-                                    <button class="th-sort-btn" aria-label="Sort by segment">
-                                        <span class="header-main-text">Segment</span>
-                                        <span class="sort-icon" aria-hidden="true">▲</span>
-                                    </button>
-                                </div>
-                            </th>
-                            <th scope="col" class="center col-pick sortable" data-sort="pick">
-                                <div class="th-header-shell">
-                                    <button class="th-sort-btn" aria-label="Sort by pick">
-                                        <span class="header-main-text">Pick</span>
-                                        <span class="sort-icon" aria-hidden="true">▲</span>
-                                    </button>
-                                </div>
-                            </th>
-                            <th scope="col" class="center sortable" data-sort="risk">
-                                <div class="th-header-shell">
-                                    <button class="th-sort-btn" aria-label="Sort by risk/win">
-                                        <span class="header-main-text">$ Risk /<br>$ Win</span>
-                                        <span class="sort-icon" aria-hidden="true">▲</span>
-                                    </button>
-                                </div>
-                            </th>
-                            <th scope="col" class="center sortable" data-sort="score">
-                                <div class="th-header-shell">
-                                    <button class="th-sort-btn" aria-label="Sort by box score">
-                                        <span class="header-main-text">Box Score</span>
-                                        <span class="sort-icon" aria-hidden="true">▲</span>
-                                    </button>
-                                </div>
-                            </th>
-                            <th scope="col" class="center sortable" data-sort="status">
-                                <div class="th-header-shell">
-                                    <button class="th-sort-btn" aria-label="Sort by status">
-                                        <span class="header-main-text">Status</span>
-                                        <span class="sort-icon" aria-hidden="true">▲</span>
-                                    </button>
-                                </div>
-                            </th>
-                            <th scope="col" class="center sortable" data-sort="profit">
-                                <div class="th-header-shell">
-                                    <button class="th-sort-btn" aria-label="Sort by won/lost">
-                                        <span class="header-main-text">$ Won /<br>$ Lost</span>
-                                        <span class="sort-icon" aria-hidden="true">▲</span>
-                                    </button>
-                                </div>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody id="picks-tbody">
-                        <!-- Rows populated by JS -->
-                    </tbody>
-            </table>
+          </div>
         </div>
-        </div><!-- /.main-dashboard-layout -->
 
+        <div class="kpi-tiles">
+          <!-- KPI Tile 1: Projected PnL -->
+          <div
+            class="kpi-tile"
+            data-tile-id="1"
+            data-action="flip-tile"
+            role="button"
+            tabindex="0"
+            aria-label="Projected PnL KPI, click to flip"
+          >
+            <div class="kpi-tile-layer active">
+              <div class="kpi-label">Proj. PnL</div>
+              <div class="kpi-value positive">+$0</div>
+              <div class="kpi-subtext">0 Active Picks</div>
+            </div>
+            <div class="kpi-tile-layer">
+              <div class="kpi-label">Net Profit</div>
+              <div class="kpi-value">$0</div>
+              <div class="kpi-subtext">Season Total</div>
+            </div>
+          </div>
+
+          <!-- KPI Tile 2: Win Rate -->
+          <div
+            class="kpi-tile"
+            data-tile-id="2"
+            data-action="flip-tile"
+            role="button"
+            tabindex="0"
+            aria-label="Win Rate KPI, click to flip"
+          >
+            <div class="kpi-tile-layer active">
+              <div class="kpi-label">Win Rate</div>
+              <div class="kpi-value">0%</div>
+              <div class="kpi-subtext">0-0-0 Record</div>
+            </div>
+            <div class="kpi-tile-layer">
+              <div class="kpi-label">ROI</div>
+              <div class="kpi-value">0%</div>
+              <div class="kpi-subtext">Total Return</div>
+            </div>
+          </div>
+
+          <!-- KPI Tile 3: Active Volume -->
+          <div
+            class="kpi-tile"
+            data-tile-id="3"
+            data-action="flip-tile"
+            role="button"
+            tabindex="0"
+            aria-label="Active Volume KPI, click to flip"
+          >
+            <div class="kpi-tile-layer active">
+              <div class="kpi-label">Volume</div>
+              <div class="kpi-value">$0</div>
+              <div class="kpi-subtext">Total at Risk</div>
+            </div>
+            <div class="kpi-tile-layer">
+              <div class="kpi-label">To Win</div>
+              <div class="kpi-value">$0</div>
+              <div class="kpi-subtext">Potential Win</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== Date Range Selector (Compact Dropdown) ===== -->
+        <div class="date-range-selector">
+          <button
+            class="date-range-toggle"
+            id="date-range-toggle"
+            aria-expanded="false"
+            aria-haspopup="listbox"
+          >
+            <span class="date-range-label" id="date-range-label">Active</span>
+            <span class="date-range-arrow">▼</span>
+          </button>
+          <div class="date-range-dropdown" id="date-range-dropdown" role="listbox" hidden>
+            <button
+              class="date-range-option active"
+              data-range="active"
+              role="option"
+              aria-selected="true"
+            >
+              Active Picks
+            </button>
+            <button
+              class="date-range-option"
+              data-range="today"
+              role="option"
+              aria-selected="false"
+            >
+              Today
+            </button>
+            <button
+              class="date-range-option"
+              data-range="tomorrow"
+              role="option"
+              aria-selected="false"
+            >
+              Tomorrow
+            </button>
+            <button class="date-range-option" data-range="week" role="option" aria-selected="false">
+              This Week
+            </button>
+            <div class="date-range-divider"></div>
+            <button
+              class="date-range-option"
+              data-range="settled"
+              role="option"
+              aria-selected="false"
+            >
+              Settled
+            </button>
+            <button
+              class="date-range-option"
+              data-range="yesterday"
+              role="option"
+              aria-selected="false"
+            >
+              Yesterday
+            </button>
+            <button
+              class="date-range-option"
+              data-range="lastWeek"
+              role="option"
+              aria-selected="false"
+            >
+              Last Week
+            </button>
+            <button
+              class="date-range-option"
+              data-range="lastMonth"
+              role="option"
+              aria-selected="false"
+            >
+              Last Month
+            </button>
+            <button
+              class="date-range-option"
+              data-range="last30days"
+              role="option"
+              aria-selected="false"
+            >
+              Last 30 Days
+            </button>
+            <div class="date-range-divider"></div>
+            <button
+              class="date-range-option"
+              data-range="custom"
+              role="option"
+              aria-selected="false"
+              id="custom-range-trigger"
+            >
+              Custom Range
+            </button>
+            <button
+              class="date-range-option"
+              data-range="sinceInception"
+              role="option"
+              aria-selected="false"
+            >
+              Since Inception
+            </button>
+            <button class="date-range-option" data-range="all" role="option" aria-selected="false">
+              All Time
+            </button>
+          </div>
+
+          <!-- Custom Calendar Dropdown Card -->
+          <div class="custom-calendar-card" id="custom-calendar-card" hidden>
+            <div class="calendar-card-header">
+              <span class="calendar-card-title">Select Date Range</span>
+              <button
+                class="calendar-card-close"
+                id="calendar-card-close"
+                aria-label="Close calendar"
+              >
+                ×
+              </button>
+            </div>
+            <div class="calendar-card-body">
+              <div class="calendar-date-targets">
+                <button class="date-target-btn active" data-target="start" id="target-start">
+                  <span class="date-target-label">From</span>
+                  <span class="date-target-value" id="date-range-start-display">—</span>
+                </button>
+                <button class="date-target-btn" data-target="end" id="target-end">
+                  <span class="date-target-label">To</span>
+                  <span class="date-target-value" id="date-range-end-display">—</span>
+                </button>
+              </div>
+              <div class="custom-calendar">
+                <div class="custom-calendar-header">
+                  <button class="calendar-nav prev" aria-label="Previous month">‹</button>
+                  <div class="calendar-month-label" id="custom-calendar-month">January 2025</div>
+                  <button class="calendar-nav next" aria-label="Next month">›</button>
+                </div>
+                <div class="calendar-weekdays">
+                  <span>S</span>
+                  <span>M</span>
+                  <span>T</span>
+                  <span>W</span>
+                  <span>T</span>
+                  <span>F</span>
+                  <span>S</span>
+                </div>
+                <div class="calendar-days" id="custom-calendar-days"></div>
+              </div>
+              <div class="calendar-card-actions">
+                <button class="calendar-action-btn calendar-clear-btn" id="calendar-clear-btn">
+                  Clear
+                </button>
+                <button class="calendar-action-btn calendar-apply-btn" id="calendar-apply-btn">
+                  Apply
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- ===== Main Dashboard Layout ===== -->
+      <div class="main-dashboard-layout">
+        <!-- Filter Toolbar -->
+        <div class="toolbar-container toolbar-layout">
+          <div class="filter-toolbar" id="filter-toolbar">
+            <div class="ft-left">
+              <!-- League pills -->
+              <button class="ft-pill ft-league active" data-league="all">All</button>
+              <button class="ft-pill ft-league" data-league="nba">NBA</button>
+              <button class="ft-pill ft-league" data-league="ncaab">NCAAM</button>
+              <button class="ft-pill ft-league" data-league="nfl">NFL</button>
+              <button class="ft-pill ft-league" data-league="ncaaf">NCAAF</button>
+              <button class="ft-pill ft-league" data-league="nhl">NHL</button>
+              <button class="ft-pill ft-league" data-league="mlb">MLB</button>
+              <!-- Segment dropdown -->
+              <div class="ft-dropdown">
+                <button class="ft-dropdown-btn" id="segment-dropdown-btn">Segment ▾</button>
+                <div class="ft-dropdown-menu" id="segment-dropdown-menu">
+                  <button class="ft-dropdown-item active" data-f="segment" data-v="all">
+                    All Segments
+                  </button>
+                  <button class="ft-dropdown-item" data-f="segment" data-v="full">Full Game</button>
+                  <button class="ft-dropdown-item" data-f="segment" data-v="1h">1st Half</button>
+                  <button class="ft-dropdown-item" data-f="segment" data-v="2h">2nd Half</button>
+                </div>
+              </div>
+              <!-- Pick type dropdown -->
+              <div class="ft-dropdown">
+                <button class="ft-dropdown-btn" id="pick-dropdown-btn">Pick Type ▾</button>
+                <div class="ft-dropdown-menu" id="pick-dropdown-menu">
+                  <button class="ft-dropdown-item active" data-f="pick" data-v="all">
+                    All Picks
+                  </button>
+                  <button class="ft-dropdown-item" data-f="pick" data-v="spread">Spread</button>
+                  <button class="ft-dropdown-item" data-f="pick" data-v="ml">Moneyline</button>
+                  <button class="ft-dropdown-item" data-f="pick" data-v="total">Total</button>
+                  <button class="ft-dropdown-item" data-f="pick" data-v="tt">Team Total</button>
+                </div>
+              </div>
+              <!-- Status dropdown -->
+              <div class="ft-dropdown">
+                <button class="ft-dropdown-btn" id="status-dropdown-btn">Status ▾</button>
+                <div class="ft-dropdown-menu" id="status-dropdown-menu">
+                  <button class="ft-dropdown-item active" data-f="status" data-v="all">
+                    All Status
+                  </button>
+                  <button class="ft-dropdown-item" data-f="status" data-v="pending">Pending</button>
+                  <button class="ft-dropdown-item" data-f="status" data-v="win">Won</button>
+                  <button class="ft-dropdown-item" data-f="status" data-v="loss">Lost</button>
+                  <button class="ft-dropdown-item" data-f="status" data-v="push">Push</button>
+                </div>
+              </div>
+              <button class="ft-clear" id="ft-clear">✕ Clear</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== Active Picks Table ===== -->
+        <div class="table-container">
+          <table class="picks-table" id="picks-table">
+            <colgroup>
+              <col class="w-10" />
+              <!-- Date/Time -->
+              <col class="w-6" />
+              <!-- League -->
+              <col class="w-16" />
+              <!-- Matchup -->
+              <col class="w-7" />
+              <!-- Segment -->
+              <col class="w-14" />
+              <!-- Pick -->
+              <col class="w-10" />
+              <!-- Risk/Win -->
+              <col class="w-17" />
+              <!-- Box Score -->
+              <col class="w-8" />
+              <!-- Status -->
+              <col class="w-12" />
+              <!-- $ Won / $ Lost -->
+            </colgroup>
+            <thead>
+              <tr>
+                <th scope="col" class="col-datetime sortable" data-sort="date">
+                  <div class="th-header-shell">
+                    <button type="button" class="th-sort-btn" aria-label="Sort by date and time">
+                      <span class="header-main-text">Date & Time</span>
+                      <span class="header-subtext">(CST)</span>
+                      <span class="sort-icon" aria-hidden="true">▲</span>
+                    </button>
+                  </div>
+                </th>
+                <th scope="col" class="center col-league sortable" data-sort="league">
+                  <div class="th-header-shell">
+                    <button class="th-sort-btn" aria-label="Sort by league">
+                      <span class="header-main-text">League</span>
+                      <span class="sort-icon" aria-hidden="true">▲</span>
+                    </button>
+                  </div>
+                </th>
+                <th scope="col" class="sortable col-matchup" data-sort="matchup">
+                  <div class="th-header-shell">
+                    <button class="th-sort-btn" aria-label="Sort by Matchup">
+                      <span class="header-main-text">Matchup</span>
+                      <span class="header-subtext">Away vs Home</span>
+                      <span class="sort-icon" aria-hidden="true">▲</span>
+                    </button>
+                  </div>
+                </th>
+                <th scope="col" class="center col-segment sortable" data-sort="segment">
+                  <div class="th-header-shell">
+                    <button class="th-sort-btn" aria-label="Sort by segment">
+                      <span class="header-main-text">Segment</span>
+                      <span class="sort-icon" aria-hidden="true">▲</span>
+                    </button>
+                  </div>
+                </th>
+                <th scope="col" class="center col-pick sortable" data-sort="pick">
+                  <div class="th-header-shell">
+                    <button class="th-sort-btn" aria-label="Sort by pick">
+                      <span class="header-main-text">Pick</span>
+                      <span class="sort-icon" aria-hidden="true">▲</span>
+                    </button>
+                  </div>
+                </th>
+                <th scope="col" class="center sortable" data-sort="risk">
+                  <div class="th-header-shell">
+                    <button class="th-sort-btn" aria-label="Sort by risk/win">
+                      <span class="header-main-text">$ Risk /<br />$ Win</span>
+                      <span class="sort-icon" aria-hidden="true">▲</span>
+                    </button>
+                  </div>
+                </th>
+                <th scope="col" class="center sortable" data-sort="score">
+                  <div class="th-header-shell">
+                    <button class="th-sort-btn" aria-label="Sort by box score">
+                      <span class="header-main-text">Box Score</span>
+                      <span class="sort-icon" aria-hidden="true">▲</span>
+                    </button>
+                  </div>
+                </th>
+                <th scope="col" class="center sortable" data-sort="status">
+                  <div class="th-header-shell">
+                    <button class="th-sort-btn" aria-label="Sort by status">
+                      <span class="header-main-text">Status</span>
+                      <span class="sort-icon" aria-hidden="true">▲</span>
+                    </button>
+                  </div>
+                </th>
+                <th scope="col" class="center sortable" data-sort="profit">
+                  <div class="th-header-shell">
+                    <button class="th-sort-btn" aria-label="Sort by won/lost">
+                      <span class="header-main-text">$ Won /<br />$ Lost</span>
+                      <span class="sort-icon" aria-hidden="true">▲</span>
+                    </button>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody id="picks-tbody">
+              <!-- Rows populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- /.main-dashboard-layout -->
     </main>
 
     <!-- ===== Back to Top Button ===== -->
@@ -561,9 +868,6 @@
 
     <!-- ===== INLINE SCRIPT REMOVED ===== -->
     <!-- All functionality moved to external JS files in assets/ -->
-
-
-
 
     <!-- Modular JS Architecture -->
     <script src="assets/js/modules/zebra-stripes.js?v=20251224-3" defer></script>
@@ -578,67 +882,74 @@
     <!-- NOTE: active-picks-modular.js deprecated - using dashboard-init.js instead -->
     <script src="dashboard/js/kpi-calculator.js?v=34.00.0" defer></script>
 
-        <script src="dashboard/js/picks-service.js?v=34.00.0" defer></script>
-        <script>
-        // Modular date range filter logic
-        document.addEventListener('DOMContentLoaded', function() {
-            const rangeDropdown = document.getElementById('date-range-dropdown');
-            const rangeLabel = document.getElementById('date-range-label');
-            const picksTbody = document.getElementById('picks-tbody');
-            function fetchAndRenderPicks(range) {
-                let fetchPromise;
-                switch (range) {
-                    case 'active': fetchPromise = window.PicksService.getActive(); break;
-                    case 'today': fetchPromise = window.PicksService.getToday(); break;
-                    case 'settled': fetchPromise = window.PicksService.getSettled(); break;
-                    case 'week': {
-                        const now = new Date();
-                        const start = new Date(now.setDate(now.getDate() - now.getDay()));
-                        const end = new Date(now.setDate(start.getDate() + 6));
-                        fetchPromise = window.PicksService.getByDateRange(
-                            start.toISOString().split('T')[0],
-                            end.toISOString().split('T')[0]
-                        );
-                        break;
-                    }
-                    // Add more cases as needed
-                    default: fetchPromise = window.PicksService.getAll();
-                }
-                fetchPromise.then(picks => {
-                    picksTbody.innerHTML = '';
-                    picks.forEach(pick => {
-                        // Modular row rendering (simplified)
-                        const tr = document.createElement('tr');
-                        tr.setAttribute('data-league', pick.league || '');
-                        tr.setAttribute('data-segment', pick.segment || '');
-                        tr.setAttribute('data-pick-type', pick.pickType || '');
-                        tr.setAttribute('data-status', pick.status || '');
-                        tr.innerHTML = `
-                            <td>${pick.date || ''}</td>
-                            <td>${pick.league || ''}</td>
-                            <td>${pick.matchup || ''}</td>
-                            <td>${pick.segment || ''}</td>
-                            <td>${pick.pick || ''}</td>
-                            <td>${pick.risk || ''}</td>
-                            <td>${pick.score || ''}</td>
-                            <td>${pick.status || ''}</td>
-                            <td>${pick.pnl || ''}</td>
-                        `;
-                        picksTbody.appendChild(tr);
-                    });
-                });
+    <script src="dashboard/js/picks-service.js?v=34.00.0" defer></script>
+    <script>
+      // Modular date range filter logic
+      document.addEventListener("DOMContentLoaded", function () {
+        const rangeDropdown = document.getElementById("date-range-dropdown");
+        const rangeLabel = document.getElementById("date-range-label");
+        const picksTbody = document.getElementById("picks-tbody");
+        function fetchAndRenderPicks(range) {
+          let fetchPromise;
+          switch (range) {
+            case "active":
+              fetchPromise = window.PicksService.getActive();
+              break;
+            case "today":
+              fetchPromise = window.PicksService.getToday();
+              break;
+            case "settled":
+              fetchPromise = window.PicksService.getSettled();
+              break;
+            case "week": {
+              const now = new Date();
+              const start = new Date(now.setDate(now.getDate() - now.getDay()));
+              const end = new Date(now.setDate(start.getDate() + 6));
+              fetchPromise = window.PicksService.getByDateRange(
+                start.toISOString().split("T")[0],
+                end.toISOString().split("T")[0]
+              );
+              break;
             }
-            rangeDropdown.addEventListener('click', function(e) {
-                if (e.target.classList.contains('date-range-option')) {
-                    const range = e.target.getAttribute('data-range');
-                    rangeLabel.textContent = e.target.textContent;
-                    fetchAndRenderPicks(range);
-                }
+            // Add more cases as needed
+            default:
+              fetchPromise = window.PicksService.getAll();
+          }
+          fetchPromise.then((picks) => {
+            picksTbody.innerHTML = "";
+            picks.forEach((pick) => {
+              // Modular row rendering (simplified)
+              const tr = document.createElement("tr");
+              tr.setAttribute("data-league", pick.league || "");
+              tr.setAttribute("data-segment", pick.segment || "");
+              tr.setAttribute("data-pick-type", pick.pickType || "");
+              tr.setAttribute("data-status", pick.status || "");
+              tr.innerHTML = `
+                            <td>${pick.date || ""}</td>
+                            <td>${pick.league || ""}</td>
+                            <td>${pick.matchup || ""}</td>
+                            <td>${pick.segment || ""}</td>
+                            <td>${pick.pick || ""}</td>
+                            <td>${pick.risk || ""}</td>
+                            <td>${pick.score || ""}</td>
+                            <td>${pick.status || ""}</td>
+                            <td>${pick.pnl || ""}</td>
+                        `;
+              picksTbody.appendChild(tr);
             });
-            // Initial load
-            fetchAndRenderPicks('active');
+          });
+        }
+        rangeDropdown.addEventListener("click", function (e) {
+          if (e.target.classList.contains("date-range-option")) {
+            const range = e.target.getAttribute("data-range");
+            rangeLabel.textContent = e.target.textContent;
+            fetchAndRenderPicks(range);
+          }
         });
-        </script>
+        // Initial load
+        fetchAndRenderPicks("active");
+      });
+    </script>
     <script src="dashboard/js/smart-load-picks.js?v=34.00.2" defer></script>
     <script src="assets/js/core/navigation.js?v=34.00.0" defer></script>
     <script src="dashboard/js/status-logic.js?v=34.00.0" defer></script>
@@ -687,90 +998,113 @@
     <!-- Sportsbook Connector -->
     <script src="assets/js/features/sportsbook-connector.js?v=34.00.0" defer></script>
 
-        <!-- Service worker registration and idle prefetch -->
-        <script>
-            (function(){
+    <!-- Service worker registration and idle prefetch -->
+    <script>
+      (function () {
+        try {
+          if ("serviceWorker" in navigator) {
+            var swUrl = "/sw.js?v=2.0.3";
+            var expectedSwVersion = "v2.0.3";
+
+            async function hardResetCachesAndReload() {
+              try {
+                var regs = await navigator.serviceWorker.getRegistrations();
+                await Promise.all(
+                  regs.map(function (r) {
+                    return r.unregister();
+                  })
+                );
+              } catch (e) {}
+              try {
+                if (window.caches && caches.keys) {
+                  var keys = await caches.keys();
+                  await Promise.all(
+                    keys.map(function (k) {
+                      return caches.delete(k);
+                    })
+                  );
+                }
+              } catch (e) {}
+              try {
+                // Force a truly fresh navigation
+                var url = new URL(window.location.href);
+                url.searchParams.set("r", String(Date.now()));
+                window.location.replace(url.toString());
+              } catch (e) {
+                window.location.reload();
+              }
+            }
+
+            function getSwVersion(controller) {
+              return new Promise(function (resolve) {
                 try {
-                    if ('serviceWorker' in navigator) {
-                        var swUrl = '/sw.js?v=2.0.3';
-                        var expectedSwVersion = 'v2.0.3';
+                  if (!controller) return resolve(null);
+                  var channel = new MessageChannel();
+                  channel.port1.onmessage = function (evt) {
+                    resolve((evt && evt.data && evt.data.version) || null);
+                  };
+                  controller.postMessage({ type: "GET_VERSION" }, [channel.port2]);
+                  setTimeout(function () {
+                    resolve(null);
+                  }, 1500);
+                } catch (e) {
+                  resolve(null);
+                }
+              });
+            }
 
-                        async function hardResetCachesAndReload() {
-                            try {
-                                var regs = await navigator.serviceWorker.getRegistrations();
-                                await Promise.all(regs.map(function(r){ return r.unregister(); }));
-                            } catch(e) {}
-                            try {
-                                if (window.caches && caches.keys) {
-                                    var keys = await caches.keys();
-                                    await Promise.all(keys.map(function(k){ return caches.delete(k); }));
-                                }
-                            } catch(e) {}
-                            try {
-                                // Force a truly fresh navigation
-                                var url = new URL(window.location.href);
-                                url.searchParams.set('r', String(Date.now()));
-                                window.location.replace(url.toString());
-                            } catch(e) {
-                                window.location.reload();
-                            }
-                        }
+            async function ensureFreshClient() {
+              // Manual escape hatch: /index.html?reset=1
+              try {
+                var params = new URLSearchParams(window.location.search);
+                if (params.get("reset") === "1") {
+                  await hardResetCachesAndReload();
+                  return;
+                }
+              } catch (e) {}
 
-                        function getSwVersion(controller) {
-                            return new Promise(function(resolve){
-                                try {
-                                    if (!controller) return resolve(null);
-                                    var channel = new MessageChannel();
-                                    channel.port1.onmessage = function(evt){
-                                        resolve((evt && evt.data && evt.data.version) || null);
-                                    };
-                                    controller.postMessage({ type: 'GET_VERSION' }, [channel.port2]);
-                                    setTimeout(function(){ resolve(null); }, 1500);
-                                } catch(e) {
-                                    resolve(null);
-                                }
-                            });
-                        }
+              // If an older SW is controlling the page, reset automatically.
+              try {
+                var controller = navigator.serviceWorker.controller;
+                var activeVersion = await getSwVersion(controller);
+                if (activeVersion && activeVersion !== expectedSwVersion) {
+                  await hardResetCachesAndReload();
+                }
+              } catch (e) {}
+            }
 
-                        async function ensureFreshClient() {
-                            // Manual escape hatch: /index.html?reset=1
-                            try {
-                                var params = new URLSearchParams(window.location.search);
-                                if (params.get('reset') === '1') {
-                                    await hardResetCachesAndReload();
-                                    return;
-                                }
-                            } catch(e) {}
-
-                            // If an older SW is controlling the page, reset automatically.
-                            try {
-                                var controller = navigator.serviceWorker.controller;
-                                var activeVersion = await getSwVersion(controller);
-                                if (activeVersion && activeVersion !== expectedSwVersion) {
-                                    await hardResetCachesAndReload();
-                                }
-                            } catch(e) {}
-                        }
-
-                        window.addEventListener('load', function() {
-                            navigator.serviceWorker.register(swUrl, { updateViaCache: 'none' }).then(function(reg){
-                                try { reg.update(); } catch(e) {}
-                                try {
-                                    if (reg.waiting) {
-                                        reg.waiting.postMessage({ type: 'SKIP_WAITING' });
-                                    }
-                                } catch(e) {}
-                                ensureFreshClient();
-                            }).catch(function(){});
-                        });
-                        navigator.serviceWorker.addEventListener('controllerchange', function(){ /* no-op */ });
+            window.addEventListener("load", function () {
+              navigator.serviceWorker
+                .register(swUrl, { updateViaCache: "none" })
+                .then(function (reg) {
+                  try {
+                    reg.update();
+                  } catch (e) {}
+                  try {
+                    if (reg.waiting) {
+                      reg.waiting.postMessage({ type: "SKIP_WAITING" });
                     }
-                } catch(e) {}
-                (window.requestIdleCallback || function(cb){setTimeout(cb, 100)})(function(){
-                    try { fetch('/weekly-lineup.html', { mode: 'no-cors' }).catch(function(){}); } catch(e) {}
-                });
-            })();
-        </script>
-
-</body>
+                  } catch (e) {}
+                  ensureFreshClient();
+                })
+                .catch(function () {});
+            });
+            navigator.serviceWorker.addEventListener("controllerchange", function () {
+              /* no-op */
+            });
+          }
+        } catch (e) {}
+        (
+          window.requestIdleCallback ||
+          function (cb) {
+            setTimeout(cb, 100);
+          }
+        )(function () {
+          try {
+            fetch("/weekly-lineup.html", { mode: "no-cors" }).catch(function () {});
+          } catch (e) {}
+        });
+      })();
+    </script>
+  </body>
 </html>

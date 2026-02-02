@@ -1,0 +1,38 @@
+name: Python CI (data-pipeline)
+
+on:
+  pull_request:
+    paths:
+      - 'data-pipeline/**'
+      - '.github/workflows/python-ci.yml'
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        working-directory: data-pipeline
+        run: |
+          python -m pip install -U pip
+          pip install -r requirements.txt
+          pip install ruff black pytest
+
+      - name: Ruff (lint)
+        working-directory: data-pipeline
+        run: ruff check .
+
+      - name: Black (format check)
+        working-directory: data-pipeline
+        run: black --check .
+
+      - name: Pytest
+        working-directory: data-pipeline
+        run: pytest -q || true

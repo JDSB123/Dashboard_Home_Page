@@ -1,0 +1,11 @@
+/* Column width utility classes for <col> elements */
+col.w-6 { width: 6%; }
+col.w-7 { width: 7%; }
+col.w-8 { width: 8%; }
+col.w-10 { width: 10%; }
+col.w-12 { width: 12%; }
+col.w-14 { width: 14%; }
+col.w-16 { width: 16%; }
+col.w-17 { width: 17%; }
+col.w-25 { width: 25%; }
+col.w-30 { width: 30%; }
