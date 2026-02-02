@@ -53,7 +53,7 @@
 
     "workbench.startupEditor": "none",
     "security.workspace.trust.enabled": true,
-    
+
     "java.enabled": false,
     "jupyter.experiments.enabled": false
   },
