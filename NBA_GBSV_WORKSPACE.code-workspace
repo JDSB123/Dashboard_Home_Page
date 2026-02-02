@@ -48,9 +48,19 @@
     "python.analysis.autoImportCompletions": true,
 
     "git.confirmSync": false,
-    "git.autofetch": false,
+    "git.autofetch": true,
     "git.enableSmartCommit": true,
+    "git.fetchOnPull": true,
+    "git.pruneOnFetch": true,
+    "git.rememberCredentials": true,
 
+    "azure.cloudSettings": {
+      "rememberAccount": true,
+      "rememberSubscription": true
+    },
+    "azure.reauthenticate": false,
+    "azure.tenant": "persistent",
+    
     "workbench.startupEditor": "none",
     "security.workspace.trust.enabled": true,
     
@@ -90,9 +100,19 @@
     "version": "2.0.0",
     "tasks": [
       {
+        "label": "Configure Git Credentials",
+        "type": "shell",
+        "command": "git config --global credential.helper manager; git config --global credential.https://github.com.provider generic",
+        "presentation": {
+          "reveal": "silent",
+          "close": true
+        },
+        "problemMatcher": []
+      },
+      {
         "label": "Check Azure Login",
         "type": "shell",
-        "command": "az account show 2>$null; if ($LASTEXITCODE -ne 0) { Write-Host 'Azure CLI not logged in. Running az login...'; az login }",
+        "command": "$account = az account show 2>$null | ConvertFrom-Json; if ($account) { Write-Host 'Azure authenticated as' $account.user.name } else { Write-Host 'Running az login with persistent credentials...'; az login --use-device-code }",
         "presentation": {
           "reveal": "silent",
           "close": true
@@ -132,6 +152,7 @@
       {
         "label": "Workspace Initialization",
         "dependsOn": [
+          "Configure Git Credentials",
           "Check Azure Login",
           "Install Python Dependencies",
           "Install NPM Dependencies",
@@ -174,6 +195,20 @@
       {
         "label": "Full Stack Start",
         "dependsOn": ["Start Azurite", "Start NBA API", "Start Dashboard Functions"],
+        "problemMatcher": []
+      },
+      {
+        "label": "Auto Start Development Environment",
+        "dependsOn": ["Workspace Initialization", "Full Stack Start"],
+        "dependsOrder": "sequence",
+        "runOptions": {
+          "runOn": "folderOpen"
+        },
+        "presentation": {
+          "reveal": "always",
+          "panel": "dedicated",
+          "focus": false
+        },
         "problemMatcher": []
       }
     ]
