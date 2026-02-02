@@ -6,18 +6,21 @@ jest.mock("@azure/data-tables", () => ({
   },
 }));
 
-const healthFn = require("../Health");
-
 const makeContext = () => ({
   log: { error: jest.fn(), info: jest.fn() },
 });
 
 describe("Health function", () => {
   const OLD_ENV = process.env;
+  let healthFn;
+
   beforeEach(() => {
     jest.resetModules();
     process.env = { ...OLD_ENV };
+    // Re-require after resetModules to pick up fresh mock state
+    healthFn = require("../Health");
   });
+
   afterAll(() => {
     process.env = OLD_ENV;
   });
@@ -40,16 +43,23 @@ describe("Health function", () => {
   });
 
   test("returns 503 when an error occurs", async () => {
-    // Force an error by mocking TableClient to throw on list
+    // Set up environment for storage check
     process.env.AzureWebJobsStorage = "UseDevelopmentStorage=true";
-    const { TableClient } = require("@azure/data-tables");
-    TableClient.fromConnectionString.mockImplementation(() => ({
-      listEntities: () => ({
-        next: async () => {
-          throw new Error("boom");
-        },
-      }),
+    
+    // Re-require modules to get fresh state with updated mock
+    jest.resetModules();
+    jest.doMock("@azure/data-tables", () => ({
+      TableClient: {
+        fromConnectionString: jest.fn(() => ({
+          listEntities: () => ({
+            next: async () => {
+              throw new Error("boom");
+            },
+          }),
+        })),
+      },
     }));
+    healthFn = require("../Health");
 
     const context = makeContext();
     await healthFn(context, {});
@@ -58,3 +68,4 @@ describe("Health function", () => {
     expect(context.res.body.status).toBe("unhealthy");
   });
 });
+

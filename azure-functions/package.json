@@ -5,7 +5,7 @@
   "scripts": {
     "start": "func start",
     "test": "jest",
-    "lint": "eslint . --ext .js",
+    "lint": "eslint .",
     "format": "prettier -w .",
     "format:check": "prettier -c .",
     "test:coverage": "jest --coverage"
