@@ -40,7 +40,8 @@ describe("Health function", () => {
   });
 
   test("returns 503 when an error occurs", async () => {
-    // Force an error by removing env and mocking TableClient to throw on list
+    // Force an error by mocking TableClient to throw on list
+    process.env.AzureWebJobsStorage = "UseDevelopmentStorage=true";
     const { TableClient } = require("@azure/data-tables");
     TableClient.fromConnectionString.mockImplementation(() => ({
       listEntities: () => ({

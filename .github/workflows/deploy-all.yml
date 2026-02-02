@@ -102,8 +102,8 @@ jobs:
       - name: Run Accessibility Audit
         run: |
           http-server client -p 8080 &
-          sleep 5
-          pa11y-ci --sitemap http://localhost:8080/index.html || true
+          sleep 10
+          pa11y-ci --chrome-launch-config '{"args": ["--no-sandbox", "--disable-setuid-sandbox", "--headless"]}' --sitemap http://localhost:8080/index.html || true
 
   test-functions:
     name: Azure Functions Tests
