@@ -1,13 +1,17 @@
 {
-    "claudeCodeChat.permissions.yoloMode": true,
-    "github.copilot.chat.editing.alwaysApprove": true,
-    "github.copilot.chat.editing.reviewMode": "off",
-    "github.copilot.chat.requestFeedback": "never",
-    "github.copilot.advanced": {
-        "debug.overrideEngine": "claude-sonnet-4.5"
-    },
-    "azureFunctions.deploySubpath": "Dashboard_Home_Page\\azure-functions",
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "claudeCodeChat.permissions.yoloMode": true,
+  "github.copilot.chat.editing.alwaysApprove": true,
+  "github.copilot.chat.editing.reviewMode": "off",
+  "github.copilot.chat.requestFeedback": "never",
+  "github.copilot.advanced": {
+    "debug.overrideEngine": "claude-sonnet-4.5"
+  },
+  "azureFunctions.deploySubpath": "Dashboard_Home_Page\\azure-functions",
   "terminal.integrated.env.windows": {
+    "TZ": "America/Chicago",
     "DOTNET_ROOT": "${workspaceFolder}/.dev/dotnet",
     "NUGET_PACKAGES": "${workspaceFolder}/.dev/nuget",
     "GOROOT": "${workspaceFolder}/.dev/go-sdk/go",
@@ -26,11 +30,11 @@
   "dotnet.server.runtimeEnvironment": {
     "DOTNET_ROOT": "${workspaceFolder}/.dev/dotnet"
   },
-    "azureFunctions.postDeployTask": "npm install (functions)",
-    "azureFunctions.projectLanguage": "JavaScript",
-    "azureFunctions.projectRuntime": "~4",
-    "debug.internalConsoleOptions": "neverOpen",
-    "azureFunctions.projectLanguageModel": 4,
-    "azureFunctions.preDeployTask": "npm prune (functions)",
-    "github.codespaces.idleTimeoutMinutes": 240
+  "azureFunctions.postDeployTask": "npm install (functions)",
+  "azureFunctions.projectLanguage": "JavaScript",
+  "azureFunctions.projectRuntime": "~4",
+  "debug.internalConsoleOptions": "neverOpen",
+  "azureFunctions.projectLanguageModel": 4,
+  "azureFunctions.preDeployTask": "npm prune (functions)",
+  "github.codespaces.idleTimeoutMinutes": 240
 }
