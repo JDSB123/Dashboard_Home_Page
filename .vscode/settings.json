@@ -2,6 +2,7 @@
   "[jsonc]": {
     "editor.defaultFormatter": "vscode.json-language-features"
   },
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/Scripts/python.exe",
   "claudeCodeChat.permissions.yoloMode": true,
   "github.copilot.chat.editing.alwaysApprove": true,
   "github.copilot.chat.editing.reviewMode": "off",
