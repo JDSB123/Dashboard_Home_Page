@@ -11,7 +11,6 @@ param skuName = 'Standard_AzureFrontDoor'
 
 // Backend Origins - Current Container Apps
 param staticWebAppHostname = 'proud-cliff-008e2e20f.2.azurestaticapps.net'
-param orchestratorHostname = 'gbsv-orchestrator.wittypebble-41c11c65.eastus.azurecontainerapps.io'
 param nbaApiHostname = 'gbsv-nbav3-aca.wittypebble-41c11c65.eastus.azurecontainerapps.io'
 param ncaamApiHostname = 'ncaam-stable-prediction.wonderfulforest-c2d7d49a.centralus.azurecontainerapps.io'
 param nflApiHostname = 'nfl-api.purplegrass-5889a981.eastus.azurecontainerapps.io'
