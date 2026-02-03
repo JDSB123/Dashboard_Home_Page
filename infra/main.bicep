@@ -77,8 +77,8 @@ resource wafPolicy 'Microsoft.Network/FrontDoorWebApplicationFirewallPolicies@20
       customBlockResponseStatusCode: 403
       customBlockResponseBody: base64('{"error": "Request blocked by WAF policy"}')
     }
-    // Premium SKU - Full managed rule sets enabled
-    managedRules: {
+    // Managed rules only available for Premium SKU
+    managedRules: skuName == 'Premium_AzureFrontDoor' ? {
       managedRuleSets: [
         {
           ruleSetType: 'Microsoft_DefaultRuleSet'
@@ -91,6 +91,8 @@ resource wafPolicy 'Microsoft.Network/FrontDoorWebApplicationFirewallPolicies@20
           ruleSetAction: 'Block'
         }
       ]
+    } : {
+      managedRuleSets: []
     }
     customRules: {
       rules: [
