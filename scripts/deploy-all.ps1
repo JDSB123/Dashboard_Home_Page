@@ -97,8 +97,17 @@ function Get-Configuration {
     $configFile = Join-Path $PSScriptRoot "deployment-config.json"
     if (-not (Test-Path $configFile)) {
         Write-Status "Creating default configuration..." -Type Warning
+        # Resolve subscription dynamically — never commit subscription IDs to source
+        $subId = az account show --query id -o tsv 2>$null
+        if (-not $subId) { throw "Not logged into Azure. Run: az login" }
+
+        # Resolve Container App FQDNs dynamically from Azure
+        function Get-AcaFqdn([string]$AppName, [string]$RG) {
+            $fqdn = az containerapp show --name $AppName --resource-group $RG --query "properties.configuration.ingress.fqdn" -o tsv 2>$null
+            return if ($fqdn) { "https://$fqdn" } else { "" }
+        }
+
         $defaultConfig = @{
-            subscriptionId = (az account show --query id -o tsv)
             resourceGroup = $ResourceGroup
             environment = $Environment
             location = "eastus"
@@ -123,33 +132,30 @@ function Get-Configuration {
                 nba = @{
                     resourceGroup = "dashboard-gbsv-main-rg"
                     containerApp = "gbsv-nbav3-aca"
-                    endpoint = "https://gbsv-nbav3-aca.wittypebble-41c11c65.eastus.azurecontainerapps.io"
-                    functionUrl = "https://nba-picks-trigger.azurewebsites.net"
+                    endpoint = (Get-AcaFqdn "gbsv-nbav3-aca" "dashboard-gbsv-main-rg")
                 }
                 ncaam = @{
                     resourceGroup = "ncaam-gbsv-model-rg"
                     containerApp = "ncaam-stable-prediction"
-                    endpoint = "https://ncaam-stable-prediction.wonderfulforest-c2d7d49a.centralus.azurecontainerapps.io"
-                    functionUrl = ""
+                    endpoint = (Get-AcaFqdn "ncaam-stable-prediction" "ncaam-gbsv-model-rg")
                 }
                 nfl = @{
                     resourceGroup = "nfl-gbsv-model-rg"
                     containerApp = "nfl-api"
-                    endpoint = "https://nfl-api.purplegrass-5889a981.eastus.azurecontainerapps.io"
-                    functionUrl = "https://nfl-picks-trigger.azurewebsites.net"
+                    endpoint = (Get-AcaFqdn "nfl-api" "nfl-gbsv-model-rg")
                 }
                 ncaaf = @{
                     resourceGroup = "ncaaf-gbsv-model-rg"
                     containerApp = "ncaaf-v5-prod"
-                    endpoint = "https://ncaaf-v5-prod.salmonwave-314d4ffe.eastus.azurecontainerapps.io"
+                    endpoint = (Get-AcaFqdn "ncaaf-v5-prod" "ncaaf-gbsv-model-rg")
                 }
             }
             dashboard = @{
-                url = "https://wittypebble-41c11c65.eastus.azurestaticapps.net"
                 staticWebApp = "Dashboard-Home-Page"
             }
         }
         $defaultConfig | ConvertTo-Json -Depth 10 | Set-Content $configFile
+        Write-Status "Generated $configFile with live Azure FQDNs — review before deploying" -Type Warning
     }
 
     $config = Get-Content $configFile | ConvertFrom-Json
@@ -254,12 +260,15 @@ function Deploy-SignalR {
         --resource-group $rg `
         --query primaryConnectionString -o tsv
 
-    # Configure CORS
+    # Configure CORS - resolve dashboard URL dynamically from Static Web App
     Write-Status "Configuring SignalR CORS..." -Type Info
+    $swaHostname = az staticwebapp show --name $Config.dashboard.staticWebApp --resource-group $rg --query "defaultHostname" -o tsv 2>$null
+    $dashboardUrl = if ($swaHostname) { "https://$swaHostname" } else { $env:DASHBOARD_URL }
+    if (-not $dashboardUrl) { Write-Status "WARNING: Could not resolve dashboard URL for CORS" -Type Warning }
     az signalr cors update `
         --name $signalr.name `
         --resource-group $rg `
-        --allowed-origins $Config.dashboard.url "http://localhost:*"
+        --allowed-origins $dashboardUrl "http://localhost:*"
 
     return $signalrConnection
 }
@@ -460,7 +469,7 @@ function Deploy-OrchestratorContainerApp {
         "NCAAM_API_URL=$($Config.models.ncaam.endpoint)",
         "NFL_API_URL=$($Config.models.nfl.endpoint)",
         "NCAAF_API_URL=$($Config.models.ncaaf.endpoint)",
-        "CORS_ALLOWED_ORIGINS=$($Config.dashboard.url)",
+        "CORS_ALLOWED_ORIGINS=$dashboardUrl",
         "ENVIRONMENT=$($Config.environment)"
     )
 

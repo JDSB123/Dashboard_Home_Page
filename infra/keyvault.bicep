@@ -199,6 +199,91 @@ resource secretStorageConn 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
   }
 }
 
+// Telegram Bot Token - for automatic pick extraction
+resource secretTelegramBotToken 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
+  parent: keyVault
+  name: 'telegram-bot-token'
+  properties: {
+    value: 'PLACEHOLDER-SET-VIA-CLI'
+    contentType: 'Bot Token'
+    attributes: {
+      enabled: true
+    }
+  }
+  tags: {
+    service: 'Telegram'
+    usage: 'TelegramRunner webhook verification and bot API'
+  }
+}
+
+// Cosmos DB Endpoint
+resource secretCosmosEndpoint 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
+  parent: keyVault
+  name: 'cosmos-endpoint'
+  properties: {
+    value: 'PLACEHOLDER-SET-VIA-CLI'
+    contentType: 'Endpoint URL'
+    attributes: {
+      enabled: true
+    }
+  }
+  tags: {
+    service: 'Azure Cosmos DB'
+    usage: 'Picks and metrics database endpoint'
+  }
+}
+
+// Cosmos DB Primary Key
+resource secretCosmosKey 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
+  parent: keyVault
+  name: 'cosmos-key'
+  properties: {
+    value: 'PLACEHOLDER-SET-VIA-CLI'
+    contentType: 'API Key'
+    attributes: {
+      enabled: true
+    }
+  }
+  tags: {
+    service: 'Azure Cosmos DB'
+    usage: 'Picks and metrics database auth key'
+  }
+}
+
+// Azure SignalR Connection String
+resource secretSignalRConnection 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
+  parent: keyVault
+  name: 'signalr-connection-string'
+  properties: {
+    value: 'PLACEHOLDER-SET-VIA-CLI'
+    contentType: 'Connection String'
+    attributes: {
+      enabled: true
+    }
+  }
+  tags: {
+    service: 'Azure SignalR'
+    usage: 'Real-time dashboard updates'
+  }
+}
+
+// Sportsbook API Encryption Key (AES-256-GCM)
+resource secretSportsbookEncryptionKey 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
+  parent: keyVault
+  name: 'sportsbook-encryption-key'
+  properties: {
+    value: 'PLACEHOLDER-SET-VIA-CLI'
+    contentType: 'Encryption Key (64-char hex, generate: openssl rand -hex 32)'
+    attributes: {
+      enabled: true
+    }
+  }
+  tags: {
+    service: 'SportsbookAPI'
+    usage: 'AES-256-GCM encryption for sportsbook credential transit'
+  }
+}
+
 // Azure Computer Vision endpoint - for OCR
 resource secretVisionEndpoint 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
   parent: keyVault
@@ -254,4 +339,9 @@ output secretReferences object = {
   storageConnectionString: '@Microsoft.KeyVault(SecretUri=${keyVault.properties.vaultUri}secrets/azure-storage-connection-string/)'
   visionEndpoint: '@Microsoft.KeyVault(SecretUri=${keyVault.properties.vaultUri}secrets/azure-vision-endpoint/)'
   visionKey: '@Microsoft.KeyVault(SecretUri=${keyVault.properties.vaultUri}secrets/azure-vision-key/)'
+  telegramBotToken: '@Microsoft.KeyVault(SecretUri=${keyVault.properties.vaultUri}secrets/telegram-bot-token/)'
+  cosmosEndpoint: '@Microsoft.KeyVault(SecretUri=${keyVault.properties.vaultUri}secrets/cosmos-endpoint/)'
+  cosmosKey: '@Microsoft.KeyVault(SecretUri=${keyVault.properties.vaultUri}secrets/cosmos-key/)'
+  signalRConnectionString: '@Microsoft.KeyVault(SecretUri=${keyVault.properties.vaultUri}secrets/signalr-connection-string/)'
+  sportsbookEncryptionKey: '@Microsoft.KeyVault(SecretUri=${keyVault.properties.vaultUri}secrets/sportsbook-encryption-key/)'
 }

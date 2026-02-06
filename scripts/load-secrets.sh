@@ -47,9 +47,9 @@ printf "\n🏗️ Refreshing Infrastructure Credentials...\n"
 
 # 1. Cosmos DB
 printf "  Syncing Cosmos DB (gbsv-picks-db)..."
-COSMOS_ENDPOINT="https://gbsv-picks-db.documents.azure.com:443/"
+COSMOS_ENDPOINT=$(az cosmosdb show --resource-group "$RG_NAME" --name "gbsv-picks-db" --query documentEndpoint -o tsv 2>/dev/null || echo "")
 COSMOS_KEY=$(az cosmosdb keys list --resource-group "$RG_NAME" --name "gbsv-picks-db" --query primaryMasterKey -o tsv 2>/dev/null || echo "")
-if [ -n "$COSMOS_KEY" ]; then
+if [ -n "$COSMOS_KEY" ] && [ -n "$COSMOS_ENDPOINT" ]; then
     export COSMOS_ENDPOINT="$COSMOS_ENDPOINT"
     export COSMOS_KEY="$COSMOS_KEY"
     export COSMOS_CONNECTION_STRING="AccountEndpoint=$COSMOS_ENDPOINT;AccountKey=$COSMOS_KEY;"

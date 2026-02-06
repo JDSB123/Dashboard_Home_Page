@@ -9,7 +9,7 @@
 .EXAMPLE
     pwsh ./scripts/sync-model-registry.ps1 `
       -SubscriptionId 00000000-0000-0000-0000-000000000000 `
-      -OrchestratorUrl https://gbsv-orchestrator.wittypebble-41c11c65.eastus.azurecontainerapps.io/api `
+      -OrchestratorUrl $env:ORCHESTRATOR_URL `
       -ModelsJson '[{"model":"nba","resourceGroup":"dashboard-gbsv-main-rg","appName":"gbsv-nbav3-aca"}]'
 .NOTES
     Requires Azure CLI authenticated to the subscription that holds the model Container Apps.
@@ -17,11 +17,24 @@
 
 param(
     [string]$SubscriptionId = "",
-    [string]$OrchestratorUrl = "https://gbsv-orchestrator.wittypebble-41c11c65.eastus.azurecontainerapps.io/api",
+    [string]$OrchestratorUrl = ($env:ORCHESTRATOR_URL ?? ""),
     [string]$ModelsJson = "",
     [string]$FunctionsKey = "",
     [switch]$DryRun
 )
+
+if (-not $OrchestratorUrl) {
+    # Try to resolve from deployment-config.json
+    $configPath = Join-Path $PSScriptRoot "deployment-config.json"
+    if (Test-Path $configPath) {
+        $cfg = Get-Content $configPath | ConvertFrom-Json
+        $fqdn = az containerapp show --name $cfg.orchestrator.name --resource-group $cfg.resourceGroup --query "properties.configuration.ingress.fqdn" -o tsv 2>$null
+        if ($fqdn) { $OrchestratorUrl = "https://$fqdn/api" }
+    }
+    if (-not $OrchestratorUrl) {
+        throw "OrchestratorUrl not set. Pass -OrchestratorUrl or set ORCHESTRATOR_URL env var."
+    }
+}
 
 $ErrorActionPreference = "Stop"
 

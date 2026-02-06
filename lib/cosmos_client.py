@@ -50,16 +50,22 @@ class CosmosPicksClient:
     """Client for Cosmos DB picks collection"""
 
     def __init__(self):
-        self.endpoint = os.getenv(
-            "COSMOS_ENDPOINT", "https://gbsv-picks-db.documents.azure.com:443/"
-        )
+        self.endpoint = os.getenv("COSMOS_ENDPOINT")
         self.key = os.getenv("COSMOS_KEY")
         self.database_name = "picks-db"
         self.picks_container = "picks"
         self.metrics_container = "metrics"
 
+        if not self.endpoint:
+            raise ValueError(
+                "COSMOS_ENDPOINT environment variable not set. "
+                "Load via: . ./scripts/load-secrets.sh  or  . ./scripts/load-secrets.ps1 -FromKeyVault"
+            )
         if not self.key:
-            raise ValueError("COSMOS_KEY environment variable not set")
+            raise ValueError(
+                "COSMOS_KEY environment variable not set. "
+                "Load via: . ./scripts/load-secrets.sh  or  . ./scripts/load-secrets.ps1 -FromKeyVault"
+            )
 
         self.client = CosmosClient(self.endpoint, self.key)
         self.database = self.client.get_database_client(self.database_name)

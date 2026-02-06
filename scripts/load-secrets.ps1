@@ -4,7 +4,7 @@
 
 param(
     [switch]$FromKeyVault,  # If set, pulls from Azure Key Vault instead of hardcoded dev values
-    [string]$VaultName = "ncaam-stablegbsvkv"
+    [string]$VaultName = "dashboard-gbsv-kv-prod"
 )
 
 Write-Host "🔐 Loading API secrets..." -ForegroundColor Cyan

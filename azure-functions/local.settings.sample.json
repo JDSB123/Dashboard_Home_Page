@@ -27,10 +27,17 @@
     "AZURE_STORAGE_CONNECTION_STRING": "DefaultEndpointsProtocol=https;AccountName=xxx",
 
     "_comment_model_apis": "=== MODEL API URLS ===",
-    "NBA_API_URL": "https://gbsv-nbav3-aca.wittypebble-41c11c65.eastus.azurecontainerapps.io",
-    "NCAAM_API_URL": "https://ncaam-api.xxx.azurecontainerapps.io",
-    "NFL_API_URL": "https://nfl-api.xxx.azurecontainerapps.io",
-    "NCAAF_API_URL": "https://ncaaf-api.xxx.azurecontainerapps.io"
+    "NBA_API_URL": "https://YOUR-NBA-APP.azurecontainerapps.io",
+    "NCAAM_API_URL": "https://YOUR-NCAAM-APP.azurecontainerapps.io",
+    "NFL_API_URL": "https://YOUR-NFL-APP.azurecontainerapps.io",
+    "NCAAF_API_URL": "https://YOUR-NCAAF-APP.azurecontainerapps.io",
+
+    "_comment_sportsbook": "=== SPORTSBOOK ENCRYPTION ===",
+    "SPORTSBOOK_ENCRYPTION_KEY": "YOUR_64_CHAR_HEX_KEY_FROM_OPENSSL_RAND_HEX_32",
+
+    "_comment_telegram": "=== TELEGRAM ===",
+    "TELEGRAM_BOT_TOKEN": "YOUR_TELEGRAM_BOT_TOKEN",
+    "TELEGRAM_WEBHOOK_SECRET": "YOUR_WEBHOOK_SECRET"
   },
   "Host": {
     "CORS": "*",

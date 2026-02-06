@@ -48,37 +48,32 @@
     },
     "staticWebAppHostname": {
       "type": "string",
-      "defaultValue": "proud-cliff-008e2e20f.2.azurestaticapps.net",
       "metadata": {
-        "description": "Static Web App hostname"
+        "description": "Static Web App hostname (no https:// prefix)"
       }
     },
     "nbaApiHostname": {
       "type": "string",
-      "defaultValue": "gbsv-nbav3-aca.wittypebble-41c11c65.eastus.azurecontainerapps.io",
       "metadata": {
-        "description": "NBA API Container App hostname"
+        "description": "NBA API Container App hostname (no https:// prefix)"
       }
     },
     "ncaamApiHostname": {
       "type": "string",
-      "defaultValue": "ncaam-stable-prediction.wonderfulforest-c2d7d49a.centralus.azurecontainerapps.io",
       "metadata": {
-        "description": "NCAAM API Container App hostname"
+        "description": "NCAAM API Container App hostname (no https:// prefix)"
       }
     },
     "nflApiHostname": {
       "type": "string",
-      "defaultValue": "nfl-api.purplegrass-5889a981.eastus.azurecontainerapps.io",
       "metadata": {
-        "description": "NFL API Container App hostname"
+        "description": "NFL API Container App hostname (no https:// prefix)"
       }
     },
     "ncaafApiHostname": {
       "type": "string",
-      "defaultValue": "ncaaf-v5-prod.salmonwave-314d4ffe.eastus.azurecontainerapps.io",
       "metadata": {
-        "description": "NCAAF API Container App hostname"
+        "description": "NCAAF API Container App hostname (no https:// prefix)"
       }
     }
   },

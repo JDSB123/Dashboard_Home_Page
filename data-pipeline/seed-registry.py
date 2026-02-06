@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Seed modelregistry table with default endpoints."""
+"""Seed modelregistry table with default endpoints.
+
+Endpoint URLs are read from environment variables (set via load-secrets.sh or
+GitHub Variables). No hardcoded infrastructure URLs.
+"""
 
 from azure.data.tables import TableServiceClient, TableEntity
 import os
@@ -10,13 +14,28 @@ conn_str = os.environ.get("AZURE_FUNCTIONS_STORAGE_CONNECTION")
 if not conn_str:
     raise ValueError("AZURE_FUNCTIONS_STORAGE_CONNECTION environment variable not set")
 
-# Model endpoints from client/config.js
-endpoints = {
-    "nba": "https://gbsv-nbav3-aca.wittypebble-41c11c65.eastus.azurecontainerapps.io",
-    "ncaam": "https://ncaam-stable-prediction.wonderfulforest-c2d7d49a.centralus.azurecontainerapps.io",
-    "nfl": "https://nfl-api.purplegrass-5889a981.eastus.azurecontainerapps.io",
-    "ncaaf": "https://ncaaf-v5-prod.salmonwave-314d4ffe.eastus.azurecontainerapps.io",
+# Model endpoints from environment variables — must be set before running
+_REQUIRED_VARS = {
+    "nba": "NBA_API_URL",
+    "ncaam": "NCAAM_API_URL",
+    "nfl": "NFL_API_URL",
+    "ncaaf": "NCAAF_API_URL",
 }
+
+endpoints = {}
+missing = []
+for model, env_var in _REQUIRED_VARS.items():
+    url = os.environ.get(env_var)
+    if not url:
+        missing.append(env_var)
+    else:
+        endpoints[model] = url
+
+if missing:
+    raise ValueError(
+        f"Missing required environment variables: {', '.join(missing)}\n"
+        "Set them via: . ./scripts/load-secrets.sh  or configure GitHub Variables."
+    )
 
 # Connect to table
 service = TableServiceClient.from_connection_string(conn_str)

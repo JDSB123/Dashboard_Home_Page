@@ -1,7 +1,8 @@
 // Shared CORS helper for Azure Functions
+// Origins are configured via ALLOWED_ORIGINS or CORS_ALLOWED_ORIGINS environment variables.
+// Fallback defaults are kept minimal (localhost only) to avoid hardcoding infrastructure URLs.
 const DEFAULT_ALLOWED_ORIGINS = [
   'https://www.greenbiersportventures.com',
-  'https://wittypebble-41c11c65.eastus.azurestaticapps.net',
   'http://localhost:3000',
   'http://localhost:8080'
 ];

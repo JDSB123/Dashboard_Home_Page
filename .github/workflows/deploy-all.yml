@@ -46,18 +46,18 @@ permissions:
 
 env:
   # Azure resource names — shared across jobs
-  RESOURCE_GROUP: dashboard-gbsv-main-rg
-  LOCATION: eastus
-  CONTAINERAPPS_ENVIRONMENT: gbsv-aca-env
-  CONTAINER_APP_NAME: gbsv-orchestrator
-  IMAGE_NAME: gbsv-orchestrator
-  ACR_LOGIN_SERVER: gbsvregistry.azurecr.io
-  # Sport API endpoints — sourced from scripts/deployment-config.json (single source of truth)
-  # Update endpoints there, then the load-sport-endpoints step will populate these.
-  NBA_API_URL: https://gbsv-nbav3-aca.wittypebble-41c11c65.eastus.azurecontainerapps.io
-  NCAAM_API_URL: https://ncaam-stable-prediction.wonderfulforest-c2d7d49a.centralus.azurecontainerapps.io
-  NFL_API_URL: https://nfl-api.purplegrass-5889a981.eastus.azurecontainerapps.io
-  NCAAF_API_URL: https://ncaaf-v5-prod.salmonwave-314d4ffe.eastus.azurecontainerapps.io
+  # All infrastructure identifiers come from GitHub Repository Variables (Settings → Secrets and variables → Actions → Variables)
+  RESOURCE_GROUP: ${{ vars.AZURE_RESOURCE_GROUP || 'dashboard-gbsv-main-rg' }}
+  LOCATION: ${{ vars.AZURE_LOCATION || 'eastus' }}
+  CONTAINERAPPS_ENVIRONMENT: ${{ vars.CONTAINERAPPS_ENVIRONMENT || 'gbsv-aca-env' }}
+  CONTAINER_APP_NAME: ${{ vars.CONTAINER_APP_NAME || 'gbsv-orchestrator' }}
+  IMAGE_NAME: ${{ vars.IMAGE_NAME || 'gbsv-orchestrator' }}
+  ACR_LOGIN_SERVER: ${{ secrets.ACR_LOGIN_SERVER }}
+  # Sport API endpoints — stored in GitHub Repository Variables (no secrets, public FQDNs)
+  NBA_API_URL: ${{ vars.NBA_API_URL }}
+  NCAAM_API_URL: ${{ vars.NCAAM_API_URL }}
+  NFL_API_URL: ${{ vars.NFL_API_URL }}
+  NCAAF_API_URL: ${{ vars.NCAAF_API_URL }}
 
 jobs:
   validate:

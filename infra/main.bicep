@@ -26,28 +26,24 @@ param skuName string = 'Premium_AzureFrontDoor'
 // Backend Origins Configuration
 // ════════════════════════════════════════════════════════════════════════════
 
-@description('Static Web App hostname')
-param staticWebAppHostname string = 'proud-cliff-008e2e20f.2.azurestaticapps.net'
+@description('Static Web App hostname (no https:// prefix)')
+param staticWebAppHostname string
 
 // NOTE: Dashboard Orchestrator REMOVED - redundant
 // Each sport API has built-in async queue processing at /{sport}/predictions
 // No need for orchestrator middleman
 
-<<<<<<< Updated upstream
-@description('NBA API Container App hostname')
-param nbaApiHostname string = 'gbsv-nbav3-aca.wittypebble-41c11c65.eastus.azurecontainerapps.io'
+@description('NBA API Container App hostname (no https:// prefix)')
+param nbaApiHostname string
 
-@description('NCAAM API Container App hostname')
-param ncaamApiHostname string = 'ncaam-stable-prediction.wonderfulforest-c2d7d49a.centralus.azurecontainerapps.io'
+@description('NCAAM API Container App hostname (no https:// prefix)')
+param ncaamApiHostname string
 
-@description('NFL API Container App hostname')
-param nflApiHostname string = 'nfl-api.purplegrass-5889a981.eastus.azurecontainerapps.io'
+@description('NFL API Container App hostname (no https:// prefix)')
+param nflApiHostname string
 
-@description('NCAAF API Container App hostname')
-param ncaafApiHostname string = 'ncaaf-v5-prod.salmonwave-314d4ffe.eastus.azurecontainerapps.io'
-=======
-// Sport model hostnames removed — models live in their own repos/resource groups
->>>>>>> Stashed changes
+@description('NCAAF API Container App hostname (no https:// prefix)')
+param ncaafApiHostname string
 
 // ════════════════════════════════════════════════════════════════════════════
 // Variables

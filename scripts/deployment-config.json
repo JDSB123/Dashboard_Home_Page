@@ -14,7 +14,6 @@
   },
 
   "location": "eastus",
-  "subscriptionId": "3a1a4a94-45a5-4f7c-8ada-97978221052c",
   "signalr": {
     "sku": "Free_F1",
     "name": "gbsv-signalr",
@@ -22,7 +21,6 @@
   },
   "resourceGroup": "dashboard-gbsv-main-rg",
   "dashboard": {
-    "url": "https://wittypebble-41c11c65.eastus.azurestaticapps.net",
     "staticWebApp": "Dashboard-Home-Page"
   }
 }
