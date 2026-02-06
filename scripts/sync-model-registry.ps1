@@ -40,9 +40,9 @@ $ErrorActionPreference = "Stop"
 
 # Default models; override with -ModelsJson if your RG/app names differ.
 $defaultModels = @(
-    @{ model = "nba";   resourceGroup = "dashboard-gbsv-main-rg";   appName = "gbsv-nbav3-aca" },
+    @{ model = "nba"; resourceGroup = "dashboard-gbsv-main-rg"; appName = "gbsv-nbav3-aca" },
     @{ model = "ncaam"; resourceGroup = "ncaam-gbsv-model-rg"; appName = "ncaam-stable-prediction" },
-    @{ model = "nfl";   resourceGroup = "nfl-gbsv-model-rg";   appName = "nfl-api" },
+    @{ model = "nfl"; resourceGroup = "nfl-gbsv-model-rg"; appName = "nfl-api" },
     @{ model = "ncaaf"; resourceGroup = "ncaaf-gbsv-model-rg"; appName = "ncaaf-v5-prod" }
 )
 
@@ -52,7 +52,8 @@ function Get-Models {
         try {
             $parsed = $Json | ConvertFrom-Json
             if ($parsed) { return $parsed }
-        } catch {
+        }
+        catch {
             throw "Failed to parse ModelsJson. Provide valid JSON array of {model, resourceGroup, appName}."
         }
     }
@@ -172,7 +173,8 @@ foreach ($m in $models) {
         Write-Host " -> $endpoint" -ForegroundColor DarkGray
         Update-Registry -Url $registryUrl -Model $model -Endpoint $endpoint -Version $version -Timestamp $timestamp -FunctionsKey $FunctionsKey -DryRun:$DryRun
         Write-Host "Updated $model" -ForegroundColor Green
-    } catch {
+    }
+    catch {
         Write-Warning "Failed to update $model ($rg/$app): $($_.Exception.Message)"
     }
 }

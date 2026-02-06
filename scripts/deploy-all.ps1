@@ -31,9 +31,9 @@ $InformationPreference = "Continue"
 $colors = @{
     Success = "Green"
     Warning = "Yellow"
-    Error = "Red"
-    Info = "Cyan"
-    Header = "Magenta"
+    Error   = "Red"
+    Info    = "Cyan"
+    Header  = "Magenta"
 }
 
 function Write-Status {
@@ -57,11 +57,11 @@ function Test-Prerequisites {
     Write-Section "Checking Prerequisites"
 
     $requirements = @(
-        @{Name = "Azure CLI"; Command = "az"; MinVersion = "2.50.0"},
-        @{Name = "Docker"; Command = "docker"; MinVersion = "20.10.0"},
-        @{Name = "Git"; Command = "git"; MinVersion = "2.30.0"},
-        @{Name = "Node.js"; Command = "node"; MinVersion = "18.0.0"},
-        @{Name = "PowerShell"; Command = "pwsh"; MinVersion = "7.0.0"}
+        @{Name = "Azure CLI"; Command = "az"; MinVersion = "2.50.0" },
+        @{Name = "Docker"; Command = "docker"; MinVersion = "20.10.0" },
+        @{Name = "Git"; Command = "git"; MinVersion = "2.30.0" },
+        @{Name = "Node.js"; Command = "node"; MinVersion = "18.0.0" },
+        @{Name = "PowerShell"; Command = "pwsh"; MinVersion = "7.0.0" }
     )
 
     $failed = $false
@@ -71,7 +71,8 @@ function Test-Prerequisites {
             if ($version) {
                 Write-Status "✓ $($req.Name) found: $version" -Type Success
             }
-        } catch {
+        }
+        catch {
             Write-Status "✗ $($req.Name) not found or version too old (need >= $($req.MinVersion))" -Type Error
             $failed = $true
         }
@@ -85,7 +86,8 @@ function Test-Prerequisites {
     try {
         $account = az account show 2>$null | ConvertFrom-Json
         Write-Status "✓ Azure CLI logged in as: $($account.user.name)" -Type Success
-    } catch {
+    }
+    catch {
         Write-Status "Azure CLI not logged in. Running 'az login'..." -Type Warning
         az login
     }
@@ -109,48 +111,48 @@ function Get-Configuration {
 
         $defaultConfig = @{
             resourceGroup = $ResourceGroup
-            environment = $Environment
-            location = "eastus"
-            orchestrator = @{
-                name = "gbsv-orchestrator"
+            environment   = $Environment
+            location      = "eastus"
+            orchestrator  = @{
+                name                    = "gbsv-orchestrator"
                 containerAppEnvironment = "gbsv-aca-env"
-                storageAccount = "gbsvorchestratorstorage"
-                registryTable = "modelregistry"
-                executionsTable = "modelexecutions"
+                storageAccount          = "gbsvorchestratorstorage"
+                registryTable           = "modelregistry"
+                executionsTable         = "modelexecutions"
             }
-            signalr = @{
-                name = "gbsv-signalr"
-                sku = "Free_F1"
+            signalr       = @{
+                name        = "gbsv-signalr"
+                sku         = "Free_F1"
                 serviceMode = "Serverless"
             }
-            monitoring = @{
-                appInsights = "gbsv-orchestrator-insights"
-                logAnalytics = "gbsv-logs"
+            monitoring    = @{
+                appInsights      = "gbsv-orchestrator-insights"
+                logAnalytics     = "gbsv-logs"
                 alertActionGroup = "gbsv-alerts"
             }
-            models = @{
-                nba = @{
+            models        = @{
+                nba   = @{
                     resourceGroup = "dashboard-gbsv-main-rg"
-                    containerApp = "gbsv-nbav3-aca"
-                    endpoint = (Get-AcaFqdn "gbsv-nbav3-aca" "dashboard-gbsv-main-rg")
+                    containerApp  = "gbsv-nbav3-aca"
+                    endpoint      = (Get-AcaFqdn "gbsv-nbav3-aca" "dashboard-gbsv-main-rg")
                 }
                 ncaam = @{
                     resourceGroup = "ncaam-gbsv-model-rg"
-                    containerApp = "ncaam-stable-prediction"
-                    endpoint = (Get-AcaFqdn "ncaam-stable-prediction" "ncaam-gbsv-model-rg")
+                    containerApp  = "ncaam-stable-prediction"
+                    endpoint      = (Get-AcaFqdn "ncaam-stable-prediction" "ncaam-gbsv-model-rg")
                 }
-                nfl = @{
+                nfl   = @{
                     resourceGroup = "nfl-gbsv-model-rg"
-                    containerApp = "nfl-api"
-                    endpoint = (Get-AcaFqdn "nfl-api" "nfl-gbsv-model-rg")
+                    containerApp  = "nfl-api"
+                    endpoint      = (Get-AcaFqdn "nfl-api" "nfl-gbsv-model-rg")
                 }
                 ncaaf = @{
                     resourceGroup = "ncaaf-gbsv-model-rg"
-                    containerApp = "ncaaf-v5-prod"
-                    endpoint = (Get-AcaFqdn "ncaaf-v5-prod" "ncaaf-gbsv-model-rg")
+                    containerApp  = "ncaaf-v5-prod"
+                    endpoint      = (Get-AcaFqdn "ncaaf-v5-prod" "ncaaf-gbsv-model-rg")
                 }
             }
-            dashboard = @{
+            dashboard     = @{
                 staticWebApp = "Dashboard-Home-Page"
             }
         }
@@ -182,7 +184,8 @@ function Deploy-StorageAccount {
             --sku Standard_LRS `
             --kind StorageV2 `
             --allow-blob-public-access false
-    } else {
+    }
+    else {
         Write-Status "Storage account already exists: $storageAccount" -Type Success
     }
 
@@ -205,7 +208,8 @@ function Deploy-StorageAccount {
             az storage table create `
                 --name $table `
                 --connection-string $connectionString
-        } else {
+        }
+        else {
             Write-Status "Table already exists: $table" -Type Success
         }
     }
@@ -224,7 +228,8 @@ function Deploy-StorageAccount {
                 --name $container `
                 --connection-string $connectionString `
                 --public-access off
-        } else {
+        }
+        else {
             Write-Status "Container already exists: $container" -Type Success
         }
     }
@@ -250,7 +255,8 @@ function Deploy-SignalR {
             --location $Config.location `
             --sku $signalr.sku `
             --service-mode $signalr.serviceMode
-    } else {
+    }
+    else {
         Write-Status "SignalR service already exists: $($signalr.name)" -Type Success
     }
 
@@ -293,7 +299,8 @@ function Deploy-Monitoring {
             --resource-group $rg `
             --location $Config.location `
             --retention-time 30
-    } else {
+    }
+    else {
         Write-Status "Log Analytics workspace already exists: $($monitoring.logAnalytics)" -Type Success
     }
 
@@ -310,7 +317,8 @@ function Deploy-Monitoring {
             --location $Config.location `
             --workspace $monitoring.logAnalytics `
             --application-type web
-    } else {
+    }
+    else {
         Write-Status "Application Insights already exists: $($monitoring.appInsights)" -Type Success
     }
 
@@ -327,7 +335,7 @@ function Deploy-Monitoring {
 
     return @{
         InstrumentationKey = $instrumentationKey
-        ConnectionString = $appInsightsConnection
+        ConnectionString   = $appInsightsConnection
     }
 }
 
@@ -364,7 +372,8 @@ function Deploy-ContainerAppEnvironment {
             --location $Config.location `
             --logs-workspace-id $workspaceId `
             --logs-workspace-key $workspaceKey
-    } else {
+    }
+    else {
         Write-Status "Container App Environment already exists: $envName" -Type Success
     }
 }
@@ -414,13 +423,14 @@ EXPOSE 80
     try {
         docker build -t "${imageName}:${imageTag}" -t "${imageName}:latest" .
         Write-Status "Docker image built successfully" -Type Success
-    } finally {
+    }
+    finally {
         Pop-Location
     }
 
     return @{
         Name = $imageName
-        Tag = $imageTag
+        Tag  = $imageTag
     }
 }
 
@@ -491,7 +501,8 @@ function Deploy-OrchestratorContainerApp {
             --min-replicas 1 `
             --max-replicas 10 `
             --env-vars $envVars
-    } else {
+    }
+    else {
         Write-Status "Updating Container App: $appName" -Type Info
 
         az containerapp update `
@@ -573,11 +584,11 @@ function Initialize-ModelRegistry {
         # Create registry entry using Azure CLI
         $entity = @{
             PartitionKey = $modelName
-            RowKey = "current"
-            endpoint = $modelConfig.endpoint
-            version = "1.0.0"
-            lastUpdated = (Get-Date -Format "yyyy-MM-ddTHH:mm:ssZ")
-            healthy = $true
+            RowKey       = "current"
+            endpoint     = $modelConfig.endpoint
+            version      = "1.0.0"
+            lastUpdated  = (Get-Date -Format "yyyy-MM-ddTHH:mm:ssZ")
+            healthy      = $true
         } | ConvertTo-Json -Compress
 
         # Use Azure CLI to add entity (PowerShell native storage commands are limited)
@@ -623,22 +634,22 @@ function Create-Alerts {
     # Create alerts
     $alerts = @(
         @{
-            Name = "orchestrator-high-failure-rate"
+            Name        = "orchestrator-high-failure-rate"
             Description = "Alert when orchestrator failure rate exceeds 10%"
-            Condition = "avg requests/failed > 0.1"
-            Severity = 2
+            Condition   = "avg requests/failed > 0.1"
+            Severity    = 2
         },
         @{
-            Name = "model-execution-timeout"
+            Name        = "model-execution-timeout"
             Description = "Alert when model execution takes longer than 5 minutes"
-            Condition = "avg duration > 300000"
-            Severity = 3
+            Condition   = "avg duration > 300000"
+            Severity    = 3
         },
         @{
-            Name = "storage-quota-exceeded"
+            Name        = "storage-quota-exceeded"
             Description = "Alert when storage usage exceeds 80%"
-            Condition = "avg storage/used > 0.8"
-            Severity = 3
+            Condition   = "avg storage/used > 0.8"
+            Severity    = 3
         }
     )
 
@@ -679,7 +690,8 @@ function Update-DashboardConfig {
         $content | Set-Content $targetFile
 
         Write-Status "Dashboard configuration (config.js) generated successfully" -Type Success
-    } else {
+    }
+    else {
         Write-Status "client/config.template.js not found - cannot generate config" -Type Error
     }
 }
@@ -804,7 +816,8 @@ try {
         -OrchestratorUrl $orchestratorUrl `
         -DeploymentTime $deploymentTime.ToString("hh\:mm\:ss")
 
-} catch {
+}
+catch {
     Write-Status "Deployment failed: $_" -Type Error
     Write-Status $_.ScriptStackTrace -Type Error
     exit 1

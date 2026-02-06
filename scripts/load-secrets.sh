@@ -31,9 +31,9 @@ declare -A SECRET_MAP=(
 for SECRET_NAME in "${!SECRET_MAP[@]}"; do
     ENV_VAR="${SECRET_MAP[$SECRET_NAME]}"
     printf "  Fetching %s from Key Vault..." "$SECRET_NAME"
-    
+
     VALUE=$(az keyvault secret show --vault-name "$VAULT_NAME" --name "$SECRET_NAME" --query value -o tsv 2>/dev/null || echo "")
-    
+
     if [ -n "$VALUE" ]; then
         export "$ENV_VAR"="$VALUE"
         printf " ✅\n"
@@ -75,7 +75,7 @@ if [ -f ".env" ]; then
     # Create temp file to avoid partial updates
     TMP_ENV=$(mktemp)
     cp .env "$TMP_ENV"
-    
+
     for VAR in SDIO_KEY ODDS_API_KEY BASKETBALL_API_KEY ACTIONNETWORK_USER ACTIONNETWORK_PASS TELEGRAM_BOT_TOKEN COSMOS_ENDPOINT COSMOS_KEY COSMOS_CONNECTION_STRING AZURE_STORAGE_CONNECTION_STRING AzureWebJobsStorage; do
         VAL="${!VAR:-}"
         if [ -n "$VAL" ]; then

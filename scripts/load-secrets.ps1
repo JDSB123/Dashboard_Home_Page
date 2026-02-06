@@ -11,14 +11,14 @@ Write-Host "🔐 Loading API secrets..." -ForegroundColor Cyan
 
 if ($FromKeyVault) {
     Write-Host "  Fetching from Azure Key Vault: $VaultName" -ForegroundColor Yellow
-    
+
     # Check if logged in
     $account = az account show 2>$null | ConvertFrom-Json
     if (-not $account) {
         Write-Host "  ❌ Not logged into Azure. Run: az login" -ForegroundColor Red
         return
     }
-    
+
     try {
         $env:SDIO_KEY = (az keyvault secret show --vault-name $VaultName --name "sportsdataio-nfl-ncaaf" --query value -o tsv 2>$null)
         $env:ODDS_API_KEY = (az keyvault secret show --vault-name $VaultName --name "oddsapi-main" --query value -o tsv 2>$null)
@@ -43,7 +43,8 @@ if (-not $FromKeyVault) {
             }
         }
         Write-Host "  ✅ Loaded secrets from .env file" -ForegroundColor Green
-    } else {
+    }
+    else {
         Write-Host "  ⚠️ No .env file found. Create one from .env.example or use -FromKeyVault" -ForegroundColor Red
         Write-Host "  Run: copy .env.example .env  then fill in your values" -ForegroundColor Yellow
         return

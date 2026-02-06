@@ -12,11 +12,7 @@
     "environment": {
       "type": "string",
       "defaultValue": "prod",
-      "allowedValues": [
-        "dev",
-        "staging",
-        "prod"
-      ],
+      "allowedValues": ["dev", "staging", "prod"],
       "metadata": {
         "description": "Environment name (dev, staging, prod)"
       }
@@ -38,10 +34,7 @@
     "skuName": {
       "type": "string",
       "defaultValue": "Premium_AzureFrontDoor",
-      "allowedValues": [
-        "Standard_AzureFrontDoor",
-        "Premium_AzureFrontDoor"
-      ],
+      "allowedValues": ["Standard_AzureFrontDoor", "Premium_AzureFrontDoor"],
       "metadata": {
         "description": "Front Door SKU - Premium includes WAF managed rules (OWASP, Bot Manager)"
       }
@@ -117,9 +110,7 @@
                 {
                   "matchVariable": "RequestUri",
                   "operator": "RegEx",
-                  "matchValue": [
-                    "^/(nba|ncaam|nfl|ncaaf)/"
-                  ]
+                  "matchValue": ["^/(nba|ncaam|nfl|ncaaf)/"]
                 }
               ],
               "action": "Block"
@@ -134,9 +125,7 @@
                 {
                   "matchVariable": "RequestUri",
                   "operator": "RegEx",
-                  "matchValue": [
-                    "^/(nba|ncaam|nfl|ncaaf)/predictions"
-                  ]
+                  "matchValue": ["^/(nba|ncaam|nfl|ncaaf)/predictions"]
                 }
               ],
               "action": "Block"
@@ -431,12 +420,8 @@
             "id": "[resourceId('Microsoft.Cdn/profiles/ruleSets', variables('frontDoorName'), 'UrlRewriteRules')]"
           }
         ],
-        "supportedProtocols": [
-          "Https"
-        ],
-        "patternsToMatch": [
-          "/nba/*"
-        ],
+        "supportedProtocols": ["Https"],
+        "patternsToMatch": ["/nba/*"],
         "forwardingProtocol": "HttpsOnly",
         "linkToDefaultDomain": "Enabled",
         "httpsRedirect": "Enabled",
@@ -462,12 +447,8 @@
             "id": "[resourceId('Microsoft.Cdn/profiles/ruleSets', variables('frontDoorName'), 'UrlRewriteRules')]"
           }
         ],
-        "supportedProtocols": [
-          "Https"
-        ],
-        "patternsToMatch": [
-          "/ncaam/*"
-        ],
+        "supportedProtocols": ["Https"],
+        "patternsToMatch": ["/ncaam/*"],
         "forwardingProtocol": "HttpsOnly",
         "linkToDefaultDomain": "Enabled",
         "httpsRedirect": "Enabled",
@@ -493,12 +474,8 @@
             "id": "[resourceId('Microsoft.Cdn/profiles/ruleSets', variables('frontDoorName'), 'UrlRewriteRules')]"
           }
         ],
-        "supportedProtocols": [
-          "Https"
-        ],
-        "patternsToMatch": [
-          "/nfl/*"
-        ],
+        "supportedProtocols": ["Https"],
+        "patternsToMatch": ["/nfl/*"],
         "forwardingProtocol": "HttpsOnly",
         "linkToDefaultDomain": "Enabled",
         "httpsRedirect": "Enabled",
@@ -524,12 +501,8 @@
             "id": "[resourceId('Microsoft.Cdn/profiles/ruleSets', variables('frontDoorName'), 'UrlRewriteRules')]"
           }
         ],
-        "supportedProtocols": [
-          "Https"
-        ],
-        "patternsToMatch": [
-          "/ncaaf/*"
-        ],
+        "supportedProtocols": ["Https"],
+        "patternsToMatch": ["/ncaaf/*"],
         "forwardingProtocol": "HttpsOnly",
         "linkToDefaultDomain": "Enabled",
         "httpsRedirect": "Enabled",
@@ -550,13 +523,8 @@
         "originGroup": {
           "id": "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupDashboard'))]"
         },
-        "supportedProtocols": [
-          "Https",
-          "Http"
-        ],
-        "patternsToMatch": [
-          "/*"
-        ],
+        "supportedProtocols": ["Https", "Http"],
+        "patternsToMatch": ["/*"],
         "forwardingProtocol": "HttpsOnly",
         "linkToDefaultDomain": "Enabled",
         "httpsRedirect": "Enabled",
@@ -603,9 +571,7 @@
                   "id": "[resourceId('Microsoft.Cdn/profiles/afdEndpoints', variables('frontDoorName'), variables('endpointName'))]"
                 }
               ],
-              "patternsToMatch": [
-                "/*"
-              ]
+              "patternsToMatch": ["/*"]
             }
           ]
         }
