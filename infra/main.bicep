@@ -137,6 +137,46 @@ resource wafPolicy 'Microsoft.Network/FrontDoorWebApplicationFirewallPolicies@20
           ]
           action: 'Block'
         }
+        {
+          name: 'RateLimitPicksWrite'
+          priority: 300
+          ruleType: 'RateLimitRule'
+          rateLimitDurationInMinutes: 1
+          rateLimitThreshold: 200 // Write operations on picks API
+          matchConditions: [
+            {
+              matchVariable: 'RequestUri'
+              operator: 'RegEx'
+              matchValue: ['^/api/picks']
+            }
+            {
+              matchVariable: 'RequestMethod'
+              operator: 'Equal'
+              matchValue: ['POST', 'PATCH', 'DELETE']
+            }
+          ]
+          action: 'Block'
+        }
+        {
+          name: 'RateLimitPicksRead'
+          priority: 400
+          ruleType: 'RateLimitRule'
+          rateLimitDurationInMinutes: 1
+          rateLimitThreshold: 500 // Read operations on picks API
+          matchConditions: [
+            {
+              matchVariable: 'RequestUri'
+              operator: 'RegEx'
+              matchValue: ['^/api/picks']
+            }
+            {
+              matchVariable: 'RequestMethod'
+              operator: 'Equal'
+              matchValue: ['GET']
+            }
+          ]
+          action: 'Block'
+        }
       ]
     }
   }

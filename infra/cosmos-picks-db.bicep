@@ -7,7 +7,7 @@ resource cosmosDbAccount 'Microsoft.DocumentDB/databaseAccounts@2023-04-15' = {
   name: '${projectName}-picks-db'
   location: location
   kind: 'GlobalDocumentDB'
-  
+
   properties: {
     databaseAccountOfferType: 'Standard'
     consistencyPolicy: {
@@ -79,9 +79,8 @@ resource picksContainer 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/cont
       }
       defaultTtl: -1 // No expiration
     }
-    options: {
-      throughput: 400
-    }
+    // Note: No throughput options — account uses EnableServerless capability
+    // which auto-scales and does not support provisioned throughput
   }
 }
 
@@ -121,9 +120,7 @@ resource metricsContainer 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/co
       }
       defaultTtl: -1 // No expiration
     }
-    options: {
-      throughput: 400
-    }
+    // Note: No throughput options — account uses EnableServerless capability
   }
 }
 
