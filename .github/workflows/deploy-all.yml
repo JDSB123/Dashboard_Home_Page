@@ -83,6 +83,7 @@ jobs:
           az deployment group validate \
             --resource-group ${{ env.RESOURCE_GROUP }} \
             --template-file infra/main.bicep \
+            --parameters infra/main.bicepparam \
             --parameters environment=${{ env.DEPLOY_ENV }} \
             --parameters enableWaf=${{ env.SKIP_WAF != 'true' }}
 
@@ -164,6 +165,7 @@ jobs:
           az deployment group what-if \
             --resource-group ${{ env.RESOURCE_GROUP }} \
             --template-file infra/main.bicep \
+            --parameters infra/main.bicepparam \
             --parameters environment=${{ env.DEPLOY_ENV }} \
             --parameters enableWaf=${{ env.SKIP_WAF != 'true' }}
 

@@ -85,6 +85,7 @@ jobs:
           az deployment group what-if \
             --resource-group ${{ env.RESOURCE_GROUP }} \
             --template-file infra/main.bicep \
+            --parameters infra/main.bicepparam \
             --parameters environment=${{ github.event.inputs.environment }} \
             --parameters enableWaf=${{ github.event.inputs.skip_waf != 'true' }}
 
