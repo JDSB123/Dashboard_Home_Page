@@ -35,6 +35,10 @@ function buildCorsHeaders(req, allowedOrigins, options = {}) {
     headers["Access-Control-Expose-Headers"] = options.exposeHeaders;
   }
 
+  if (options.credentials) {
+    headers["Access-Control-Allow-Credentials"] = "true";
+  }
+
   if (!allowAny) {
     headers["Vary"] = "Origin";
   }

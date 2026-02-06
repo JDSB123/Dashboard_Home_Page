@@ -7,18 +7,18 @@
  */
 
 const https = require("https");
+const { getAllowedOrigins, buildCorsHeaders } = require("../shared/http");
+
+const ALLOWED_ORIGINS = getAllowedOrigins();
 
 module.exports = async function (context, req) {
+  const corsHeaders = buildCorsHeaders(req, ALLOWED_ORIGINS);
+
   // Handle CORS preflight
   if (req.method === "OPTIONS") {
     context.res = {
       status: 204,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Max-Age": "86400",
-      },
+      headers: corsHeaders,
     };
     return;
   }
@@ -37,7 +37,7 @@ module.exports = async function (context, req) {
   if (!sportPath) {
     context.res = {
       status: 400,
-      headers: { "Access-Control-Allow-Origin": "*" },
+      headers: corsHeaders,
       body: { error: `Invalid sport: ${sport}. Supported: nfl, ncaaf, cfb` },
     };
     return;
@@ -49,7 +49,7 @@ module.exports = async function (context, req) {
     context.log.error("SDIO_KEY not configured in app settings");
     context.res = {
       status: 500,
-      headers: { "Access-Control-Allow-Origin": "*" },
+      headers: corsHeaders,
       body: { error: "SportsDataIO API key not configured" },
     };
     return;
@@ -106,7 +106,7 @@ module.exports = async function (context, req) {
     context.res = {
       status: 200,
       headers: {
-        "Access-Control-Allow-Origin": "*",
+        ...corsHeaders,
         "Content-Type": "application/json",
         "Cache-Control": "public, max-age=30", // Cache for 30 seconds
       },
@@ -116,7 +116,7 @@ module.exports = async function (context, req) {
     context.log.error(`[Scoreboard] Error fetching ${sport}:`, error.message);
     context.res = {
       status: error.statusCode || 500,
-      headers: { "Access-Control-Allow-Origin": "*" },
+      headers: corsHeaders,
       body: {
         error: error.message,
         sport: sport,

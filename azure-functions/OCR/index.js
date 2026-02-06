@@ -1,5 +1,6 @@
 const axios = require("axios");
 const FormData = require("form-data");
+const { validateSharedKey } = require("../shared/auth");
 
 /**
  * OCR API endpoint using Azure Computer Vision
@@ -17,6 +18,13 @@ module.exports = async function (context, req) {
       status: 405,
       body: { error: "Method not allowed" },
     };
+    return;
+  }
+
+  // Validate shared key for POST requests
+  const auth = validateSharedKey(req, context, { requireEnv: "REQUIRE_OCR_KEY" });
+  if (!auth.ok) {
+    context.res = { status: 401, body: { error: auth.reason || "Unauthorized" } };
     return;
   }
 

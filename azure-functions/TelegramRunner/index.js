@@ -1,4 +1,4 @@
-const { spawn } = require("child_process");
+const { execFile } = require("child_process");
 const path = require("path");
 
 module.exports = async function (context, req) {
@@ -37,45 +37,35 @@ module.exports = async function (context, req) {
 
   context.log(`Executing: python ${script} --date ${date}`);
 
-  // Use spawn with argument array to prevent command injection
-  const child = spawn("python", [script, "--date", date], {
-    cwd: repoRoot,
-    maxBuffer: 1024 * 1024 * 4,
-  });
+  // Use execFile with argument array to prevent command injection
+  // execFile (unlike spawn) supports maxBuffer for output limiting
+  return new Promise((resolve) => {
+    execFile(
+      "python",
+      [script, "--date", date],
+      { cwd: repoRoot, maxBuffer: 1024 * 1024 * 4 },
+      (error, stdout, stderr) => {
+        if (error) {
+          context.log.error("Runner failed", error.code, stderr);
+          context.res = {
+            status: 500,
+            body: {
+              error: "Runner failed",
+              exitCode: error.code,
+              details: stderr,
+            },
+          };
+          resolve();
+          return;
+        }
 
-  let stdout = "";
-  let stderr = "";
-
-  child.stdout.on("data", (data) => {
-    stdout += data.toString();
-  });
-
-  child.stderr.on("data", (data) => {
-    stderr += data.toString();
-  });
-
-  child.on("error", (err) => {
-    context.log.error("Runner failed to start", err);
-    context.res = { status: 500, body: { error: "Runner failed to start", details: err.message } };
-    context.done();
-  });
-
-  child.on("close", (code) => {
-    if (code !== 0) {
-      context.log.error("Runner failed", code, stderr);
-      context.res = {
-        status: 500,
-        body: { error: "Runner failed", exitCode: code, details: stderr },
-      };
-      context.done();
-      return;
-    }
-
-    context.log("Runner finished");
-    context.res = {
-      status: 200,
-      body: { message: "Analysis started", date: date, output: stdout },
-    };
-    context.done();
+        context.log("Runner finished");
+        context.res = {
+          status: 200,
+          body: { message: "Analysis started", date: date, output: stdout },
+        };
+        resolve();
+      }
+    );
   });
 };

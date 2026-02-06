@@ -35,9 +35,13 @@ function validateSharedKey(req, context, options = {}) {
     options.sharedKeyEnv || ["ORCHESTRATOR_FUNCTIONS_KEY", "API_SHARED_SECRET"]
   );
   const requireEnv = options.requireEnv || "REQUIRE_SHARED_KEY";
-  const requireKey = toBoolean(process.env[requireEnv]);
+  // Secure by default: auth is required unless explicitly set to "false"
+  const disableAuth =
+    String(process.env[requireEnv] || "")
+      .trim()
+      .toLowerCase() === "false";
 
-  if (!requireKey) {
+  if (disableAuth) {
     return { ok: true, bypass: true };
   }
 

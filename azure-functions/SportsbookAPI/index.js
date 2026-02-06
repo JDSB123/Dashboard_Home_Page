@@ -1,4 +1,40 @@
 const axios = require("axios");
+const crypto = require("crypto");
+const { validateSharedKey } = require("../shared/auth");
+
+// AES-256-GCM encryption key — sourced from env (should be set via Key Vault)
+// Generate with: node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+function getEncryptionKey() {
+  const hex = process.env.SPORTSBOOK_ENCRYPTION_KEY;
+  if (!hex || hex.length !== 64) {
+    throw new Error(
+      "SPORTSBOOK_ENCRYPTION_KEY not configured — set a 64-char hex key via Key Vault"
+    );
+  }
+  return Buffer.from(hex, "hex");
+}
+
+function encryptToken(payload) {
+  const key = getEncryptionKey();
+  const iv = crypto.randomBytes(12);
+  const cipher = crypto.createCipheriv("aes-256-gcm", key, iv);
+  const encrypted = Buffer.concat([cipher.update(JSON.stringify(payload), "utf8"), cipher.final()]);
+  const tag = cipher.getAuthTag();
+  // Pack iv + tag + ciphertext into one base64 string
+  return Buffer.concat([iv, tag, encrypted]).toString("base64");
+}
+
+function decryptToken(tokenStr) {
+  const key = getEncryptionKey();
+  const raw = Buffer.from(tokenStr, "base64");
+  const iv = raw.subarray(0, 12);
+  const tag = raw.subarray(12, 28);
+  const encrypted = raw.subarray(28);
+  const decipher = crypto.createDecipheriv("aes-256-gcm", key, iv);
+  decipher.setAuthTag(tag);
+  const decrypted = Buffer.concat([decipher.update(encrypted), decipher.final()]);
+  return JSON.parse(decrypted.toString("utf8"));
+}
 
 /**
  * Sportsbook API Integration
@@ -10,6 +46,15 @@ const axios = require("axios");
  */
 module.exports = async function (context, req) {
   context.log("Sportsbook API request:", req.params);
+
+  // Validate auth for POST routes (connect, bets)
+  if (req.method === "POST") {
+    const auth = validateSharedKey(req, context, { requireEnv: "REQUIRE_SPORTSBOOK_KEY" });
+    if (!auth.ok) {
+      context.res = { status: 401, body: { error: auth.reason || "Unauthorized" } };
+      return;
+    }
+  }
 
   const action = req.params.action;
 
@@ -45,15 +90,12 @@ async function handleConnect(context, req) {
       return;
     }
 
-    // Generate encrypted token for future requests
-    // In production, store in Azure Key Vault or encrypt properly
-    const token = Buffer.from(
-      JSON.stringify({
-        bookId,
-        timestamp: Date.now(),
-        // Don't store actual password, use session token from sportsbook
-      })
-    ).toString("base64");
+    // Generate AES-256-GCM encrypted token for future requests
+    const token = encryptToken({
+      bookId,
+      timestamp: Date.now(),
+      // Don't store actual password, use session token from sportsbook
+    });
 
     context.res = {
       status: 200,
@@ -77,8 +119,8 @@ async function handleFetchBets(context, req) {
   }
 
   try {
-    // Verify token
-    const decoded = JSON.parse(Buffer.from(token, "base64").toString());
+    // Verify and decrypt token
+    const decoded = decryptToken(token);
 
     if (decoded.bookId !== bookId) {
       context.res = { status: 401, body: { error: "Invalid token" } };
