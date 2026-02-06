@@ -4,350 +4,364 @@
  */
 
 function parseScoreFromResult(resultString) {
-    /**
-     * Parse score from result string
-     * E.g., "Raiders 7 - Broncos 10" => { away: 7, home: 10 }
-     */
-    if (!resultString) return { away: null, home: null };
+  /**
+   * Parse score from result string
+   * E.g., "Raiders 7 - Broncos 10" => { away: 7, home: 10 }
+   */
+  if (!resultString) return { away: null, home: null };
 
-    const scorePattern = /(\d+)\s*-\s*(\d+)/;
-    const match = resultString.match(scorePattern);
+  const scorePattern = /(\d+)\s*-\s*(\d+)/;
+  const match = resultString.match(scorePattern);
 
-    if (match) {
-        return {
-            away: parseInt(match[1]),
-            home: parseInt(match[2])
-        };
-    }
+  if (match) {
+    return {
+      away: parseInt(match[1]),
+      home: parseInt(match[2]),
+    };
+  }
 
-    return { away: null, home: null };
+  return { away: null, home: null };
 }
 
 function normalizeStatus(status) {
-    const value = (status || '').toString().toLowerCase();
-    return value === 'lost' ? 'loss' : value;
+  const value = (status || "").toString().toLowerCase();
+  return value === "lost" ? "loss" : value;
 }
 
 function calculateKPIs(picks) {
-    /**
-     * Calculate all KPI metrics from picks array
-     */
-    // Defensive: ensure picks is an array
-    if (!picks || !Array.isArray(picks)) {
-        picks = [];
+  /**
+   * Calculate all KPI metrics from picks array
+   */
+  // Defensive: ensure picks is an array
+  if (!picks || !Array.isArray(picks)) {
+    picks = [];
+  }
+
+  const kpis = {
+    activePicks: 0,
+    activeRisk: 0,
+    toWin: 0,
+    onTrackAmount: 0,
+    atRiskAmount: 0,
+    projected: 0,
+    netProfit: 0,
+    totalWon: 0,
+    totalLost: 0,
+    wins: 0,
+    losses: 0,
+    pushes: 0,
+    roePercentage: 0,
+    winPercentage: 0,
+    currentStreak: "",
+    totalRisk: 0,
+    topLeague: { name: "N/A", winRate: 0 },
+    topBetType: { name: "N/A", winRate: 0 },
+    topSegment: { name: "N/A", winRate: 0 },
+    topSportsbook: { name: "N/A", winRate: 0 },
+  };
+
+  // Track stats by category for "top" calculations
+  const leagueStats = {};
+  const betTypeStats = {};
+  const segmentStats = {};
+  const sportsbookStats = {};
+
+  picks.forEach((pick) => {
+    // Safely parse risk and win values - handle both string and number types
+    const riskStr =
+      pick.risk != null ? String(pick.risk).replace(/,/g, "") : "0";
+    const winStr = pick.win != null ? String(pick.win).replace(/,/g, "") : "0";
+    const risk = parseFloat(riskStr) || 0;
+    const win = parseFloat(winStr) || 0;
+    const status = normalizeStatus(pick.status);
+    const isLoss = status === "loss";
+
+    // Active picks (pending, live, on-track, at-risk)
+    if (
+      status === "pending" ||
+      status === "live" ||
+      status === "on-track" ||
+      status === "at-risk"
+    ) {
+      kpis.activePicks++;
+      kpis.toWin += win;
+      kpis.activeRisk += risk;
+
+      // Track on-track vs at-risk amounts
+      if (status === "on-track") {
+        kpis.onTrackAmount += win; // Potential payout for on-track picks
+      } else if (status === "at-risk") {
+        kpis.atRiskAmount += risk; // Risk amount for at-risk picks
+      } else if (status === "pending") {
+        // Pending picks are neither on-track nor at-risk yet
+        kpis.onTrackAmount += win * 0.5; // Assume 50% distribution for pending
+        kpis.atRiskAmount += risk * 0.5;
+      }
     }
 
-    const kpis = {
-        activePicks: 0,
-        activeRisk: 0,
-        toWin: 0,
-        onTrackAmount: 0,
-        atRiskAmount: 0,
-        projected: 0,
-        netProfit: 0,
-        totalWon: 0,
-        totalLost: 0,
-        wins: 0,
-        losses: 0,
-        pushes: 0,
-        roePercentage: 0,
-        winPercentage: 0,
-        currentStreak: '',
-        totalRisk: 0,
-        topLeague: { name: 'N/A', winRate: 0 },
-        topBetType: { name: 'N/A', winRate: 0 },
-        topSegment: { name: 'N/A', winRate: 0 },
-        topSportsbook: { name: 'N/A', winRate: 0 }
-    };
+    // Wins
+    if (status === "win") {
+      kpis.wins++;
+      kpis.totalWon += win;
 
-    // Track stats by category for "top" calculations
-    const leagueStats = {};
-    const betTypeStats = {};
-    const segmentStats = {};
-    const sportsbookStats = {};
-
-    picks.forEach(pick => {
-        // Safely parse risk and win values - handle both string and number types
-        const riskStr = pick.risk != null ? String(pick.risk).replace(/,/g, '') : '0';
-        const winStr = pick.win != null ? String(pick.win).replace(/,/g, '') : '0';
-        const risk = parseFloat(riskStr) || 0;
-        const win = parseFloat(winStr) || 0;
-        const status = normalizeStatus(pick.status);
-        const isLoss = status === 'loss';
-
-        // Active picks (pending, live, on-track, at-risk)
-        if (status === 'pending' || status === 'live' || status === 'on-track' || status === 'at-risk') {
-            kpis.activePicks++;
-            kpis.toWin += win;
-            kpis.activeRisk += risk;
-            
-            // Track on-track vs at-risk amounts
-            if (status === 'on-track') {
-                kpis.onTrackAmount += win; // Potential payout for on-track picks
-            } else if (status === 'at-risk') {
-                kpis.atRiskAmount += risk; // Risk amount for at-risk picks
-            } else if (status === 'pending') {
-                // Pending picks are neither on-track nor at-risk yet
-                kpis.onTrackAmount += win * 0.5; // Assume 50% distribution for pending
-                kpis.atRiskAmount += risk * 0.5;
-            }
-        }
-
-        // Wins
-        if (status === 'win') {
-            kpis.wins++;
-            kpis.totalWon += win;
-
-            // Track wins by category
-            trackWin(leagueStats, pick.league || 'Unknown');
-            trackWin(betTypeStats, pick.pickType || 'Unknown');
-            trackWin(segmentStats, pick.segment || 'Full Game');
-            trackWin(sportsbookStats, pick.book || 'Unknown');
-        }
-
-        // Losses
-        if (isLoss) {
-            kpis.losses++;
-            kpis.totalLost += risk;
-
-            // Track losses by category
-            trackLoss(leagueStats, pick.league || 'Unknown');
-            trackLoss(betTypeStats, pick.pickType || 'Unknown');
-            trackLoss(segmentStats, pick.segment || 'Full Game');
-            trackLoss(sportsbookStats, pick.book || 'Unknown');
-        }
-
-        // Pushes
-        if (status === 'push') {
-            kpis.pushes++;
-        }
-
-        // Total risk
-        kpis.totalRisk += risk;
-    });
-
-    // Calculate projected gain if all active picks win
-    kpis.projected = kpis.toWin - kpis.activeRisk;
-
-    // Calculate net profit/loss
-    kpis.netProfit = kpis.totalWon - kpis.totalLost;
-
-    // Calculate percentages
-    const totalGames = kpis.wins + kpis.losses + kpis.pushes;
-    const totalDecided = kpis.wins + kpis.losses;
-    if (totalDecided > 0) {
-        kpis.winPercentage = ((kpis.wins / totalDecided) * 100).toFixed(1);
-    } else {
-        kpis.winPercentage = '0.0';
+      // Track wins by category
+      trackWin(leagueStats, pick.league || "Unknown");
+      trackWin(betTypeStats, pick.pickType || "Unknown");
+      trackWin(segmentStats, pick.segment || "Full Game");
+      trackWin(sportsbookStats, pick.book || "Unknown");
     }
 
-    // Calculate ROE (Return on Equity)
-    if (kpis.totalRisk > 0) {
-        kpis.roePercentage = ((kpis.netProfit / kpis.totalRisk) * 100).toFixed(1);
-    } else {
-        kpis.roePercentage = '0.0';
+    // Losses
+    if (isLoss) {
+      kpis.losses++;
+      kpis.totalLost += risk;
+
+      // Track losses by category
+      trackLoss(leagueStats, pick.league || "Unknown");
+      trackLoss(betTypeStats, pick.pickType || "Unknown");
+      trackLoss(segmentStats, pick.segment || "Full Game");
+      trackLoss(sportsbookStats, pick.book || "Unknown");
     }
 
-    // Calculate streak
-    kpis.currentStreak = calculateStreak(picks);
+    // Pushes
+    if (status === "push") {
+      kpis.pushes++;
+    }
 
-    // Find top performers
-    kpis.topLeague = findTopPerformer(leagueStats);
-    kpis.topBetType = findTopPerformer(betTypeStats);
-    kpis.topSegment = findTopPerformer(segmentStats);
-    kpis.topSportsbook = findTopPerformer(sportsbookStats);
+    // Total risk
+    kpis.totalRisk += risk;
+  });
 
-    return kpis;
+  // Calculate projected gain if all active picks win
+  kpis.projected = kpis.toWin - kpis.activeRisk;
+
+  // Calculate net profit/loss
+  kpis.netProfit = kpis.totalWon - kpis.totalLost;
+
+  // Calculate percentages
+  const totalGames = kpis.wins + kpis.losses + kpis.pushes;
+  const totalDecided = kpis.wins + kpis.losses;
+  if (totalDecided > 0) {
+    kpis.winPercentage = ((kpis.wins / totalDecided) * 100).toFixed(1);
+  } else {
+    kpis.winPercentage = "0.0";
+  }
+
+  // Calculate ROE (Return on Equity)
+  if (kpis.totalRisk > 0) {
+    kpis.roePercentage = ((kpis.netProfit / kpis.totalRisk) * 100).toFixed(1);
+  } else {
+    kpis.roePercentage = "0.0";
+  }
+
+  // Calculate streak
+  kpis.currentStreak = calculateStreak(picks);
+
+  // Find top performers
+  kpis.topLeague = findTopPerformer(leagueStats);
+  kpis.topBetType = findTopPerformer(betTypeStats);
+  kpis.topSegment = findTopPerformer(segmentStats);
+  kpis.topSportsbook = findTopPerformer(sportsbookStats);
+
+  return kpis;
 }
 
 function trackWin(stats, key) {
-    if (!stats[key]) stats[key] = { wins: 0, losses: 0 };
-    stats[key].wins++;
+  if (!stats[key]) stats[key] = { wins: 0, losses: 0 };
+  stats[key].wins++;
 }
 
 function trackLoss(stats, key) {
-    if (!stats[key]) stats[key] = { wins: 0, losses: 0 };
-    stats[key].losses++;
+  if (!stats[key]) stats[key] = { wins: 0, losses: 0 };
+  stats[key].losses++;
 }
 
 function findTopPerformer(stats) {
-    let topName = 'N/A';
-    let topWinRate = 0;
+  let topName = "N/A";
+  let topWinRate = 0;
 
-    for (const [name, record] of Object.entries(stats)) {
-        const total = record.wins + record.losses;
-        if (total >= 3) { // Minimum 3 picks to qualify
-            const winRate = (record.wins / total) * 100;
-            if (winRate > topWinRate) {
-                topWinRate = winRate;
-                topName = name;
-            }
-        }
+  for (const [name, record] of Object.entries(stats)) {
+    const total = record.wins + record.losses;
+    if (total >= 3) {
+      // Minimum 3 picks to qualify
+      const winRate = (record.wins / total) * 100;
+      if (winRate > topWinRate) {
+        topWinRate = winRate;
+        topName = name;
+      }
     }
+  }
 
-    return { name: topName, winRate: topWinRate.toFixed(1) };
+  return { name: topName, winRate: topWinRate.toFixed(1) };
 }
 
 function calculateStreak(picks) {
-    /**
-     * Calculate current win/loss streak
-     */
-    const finishedPicks = picks.filter(p => {
-        const status = normalizeStatus(p.status);
-        return status === 'win' || status === 'loss';
-    }).reverse(); // Most recent first
+  /**
+   * Calculate current win/loss streak
+   */
+  const finishedPicks = picks
+    .filter((p) => {
+      const status = normalizeStatus(p.status);
+      return status === "win" || status === "loss";
+    })
+    .reverse(); // Most recent first
 
-    if (finishedPicks.length === 0) return 'W0';
+  if (finishedPicks.length === 0) return "W0";
 
-    let streak = 1;
-    const lastStatus = normalizeStatus(finishedPicks[0].status);
+  let streak = 1;
+  const lastStatus = normalizeStatus(finishedPicks[0].status);
 
-    for (let i = 1; i < finishedPicks.length; i++) {
-        if (normalizeStatus(finishedPicks[i].status) === lastStatus) {
-            streak++;
-        } else {
-            break;
-        }
+  for (let i = 1; i < finishedPicks.length; i++) {
+    if (normalizeStatus(finishedPicks[i].status) === lastStatus) {
+      streak++;
+    } else {
+      break;
     }
+  }
 
-    return lastStatus === 'win' ? `W${streak}` : `L${streak}`;
+  return lastStatus === "win" ? `W${streak}` : `L${streak}`;
 }
 
 function updateKPITiles(kpis) {
-    /**
-     * Update the KPI tiles in the dashboard
-     * Uses dual-layer structure (.kpi-tile-layer) with flip functionality
-     */
+  /**
+   * Update the KPI tiles in the dashboard
+   * Uses dual-layer structure (.kpi-tile-layer) with flip functionality
+   */
 
-    // Tile 1 - Projected PnL (front) / Net Profit (back)
-    const tile1 = document.querySelector('[data-tile-id="1"]');
-    if (tile1) {
-        const layers = tile1.querySelectorAll('.kpi-tile-layer');
+  // Tile 1 - Projected PnL (front) / Net Profit (back)
+  const tile1 = document.querySelector('[data-tile-id="1"]');
+  if (tile1) {
+    const layers = tile1.querySelectorAll(".kpi-tile-layer");
 
-        // Front layer - Projected PnL
-        if (layers[0]) {
-            const valueEl = layers[0].querySelector('.kpi-value');
-            const subtextEl = layers[0].querySelector('.kpi-subtext');
+    // Front layer - Projected PnL
+    if (layers[0]) {
+      const valueEl = layers[0].querySelector(".kpi-value");
+      const subtextEl = layers[0].querySelector(".kpi-subtext");
 
-            if (valueEl) {
-                const projectedSign = kpis.projected >= 0 ? '+' : '';
-                valueEl.textContent = `${projectedSign}$${Math.abs(kpis.projected).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+      if (valueEl) {
+        const projectedSign = kpis.projected >= 0 ? "+" : "";
+        valueEl.textContent = `${projectedSign}$${Math.abs(kpis.projected).toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
 
-                valueEl.classList.remove('positive', 'negative');
-                if (kpis.projected > 0) {
-                    valueEl.classList.add('positive');
-                } else if (kpis.projected < 0) {
-                    valueEl.classList.add('negative');
-                }
-            }
-
-            if (subtextEl) {
-                subtextEl.textContent = `${kpis.activePicks} Active Picks`;
-            }
+        valueEl.classList.remove("positive", "negative");
+        if (kpis.projected > 0) {
+          valueEl.classList.add("positive");
+        } else if (kpis.projected < 0) {
+          valueEl.classList.add("negative");
         }
+      }
 
-        // Back layer - Net Profit
-        if (layers[1]) {
-            const valueEl = layers[1].querySelector('.kpi-value');
-            const subtextEl = layers[1].querySelector('.kpi-subtext');
-
-            if (valueEl) {
-                const netSign = kpis.netProfit >= 0 ? '+' : '';
-                valueEl.textContent = `${netSign}$${Math.abs(kpis.netProfit).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
-
-                valueEl.classList.remove('positive', 'negative');
-                if (kpis.netProfit > 0) {
-                    valueEl.classList.add('positive');
-                } else if (kpis.netProfit < 0) {
-                    valueEl.classList.add('negative');
-                }
-            }
-
-            if (subtextEl) {
-                subtextEl.textContent = `Season Total`;
-            }
-        }
+      if (subtextEl) {
+        subtextEl.textContent = `${kpis.activePicks} Active Picks`;
+      }
     }
 
-    // Tile 2 - Win Rate (front) / ROI (back)
-    const tile2 = document.querySelector('[data-tile-id="2"]');
-    if (tile2) {
-        const layers = tile2.querySelectorAll('.kpi-tile-layer');
+    // Back layer - Net Profit
+    if (layers[1]) {
+      const valueEl = layers[1].querySelector(".kpi-value");
+      const subtextEl = layers[1].querySelector(".kpi-subtext");
 
-        // Front layer - Win Rate
-        if (layers[0]) {
-            const valueEl = layers[0].querySelector('.kpi-value');
-            const subtextEl = layers[0].querySelector('.kpi-subtext');
+      if (valueEl) {
+        const netSign = kpis.netProfit >= 0 ? "+" : "";
+        valueEl.textContent = `${netSign}$${Math.abs(kpis.netProfit).toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
 
-            if (valueEl) {
-                valueEl.textContent = `${kpis.winPercentage}%`;
-            }
-
-            if (subtextEl) {
-                subtextEl.textContent = `${kpis.wins}-${kpis.losses}-${kpis.pushes} Record`;
-            }
+        valueEl.classList.remove("positive", "negative");
+        if (kpis.netProfit > 0) {
+          valueEl.classList.add("positive");
+        } else if (kpis.netProfit < 0) {
+          valueEl.classList.add("negative");
         }
+      }
 
-        // Back layer - ROI
-        if (layers[1]) {
-            const valueEl = layers[1].querySelector('.kpi-value');
-            const subtextEl = layers[1].querySelector('.kpi-subtext');
+      if (subtextEl) {
+        subtextEl.textContent = `Season Total`;
+      }
+    }
+  }
 
-            if (valueEl) {
-                const roiSign = parseFloat(kpis.roePercentage) >= 0 ? '+' : '';
-                valueEl.textContent = `${roiSign}${kpis.roePercentage}%`;
+  // Tile 2 - Win Rate (front) / ROI (back)
+  const tile2 = document.querySelector('[data-tile-id="2"]');
+  if (tile2) {
+    const layers = tile2.querySelectorAll(".kpi-tile-layer");
 
-                valueEl.classList.remove('positive', 'negative');
-                if (parseFloat(kpis.roePercentage) > 0) {
-                    valueEl.classList.add('positive');
-                } else if (parseFloat(kpis.roePercentage) < 0) {
-                    valueEl.classList.add('negative');
-                }
-            }
+    // Front layer - Win Rate
+    if (layers[0]) {
+      const valueEl = layers[0].querySelector(".kpi-value");
+      const subtextEl = layers[0].querySelector(".kpi-subtext");
 
-            if (subtextEl) {
-                subtextEl.textContent = `Return on Equity`;
-            }
-        }
+      if (valueEl) {
+        valueEl.textContent = `${kpis.winPercentage}%`;
+      }
+
+      if (subtextEl) {
+        subtextEl.textContent = `${kpis.wins}-${kpis.losses}-${kpis.pushes} Record`;
+      }
     }
 
-    // Tile 3 - Active Volume (front) / To Win (back)
-    const tile3 = document.querySelector('[data-tile-id="3"]');
-    if (tile3) {
-        const layers = tile3.querySelectorAll('.kpi-tile-layer');
+    // Back layer - ROI
+    if (layers[1]) {
+      const valueEl = layers[1].querySelector(".kpi-value");
+      const subtextEl = layers[1].querySelector(".kpi-subtext");
 
-        // Front layer - Active Risk
-        if (layers[0]) {
-            const valueEl = layers[0].querySelector('.kpi-value');
-            const subtextEl = layers[0].querySelector('.kpi-subtext');
+      if (valueEl) {
+        const roiSign = parseFloat(kpis.roePercentage) >= 0 ? "+" : "";
+        valueEl.textContent = `${roiSign}${kpis.roePercentage}%`;
 
-            if (valueEl) {
-                valueEl.textContent = `$${kpis.activeRisk.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
-            }
-
-            if (subtextEl) {
-                subtextEl.textContent = `Total at Risk`;
-            }
+        valueEl.classList.remove("positive", "negative");
+        if (parseFloat(kpis.roePercentage) > 0) {
+          valueEl.classList.add("positive");
+        } else if (parseFloat(kpis.roePercentage) < 0) {
+          valueEl.classList.add("negative");
         }
+      }
 
-        // Back layer - To Win
-        if (layers[1]) {
-            const valueEl = layers[1].querySelector('.kpi-value');
-            const subtextEl = layers[1].querySelector('.kpi-subtext');
-
-            if (valueEl) {
-                valueEl.textContent = `$${kpis.toWin.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
-                valueEl.classList.add('positive');
-            }
-
-            if (subtextEl) {
-                subtextEl.textContent = `Potential Payout`;
-            }
-        }
+      if (subtextEl) {
+        subtextEl.textContent = `Return on Equity`;
+      }
     }
+  }
+
+  // Tile 3 - Active Volume (front) / To Win (back)
+  const tile3 = document.querySelector('[data-tile-id="3"]');
+  if (tile3) {
+    const layers = tile3.querySelectorAll(".kpi-tile-layer");
+
+    // Front layer - Active Risk
+    if (layers[0]) {
+      const valueEl = layers[0].querySelector(".kpi-value");
+      const subtextEl = layers[0].querySelector(".kpi-subtext");
+
+      if (valueEl) {
+        valueEl.textContent = `$${kpis.activeRisk.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+      }
+
+      if (subtextEl) {
+        subtextEl.textContent = `Total at Risk`;
+      }
+    }
+
+    // Back layer - To Win
+    if (layers[1]) {
+      const valueEl = layers[1].querySelector(".kpi-value");
+      const subtextEl = layers[1].querySelector(".kpi-subtext");
+
+      if (valueEl) {
+        valueEl.textContent = `$${kpis.toWin.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+        valueEl.classList.add("positive");
+      }
+
+      if (subtextEl) {
+        subtextEl.textContent = `Potential Payout`;
+      }
+    }
+  }
 }
 
 // Export functions
 window.calculateKPIs = calculateKPIs;
 window.updateKPITiles = updateKPITiles;
 window.parseScoreFromResult = parseScoreFromResult;
+
+// CJS export for Node.js testing
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = { calculateKPIs, parseScoreFromResult, normalizeStatus };
+}

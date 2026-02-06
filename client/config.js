@@ -35,9 +35,6 @@ window.APP_CONFIG = {
     "https://gbsvorchestratorstorage.blob.core.windows.net/team-logos", // Direct blob fallback
 
   // Feature Flags
-  WEEKLY_LINEUP_DISABLED_LEAGUES: ["NFL", "NCAAF"],
-
-  // Feature Flags
   AUTH_ENABLED: false,
   DEBUG_MODE: false,
 

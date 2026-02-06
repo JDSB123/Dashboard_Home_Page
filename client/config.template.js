@@ -5,65 +5,89 @@
  * Repository:  github.com/JDSB123/Dashboard_Home_Page
  * Azure RG:    Dashboard_Home_Page (eastus)
  * Owner:       jb@greenbiercapital.com
- * Version:     33.01.0
+ * Version:     34.00.1
  * ═══════════════════════════════════════════════════════════════════════════
  */
 
 // Note: Object NOT frozen to allow dynamic endpoint updates from registry
 window.APP_CONFIG = {
   // Project Identification
-  PROJECT_NAME: 'Dashboard_Home_Page',
-  VERSION: '33.01.0',
-  ENVIRONMENT: 'production',
+  PROJECT_NAME: "Dashboard_Home_Page",
+  VERSION: "34.00.1",
+  ENVIRONMENT: "production",
 
   // Azure Configuration
-  AZURE_RESOURCE_GROUP: 'dashboard-gbsv-main-rg',
-  AZURE_REGION: 'eastus',
+  AZURE_RESOURCE_GROUP: "dashboard-gbsv-main-rg",
+  AZURE_REGION: "eastus",
 
   // API Configuration
-  API_BASE_URL: 'https://www.greenbiersportventures.com/api',
-  ORCHESTRATOR_URL: 'https://www.greenbiersportventures.com/api',
-  FUNCTIONS_BASE_URL: 'https://www.greenbiersportventures.com',
-  API_BASE_FALLBACK: 'https://www.greenbiersportventures.com/api',
+  API_BASE_URL: "https://www.greenbiersportventures.com/api",
+  ORCHESTRATOR_URL: "https://www.greenbiersportventures.com/api",
+  FUNCTIONS_BASE_URL: "https://www.greenbiersportventures.com",
+  API_BASE_FALLBACK: "https://www.greenbiersportventures.com/api",
   DYNAMIC_REGISTRY_ENABLED: true,
 
   // Model API Endpoints (can be dynamically updated by model-endpoints-bootstrap.js)
+  API_ENDPOINTS: {
+    NFL: "__NFL_API_URL__",
+    NCAAF: "__NCAAF_API_URL__",
+    NBA: "__NBA_API_URL__",
+    NCAAM: "__NCAAM_API_URL__",
+    NHL: "",
+    MLB: "",
+  },
+
+  // Feature Flags
+  WEEKLY_LINEUP_DISABLED_LEAGUES: ["NFL", "NCAAF"],
+
   // These endpoints are used by:
   //   - Frontend fetchers (nba-picks-fetcher.js, etc.) for real-time Weekly Lineup display
   //   - Azure Function ModelJobProcessor for backend async job processing
   //   - model-endpoints-bootstrap.js fetches latest from /api/registry on page load
 
-  // NBA: Function App (primary) + Container App (fallback)
-  NBA_FUNCTION_URL: 'https://www.greenbiersportventures.com/api/weekly-lineup/nba',  // Primary - Function App with /api/weekly-lineup/nba
-  NBA_API_URL: '__NBA_API_URL__',  // Fallback - Container App
-  NCAAM_API_URL: '__NCAAM_API_URL__',
-  // NFL: Function App (primary) + Container App (fallback)
-  NFL_FUNCTION_URL: 'https://www.greenbiersportventures.com/api/weekly-lineup/nfl',  // Primary - Function App with /api/weekly-lineup/nfl
-  NFL_API_URL: '__NFL_API_URL__',  // Fallback - Container App
-  NCAAF_API_URL: '__NCAAF_API_URL__',
-  NHL_API_URL: '', // Placeholder - will be populated from registry when available
-  MLB_API_URL: '', // Placeholder - will be populated from registry when available
+  // Sport Prediction APIs - Direct routing via Front Door: /{sport}/predictions
+  NBA_API_URL: "__NBA_API_URL__",
+  NCAAM_API_URL: "__NCAAM_API_URL__",
+  NFL_API_URL: "__NFL_API_URL__",
+  NCAAF_API_URL: "__NCAAF_API_URL__",
+  NHL_API_URL: "",
+  MLB_API_URL: "",
 
   // Static Assets (Front Door / CDN)
-  LOGO_BASE_URL: '__LOGO_BASE_URL__', // e.g. https://www.greenbiersportventures.com/team-logos
-  LOGO_FALLBACK_URL: '__LOGO_FALLBACK_URL__', // e.g. https://gbsvorchestratorstorage.blob.core.windows.net/team-logos
+  LOGO_BASE_URL: "__LOGO_BASE_URL__",
+  LOGO_FALLBACK_URL: "__LOGO_FALLBACK_URL__",
 
   // Feature Flags
   AUTH_ENABLED: false,
   DEBUG_MODE: false,
 
+  // Database Sync - Enable to sync picks with Azure Cosmos DB
+  ENABLE_DB_SYNC: true,
   // Team Records API (disable to avoid 404s when endpoint is unavailable)
   TEAM_RECORDS_API_ENABLED: false,
 
   // Repository Info
-  REPO_URL: 'https://github.com/JDSB123/Dashboard_Home_Page',
-  OWNER: 'jb@greenbiercapital.com',
+  REPO_URL: "https://github.com/JDSB123/Dashboard_Home_Page",
+  OWNER: "jb@greenbiercapital.com",
 
   // Note: External API keys (SportsDataIO, TheOddsAPI) are configured in Azure Function App Settings
   // All external API calls are proxied through Azure Functions for security
 };
 
+// Back-compat: some scripts read this directly
+window.WEEKLY_LINEUP_DISABLED_LEAGUES =
+  window.APP_CONFIG.WEEKLY_LINEUP_DISABLED_LEAGUES;
+
+// GBSV Configuration for Azure services
+window.GBSV_CONFIG = {
+  FUNCTIONS_URL: "https://www.greenbiersportventures.com",
+  PICKS_API_ENDPOINT: "https://www.greenbiersportventures.com/nba/picks",
+};
+
 // Export for module usage if needed
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = window.APP_CONFIG;
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = {
+    APP_CONFIG: window.APP_CONFIG,
+    GBSV_CONFIG: window.GBSV_CONFIG,
+  };
 }
