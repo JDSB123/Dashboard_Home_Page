@@ -27,32 +27,7 @@ window.APP_CONFIG = {
   API_BASE_FALLBACK: "https://www.greenbiersportventures.com/api",
   DYNAMIC_REGISTRY_ENABLED: true,
 
-  // Model API Endpoints (can be dynamically updated by model-endpoints-bootstrap.js)
-  API_ENDPOINTS: {
-    NFL: "https://www.greenbiersportventures.com/nfl/predictions",
-    NCAAF: "https://www.greenbiersportventures.com/ncaaf/predictions",
-    NBA: "https://www.greenbiersportventures.com/nba/predictions",
-    NCAAM: "https://www.greenbiersportventures.com/ncaam/predictions",
-    NHL: "https://www.greenbiersportventures.com/nhl/predictions",
-    MLB: "https://www.greenbiersportventures.com/mlb/predictions",
-  },
-
-  // Feature Flags
-  WEEKLY_LINEUP_DISABLED_LEAGUES: ["NFL", "NCAAF"],
-
-  // These endpoints are used by:
-  //   - Frontend fetchers (nba-picks-fetcher.js, etc.) for real-time Weekly Lineup display
-  //   - Azure Function ModelJobProcessor for backend async job processing
-  //   - model-endpoints-bootstrap.js fetches latest from /api/registry on page load
-
-  // Sport Prediction APIs - Direct routing via Front Door: /{sport}/predictions
-  // No /api/ prefix - clean URL pattern
-  NBA_API_URL: "https://www.greenbiersportventures.com/nba/predictions",
-  NCAAM_API_URL: "https://www.greenbiersportventures.com/ncaam/predictions",
-  NFL_API_URL: "https://www.greenbiersportventures.com/nfl/predictions",
-  NCAAF_API_URL: "https://www.greenbiersportventures.com/ncaaf/predictions",
-  NHL_API_URL: "", // Placeholder - will be populated from registry when available
-  MLB_API_URL: "", // Placeholder - will be populated from registry when available
+  // Model API Endpoints — sport models removed; endpoints live in their own repos
 
   // Static Assets (Front Door / CDN)
   LOGO_BASE_URL: "https://www.greenbiersportventures.com/team-logos", // Served via Front Door/custom domain

@@ -33,6 +33,7 @@ param staticWebAppHostname string = 'proud-cliff-008e2e20f.2.azurestaticapps.net
 // Each sport API has built-in async queue processing at /{sport}/predictions
 // No need for orchestrator middleman
 
+<<<<<<< Updated upstream
 @description('NBA API Container App hostname')
 param nbaApiHostname string = 'gbsv-nbav3-aca.wittypebble-41c11c65.eastus.azurecontainerapps.io'
 
@@ -44,6 +45,9 @@ param nflApiHostname string = 'nfl-api.purplegrass-5889a981.eastus.azurecontaine
 
 @description('NCAAF API Container App hostname')
 param ncaafApiHostname string = 'ncaaf-v5-prod.salmonwave-314d4ffe.eastus.azurecontainerapps.io'
+=======
+// Sport model hostnames removed — models live in their own repos/resource groups
+>>>>>>> Stashed changes
 
 // ════════════════════════════════════════════════════════════════════════════
 // Variables
@@ -55,10 +59,15 @@ var endpointName = 'gbsv-endpoint-${environment}'
 
 // Origin group names
 var originGroupDashboard = 'og-dashboard'
+<<<<<<< Updated upstream
 var originGroupNba = 'og-nba-api'
 var originGroupNcaam = 'og-ncaam-api'
 var originGroupNfl = 'og-nfl-api'
 var originGroupNcaaf = 'og-ncaaf-api'
+=======
+var originGroupOrchestrator = 'og-orchestrator'
+
+>>>>>>> Stashed changes
 
 // ════════════════════════════════════════════════════════════════════════════
 // WAF Policy (Premium - Full OWASP + Bot Manager protection)
@@ -189,30 +198,17 @@ resource originGroupDashboardResource 'Microsoft.Cdn/profiles/originGroups@2024-
   }
 }
 
+<<<<<<< Updated upstream
 // NBA API Origin Group
 resource originGroupNbaResource 'Microsoft.Cdn/profiles/originGroups@2024-02-01' = {
   parent: frontDoorProfile
   name: originGroupNba
-  properties: {
-    loadBalancingSettings: {
-      sampleSize: 4
-      successfulSamplesRequired: 3
-      additionalLatencyInMilliseconds: 50
-    }
-    healthProbeSettings: {
-      probePath: '/health'
-      probeRequestType: 'GET'
-      probeProtocol: 'Https'
-      probeIntervalInSeconds: 30
-    }
-    sessionAffinityState: 'Disabled'
-  }
-}
-
-// NCAAM API Origin Group
-resource originGroupNcaamResource 'Microsoft.Cdn/profiles/originGroups@2024-02-01' = {
+=======
+// Orchestrator API Origin Group
+resource originGroupOrchestratorResource 'Microsoft.Cdn/profiles/originGroups@2024-02-01' = {
   parent: frontDoorProfile
-  name: originGroupNcaam
+  name: originGroupOrchestrator
+>>>>>>> Stashed changes
   properties: {
     loadBalancingSettings: {
       sampleSize: 4
@@ -220,7 +216,11 @@ resource originGroupNcaamResource 'Microsoft.Cdn/profiles/originGroups@2024-02-0
       additionalLatencyInMilliseconds: 50
     }
     healthProbeSettings: {
+<<<<<<< Updated upstream
       probePath: '/health'
+=======
+      probePath: '/api/health'
+>>>>>>> Stashed changes
       probeRequestType: 'GET'
       probeProtocol: 'Https'
       probeIntervalInSeconds: 30
@@ -228,46 +228,11 @@ resource originGroupNcaamResource 'Microsoft.Cdn/profiles/originGroups@2024-02-0
     sessionAffinityState: 'Disabled'
   }
 }
+<<<<<<< Updated upstream
+=======
 
-// NFL API Origin Group
-resource originGroupNflResource 'Microsoft.Cdn/profiles/originGroups@2024-02-01' = {
-  parent: frontDoorProfile
-  name: originGroupNfl
-  properties: {
-    loadBalancingSettings: {
-      sampleSize: 4
-      successfulSamplesRequired: 3
-      additionalLatencyInMilliseconds: 50
-    }
-    healthProbeSettings: {
-      probePath: '/health'
-      probeRequestType: 'GET'
-      probeProtocol: 'Https'
-      probeIntervalInSeconds: 30
-    }
-    sessionAffinityState: 'Disabled'
-  }
-}
+>>>>>>> Stashed changes
 
-// NCAAF API Origin Group
-resource originGroupNcaafResource 'Microsoft.Cdn/profiles/originGroups@2024-02-01' = {
-  parent: frontDoorProfile
-  name: originGroupNcaaf
-  properties: {
-    loadBalancingSettings: {
-      sampleSize: 4
-      successfulSamplesRequired: 3
-      additionalLatencyInMilliseconds: 50
-    }
-    healthProbeSettings: {
-      probePath: '/health'
-      probeRequestType: 'GET'
-      probeProtocol: 'Https'
-      probeIntervalInSeconds: 30
-    }
-    sessionAffinityState: 'Disabled'
-  }
-}
 
 // ════════════════════════════════════════════════════════════════════════════
 // Origins (Backend Servers)
@@ -289,6 +254,7 @@ resource originDashboard 'Microsoft.Cdn/profiles/originGroups/origins@2024-02-01
   }
 }
 
+<<<<<<< Updated upstream
 // NBA API Origin
 resource originNba 'Microsoft.Cdn/profiles/originGroups/origins@2024-02-01' = {
   parent: originGroupNbaResource
@@ -298,60 +264,28 @@ resource originNba 'Microsoft.Cdn/profiles/originGroups/origins@2024-02-01' = {
     httpPort: 80
     httpsPort: 443
     originHostHeader: nbaApiHostname
-    priority: 1
-    weight: 1000
-    enabledState: 'Enabled'
-    enforceCertificateNameCheck: true
-  }
-}
-
-// NCAAM API Origin
-resource originNcaam 'Microsoft.Cdn/profiles/originGroups/origins@2024-02-01' = {
-  parent: originGroupNcaamResource
-  name: 'origin-ncaam-api'
+=======
+// Orchestrator Origin
+resource originOrchestrator 'Microsoft.Cdn/profiles/originGroups/origins@2024-02-01' = {
+  parent: originGroupOrchestratorResource
+  name: 'origin-orchestrator'
   properties: {
-    hostName: ncaamApiHostname
+    hostName: orchestratorHostname
     httpPort: 80
     httpsPort: 443
-    originHostHeader: ncaamApiHostname
+    originHostHeader: orchestratorHostname
+>>>>>>> Stashed changes
     priority: 1
     weight: 1000
     enabledState: 'Enabled'
     enforceCertificateNameCheck: true
   }
 }
+<<<<<<< Updated upstream
+=======
 
-// NFL API Origin
-resource originNfl 'Microsoft.Cdn/profiles/originGroups/origins@2024-02-01' = {
-  parent: originGroupNflResource
-  name: 'origin-nfl-api'
-  properties: {
-    hostName: nflApiHostname
-    httpPort: 80
-    httpsPort: 443
-    originHostHeader: nflApiHostname
-    priority: 1
-    weight: 1000
-    enabledState: 'Enabled'
-    enforceCertificateNameCheck: true
-  }
-}
+>>>>>>> Stashed changes
 
-// NCAAF API Origin
-resource originNcaaf 'Microsoft.Cdn/profiles/originGroups/origins@2024-02-01' = {
-  parent: originGroupNcaafResource
-  name: 'origin-ncaaf-api'
-  properties: {
-    hostName: ncaafApiHostname
-    httpPort: 80
-    httpsPort: 443
-    originHostHeader: ncaafApiHostname
-    priority: 1
-    weight: 1000
-    enabledState: 'Enabled'
-    enforceCertificateNameCheck: true
-  }
-}
 
 // ════════════════════════════════════════════════════════════════════════════
 // Rule Sets for Path Rewriting
@@ -398,9 +332,13 @@ resource ruleCanonicalHost 'Microsoft.Cdn/profiles/ruleSets/rules@2024-02-01' = 
   }
 }
 
+<<<<<<< Updated upstream
 // NOTE: No URL rewrite rules needed for sport routes
 // Front Door routes /{sport}/* directly to sport APIs
 // Sport APIs expect paths like /nba/predictions, /health, etc. at root
+=======
+
+>>>>>>> Stashed changes
 
 // ════════════════════════════════════════════════════════════════════════════
 // Routes (Direct Sport Routing - No /api/ prefix)
@@ -413,6 +351,7 @@ resource ruleCanonicalHost 'Microsoft.Cdn/profiles/ruleSets/rules@2024-02-01' = 
 //   - /ncaaf/predictions → NCAAF API
 // ════════════════════════════════════════════════════════════════════════════
 
+<<<<<<< Updated upstream
 // NBA API Route (/nba/*)
 resource routeNbaApi 'Microsoft.Cdn/profiles/afdEndpoints/routes@2024-02-01' = {
   parent: frontDoorEndpoint
@@ -428,12 +367,25 @@ resource routeNbaApi 'Microsoft.Cdn/profiles/afdEndpoints/routes@2024-02-01' = {
     ]
     supportedProtocols: ['Https']
     patternsToMatch: ['/nba/*']
+=======
+// Orchestrator API Route (/api/*) - catches all /api/ requests
+resource routeOrchestratorApi 'Microsoft.Cdn/profiles/afdEndpoints/routes@2024-02-01' = {
+  parent: frontDoorEndpoint
+  name: 'route-orchestrator-api'
+  properties: {
+    originGroup: {
+      id: originGroupOrchestratorResource.id
+    }
+    supportedProtocols: ['Https']
+    patternsToMatch: ['/api/*']
+>>>>>>> Stashed changes
     forwardingProtocol: 'HttpsOnly'
     linkToDefaultDomain: 'Enabled'
     httpsRedirect: 'Enabled'
     enabledState: 'Enabled'
   }
   dependsOn: [
+<<<<<<< Updated upstream
     originNba
   ]
 }
@@ -514,6 +466,13 @@ resource routeNcaafApi 'Microsoft.Cdn/profiles/afdEndpoints/routes@2024-02-01' =
 }
 
 // Dashboard Route (/*) - default catch-all for Static Web App
+=======
+    originOrchestrator
+  ]
+}
+
+// Dashboard Route (/*) - default catch-all
+>>>>>>> Stashed changes
 resource routeDashboard 'Microsoft.Cdn/profiles/afdEndpoints/routes@2024-02-01' = {
   parent: frontDoorEndpoint
   name: 'route-dashboard'

@@ -12,31 +12,7 @@
     "executionsTable": "modelexecutions",
     "registryTable": "modelregistry"
   },
-  "models": {
-    "nfl": {
-      "resourceGroup": "nfl-gbsv-model-rg",
-      "containerApp": "nfl-api",
-      "endpoint": "https://nfl-api.purplegrass-5889a981.eastus.azurecontainerapps.io",
-      "functionUrl": "https://nfl-picks-trigger.azurewebsites.net"
-    },
-    "ncaam": {
-      "resourceGroup": "ncaam-gbsv-model-rg",
-      "containerApp": "ncaam-stable-prediction",
-      "endpoint": "https://ncaam-stable-prediction.wonderfulforest-c2d7d49a.centralus.azurecontainerapps.io",
-      "functionUrl": ""
-    },
-    "ncaaf": {
-      "resourceGroup": "ncaaf-gbsv-model-rg",
-      "containerApp": "ncaaf-v5-prod",
-      "endpoint": "https://ncaaf-v5-prod.salmonwave-314d4ffe.eastus.azurecontainerapps.io"
-    },
-    "nba": {
-      "resourceGroup": "dashboard-gbsv-main-rg",
-      "containerApp": "gbsv-nbav3-aca",
-      "endpoint": "https://gbsv-nbav3-aca.wittypebble-41c11c65.eastus.azurecontainerapps.io",
-      "functionUrl": "https://nba-picks-trigger.azurewebsites.net"
-    }
-  },
+
   "location": "eastus",
   "subscriptionId": "3a1a4a94-45a5-4f7c-8ada-97978221052c",
   "signalr": {
