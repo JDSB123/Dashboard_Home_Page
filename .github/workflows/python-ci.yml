@@ -35,4 +35,4 @@ jobs:
 
       - name: Pytest
         working-directory: data-pipeline
-        run: pytest -q || true
+        run: pytest -q

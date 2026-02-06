@@ -5,10 +5,9 @@ name: Deploy Full Stack (Front Door + Orchestrator + Static Web App)
 on:
   push:
     branches: [main]
-    paths-ignore:
-      - 'docs/**'
-      - 'README.md'
-      - '.env.example'
+    paths:
+      - 'infra/**'
+      - '.github/workflows/deploy-all.yml'
   workflow_dispatch:
     inputs:
       environment:
@@ -46,14 +45,15 @@ permissions:
   contents: read
 
 env:
-  # Azure resource names - hardcoded (not secrets!)
+  # Azure resource names — shared across jobs
   RESOURCE_GROUP: dashboard-gbsv-main-rg
   LOCATION: eastus
   CONTAINERAPPS_ENVIRONMENT: gbsv-aca-env
   CONTAINER_APP_NAME: gbsv-orchestrator
   IMAGE_NAME: gbsv-orchestrator
   ACR_LOGIN_SERVER: gbsvregistry.azurecr.io
-  # Sport API endpoints - hardcoded
+  # Sport API endpoints — sourced from scripts/deployment-config.json (single source of truth)
+  # Update endpoints there, then the load-sport-endpoints step will populate these.
   NBA_API_URL: https://gbsv-nbav3-aca.wittypebble-41c11c65.eastus.azurecontainerapps.io
   NCAAM_API_URL: https://ncaam-stable-prediction.wonderfulforest-c2d7d49a.centralus.azurecontainerapps.io
   NFL_API_URL: https://nfl-api.purplegrass-5889a981.eastus.azurecontainerapps.io
@@ -102,10 +102,11 @@ jobs:
         run: npm install -g http-server pa11y-ci
 
       - name: Run Accessibility Audit
+        continue-on-error: true  # Advisory — report but don't gate deployment
         run: |
           http-server client -p 8080 &
           sleep 10
-          pa11y-ci --chrome-launch-config '{"args": ["--no-sandbox", "--disable-setuid-sandbox", "--headless"]}' --sitemap http://localhost:8080/index.html || true
+          pa11y-ci --chrome-launch-config '{"args": ["--no-sandbox", "--disable-setuid-sandbox", "--headless"]}' --sitemap http://localhost:8080/index.html
 
   test-functions:
     name: Azure Functions Tests
@@ -358,25 +359,19 @@ jobs:
         id: acr-creds
         env:
           ACR_LOGIN_SERVER: ${{ env.ACR_LOGIN_SERVER }}
-          ACR_USERNAME: ${{ secrets.ACR_USERNAME }}
-          ACR_PASSWORD: ${{ secrets.ACR_PASSWORD }}
         run: |
           if [ -z "$ACR_LOGIN_SERVER" ]; then
             echo "ERROR: ACR login server not set" >&2
             exit 1
           fi
 
-          if [ -n "$ACR_USERNAME" ] && [ -n "$ACR_PASSWORD" ]; then
-            echo "registryUsername=$ACR_USERNAME" >> "$GITHUB_OUTPUT"
-            echo "registryPassword=$ACR_PASSWORD" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
+          # Get ACR credentials dynamically from Azure
           ACR_NAME=${ACR_LOGIN_SERVER%%.*}
           registry_user=$(az acr credential show --name "$ACR_NAME" --query username -o tsv 2>/dev/null || true)
           registry_pass=$(az acr credential show --name "$ACR_NAME" --query "passwords[0].value" -o tsv 2>/dev/null || true)
 
           if [ -n "$registry_user" ] && [ -n "$registry_pass" ]; then
+            echo "::add-mask::$registry_pass"
             echo "registryUsername=$registry_user" >> "$GITHUB_OUTPUT"
             echo "registryPassword=$registry_pass" >> "$GITHUB_OUTPUT"
           else
@@ -409,6 +404,36 @@ jobs:
             exit 1
           fi
 
+      - name: Fetch secrets from Key Vault
+        id: keyvault-secrets
+        env:
+          RESOURCE_GROUP: ${{ env.RESOURCE_GROUP }}
+        run: |
+          # Find Dashboard Key Vault
+          KV_NAME=$(az keyvault list -g "$RESOURCE_GROUP" --query "[?contains(name, 'dashboard')].name | [0]" -o tsv 2>/dev/null || echo "")
+          if [ -z "$KV_NAME" ]; then
+            echo "::warning::Dashboard Key Vault not found - using empty connection strings"
+            echo "storage_conn=" >> $GITHUB_OUTPUT
+            echo "signalr_conn=" >> $GITHUB_OUTPUT
+            echo "appinsights_conn=" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          echo "Found Key Vault: $KV_NAME"
+
+          # Fetch secrets (with fallbacks for missing secrets)
+          STORAGE_CONN=$(az keyvault secret show --vault-name "$KV_NAME" --name "azure-storage-connection-string" --query "value" -o tsv 2>/dev/null || echo "")
+          SIGNALR_CONN=$(az keyvault secret show --vault-name "$KV_NAME" --name "azure-signalr-connection-string" --query "value" -o tsv 2>/dev/null || echo "")
+          APPINSIGHTS_CONN=$(az keyvault secret show --vault-name "$KV_NAME" --name "appinsights-connection-string" --query "value" -o tsv 2>/dev/null || echo "")
+
+          # Mask and output
+          if [ -n "$STORAGE_CONN" ]; then echo "::add-mask::$STORAGE_CONN"; fi
+          if [ -n "$SIGNALR_CONN" ]; then echo "::add-mask::$SIGNALR_CONN"; fi
+          if [ -n "$APPINSIGHTS_CONN" ]; then echo "::add-mask::$APPINSIGHTS_CONN"; fi
+
+          echo "storage_conn=$STORAGE_CONN" >> $GITHUB_OUTPUT
+          echo "signalr_conn=$SIGNALR_CONN" >> $GITHUB_OUTPUT
+          echo "appinsights_conn=$APPINSIGHTS_CONN" >> $GITHUB_OUTPUT
+
       - name: Deploy container app
         env:
           RESOURCE_GROUP: ${{ env.RESOURCE_GROUP }}
@@ -417,9 +442,9 @@ jobs:
           ACR_LOGIN_SERVER: ${{ env.ACR_LOGIN_SERVER }}
           ACR_USERNAME: ${{ steps.acr-creds.outputs.registryUsername }}
           ACR_PASSWORD: ${{ steps.acr-creds.outputs.registryPassword }}
-          AzureWebJobsStorage: ${{ secrets.AZURE_FUNCTIONS_STORAGE_CONNECTION }}
-          AzureSignalRConnectionString: ${{ secrets.AZURE_SIGNALR_CONNECTION_STRING }}
-          APPLICATIONINSIGHTS_CONNECTION_STRING: ${{ secrets.APPINSIGHTS_CONNECTION_STRING }}
+          AzureWebJobsStorage: ${{ steps.keyvault-secrets.outputs.storage_conn }}
+          AzureSignalRConnectionString: ${{ steps.keyvault-secrets.outputs.signalr_conn }}
+          APPLICATIONINSIGHTS_CONNECTION_STRING: ${{ steps.keyvault-secrets.outputs.appinsights_conn }}
           NBA_API_URL: ${{ env.NBA_API_URL }}
           NCAAM_API_URL: ${{ env.NCAAM_API_URL }}
           NFL_API_URL: ${{ env.NFL_API_URL }}
