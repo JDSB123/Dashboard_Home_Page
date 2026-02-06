@@ -180,8 +180,7 @@ jobs:
           echo "| Path | Backend |" >> $GITHUB_STEP_SUMMARY
           echo "|------|---------|" >> $GITHUB_STEP_SUMMARY
           echo "| \`/*\` | Static Web App (Dashboard) |" >> $GITHUB_STEP_SUMMARY
-          echo "| \`/api/*\` | Orchestrator Container App |" >> $GITHUB_STEP_SUMMARY
-          echo "| \`/api/nba/*\` | NBA API Container App |" >> $GITHUB_STEP_SUMMARY
-          echo "| \`/api/ncaam/*\` | NCAAM API Container App |" >> $GITHUB_STEP_SUMMARY
-          echo "| \`/api/nfl/*\` | NFL API Container App |" >> $GITHUB_STEP_SUMMARY
-          echo "| \`/api/ncaaf/*\` | NCAAF API Container App |" >> $GITHUB_STEP_SUMMARY
+          echo "| \`/nba/*\` | NBA API Container App |" >> $GITHUB_STEP_SUMMARY
+          echo "| \`/ncaam/*\` | NCAAM API Container App |" >> $GITHUB_STEP_SUMMARY
+          echo "| \`/nfl/*\` | NFL API Container App |" >> $GITHUB_STEP_SUMMARY
+          echo "| \`/ncaaf/*\` | NCAAF API Container App |" >> $GITHUB_STEP_SUMMARY

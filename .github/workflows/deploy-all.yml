@@ -321,7 +321,7 @@ jobs:
             --custom-domain-name "$CUSTOM_DOMAIN_RESOURCE_NAME" \
             --query id -o tsv)
 
-          for ROUTE in route-dashboard route-orchestrator-api route-nba-api route-ncaam-api route-nfl-api route-ncaaf-api; do
+          for ROUTE in route-dashboard route-nba route-ncaam route-nfl route-ncaaf; do
             az afd route update \
               --profile-name "$FRONTDOOR_PROFILE" \
               --endpoint-name "$FRONTDOOR_ENDPOINT" \
@@ -333,7 +333,7 @@ jobs:
   orchestrator:
     name: Build and deploy orchestrator container
     runs-on: ubuntu-latest
-    needs: [frontdoor, custom-domain]
+    needs: frontdoor
     if: ${{ github.event.inputs.dry_run != 'true' }}
     steps:
       - name: Checkout
