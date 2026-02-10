@@ -1,7 +1,7 @@
 # Data Pipeline Python Dependencies (pinned for reproducibility)
 requests==2.32.5
 pandas==3.0.0
-azure-cosmos==4.14.5
+azure-cosmos==4.14.6
 azure-storage-blob==12.21.0
 python-dotenv==1.2.1
 aiohttp==3.13.3
