@@ -52,7 +52,7 @@
          * Get NCAAM games for a specific date
          * @param {string} date - Date in YYYY-MM-DD format
          */
-        async getNCAMGames(date) {
+        async getNCAAMGames(date) {
             const cacheKey = `ncaam-games-${date}`;
             
             if (this._isCacheValid(cacheKey)) {
@@ -102,7 +102,7 @@
          * @param {string} league - 'nba' or 'ncaam'
          * @param {string} season - Season year (e.g., '2025')
          */
-        async getStandings(league = 'nba', season = '2025') {
+        async getStandings(league = 'nba', season = String(new Date().getFullYear())) {
             const cacheKey = `${league}-standings-${season}`;
             
             if (this._isCacheValid(cacheKey)) {
