@@ -1,0 +1,443 @@
+{
+  "BAMA": {
+    "abbreviations": ["BAMA", "ALA"],
+    "names": ["Alabama Crimson Tide"],
+    "locations": ["Alabama", "Tuscaloosa"],
+    "nicknames": ["Crimson Tide", "Tide", "Bama"],
+    "conference": "SEC"
+  },
+  "OSU": {
+    "abbreviations": ["OSU"],
+    "names": ["Ohio State Buckeyes"],
+    "locations": ["Ohio State", "Columbus"],
+    "nicknames": ["Buckeyes", "Bucks"],
+    "conference": "Big Ten"
+  },
+  "MICH": {
+    "abbreviations": ["MICH", "UM"],
+    "names": ["Michigan Wolverines"],
+    "locations": ["Michigan", "Ann Arbor"],
+    "nicknames": ["Wolverines"],
+    "conference": "Big Ten"
+  },
+  "UGA": {
+    "abbreviations": ["UGA"],
+    "names": ["Georgia Bulldogs"],
+    "locations": ["Georgia", "Athens"],
+    "nicknames": ["Bulldogs", "Dawgs"],
+    "conference": "SEC"
+  },
+  "ND": {
+    "abbreviations": ["ND"],
+    "names": ["Notre Dame Fighting Irish"],
+    "locations": ["Notre Dame", "South Bend"],
+    "nicknames": ["Fighting Irish", "Irish"],
+    "conference": "Independent"
+  },
+  "TEX": {
+    "abbreviations": ["TEX", "UT"],
+    "names": ["Texas Longhorns"],
+    "locations": ["Texas", "Austin"],
+    "nicknames": ["Longhorns", "Horns"],
+    "conference": "SEC"
+  },
+  "TAMU": {
+    "abbreviations": ["TAMU"],
+    "names": ["Texas A&M Aggies"],
+    "locations": ["Texas A&M", "College Station"],
+    "nicknames": ["Aggies"],
+    "conference": "SEC"
+  },
+  "LSU": {
+    "abbreviations": ["LSU"],
+    "names": ["LSU Tigers"],
+    "locations": ["LSU", "Baton Rouge", "Louisiana State"],
+    "nicknames": ["Tigers"],
+    "conference": "SEC"
+  },
+  "FLA": {
+    "abbreviations": ["FLA", "UF"],
+    "names": ["Florida Gators"],
+    "locations": ["Florida", "Gainesville"],
+    "nicknames": ["Gators"],
+    "conference": "SEC"
+  },
+  "FSU": {
+    "abbreviations": ["FSU"],
+    "names": ["Florida State Seminoles"],
+    "locations": ["Florida State", "Tallahassee"],
+    "nicknames": ["Seminoles", "Noles"],
+    "conference": "ACC"
+  },
+  "MIA": {
+    "abbreviations": ["MIA"],
+    "names": ["Miami Hurricanes"],
+    "locations": ["Miami", "Coral Gables"],
+    "nicknames": ["Hurricanes", "Canes", "The U"],
+    "conference": "ACC"
+  },
+  "CLEM": {
+    "abbreviations": ["CLEM"],
+    "names": ["Clemson Tigers"],
+    "locations": ["Clemson"],
+    "nicknames": ["Tigers"],
+    "conference": "ACC"
+  },
+  "OU": {
+    "abbreviations": ["OU"],
+    "names": ["Oklahoma Sooners"],
+    "locations": ["Oklahoma", "Norman"],
+    "nicknames": ["Sooners"],
+    "conference": "SEC"
+  },
+  "USC": {
+    "abbreviations": ["USC"],
+    "names": ["USC Trojans"],
+    "locations": ["USC", "Los Angeles", "Southern Cal"],
+    "nicknames": ["Trojans"],
+    "conference": "Big Ten"
+  },
+  "ORE": {
+    "abbreviations": ["ORE"],
+    "names": ["Oregon Ducks"],
+    "locations": ["Oregon", "Eugene"],
+    "nicknames": ["Ducks"],
+    "conference": "Big Ten"
+  },
+  "PSU": {
+    "abbreviations": ["PSU"],
+    "names": ["Penn State Nittany Lions"],
+    "locations": ["Penn State", "State College"],
+    "nicknames": ["Nittany Lions"],
+    "conference": "Big Ten"
+  },
+  "TENN": {
+    "abbreviations": ["TENN"],
+    "names": ["Tennessee Volunteers"],
+    "locations": ["Tennessee", "Knoxville"],
+    "nicknames": ["Volunteers", "Vols"],
+    "conference": "SEC"
+  },
+  "AUB": {
+    "abbreviations": ["AUB"],
+    "names": ["Auburn Tigers"],
+    "locations": ["Auburn"],
+    "nicknames": ["Tigers", "War Eagle"],
+    "conference": "SEC"
+  },
+  "WIS": {
+    "abbreviations": ["WIS", "WISC"],
+    "names": ["Wisconsin Badgers"],
+    "locations": ["Wisconsin", "Madison"],
+    "nicknames": ["Badgers"],
+    "conference": "Big Ten"
+  },
+  "IOWA": {
+    "abbreviations": ["IOWA"],
+    "names": ["Iowa Hawkeyes"],
+    "locations": ["Iowa", "Iowa City"],
+    "nicknames": ["Hawkeyes"],
+    "conference": "Big Ten"
+  },
+  "MSU": {
+    "abbreviations": ["MSU"],
+    "names": ["Michigan State Spartans"],
+    "locations": ["Michigan State", "East Lansing"],
+    "nicknames": ["Spartans"],
+    "conference": "Big Ten"
+  },
+  "UCLA": {
+    "abbreviations": ["UCLA"],
+    "names": ["UCLA Bruins"],
+    "locations": ["UCLA", "Los Angeles"],
+    "nicknames": ["Bruins"],
+    "conference": "Big Ten"
+  },
+  "GT": {
+    "abbreviations": ["GT"],
+    "names": ["Georgia Tech Yellow Jackets"],
+    "locations": ["Georgia Tech", "Atlanta"],
+    "nicknames": ["Yellow Jackets"],
+    "conference": "ACC"
+  },
+  "VT": {
+    "abbreviations": ["VT"],
+    "names": ["Virginia Tech Hokies"],
+    "locations": ["Virginia Tech", "Blacksburg"],
+    "nicknames": ["Hokies"],
+    "conference": "ACC"
+  },
+  "AFA": {
+    "abbreviations": ["AFA", "USAFA"],
+    "names": ["Air Force Falcons"],
+    "locations": ["Air Force", "Colorado Springs"],
+    "nicknames": ["Falcons"],
+    "conference": "Mountain West"
+  },
+  "ARMY": {
+    "abbreviations": ["ARMY"],
+    "names": ["Army Black Knights"],
+    "locations": ["Army", "West Point"],
+    "nicknames": ["Black Knights"],
+    "conference": "Independent"
+  },
+  "NAVY": {
+    "abbreviations": ["NAVY"],
+    "names": ["Navy Midshipmen"],
+    "locations": ["Navy", "Annapolis"],
+    "nicknames": ["Midshipmen", "Mids"],
+    "conference": "American"
+  },
+  "BSU": {
+    "abbreviations": ["BSU"],
+    "names": ["Boise State Broncos"],
+    "locations": ["Boise State", "Boise"],
+    "nicknames": ["Broncos"],
+    "conference": "Mountain West"
+  },
+  "TCU": {
+    "abbreviations": ["TCU"],
+    "names": ["TCU Horned Frogs"],
+    "locations": ["TCU", "Fort Worth", "Texas Christian"],
+    "nicknames": ["Horned Frogs", "Frogs"],
+    "conference": "Big 12"
+  },
+  "UTAH": {
+    "abbreviations": ["UTAH"],
+    "names": ["Utah Utes"],
+    "locations": ["Utah", "Salt Lake City"],
+    "nicknames": ["Utes"],
+    "conference": "Big 12"
+  },
+  "OKST": {
+    "abbreviations": ["OKST"],
+    "names": ["Oklahoma State Cowboys"],
+    "locations": ["Oklahoma State", "Stillwater"],
+    "nicknames": ["Cowboys", "Pokes"],
+    "conference": "Big 12"
+  },
+  "TTU": {
+    "abbreviations": ["TTU", "TT"],
+    "names": ["Texas Tech Red Raiders"],
+    "locations": ["Texas Tech", "Lubbock"],
+    "nicknames": ["Red Raiders"],
+    "conference": "Big 12"
+  },
+  "WVU": {
+    "abbreviations": ["WVU"],
+    "names": ["West Virginia Mountaineers"],
+    "locations": ["West Virginia", "Morgantown"],
+    "nicknames": ["Mountaineers"],
+    "conference": "Big 12"
+  },
+  "KU": {
+    "abbreviations": ["KU"],
+    "names": ["Kansas Jayhawks"],
+    "locations": ["Kansas", "Lawrence"],
+    "nicknames": ["Jayhawks"],
+    "conference": "Big 12"
+  },
+  "KSU": {
+    "abbreviations": ["KSU"],
+    "names": ["Kansas State Wildcats"],
+    "locations": ["Kansas State", "Manhattan"],
+    "nicknames": ["Wildcats"],
+    "conference": "Big 12"
+  },
+  "ISU": {
+    "abbreviations": ["ISU"],
+    "names": ["Iowa State Cyclones"],
+    "locations": ["Iowa State", "Ames"],
+    "nicknames": ["Cyclones"],
+    "conference": "Big 12"
+  },
+  "BAY": {
+    "abbreviations": ["BAY"],
+    "names": ["Baylor Bears"],
+    "locations": ["Baylor", "Waco"],
+    "nicknames": ["Bears"],
+    "conference": "Big 12"
+  },
+  "WASH": {
+    "abbreviations": ["WASH", "UW"],
+    "names": ["Washington Huskies"],
+    "locations": ["Washington", "Seattle"],
+    "nicknames": ["Huskies"],
+    "conference": "Big Ten"
+  },
+  "WSU": {
+    "abbreviations": ["WSU"],
+    "names": ["Washington State Cougars"],
+    "locations": ["Washington State", "Pullman"],
+    "nicknames": ["Cougars", "Cougs", "Wazzu"],
+    "conference": "Pac-12"
+  },
+  "COLO": {
+    "abbreviations": ["COLO", "CU"],
+    "names": ["Colorado Buffaloes"],
+    "locations": ["Colorado", "Boulder"],
+    "nicknames": ["Buffaloes", "Buffs"],
+    "conference": "Big 12"
+  },
+  "ARIZ": {
+    "abbreviations": ["ARIZ"],
+    "names": ["Arizona Wildcats"],
+    "locations": ["Arizona", "Tucson"],
+    "nicknames": ["Wildcats", "Zona"],
+    "conference": "Big 12"
+  },
+  "ASU": {
+    "abbreviations": ["ASU"],
+    "names": ["Arizona State Sun Devils"],
+    "locations": ["Arizona State", "Tempe"],
+    "nicknames": ["Sun Devils"],
+    "conference": "Big 12"
+  },
+  "STAN": {
+    "abbreviations": ["STAN"],
+    "names": ["Stanford Cardinal"],
+    "locations": ["Stanford", "Palo Alto"],
+    "nicknames": ["Cardinal"],
+    "conference": "ACC"
+  },
+  "CAL": {
+    "abbreviations": ["CAL"],
+    "names": ["California Golden Bears"],
+    "locations": ["California", "Berkeley", "Cal"],
+    "nicknames": ["Golden Bears"],
+    "conference": "ACC"
+  },
+  "UNC": {
+    "abbreviations": ["UNC"],
+    "names": ["North Carolina Tar Heels"],
+    "locations": ["North Carolina", "Chapel Hill"],
+    "nicknames": ["Tar Heels"],
+    "conference": "ACC"
+  },
+  "NCST": {
+    "abbreviations": ["NCST", "NCSU"],
+    "names": ["NC State Wolfpack"],
+    "locations": ["NC State", "Raleigh", "North Carolina State"],
+    "nicknames": ["Wolfpack"],
+    "conference": "ACC"
+  },
+  "DUKE": {
+    "abbreviations": ["DUKE"],
+    "names": ["Duke Blue Devils"],
+    "locations": ["Duke", "Durham"],
+    "nicknames": ["Blue Devils"],
+    "conference": "ACC"
+  },
+  "WAKE": {
+    "abbreviations": ["WAKE"],
+    "names": ["Wake Forest Demon Deacons"],
+    "locations": ["Wake Forest", "Winston-Salem"],
+    "nicknames": ["Demon Deacons"],
+    "conference": "ACC"
+  },
+  "LOU": {
+    "abbreviations": ["LOU"],
+    "names": ["Louisville Cardinals"],
+    "locations": ["Louisville"],
+    "nicknames": ["Cardinals", "Cards"],
+    "conference": "ACC"
+  },
+  "PITT": {
+    "abbreviations": ["PITT"],
+    "names": ["Pitt Panthers"],
+    "locations": ["Pitt", "Pittsburgh"],
+    "nicknames": ["Panthers"],
+    "conference": "ACC"
+  },
+  "SYR": {
+    "abbreviations": ["SYR"],
+    "names": ["Syracuse Orange"],
+    "locations": ["Syracuse"],
+    "nicknames": ["Orange", "Cuse"],
+    "conference": "ACC"
+  },
+  "BC": {
+    "abbreviations": ["BC"],
+    "names": ["Boston College Eagles"],
+    "locations": ["Boston College", "Boston", "Chestnut Hill"],
+    "nicknames": ["Eagles"],
+    "conference": "ACC"
+  },
+  "UVA": {
+    "abbreviations": ["UVA"],
+    "names": ["Virginia Cavaliers"],
+    "locations": ["Virginia", "Charlottesville"],
+    "nicknames": ["Cavaliers", "Hoos"],
+    "conference": "ACC"
+  },
+  "ARK": {
+    "abbreviations": ["ARK"],
+    "names": ["Arkansas Razorbacks"],
+    "locations": ["Arkansas", "Fayetteville"],
+    "nicknames": ["Razorbacks", "Hogs"],
+    "conference": "SEC"
+  },
+  "MISS": {
+    "abbreviations": ["MISS"],
+    "names": ["Ole Miss Rebels"],
+    "locations": ["Mississippi", "Oxford", "Ole Miss"],
+    "nicknames": ["Rebels"],
+    "conference": "SEC"
+  },
+  "MSST": {
+    "abbreviations": ["MSST"],
+    "names": ["Mississippi State Bulldogs"],
+    "locations": ["Mississippi State", "Starkville"],
+    "nicknames": ["Bulldogs"],
+    "conference": "SEC"
+  },
+  "UK": {
+    "abbreviations": ["UK"],
+    "names": ["Kentucky Wildcats"],
+    "locations": ["Kentucky", "Lexington"],
+    "nicknames": ["Wildcats"],
+    "conference": "SEC"
+  },
+  "MIZ": {
+    "abbreviations": ["MIZ"],
+    "names": ["Missouri Tigers"],
+    "locations": ["Missouri", "Columbia"],
+    "nicknames": ["Tigers", "Mizzou"],
+    "conference": "SEC"
+  },
+  "SCAR": {
+    "abbreviations": ["SCAR"],
+    "names": ["South Carolina Gamecocks"],
+    "locations": ["South Carolina", "Columbia"],
+    "nicknames": ["Gamecocks", "Cocks"],
+    "conference": "SEC"
+  },
+  "VAN": {
+    "abbreviations": ["VAN"],
+    "names": ["Vanderbilt Commodores"],
+    "locations": ["Vanderbilt", "Nashville"],
+    "nicknames": ["Commodores", "Vandy"],
+    "conference": "SEC"
+  },
+  "NDSU": {
+    "abbreviations": ["NDSU"],
+    "names": ["North Dakota State Bison"],
+    "locations": ["North Dakota State", "Fargo"],
+    "nicknames": ["Bison"],
+    "conference": "Missouri Valley"
+  },
+  "SMU": {
+    "abbreviations": ["SMU"],
+    "names": ["SMU Mustangs"],
+    "locations": ["SMU", "Dallas"],
+    "nicknames": ["Mustangs"],
+    "conference": "ACC"
+  },
+  "OLE": {
+    "abbreviations": ["OLE"],
+    "names": ["Ole Miss Rebels"],
+    "locations": ["Ole Miss", "Oxford"],
+    "nicknames": ["Rebels"],
+    "conference": "SEC"
+  }
+}

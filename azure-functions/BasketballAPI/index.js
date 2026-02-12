@@ -15,7 +15,7 @@ module.exports = async function (context, req) {
   context.log("Basketball API proxy request:", req.params, req.query);
 
   const apiKey = process.env.BASKETBALL_API_KEY;
-  const baseUrl = "https://api-basketball.p.rapidapi.com"; // Adjust based on actual API
+  const baseUrl = "https://v1.basketball.api-sports.io";
 
   if (!apiKey) {
     context.log.error("BASKETBALL_API_KEY not configured");
@@ -103,8 +103,7 @@ module.exports = async function (context, req) {
     // Make API request
     const response = await axios.get(`${baseUrl}${apiEndpoint}`, {
       headers: {
-        "X-RapidAPI-Key": apiKey,
-        "X-RapidAPI-Host": "api-basketball.p.rapidapi.com",
+        "x-apisports-key": apiKey,
       },
       params,
     });

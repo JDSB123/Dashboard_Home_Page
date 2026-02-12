@@ -1,13 +1,14 @@
 /**
- * NCAAM Picks Fetcher v2.4
- * Fetches NCAAM model picks via Azure Front Door weekly-lineup route
+ * NCAAM Picks Fetcher v3.0
+ * Fetches NCAAM model picks from ncaam_gbsv_v2.0 Container App via Front Door
  *
- * Primary Route: {API_BASE_URL}/weekly-lineup/ncaam
- * Fallback Route: {NCAAM_API_URL}/api/picks/{date}
+ * Primary Route: /ncaam/api/picks/{date}  (Front Door strips /ncaam/ prefix)
+ * Fallback Route: {NCAAM_API_URL}/api/picks/{date} (direct ACA)
  *
- * Container App: ncaam-stable-prediction (NCAAM-GBSV-MODEL-RG)
+ * ACA: ca-ncaamgbsvv20 (ncaam_gbsv_v2.0 resource group)
  * Endpoints:
  *   - /api/picks/{date} - Get picks for date
+ *   - /api/picks/weekly - Get weekly picks
  *   - /trigger-picks - Trigger pick generation (if picks not ready)
  */
 
@@ -108,9 +109,10 @@
             return cached.data;
         }
 
-        // Primary: Weekly-lineup route through orchestrator
-        const baseUrl = getBaseApiUrl();
-        const primaryUrl = `${baseUrl}/weekly-lineup/ncaam${date !== 'today' ? `?date=${date}` : ''}`;
+        // Primary: Front Door route → /ncaam/api/picks/{date}
+        // NcaamRewrite rule strips /ncaam/ prefix so ACA receives /api/picks/{date}
+        const frontDoorBase = window.APP_CONFIG?.FUNCTIONS_BASE_URL || window.location.origin;
+        const primaryUrl = `${frontDoorBase}/ncaam/api/picks/${date}`;
         console.log(`[NCAAM-PICKS] Fetching from weekly-lineup route: ${primaryUrl}`);
 
         try {
@@ -314,6 +316,6 @@
         }
     };
 
-    console.log('[NCAAM-FETCHER] v2.4 loaded - Primary: /api/weekly-lineup/ncaam | Fallback: Container App /api/picks/{date}');
+    console.log('[NCAAM-FETCHER] v3.0 loaded - ncaam_gbsv_v2.0: /ncaam/api/picks/{date} via Front Door');
 
 })();

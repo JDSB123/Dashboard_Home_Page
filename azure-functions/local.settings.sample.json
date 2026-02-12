@@ -7,8 +7,10 @@
 
     "_comment_apis": "=== API KEYS ===",
     "SDIO_KEY": "YOUR_SPORTSDATAIO_KEY",
+    "BETSAPI_TOKEN": "YOUR_BETSAPI_TOKEN",
     "ODDS_API_KEY": "YOUR_ODDS_API_KEY",
     "BASKETBALL_API_KEY": "YOUR_BASKETBALL_API_KEY",
+    "API_BASKETBALL_KEY": "YOUR_API_BASKETBALL_KEY",
 
     "_comment_cosmos": "=== COSMOS DB ===",
     "COSMOS_ENDPOINT": "https://your-account.documents.azure.com:443/",

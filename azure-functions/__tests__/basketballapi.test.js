@@ -69,7 +69,7 @@ describe("BasketballAPI", () => {
     expect(axiosMod.get).toHaveBeenCalledWith(
       expect.stringContaining("/games"),
       expect.objectContaining({
-        headers: expect.objectContaining({ "X-RapidAPI-Key": "rapid-test-key" }),
+        headers: expect.objectContaining({ "x-apisports-key": "rapid-test-key" }),
       })
     );
     expect(ctx.res.status).toBe(200);

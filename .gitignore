@@ -60,3 +60,13 @@ Dashboard_Home_Page/
 
 # One-off analysis scripts
 analyze_picks.py
+
+# Generated SQLite databases
+*.db
+!Thumbs.db
+
+# Private Telegram input
+tracker_pnl/input_telegram.txt
+
+# Diagnostic scratch files
+tracker_pnl/diagnose_output.py

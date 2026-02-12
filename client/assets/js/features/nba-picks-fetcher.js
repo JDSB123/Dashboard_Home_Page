@@ -1,11 +1,12 @@
 /**
- * NBA Picks Fetcher v2.3
- * Fetches NBA model picks via Azure Front Door weekly-lineup route
+ * NBA Picks Fetcher v3.0
+ * Fetches NBA model picks from nba_gbsv_v5_az Container App via Front Door
  *
- * Primary Route: {API_BASE_URL}/weekly-lineup/nba
- * Fallback Route: {NBA_API_URL}/slate/{date}/executive
+ * Primary Route: /nba/predictions/latest  (Front Door strips /nba/ prefix)
+ * Fallback Route: {NBA_API_URL}/predictions/latest (direct ACA)
  *
- * The weekly-lineup route is the canonical path that proxies to the Container App
+ * ACA: nbagbsvv5-aca (nba_gbsv_v5_az resource group)
+ * Endpoint: /predictions/latest
  */
 
 (function () {
@@ -73,10 +74,10 @@
     }
 
     try {
-      // Primary: Weekly-lineup route (canonical path through orchestrator)
-      // Route: {API_BASE_URL}/weekly-lineup/nba
-      const baseUrl = getBaseApiUrl();
-      const primaryEndpoint = `${baseUrl}/weekly-lineup/nba`;
+      // Primary: Front Door route → /nba/predictions/latest
+      // NbaRewrite rule strips /nba/ prefix so ACA receives /predictions/latest
+      const frontDoorBase = window.APP_CONFIG?.FUNCTIONS_BASE_URL || window.location.origin;
+      const primaryEndpoint = `${frontDoorBase}/nba/predictions/latest`;
 
       console.log(
         `[NBA-FETCHER] Fetching from weekly-lineup route: ${primaryEndpoint}`,
@@ -90,15 +91,8 @@
           `[NBA-FETCHER] Primary route failed (${response.status}), trying Container App fallback...`,
         );
 
-        // Normalize date for fallback endpoint
-        let dateParam = date;
-        if (date === "tomorrow") {
-          const tomorrow = new Date();
-          tomorrow.setDate(tomorrow.getDate() + 1);
-          dateParam = tomorrow.toISOString().split("T")[0];
-        }
-
-        const fallbackEndpoint = `${getNbaContainerEndpoint()}/slate/${dateParam}/executive`;
+        // Fallback: direct ACA /predictions/latest
+        const fallbackEndpoint = `${getNbaContainerEndpoint()}/predictions/latest`;
         console.log(`[NBA-FETCHER] Fallback endpoint: ${fallbackEndpoint}`);
 
         response = await fetchWithTimeout(fallbackEndpoint);
@@ -112,16 +106,16 @@
 
       const data = await response.json();
 
-      // Validate response structure - NBA API returns { plays: [...], total_plays, version, etc. }
-      if (!data || (!data.plays && !data.picks && !Array.isArray(data))) {
+      // Validate response structure - NBA v5 API returns { predictions: [...], games_found, run_id, etc. }
+      if (!data || (!data.predictions && !data.plays && !data.picks && !Array.isArray(data))) {
         console.warn(
           "[NBA-FETCHER] Unexpected response format:",
           Object.keys(data || {}),
         );
       } else {
-        const playCount = data.plays?.length || data.picks?.length || 0;
+        const playCount = data.predictions?.length || data.plays?.length || data.picks?.length || 0;
         console.log(
-          `[NBA-FETCHER] ✅ Received ${playCount} plays from API (version: ${data.version || "unknown"})`,
+          `[NBA-FETCHER] ✅ Received ${playCount} predictions from API (run_id: ${data.run_id || "unknown"})`,
         );
       }
 
@@ -271,6 +265,6 @@
   };
 
   console.log(
-    "[NBA-FETCHER] v2.4 loaded - Direct routing: /nba/predictions via Front Door",
+    "[NBA-FETCHER] v3.0 loaded - nba_gbsv_v5_az: /nba/predictions/latest via Front Door",
   );
 })();

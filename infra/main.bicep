@@ -45,6 +45,12 @@ param nflApiHostname string
 @description('NCAAF API Container App hostname (no https:// prefix)')
 param ncaafApiHostname string
 
+@description('Custom domain name (e.g., www.greenbiersportventures.com)')
+param customDomainName string = 'www.greenbiersportventures.com'
+
+@description('Enable custom domain on routes and security policy')
+param enableCustomDomain bool = true
+
 // ════════════════════════════════════════════════════════════════════════════
 // Variables
 // ════════════════════════════════════════════════════════════════════════════
@@ -58,6 +64,7 @@ var originGroupDashboard = 'og-dashboard'
 var originGroupNba = 'og-nba-api'
 var originGroupNcaam = 'og-ncaam-api'
 var originGroupNfl = 'og-nfl-api'
+var customDomainResourceName = replace(replace(customDomainName, '.', '-'), '_', '-')
 var originGroupNcaaf = 'og-ncaaf-api'
 
 // ════════════════════════════════════════════════════════════════════════════
@@ -394,6 +401,22 @@ resource originNcaaf 'Microsoft.Cdn/profiles/originGroups/origins@2024-02-01' = 
 }
 
 // ════════════════════════════════════════════════════════════════════════════
+// Custom Domain
+// ════════════════════════════════════════════════════════════════════════════
+
+resource customDomain 'Microsoft.Cdn/profiles/customDomains@2024-02-01' = if (enableCustomDomain) {
+  parent: frontDoorProfile
+  name: customDomainResourceName
+  properties: {
+    hostName: customDomainName
+    tlsSettings: {
+      certificateType: 'ManagedCertificate'
+      minimumTlsVersion: 'TLS12'
+    }
+  }
+}
+
+// ════════════════════════════════════════════════════════════════════════════
 // Rule Sets for Path Rewriting
 // ════════════════════════════════════════════════════════════════════════════
 
@@ -461,6 +484,13 @@ resource routeNbaApi 'Microsoft.Cdn/profiles/afdEndpoints/routes@2024-02-01' = {
     originGroup: {
       id: originGroupNbaResource.id
     }
+    customDomains: enableCustomDomain
+      ? [
+          {
+            id: customDomain.id
+          }
+        ]
+      : []
     ruleSets: [
       {
         id: ruleSet.id
@@ -486,6 +516,13 @@ resource routeNcaamApi 'Microsoft.Cdn/profiles/afdEndpoints/routes@2024-02-01' =
     originGroup: {
       id: originGroupNcaamResource.id
     }
+    customDomains: enableCustomDomain
+      ? [
+          {
+            id: customDomain.id
+          }
+        ]
+      : []
     ruleSets: [
       {
         id: ruleSet.id
@@ -511,6 +548,13 @@ resource routeNflApi 'Microsoft.Cdn/profiles/afdEndpoints/routes@2024-02-01' = {
     originGroup: {
       id: originGroupNflResource.id
     }
+    customDomains: enableCustomDomain
+      ? [
+          {
+            id: customDomain.id
+          }
+        ]
+      : []
     ruleSets: [
       {
         id: ruleSet.id
@@ -536,6 +580,13 @@ resource routeNcaafApi 'Microsoft.Cdn/profiles/afdEndpoints/routes@2024-02-01' =
     originGroup: {
       id: originGroupNcaafResource.id
     }
+    customDomains: enableCustomDomain
+      ? [
+          {
+            id: customDomain.id
+          }
+        ]
+      : []
     ruleSets: [
       {
         id: ruleSet.id
@@ -561,6 +612,13 @@ resource routeDashboard 'Microsoft.Cdn/profiles/afdEndpoints/routes@2024-02-01' 
     originGroup: {
       id: originGroupDashboardResource.id
     }
+    customDomains: enableCustomDomain
+      ? [
+          {
+            id: customDomain.id
+          }
+        ]
+      : []
     supportedProtocols: ['Https', 'Http']
     patternsToMatch: ['/*']
     forwardingProtocol: 'HttpsOnly'
@@ -606,11 +664,20 @@ resource securityPolicy 'Microsoft.Cdn/profiles/securityPolicies@2024-02-01' = i
       }
       associations: [
         {
-          domains: [
-            {
-              id: frontDoorEndpoint.id
-            }
-          ]
+          domains: concat(
+            [
+              {
+                id: frontDoorEndpoint.id
+              }
+            ],
+            enableCustomDomain
+              ? [
+                  {
+                    id: customDomain.id
+                  }
+                ]
+              : []
+          )
           // Azure Front Door Standard requires '/*' pattern for security policies
           // Rate limiting for /api/* is handled within the WAF custom rules
           patternsToMatch: ['/*']
