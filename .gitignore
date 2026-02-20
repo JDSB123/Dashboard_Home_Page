@@ -48,6 +48,22 @@ output/
 logs/
 telegram_history/
 
+# Generated box score snapshots
+box_scores/
+
+# Scratch outputs
+grading_out.txt
+hydrate_out.txt
+
+# Local debugging scripts
+debug_db.py
+
+# tracker_pnl scratch scripts
+tracker_pnl/check_*.py
+tracker_pnl/debug_*.py
+tracker_pnl/diagnose_*.py
+tracker_pnl/grade_picks.py
+
 # Large Kaggle datasets (use external storage)
 data-pipeline/kaggle_basketball/
 data-pipeline/kaggle_historical_nba/

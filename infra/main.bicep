@@ -29,9 +29,8 @@ param skuName string = 'Premium_AzureFrontDoor'
 @description('Static Web App hostname (no https:// prefix)')
 param staticWebAppHostname string
 
-// NOTE: Dashboard Orchestrator REMOVED - redundant
-// Each sport API has built-in async queue processing at /{sport}/predictions
-// No need for orchestrator middleman
+@description('Orchestrator API Container App hostname (no https:// prefix) - serves /api/* endpoints (picks, archive, scoreboard proxy, etc.)')
+param orchestratorApiHostname string
 
 @description('NBA API Container App hostname (no https:// prefix)')
 param nbaApiHostname string
@@ -61,6 +60,7 @@ var endpointName = 'gbsv-endpoint-${environment}'
 
 // Origin group names
 var originGroupDashboard = 'og-dashboard'
+var originGroupOrchestrator = 'og-orchestrator-api'
 var originGroupNba = 'og-nba-api'
 var originGroupNcaam = 'og-ncaam-api'
 var originGroupNfl = 'og-nfl-api'
@@ -236,6 +236,27 @@ resource originGroupDashboardResource 'Microsoft.Cdn/profiles/originGroups@2024-
   }
 }
 
+// Orchestrator API Origin Group (/api/*)
+resource originGroupOrchestratorResource 'Microsoft.Cdn/profiles/originGroups@2024-02-01' = {
+  parent: frontDoorProfile
+  name: originGroupOrchestrator
+  properties: {
+    loadBalancingSettings: {
+      sampleSize: 4
+      successfulSamplesRequired: 3
+      additionalLatencyInMilliseconds: 50
+    }
+    healthProbeSettings: {
+      // Functions container exposes health at /api/health
+      probePath: '/api/health'
+      probeRequestType: 'GET'
+      probeProtocol: 'Https'
+      probeIntervalInSeconds: 30
+    }
+    sessionAffinityState: 'Disabled'
+  }
+}
+
 // NBA API Origin Group
 resource originGroupNbaResource 'Microsoft.Cdn/profiles/originGroups@2024-02-01' = {
   parent: frontDoorProfile
@@ -329,6 +350,22 @@ resource originDashboard 'Microsoft.Cdn/profiles/originGroups/origins@2024-02-01
     httpPort: 80
     httpsPort: 443
     originHostHeader: staticWebAppHostname
+    priority: 1
+    weight: 1000
+    enabledState: 'Enabled'
+    enforceCertificateNameCheck: true
+  }
+}
+
+// Orchestrator API Origin (Container App)
+resource originOrchestrator 'Microsoft.Cdn/profiles/originGroups/origins@2024-02-01' = {
+  parent: originGroupOrchestratorResource
+  name: 'origin-orchestrator-api'
+  properties: {
+    hostName: orchestratorApiHostname
+    httpPort: 80
+    httpsPort: 443
+    originHostHeader: orchestratorApiHostname
     priority: 1
     weight: 1000
     enabledState: 'Enabled'
@@ -604,6 +641,33 @@ resource routeNcaafApi 'Microsoft.Cdn/profiles/afdEndpoints/routes@2024-02-01' =
   ]
 }
 
+// Orchestrator API Route (/api/* → orchestrator ACA receives /api/*)
+resource routeOrchestratorApi 'Microsoft.Cdn/profiles/afdEndpoints/routes@2024-02-01' = {
+  parent: frontDoorEndpoint
+  name: 'route-orchestrator-api'
+  properties: {
+    originGroup: {
+      id: originGroupOrchestratorResource.id
+    }
+    customDomains: enableCustomDomain
+      ? [
+          {
+            id: customDomain.id
+          }
+        ]
+      : []
+    supportedProtocols: ['Https']
+    patternsToMatch: ['/api/*']
+    forwardingProtocol: 'HttpsOnly'
+    linkToDefaultDomain: 'Enabled'
+    httpsRedirect: 'Enabled'
+    enabledState: 'Enabled'
+  }
+  dependsOn: [
+    originOrchestrator
+  ]
+}
+
 // Dashboard Route (/*) - default catch-all for Static Web App
 resource routeDashboard 'Microsoft.Cdn/profiles/afdEndpoints/routes@2024-02-01' = {
   parent: frontDoorEndpoint
@@ -646,6 +710,7 @@ resource routeDashboard 'Microsoft.Cdn/profiles/afdEndpoints/routes@2024-02-01' 
     routeNcaamApi
     routeNflApi
     routeNcaafApi
+    routeOrchestratorApi
   ]
 }
 
