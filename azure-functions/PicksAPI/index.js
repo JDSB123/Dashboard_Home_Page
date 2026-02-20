@@ -132,6 +132,9 @@ function normalizePick(pick, forceSport = null) {
   const now = new Date().toISOString();
   const sport = normalizeSport(forceSport || pick.sport || pick.league) || "NBA";
 
+  const locked = pick.locked === true || pick.locked === "true";
+  const lockedAt = locked ? (pick.lockedAt || pick.locked_at || now) : null;
+
   return {
     id: pick.id || generatePickId({ ...pick, sport }),
     sport: sport, // Partition key
@@ -153,6 +156,8 @@ function normalizePick(pick, forceSport = null) {
     status: (pick.status || "pending").toLowerCase(),
     result: pick.result || "",
     pnl: parseFloat(pick.pnl) || 0,
+    locked,
+    lockedAt,
     createdAt: pick.createdAt || now,
     updatedAt: now,
     source: pick.source || "dashboard",
@@ -170,6 +175,7 @@ function buildQuery(options = {}) {
     active,
     settled,
     archived,
+    locked,
     date,
     from,
     to,
@@ -224,6 +230,15 @@ function buildQuery(options = {}) {
   if (sportsbook) {
     conditions.push("LOWER(c.sportsbook) = @sportsbook");
     parameters.push({ name: "@sportsbook", value: sportsbook.toLowerCase() });
+  }
+
+  // Locked filter (treat missing as false for backward compatibility)
+  if (locked === true) {
+    conditions.push("(IS_DEFINED(c.locked) AND c.locked = @locked)");
+    parameters.push({ name: "@locked", value: true });
+  } else if (locked === false) {
+    conditions.push("(NOT IS_DEFINED(c.locked) OR c.locked = @locked)");
+    parameters.push({ name: "@locked", value: false });
   }
 
   const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
@@ -304,6 +319,10 @@ module.exports = async function (context, req) {
         active: action === "active" || req.query.active === "true",
         settled: action === "settled" || req.query.settled === "true",
         archived: action === "archived" || req.query.archived === "true",
+        locked:
+          req.query.locked === undefined
+            ? undefined
+            : req.query.locked === true || req.query.locked === "true",
         date: req.query.date,
         from: req.query.from,
         to: req.query.to,

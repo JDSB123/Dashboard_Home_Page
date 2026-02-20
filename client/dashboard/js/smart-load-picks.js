@@ -2164,8 +2164,8 @@ async function loadPicksFromDatabase() {
                 console.log('[DB LOADER] Migration result:', migrationResult);
             }
 
-            // Fetch picks from Azure
-            const picks = await window.PicksService.getAll({ limit: 200 });
+            // Fetch picks from Azure (Dashboard is the "locked portfolio")
+            const picks = await window.PicksService.getAll({ locked: true, limit: 200 });
 
             if (picks && picks.length > 0) {
                 console.log(`[DB LOADER] ✅ Loaded ${picks.length} picks from Azure Cosmos DB`);
@@ -2313,10 +2313,11 @@ function initializeDeleteButtons() {
             // Try PicksService first (Azure Cosmos DB)
             if (window.PicksService && pickId) {
                 try {
-                    await window.PicksService.remove(pickId);
-                    console.log('[PICKS] Deleted pick from Azure:', pickId);
+                    // Removing from Dashboard == unlock (do not delete history)
+                    await window.PicksService.update(pickId, { locked: false, lockedAt: null });
+                    console.log('[PICKS] Unlocked pick in Azure:', pickId);
                 } catch (error) {
-                    console.warn('[PICKS] Failed to delete from Azure, trying localStorage:', error);
+                    console.warn('[PICKS] Failed to unlock in Azure, trying delete/localStorage fallback:', error);
                     // Fall back to LocalPicksManager
                     if (window.LocalPicksManager && pickIndex !== undefined) {
                         const picks = window.LocalPicksManager.getAll ? window.LocalPicksManager.getAll() : [];
