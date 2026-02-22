@@ -22,7 +22,19 @@
     `${window.location.origin}/api`;
 
   /**
-   * Get the NCAAM Container App endpoint for fallback
+   * Get the NCAAM model proxy base URL.
+   * Always routes through the orchestrator proxy (/api/model/ncaam) to avoid
+   * direct Container App CORS issues.
+   */
+  function getNCAAMProxyBase() {
+    const base =
+      window.APP_CONFIG?.FUNCTIONS_BASE_URL || window.location.origin;
+    return `${base}/api/model/ncaam`;
+  }
+
+  /**
+   * Get the NCAAM Container App endpoint (direct, last-resort fallback).
+   * Only used when the proxy is unavailable.
    */
   function getNCAAMEndpoint() {
     const resolverApi = window.ModelEndpointResolver?.getApiEndpoint?.("ncaam");
@@ -67,18 +79,17 @@
    * Trigger picks generation if not already available
    */
   async function triggerPicksIfNeeded(cacheKey) {
-    const endpoint = getNCAAMEndpoint();
-    const triggerKey = `${endpoint}|${cacheKey || "today"}`;
+    const proxyBase = getNCAAMProxyBase();
+    const triggerKey = `${proxyBase}|${cacheKey || "today"}`;
     if (triggerInFlight[triggerKey]) {
       return false;
     }
     triggerInFlight[triggerKey] = true;
     try {
-      console.log("[NCAAM-PICKS] Triggering picks generation at:", endpoint);
-      const response = await fetchWithTimeout(
-        `${endpoint}/trigger-picks`,
-        60000,
-      );
+      // Route through model proxy to avoid direct Container App CORS issues
+      const triggerUrl = `${proxyBase}/trigger-picks`;
+      console.log("[NCAAM-PICKS] Triggering picks generation via proxy:", triggerUrl);
+      const response = await fetchWithTimeout(triggerUrl, 60000);
       if (response.ok) {
         const result = await response.json();
         console.log("[NCAAM-PICKS] Trigger response:", result);
@@ -125,15 +136,15 @@
       // Try primary weekly-lineup route first
       let response = await fetchWithTimeout(primaryUrl);
 
-      // If primary fails, try direct Container App fallback
+      // If primary fails, try via proxy base (same route, ensures consistency)
       if (!response.ok) {
         console.warn(
-          `[NCAAM-PICKS] Proxy route failed (${response.status}), trying Container App fallback...`,
+          `[NCAAM-PICKS] Proxy route failed (${response.status}), retrying...`,
         );
 
-        // Fallback: direct ACA (may be blocked by CORS in browsers)
-        const endpoint = getNCAAMEndpoint();
-        const fallbackUrl = `${endpoint}/api/picks/${date}`;
+        // Retry via proxy base to avoid direct ACA CORS issues
+        const proxyBase = getNCAAMProxyBase();
+        const fallbackUrl = `${proxyBase}/api/picks/${date}`;
         console.log(`[NCAAM-PICKS] Fallback URL: ${fallbackUrl}`);
 
         response = await fetchWithTimeout(fallbackUrl);
@@ -177,9 +188,9 @@
           console.log("[NCAAM-PICKS] Waiting 5s for generation...");
           await new Promise((resolve) => setTimeout(resolve, 5000));
 
-          // Retry with fallback
-          const endpoint = getNCAAMEndpoint();
-          response = await fetchWithTimeout(`${endpoint}/api/picks/${date}`);
+          // Retry via proxy
+          const proxyBase = getNCAAMProxyBase();
+          response = await fetchWithTimeout(`${proxyBase}/api/picks/${date}`);
           if (response.ok) {
             data = await response.json();
           }
