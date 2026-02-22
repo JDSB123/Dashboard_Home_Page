@@ -632,7 +632,19 @@
     <script src="assets/js/utils/weekly-lineup-sync.js?v=34.00.0" defer></script>
 
     <script src="assets/js/features/live-scores.js?v=34.00.1" defer></script>
-    <script src="assets/js/features/weekly-lineup.js?v=34.01.1" defer></script>
+
+    <!-- Model endpoint hydration (optional registry) + fetchers -->
+    <script src="assets/js/utils/model-endpoint-resolver.js?v=34.01.1" defer></script>
+    <script src="assets/js/features/model-endpoints-bootstrap.js?v=34.01.1" defer></script>
+    <script src="assets/js/features/nba-picks-fetcher.js?v=34.01.1" defer></script>
+    <script src="assets/js/features/ncaam-picks-fetcher.js?v=34.01.1" defer></script>
+    <script src="assets/js/features/unified-picks-fetcher.js?v=34.01.1" defer></script>
+
+    <!-- Cosmos-backed Picks API client (used for lock/unlock + persistence) -->
+    <script src="dashboard/js/picks-service.js?v=34.01.1" defer></script>
+
+    <!-- Weekly Lineup controller (fetch + render + lock) -->
+    <script src="assets/js/features/weekly-lineup-controller.js?v=34.01.1" defer></script>
     <script src="assets/js/modules/picks-state-manager.js?v=33.00.4" defer></script>
     <script src="assets/js/modules/picks-table-renderer.js?v=33.00.4" defer></script>
     <script src="assets/js/modules/picks-filter-manager.js?v=33.00.4" defer></script>
@@ -650,7 +662,7 @@
     <!-- Authentication -->
     <script src="assets/js/core/auth-client.js?v=34.00.0" defer></script>
     <!-- Blob Storage Archival -->
-    <script src="assets/js/features/bubble-storage-archiver.js?v=34.00.0" defer></script>
+    <script src="assets/js/features/blob-storage-archiver.js?v=34.00.0" defer></script>
     <!-- History Manager (Azure Blob Archive) -->
     <script src="assets/js/features/history-manager.js?v=34.00.0" defer></script>
     <!-- File Import - PDF & Image OCR Parsing -->

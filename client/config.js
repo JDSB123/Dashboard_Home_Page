@@ -28,6 +28,9 @@ window.APP_CONFIG = {
   DYNAMIC_REGISTRY_ENABLED: true,
 
   // Model API Endpoints — sport models removed; endpoints live in their own repos
+  // Direct Container App fallbacks (used only if Front Door route fails)
+  NBA_API_URL: "https://nbagbsvv5-aca.blackglacier-f1574637.centralus.azurecontainerapps.io",
+  NCAAM_API_URL: "https://ca-ncaamgbsvv20.braveriver-ed513377.eastus2.azurecontainerapps.io",
 
   // Static Assets (Front Door / CDN)
   LOGO_BASE_URL: "https://www.greenbiersportventures.com/team-logos", // Served via Front Door/custom domain
