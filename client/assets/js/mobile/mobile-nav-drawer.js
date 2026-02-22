@@ -3,61 +3,61 @@
  * Slide-out navigation menu for mobile devices
  */
 
-(function() {
-    'use strict';
+(function () {
+  "use strict";
 
-    class MobileNavDrawer {
-        constructor() {
-            this.isOpen = false;
-            this.drawer = null;
-            this.overlay = null;
-            this.hamburger = null;
-            this.initialized = false;
-        }
+  class MobileNavDrawer {
+    constructor() {
+      this.isOpen = false;
+      this.drawer = null;
+      this.overlay = null;
+      this.hamburger = null;
+      this.initialized = false;
+    }
 
-        /**
-         * Initialize the mobile navigation drawer
-         */
-        init() {
-            if (this.initialized) return;
-            
-            // Only initialize on mobile
-            if (window.innerWidth > 767) {
-                return;
-            }
+    /**
+     * Initialize the mobile navigation drawer
+     */
+    init() {
+      if (this.initialized) return;
 
-            this._createDrawer();
-            this._createOverlay();
-            this._setupHamburger();
-            this._setupEventListeners();
-            
-            this.initialized = true;
-            console.log('Mobile navigation drawer initialized');
-        }
+      // Only initialize on mobile
+      if (window.innerWidth > 767) {
+        return;
+      }
 
-        /**
-         * Create the drawer element
-         */
-        _createDrawer() {
-            this.drawer = document.createElement('nav');
-            this.drawer.id = 'mobile-nav-drawer';
-            this.drawer.className = 'mobile-nav-drawer';
-            this.drawer.innerHTML = `
+      this._createDrawer();
+      this._createOverlay();
+      this._setupHamburger();
+      this._setupEventListeners();
+
+      this.initialized = true;
+      console.log("Mobile navigation drawer initialized");
+    }
+
+    /**
+     * Create the drawer element
+     */
+    _createDrawer() {
+      this.drawer = document.createElement("nav");
+      this.drawer.id = "mobile-nav-drawer";
+      this.drawer.className = "mobile-nav-drawer";
+      this.drawer.innerHTML = `
                 <div class="drawer-header">
                     <img src="/assets/Logo%208.5.png" alt="GBSV" class="drawer-logo">
                     <button class="drawer-close" aria-label="Close menu">×</button>
                 </div>
                 <ul class="drawer-menu">
-                    <li><a href="/index.html" class="drawer-link ${this._isActive('/index.html') ? 'active' : ''}">
+                    <li><a href="/index.html" class="drawer-link ${this._isActive("/index.html") ? "active" : ""}">
                         <span class="drawer-icon">📊</span> Dashboard
                     </a></li>
-                    <li><a href="/weekly-lineup.html" class="drawer-link ${this._isActive('/weekly-lineup.html') ? 'active' : ''}">
+                    <li><a href="/weekly-lineup.html" class="drawer-link ${this._isActive("/weekly-lineup.html") ? "active" : ""}">
                         <span class="drawer-icon">📋</span> Weekly Lineup
                     </a></li>
-                    <li><a href="/odds-market.html" class="drawer-link ${this._isActive('/odds-market.html') ? 'active' : ''}">
+                    <li><a href="/odds-market.html" class="drawer-link ${this._isActive("/odds-market.html") ? "active" : ""}">
                         <span class="drawer-icon">📈</span> Odds Market
                     </a></li>
-                    <li><a href="/picks-tracker.html" class="drawer-link ${this._isActive('/picks-tracker.html') ? 'active' : ''}">
+                    <li><a href="/picks-tracker.html" class="drawer-link ${this._isActive("/picks-tracker.html") ? "active" : ""}">
                         <span class="drawer-icon">🎯</span> Picks Tracker
                     </a></li>
                 </ul>
@@ -81,213 +81,235 @@
                 </div>
             `;
 
-            document.body.appendChild(this.drawer);
+      document.body.appendChild(this.drawer);
 
-            // Style the drawer
-            this._injectStyles();
-        }
+      // Style the drawer
+      this._injectStyles();
+    }
 
-        /**
-         * Create overlay for drawer
-         */
-        _createOverlay() {
-            this.overlay = document.createElement('div');
-            this.overlay.id = 'mobile-nav-overlay';
-            this.overlay.className = 'mobile-nav-overlay';
-            document.body.appendChild(this.overlay);
-        }
+    /**
+     * Create overlay for drawer
+     */
+    _createOverlay() {
+      this.overlay = document.createElement("div");
+      this.overlay.id = "mobile-nav-overlay";
+      this.overlay.className = "mobile-nav-overlay";
+      document.body.appendChild(this.overlay);
+    }
 
-        /**
-         * Set up hamburger menu button
-         */
-        _setupHamburger() {
-            // Find existing hamburger or create one
-            this.hamburger = document.querySelector('.mobile-hamburger, .hamburger-menu, #hamburger-btn');
-            
-            if (!this.hamburger) {
-                // Create hamburger button
-                this.hamburger = document.createElement('button');
-                this.hamburger.id = 'hamburger-btn';
-                this.hamburger.className = 'hamburger-btn';
-                this.hamburger.setAttribute('aria-label', 'Open menu');
-                this.hamburger.innerHTML = `
+    /**
+     * Set up hamburger menu button
+     */
+    _setupHamburger() {
+      // Find existing hamburger or create one
+      this.hamburger = document.querySelector(
+        ".mobile-hamburger, .hamburger-menu, #hamburger-btn",
+      );
+
+      if (!this.hamburger) {
+        // Create hamburger button
+        this.hamburger = document.createElement("button");
+        this.hamburger.id = "hamburger-btn";
+        this.hamburger.className = "hamburger-btn";
+        this.hamburger.setAttribute("aria-label", "Open menu");
+        this.hamburger.innerHTML = `
                     <span class="hamburger-line"></span>
                     <span class="hamburger-line"></span>
                     <span class="hamburger-line"></span>
                 `;
 
-                // Insert at the start of the body or header
-                const header = document.querySelector('header, .header, .mobile-header');
-                if (header) {
-                    header.insertBefore(this.hamburger, header.firstChild);
-                } else {
-                    document.body.insertBefore(this.hamburger, document.body.firstChild);
-                }
-            }
+        // Insert at the start of the body or header
+        const header = document.querySelector(
+          "header, .header, .mobile-header",
+        );
+        if (header) {
+          header.insertBefore(this.hamburger, header.firstChild);
+        } else {
+          document.body.insertBefore(this.hamburger, document.body.firstChild);
         }
+      }
+    }
 
-        /**
-         * Set up event listeners
-         */
-        _setupEventListeners() {
-            // Hamburger click
-            this.hamburger.addEventListener('click', (e) => {
-                e.preventDefault();
-                this.toggle();
-            });
+    /**
+     * Set up event listeners
+     */
+    _setupEventListeners() {
+      // Hamburger click
+      this.hamburger.addEventListener("click", (e) => {
+        e.preventDefault();
+        this.toggle();
+      });
 
-            // Overlay click to close
-            this.overlay.addEventListener('click', () => {
-                this.close();
-            });
+      // Overlay click to close
+      this.overlay.addEventListener("click", () => {
+        this.close();
+      });
 
-            // Close button
-            const closeBtn = this.drawer.querySelector('.drawer-close');
-            if (closeBtn) {
-                closeBtn.addEventListener('click', () => this.close());
-            }
+      // Close button
+      const closeBtn = this.drawer.querySelector(".drawer-close");
+      if (closeBtn) {
+        closeBtn.addEventListener("click", () => this.close());
+      }
 
-            // Handle escape key
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && this.isOpen) {
-                    this.close();
-                }
-            });
-
-            // Handle swipe to close
-            this._setupSwipeHandler();
-
-            // Quick action buttons
-            const fetchAllBtn = document.getElementById('drawer-fetch-all');
-            if (fetchAllBtn) {
-                fetchAllBtn.addEventListener('click', () => {
-                    this.close();
-                    // Trigger fetch all picks
-                    if (window.fetchAllPicks) {
-                        window.fetchAllPicks();
-                    } else {
-                        document.querySelector('[data-action="refresh-all"]')?.click();
-                    }
-                });
-            }
-
-            const manualPickBtn = document.getElementById('drawer-manual-pick');
-            if (manualPickBtn) {
-                manualPickBtn.addEventListener('click', () => {
-                    this.close();
-                    // Open manual pick modal
-                    if (window.ManualPickModal) {
-                        window.ManualPickModal.show();
-                    }
-                });
-            }
-
-            // Update connection status
-            window.addEventListener('signalr:connected', () => this._updateStatus(true));
-            window.addEventListener('signalr:disconnected', () => this._updateStatus(false));
+      // Handle escape key
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && this.isOpen) {
+          this.close();
         }
+      });
 
-        /**
-         * Set up swipe to close gesture
-         */
-        _setupSwipeHandler() {
-            let startX = 0;
-            let currentX = 0;
+      // Handle swipe to close
+      this._setupSwipeHandler();
 
-            this.drawer.addEventListener('touchstart', (e) => {
-                startX = e.touches[0].clientX;
-            }, { passive: true });
+      // Quick action buttons
+      const fetchAllBtn = document.getElementById("drawer-fetch-all");
+      if (fetchAllBtn) {
+        fetchAllBtn.addEventListener("click", () => {
+          this.close();
+          // Trigger fetch all picks
+          if (window.fetchAllPicks) {
+            window.fetchAllPicks();
+          } else {
+            document.querySelector('[data-action="refresh-all"]')?.click();
+          }
+        });
+      }
 
-            this.drawer.addEventListener('touchmove', (e) => {
-                currentX = e.touches[0].clientX;
-                const diff = startX - currentX;
-                
-                if (diff > 0) {
-                    // Swiping left (closing)
-                    this.drawer.style.transform = `translateX(-${Math.min(diff, 280)}px)`;
-                }
-            }, { passive: true });
+      const manualPickBtn = document.getElementById("drawer-manual-pick");
+      if (manualPickBtn) {
+        manualPickBtn.addEventListener("click", () => {
+          this.close();
+          // Open manual pick modal
+          if (window.ManualPickModal) {
+            window.ManualPickModal.show();
+          }
+        });
+      }
 
-            this.drawer.addEventListener('touchend', () => {
-                const diff = startX - currentX;
-                
-                if (diff > 100) {
-                    // Swipe threshold reached - close
-                    this.close();
-                } else {
-                    // Reset position
-                    this.drawer.style.transform = '';
-                }
-            }, { passive: true });
-        }
+      // Update connection status
+      window.addEventListener("signalr:connected", () =>
+        this._updateStatus(true),
+      );
+      window.addEventListener("signalr:disconnected", () =>
+        this._updateStatus(false),
+      );
+    }
 
-        /**
-         * Toggle drawer open/close
-         */
-        toggle() {
-            if (this.isOpen) {
-                this.close();
-            } else {
-                this.open();
-            }
-        }
+    /**
+     * Set up swipe to close gesture
+     */
+    _setupSwipeHandler() {
+      let startX = 0;
+      let currentX = 0;
 
-        /**
-         * Open the drawer
-         */
-        open() {
-            this.isOpen = true;
-            this.drawer.classList.add('open');
-            this.overlay.classList.add('visible');
-            this.hamburger.classList.add('active');
-            document.body.style.overflow = 'hidden';
-            this.drawer.style.transform = '';
-        }
+      this.drawer.addEventListener(
+        "touchstart",
+        (e) => {
+          startX = e.touches[0].clientX;
+        },
+        { passive: true },
+      );
 
-        /**
-         * Close the drawer
-         */
-        close() {
-            this.isOpen = false;
-            this.drawer.classList.remove('open');
-            this.overlay.classList.remove('visible');
-            this.hamburger.classList.remove('active');
-            document.body.style.overflow = '';
-            this.drawer.style.transform = '';
-        }
+      this.drawer.addEventListener(
+        "touchmove",
+        (e) => {
+          currentX = e.touches[0].clientX;
+          const diff = startX - currentX;
 
-        /**
-         * Check if current page matches path
-         */
-        _isActive(path) {
-            return window.location.pathname.endsWith(path) || 
-                   (path === '/index.html' && window.location.pathname === '/');
-        }
+          if (diff > 0) {
+            // Swiping left (closing)
+            this.drawer.style.transform = `translateX(-${Math.min(diff, 280)}px)`;
+          }
+        },
+        { passive: true },
+      );
 
-        /**
-         * Update connection status in drawer
-         */
-        _updateStatus(isOnline) {
-            const dot = this.drawer?.querySelector('.status-dot');
-            const text = this.drawer?.querySelector('.drawer-status span:last-child');
-            
-            if (dot) {
-                dot.className = `status-dot ${isOnline ? 'online' : 'offline'}`;
-            }
-            if (text) {
-                text.textContent = isOnline ? 'Connected' : 'Offline';
-            }
-        }
+      this.drawer.addEventListener(
+        "touchend",
+        () => {
+          const diff = startX - currentX;
 
-        /**
-         * Inject CSS styles
-         */
-        _injectStyles() {
-            if (document.getElementById('mobile-nav-drawer-styles')) return;
+          if (diff > 100) {
+            // Swipe threshold reached - close
+            this.close();
+          } else {
+            // Reset position
+            this.drawer.style.transform = "";
+          }
+        },
+        { passive: true },
+      );
+    }
 
-            const style = document.createElement('style');
-            style.id = 'mobile-nav-drawer-styles';
-            style.textContent = `
+    /**
+     * Toggle drawer open/close
+     */
+    toggle() {
+      if (this.isOpen) {
+        this.close();
+      } else {
+        this.open();
+      }
+    }
+
+    /**
+     * Open the drawer
+     */
+    open() {
+      this.isOpen = true;
+      this.drawer.classList.add("open");
+      this.overlay.classList.add("visible");
+      this.hamburger.classList.add("active");
+      document.body.style.overflow = "hidden";
+      this.drawer.style.transform = "";
+    }
+
+    /**
+     * Close the drawer
+     */
+    close() {
+      this.isOpen = false;
+      this.drawer.classList.remove("open");
+      this.overlay.classList.remove("visible");
+      this.hamburger.classList.remove("active");
+      document.body.style.overflow = "";
+      this.drawer.style.transform = "";
+    }
+
+    /**
+     * Check if current page matches path
+     */
+    _isActive(path) {
+      return (
+        window.location.pathname.endsWith(path) ||
+        (path === "/index.html" && window.location.pathname === "/")
+      );
+    }
+
+    /**
+     * Update connection status in drawer
+     */
+    _updateStatus(isOnline) {
+      const dot = this.drawer?.querySelector(".status-dot");
+      const text = this.drawer?.querySelector(".drawer-status span:last-child");
+
+      if (dot) {
+        dot.className = `status-dot ${isOnline ? "online" : "offline"}`;
+      }
+      if (text) {
+        text.textContent = isOnline ? "Connected" : "Offline";
+      }
+    }
+
+    /**
+     * Inject CSS styles
+     */
+    _injectStyles() {
+      if (document.getElementById("mobile-nav-drawer-styles")) return;
+
+      const style = document.createElement("style");
+      style.id = "mobile-nav-drawer-styles";
+      style.textContent = `
                 .mobile-nav-drawer {
                     position: fixed;
                     top: 0;
@@ -483,27 +505,26 @@
                     }
                 }
             `;
-            document.head.appendChild(style);
-        }
+      document.head.appendChild(style);
     }
+  }
 
-    // Create and initialize on DOM ready
-    const mobileNav = new MobileNavDrawer();
+  // Create and initialize on DOM ready
+  const mobileNav = new MobileNavDrawer();
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => mobileNav.init());
-    } else {
-        mobileNav.init();
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => mobileNav.init());
+  } else {
+    mobileNav.init();
+  }
+
+  // Re-init on resize if crossing breakpoint
+  window.addEventListener("resize", () => {
+    if (window.innerWidth <= 767 && !mobileNav.initialized) {
+      mobileNav.init();
     }
+  });
 
-    // Re-init on resize if crossing breakpoint
-    window.addEventListener('resize', () => {
-        if (window.innerWidth <= 767 && !mobileNav.initialized) {
-            mobileNav.init();
-        }
-    });
-
-    // Export to window
-    window.MobileNavDrawer = mobileNav;
-
+  // Export to window
+  window.MobileNavDrawer = mobileNav;
 })();

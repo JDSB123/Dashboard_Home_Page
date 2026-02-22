@@ -4,11 +4,18 @@
     <link rel="stylesheet" href="assets/css/base/critical.css?v=1" />
     <meta name="theme-color" content="#030b16" />
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
     <title>Picks Tracker — Feb 22 2026 | GBSV</title>
 
     <link rel="icon" type="image/png" href="assets/Logo%208.5.png?v=20251216" />
-    <link rel="preload" as="image" href="assets/JB_Bearish_Market_FULL_page.png" />
+    <link
+      rel="preload"
+      as="image"
+      href="assets/JB_Bearish_Market_FULL_page.png"
+    />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -22,9 +29,18 @@
     <link rel="stylesheet" href="assets/css/base/variables.css?v=34.00.0" />
     <link rel="stylesheet" href="assets/css/base/reset.css?v=34.00.0" />
     <link rel="stylesheet" href="assets/css/layout/page-layout.css?v=34.00.0" />
-    <link rel="stylesheet" href="assets/css/components/navigation.css?v=34.00.0" />
-    <link rel="stylesheet" href="assets/css/components/status-badges.css?v=34.00.0" />
-    <link rel="stylesheet" href="assets/css/components/mobile-responsive.css?v=34.00.0" />
+    <link
+      rel="stylesheet"
+      href="assets/css/components/navigation.css?v=34.00.0"
+    />
+    <link
+      rel="stylesheet"
+      href="assets/css/components/status-badges.css?v=34.00.0"
+    />
+    <link
+      rel="stylesheet"
+      href="assets/css/components/mobile-responsive.css?v=34.00.0"
+    />
 
     <!-- Page-specific -->
     <link rel="stylesheet" href="assets/css/pages/picks-tracker.css?v=1.0.0" />
@@ -33,7 +49,10 @@
     <script src="config.js?v=34.00.0" defer></script>
 
     <!-- Mobile-specific tracker styles -->
-    <link rel="stylesheet" href="assets/css/pages/picks-tracker-mobile.css?v=1.0.0" />
+    <link
+      rel="stylesheet"
+      href="assets/css/pages/picks-tracker-mobile.css?v=1.0.0"
+    />
   </head>
   <body class="page-picks-tracker">
     <noscript>
@@ -51,7 +70,11 @@
         <li><a href="index.html" class="nav-link">Dashboard</a></li>
         <li><a href="weekly-lineup.html" class="nav-link">Weekly Lineup</a></li>
         <li><a href="odds-market.html" class="nav-link">Odds Market</a></li>
-        <li><a href="picks-tracker.html" class="nav-link" aria-current="page">Picks Tracker</a></li>
+        <li>
+          <a href="picks-tracker.html" class="nav-link" aria-current="page"
+            >Picks Tracker</a
+          >
+        </li>
       </ul>
     </nav>
 
@@ -63,8 +86,10 @@
           <h1>Picks Tracker</h1>
           <span class="date-label">Saturday, February 22, 2026</span>
         </div>
-        <div style="display:flex;align-items:center;gap:12px;">
-          <span class="update-time">Last update: <span id="last-updated">--</span></span>
+        <div style="display: flex; align-items: center; gap: 12px">
+          <span class="update-time"
+            >Last update: <span id="last-updated">--</span></span
+          >
           <button id="refresh-btn" type="button">Refresh</button>
         </div>
       </div>
@@ -111,9 +136,9 @@
               <th class="center">Score</th>
               <th class="center">Status</th>
               <th>Detail</th>
-              <th style="text-align:right">Risk</th>
-              <th style="text-align:right">To Win</th>
-              <th style="text-align:right">P&amp;L</th>
+              <th style="text-align: right">Risk</th>
+              <th style="text-align: right">To Win</th>
+              <th style="text-align: right">P&amp;L</th>
             </tr>
           </thead>
           <tbody id="straights-tbody"></tbody>
@@ -129,9 +154,9 @@
               <th>Type</th>
               <th>Legs</th>
               <th class="center">Status</th>
-              <th style="text-align:right">Risk</th>
-              <th style="text-align:right">To Win</th>
-              <th style="text-align:right">P&amp;L</th>
+              <th style="text-align: right">Risk</th>
+              <th style="text-align: right">To Win</th>
+              <th style="text-align: right">P&amp;L</th>
             </tr>
           </thead>
           <tbody id="rr-tbody"></tbody>
@@ -144,7 +169,10 @@
     <script src="assets/js/core/navigation.js?v=34.00.0" defer></script>
 
     <!-- Mobile Navigation Drawer -->
-    <script src="assets/js/mobile/mobile-nav-drawer.js?v=34.01.0" defer></script>
+    <script
+      src="assets/js/mobile/mobile-nav-drawer.js?v=34.01.0"
+      defer
+    ></script>
 
     <!-- Shared Bottom Navigation -->
     <script src="assets/js/mobile/shared-bottom-nav.js?v=1.0.0" defer></script>

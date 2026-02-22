@@ -3,7 +3,7 @@
  * Thumb-friendly bottom tab bar for all pages on mobile (≤767px)
  */
 (function () {
-  'use strict';
+  "use strict";
 
   class SharedBottomNav {
     constructor() {
@@ -16,7 +16,7 @@
       if (window.innerWidth > 767) return;
 
       // Don't double-render if weekly-lineup-mobile already created a bottom nav
-      if (document.querySelector('.mobile-bottom-nav, .bottom-nav')) return;
+      if (document.querySelector(".mobile-bottom-nav, .bottom-nav")) return;
 
       this._create();
       this._injectStyles();
@@ -26,39 +26,62 @@
 
     _create() {
       const pages = [
-        { label: 'Dashboard', href: '/index.html', icon: '📊', match: ['/index.html', '/'] },
-        { label: 'Lineup',    href: '/weekly-lineup.html', icon: '📋', match: ['/weekly-lineup.html'] },
-        { label: 'Odds',      href: '/odds-market.html',   icon: '📈', match: ['/odds-market.html'] },
-        { label: 'Tracker',   href: '/picks-tracker.html',  icon: '🎯', match: ['/picks-tracker.html'] },
+        {
+          label: "Dashboard",
+          href: "/index.html",
+          icon: "📊",
+          match: ["/index.html", "/"],
+        },
+        {
+          label: "Lineup",
+          href: "/weekly-lineup.html",
+          icon: "📋",
+          match: ["/weekly-lineup.html"],
+        },
+        {
+          label: "Odds",
+          href: "/odds-market.html",
+          icon: "📈",
+          match: ["/odds-market.html"],
+        },
+        {
+          label: "Tracker",
+          href: "/picks-tracker.html",
+          icon: "🎯",
+          match: ["/picks-tracker.html"],
+        },
       ];
 
-      this.nav = document.createElement('nav');
-      this.nav.className = 'shared-bottom-nav';
-      this.nav.setAttribute('aria-label', 'Page navigation');
+      this.nav = document.createElement("nav");
+      this.nav.className = "shared-bottom-nav";
+      this.nav.setAttribute("aria-label", "Page navigation");
 
       const path = window.location.pathname;
 
-      this.nav.innerHTML = pages.map(p => {
-        const active = p.match.some(m => path.endsWith(m)) ? ' active' : '';
-        return `<a href="${p.href}" class="bottom-nav-item${active}" aria-label="${p.label}">
+      this.nav.innerHTML = pages
+        .map((p) => {
+          const active = p.match.some((m) => path.endsWith(m)) ? " active" : "";
+          return `<a href="${p.href}" class="bottom-nav-item${active}" aria-label="${p.label}">
           <span class="bottom-nav-icon">${p.icon}</span>
           <span class="bottom-nav-label">${p.label}</span>
         </a>`;
-      }).join('');
+        })
+        .join("");
 
       document.body.appendChild(this.nav);
     }
 
     _adjustPagePadding() {
       // Ensure page content doesn't get hidden behind the bottom nav
-      document.body.style.paddingBottom = 'calc(60px + env(safe-area-inset-bottom, 0px))';
+      document.body.style.paddingBottom =
+        "calc(60px + env(safe-area-inset-bottom, 0px))";
     }
 
     _injectStyles() {
-      if (document.getElementById('shared-bottom-nav-styles')) return;
+      if (document.getElementById("shared-bottom-nav-styles")) return;
 
-      const style = document.createElement('style');
-      style.id = 'shared-bottom-nav-styles';
+      const style = document.createElement("style");
+      style.id = "shared-bottom-nav-styles";
       style.textContent = `
         .shared-bottom-nav {
           position: fixed;
@@ -125,13 +148,13 @@
 
   const bottomNav = new SharedBottomNav();
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => bottomNav.init());
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => bottomNav.init());
   } else {
     bottomNav.init();
   }
 
-  window.addEventListener('resize', () => {
+  window.addEventListener("resize", () => {
     if (window.innerWidth <= 767 && !bottomNav.initialized) {
       bottomNav.init();
     }

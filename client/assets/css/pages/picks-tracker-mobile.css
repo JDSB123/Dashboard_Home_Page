@@ -8,13 +8,13 @@
   position: fixed;
   inset: 0;
   z-index: -1;
-  background: url('../../../assets/JB_Bearish_Market_FULL_page.png') center/cover no-repeat;
+  background: url("../../../assets/JB_Bearish_Market_FULL_page.png")
+    center/cover no-repeat;
   opacity: 0.25;
 }
 
 /* ===== MOBILE: ≤ 767px ===== */
 @media (max-width: 767px) {
-
   /* Page padding: leave room for bottom nav */
   body.page-picks-tracker {
     padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
@@ -107,7 +107,11 @@
     padding: 10px 12px;
     border: 1px solid rgba(0, 214, 137, 0.1);
     border-radius: 8px;
-    background: linear-gradient(180deg, rgba(8, 18, 32, 0.95), rgba(4, 12, 24, 0.98));
+    background: linear-gradient(
+      180deg,
+      rgba(8, 18, 32, 0.95),
+      rgba(4, 12, 24, 0.98)
+    );
     gap: 4px;
   }
 
