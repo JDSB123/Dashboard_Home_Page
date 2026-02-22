@@ -20,6 +20,12 @@ Environment variables are listed in .env.example. Key settings:
 - CORS_ALLOWED_ORIGINS
 - ORCHESTRATOR_URL / FUNCTIONS_BASE_URL / API_BASE_URL
 
+Cosmos DB defaults used by local and recommended in prod:
+
+- COSMOS_DATABASE: `picks-db`
+- COSMOS_CONTAINER: `picks`
+- Partition Key: `/sport`
+
 Optional auth guards (set to true to require a shared key on write endpoints):
 
 - REQUIRE_EXECUTE_KEY

@@ -1,6 +1,6 @@
 /**
- * Local Picks Manager v33.01.0
- * Production version - Real data only, no sample data
+ * Local Picks Manager v33.02.0
+ * Production version - Real data only, no sample data, auto-cleanup of stale picks
  * Stores picks in localStorage, auto-fetches game data from ESPN
  *
  * @deprecated This module uses localStorage for pick storage. Prefer the
@@ -1708,6 +1708,66 @@
 
   // ========== CLEANUP SAMPLE DATA ==========
 
+  /**
+   * Clean up stale pending picks older than specified days
+   * Runs once per day to prevent accumulation of old picks
+   */
+  function cleanupStalePicks(daysOld = 7) {
+    const LAST_CLEANUP_KEY = "gbsv_last_stale_cleanup";
+    const lastCleanup = localStorage.getItem(LAST_CLEANUP_KEY);
+    const today = new Date().toDateString();
+
+    // Only run once per day
+    if (lastCleanup === today) {
+      return;
+    }
+
+    const picks = getAllPicks();
+    if (picks.length === 0) {
+      localStorage.setItem(LAST_CLEANUP_KEY, today);
+      return;
+    }
+
+    const cutoffDate = new Date();
+    cutoffDate.setDate(cutoffDate.getDate() - daysOld);
+    cutoffDate.setHours(0, 0, 0, 0);
+
+    const freshPicks = picks.filter((pick) => {
+      const status = (pick.status || "pending").toLowerCase();
+
+      // Keep all settled picks (won, lost, push) regardless of age
+      if (["win", "won", "loss", "lost", "push"].includes(status)) {
+        return true;
+      }
+
+      // For pending/live picks, check age
+      const dateStr = pick.gameDate || pick.createdAt || "";
+      let pickDate = null;
+
+      try {
+        pickDate = dateStr ? new Date(dateStr) : null;
+      } catch {}
+
+      // Keep if we can't determine date (safer to keep)
+      if (!pickDate || isNaN(pickDate.getTime())) {
+        return true;
+      }
+
+      // Remove if older than cutoff
+      return pickDate >= cutoffDate;
+    });
+
+    if (freshPicks.length < picks.length) {
+      const removed = picks.length - freshPicks.length;
+      console.log(
+        `🗑️ [Stale Cleanup] Removed ${removed} old pending picks (>${daysOld}d), kept ${freshPicks.length} picks`,
+      );
+      savePicks(freshPicks);
+    }
+
+    localStorage.setItem(LAST_CLEANUP_KEY, today);
+  }
+
   function cleanupSampleData() {
     const CLEANUP_VERSION_KEY = "gbsv_cleanup_v5"; // Bump version to re-run cleanup
 
@@ -1790,10 +1850,15 @@
   }
 
   function initialize() {
-    console.log("🏠 LocalPicksManager v33.01.0 initialized (real data only)");
+    console.log(
+      "🏠 LocalPicksManager v33.02.0 initialized (real data only + auto-cleanup)",
+    );
 
-    // Clean up any legacy sample/demo data
+    // Clean up any legacy sample/demo data (runs once)
     cleanupSampleData();
+
+    // Clean up stale pending picks (runs daily)
+    cleanupStalePicks(7); // Remove pending picks older than 7 days
 
     // NO DEMO DATA: Production version uses only real picks from weekly-lineup
     // importTodaysPicks(); -- DISABLED: No sample/placeholder data in production
@@ -1980,6 +2045,7 @@
     getUnitMultiplier,
     setUnitMultiplier,
     archiveOldPicks,
+    cleanupStale: cleanupStalePicks, // Manually trigger stale picks cleanup
     // Debug helpers
     debug: () => {
       const picks = getAllPicks();
@@ -2005,5 +2071,5 @@
     },
   };
 
-  console.log("✅ LocalPicksManager v33.01.0 loaded");
+  console.log("✅ LocalPicksManager v33.02.0 loaded (with auto-cleanup)");
 })();

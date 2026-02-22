@@ -20,8 +20,8 @@ Azure Cosmos DB is now your permanent archive for:
 
 - **Database**: picks-db
 - **Collections**:
-  - `picks` - Partition key: `/league`
-  - `metrics` - Partition key: `/league`
+  - `picks` - Partition key: `/sport`
+  - `metrics` - Partition key: `/sport`
 
 ## Pick Document Schema
 

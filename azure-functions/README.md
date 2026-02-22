@@ -75,7 +75,7 @@ DELETE /picks/{sport}/clear   - Clear all (requires x-confirm-clear header)
 ## Cosmos DB Schema
 
 ```
-Database: gbsv-picks
+Database: picks-db
 Container: picks
 Partition Key: /sport
 ```
@@ -120,7 +120,7 @@ func start
 | --------------------------------- | ----------------------------------------- |
 | `COSMOS_ENDPOINT`                 | Cosmos DB account endpoint                |
 | `COSMOS_KEY`                      | Cosmos DB primary key (or use Key Vault)  |
-| `COSMOS_DATABASE`                 | Database name (default: gbsv-picks)       |
+| `COSMOS_DATABASE`                 | Database name (default: picks-db)         |
 | `COSMOS_CONTAINER`                | Container name (default: picks)           |
 | `AzureWebJobsStorage`             | Azure Storage connection string           |
 | `AZURE_SIGNALR_CONNECTION_STRING` | SignalR Service connection                |
