@@ -1,4 +1,5 @@
 const axios = require("axios");
+const { getAllowedOrigins, buildCorsHeaders } = require("../shared/http");
 
 /**
  * Basketball API Proxy
@@ -12,6 +13,17 @@ const axios = require("axios");
  * GET /api/basketball-api/health
  */
 module.exports = async function (context, req) {
+  const allowedOrigins = getAllowedOrigins();
+  const corsHeaders = buildCorsHeaders(req, allowedOrigins, {
+    methods: "GET,OPTIONS",
+  });
+
+  // Handle CORS preflight
+  if (req.method === "OPTIONS") {
+    context.res = { status: 204, headers: corsHeaders, body: "" };
+    return;
+  }
+
   context.log("Basketball API proxy request:", req.params, req.query);
 
   const apiKey = process.env.BASKETBALL_API_KEY;
@@ -21,6 +33,7 @@ module.exports = async function (context, req) {
     context.log.error("BASKETBALL_API_KEY not configured");
     context.res = {
       status: 500,
+      headers: corsHeaders,
       body: { error: "API not configured" },
     };
     return;
@@ -33,6 +46,7 @@ module.exports = async function (context, req) {
   if (pathParts[0] === "health") {
     context.res = {
       status: 200,
+      headers: corsHeaders,
       body: { status: "ok", timestamp: new Date().toISOString() },
     };
     return;
@@ -44,6 +58,7 @@ module.exports = async function (context, req) {
   if (!league || !["nba", "ncaam"].includes(league.toLowerCase())) {
     context.res = {
       status: 400,
+      headers: corsHeaders,
       body: { error: "Invalid league. Use nba or ncaam." },
     };
     return;
@@ -66,7 +81,7 @@ module.exports = async function (context, req) {
       case "game":
         const gameId = pathParts[2];
         if (!gameId) {
-          context.res = { status: 400, body: { error: "Game ID required" } };
+          context.res = { status: 400, headers: corsHeaders, body: { error: "Game ID required" } };
           return;
         }
         apiEndpoint = `/games/${gameId}`;
@@ -81,7 +96,7 @@ module.exports = async function (context, req) {
       case "team":
         const teamId = pathParts[2];
         if (!teamId) {
-          context.res = { status: 400, body: { error: "Team ID required" } };
+          context.res = { status: 400, headers: corsHeaders, body: { error: "Team ID required" } };
           return;
         }
         apiEndpoint = `/statistics/teams?team=${teamId}&league=${leagueId}`;
@@ -95,6 +110,7 @@ module.exports = async function (context, req) {
       default:
         context.res = {
           status: 400,
+          headers: corsHeaders,
           body: { error: "Invalid action. Use games, game, standings, team, or odds." },
         };
         return;
@@ -111,6 +127,7 @@ module.exports = async function (context, req) {
     context.res = {
       status: 200,
       headers: {
+        ...corsHeaders,
         "Content-Type": "application/json",
         "Cache-Control": "public, max-age=60", // 1 minute cache
       },
@@ -122,16 +139,19 @@ module.exports = async function (context, req) {
     if (error.response?.status === 429) {
       context.res = {
         status: 429,
+        headers: corsHeaders,
         body: { error: "Rate limit exceeded. Try again later." },
       };
     } else if (error.response?.status === 401) {
       context.res = {
         status: 500,
+        headers: corsHeaders,
         body: { error: "API authentication failed" },
       };
     } else {
       context.res = {
         status: error.response?.status || 500,
+        headers: corsHeaders,
         body: {
           error: "Failed to fetch data",
           details: error.message,

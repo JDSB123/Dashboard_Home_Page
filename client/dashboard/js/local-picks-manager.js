@@ -1563,16 +1563,16 @@
                     <option value="other" ${sportsbook === "other" ? "selected" : ""}>Other</option>
                 </select>
             </td>
-            <td class="center">
+            <td class="center" data-label="League">
                 ${renderLeagueCell(sport)}
             </td>
-            <td>
+            <td data-label="Matchup">
                 ${matchupHtml}
             </td>
-            <td class="center">
+            <td class="center" data-label="Segment">
                 <span class="game-segment" data-segment="${segmentKey}">${segmentLabel}</span>
             </td>
-            <td>
+            <td data-label="Pick">
                 <div class="pick-cell">
                     <div class="pick-team-info">
                         ${pickLogoHtml}
@@ -1585,7 +1585,7 @@
                     ${pick.edge ? `<div class="pick-edge"><span class="edge-badge">+${parseFloat(pick.edge).toFixed(1)}%</span></div>` : ""}
                 </div>
             </td>
-            <td class="center">
+            <td class="center" data-label="Risk / Win">
                 <div class="currency-combined currency-stacked editable-amounts">
                     <div class="currency-risk-row">
                         <input type="number"
@@ -1606,16 +1606,16 @@
                            step="1000">
                 </div>
             </td>
-            <td class="center">
+            <td class="center" data-label="Box Score">
                 ${boxscoreHtml}
             </td>
-            <td class="center">
+            <td class="center" data-label="Status">
                 <span class="status-badge" data-status="${status}" data-blurb="${generateStatusBlurb(status, pick)}">${formatStatusLabel(status, pick)}</span>
             </td>
-            <td class="center">
+            <td class="center" data-label="Hit / Miss">
                 <span class="hit-miss-value" data-status="${status}">${hitMissValue}</span>
             </td>
-            <td class="center">
+            <td class="center" data-label="$ Won / Lost">
                 <span class="won-lost-value" data-status="${status}">${wonLostValue}</span>
                 <button class="delete-pick-btn" onclick="event.stopPropagation(); window.LocalPicksManager.delete('${pick.id}')" title="Remove pick from dashboard">✕</button>
             </td>

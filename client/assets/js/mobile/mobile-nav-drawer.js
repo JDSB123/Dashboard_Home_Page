@@ -57,6 +57,9 @@
                     <li><a href="/odds-market.html" class="drawer-link ${this._isActive('/odds-market.html') ? 'active' : ''}">
                         <span class="drawer-icon">📈</span> Odds Market
                     </a></li>
+                    <li><a href="/picks-tracker.html" class="drawer-link ${this._isActive('/picks-tracker.html') ? 'active' : ''}">
+                        <span class="drawer-icon">🎯</span> Picks Tracker
+                    </a></li>
                 </ul>
                 <div class="drawer-section">
                     <h4 class="drawer-section-title">Quick Actions</h4>

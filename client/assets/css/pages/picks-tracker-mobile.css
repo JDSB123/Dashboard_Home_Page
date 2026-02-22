@@ -1,0 +1,209 @@
+/* ==========================================================================
+   Picks Tracker — Mobile Responsive Overrides
+   Dedicated mobile styles for the picks tracker page
+   ========================================================================== */
+
+/* ===== BACKGROUND (moved from inline style) ===== */
+.tracker-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: url('../../../assets/JB_Bearish_Market_FULL_page.png') center/cover no-repeat;
+  opacity: 0.25;
+}
+
+/* ===== MOBILE: ≤ 767px ===== */
+@media (max-width: 767px) {
+
+  /* Page padding: leave room for bottom nav */
+  body.page-picks-tracker {
+    padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* Hide desktop nav links — hamburger takes over */
+  body.page-picks-tracker .brand-nav .nav-links {
+    display: none;
+  }
+
+  /* Fixed nav bar */
+  body.page-picks-tracker .brand-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 9998;
+    height: 48px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background: rgba(3, 11, 22, 0.92);
+    border-bottom: 1px solid rgba(0, 214, 137, 0.12);
+  }
+
+  /* Push content below fixed nav */
+  .tracker-page {
+    padding-top: 56px;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  /* ===== HEADER ===== */
+  .tracker-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 12px 0 10px;
+  }
+
+  .tracker-header h1 {
+    font-size: 1.1rem;
+  }
+
+  /* ===== KPI STRIP ===== */
+  .tracker-kpis {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .kpi-card {
+    padding: 10px 6px;
+  }
+
+  .kpi-value {
+    font-size: 1rem;
+  }
+
+  .kpi-label {
+    font-size: 9px;
+  }
+
+  /* ===== GAME CARDS ===== */
+  #game-cards {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  /* ===== TABLE → CARD TRANSFORMATION ===== */
+  .tracker-table-wrap {
+    overflow-x: visible;
+  }
+
+  .tracker-table {
+    display: block;
+  }
+
+  .tracker-table thead {
+    display: none;
+  }
+
+  .tracker-table tbody {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .tracker-table tbody tr {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 10px 12px;
+    border: 1px solid rgba(0, 214, 137, 0.1);
+    border-radius: 8px;
+    background: linear-gradient(180deg, rgba(8, 18, 32, 0.95), rgba(4, 12, 24, 0.98));
+    gap: 4px;
+  }
+
+  /* Straight bets card layout */
+  #straights-tbody tr td {
+    border: none;
+    padding: 2px 0;
+  }
+
+  /* Pick name — full width, top of card */
+  #straights-tbody tr td:nth-child(1) {
+    flex: 0 0 100%;
+    font-weight: 600;
+    font-size: 14px;
+    color: #fff;
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    margin-bottom: 2px;
+  }
+
+  /* Score */
+  #straights-tbody tr td:nth-child(2) {
+    flex: 0 0 auto;
+    margin-right: auto;
+  }
+
+  /* Status badge */
+  #straights-tbody tr td:nth-child(3) {
+    flex: 0 0 auto;
+  }
+
+  /* Detail — full width */
+  #straights-tbody tr td:nth-child(4) {
+    flex: 0 0 100%;
+    font-size: 12px;
+    color: rgba(160, 175, 190, 0.7);
+  }
+
+  /* Money row */
+  #straights-tbody tr td:nth-child(5),
+  #straights-tbody tr td:nth-child(6),
+  #straights-tbody tr td:nth-child(7) {
+    flex: 1;
+    text-align: center;
+    font-size: 12px;
+  }
+
+  /* Round robin card layout */
+  #rr-tbody tr td {
+    border: none;
+    padding: 2px 0;
+  }
+
+  #rr-tbody tr td:nth-child(1) {
+    flex: 0 0 100%;
+    font-weight: 600;
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    margin-bottom: 2px;
+  }
+
+  #rr-tbody tr td:nth-child(2) {
+    flex: 0 0 100%;
+  }
+
+  #rr-tbody tr td:nth-child(3) {
+    flex: 0 0 auto;
+    margin-right: auto;
+  }
+
+  #rr-tbody tr td:nth-child(4),
+  #rr-tbody tr td:nth-child(5),
+  #rr-tbody tr td:nth-child(6) {
+    flex: 1;
+    text-align: center;
+    font-size: 12px;
+  }
+
+  /* Section titles */
+  .section-title {
+    font-size: 0.95rem;
+    margin: 20px 0 10px;
+  }
+
+  /* Touch targets */
+  #refresh-btn {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 10px 18px;
+    font-size: 13px;
+  }
+}
+
+/* ===== SMALL PHONES: ≤ 480px ===== */
+@media (max-width: 480px) {
+  .tracker-kpis {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

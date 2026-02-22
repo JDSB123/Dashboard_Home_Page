@@ -2663,7 +2663,7 @@ body.page-active-picks .filter-chip .chip-remove:hover {
     }
 }
 
-/* Small Phone: < 480px */
+/* Small Phone: < 480px — Card View */
 @media (max-width: 480px) {
     body.page-active-picks .main-container {
         padding-left: 8px;
@@ -2673,31 +2673,6 @@ body.page-active-picks .filter-chip .chip-remove:hover {
     body.page-active-picks .dashboard-topline {
         padding-left: 8px;
         padding-right: 8px;
-    }
-
-    body.page-active-picks .picks-table {
-        min-width: 450px;
-        font-size: 11px;
-    }
-
-    body.page-active-picks .picks-table td,
-    body.page-active-picks .picks-table th {
-        padding: 6px 4px;
-    }
-
-    /* Also hide Segment column on small phones */
-    body.page-active-picks .picks-table th:nth-child(4),
-    body.page-active-picks .picks-table td:nth-child(4) {
-        display: none;
-    }
-
-    /* Smaller header text */
-    body.page-active-picks .picks-table .header-main-text {
-        font-size: 0.65rem;
-    }
-
-    body.page-active-picks .picks-table .header-subtext {
-        display: none;
     }
 
     /* Smaller brand */
@@ -2714,19 +2689,11 @@ body.page-active-picks .filter-chip .chip-remove:hover {
         font-size: 0.75rem;
     }
 
-    /* Even smaller logos */
-    body.page-active-picks .picks-table .team-logo,
-    body.page-active-picks .picks-table .league-logo {
-        width: 16px;
-        height: 16px;
-    }
-
     /* Single column KPI tiles */
     body.page-active-picks .kpi-tiles {
         grid-template-columns: 1fr;
     }
 
-    /* Compact KPI text */
     body.page-active-picks .kpi-label {
         font-size: 0.6rem;
     }
@@ -2741,9 +2708,161 @@ body.page-active-picks .filter-chip .chip-remove:hover {
         font-size: 0.65rem;
     }
 
-    /* Compact status badges */
-    body.page-active-picks .status-badge {
-        padding: 3px 6px;
-        font-size: 0.6rem;
+    /* ===== CARD VIEW: Table → Stacked Cards ===== */
+
+    /* Remove horizontal scroll — cards don't need it */
+    body.page-active-picks .table-container {
+        overflow-x: visible;
     }
+
+    body.page-active-picks .picks-table {
+        display: block !important;
+        min-width: 0 !important;
+        width: 100% !important;
+        font-size: 13px;
+        table-layout: auto !important;
+    }
+
+    /* Hide colgroup (no effect on card layout) */
+    body.page-active-picks .picks-table colgroup {
+        display: none;
+    }
+
+    /* Hide table header */
+    body.page-active-picks .picks-table thead {
+        display: none !important;
+    }
+
+    /* Grid of cards */
+    body.page-active-picks .picks-table tbody {
+        display: grid !important;
+        gap: 12px;
+        padding: 4px;
+    }
+
+    /* Each row = a card */
+    body.page-active-picks .picks-table tbody tr {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr;
+        gap: 6px 12px;
+        padding: 14px;
+        background: var(--color-bg-elevated, rgba(15, 25, 45, 0.85));
+        border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
+        border-radius: 10px;
+        position: relative;
+    }
+
+    /* Base cell style in card mode */
+    body.page-active-picks .picks-table tbody td {
+        display: flex !important;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 4px 0 !important;
+        border: none !important;
+        white-space: normal !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
+        max-width: none !important;
+        min-width: 0 !important;
+        width: auto !important;
+    }
+
+    /* Label above each value */
+    body.page-active-picks .picks-table tbody td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: var(--color-text-secondary, rgba(255, 255, 255, 0.55));
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 2px;
+    }
+
+    /* Matchup cell spans full width */
+    body.page-active-picks .picks-table tbody td:nth-child(3) {
+        grid-column: 1 / -1;
+    }
+
+    /* Pick cell spans full width */
+    body.page-active-picks .picks-table tbody td:nth-child(5) {
+        grid-column: 1 / -1;
+    }
+
+    /* Hide duplicate column: Hit/Miss (cell 9, same as Won/Lost) */
+    body.page-active-picks .picks-table tbody td:nth-child(9) {
+        display: none !important;
+    }
+
+    /* Hide Segment (cell 4) — less critical on mobile */
+    body.page-active-picks .picks-table tbody td:nth-child(4) {
+        display: none !important;
+    }
+
+    /* Hide Box Score (cell 7) — too wide for cards */
+    body.page-active-picks .picks-table tbody td:nth-child(7) {
+        display: none !important;
+    }
+
+    /* Status badge in card */
+    body.page-active-picks .picks-table tbody .status-badge {
+        padding: 3px 8px;
+        font-size: 0.7rem;
+    }
+
+    /* Risk/Win inputs: full-width and touch-friendly */
+    body.page-active-picks .picks-table tbody .editable-risk,
+    body.page-active-picks .picks-table tbody .editable-win {
+        width: 100%;
+        min-height: 36px;
+        font-size: 14px;
+        padding: 6px 8px;
+        border-radius: 6px;
+    }
+
+    /* Won/Lost cell — position delete btn to top-right of card */
+    body.page-active-picks .picks-table tbody td:nth-child(10) {
+        position: static;
+    }
+
+    body.page-active-picks .picks-table tbody td:nth-child(10) .delete-pick-btn {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        width: 28px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: rgba(255, 60, 60, 0.15);
+        border: 1px solid rgba(255, 60, 60, 0.3);
+        color: #ff6b6b;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    /* Pick cell layout in card */
+    body.page-active-picks .picks-table tbody .pick-cell {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 6px;
+        align-items: center;
+    }
+
+    /* Team logos in cards */
+    body.page-active-picks .picks-table .team-logo,
+    body.page-active-picks .picks-table .league-logo {
+        width: 20px;
+        height: 20px;
+    }
+
+    /* Sportsbook dropdown touch-friendly */
+    body.page-active-picks .picks-table .sportsbook-dropdown {
+        min-height: 32px;
+        font-size: 12px;
+        width: 100%;
+        border-radius: 6px;
+    }
+
+    /* ===== END CARD VIEW ===== */
 }

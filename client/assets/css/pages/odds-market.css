@@ -1248,4 +1248,54 @@ body.page-odds-market.slip-open .bet-slip-toggle .toggle-icon {
         justify-content: space-between;
         padding: 12px 14px;
     }
+
+    /* ===== BET SLIP: Bottom sheet on phones ===== */
+    .bet-slip {
+        position: fixed;
+        top: auto;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        max-width: none;
+        max-height: 55vh;
+        border-left: none;
+        border-top: 1px solid rgba(0, 214, 137, 0.25);
+        border-radius: 16px 16px 0 0;
+        transform: translateY(calc(100% - 48px));
+        transition: transform 0.3s ease;
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+        z-index: 10000;
+    }
+
+    body.page-odds-market.slip-open .bet-slip {
+        transform: translateY(0);
+    }
+
+    .bet-slip-header {
+        border-radius: 16px 16px 0 0;
+        cursor: pointer;
+        min-height: 48px;
+    }
+
+    /* Drag handle indicator */
+    .bet-slip-header::before {
+        content: '';
+        display: block;
+        width: 36px;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 2px;
+        margin: 0 auto 8px;
+    }
+
+    .bet-slip-body {
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        max-height: calc(55vh - 120px);
+    }
+
+    body.page-odds-market.slip-open .main-container {
+        padding-right: 20px;
+    }
 }

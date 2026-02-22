@@ -22,10 +22,13 @@
     <!-- Local dev helper: if Live Server runs from repo root, fix base href -->
     <script>
       (function () {
-        if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
-          if (!location.pathname.startsWith('/client/')) {
-            var base = document.createElement('base');
-            base.href = '/client/';
+        if (
+          location.hostname === "localhost" ||
+          location.hostname === "127.0.0.1"
+        ) {
+          if (!location.pathname.startsWith("/client/")) {
+            var base = document.createElement("base");
+            base.href = "/client/";
             document.head.prepend(base);
           }
         }
@@ -163,11 +166,6 @@
       as="image"
     />
     <link rel="prefetch" href="dist/bundle.min.css" as="style" />
-    <link
-      rel="prefetch"
-      href="assets/js/weekly-lineup-mobile.js?v=34.00.0"
-      as="script"
-    />
   </head>
   <body class="page-active-picks">
     <noscript>
@@ -1286,7 +1284,13 @@
 
     <!-- Mobile Navigation Drawer -->
     <script
-      src="assets/js/mobile/mobile-nav-drawer.js?v=34.00.0"
+      src="assets/js/mobile/mobile-nav-drawer.js?v=34.01.0"
+      defer
+    ></script>
+
+    <!-- Shared Bottom Navigation -->
+    <script
+      src="assets/js/mobile/shared-bottom-nav.js?v=1.0.0"
       defer
     ></script>
 

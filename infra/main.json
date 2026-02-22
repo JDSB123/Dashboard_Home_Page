@@ -5,14 +5,18 @@
     "_generator": {
       "name": "bicep",
       "version": "0.40.2.10011",
-      "templateHash": "12196420896604967991"
+      "templateHash": "15569691290546012591"
     }
   },
   "parameters": {
     "environment": {
       "type": "string",
       "defaultValue": "prod",
-      "allowedValues": ["dev", "staging", "prod"],
+      "allowedValues": [
+        "dev",
+        "staging",
+        "prod"
+      ],
       "metadata": {
         "description": "Environment name (dev, staging, prod)"
       }
@@ -34,7 +38,10 @@
     "skuName": {
       "type": "string",
       "defaultValue": "Premium_AzureFrontDoor",
-      "allowedValues": ["Standard_AzureFrontDoor", "Premium_AzureFrontDoor"],
+      "allowedValues": [
+        "Standard_AzureFrontDoor",
+        "Premium_AzureFrontDoor"
+      ],
       "metadata": {
         "description": "Front Door SKU - Premium includes WAF managed rules (OWASP, Bot Manager)"
       }
@@ -43,6 +50,12 @@
       "type": "string",
       "metadata": {
         "description": "Static Web App hostname (no https:// prefix)"
+      }
+    },
+    "orchestratorApiHostname": {
+      "type": "string",
+      "metadata": {
+        "description": "Orchestrator API Container App hostname (no https:// prefix) - serves /api/* endpoints (picks, archive, scoreboard proxy, etc.)"
       }
     },
     "nbaApiHostname": {
@@ -68,6 +81,20 @@
       "metadata": {
         "description": "NCAAF API Container App hostname (no https:// prefix)"
       }
+    },
+    "customDomainName": {
+      "type": "string",
+      "defaultValue": "www.greenbiersportventures.com",
+      "metadata": {
+        "description": "Custom domain name (e.g., www.greenbiersportventures.com)"
+      }
+    },
+    "enableCustomDomain": {
+      "type": "bool",
+      "defaultValue": true,
+      "metadata": {
+        "description": "Enable custom domain on routes and security policy"
+      }
     }
   },
   "variables": {
@@ -75,9 +102,11 @@
     "wafPolicyName": "[format('gbsvwafpolicy{0}', parameters('environment'))]",
     "endpointName": "[format('gbsv-endpoint-{0}', parameters('environment'))]",
     "originGroupDashboard": "og-dashboard",
+    "originGroupOrchestrator": "og-orchestrator-api",
     "originGroupNba": "og-nba-api",
     "originGroupNcaam": "og-ncaam-api",
     "originGroupNfl": "og-nfl-api",
+    "customDomainResourceName": "[replace(replace(parameters('customDomainName'), '.', '-'), '_', '-')]",
     "originGroupNcaaf": "og-ncaaf-api"
   },
   "resources": [
@@ -110,7 +139,9 @@
                 {
                   "matchVariable": "RequestUri",
                   "operator": "RegEx",
-                  "matchValue": ["^/(nba|ncaam|nfl|ncaaf)/"]
+                  "matchValue": [
+                    "^/(nba|ncaam|nfl|ncaaf)/"
+                  ]
                 }
               ],
               "action": "Block"
@@ -125,7 +156,59 @@
                 {
                   "matchVariable": "RequestUri",
                   "operator": "RegEx",
-                  "matchValue": ["^/(nba|ncaam|nfl|ncaaf)/predictions"]
+                  "matchValue": [
+                    "^/(nba|ncaam|nfl|ncaaf)/predictions"
+                  ]
+                }
+              ],
+              "action": "Block"
+            },
+            {
+              "name": "RateLimitPicksWrite",
+              "priority": 300,
+              "ruleType": "RateLimitRule",
+              "rateLimitDurationInMinutes": 1,
+              "rateLimitThreshold": 200,
+              "matchConditions": [
+                {
+                  "matchVariable": "RequestUri",
+                  "operator": "RegEx",
+                  "matchValue": [
+                    "^/api/picks"
+                  ]
+                },
+                {
+                  "matchVariable": "RequestMethod",
+                  "operator": "Equal",
+                  "matchValue": [
+                    "POST",
+                    "PATCH",
+                    "DELETE"
+                  ]
+                }
+              ],
+              "action": "Block"
+            },
+            {
+              "name": "RateLimitPicksRead",
+              "priority": 400,
+              "ruleType": "RateLimitRule",
+              "rateLimitDurationInMinutes": 1,
+              "rateLimitThreshold": 500,
+              "matchConditions": [
+                {
+                  "matchVariable": "RequestUri",
+                  "operator": "RegEx",
+                  "matchValue": [
+                    "^/api/picks"
+                  ]
+                },
+                {
+                  "matchVariable": "RequestMethod",
+                  "operator": "Equal",
+                  "matchValue": [
+                    "GET"
+                  ]
                 }
               ],
               "action": "Block"
@@ -177,6 +260,28 @@
           "probeRequestType": "HEAD",
           "probeProtocol": "Https",
           "probeIntervalInSeconds": 100
+        },
+        "sessionAffinityState": "Disabled"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Cdn/profiles', variables('frontDoorName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Cdn/profiles/originGroups",
+      "apiVersion": "2024-02-01",
+      "name": "[format('{0}/{1}', variables('frontDoorName'), variables('originGroupOrchestrator'))]",
+      "properties": {
+        "loadBalancingSettings": {
+          "sampleSize": 4,
+          "successfulSamplesRequired": 3,
+          "additionalLatencyInMilliseconds": 50
+        },
+        "healthProbeSettings": {
+          "probePath": "/api/health",
+          "probeRequestType": "GET",
+          "probeProtocol": "Https",
+          "probeIntervalInSeconds": 30
         },
         "sessionAffinityState": "Disabled"
       },
@@ -293,6 +398,24 @@
     {
       "type": "Microsoft.Cdn/profiles/originGroups/origins",
       "apiVersion": "2024-02-01",
+      "name": "[format('{0}/{1}/{2}', variables('frontDoorName'), variables('originGroupOrchestrator'), 'origin-orchestrator-api')]",
+      "properties": {
+        "hostName": "[parameters('orchestratorApiHostname')]",
+        "httpPort": 80,
+        "httpsPort": 443,
+        "originHostHeader": "[parameters('orchestratorApiHostname')]",
+        "priority": 1,
+        "weight": 1000,
+        "enabledState": "Enabled",
+        "enforceCertificateNameCheck": true
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupOrchestrator'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Cdn/profiles/originGroups/origins",
+      "apiVersion": "2024-02-01",
       "name": "[format('{0}/{1}/{2}', variables('frontDoorName'), variables('originGroupNba'), 'origin-nba-api')]",
       "properties": {
         "hostName": "[parameters('nbaApiHostname')]",
@@ -363,6 +486,22 @@
       ]
     },
     {
+      "condition": "[parameters('enableCustomDomain')]",
+      "type": "Microsoft.Cdn/profiles/customDomains",
+      "apiVersion": "2024-02-01",
+      "name": "[format('{0}/{1}', variables('frontDoorName'), variables('customDomainResourceName'))]",
+      "properties": {
+        "hostName": "[parameters('customDomainName')]",
+        "tlsSettings": {
+          "certificateType": "ManagedCertificate",
+          "minimumTlsVersion": "TLS12"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Cdn/profiles', variables('frontDoorName'))]"
+      ]
+    },
+    {
       "type": "Microsoft.Cdn/profiles/ruleSets",
       "apiVersion": "2024-02-01",
       "name": "[format('{0}/{1}', variables('frontDoorName'), 'UrlRewriteRules')]",
@@ -415,19 +554,25 @@
         "originGroup": {
           "id": "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupNba'))]"
         },
+        "customDomains": "[if(parameters('enableCustomDomain'), createArray(createObject('id', resourceId('Microsoft.Cdn/profiles/customDomains', variables('frontDoorName'), variables('customDomainResourceName')))), createArray())]",
         "ruleSets": [
           {
             "id": "[resourceId('Microsoft.Cdn/profiles/ruleSets', variables('frontDoorName'), 'UrlRewriteRules')]"
           }
         ],
-        "supportedProtocols": ["Https"],
-        "patternsToMatch": ["/nba/*"],
+        "supportedProtocols": [
+          "Https"
+        ],
+        "patternsToMatch": [
+          "/nba/*"
+        ],
         "forwardingProtocol": "HttpsOnly",
         "linkToDefaultDomain": "Enabled",
         "httpsRedirect": "Enabled",
         "enabledState": "Enabled"
       },
       "dependsOn": [
+        "[resourceId('Microsoft.Cdn/profiles/customDomains', variables('frontDoorName'), variables('customDomainResourceName'))]",
         "[resourceId('Microsoft.Cdn/profiles/afdEndpoints', variables('frontDoorName'), variables('endpointName'))]",
         "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupNba'))]",
         "[resourceId('Microsoft.Cdn/profiles/originGroups/origins', variables('frontDoorName'), variables('originGroupNba'), 'origin-nba-api')]",
@@ -442,19 +587,25 @@
         "originGroup": {
           "id": "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupNcaam'))]"
         },
+        "customDomains": "[if(parameters('enableCustomDomain'), createArray(createObject('id', resourceId('Microsoft.Cdn/profiles/customDomains', variables('frontDoorName'), variables('customDomainResourceName')))), createArray())]",
         "ruleSets": [
           {
             "id": "[resourceId('Microsoft.Cdn/profiles/ruleSets', variables('frontDoorName'), 'UrlRewriteRules')]"
           }
         ],
-        "supportedProtocols": ["Https"],
-        "patternsToMatch": ["/ncaam/*"],
+        "supportedProtocols": [
+          "Https"
+        ],
+        "patternsToMatch": [
+          "/ncaam/*"
+        ],
         "forwardingProtocol": "HttpsOnly",
         "linkToDefaultDomain": "Enabled",
         "httpsRedirect": "Enabled",
         "enabledState": "Enabled"
       },
       "dependsOn": [
+        "[resourceId('Microsoft.Cdn/profiles/customDomains', variables('frontDoorName'), variables('customDomainResourceName'))]",
         "[resourceId('Microsoft.Cdn/profiles/afdEndpoints', variables('frontDoorName'), variables('endpointName'))]",
         "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupNcaam'))]",
         "[resourceId('Microsoft.Cdn/profiles/originGroups/origins', variables('frontDoorName'), variables('originGroupNcaam'), 'origin-ncaam-api')]",
@@ -469,19 +620,25 @@
         "originGroup": {
           "id": "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupNfl'))]"
         },
+        "customDomains": "[if(parameters('enableCustomDomain'), createArray(createObject('id', resourceId('Microsoft.Cdn/profiles/customDomains', variables('frontDoorName'), variables('customDomainResourceName')))), createArray())]",
         "ruleSets": [
           {
             "id": "[resourceId('Microsoft.Cdn/profiles/ruleSets', variables('frontDoorName'), 'UrlRewriteRules')]"
           }
         ],
-        "supportedProtocols": ["Https"],
-        "patternsToMatch": ["/nfl/*"],
+        "supportedProtocols": [
+          "Https"
+        ],
+        "patternsToMatch": [
+          "/nfl/*"
+        ],
         "forwardingProtocol": "HttpsOnly",
         "linkToDefaultDomain": "Enabled",
         "httpsRedirect": "Enabled",
         "enabledState": "Enabled"
       },
       "dependsOn": [
+        "[resourceId('Microsoft.Cdn/profiles/customDomains', variables('frontDoorName'), variables('customDomainResourceName'))]",
         "[resourceId('Microsoft.Cdn/profiles/afdEndpoints', variables('frontDoorName'), variables('endpointName'))]",
         "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupNfl'))]",
         "[resourceId('Microsoft.Cdn/profiles/originGroups/origins', variables('frontDoorName'), variables('originGroupNfl'), 'origin-nfl-api')]",
@@ -496,23 +653,56 @@
         "originGroup": {
           "id": "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupNcaaf'))]"
         },
+        "customDomains": "[if(parameters('enableCustomDomain'), createArray(createObject('id', resourceId('Microsoft.Cdn/profiles/customDomains', variables('frontDoorName'), variables('customDomainResourceName')))), createArray())]",
         "ruleSets": [
           {
             "id": "[resourceId('Microsoft.Cdn/profiles/ruleSets', variables('frontDoorName'), 'UrlRewriteRules')]"
           }
         ],
-        "supportedProtocols": ["Https"],
-        "patternsToMatch": ["/ncaaf/*"],
+        "supportedProtocols": [
+          "Https"
+        ],
+        "patternsToMatch": [
+          "/ncaaf/*"
+        ],
         "forwardingProtocol": "HttpsOnly",
         "linkToDefaultDomain": "Enabled",
         "httpsRedirect": "Enabled",
         "enabledState": "Enabled"
       },
       "dependsOn": [
+        "[resourceId('Microsoft.Cdn/profiles/customDomains', variables('frontDoorName'), variables('customDomainResourceName'))]",
         "[resourceId('Microsoft.Cdn/profiles/afdEndpoints', variables('frontDoorName'), variables('endpointName'))]",
         "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupNcaaf'))]",
         "[resourceId('Microsoft.Cdn/profiles/originGroups/origins', variables('frontDoorName'), variables('originGroupNcaaf'), 'origin-ncaaf-api')]",
         "[resourceId('Microsoft.Cdn/profiles/ruleSets', variables('frontDoorName'), 'UrlRewriteRules')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Cdn/profiles/afdEndpoints/routes",
+      "apiVersion": "2024-02-01",
+      "name": "[format('{0}/{1}/{2}', variables('frontDoorName'), variables('endpointName'), 'route-orchestrator-api')]",
+      "properties": {
+        "originGroup": {
+          "id": "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupOrchestrator'))]"
+        },
+        "customDomains": "[if(parameters('enableCustomDomain'), createArray(createObject('id', resourceId('Microsoft.Cdn/profiles/customDomains', variables('frontDoorName'), variables('customDomainResourceName')))), createArray())]",
+        "supportedProtocols": [
+          "Https"
+        ],
+        "patternsToMatch": [
+          "/api/*"
+        ],
+        "forwardingProtocol": "HttpsOnly",
+        "linkToDefaultDomain": "Enabled",
+        "httpsRedirect": "Enabled",
+        "enabledState": "Enabled"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Cdn/profiles/customDomains', variables('frontDoorName'), variables('customDomainResourceName'))]",
+        "[resourceId('Microsoft.Cdn/profiles/afdEndpoints', variables('frontDoorName'), variables('endpointName'))]",
+        "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupOrchestrator'))]",
+        "[resourceId('Microsoft.Cdn/profiles/originGroups/origins', variables('frontDoorName'), variables('originGroupOrchestrator'), 'origin-orchestrator-api')]"
       ]
     },
     {
@@ -523,8 +713,14 @@
         "originGroup": {
           "id": "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupDashboard'))]"
         },
-        "supportedProtocols": ["Https", "Http"],
-        "patternsToMatch": ["/*"],
+        "customDomains": "[if(parameters('enableCustomDomain'), createArray(createObject('id', resourceId('Microsoft.Cdn/profiles/customDomains', variables('frontDoorName'), variables('customDomainResourceName')))), createArray())]",
+        "supportedProtocols": [
+          "Https",
+          "Http"
+        ],
+        "patternsToMatch": [
+          "/*"
+        ],
         "forwardingProtocol": "HttpsOnly",
         "linkToDefaultDomain": "Enabled",
         "httpsRedirect": "Enabled",
@@ -544,13 +740,15 @@
         }
       },
       "dependsOn": [
+        "[resourceId('Microsoft.Cdn/profiles/customDomains', variables('frontDoorName'), variables('customDomainResourceName'))]",
         "[resourceId('Microsoft.Cdn/profiles/afdEndpoints', variables('frontDoorName'), variables('endpointName'))]",
         "[resourceId('Microsoft.Cdn/profiles/originGroups/origins', variables('frontDoorName'), variables('originGroupDashboard'), 'origin-dashboard')]",
         "[resourceId('Microsoft.Cdn/profiles/originGroups', variables('frontDoorName'), variables('originGroupDashboard'))]",
         "[resourceId('Microsoft.Cdn/profiles/afdEndpoints/routes', variables('frontDoorName'), variables('endpointName'), 'route-nba')]",
         "[resourceId('Microsoft.Cdn/profiles/afdEndpoints/routes', variables('frontDoorName'), variables('endpointName'), 'route-ncaaf')]",
         "[resourceId('Microsoft.Cdn/profiles/afdEndpoints/routes', variables('frontDoorName'), variables('endpointName'), 'route-ncaam')]",
-        "[resourceId('Microsoft.Cdn/profiles/afdEndpoints/routes', variables('frontDoorName'), variables('endpointName'), 'route-nfl')]"
+        "[resourceId('Microsoft.Cdn/profiles/afdEndpoints/routes', variables('frontDoorName'), variables('endpointName'), 'route-nfl')]",
+        "[resourceId('Microsoft.Cdn/profiles/afdEndpoints/routes', variables('frontDoorName'), variables('endpointName'), 'route-orchestrator-api')]"
       ]
     },
     {
@@ -566,17 +764,16 @@
           },
           "associations": [
             {
-              "domains": [
-                {
-                  "id": "[resourceId('Microsoft.Cdn/profiles/afdEndpoints', variables('frontDoorName'), variables('endpointName'))]"
-                }
-              ],
-              "patternsToMatch": ["/*"]
+              "domains": "[concat(createArray(createObject('id', resourceId('Microsoft.Cdn/profiles/afdEndpoints', variables('frontDoorName'), variables('endpointName')))), if(parameters('enableCustomDomain'), createArray(createObject('id', resourceId('Microsoft.Cdn/profiles/customDomains', variables('frontDoorName'), variables('customDomainResourceName')))), createArray()))]",
+              "patternsToMatch": [
+                "/*"
+              ]
             }
           ]
         }
       },
       "dependsOn": [
+        "[resourceId('Microsoft.Cdn/profiles/customDomains', variables('frontDoorName'), variables('customDomainResourceName'))]",
         "[resourceId('Microsoft.Cdn/profiles/afdEndpoints', variables('frontDoorName'), variables('endpointName'))]",
         "[resourceId('Microsoft.Cdn/profiles', variables('frontDoorName'))]",
         "[resourceId('Microsoft.Network/FrontDoorWebApplicationFirewallPolicies', variables('wafPolicyName'))]"

@@ -423,7 +423,7 @@ jobs:
 
           # Fetch secrets (with fallbacks for missing secrets)
           STORAGE_CONN=$(az keyvault secret show --vault-name "$KV_NAME" --name "azure-storage-connection-string" --query "value" -o tsv 2>/dev/null || echo "")
-          SIGNALR_CONN=$(az keyvault secret show --vault-name "$KV_NAME" --name "azure-signalr-connection-string" --query "value" -o tsv 2>/dev/null || echo "")
+          SIGNALR_CONN=$(az keyvault secret show --vault-name "$KV_NAME" --name "signalr-connection-string" --query "value" -o tsv 2>/dev/null || echo "")
           APPINSIGHTS_CONN=$(az keyvault secret show --vault-name "$KV_NAME" --name "appinsights-connection-string" --query "value" -o tsv 2>/dev/null || echo "")
 
           # Mask and output

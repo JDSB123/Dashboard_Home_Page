@@ -47,6 +47,8 @@ window.APP_CONFIG = {
   ENABLE_DB_SYNC: true,
   // Team Records API (disable to avoid 404s when endpoint is unavailable)
   TEAM_RECORDS_API_ENABLED: false,
+  // Leagues to hide from Weekly Lineup (off-season or not modeled)
+  WEEKLY_LINEUP_DISABLED_LEAGUES: ["NFL", "NCAAF"],
 
   // Repository Info
   REPO_URL: "https://github.com/JDSB123/Dashboard_Home_Page",
