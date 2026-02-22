@@ -2,12 +2,26 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
+			"type": "shell",
+			"label": "kill-port-7072",
+			"command": "$p = (Get-NetTCPConnection -LocalPort 7072 -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty OwningProcess); if ($p) { Write-Host \"Killing stale func PID $p\"; Stop-Process -Id $p -Force -ErrorAction SilentlyContinue } else { Write-Host \"Port 7072 is free\" }",
+			"type": "shell",
+			"problemMatcher": [],
+			"presentation": { "reveal": "silent", "panel": "shared" },
+			"options": {
+				"shell": {
+					"executable": "pwsh",
+					"args": ["-NoProfile", "-Command"]
+				}
+			}
+		},
+		{
 			"type": "func",
 			"label": "func: host start",
 			"command": "host start",
 			"problemMatcher": "$func-node-watch",
 			"isBackground": true,
-			"dependsOn": "npm install (functions)",
+			"dependsOn": ["kill-port-7072", "npm install (functions)"],
 			"options": {
 				"cwd": "${workspaceFolder}/azure-functions"
 			}
@@ -27,6 +41,17 @@
 			"problemMatcher": [],
 			"options": {
 				"cwd": "${workspaceFolder}/azure-functions"
+			}
+		},
+		{
+			"type": "shell",
+			"label": "Start Local Dev (Azurite + Functions)",
+			"command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/start-local-dev.ps1 -Port 7072",
+			"problemMatcher": [],
+			"group": "build",
+			"presentation": { "reveal": "always", "panel": "dedicated" },
+			"options": {
+				"cwd": "${workspaceFolder}"
 			}
 		}
 	]
