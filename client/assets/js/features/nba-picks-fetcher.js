@@ -74,10 +74,11 @@
     }
 
     try {
-      // Primary: Front Door route → /nba/predictions/latest
-      // NbaRewrite rule strips /nba/ prefix so ACA receives /predictions/latest
-      const frontDoorBase = window.APP_CONFIG?.FUNCTIONS_BASE_URL || window.location.origin;
-      const primaryEndpoint = `${frontDoorBase}/nba/predictions/latest`;
+      // Primary: Same-origin proxy via Azure Functions → /api/model/nba/predictions/latest
+      // This avoids cross-origin CORS issues and does not depend on Front Door sport rewrites.
+      const frontDoorBase =
+        window.APP_CONFIG?.FUNCTIONS_BASE_URL || window.location.origin;
+      const primaryEndpoint = `${frontDoorBase}/api/model/nba/predictions/latest`;
 
       console.log(
         `[NBA-FETCHER] Fetching from weekly-lineup route: ${primaryEndpoint}`,
@@ -91,7 +92,7 @@
           `[NBA-FETCHER] Primary route failed (${response.status}), trying Container App fallback...`,
         );
 
-        // Fallback: direct ACA /predictions/latest
+        // Fallback: direct ACA /predictions/latest (may be blocked by CORS in browsers)
         const fallbackEndpoint = `${getNbaContainerEndpoint()}/predictions/latest`;
         console.log(`[NBA-FETCHER] Fallback endpoint: ${fallbackEndpoint}`);
 
@@ -107,13 +108,23 @@
       const data = await response.json();
 
       // Validate response structure - NBA v5 API returns { predictions: [...], games_found, run_id, etc. }
-      if (!data || (!data.predictions && !data.plays && !data.picks && !Array.isArray(data))) {
+      if (
+        !data ||
+        (!data.predictions &&
+          !data.plays &&
+          !data.picks &&
+          !Array.isArray(data))
+      ) {
         console.warn(
           "[NBA-FETCHER] Unexpected response format:",
           Object.keys(data || {}),
         );
       } else {
-        const playCount = data.predictions?.length || data.plays?.length || data.picks?.length || 0;
+        const playCount =
+          data.predictions?.length ||
+          data.plays?.length ||
+          data.picks?.length ||
+          0;
         console.log(
           `[NBA-FETCHER] ✅ Received ${playCount} predictions from API (run_id: ${data.run_id || "unknown"})`,
         );

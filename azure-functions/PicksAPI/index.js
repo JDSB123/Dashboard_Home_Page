@@ -133,7 +133,7 @@ function normalizePick(pick, forceSport = null) {
   const sport = normalizeSport(forceSport || pick.sport || pick.league) || "NBA";
 
   const locked = pick.locked === true || pick.locked === "true";
-  const lockedAt = locked ? (pick.lockedAt || pick.locked_at || now) : null;
+  const lockedAt = locked ? pick.lockedAt || pick.locked_at || now : null;
 
   return {
     id: pick.id || generatePickId({ ...pick, sport }),
@@ -244,7 +244,9 @@ function buildQuery(options = {}) {
   const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
 
   return {
-    query: `SELECT * FROM c ${whereClause} ORDER BY c.gameDate DESC, c.createdAt DESC OFFSET 0 LIMIT ${limit}`,
+    // NOTE: Avoid multi-field ORDER BY (requires a Cosmos DB composite index).
+    // We order by a single field and let callers do any additional tie-breaking if needed.
+    query: `SELECT * FROM c ${whereClause} ORDER BY c.gameDate DESC OFFSET 0 LIMIT ${limit}`,
     parameters,
   };
 }
