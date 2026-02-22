@@ -16,7 +16,7 @@
     "@azure/identity": "^4.0.0",
     "@azure/keyvault-secrets": "^4.7.0",
     "@azure/data-tables": "^13.2.2",
-    "@microsoft/signalr": "^7.0.0",
+    "@microsoft/signalr": "^10.0.0",
     "axios": "^1.13.4",
     "form-data": "^4.0.0"
   },
