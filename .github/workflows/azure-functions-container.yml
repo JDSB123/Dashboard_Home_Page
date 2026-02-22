@@ -8,6 +8,10 @@ on:
       - '.github/workflows/azure-functions-container.yml'
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   RESOURCE_GROUP: ${{ vars.AZURE_RESOURCE_GROUP || 'dashboard-gbsv-main-rg' }}
   LOCATION: ${{ vars.AZURE_LOCATION || 'eastus' }}
@@ -29,6 +33,21 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: azure-functions/package-lock.json
+
+      - name: Install dependencies (Functions)
+        working-directory: azure-functions
+        run: npm ci
+
+      - name: Run tests (Functions)
+        working-directory: azure-functions
+        run: npm test
 
       - name: Azure login
         uses: azure/login@v2

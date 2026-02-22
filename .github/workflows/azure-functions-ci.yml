@@ -1,14 +1,14 @@
 name: Azure Functions CI
 
 on:
-  push:
-    branches: [ main ]
-    paths:
-      - 'azure-functions/**'
   pull_request:
     paths:
       - 'azure-functions/**'
       - '.github/workflows/azure-functions-ci.yml'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   validate:

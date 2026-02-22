@@ -3,11 +3,6 @@ name: Deploy Full Stack (Front Door + Orchestrator + Static Web App)
 # NOTE: Push runs use job-level defaults to avoid missing workflow_dispatch inputs.
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'infra/**'
-      - '.github/workflows/deploy-all.yml'
   workflow_dispatch:
     inputs:
       environment:
@@ -43,6 +38,10 @@ on:
 permissions:
   id-token: write
   contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 env:
   # Azure resource names — shared across jobs
