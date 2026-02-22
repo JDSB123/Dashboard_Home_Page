@@ -162,11 +162,12 @@
                 }
             }
 
+            const esc = window.SharedUtils?.escapeHtml || ((s) => String(s ?? ''));
             statsBar.innerHTML = `
                 <div class="history-controls">
                     <label>Week:</label>
                     <select id="history-week-select" class="history-week-select">
-                        ${weeks.map(w => `<option value="${w}">${this._formatWeekLabel(w)}</option>`).join('')}
+                        ${weeks.map(w => `<option value="${esc(w)}">${esc(this._formatWeekLabel(w))}</option>`).join('')}
                     </select>
                     <span class="history-source-badge">☁️ Cloud Archive</span>
                 </div>
@@ -238,7 +239,8 @@
          * Render a single pick row
          */
         _renderPickRow(pick) {
-            const outcomeClass = pick.outcome ? `outcome-${pick.outcome}` : '';
+            const esc = window.SharedUtils?.escapeHtml || ((s) => String(s ?? ''));
+            const outcomeClass = pick.outcome ? `outcome-${esc(pick.outcome)}` : '';
             const outcomeIcon = this._getOutcomeIcon(pick.outcome);
 
             return `
@@ -246,11 +248,11 @@
                     <td class="col-datetime">${this._formatDateTime(pick.gameDate, pick.gameTime)}</td>
                     <td class="col-league center">${this._getLeagueLogo(pick.league)}</td>
                     <td class="col-matchup">${this._formatMatchup(pick)}</td>
-                    <td class="col-segment center">${pick.segment || 'Full'}</td>
-                    <td class="col-pick">${pick.pick || ''}</td>
-                    <td class="col-market center">${pick.odds || ''}</td>
-                    <td class="col-edge center">${pick.edge ? pick.edge + '%' : ''}</td>
-                    <td class="col-fire center">${pick.confidence || ''}</td>
+                    <td class="col-segment center">${esc(pick.segment || 'Full')}</td>
+                    <td class="col-pick">${esc(pick.pick || '')}</td>
+                    <td class="col-market center">${esc(pick.odds || '')}</td>
+                    <td class="col-edge center">${pick.edge ? esc(pick.edge) + '%' : ''}</td>
+                    <td class="col-fire center">${esc(pick.confidence || '')}</td>
                     <td class="col-track center">${outcomeIcon}</td>
                 </tr>
             `;
@@ -290,23 +292,25 @@
                 'NCAAM': '/assets/icons/league-ncaam.svg',
                 'NCAAF': '/assets/icons/league-ncaaf.svg'
             };
+            const esc = window.SharedUtils?.escapeHtml || ((s) => String(s ?? ''));
             const src = logos[league?.toUpperCase()] || '';
-            return src ? `<img src="${src}" alt="${league}" class="league-logo-sm" style="height:24px;">` : league || '';
+            return src ? `<img src="${src}" alt="${esc(league)}" class="league-logo-sm" style="height:24px;">` : esc(league || '');
         }
 
         /**
          * Format matchup display
          */
         _formatMatchup(pick) {
+            const esc = window.SharedUtils?.escapeHtml || ((s) => String(s ?? ''));
             const away = pick.awayTeam || pick.team1 || '';
             const home = pick.homeTeam || pick.team2 || '';
 
-            if (!away && !home) return pick.matchup || '';
+            if (!away && !home) return esc(pick.matchup || '');
 
             return `<div class="matchup-cell">
-                <span class="team-away">${away}</span>
+                <span class="team-away">${esc(away)}</span>
                 <span class="vs">@</span>
-                <span class="team-home">${home}</span>
+                <span class="team-home">${esc(home)}</span>
             </div>`;
         }
     }

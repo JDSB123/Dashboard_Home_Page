@@ -40,10 +40,13 @@ Usage:
     })
 """
 
+import logging
 import os
 from azure.cosmos import CosmosClient, PartitionKey, exceptions
 from typing import Dict, List, Optional
 from datetime import datetime
+
+logger = logging.getLogger(__name__)
 
 
 class CosmosPicksClient:
@@ -88,10 +91,10 @@ class CosmosPicksClient:
             result = picks_container.create_item(body=pick_doc)
             return result
         except exceptions.CosmosResourceExistsError:
-            print(f"Pick {pick_doc.get('id')} already exists")
+            logger.warning("Pick %s already exists", pick_doc.get("id"))
             return pick_doc
         except Exception as e:
-            print(f"Error inserting pick: {e}")
+            logger.error("Error inserting pick: %s", e)
             raise
 
     def insert_picks_batch(self, picks: List[Dict]) -> int:
@@ -104,32 +107,40 @@ class CosmosPicksClient:
                 self.insert_pick(pick)
                 inserted += 1
             except Exception as e:
-                print(f"Failed to insert pick {pick.get('id')}: {e}")
+                logger.error("Failed to insert pick %s: %s", pick.get("id"), e)
                 continue
 
         return inserted
 
+    # Fields that are safe to filter on (prevents field-name injection)
+    ALLOWED_FILTER_FIELDS = frozenset({
+        "result", "status", "date", "matchup", "pick", "segment",
+        "model", "sport", "season", "gameDate", "pnl", "locked",
+    })
+
     def query_picks(self, league: str, season: Optional[int] = None, **filters) -> List[Dict]:
-        """Query picks with filters"""
+        """Query picks with parameterized filters (SQL-injection safe)"""
         picks_container = self.database.get_container_client(self.picks_container)
 
-        # Build WHERE clause
-        where_clauses = [f"p.league = '{league}'"]
+        conditions = ["p.league = @league"]
+        parameters = [{"name": "@league", "value": league}]
 
         if season:
-            where_clauses.append(f"p.season = {season}")
+            conditions.append("p.season = @season")
+            parameters.append({"name": "@season", "value": season})
 
-        for key, value in filters.items():
-            if isinstance(value, str):
-                where_clauses.append(f"p.{key} = '{value}'")
-            else:
-                where_clauses.append(f"p.{key} = {value}")
+        for i, (key, value) in enumerate(filters.items()):
+            if key not in self.ALLOWED_FILTER_FIELDS:
+                raise ValueError(f"Invalid filter field: {key}")
+            param_name = f"@filter_{i}"
+            conditions.append(f"p.{key} = {param_name}")
+            parameters.append({"name": param_name, "value": value})
 
-        where_str = " AND ".join(where_clauses)
+        where_str = " AND ".join(conditions)
         query = f"SELECT * FROM c p WHERE {where_str} ORDER BY p.date DESC"
 
         results = list(
-            picks_container.query_items(query=query, parameters=[], partition_key=league)
+            picks_container.query_items(query=query, parameters=parameters, partition_key=league)
         )
 
         return results
@@ -151,20 +162,23 @@ class CosmosPicksClient:
             result = metrics_container.upsert_item(body=metrics_doc)
             return result
         except Exception as e:
-            print(f"Error upserting metrics: {e}")
+            logger.error("Error upserting metrics: %s", e)
             raise
 
     def get_metrics(self, league: str, season: Optional[int] = None) -> Optional[Dict]:
-        """Get metrics for a league/season"""
+        """Get metrics for a league/season (parameterized queries)"""
         metrics_container = self.database.get_container_client(self.metrics_container)
 
+        parameters = [{"name": "@league", "value": league}]
+
         if season:
-            query = f"SELECT * FROM c WHERE c.league = '{league}' AND c.season = {season}"
+            query = "SELECT * FROM c WHERE c.league = @league AND c.season = @season"
+            parameters.append({"name": "@season", "value": season})
         else:
-            query = f"SELECT * FROM c WHERE c.league = '{league}' ORDER BY c.timestamp DESC LIMIT 1"
+            query = "SELECT TOP 1 * FROM c WHERE c.league = @league ORDER BY c.timestamp DESC"
 
         results = list(
-            metrics_container.query_items(query=query, parameters=[], partition_key=league)
+            metrics_container.query_items(query=query, parameters=parameters, partition_key=league)
         )
 
         return results[0] if results else None
@@ -208,9 +222,9 @@ class CosmosPicksClient:
 
 
 if __name__ == "__main__":
-    # Test connection
+    logging.basicConfig(level=logging.INFO)
     client = CosmosPicksClient()
-    print(f"✓ Connected to {client.endpoint}")
-    print(f"✓ Database: {client.database_name}")
-    print(f"✓ Picks container: {client.picks_container}")
-    print(f"✓ Metrics container: {client.metrics_container}")
+    logger.info("Connected to %s", client.endpoint)
+    logger.info("Database: %s", client.database_name)
+    logger.info("Picks container: %s", client.picks_container)
+    logger.info("Metrics container: %s", client.metrics_container)

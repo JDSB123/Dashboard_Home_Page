@@ -72,9 +72,10 @@ describe("shared/http – CORS helpers", () => {
   describe("sendResponse", () => {
     test("sets context.res with status, body, and headers", () => {
       const context = { res: null };
-      sendResponse(context, {}, 200, { ok: true }, { "X-Custom": "1" }, { Vary: "Origin" });
+      sendResponse(context, 200, { ok: true }, { Vary: "Origin" }, { "X-Custom": "1" });
       expect(context.res.status).toBe(200);
       expect(context.res.body).toEqual({ ok: true });
+      expect(context.res.headers["Content-Type"]).toBe("application/json");
       expect(context.res.headers["X-Custom"]).toBe("1");
       expect(context.res.headers["Vary"]).toBe("Origin");
     });

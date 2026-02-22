@@ -3,11 +3,14 @@ API Clients Module
 Client implementations for various sports data APIs.
 """
 
+import logging
 import os
 import requests
 from typing import List, Dict, Optional
 from datetime import datetime, date
 import time
+
+logger = logging.getLogger(__name__)
 
 
 class SportsDataIOClient:
@@ -55,7 +58,7 @@ class SportsDataIOClient:
 
             return box_scores
         except Exception as e:
-            print(f"Error fetching NFL scores for {game_date}: {e}")
+            logger.error("Error fetching NFL scores for %s: %s", game_date, e)
             return []
 
     def get_nfl_scores_by_week(self, season: int, week: int) -> List[Dict]:
@@ -86,7 +89,7 @@ class SportsDataIOClient:
 
             return result
         except Exception as e:
-            print(f"Error fetching NFL scores for week {week}: {e}")
+            logger.error("Error fetching NFL scores for week %s: %s", week, e)
             return []
 
     def get_nfl_box_scores_by_week(self, season: int, week: int) -> List[Dict]:
@@ -163,7 +166,7 @@ class SportsDataIOClient:
 
             return result
         except Exception as e:
-            print(f"Error fetching NFL box scores for week {week}: {e}")
+            logger.error("Error fetching NFL box scores for week %s: %s", week, e)
             return []
 
     def get_nfl_box_score(self, game_id: int) -> Optional[Dict]:
@@ -185,7 +188,7 @@ class SportsDataIOClient:
 
             return self._parse_nfl_box_score_v3(data)
         except Exception as e:
-            print(f"Error fetching NFL box score for game {game_id}: {e}")
+            logger.error("Error fetching NFL box score for game %s: %s", game_id, e)
             return None
 
     def _parse_nfl_box_score_v3(self, data: Dict) -> Dict:
@@ -248,7 +251,7 @@ class SportsDataIOClient:
 
             return box_scores
         except Exception as e:
-            print(f"Error fetching NCAAF scores for season {season} week {week}: {e}")
+            logger.error("Error fetching NCAAF scores for season %s week %s: %s", season, week, e)
             return []
 
     def get_ncaaf_games_by_week(self, season: int, week: int) -> List[Dict]:
@@ -277,7 +280,7 @@ class SportsDataIOClient:
 
             return result
         except Exception as e:
-            print(f"Error fetching NCAAF games for week {week}: {e}")
+            logger.error("Error fetching NCAAF games for week %s: %s", week, e)
             return []
 
     def get_ncaaf_box_score(self, game_id: int) -> Optional[Dict]:
@@ -299,7 +302,7 @@ class SportsDataIOClient:
 
             return self._parse_ncaaf_box_score(data)
         except Exception as e:
-            print(f"Error fetching NCAAF box score for game {game_id}: {e}")
+            logger.error("Error fetching NCAAF box score for game %s: %s", game_id, e)
             return None
 
     def _parse_ncaaf_game_with_quarters(self, game: Dict) -> Dict:
@@ -521,7 +524,7 @@ class APIBasketballClient:
 
             return box_scores
         except Exception as e:
-            print(f"Error fetching NBA games for {game_date}: {e}")
+            logger.error("Error fetching NBA games for %s: %s", game_date, e)
             return []
 
     def get_nba_box_score(self, game_id: int) -> Optional[Dict]:
@@ -538,7 +541,7 @@ class APIBasketballClient:
                 return self._parse_nba_box_score(games[0])
             return None
         except Exception as e:
-            print(f"Error fetching NBA box score for game {game_id}: {e}")
+            logger.error("Error fetching NBA box score for game %s: %s", game_id, e)
             return None
 
     def get_ncaam_games(self, game_date: str) -> List[Dict]:
@@ -564,7 +567,7 @@ class APIBasketballClient:
 
             return box_scores
         except Exception as e:
-            print(f"Error fetching NCAAM games for {game_date}: {e}")
+            logger.error("Error fetching NCAAM games for %s: %s", game_date, e)
             return []
 
     def _get_season(self, game_date: str) -> str:

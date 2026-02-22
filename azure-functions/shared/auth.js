@@ -42,6 +42,17 @@ function validateSharedKey(req, context, options = {}) {
       .toLowerCase() === "false";
 
   if (disableAuth) {
+    // Block auth bypass in production to prevent misconfiguration
+    const env = (process.env.ENVIRONMENT || process.env.NODE_ENV || "").toLowerCase();
+    if (env === "production") {
+      if (context?.log?.warn) {
+        context.log.warn(`[Auth] Auth bypass attempted in production (${requireEnv}=false). Denied.`);
+      }
+      return { ok: false, reason: "Auth bypass not allowed in production" };
+    }
+    if (context?.log?.warn) {
+      context.log.warn(`[Auth] Auth bypassed for endpoint (${requireEnv}=false)`);
+    }
     return { ok: true, bypass: true };
   }
 

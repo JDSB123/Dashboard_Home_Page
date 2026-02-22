@@ -15,6 +15,9 @@
     let activeLeague = 'all';
     let expandedGames = new Set();
 
+    // XSS-safe HTML escaping
+    const esc = window.SharedUtils?.escapeHtml || ((s) => String(s ?? ''));
+
     // ===== INITIALIZATION =====
     document.addEventListener('DOMContentLoaded', initDailySlate);
 
@@ -160,41 +163,41 @@
         const awayLogo = getTeamLogoUrl(game.awayTeam.abbr, game.league);
         const homeLogo = getTeamLogoUrl(game.homeTeam.abbr, game.league);
 
-        const awayRank = game.awayTeam.rank ? `<span class="team-ranking">#${game.awayTeam.rank}</span>` : '';
-        const homeRank = game.homeTeam.rank ? `<span class="team-ranking">#${game.homeTeam.rank}</span>` : '';
+        const awayRank = game.awayTeam.rank ? `<span class="team-ranking">#${esc(game.awayTeam.rank)}</span>` : '';
+        const homeRank = game.homeTeam.rank ? `<span class="team-ranking">#${esc(game.homeTeam.rank)}</span>` : '';
 
         return `
-            <tr class="zebra-row ${game.isLive ? 'live-game' : ''}" data-game-id="${game.id}">
+            <tr class="zebra-row ${game.isLive ? 'live-game' : ''}" data-game-id="${esc(game.id)}">
                 <td>
                     <div class="datetime-cell">
                         ${game.isLive
                             ? `<span class="live-badge"><span class="live-dot"></span>LIVE</span>
-                               <span class="cell-time">${game.liveInfo.period} ${game.liveInfo.clock}</span>`
-                            : `<span class="cell-date">${game.date}</span>
-                               <span class="cell-time">${game.time}</span>`
+                               <span class="cell-time">${esc(game.liveInfo.period)} ${esc(game.liveInfo.clock)}</span>`
+                            : `<span class="cell-date">${esc(game.date)}</span>
+                               <span class="cell-time">${esc(game.time)}</span>`
                         }
                     </div>
                 </td>
                 <td>
                     <div class="matchup-cell">
                         <div class="team-line">
-                            <img src="${awayLogo}" class="team-logo" alt="${game.awayTeam.abbr}" onerror="this.style.display='none'">
+                            <img src="${awayLogo}" class="team-logo" alt="${esc(game.awayTeam.abbr)}" onerror="this.style.display='none'">
                             <div class="team-name-wrapper">
                                 ${awayRank}
-                                <span class="team-name-full">${game.awayTeam.name}</span>
-                                <span class="team-record">${game.awayTeam.record}</span>
+                                <span class="team-name-full">${esc(game.awayTeam.name)}</span>
+                                <span class="team-record">${esc(game.awayTeam.record)}</span>
                             </div>
-                            ${game.isLive ? `<span class="live-score">${game.liveInfo.awayScore}</span>` : ''}
+                            ${game.isLive ? `<span class="live-score">${esc(game.liveInfo.awayScore)}</span>` : ''}
                         </div>
                         <span class="vs-divider">@</span>
                         <div class="team-line">
-                            <img src="${homeLogo}" class="team-logo" alt="${game.homeTeam.abbr}" onerror="this.style.display='none'">
+                            <img src="${homeLogo}" class="team-logo" alt="${esc(game.homeTeam.abbr)}" onerror="this.style.display='none'">
                             <div class="team-name-wrapper">
                                 ${homeRank}
-                                <span class="team-name-full">${game.homeTeam.name}</span>
-                                <span class="team-record">${game.homeTeam.record}</span>
+                                <span class="team-name-full">${esc(game.homeTeam.name)}</span>
+                                <span class="team-record">${esc(game.homeTeam.record)}</span>
                             </div>
-                            ${game.isLive ? `<span class="live-score">${game.liveInfo.homeScore}</span>` : ''}
+                            ${game.isLive ? `<span class="live-score">${esc(game.liveInfo.homeScore)}</span>` : ''}
                         </div>
                     </div>
                 </td>
@@ -466,14 +469,14 @@
         body.innerHTML = betslip.map((pick, idx) => `
             <div class="betslip-item" data-index="${idx}">
                 <div class="betslip-item-header">
-                    <span class="betslip-pick">${formatPickLabel(pick)}</span>
+                    <span class="betslip-pick">${esc(formatPickLabel(pick))}</span>
                     <button class="betslip-remove" data-index="${idx}">✕</button>
                 </div>
-                <div class="betslip-matchup">${pick.matchup} • ${pick.segment.toUpperCase()}</div>
-                <div class="betslip-odds">${pick.odds}</div>
+                <div class="betslip-matchup">${esc(pick.matchup)} • ${esc(pick.segment.toUpperCase())}</div>
+                <div class="betslip-odds">${esc(pick.odds)}</div>
                 <div class="betslip-wager">
                     <span class="wager-label">Risk $</span>
-                    <input type="number" class="wager-input" data-index="${idx}" value="${pick.risk || ''}" placeholder="0" min="0">
+                    <input type="number" class="wager-input" data-index="${idx}" value="${esc(pick.risk || '')}" placeholder="0" min="0">
                 </div>
             </div>
         `).join('');

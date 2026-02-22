@@ -1,0 +1,13 @@
+{
+  "name": "gbsv-dashboard-client",
+  "version": "35.0.0",
+  "private": true,
+  "description": "Green Bier Sport Ventures Dashboard - Client Build",
+  "scripts": {
+    "build": "node build.mjs",
+    "build:watch": "node build.mjs --watch"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0"
+  }
+}

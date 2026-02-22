@@ -142,10 +142,13 @@
       if (!authContainer) return;
 
       if (this.isAuthenticated && this.user) {
+        const esc = window.SharedUtils?.escapeHtml || ((s) => String(s ?? ''));
+        const picUrl = this.user.picture ? esc(this.user.picture) : '';
+        const displayName = esc(this.user.name || this.user.email);
         authContainer.innerHTML = `
                     <div class="user-profile">
-                        ${this.user.picture ? `<img src="${this.user.picture}" alt="" class="user-avatar">` : ""}
-                        <span class="user-name">${this.user.name || this.user.email}</span>
+                        ${picUrl ? `<img src="${picUrl}" alt="" class="user-avatar">` : ""}
+                        <span class="user-name">${displayName}</span>
                         <button class="btn-logout" id="btn-logout">Sign Out</button>
                     </div>
                 `;
@@ -174,6 +177,7 @@
       const modal = document.createElement("div");
       modal.id = "auth-modal";
       modal.className = "auth-modal-overlay";
+      const esc = window.SharedUtils?.escapeHtml || ((s) => String(s ?? ''));
       modal.innerHTML = `
                 <div class="auth-modal">
                     <div class="auth-modal-header">
@@ -181,7 +185,7 @@
                         <h2>Welcome to GBSV</h2>
                     </div>
                     <div class="auth-modal-body">
-                        <p>${message}</p>
+                        <p>${esc(message)}</p>
                     </div>
                     <div class="auth-modal-footer">
                         <button class="btn btn-secondary" id="auth-cancel">Cancel</button>

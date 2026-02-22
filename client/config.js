@@ -33,6 +33,8 @@ window.APP_CONFIG = {
     "https://nbagbsvv5-aca.blackglacier-f1574637.centralus.azurecontainerapps.io",
   NCAAM_API_URL:
     "https://ca-ncaamgbsvv20.braveriver-ed513377.eastus2.azurecontainerapps.io",
+  NHL_API_URL:
+    "https://nhl-gbsv-v1-az-aca.lemonsand-51e2acaf.eastus2.azurecontainerapps.io",
 
   // Static Assets (Front Door / CDN)
   LOGO_BASE_URL: "https://www.greenbiersportventures.com/team-logos", // Served via Front Door/custom domain

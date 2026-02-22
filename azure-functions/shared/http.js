@@ -46,10 +46,11 @@ function buildCorsHeaders(req, allowedOrigins, options = {}) {
   return headers;
 }
 
-function sendResponse(context, req, status, body, extraHeaders = {}, corsHeaders = {}) {
+function sendResponse(context, status, body, corsHeaders = {}, extraHeaders = {}) {
   context.res = {
     status,
     headers: {
+      "Content-Type": "application/json",
       ...corsHeaders,
       ...extraHeaders,
     },
@@ -57,8 +58,30 @@ function sendResponse(context, req, status, body, extraHeaders = {}, corsHeaders
   };
 }
 
+/**
+ * Validate the Origin header for mutating requests (POST/PATCH/DELETE).
+ * Returns true if origin is allowed or absent (server-to-server calls).
+ */
+function validateOrigin(req, allowedOrigins) {
+  const method = (req.method || "").toUpperCase();
+  // Only enforce on mutating requests
+  if (method === "GET" || method === "HEAD" || method === "OPTIONS") {
+    return { ok: true };
+  }
+  const origin = req.headers?.origin;
+  // No Origin header = same-origin or server-to-server (allow)
+  if (!origin) {
+    return { ok: true };
+  }
+  if (allowedOrigins.includes("*") || allowedOrigins.includes(origin)) {
+    return { ok: true };
+  }
+  return { ok: false, reason: `Origin ${origin} not allowed` };
+}
+
 module.exports = {
   getAllowedOrigins,
   buildCorsHeaders,
   sendResponse,
+  validateOrigin,
 };

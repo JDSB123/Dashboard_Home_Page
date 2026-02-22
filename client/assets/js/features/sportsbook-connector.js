@@ -38,41 +38,6 @@
         _registerAdapters() {
             // Each adapter knows how to connect and fetch bets from a specific sportsbook
             this.adapters = {
-                'draftkings': {
-                    name: 'DraftKings',
-                    logo: '/assets/sportsbooks/draftkings.png',
-                    authType: 'oauth', // or 'credentials' or 'api_key'
-                    fetchBets: (auth) => this._fetchDraftKingsBets(auth),
-                    parseBet: (raw) => this._parseDraftKingsBet(raw)
-                },
-                'fanduel': {
-                    name: 'FanDuel',
-                    logo: '/assets/sportsbooks/fanduel.png',
-                    authType: 'oauth',
-                    fetchBets: (auth) => this._fetchFanDuelBets(auth),
-                    parseBet: (raw) => this._parseFanDuelBet(raw)
-                },
-                'betmgm': {
-                    name: 'BetMGM',
-                    logo: '/assets/sportsbooks/betmgm.png',
-                    authType: 'credentials',
-                    fetchBets: (auth) => this._fetchBetMGMBets(auth),
-                    parseBet: (raw) => this._parseBetMGMBet(raw)
-                },
-                'caesars': {
-                    name: 'Caesars',
-                    logo: '/assets/sportsbooks/caesars.png',
-                    authType: 'credentials',
-                    fetchBets: (auth) => this._fetchCaesarsBets(auth),
-                    parseBet: (raw) => this._parseCaesarsBet(raw)
-                },
-                'pointsbet': {
-                    name: 'PointsBet',
-                    logo: '/assets/sportsbooks/pointsbet.png',
-                    authType: 'credentials',
-                    fetchBets: (auth) => this._fetchPointsBetBets(auth),
-                    parseBet: (raw) => this._parsePointsBetBet(raw)
-                },
                 'action_network': {
                     name: 'Action Network',
                     logo: '/assets/sportsbooks/actionnetwork.png',
@@ -87,16 +52,25 @@
          * Load saved sportsbook connections from localStorage
          */
         _loadConnections() {
+            const TOKEN_MAX_AGE_MS = 24 * 60 * 60 * 1000; // 24 hours
             try {
                 const saved = localStorage.getItem('gbsv_sportsbook_connections');
                 if (saved) {
                     const connections = JSON.parse(saved);
                     connections.forEach(conn => {
+                        // Reject stale tokens older than TOKEN_MAX_AGE_MS
+                        const connectedAt = conn.connectedAt ? new Date(conn.connectedAt).getTime() : 0;
+                        if (Date.now() - connectedAt > TOKEN_MAX_AGE_MS) {
+                            console.warn(`[SPORTSBOOK] Expired token for ${conn.bookId}, removing`);
+                            return; // skip this connection
+                        }
                         this.connectedBooks.set(conn.bookId, {
                             ...conn,
                             lastSync: conn.lastSync ? new Date(conn.lastSync) : null
                         });
                     });
+                    // Persist cleaned list (without expired entries)
+                    this._saveConnections();
                 }
             } catch (e) {
                 console.error('Failed to load sportsbook connections:', e);
@@ -311,7 +285,6 @@
         }
 
         // ===== ADAPTER IMPLEMENTATIONS =====
-        // These would be fleshed out with actual API integrations
 
         async _fetchActionNetworkBets(auth) {
             // Action Network sync via their API
@@ -335,8 +308,6 @@
                 gameTime: raw.game_time
             };
         }
-
-        // Additional parsers would follow similar patterns...
     }
 
     // Create singleton
