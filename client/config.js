@@ -71,7 +71,12 @@ window.GBSV_CONFIG = {
 
 // ── Local Development Override ──────────────────────────────────────────
 // When served from localhost / 127.0.0.1 (e.g. VS Code Live Server),
-// point API calls at the local Azure Functions host so CORS is not an issue.
+// keep using production APIs by default.
+//
+// If you want to run the full stack locally (Azure Functions on your machine),
+// opt-in using ONE of:
+//   - URL param: ?localApi=1
+//   - localStorage: localStorage.setItem('LOCAL_API', '1')
 (function () {
   if (typeof window === "undefined") return;
   const loc = window.location;
@@ -80,6 +85,20 @@ window.GBSV_CONFIG = {
     loc.hostname === "127.0.0.1" ||
     loc.hostname === "0.0.0.0";
   if (!isLocal) return;
+
+  window.APP_CONFIG.IS_LOCAL_DEV = true;
+
+  const urlParams = new URLSearchParams(loc.search || "");
+  const localApiEnabled =
+    urlParams.get("localApi") === "1" ||
+    urlParams.get("localApi") === "true" ||
+    localStorage.getItem("LOCAL_API") === "1" ||
+    localStorage.getItem("LOCAL_API") === "true";
+
+  if (!localApiEnabled) {
+    // Production APIs are CORS-allowed for localhost dev now; do not force localhost:7072.
+    return;
+  }
 
   // Default local Functions port configured in local.settings.json
   const LOCAL_API = "http://localhost:7072/api";
