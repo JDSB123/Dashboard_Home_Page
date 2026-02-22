@@ -19,7 +19,8 @@
 
   const el = {
     tbody: () => document.getElementById("picks-tbody"),
-    lastRefreshed: () => document.querySelector("#ft-last-refreshed .sync-time"),
+    lastRefreshed: () =>
+      document.querySelector("#ft-last-refreshed .sync-time"),
   };
 
   const nowIso = () => new Date().toISOString();
@@ -58,7 +59,9 @@
     const home = slug(pick.homeTeam);
     const pickType = slug(pick.pickType);
     const segment = slug(pick.segment);
-    const direction = slug(pick.pickDirection || pick.pickTeam || pick.pick || "");
+    const direction = slug(
+      pick.pickDirection || pick.pickTeam || pick.pick || "",
+    );
     const line = slug(pick.line);
 
     const base = `${sport}-${date}-${away}-at-${home}-${pickType}-${segment}-${direction}-${line}`;
@@ -93,7 +96,10 @@
       return;
     }
 
-    target.textContent = d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    target.textContent = d.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
   };
 
   const getLeagueLogo = (sport) => {
@@ -117,7 +123,11 @@
 
     if (type === "total") {
       const dir = safeText(pick.pickDirection).toUpperCase();
-      const label = dir.includes("UNDER") ? "Under" : dir.includes("OVER") ? "Over" : dir;
+      const label = dir.includes("UNDER")
+        ? "Under"
+        : dir.includes("OVER")
+          ? "Over"
+          : dir;
       return `${label} ${line}`.trim();
     }
 
@@ -158,7 +168,10 @@
     for (const pick of picks) {
       const sport = normalizeSport(pick.sport || pick.league);
       const leagueLogo = getLeagueLogo(sport);
-      const edge = typeof pick.edge === "number" ? pick.edge : parseFloat(String(pick.edge || "").replace("%", "")) || 0;
+      const edge =
+        typeof pick.edge === "number"
+          ? pick.edge
+          : parseFloat(String(pick.edge || "").replace("%", "")) || 0;
       const isLocked = pick.locked === true;
 
       const tr = document.createElement("tr");
@@ -239,7 +252,9 @@
 
   const toCosmosPick = (pick) => {
     const sport = normalizeSport(pick.sport || pick.league);
-    const gameDate = (pick.gameDate || pick.date || nowIso()).toString().slice(0, 10);
+    const gameDate = (pick.gameDate || pick.date || nowIso())
+      .toString()
+      .slice(0, 10);
 
     const normalized = {
       id: pick.id || computePickId(pick),
@@ -252,7 +267,10 @@
       pickTeam: safeText(pick.pickTeam || ""),
       line: safeText(pick.line || ""),
       odds: safeText(pick.odds || ""),
-      edge: typeof pick.edge === "number" ? pick.edge : parseFloat(String(pick.edge || "").replace("%", "")) || 0,
+      edge:
+        typeof pick.edge === "number"
+          ? pick.edge
+          : parseFloat(String(pick.edge || "").replace("%", "")) || 0,
       segment: safeText(pick.segment || "FG"),
       sportsbook: safeText(pick.sportsbook || pick.book || "Model"),
       gameDate,
@@ -289,7 +307,10 @@
 
     try {
       await window.PicksService.create(payload);
-      showToast(`Saved ${payload.length} picks to Dashboard (unlocked)`, "success");
+      showToast(
+        `Saved ${payload.length} picks to Dashboard (unlocked)`,
+        "success",
+      );
     } catch (e) {
       showToast(`Failed to save picks: ${e.message || e}`, "error");
     }
@@ -317,7 +338,12 @@
       renderRows(state.activePicks);
       persistWeeklyLineupCache(state.activePicks);
 
-      showToast(locked ? "Locked in — now on Dashboard" : "Unlocked — removed from Dashboard", "success");
+      showToast(
+        locked
+          ? "Locked in — now on Dashboard"
+          : "Unlocked — removed from Dashboard",
+        "success",
+      );
     } catch (e) {
       showToast(`Lock update failed: ${e.message || e}`, "error");
     }
@@ -359,13 +385,17 @@
 
     try {
       const date = getDateParamForFetchers();
-      const result = await window.UnifiedPicksFetcher.fetchPicks(league, date, { skipCache: true });
+      const result = await window.UnifiedPicksFetcher.fetchPicks(league, date, {
+        skipCache: true,
+      });
 
       const picks = Array.isArray(result?.picks) ? result.picks : [];
       const enriched = picks.map((p) => {
         const withId = { ...p };
         withId.sport = normalizeSport(withId.sport || withId.league);
-        withId.gameDate = (withId.gameDate || withId.date || nowIso()).toString().slice(0, 10);
+        withId.gameDate = (withId.gameDate || withId.date || nowIso())
+          .toString()
+          .slice(0, 10);
         withId.id = withId.id || computePickId(withId);
         withId.locked = withId.locked === true;
         return withId;

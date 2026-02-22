@@ -29,8 +29,10 @@ window.APP_CONFIG = {
 
   // Model API Endpoints — sport models removed; endpoints live in their own repos
   // Direct Container App fallbacks (used only if Front Door route fails)
-  NBA_API_URL: "https://nbagbsvv5-aca.blackglacier-f1574637.centralus.azurecontainerapps.io",
-  NCAAM_API_URL: "https://ca-ncaamgbsvv20.braveriver-ed513377.eastus2.azurecontainerapps.io",
+  NBA_API_URL:
+    "https://nbagbsvv5-aca.blackglacier-f1574637.centralus.azurecontainerapps.io",
+  NCAAM_API_URL:
+    "https://ca-ncaamgbsvv20.braveriver-ed513377.eastus2.azurecontainerapps.io",
 
   // Static Assets (Front Door / CDN)
   LOGO_BASE_URL: "https://www.greenbiersportventures.com/team-logos", // Served via Front Door/custom domain
@@ -66,6 +68,32 @@ window.GBSV_CONFIG = {
   // Cosmos DB picks storage (accessed via Azure Functions)
   PICKS_API_ENDPOINT: "https://www.greenbiersportventures.com/nba/picks",
 };
+
+// ── Local Development Override ──────────────────────────────────────────
+// When served from localhost / 127.0.0.1 (e.g. VS Code Live Server),
+// point API calls at the local Azure Functions host so CORS is not an issue.
+(function () {
+  if (typeof window === "undefined") return;
+  const loc = window.location;
+  const isLocal =
+    loc.hostname === "localhost" ||
+    loc.hostname === "127.0.0.1" ||
+    loc.hostname === "0.0.0.0";
+  if (!isLocal) return;
+
+  // Default local Functions port configured in local.settings.json
+  const LOCAL_API = "http://localhost:7072/api";
+  const LOCAL_BASE = "http://localhost:7072";
+
+  window.APP_CONFIG.ENVIRONMENT = "development";
+  window.APP_CONFIG.API_BASE_URL = LOCAL_API;
+  window.APP_CONFIG.ORCHESTRATOR_URL = LOCAL_API;
+  window.APP_CONFIG.FUNCTIONS_BASE_URL = LOCAL_BASE;
+  window.APP_CONFIG.API_BASE_FALLBACK = LOCAL_API;
+
+  window.GBSV_CONFIG.FUNCTIONS_URL = LOCAL_BASE;
+  window.GBSV_CONFIG.PICKS_API_ENDPOINT = LOCAL_BASE + "/nba/picks";
+})();
 
 // Export for module usage if needed
 if (typeof module !== "undefined" && module.exports) {

@@ -479,7 +479,7 @@ function Deploy-OrchestratorContainerApp {
         "NCAAM_API_URL=$($Config.models.ncaam.endpoint)",
         "NFL_API_URL=$($Config.models.nfl.endpoint)",
         "NCAAF_API_URL=$($Config.models.ncaaf.endpoint)",
-        "CORS_ALLOWED_ORIGINS=$dashboardUrl",
+        "CORS_ALLOWED_ORIGINS=$dashboardUrl,http://127.0.0.1:5500,http://localhost:5500",
         "ENVIRONMENT=$($Config.environment)"
     )
 

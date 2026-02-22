@@ -399,7 +399,7 @@ module.exports = async function (context, req) {
     if (req.method === "POST" && action !== "archive") {
       const body = req.body;
       const picks = Array.isArray(body) ? body : body.picks || [body];
-      
+
       if (picks.length === 0) {
         sendResponse(context, 200, { success: true, created: 0, picks: [] }, corsHeaders);
         return;
