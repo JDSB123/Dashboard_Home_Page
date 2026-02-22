@@ -157,7 +157,8 @@ az functionapp config appsettings set \
     "NBA_API_URL=https://www.greenbiersportventures.com/api/nba" \
     "NCAAM_API_URL=https://www.greenbiersportventures.com/api/ncaam" \
     "NFL_API_URL=https://www.greenbiersportventures.com/api/nfl" \
-    "NCAAF_API_URL=https://www.greenbiersportventures.com/api/ncaaf"
+    "NCAAF_API_URL=https://www.greenbiersportventures.com/api/ncaaf" \
+    "REQUIRE_PICKS_WRITE_KEY=false"
 
 # Enable CORS
 echo "Configuring CORS..."
