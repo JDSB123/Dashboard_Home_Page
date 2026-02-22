@@ -62,6 +62,25 @@ python -m http.server 8080
 
 Then open `http://localhost:8080/`.
 
+### Backend (Functions) local dev
+
+The Azure Functions app lives in `azure-functions/`. Quickstart:
+
+```powershell
+# 1) Start Azurite (local storage emulator)
+npx azurite --silent --location ".azurite" --debug ".azurite\\debug.log"
+
+# 2) Seed required local tables (one-time)
+cd azure-functions
+npm install
+npm run dev:seed-tables
+
+# 3) Start Functions (port configured in local.settings.json, e.g., 7072)
+func start
+```
+
+Endpoints (examples): `http://localhost:7072/api/picks/NBA`, `http://localhost:7072/api/health`.
+
 ## Documentation
 
 See [docs/README.md](docs/README.md) for the full documentation index.

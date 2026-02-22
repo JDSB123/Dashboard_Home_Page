@@ -53,7 +53,7 @@ resource picksContainer 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/cont
       id: 'picks'
       partitionKey: {
         paths: [
-          '/league'
+          '/sport'
         ]
         kind: 'Hash'
       }
@@ -94,7 +94,7 @@ resource metricsContainer 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/co
       id: 'metrics'
       partitionKey: {
         paths: [
-          '/league'
+          '/sport'
         ]
         kind: 'Hash'
       }

@@ -41,7 +41,7 @@ const { validateSharedKey } = require("../shared/auth");
  * ════════════════════════════════════════════════════════════════════════════
  * COSMOS DB STRUCTURE
  * ════════════════════════════════════════════════════════════════════════════
- * Database: gbsv-picks
+ * Database: picks-db
  * Container: picks
  * Partition Key: /sport (NBA, NFL, NCAAM, NCAAF)
  *
@@ -88,7 +88,7 @@ async function getContainer() {
 
   const endpoint = process.env.COSMOS_ENDPOINT;
   const key = process.env.COSMOS_KEY;
-  const databaseId = process.env.COSMOS_DATABASE || "gbsv-picks";
+  const databaseId = process.env.COSMOS_DATABASE || "picks-db";
   const containerId = process.env.COSMOS_CONTAINER || "picks";
 
   if (!endpoint || !key) {
