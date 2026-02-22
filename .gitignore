@@ -42,6 +42,7 @@ nul
 
 # Azurite local emulator state
 __azurite_db*.json
+.azurite/
 
 # Generated datasets / caches (do not commit)
 output/

@@ -81,6 +81,14 @@ func start
 
 Endpoints (examples): `http://localhost:7072/api/picks/NBA`, `http://localhost:7072/api/health`.
 
+Or, use the one-command starter (Windows PowerShell):
+
+```powershell
+pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/start-local-dev.ps1 -Port 7072
+```
+
+Tip: Add a VS Code task to run the script from the Command Palette.
+
 ## Documentation
 
 See [docs/README.md](docs/README.md) for the full documentation index.
