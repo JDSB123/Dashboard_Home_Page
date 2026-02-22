@@ -299,10 +299,13 @@
     window.AuthClient = new AuthClient();
 
     // Init on DOM ready
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => window.AuthClient.init());
-    } else {
-        window.AuthClient.init();
+    const authEnabled = window.APP_CONFIG?.AUTH_ENABLED === true;
+    if (authEnabled) {
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => window.AuthClient.init());
+        } else {
+            window.AuthClient.init();
+        }
     }
 
 })();

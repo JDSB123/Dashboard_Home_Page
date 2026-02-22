@@ -858,6 +858,11 @@
       return [];
     }
 
+    // Ensure team variant registry is loaded (362 NCAAM + 30 NBA teams)
+    if (window.PickStandardizer.loadTeamVariants) {
+      await window.PickStandardizer.loadTeamVariants();
+    }
+
     // Set unit multiplier
     window.PickStandardizer.setUnitMultiplier(getUnitMultiplier());
 

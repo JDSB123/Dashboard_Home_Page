@@ -282,6 +282,63 @@
         'kennesaw state': 'Kennesaw State Owls',
     };
 
+    // ═══════════════════════════════════════════════════════════════════
+    // TEAM VARIANT REGISTRY — loaded from JSON (362 NCAAM + 30 NBA teams)
+    // Builds a lookup: lowercase name/location/abbreviation → canonical name
+    // ═══════════════════════════════════════════════════════════════════
+    let _variantsLoaded = false;
+
+    async function loadTeamVariants() {
+        if (_variantsLoaded) return;
+        try {
+            const [ncaamRes, nbaRes] = await Promise.all([
+                fetch('assets/data/team-variants/ncaam_team_variants.json').then(r => r.ok ? r.json() : null).catch(() => null),
+                fetch('assets/data/team-variants/nba_team_variants.json').then(r => r.ok ? r.json() : null).catch(() => null),
+            ]);
+
+            if (ncaamRes) {
+                let count = 0;
+                for (const [abbr, team] of Object.entries(ncaamRes)) {
+                    const canonical = team.name;
+                    const loc = (team.location || '').toLowerCase().trim();
+                    const nick = (team.nickname || '').toLowerCase().trim();
+                    if (loc && !TEAM_ALIASES[loc]) TEAM_ALIASES[loc] = canonical;
+                    if (abbr && !TEAM_ALIASES[abbr.toLowerCase()]) TEAM_ALIASES[abbr.toLowerCase()] = canonical;
+                    for (const alt of (team.abbreviations || [])) {
+                        const a = alt.toLowerCase().trim();
+                        if (a.length > 2 && !TEAM_ALIASES[a]) TEAM_ALIASES[a] = canonical;
+                    }
+                    if (nick && nick.length > 5 && !TEAM_ALIASES[nick]) TEAM_ALIASES[nick] = canonical;
+                    count++;
+                }
+                console.log(`✅ Loaded ${count} NCAAM team variants into standardizer`);
+            }
+
+            if (nbaRes) {
+                let count = 0;
+                for (const [abbr, team] of Object.entries(nbaRes)) {
+                    const canonical = team.name || team.fullName;
+                    const loc = (team.location || '').toLowerCase().trim();
+                    if (loc && !TEAM_ALIASES[loc]) TEAM_ALIASES[loc] = canonical;
+                    if (abbr && !TEAM_ALIASES[abbr.toLowerCase()]) TEAM_ALIASES[abbr.toLowerCase()] = canonical;
+                    for (const alt of (team.abbreviations || [])) {
+                        const a = alt.toLowerCase().trim();
+                        if (a.length > 1 && !TEAM_ALIASES[a]) TEAM_ALIASES[a] = canonical;
+                    }
+                    count++;
+                }
+                console.log(`✅ Loaded ${count} NBA team variants into standardizer`);
+            }
+
+            _variantsLoaded = true;
+        } catch (e) {
+            console.warn('[PickStandardizer] Could not load team variants:', e);
+        }
+    }
+
+    // Kick off loading immediately
+    loadTeamVariants();
+
     /**
      * Main entry point - detects format and parses accordingly
      */
@@ -314,6 +371,43 @@
 
         // Otherwise treat as text
         return parseTextPicks(input);
+    }
+
+    // ═══════════════════════════════════════════════════════════════════
+    // Bet history support (minimal)
+    // The UI references these helpers; keep them defined to avoid runtime
+    // ReferenceErrors even when bet-history parsing isn't used.
+    // ═══════════════════════════════════════════════════════════════════
+
+    function isBetHistoryFormat(text) {
+        if (typeof text !== 'string') return false;
+        const hasMoney = /\$[\d,]+/.test(text);
+        const hasTimestamp = /\b(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\b\s+\d{1,2},?\s*\d{4}/i.test(text);
+        const hasOddsSignals = /\bML\b/i.test(text) || /[+-]\d{3,4}/.test(text);
+        return hasMoney && (hasTimestamp || hasOddsSignals);
+    }
+
+    function parseBetHistory(text) {
+        if (typeof text !== 'string') return [];
+
+        // Strip common bet-history timestamp prefixes and $risk/$win lines,
+        // then fall back to the existing flexible text parser.
+        const cleanedLines = text
+            .split('\n')
+            .map(l => l.trim())
+            .filter(Boolean)
+            .map((line) => line
+                .replace(/^(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\s+\d{1,2},?\s*\d{4}\s+\d{1,2}:\d{2}\s*(?:am|pm)?\s*/i, '')
+                .trim()
+            )
+            .filter((line) => !/^\$[\d,]+/.test(line));
+
+        return parseTextPicks(cleanedLines.join('\n'));
+    }
+
+    function parseBetHistoryLeg(line, defaultSport = 'NBA', currentGame = null) {
+        if (typeof line !== 'string') return null;
+        return parseFlexibleLine(line, defaultSport, currentGame);
     }
 
     /**
@@ -1751,16 +1845,20 @@
         parseHTML: parseHTMLPicks,
         parseGameLines: parseSportsbookGameLines,
         parseText: parseTextPicks,
+        parseBetHistory: parseBetHistory,
+        loadTeamVariants: loadTeamVariants,
         toDisplayFormat: picksToDisplayFormat,
         toCSV: picksToCSV,
         setUnitMultiplier: setUnitMultiplier,
         resolveTeamName: resolveTeamName,
-        
+
         // For testing
         _parseTextLine: parseTextLine,
         _parseLineAndOdds: parseLineAndOdds,
-        _parseGamePanel: parseGamePanel
+        _parseGamePanel: parseGamePanel,
+        _isBetHistoryFormat: isBetHistoryFormat,
+        _parseBetHistoryLeg: parseBetHistoryLeg
     };
 
-    console.log('✅ PickStandardizer v3.0 loaded');
+    console.log('✅ PickStandardizer v3.1 loaded — 362 NCAAM teams + bet-history parser');
 })();
