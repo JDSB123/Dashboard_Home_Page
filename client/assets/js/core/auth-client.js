@@ -4,160 +4,177 @@
  * Provides login/logout, profile management, and session handling
  */
 
-(function() {
-    'use strict';
+(function () {
+  "use strict";
 
-    class AuthClient {
-        constructor() {
-            this.user = null;
-            this.isAuthenticated = false;
-            this.loginEndpoint = '/.auth/login/aad';
-            this.logoutEndpoint = '/.auth/logout';
-            this.meEndpoint = '/.auth/me';
-            this.initialized = false;
+  class AuthClient {
+    constructor() {
+      this.user = null;
+      this.isAuthenticated = false;
+      this.loginEndpoint = "/.auth/login/aad";
+      this.logoutEndpoint = "/.auth/logout";
+      this.meEndpoint = "/.auth/me";
+      this.initialized = false;
+    }
+
+    /**
+     * Initialize auth client
+     */
+    async init() {
+      if (this.initialized) return;
+
+      // Check if user is already logged in
+      await this.checkAuthStatus();
+
+      // Render auth UI if element exists
+      this._renderAuthUI();
+
+      // Listen for auth events
+      window.addEventListener("auth:login", () => this.login());
+      window.addEventListener("auth:logout", () => this.logout());
+
+      this.initialized = true;
+      console.log(
+        "🔐 Auth Client initialized",
+        this.isAuthenticated ? "(logged in)" : "(anonymous)",
+      );
+    }
+
+    /**
+     * Check current authentication status
+     */
+    async checkAuthStatus() {
+      try {
+        const response = await fetch(this.meEndpoint);
+
+        if (response.ok) {
+          const data = await response.json();
+
+          if (data && data.length > 0) {
+            this.user = this._parseUserFromClaims(data[0]);
+            this.isAuthenticated = true;
+
+            window.dispatchEvent(
+              new CustomEvent("auth:authenticated", {
+                detail: this.user,
+              }),
+            );
+          }
         }
+      } catch (error) {
+        // Not authenticated or auth not configured
+        console.log("Auth check:", error.message);
+      }
+    }
 
-        /**
-         * Initialize auth client
-         */
-        async init() {
-            if (this.initialized) return;
+    /**
+     * Parse user info from Azure AD claims
+     */
+    _parseUserFromClaims(authData) {
+      const claims = authData.user_claims || [];
+      const findClaim = (type) => claims.find((c) => c.typ === type)?.val;
 
-            // Check if user is already logged in
-            await this.checkAuthStatus();
+      return {
+        id: authData.user_id,
+        provider: authData.provider_name,
+        name:
+          findClaim("name") ||
+          findClaim(
+            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name",
+          ),
+        email:
+          findClaim(
+            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress",
+          ) ||
+          findClaim("emails") ||
+          authData.user_id,
+        picture: findClaim("picture"),
+        roles: authData.user_roles || [],
+        claims: claims,
+      };
+    }
 
-            // Render auth UI if element exists
-            this._renderAuthUI();
+    /**
+     * Redirect to login
+     */
+    login(returnUrl = window.location.href) {
+      const encodedReturn = encodeURIComponent(returnUrl);
+      window.location.href = `${this.loginEndpoint}?post_login_redirect_uri=${encodedReturn}`;
+    }
 
-            // Listen for auth events
-            window.addEventListener('auth:login', () => this.login());
-            window.addEventListener('auth:logout', () => this.logout());
+    /**
+     * Logout user
+     */
+    logout(returnUrl = "/") {
+      const encodedReturn = encodeURIComponent(returnUrl);
+      window.location.href = `${this.logoutEndpoint}?post_logout_redirect_uri=${encodedReturn}`;
+    }
 
-            this.initialized = true;
-            console.log('🔐 Auth Client initialized', this.isAuthenticated ? '(logged in)' : '(anonymous)');
-        }
+    /**
+     * Get current user
+     */
+    getUser() {
+      return this.user;
+    }
 
-        /**
-         * Check current authentication status
-         */
-        async checkAuthStatus() {
-            try {
-                const response = await fetch(this.meEndpoint);
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    
-                    if (data && data.length > 0) {
-                        this.user = this._parseUserFromClaims(data[0]);
-                        this.isAuthenticated = true;
-                        
-                        window.dispatchEvent(new CustomEvent('auth:authenticated', { 
-                            detail: this.user 
-                        }));
-                    }
-                }
-            } catch (error) {
-                // Not authenticated or auth not configured
-                console.log('Auth check:', error.message);
-            }
-        }
+    /**
+     * Check if user has specific role
+     */
+    hasRole(role) {
+      return this.user?.roles?.includes(role) || false;
+    }
 
-        /**
-         * Parse user info from Azure AD claims
-         */
-        _parseUserFromClaims(authData) {
-            const claims = authData.user_claims || [];
-            const findClaim = (type) => claims.find(c => c.typ === type)?.val;
+    /**
+     * Check if user is admin
+     */
+    isAdmin() {
+      return this.hasRole("admin") || this.hasRole("Admin");
+    }
 
-            return {
-                id: authData.user_id,
-                provider: authData.provider_name,
-                name: findClaim('name') || findClaim('http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'),
-                email: findClaim('http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress') 
-                    || findClaim('emails') 
-                    || authData.user_id,
-                picture: findClaim('picture'),
-                roles: authData.user_roles || [],
-                claims: claims
-            };
-        }
+    /**
+     * Render auth UI elements
+     */
+    _renderAuthUI() {
+      const authContainer =
+        document.getElementById("auth-container") ||
+        document.querySelector(".auth-container");
 
-        /**
-         * Redirect to login
-         */
-        login(returnUrl = window.location.href) {
-            const encodedReturn = encodeURIComponent(returnUrl);
-            window.location.href = `${this.loginEndpoint}?post_login_redirect_uri=${encodedReturn}`;
-        }
+      if (!authContainer) return;
 
-        /**
-         * Logout user
-         */
-        logout(returnUrl = '/') {
-            const encodedReturn = encodeURIComponent(returnUrl);
-            window.location.href = `${this.logoutEndpoint}?post_logout_redirect_uri=${encodedReturn}`;
-        }
-
-        /**
-         * Get current user
-         */
-        getUser() {
-            return this.user;
-        }
-
-        /**
-         * Check if user has specific role
-         */
-        hasRole(role) {
-            return this.user?.roles?.includes(role) || false;
-        }
-
-        /**
-         * Check if user is admin
-         */
-        isAdmin() {
-            return this.hasRole('admin') || this.hasRole('Admin');
-        }
-
-        /**
-         * Render auth UI elements
-         */
-        _renderAuthUI() {
-            const authContainer = document.getElementById('auth-container') 
-                || document.querySelector('.auth-container');
-            
-            if (!authContainer) return;
-
-            if (this.isAuthenticated && this.user) {
-                authContainer.innerHTML = `
+      if (this.isAuthenticated && this.user) {
+        authContainer.innerHTML = `
                     <div class="user-profile">
-                        ${this.user.picture ? `<img src="${this.user.picture}" alt="" class="user-avatar">` : ''}
+                        ${this.user.picture ? `<img src="${this.user.picture}" alt="" class="user-avatar">` : ""}
                         <span class="user-name">${this.user.name || this.user.email}</span>
                         <button class="btn-logout" id="btn-logout">Sign Out</button>
                     </div>
                 `;
 
-                document.getElementById('btn-logout')?.addEventListener('click', () => this.logout());
-            } else {
-                authContainer.innerHTML = `
+        document
+          .getElementById("btn-logout")
+          ?.addEventListener("click", () => this.logout());
+      } else {
+        authContainer.innerHTML = `
                     <button class="btn-login" id="btn-login">Sign In</button>
                 `;
 
-                document.getElementById('btn-login')?.addEventListener('click', () => this.login());
-            }
-        }
+        document
+          .getElementById("btn-login")
+          ?.addEventListener("click", () => this.login());
+      }
+    }
 
-        /**
-         * Show login modal (for in-page login prompt)
-         */
-        showLoginPrompt(message = 'Please sign in to continue') {
-            const existing = document.getElementById('auth-modal');
-            if (existing) existing.remove();
+    /**
+     * Show login modal (for in-page login prompt)
+     */
+    showLoginPrompt(message = "Please sign in to continue") {
+      const existing = document.getElementById("auth-modal");
+      if (existing) existing.remove();
 
-            const modal = document.createElement('div');
-            modal.id = 'auth-modal';
-            modal.className = 'auth-modal-overlay';
-            modal.innerHTML = `
+      const modal = document.createElement("div");
+      modal.id = "auth-modal";
+      modal.className = "auth-modal-overlay";
+      modal.innerHTML = `
                 <div class="auth-modal">
                     <div class="auth-modal-header">
                         <img src="/assets/Logo%208.5.png" alt="GBSV" class="auth-logo">
@@ -173,27 +190,29 @@
                 </div>
             `;
 
-            document.body.appendChild(modal);
+      document.body.appendChild(modal);
 
-            modal.querySelector('#auth-cancel').addEventListener('click', () => modal.remove());
-            modal.querySelector('#auth-login').addEventListener('click', () => {
-                modal.remove();
-                this.login();
-            });
+      modal
+        .querySelector("#auth-cancel")
+        .addEventListener("click", () => modal.remove());
+      modal.querySelector("#auth-login").addEventListener("click", () => {
+        modal.remove();
+        this.login();
+      });
 
-            // Inject styles if needed
-            this._injectAuthStyles();
-        }
+      // Inject styles if needed
+      this._injectAuthStyles();
+    }
 
-        /**
-         * Inject auth-related styles
-         */
-        _injectAuthStyles() {
-            if (document.getElementById('auth-styles')) return;
+    /**
+     * Inject auth-related styles
+     */
+    _injectAuthStyles() {
+      if (document.getElementById("auth-styles")) return;
 
-            const style = document.createElement('style');
-            style.id = 'auth-styles';
-            style.textContent = `
+      const style = document.createElement("style");
+      style.id = "auth-styles";
+      style.textContent = `
                 .auth-modal-overlay {
                     position: fixed;
                     top: 0;
@@ -291,21 +310,22 @@
                     background: rgba(255,255,255,0.1);
                 }
             `;
-            document.head.appendChild(style);
-        }
+      document.head.appendChild(style);
     }
+  }
 
-    // Create singleton
-    window.AuthClient = new AuthClient();
+  // Create singleton
+  window.AuthClient = new AuthClient();
 
-    // Init on DOM ready
-    const authEnabled = window.APP_CONFIG?.AUTH_ENABLED === true;
-    if (authEnabled) {
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => window.AuthClient.init());
-        } else {
-            window.AuthClient.init();
-        }
+  // Init on DOM ready
+  const authEnabled = window.APP_CONFIG?.AUTH_ENABLED === true;
+  if (authEnabled) {
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", () =>
+        window.AuthClient.init(),
+      );
+    } else {
+      window.AuthClient.init();
     }
-
+  }
 })();

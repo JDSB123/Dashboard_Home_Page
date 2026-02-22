@@ -10,12 +10,32 @@
     <meta name="theme-color" content="#030b16" />
     <meta charset="utf-8" />
     <!-- Page-level CSP meta removed to defer to SWA global CSP -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
     <title>Bears & Bulls — Today's Picks</title>
     <link rel="icon" type="image/png" href="assets/Logo%208.5.png?v=20251216" />
 
+    <!-- Local dev helper: if Live Server runs from repo root, fix base href -->
+    <script>
+      (function () {
+        if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+          if (!location.pathname.startsWith('/client/')) {
+            var base = document.createElement('base');
+            base.href = '/client/';
+            document.head.prepend(base);
+          }
+        }
+      })();
+    </script>
+
     <!-- Preload critical background image -->
-    <link rel="preload" as="image" href="assets/JB_Bearish_Market_FULL_page.png" />
+    <link
+      rel="preload"
+      as="image"
+      href="assets/JB_Bearish_Market_FULL_page.png"
+    />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
@@ -26,13 +46,25 @@
     <!-- CSS: Bundled for performance -->
     <link rel="stylesheet" href="dist/bundle.min.css?v=34.00.0" />
     <!-- CSS: Page specific overrides -->
-    <link rel="stylesheet" href="assets/css/pages/weekly-lineup.css?v=34.00.9" />
+    <link
+      rel="stylesheet"
+      href="assets/css/pages/weekly-lineup.css?v=34.00.9"
+    />
     <!-- Mobile Responsive Styles (includes consolidated hotfixes) -->
-    <link rel="stylesheet" href="assets/css/components/mobile-responsive.css?v=34.00.0" />
+    <link
+      rel="stylesheet"
+      href="assets/css/components/mobile-responsive.css?v=34.00.0"
+    />
     <!-- COMPLETE MOBILE OVERHAUL - This MUST be loaded LAST to override everything -->
-    <link rel="stylesheet" href="assets/css/weekly-lineup-mobile-complete.css?v=34.00.0" />
+    <link
+      rel="stylesheet"
+      href="assets/css/weekly-lineup-mobile-complete.css?v=34.00.0"
+    />
     <!-- Loading Skeleton for instant visual feedback -->
-    <link rel="stylesheet" href="assets/css/components/loading-skeleton.css?v=1.0.0" />
+    <link
+      rel="stylesheet"
+      href="assets/css/components/loading-skeleton.css?v=1.0.0"
+    />
     <!-- Utility and column width helpers -->
     <link rel="stylesheet" href="assets/css/base/utilities.css?v=1" />
     <link rel="stylesheet" href="assets/css/components/table-columns.css?v=1" />
@@ -50,27 +82,41 @@
     <script src="assets/js/init/disable-form-submit.js?v=1" defer></script>
 
     <!-- Page Transition Handler (smooth navigation with loading state) -->
-    <script src="assets/js/utils/page-transition-handler.js?v=1.0.0" defer></script>
+    <script
+      src="assets/js/utils/page-transition-handler.js?v=1.0.0"
+      defer
+    ></script>
 
     <!-- Real Picks API Helpers -->
-    <script src="assets/js/features/auto-game-fetcher.js?v=34.01.1" defer></script>
+    <script
+      src="assets/js/features/auto-game-fetcher.js?v=34.01.1"
+      defer
+    ></script>
     <!-- Complete Mobile Experience -->
     <script src="assets/js/weekly-lineup-mobile.js?v=34.00.0" defer></script>
 
     <!-- Critical Mobile Styles moved to external file -->
-    <link rel="stylesheet" href="assets/css/pages/weekly-lineup-critical.css?v=1" />
+    <link
+      rel="stylesheet"
+      href="assets/css/pages/weekly-lineup-critical.css?v=1"
+    />
   </head>
   <body class="page-glow page-weekly-lineup">
     <noscript>
       <div class="noscript-warning" role="alert">
-        <strong>JavaScript Required:</strong> This dashboard requires JavaScript.
+        <strong>JavaScript Required:</strong> This dashboard requires
+        JavaScript.
       </div>
     </noscript>
 
     <nav class="brand-nav" role="navigation" aria-label="Main navigation">
       <ul class="nav-links" aria-label="Primary">
         <li><a href="index.html" class="nav-link">Dashboard</a></li>
-        <li><a href="weekly-lineup.html" class="nav-link" aria-current="page">Weekly Lineup</a></li>
+        <li>
+          <a href="weekly-lineup.html" class="nav-link" aria-current="page"
+            >Weekly Lineup</a
+          >
+        </li>
         <li><a href="odds-market.html" class="nav-link">Odds Market</a></li>
         <li><a href="picks-tracker.html" class="nav-link">Picks Tracker</a></li>
         <li class="nav-dropdown">
@@ -98,7 +144,9 @@
                   <span class="sportsbook-name">Hulk Wager</span>
                 </div>
                 <div class="sportsbook-meta-compact">
-                  <span class="sportsbook-last-sync">Last: <span class="sync-time">--</span></span>
+                  <span class="sportsbook-last-sync"
+                    >Last: <span class="sync-time">--</span></span
+                  >
                   <button
                     type="button"
                     class="sportsbook-fetch-compact"
@@ -137,7 +185,9 @@
                   <span class="sportsbook-name">Bombay 711</span>
                 </div>
                 <div class="sportsbook-meta-compact">
-                  <span class="sportsbook-last-sync">Last: <span class="sync-time">--</span></span>
+                  <span class="sportsbook-last-sync"
+                    >Last: <span class="sync-time">--</span></span
+                  >
                   <button
                     type="button"
                     class="sportsbook-fetch-compact"
@@ -176,7 +226,9 @@
                   <span class="sportsbook-name">King of Sports</span>
                 </div>
                 <div class="sportsbook-meta-compact">
-                  <span class="sportsbook-last-sync">Last: <span class="sync-time">--</span></span>
+                  <span class="sportsbook-last-sync"
+                    >Last: <span class="sync-time">--</span></span
+                  >
                   <button
                     type="button"
                     class="sportsbook-fetch-compact"
@@ -215,7 +267,9 @@
                   <span class="sportsbook-name">Prime Time Action</span>
                 </div>
                 <div class="sportsbook-meta-compact">
-                  <span class="sportsbook-last-sync">Last: <span class="sync-time">--</span></span>
+                  <span class="sportsbook-last-sync"
+                    >Last: <span class="sync-time">--</span></span
+                  >
                   <button
                     type="button"
                     class="sportsbook-fetch-compact"
@@ -265,7 +319,9 @@
             <div class="brand-content-inline">
               <div class="brand-text-stacked">
                 <span class="brand-line-1">Bears & Bulls</span>
-                <span class="brand-line-2"><span class="brand-word">WEEKLY LINEUP</span></span>
+                <span class="brand-line-2"
+                  ><span class="brand-word">WEEKLY LINEUP</span></span
+                >
               </div>
             </div>
           </div>
@@ -277,12 +333,20 @@
             <div class="ft-left">
               <!-- League pills -->
               <button class="ft-pill ft-league" data-league="nba">NBA</button>
-              <button class="ft-pill ft-league" data-league="ncaab">NCAAM</button>
+              <button class="ft-pill ft-league" data-league="ncaab">
+                NCAAM
+              </button>
               <!-- Segment dropdown -->
               <div class="ft-dropdown">
-                <button class="ft-dropdown-btn" id="segment-dropdown-btn">Segment ▾</button>
+                <button class="ft-dropdown-btn" id="segment-dropdown-btn">
+                  Segment ▾
+                </button>
                 <div class="ft-dropdown-menu" id="segment-dropdown-menu">
-                  <button class="ft-dropdown-item" data-f="segment" data-v="full">
+                  <button
+                    class="ft-dropdown-item"
+                    data-f="segment"
+                    data-v="full"
+                  >
                     <strong>FG</strong> · Full Game
                   </button>
                   <button class="ft-dropdown-item" data-f="segment" data-v="1h">
@@ -295,18 +359,36 @@
               </div>
               <!-- Pick Type dropdown -->
               <div class="ft-dropdown">
-                <button class="ft-dropdown-btn" id="picktype-dropdown-btn">Pick Type ▾</button>
+                <button class="ft-dropdown-btn" id="picktype-dropdown-btn">
+                  Pick Type ▾
+                </button>
                 <div class="ft-dropdown-menu" id="picktype-dropdown-menu">
-                  <button class="ft-dropdown-item" data-f="pick-type" data-v="spread">
+                  <button
+                    class="ft-dropdown-item"
+                    data-f="pick-type"
+                    data-v="spread"
+                  >
                     <strong>Spread</strong> · Point spread betting
                   </button>
-                  <button class="ft-dropdown-item" data-f="pick-type" data-v="moneyline">
+                  <button
+                    class="ft-dropdown-item"
+                    data-f="pick-type"
+                    data-v="moneyline"
+                  >
                     <strong>Moneyline</strong> · Win/loss only
                   </button>
-                  <button class="ft-dropdown-item" data-f="pick-type" data-v="total">
+                  <button
+                    class="ft-dropdown-item"
+                    data-f="pick-type"
+                    data-v="total"
+                  >
                     <strong>Total</strong> · Over/Under points
                   </button>
-                  <button class="ft-dropdown-item" data-f="pick-type" data-v="team-total">
+                  <button
+                    class="ft-dropdown-item"
+                    data-f="pick-type"
+                    data-v="team-total"
+                  >
                     <strong>Team Total</strong> · Single team O/U
                   </button>
                 </div>
@@ -340,12 +422,28 @@
                     >
                   </div>
                   <div class="fetch-separator"></div>
-                  <button class="ft-fetch-league-btn" data-fetch="nba" title="Fetch NBA">
-                    <img src="assets/nba-logo.png" class="league-logo-sm" alt="NBA" />
+                  <button
+                    class="ft-fetch-league-btn"
+                    data-fetch="nba"
+                    title="Fetch NBA"
+                  >
+                    <img
+                      src="assets/nba-logo.png"
+                      class="league-logo-sm"
+                      alt="NBA"
+                    />
                     <span class="league-label">NBA</span>
                   </button>
-                  <button class="ft-fetch-league-btn" data-fetch="ncaab" title="Fetch NCAAM">
-                    <img src="assets/ncaam-logo.png" class="league-logo-sm" alt="NCAAM" />
+                  <button
+                    class="ft-fetch-league-btn"
+                    data-fetch="ncaab"
+                    title="Fetch NCAAM"
+                  >
+                    <img
+                      src="assets/ncaam-logo.png"
+                      class="league-logo-sm"
+                      alt="NCAAM"
+                    />
                     <span class="league-label">NCAAM</span>
                   </button>
                 </div>
@@ -389,7 +487,10 @@
               <tr>
                 <th scope="col" data-sort="date" class="col-datetime">
                   <div class="th-header-shell">
-                    <button class="th-sort-btn" aria-label="Sort by date and time (CST)">
+                    <button
+                      class="th-sort-btn"
+                      aria-label="Sort by date and time (CST)"
+                    >
                       <span class="header-main-text">Date & Time</span>
                       <span class="header-subtext">(CST)</span>
                       <span class="sort-icon" aria-hidden="true">▲</span>
@@ -412,23 +513,39 @@
                     <div class="filter-header-integrated">
                       <span class="filter-title">Date & Time</span>
                       <div class="filter-quick-actions">
-                        <button class="filter-action-btn" data-action="select-all">All</button
-                        ><button class="filter-action-btn" data-action="clear">Clear</button>
+                        <button
+                          class="filter-action-btn"
+                          data-action="select-all"
+                        >
+                          All</button
+                        ><button class="filter-action-btn" data-action="clear">
+                          Clear
+                        </button>
                       </div>
                     </div>
                     <div class="date-range-selector">
-                      <button class="date-range-btn active" data-range="today">Today</button
-                      ><button class="date-range-btn" data-range="tomorrow">Tomorrow</button
-                      ><button class="date-range-btn" data-range="week">This Week</button>
+                      <button class="date-range-btn active" data-range="today">
+                        Today</button
+                      ><button class="date-range-btn" data-range="tomorrow">
+                        Tomorrow</button
+                      ><button class="date-range-btn" data-range="week">
+                        This Week
+                      </button>
                     </div>
                     <div class="filter-section-compact">
                       <div class="section-label">Time Slots</div>
                       <div class="time-slots">
-                        <button class="time-slot active" data-time="morning">Morning</button
-                        ><button class="time-slot active" data-time="afternoon">Afternoon</button
-                        ><button class="time-slot active" data-time="evening">Evening</button
-                        ><button class="time-slot active" data-time="primetime">Primetime</button
-                        ><button class="time-slot active" data-time="late">Late Night</button>
+                        <button class="time-slot active" data-time="morning">
+                          Morning</button
+                        ><button class="time-slot active" data-time="afternoon">
+                          Afternoon</button
+                        ><button class="time-slot active" data-time="evening">
+                          Evening</button
+                        ><button class="time-slot active" data-time="primetime">
+                          Primetime</button
+                        ><button class="time-slot active" data-time="late">
+                          Late Night
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -457,15 +574,25 @@
                     <div class="filter-header-integrated">
                       <span class="filter-title">League</span>
                       <div class="filter-quick-actions">
-                        <button class="filter-action-btn" data-action="select-all">All</button
-                        ><button class="filter-action-btn" data-action="clear">Clear</button>
+                        <button
+                          class="filter-action-btn"
+                          data-action="select-all"
+                        >
+                          All</button
+                        ><button class="filter-action-btn" data-action="clear">
+                          Clear
+                        </button>
                       </div>
                     </div>
                     <div class="filter-section-compact">
                       <div class="league-pills">
-                        <button class="league-pill active" data-league="all">All</button
-                        ><button class="league-pill" data-league="nba">NBA</button
-                        ><button class="league-pill" data-league="ncaab">NCAAB</button>
+                        <button class="league-pill active" data-league="all">
+                          All</button
+                        ><button class="league-pill" data-league="nba">
+                          NBA</button
+                        ><button class="league-pill" data-league="ncaab">
+                          NCAAB
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -495,8 +622,14 @@
                     <div class="filter-header-integrated">
                       <span class="filter-title">Matchup</span>
                       <div class="filter-quick-actions">
-                        <button class="filter-action-btn" data-action="select-all">All</button
-                        ><button class="filter-action-btn" data-action="clear">Clear</button>
+                        <button
+                          class="filter-action-btn"
+                          data-action="select-all"
+                        >
+                          All</button
+                        ><button class="filter-action-btn" data-action="clear">
+                          Clear
+                        </button>
                       </div>
                     </div>
                     <div class="filter-section-compact">
@@ -536,16 +669,27 @@
                     <div class="filter-header-integrated">
                       <span class="filter-title">Segment</span>
                       <div class="filter-quick-actions">
-                        <button class="filter-action-btn" data-action="select-all">All</button
-                        ><button class="filter-action-btn" data-action="clear">Clear</button>
+                        <button
+                          class="filter-action-btn"
+                          data-action="select-all"
+                        >
+                          All</button
+                        ><button class="filter-action-btn" data-action="clear">
+                          Clear
+                        </button>
                       </div>
                     </div>
                     <div class="filter-section-compact">
                       <div class="segment-pills">
-                        <button class="segment-pill active" data-segment="all">All</button
-                        ><button class="segment-pill" data-segment="full">Full Game</button
-                        ><button class="segment-pill" data-segment="1h">1st Half</button
-                        ><button class="segment-pill" data-segment="2h">2nd Half</button>
+                        <button class="segment-pill active" data-segment="all">
+                          All</button
+                        ><button class="segment-pill" data-segment="full">
+                          Full Game</button
+                        ><button class="segment-pill" data-segment="1h">
+                          1st Half</button
+                        ><button class="segment-pill" data-segment="2h">
+                          2nd Half
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -574,23 +718,37 @@
                     <div class="filter-header-integrated">
                       <span class="filter-title">Pick Type</span>
                       <div class="filter-quick-actions">
-                        <button class="filter-action-btn" data-action="select-all">All</button
-                        ><button class="filter-action-btn" data-action="clear">Clear</button>
+                        <button
+                          class="filter-action-btn"
+                          data-action="select-all"
+                        >
+                          All</button
+                        ><button class="filter-action-btn" data-action="clear">
+                          Clear
+                        </button>
                       </div>
                     </div>
                     <div class="filter-section-compact">
                       <div class="pick-type-pills">
-                        <button class="pick-pill active" data-pick="all">All</button
-                        ><button class="pick-pill" data-pick="spread">Spread</button
-                        ><button class="pick-pill" data-pick="ml">Moneyline</button
-                        ><button class="pick-pill" data-pick="total">Total</button
-                        ><button class="pick-pill" data-pick="tt">Team Total</button>
+                        <button class="pick-pill active" data-pick="all">
+                          All</button
+                        ><button class="pick-pill" data-pick="spread">
+                          Spread</button
+                        ><button class="pick-pill" data-pick="ml">
+                          Moneyline</button
+                        ><button class="pick-pill" data-pick="total">
+                          Total</button
+                        ><button class="pick-pill" data-pick="tt">
+                          Team Total
+                        </button>
                       </div>
                     </div>
                   </div>
                 </th>
                 <th scope="col" class="tracker-column center col-track">
-                  <div class="th-header-shell"><span class="header-main-text">Track</span></div>
+                  <div class="th-header-shell">
+                    <span class="header-main-text">Track</span>
+                  </div>
                 </th>
               </tr>
             </thead>
@@ -622,7 +780,9 @@
         <button class="fab-item" data-fetch="ncaaf">NCAAF</button>
       </div>
     </div>
-    <button class="mobile-fab" id="mobile-fetch-fab" aria-label="Fetch picks">↻</button>
+    <button class="mobile-fab" id="mobile-fetch-fab" aria-label="Fetch picks">
+      ↻
+    </button>
 
     <script src="assets/js/utils/shared-utils.js?v=33.00.4" defer></script>
     <script src="assets/js/core/navigation.js?v=33.00.4" defer></script>
@@ -630,31 +790,70 @@
     <script src="assets/js/utils/logo-cache.js?v=33.00.4" defer></script>
 
     <!-- Weekly Lineup ↔ Dashboard Sync Bridge -->
-    <script src="assets/js/utils/weekly-lineup-sync.js?v=34.00.0" defer></script>
+    <script
+      src="assets/js/utils/weekly-lineup-sync.js?v=34.00.0"
+      defer
+    ></script>
 
     <script src="assets/js/features/live-scores.js?v=34.00.1" defer></script>
 
     <!-- Model endpoint hydration (optional registry) + fetchers -->
-    <script src="assets/js/utils/model-endpoint-resolver.js?v=34.01.1" defer></script>
-    <script src="assets/js/features/model-endpoints-bootstrap.js?v=34.01.1" defer></script>
-    <script src="assets/js/features/nba-picks-fetcher.js?v=34.01.1" defer></script>
-    <script src="assets/js/features/ncaam-picks-fetcher.js?v=34.01.1" defer></script>
-    <script src="assets/js/features/unified-picks-fetcher.js?v=34.01.1" defer></script>
+    <script
+      src="assets/js/utils/model-endpoint-resolver.js?v=34.01.1"
+      defer
+    ></script>
+    <script
+      src="assets/js/features/model-endpoints-bootstrap.js?v=34.01.1"
+      defer
+    ></script>
+    <script
+      src="assets/js/features/nba-picks-fetcher.js?v=34.01.1"
+      defer
+    ></script>
+    <script
+      src="assets/js/features/ncaam-picks-fetcher.js?v=34.01.1"
+      defer
+    ></script>
+    <script
+      src="assets/js/features/unified-picks-fetcher.js?v=34.01.1"
+      defer
+    ></script>
 
     <!-- Cosmos-backed Picks API client (used for lock/unlock + persistence) -->
     <script src="dashboard/js/picks-service.js?v=34.01.1" defer></script>
 
     <!-- Weekly Lineup controller (fetch + render + lock) -->
-    <script src="assets/js/features/weekly-lineup-controller.js?v=34.01.1" defer></script>
-    <script src="assets/js/modules/picks-state-manager.js?v=33.00.4" defer></script>
-    <script src="assets/js/modules/picks-table-renderer.js?v=33.00.4" defer></script>
-    <script src="assets/js/modules/picks-filter-manager.js?v=33.00.4" defer></script>
-    <script src="assets/js/mobile/mobile-enhancements.js?v=1.0.0" defer></script>
+    <script
+      src="assets/js/features/weekly-lineup-controller.js?v=34.01.1"
+      defer
+    ></script>
+    <script
+      src="assets/js/modules/picks-state-manager.js?v=33.00.4"
+      defer
+    ></script>
+    <script
+      src="assets/js/modules/picks-table-renderer.js?v=33.00.4"
+      defer
+    ></script>
+    <script
+      src="assets/js/modules/picks-filter-manager.js?v=33.00.4"
+      defer
+    ></script>
+    <script
+      src="assets/js/mobile/mobile-enhancements.js?v=1.0.0"
+      defer
+    ></script>
     <!-- Mobile Navigation Drawer -->
-    <script src="assets/js/mobile/mobile-nav-drawer.js?v=34.00.0" defer></script>
+    <script
+      src="assets/js/mobile/mobile-nav-drawer.js?v=34.00.0"
+      defer
+    ></script>
 
     <!-- Pick Management Scripts (needed for manual entry and upload) -->
-    <script src="assets/js/features/pick-standardizer.js?v=34.00.1" defer></script>
+    <script
+      src="assets/js/features/pick-standardizer.js?v=34.00.1"
+      defer
+    ></script>
     <script src="dashboard/js/local-picks-manager.js?v=34.00.0" defer></script>
 
     <!-- Real-time Updates via SignalR -->
@@ -663,16 +862,31 @@
     <!-- Authentication -->
     <script src="assets/js/core/auth-client.js?v=34.00.0" defer></script>
     <!-- Blob Storage Archival -->
-    <script src="assets/js/features/blob-storage-archiver.js?v=34.00.0" defer></script>
+    <script
+      src="assets/js/features/blob-storage-archiver.js?v=34.00.0"
+      defer
+    ></script>
     <!-- History Manager (Azure Blob Archive) -->
-    <script src="assets/js/features/history-manager.js?v=34.00.0" defer></script>
+    <script
+      src="assets/js/features/history-manager.js?v=34.00.0"
+      defer
+    ></script>
     <!-- File Import - PDF & Image OCR Parsing -->
     <script src="assets/js/features/pdf-parser.js?v=34.00.0" defer></script>
-    <script src="assets/js/features/image-ocr-parser.js?v=34.00.0" defer></script>
+    <script
+      src="assets/js/features/image-ocr-parser.js?v=34.00.0"
+      defer
+    ></script>
     <!-- Basketball API Secondary Data Source -->
-    <script src="assets/js/features/basketball-api-client.js?v=34.00.0" defer></script>
+    <script
+      src="assets/js/features/basketball-api-client.js?v=34.00.0"
+      defer
+    ></script>
     <!-- Sportsbook Connector -->
-    <script src="assets/js/features/sportsbook-connector.js?v=34.00.0" defer></script>
+    <script
+      src="assets/js/features/sportsbook-connector.js?v=34.00.0"
+      defer
+    ></script>
 
     <script>
       // Service worker registration (versioned to bust caches)
@@ -689,7 +903,7 @@
                 await Promise.all(
                   regs.map(function (r) {
                     return r.unregister();
-                  })
+                  }),
                 );
               } catch (e) {}
               try {
@@ -698,7 +912,7 @@
                   await Promise.all(
                     keys.map(function (k) {
                       return caches.delete(k);
-                    })
+                    }),
                   );
                 }
               } catch (e) {}
@@ -719,7 +933,9 @@
                   channel.port1.onmessage = function (evt) {
                     resolve((evt && evt.data && evt.data.version) || null);
                   };
-                  controller.postMessage({ type: "GET_VERSION" }, [channel.port2]);
+                  controller.postMessage({ type: "GET_VERSION" }, [
+                    channel.port2,
+                  ]);
                   setTimeout(function () {
                     resolve(null);
                   }, 1500);
@@ -763,9 +979,12 @@
                 })
                 .catch(function () {});
             });
-            navigator.serviceWorker.addEventListener("controllerchange", function () {
-              /* no-op */
-            });
+            navigator.serviceWorker.addEventListener(
+              "controllerchange",
+              function () {
+                /* no-op */
+              },
+            );
           }
         } catch (e) {}
       })();
@@ -777,7 +996,7 @@
           setTimeout(() => {
             window.LazyScriptLoader.loadWhenIdle([
               "assets/js/features/pdf-parser.js?v=34.00.0",
-              "assets/js/features/image-ocr-parser.js?v=34.00.0"
+              "assets/js/features/image-ocr-parser.js?v=34.00.0",
             ]);
           }, 3000);
         });
