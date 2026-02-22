@@ -91,16 +91,13 @@ window.GBSV_CONFIG = {
   window.APP_CONFIG.IS_LOCAL_DEV = true;
 
   const urlParams = new URLSearchParams(loc.search || "");
-  const localApiEnabled =
-    urlParams.get("localApi") === "1" ||
-    urlParams.get("localApi") === "true" ||
-    localStorage.getItem("LOCAL_API") === "1" ||
-    localStorage.getItem("LOCAL_API") === "true";
 
-  if (!localApiEnabled) {
-    // Production APIs are CORS-allowed for localhost dev now; do not force localhost:7072.
-    return;
-  }
+  // Auto-route to local Functions when on localhost.
+  // Override with ?localApi=0 or localStorage LOCAL_API=0 to force prod APIs.
+  const forceProduction =
+    urlParams.get("localApi") === "0" ||
+    localStorage.getItem("LOCAL_API") === "0";
+  if (forceProduction) return;
 
   // Default local Functions port configured in local.settings.json
   const LOCAL_API = "http://localhost:7072/api";

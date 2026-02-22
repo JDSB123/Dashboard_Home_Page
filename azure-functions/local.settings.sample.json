@@ -42,6 +42,7 @@
     "TELEGRAM_WEBHOOK_SECRET": "YOUR_WEBHOOK_SECRET"
   },
   "Host": {
+    "LocalHttpPort": 7072,
     "CORS": "*",
     "CORSCredentials": false
   }
