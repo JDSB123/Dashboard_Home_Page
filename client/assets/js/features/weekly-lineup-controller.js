@@ -275,6 +275,10 @@
       return;
     }
 
+    if (!Array.isArray(picks) || picks.length === 0) {
+      return;
+    }
+
     // Auto-save fetched picks as unlocked
     const payload = picks.map((p) => {
       const cosmosPick = toCosmosPick({ ...p, locked: false, lockedAt: null });

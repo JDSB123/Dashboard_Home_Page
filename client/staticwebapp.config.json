@@ -55,6 +55,13 @@
       }
     },
     {
+      "route": "/picks-tracker",
+      "rewrite": "/picks-tracker.html",
+      "headers": {
+        "Cache-Control": "no-cache, no-store, must-revalidate"
+      }
+    },
+    {
       "route": "/*.html",
       "headers": {
         "Cache-Control": "no-cache, no-store, must-revalidate"
