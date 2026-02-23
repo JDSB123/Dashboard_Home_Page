@@ -2,6 +2,11 @@
   "[jsonc]": {
     "editor.defaultFormatter": "vscode.json-language-features"
   },
+  "extensions.ignoreRecommendations": true,
+  "extensions.autoUpdate": false,
+  "extensions.autoCheckUpdates": false,
+  "update.mode": "none",
+  "update.showReleaseNotes": false,
   "python.defaultInterpreterPath": "${workspaceFolder}/.venv/Scripts/python.exe",
   "claudeCodeChat.permissions.yoloMode": true,
   "github.copilot.chat.editing.alwaysApprove": true,
@@ -38,5 +43,17 @@
   "azureFunctions.projectLanguageModel": 4,
   "azureFunctions.preDeployTask": "npm prune (functions)",
   "github.codespaces.idleTimeoutMinutes": 240,
-  "liveServer.settings.root": "/client"
+  "liveServer.settings.root": "/client",
+  "git.confirmSync": false,
+  "git.confirmEmptyCommits": false,
+  "git.showPushSuccessNotification": false,
+  "python.languageServer": "Pylance",
+  "python.analysis.diagnosticMode": "openFilesOnly",
+  "python.analysis.typeCheckingMode": "off",
+  "security.workspace.trust.untrustedFiles": "open",
+  "workbench.enableExperiments": false,
+  "workbench.settings.enableNaturalLanguageSearch": false,
+  "telemetry.telemetryLevel": "off",
+  "npm.fetchOnlinePackageInfo": false,
+  "npm.validate.enable": false
 }

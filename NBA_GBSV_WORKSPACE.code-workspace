@@ -14,79 +14,60 @@
     "terminal.integrated.env.windows": {
       "AZURE_DEV_COLLECT_TELEMETRY": "no"
     },
-
-    "extensions.ignoreRecommendations": false,
-    "extensions.autoUpdate": true,
+    "extensions.ignoreRecommendations": true,
+    "extensions.autoUpdate": false,
+    "extensions.autoCheckUpdates": false,
     "update.showReleaseNotes": false,
-
+    "update.mode": "none",
     "azurite.location": "${workspaceFolder:NBA_GBSV_Workspace}/.azurite",
     "azurite.silent": true,
     "azurite.blobHost": "127.0.0.1",
     "azurite.queueHost": "127.0.0.1",
     "azurite.tableHost": "127.0.0.1",
-
     "azureFunctions.projectRuntime": "~4",
     "azureFunctions.showProjectWarning": false,
     "azureFunctions.suppressProject": true,
     "azureFunctions.showDeployConfirmation": false,
     "azureFunctions.enableOutputTimestamps": false,
-
     "azure.showSignedInEmail": false,
     "azure-account.authenticationProvider": "auto",
-
     "dotnet.defaultSolution": "${workspaceFolder:NBA_GBSV_Workspace}/gbsv_nba_git_v3.0.sln",
     "omnisharp.enableRoslynAnalyzers": false,
     "csharp.suppressDotnetRestoreNotification": true,
-
     "python.defaultInterpreterPath": "${workspaceFolder:Dashboard}/.venv/Scripts/python.exe",
     "python.analysis.autoImportCompletions": true,
-
     "git.confirmSync": false,
     "git.autofetch": true,
     "git.enableSmartCommit": true,
     "git.fetchOnPull": true,
     "git.pruneOnFetch": true,
     "git.rememberCredentials": true,
-
     "azure.cloudSettings": {
       "rememberAccount": true,
       "rememberSubscription": true
     },
     "azure.reauthenticate": false,
     "azure.tenant": "persistent",
-
     "workbench.startupEditor": "none",
     "security.workspace.trust.enabled": true,
-
     "task.allowAutomaticTasks": "on",
-
     "java.enabled": false,
     "jupyter.experiments.enabled": false,
     "devContainers.showStartNotifications": false,
-    "remote.SSH.showLoginTerminal": false
+    "remote.SSH.showLoginTerminal": false,
+    "telemetry.telemetryLevel": "off",
+    "workbench.enableExperiments": false,
+    "workbench.settings.enableNaturalLanguageSearch": false,
+    "npm.fetchOnlinePackageInfo": false,
+    "npm.validate.enable": false,
+    "python.analysis.diagnosticMode": "openFilesOnly",
+    "python.analysis.typeCheckingMode": "off",
+    "security.workspace.trust.untrustedFiles": "open",
+    "git.confirmEmptyCommits": false,
+    "git.showPushSuccessNotification": false
   },
   "extensions": {
-    "recommendations": [
-      "ms-azuretools.vscode-azurefunctions",
-      "ms-azuretools.vscode-azurestorage",
-      "ms-azuretools.azure-dev",
-      "ms-vscode.azure-account",
-      "azurite.azurite",
-      "ms-dotnettools.csharp",
-      "ms-dotnettools.csdevkit",
-      "ms-python.python",
-      "ms-azuretools.vscode-bicep",
-      "ms-azuretools.vscode-azurestaticwebapps",
-      "ms-azuretools.vscode-cosmosdb",
-      "ms-vscode.PowerShell",
-      "esbenp.prettier-vscode",
-      "streetsidesoftware.code-spell-checker",
-      "github.copilot",
-      "github.copilot-chat",
-      "dbaeumer.vscode-eslint",
-      "eamodio.gitlens",
-      "rangav.vscode-thunder-client"
-    ]
+    "recommendations": []
   },
   "launch": {
     "version": "0.2.0",
@@ -196,12 +177,19 @@
       },
       {
         "label": "Full Stack Start",
-        "dependsOn": ["Start Azurite", "Start NBA API", "Start Dashboard Functions"],
+        "dependsOn": [
+          "Start Azurite",
+          "Start NBA API",
+          "Start Dashboard Functions"
+        ],
         "problemMatcher": []
       },
       {
         "label": "Auto Start Development Environment",
-        "dependsOn": ["Workspace Initialization", "Full Stack Start"],
+        "dependsOn": [
+          "Workspace Initialization",
+          "Full Stack Start"
+        ],
         "dependsOrder": "sequence",
         "runOptions": {
           "runOn": "folderOpen"

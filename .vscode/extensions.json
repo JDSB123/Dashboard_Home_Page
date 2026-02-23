@@ -1,31 +1,3 @@
 {
-  "recommendations": [
-    "charliermarsh.ruff",
-    "ckolkman.vscode-postgres",
-    "dbaeumer.vscode-eslint",
-    "editorconfig.editorconfig",
-    "esbenp.prettier-vscode",
-    "GitHub.copilot",
-    "GitHub.copilot-chat",
-    "github.vscode-github-actions",
-    "golang.go",
-    "humao.rest-client",
-    "mikestead.dotenv",
-    "ms-azuretools.vscode-azurefunctions",
-    "ms-azuretools.vscode-azure-static-web-apps",
-    "ms-azuretools.vscode-azureresourcegroups",
-    "ms-azuretools.vscode-bicep",
-    "ms-azuretools.vscode-cosmosdb",
-    "ms-azuretools.vscode-docker",
-    "ms-vscode.azure-account",
-    "ms-vscode.azurecli",
-    "ms-vscode.live-server",
-    "ms-vscode.vscode-node-azure-pack",
-    "ms-python.python",
-    "ms-python.vscode-pylance",
-    "redhat.vscode-yaml",
-    "ritwickdey.LiveServer",
-    "rust-lang.rust-analyzer",
-    "Azurite.azurite"
-  ]
+  "recommendations": []
 }
