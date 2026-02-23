@@ -52,112 +52,14 @@
     <!-- CSS Architecture: Direct Modular Imports (No Orchestrator) -->
     <!-- Cache version: 34.00.0 - Standardized versioning + consolidated hotfixes -->
 
-    <!-- 1. Design Tokens (colors, typography, spacing) -->
-    <link rel="stylesheet" href="assets/css/base/variables.css?v=34.00.0" />
-
-    <!-- 2. Global Resets & Utilities -->
-    <link rel="stylesheet" href="assets/css/base/reset.css?v=34.00.0" />
-
-    <!-- 3. Page Layout Structure -->
-    <link rel="stylesheet" href="assets/css/layout/page-layout.css?v=34.00.0" />
-
-    <!-- 4. Navigation & Header Components -->
-    <link
-      rel="stylesheet"
-      href="assets/css/components/navigation.css?v=34.00.0"
-    />
-    <link
-      rel="stylesheet"
-      href="assets/css/components/brand-header.css?v=34.00.0"
-    />
-
-    <!-- 5. Interactive Components -->
-    <link
-      rel="stylesheet"
-      href="assets/css/components/kpi-tiles.css?v=34.00.0"
-    />
-    <link
-      rel="stylesheet"
-      href="assets/css/components/date-toggles.css?v=34.00.0"
-    />
-
-    <!-- 6. Table System Components -->
-    <link
-      rel="stylesheet"
-      href="assets/css/components/picks-table.css?v=34.00.0"
-    />
-    <link
-      rel="stylesheet"
-      href="assets/css/components/boxscores.css?v=34.00.0"
-    />
-    <link
-      rel="stylesheet"
-      href="assets/css/components/status-badges.css?v=34.00.0"
-    />
-
-    <!-- 7. Utility & Color Systems -->
-    <link
-      rel="stylesheet"
-      href="assets/css/components/segment-colors.css?v=34.00.0"
-    />
-
-    <!-- 8. Dashboard-specific styles (self-contained) -->
-    <link rel="stylesheet" href="assets/css/pages/dashboard.css?v=34.00.0" />
-
-    <!-- 9. Mobile Responsive Styles (includes consolidated hotfixes) -->
-    <link
-      rel="stylesheet"
-      href="assets/css/components/mobile-responsive.css?v=34.00.0"
-    />
-    <!-- Utility and column width helpers -->
-    <link rel="stylesheet" href="assets/css/base/utilities.css?v=1" />
-    <link rel="stylesheet" href="assets/css/components/table-columns.css?v=1" />
+    <!-- Bundled CSS (replaces 15 individual stylesheets) -->
+    <link rel="stylesheet" href="dist/core.min.css?v=36.00.0" />
+    <link rel="stylesheet" href="dist/dashboard.min.css?v=36.00.0" />
 
     <!-- Dashboard styles consolidated in assets/css/pages/dashboard.css v5.1 -->
 
-    <!-- Runtime config -->
-    <script src="config.js?v=34.00.0" defer></script>
-    <script src="assets/js/utils/shared-utils.js?v=34.00.0" defer></script>
-    <script src="assets/js/utils/notifications.js?v=34.00.0" defer></script>
-    <!-- Performance utilities -->
-    <script
-      src="assets/js/utils/data-cache-manager.js?v=34.00.0"
-      defer
-    ></script>
-    <script
-      src="assets/js/utils/lazy-script-loader.js?v=34.00.0"
-      defer
-    ></script>
-    <!-- Logo loading from Azure Blob Storage -->
-    <script src="assets/js/utils/logo-loader.js?v=1.0.1" defer></script>
-    <script src="assets/js/utils/logo-url-rewriter.js?v=1.0.0" defer></script>
-
-    <!-- Error Handler (must load early for global error handling) -->
-    <script src="assets/js/utils/error-handler.js?v=34.00.0" defer></script>
-
-    <!-- Team Data Loader (loads external team data) -->
-    <script src="assets/js/utils/team-data-loader.js?v=34.00.0" defer></script>
-
-    <!-- Filter State Persistence (saves/restores filter state) -->
-    <script
-      src="assets/js/utils/filter-state-persistence.js?v=34.00.0"
-      defer
-    ></script>
-
-    <!-- Core dashboard interactions: KPI tiles, sorting -->
-    <script src="assets/js/core/debug-config.js?v=34.00.0" defer></script>
-    <script src="assets/js/init/disable-form-submit.js?v=1" defer></script>
-    <script src="assets/js/features/manual-upload.js" defer></script>
-    <script
-      src="assets/js/features/sportsbook-selection-handler.js?v=34.00.0"
-      defer
-    ></script>
-
-    <!-- Page Transition Handler (smooth navigation with loading state) -->
-    <script
-      src="assets/js/utils/page-transition-handler.js?v=1.0.0"
-      defer
-    ></script>
+    <!-- Runtime config (separate — per-environment) -->
+    <script src="config.js?v=36.00.0" defer></script>
     <!-- Prefetch Weekly Lineup assets to speed up navigation -->
     <link rel="prefetch" href="weekly-lineup.html" as="document" />
     <link
@@ -165,7 +67,7 @@
       href="assets/JB_Bearish_Market_FULL_page.png"
       as="image"
     />
-    <link rel="prefetch" href="dist/bundle.min.css" as="style" />
+    <link rel="prefetch" href="dist/core.min.css" as="style" />
   </head>
   <body class="page-active-picks">
     <noscript>
@@ -1121,37 +1023,12 @@
     <!-- ===== INLINE SCRIPT REMOVED ===== -->
     <!-- All functionality moved to external JS files in assets/ -->
 
-    <!-- Modular JS Architecture -->
-    <script
-      src="assets/js/modules/zebra-stripes.js?v=20251224-3"
-      defer
-    ></script>
+    <!-- SignalR CDN (external — not bundled) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.min.js"></script>
 
-    <!-- Modular Active Picks Components -->
-    <script src="assets/js/modules/picks-dom-utils.js?v=34.00.0" defer></script>
-    <script
-      src="assets/js/modules/picks-state-manager.js?v=34.00.0"
-      defer
-    ></script>
-    <script
-      src="assets/js/modules/picks-data-processor.js?v=34.00.0"
-      defer
-    ></script>
-    <script
-      src="assets/js/modules/picks-filter-manager.js?v=34.00.0"
-      defer
-    ></script>
-    <script
-      src="assets/js/modules/picks-sort-manager.js?v=34.00.0"
-      defer
-    ></script>
-    <script
-      src="assets/js/modules/picks-table-renderer.js?v=34.00.0"
-      defer
-    ></script>
-    <script src="dashboard/js/kpi-calculator.js?v=34.00.0" defer></script>
-
-    <script src="dashboard/js/picks-service.js?v=34.00.0" defer></script>
+    <!-- Bundled JS (replaces ~40 individual scripts) -->
+    <script src="dist/core.min.js?v=36.00.0" defer></script>
+    <script src="dist/dashboard.min.js?v=36.00.0" defer></script>
     <script>
       // Modular date range filter logic
       document.addEventListener("DOMContentLoaded", function () {
@@ -1219,98 +1096,6 @@
         fetchAndRenderPicks("active");
       });
     </script>
-    <script src="dashboard/js/smart-load-picks.js?v=34.00.2" defer></script>
-    <script src="assets/js/core/navigation.js?v=34.00.0" defer></script>
-    <script src="dashboard/js/status-logic.js?v=34.00.0" defer></script>
-    <script src="dashboard/js/status-tooltip.js?v=34.00.0" defer></script>
-
-    <!-- Upload functionality -->
-    <script
-      src="assets/js/features/auto-game-fetcher.js?v=34.01.1"
-      defer
-    ></script>
-
-    <!-- Model API Fetchers (BaseSportFetcher must load first) -->
-    <script
-      src="assets/js/features/base-sport-fetcher.js?v=35.00.0"
-      defer
-    ></script>
-    <script
-      src="assets/js/features/nba-picks-fetcher.js?v=35.00.0"
-      defer
-    ></script>
-    <script
-      src="assets/js/features/ncaam-picks-fetcher.js?v=35.00.0"
-      defer
-    ></script>
-    <script
-      src="assets/js/features/nfl-picks-fetcher.js?v=35.00.0"
-      defer
-    ></script>
-    <script
-      src="assets/js/features/ncaaf-picks-fetcher.js?v=35.00.0"
-      defer
-    ></script>
-    <script
-      src="assets/js/features/nhl-picks-fetcher.js?v=35.00.0"
-      defer
-    ></script>
-    <script
-      src="assets/js/features/unified-picks-fetcher.js?v=35.00.0"
-      defer
-    ></script>
-    <script
-      src="assets/js/features/pick-standardizer.js?v=34.00.1"
-      defer
-    ></script>
-    <script src="assets/js/features/import-options.js?v=34.00.0" defer></script>
-
-    <!-- Dashboard-specific: Picks Manager for local development -->
-    <script src="dashboard/js/local-picks-manager.js?v=34.00.0" defer></script>
-
-    <!-- Dashboard Initialization (KPI tiles, flip, refresh) -->
-    <script src="dashboard/js/dashboard-init.js?v=34.00.0" defer></script>
-
-    <!-- Dashboard Filter Pills Handler -->
-    <script
-      src="dashboard/js/dashboard-filter-pills.js?v=34.00.0"
-      defer
-    ></script>
-
-    <!-- Date Toggles Functionality -->
-    <script src="assets/js/utils/date-toggles.js?v=34.00.0" defer></script>
-
-    <!-- Logo Cache for Performance -->
-    <script src="assets/js/utils/logo-cache.js?v=34.00.0" defer></script>
-
-    <!-- Weekly Lineup ↔ Dashboard Sync Bridge -->
-    <script
-      src="assets/js/utils/weekly-lineup-sync.js?v=34.00.0"
-      defer
-    ></script>
-
-    <!-- Mobile Navigation Drawer -->
-    <script
-      src="assets/js/mobile/mobile-nav-drawer.js?v=34.01.0"
-      defer
-    ></script>
-
-    <!-- Shared Bottom Navigation -->
-    <script src="assets/js/mobile/shared-bottom-nav.js?v=1.0.0" defer></script>
-
-    <!-- Real-time Updates via SignalR -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.min.js"></script>
-    <script src="assets/js/core/signalr-client.js?v=34.00.0" defer></script>
-
-    <!-- Authentication -->
-    <script src="assets/js/core/auth-client.js?v=34.00.0" defer></script>
-
-    <!-- Sportsbook Connector -->
-    <script
-      src="assets/js/features/sportsbook-connector.js?v=34.00.0"
-      defer
-    ></script>
-
     <!-- Service worker registration and idle prefetch -->
     <script>
       (function () {

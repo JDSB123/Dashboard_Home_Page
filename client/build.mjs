@@ -22,17 +22,30 @@ mkdirSync(DIST, { recursive: true });
 // ── JS bundles ────────────────────────────────────────────────────────────
 // Files listed in dependency order (matching <script defer> order in HTML)
 
+// Shared core JS — loaded by ALL pages (dependency order matches HTML)
 const SHARED_JS = [
   "assets/js/core/debug-config.js",
   "assets/js/utils/shared-utils.js",
-  "assets/js/core/error-handler.js",
-  "assets/js/core/notifications.js",
+  "assets/js/utils/notifications.js",
   "assets/js/utils/data-cache-manager.js",
+  "assets/js/utils/lazy-script-loader.js",
+  "assets/js/utils/logo-loader.js",
+  "assets/js/utils/logo-url-rewriter.js",
+  "assets/js/utils/error-handler.js",
+  "assets/js/utils/logo-cache.js",
+  "assets/js/utils/page-transition-handler.js",
   "assets/js/utils/model-endpoint-resolver.js",
   "assets/js/features/model-endpoints-bootstrap.js",
   "assets/js/features/base-sport-fetcher.js",
+  "assets/js/core/navigation.js",
+  "assets/js/init/disable-form-submit.js",
+  "assets/js/mobile/mobile-nav-drawer.js",
+  "assets/js/mobile/shared-bottom-nav.js",
+  "assets/js/core/signalr-client.js",
+  "assets/js/core/auth-client.js",
 ];
 
+// Sport fetchers — shared across dashboard and weekly-lineup
 const FETCHER_JS = [
   "assets/js/features/nba-picks-fetcher.js",
   "assets/js/features/ncaam-picks-fetcher.js",
@@ -42,26 +55,61 @@ const FETCHER_JS = [
   "assets/js/features/unified-picks-fetcher.js",
 ];
 
+// Dashboard-specific JS (index.html only)
 const DASHBOARD_JS = [
-  "assets/js/features/pick-standardizer.js",
-  "assets/js/features/import-options.js",
-  "assets/js/modules/picks-table-renderer.js",
-  "assets/js/modules/picks-sort-manager.js",
+  "assets/js/utils/team-data-loader.js",
+  "assets/js/utils/filter-state-persistence.js",
+  "assets/js/features/manual-upload.js",
+  "assets/js/features/sportsbook-selection-handler.js",
+  "assets/js/modules/zebra-stripes.js",
+  "assets/js/modules/picks-dom-utils.js",
   "assets/js/modules/picks-state-manager.js",
+  "assets/js/modules/picks-data-processor.js",
+  "assets/js/modules/picks-filter-manager.js",
+  "assets/js/modules/picks-sort-manager.js",
+  "assets/js/modules/picks-table-renderer.js",
   "dashboard/js/kpi-calculator.js",
   "dashboard/js/picks-service.js",
+  "dashboard/js/smart-load-picks.js",
+  "dashboard/js/status-logic.js",
+  "dashboard/js/status-tooltip.js",
+  "assets/js/features/auto-game-fetcher.js",
+  "assets/js/features/pick-standardizer.js",
+  "assets/js/features/import-options.js",
   "dashboard/js/local-picks-manager.js",
   "dashboard/js/dashboard-init.js",
+  "dashboard/js/dashboard-filter-pills.js",
+  "assets/js/utils/date-toggles.js",
+  "assets/js/utils/weekly-lineup-sync.js",
+  "assets/js/features/sportsbook-connector.js",
 ];
 
+// Weekly-lineup-specific JS
 const WEEKLY_LINEUP_JS = [
-  "dashboard/js/picks-service.js",
+  "assets/js/modules/picks-dom-utils.js",
   "assets/js/modules/picks-state-manager.js",
+  "assets/js/modules/picks-table-renderer.js",
+  "assets/js/modules/picks-filter-manager.js",
+  "dashboard/js/picks-service.js",
+  "dashboard/js/local-picks-manager.js",
+  "assets/js/utils/weekly-lineup-sync.js",
+  "assets/js/features/live-scores.js",
+  "assets/js/features/auto-game-fetcher.js",
+  "assets/js/features/pick-standardizer.js",
   "assets/js/features/weekly-lineup-controller.js",
+  "assets/js/features/blob-storage-archiver.js",
+  "assets/js/features/history-manager.js",
+  "assets/js/features/pdf-parser.js",
+  "assets/js/features/image-ocr-parser.js",
+  "assets/js/features/basketball-api-client.js",
+  "assets/js/features/sportsbook-connector.js",
+  "assets/js/mobile/mobile-enhancements.js",
+  "assets/js/weekly-lineup-mobile.js",
 ];
 
 // ── CSS bundles ───────────────────────────────────────────────────────────
 
+// Shared core CSS — loaded by ALL pages (critical.css stays separate)
 const SHARED_CSS = [
   "assets/css/base/variables.css",
   "assets/css/base/reset.css",
@@ -69,23 +117,33 @@ const SHARED_CSS = [
   "assets/css/components/navigation.css",
   "assets/css/components/notifications-enhanced.css",
   "assets/css/components/loading-skeleton.css",
-  "assets/css/utilities/utilities.css",
+  "assets/css/base/utilities.css",
+  "assets/css/components/mobile-responsive.css",
 ];
 
+// Dashboard-specific CSS (index.html only)
 const DASHBOARD_CSS = [
   "assets/css/pages/dashboard.css",
+  "assets/css/components/brand-header.css",
   "assets/css/components/kpi-tiles.css",
+  "assets/css/components/date-toggles.css",
   "assets/css/components/picks-table.css",
+  "assets/css/components/boxscores.css",
   "assets/css/components/status-badges.css",
+  "assets/css/components/segment-colors.css",
   "assets/css/components/filter-cards.css",
   "assets/css/components/toolbar.css",
   "assets/css/components/table-columns.css",
 ];
 
+// Weekly-lineup-specific CSS
 const WEEKLY_LINEUP_CSS = [
   "assets/css/pages/weekly-lineup.css",
   "assets/css/components/picks-table.css",
+  "assets/css/components/status-badges.css",
   "assets/css/components/table-columns.css",
+  "assets/css/pages/weekly-lineup-critical.css",
+  "assets/css/weekly-lineup-mobile-complete.css",
 ];
 
 // ── Build logic ───────────────────────────────────────────────────────────

@@ -3,10 +3,13 @@ Box Score Fetcher Module
 Fetches box scores from APIs and stores them with proper segment data.
 """
 
+import logging
 import os
 from datetime import datetime, date, timedelta
 from typing import List, Dict, Optional
 from dotenv import load_dotenv
+
+logger = logging.getLogger(__name__)
 
 from .api_clients import SportsDataIOClient, APIBasketballClient
 from .betsapi_client import BetsAPIClient
@@ -33,18 +36,18 @@ class BoxScoreFetcher:
         try:
             self.betsapi_client = BetsAPIClient()
         except ValueError:
-            print("Warning: BetsAPI token not configured")
+            logger.warning("BetsAPI token not configured")
 
         # SportsDataIO kept as fallback for NFL (requires separate subscription)
         try:
             self.sportsdata_client = SportsDataIOClient()
         except ValueError:
-            print("Warning: SportsDataIO API key not configured (using BetsAPI for football)")
+            logger.warning("SportsDataIO API key not configured (using BetsAPI for football)")
 
         try:
             self.basketball_client = APIBasketballClient()
         except ValueError:
-            print("Warning: API-Basketball API key not configured")
+            logger.warning("API-Basketball API key not configured")
 
     def fetch_nfl_box_scores(self, game_date: str, use_cache: bool = True) -> List[Dict]:
         """
@@ -77,7 +80,7 @@ class BoxScoreFetcher:
                 self.cache.store_box_scores("NFL", game_date, [])
                 return []
             except Exception as e:
-                print(f"BetsAPI error for NFL {game_date}: {e}")
+                logger.error(f"BetsAPI error for NFL {game_date}: {e}")
 
         # --- SportsDataIO fallback ---
         if self.sportsdata_client:
@@ -95,9 +98,9 @@ class BoxScoreFetcher:
                     self.cache.store_box_scores("NFL", game_date, box_scores)
                 return box_scores
             except Exception as e:
-                print(f"SportsDataIO error for NFL {game_date}: {e}")
+                logger.error(f"SportsDataIO error for NFL {game_date}: {e}")
 
-        print("No API client available for NFL")
+        logger.error("No API client available for NFL")
         return []
 
     def fetch_ncaaf_box_scores(
@@ -137,14 +140,14 @@ class BoxScoreFetcher:
                 self.cache.store_box_scores("NCAAF", game_date, [])
                 return []
             except Exception as e:
-                print(f"BetsAPI error for NCAAF {game_date}: {e}")
+                logger.error(f"BetsAPI error for NCAAF {game_date}: {e}")
 
         # --- SportsDataIO fallback (requires week number) ---
         if self.sportsdata_client:
             if not season:
                 season = int(game_date[:4])
             if not week:
-                print(f"Warning: Week number required for SportsDataIO NCAAF. Skipping {game_date}")
+                logger.warning(f"Week number required for SportsDataIO NCAAF. Skipping {game_date}")
                 return []
             try:
                 scores = self.sportsdata_client.get_ncaaf_scores(season, week)
@@ -153,9 +156,9 @@ class BoxScoreFetcher:
                     self.cache.store_box_scores("NCAAF", game_date, filtered)
                 return filtered
             except Exception as e:
-                print(f"SportsDataIO error for NCAAF {game_date}: {e}")
+                logger.error(f"SportsDataIO error for NCAAF {game_date}: {e}")
 
-        print("No API client available for NCAAF")
+        logger.error("No API client available for NCAAF")
         return []
 
     def fetch_nba_box_scores(self, game_date: str, use_cache: bool = True) -> List[Dict]:
@@ -174,7 +177,7 @@ class BoxScoreFetcher:
             return self.cache.load_box_scores("NBA", game_date)
 
         if not self.basketball_client:
-            print("API-Basketball client not available for NBA")
+            logger.error("API-Basketball client not available for NBA")
             return []
 
         # Fetch games
@@ -213,7 +216,7 @@ class BoxScoreFetcher:
             return self.cache.load_box_scores("NCAAM", game_date)
 
         if not self.basketball_client:
-            print("API-Basketball client not available for NCAAM")
+            logger.error("API-Basketball client not available for NCAAM")
             return []
 
         # Fetch games
@@ -238,31 +241,31 @@ class BoxScoreFetcher:
         """
         results = {}
 
-        print(f"\nFetching box scores for {game_date}...")
+        logger.info(f"Fetching box scores for {game_date}...")
 
         # NFL
-        print("  Fetching NFL...")
+        logger.debug("Fetching NFL...")
         nfl_scores = self.fetch_nfl_box_scores(game_date, use_cache)
         results["NFL"] = nfl_scores
-        print(f"    Found {len(nfl_scores)} games")
+        logger.debug(f"Found {len(nfl_scores)} NFL games")
 
         # NCAAF (now supported via BetsAPI – no week number needed)
-        print("  Fetching NCAAF...")
+        logger.debug("Fetching NCAAF...")
         ncaaf_scores = self.fetch_ncaaf_box_scores(game_date, use_cache=use_cache)
         results["NCAAF"] = ncaaf_scores
-        print(f"    Found {len(ncaaf_scores)} games")
+        logger.debug(f"Found {len(ncaaf_scores)} NCAAF games")
 
         # NBA
-        print("  Fetching NBA...")
+        logger.debug("Fetching NBA...")
         nba_scores = self.fetch_nba_box_scores(game_date, use_cache)
         results["NBA"] = nba_scores
-        print(f"    Found {len(nba_scores)} games")
+        logger.debug(f"Found {len(nba_scores)} NBA games")
 
         # NCAAM
-        print("  Fetching NCAAM...")
+        logger.debug("Fetching NCAAM...")
         ncaam_scores = self.fetch_ncaam_box_scores(game_date, use_cache)
         results["NCAAM"] = ncaam_scores
-        print(f"    Found {len(ncaam_scores)} games")
+        logger.debug(f"Found {len(ncaam_scores)} NCAAM games")
 
         return results
 
@@ -303,7 +306,7 @@ class BoxScoreFetcher:
                     elif league == "NCAAM":
                         self.fetch_ncaam_box_scores(game_date, use_cache)
                 except Exception as e:
-                    print(f"Error fetching {league} for {game_date}: {e}")
+                    logger.error(f"Error fetching {league} for {game_date}: {e}")
 
             current += timedelta(days=1)
             # Rate limiting

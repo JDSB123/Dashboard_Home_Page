@@ -1,9 +1,14 @@
+import logging
+
 import pandas as pd
 from nba_api.stats.endpoints import leaguegamefinder, boxscoresummaryv3
 from nba_api.stats.static import teams
 from datetime import datetime, timedelta
 import time
 import os
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(name)s] %(levelname)s: %(message)s')
+logger = logging.getLogger(__name__)
 
 # NBA team abbreviations to full names
 team_abbr = {
@@ -20,7 +25,7 @@ try:
     nba_teams = teams.get_teams()
     team_id_map = {team['id']: team['abbreviation'] for team in nba_teams}
 except Exception as e:
-    print(f"Warning: Could not fetch teams: {e}")
+    logger.warning(f"Could not fetch teams: {e}")
     team_id_map = {}
 
 # Dynamic date generation: Dec 28, 2025 to Today + 1 day (to cover late games or timezone diffs)
@@ -34,13 +39,13 @@ while current_date <= end_date:
     dates.append(current_date.strftime('%m/%d/%Y'))
     current_date += timedelta(days=1)
 
-print(f"Fetching NBA games for range: {dates[0]} to {dates[-1]}...")
+logger.info(f"Fetching NBA games for range: {dates[0]} to {dates[-1]}...")
 
 all_games = []
 processed_game_ids = set()
 
 for date in dates:
-    print(f"\nFetching games for {date}...")
+    logger.info(f"Fetching games for {date}...")
     try:
         # Find games on this date
         game_finder = leaguegamefinder.LeagueGameFinder(
@@ -51,7 +56,7 @@ for date in dates:
         games_df = game_finder.get_data_frames()[0]
 
         if len(games_df) == 0:
-            print(f"  No games found")
+            logger.info(f"  No games found")
             continue
 
         # Group by game_id to get both teams
@@ -151,13 +156,13 @@ for date in dates:
                                 
                                 all_games.append(game_record)
                                 processed_game_ids.add(game_id)
-                                print(f"  {away_abbr} @ {home_abbr}: {away_fg}-{home_fg} (1H: {away_1h}-{home_1h})")
+                                logger.info(f"  {away_abbr} @ {home_abbr}: {away_fg}-{home_fg} (1H: {away_1h}-{home_1h})")
                 
             except Exception as e:
-                print(f"  Error processing {game_id}: {e}")
+                logger.error(f"  Error processing {game_id}: {e}")
 
     except Exception as e:
-        print(f"  Error for {date}: {e}")
+        logger.error(f"  Error for {date}: {e}")
 
 # Create DataFrame and save
 if all_games:
@@ -165,12 +170,12 @@ if all_games:
     # Save to the original hardcoded path for backward compatibility
     output_path = r'C:\Users\JB\green-bier-ventures\DASHBOARD_main\nba_scores_dec28_jan6.csv'
     df.to_csv(output_path, index=False)
-    print(f"\nSaved {len(all_games)} games to {output_path}")
-    
+    logger.info(f"Saved {len(all_games)} games to {output_path}")
+
     # Also save to a generic 'latest' file
     latest_path = r'C:\Users\JB\green-bier-ventures\DASHBOARD_main\nba_scores_latest.csv'
     df.to_csv(latest_path, index=False)
-    print(f"Saved copy to {latest_path}")
+    logger.info(f"Saved copy to {latest_path}")
 
     # Also save with dynamic name covering the range found
     if dates:
@@ -178,6 +183,6 @@ if all_games:
         end_fmt = dates[-1].replace('/', '-')
         dynamic_path = fr'C:\Users\JB\green-bier-ventures\DASHBOARD_main\nba_scores_{start_fmt}_to_{end_fmt}.csv'
         df.to_csv(dynamic_path, index=False)
-        print(f"Saved copy to {dynamic_path}")
+        logger.info(f"Saved copy to {dynamic_path}")
 else:
-    print("\nNo games found!")
+    logger.info("No games found!")

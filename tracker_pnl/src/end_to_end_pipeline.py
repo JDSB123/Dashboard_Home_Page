@@ -3,12 +3,15 @@ End-to-End Pick Processing Pipeline
 Parses Telegram picks → Matches with box scores → Evaluates results → Exports to Excel
 """
 
+import logging
 import re
 from dataclasses import dataclass
 from datetime import datetime
 from decimal import Decimal
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
+
+logger = logging.getLogger(__name__)
 
 import pandas as pd
 
@@ -88,12 +91,12 @@ class EndToEndPipeline:
             List of evaluated picks
         """
         # Step 1: Parse Telegram picks
-        print("Step 1: Parsing Telegram messages...")
+        logger.info("Step 1: Parsing Telegram messages...")
         raw_picks = self.parser.parse_files(html_files, date_range)
-        print(f"  Parsed {len(raw_picks)} picks")
+        logger.info(f"Parsed {len(raw_picks)} picks")
 
         # Step 2: Convert and evaluate
-        print("\nStep 2: Matching with box scores and evaluating...")
+        logger.info("Step 2: Matching with box scores and evaluating...")
         evaluated_picks = []
 
         for pick in raw_picks:
@@ -106,15 +109,15 @@ class EndToEndPipeline:
         pushes = sum(1 for p in evaluated_picks if p.status == "Push")
         pending = sum(1 for p in evaluated_picks if p.status == "Pending")
 
-        print(f"\nResults:")
-        print(f"  Hits: {hits}")
-        print(f"  Misses: {misses}")
-        print(f"  Pushes: {pushes}")
-        print(f"  Pending: {pending}")
+        logger.info(f"Results:")
+        logger.info(f"  Hits: {hits}")
+        logger.info(f"  Misses: {misses}")
+        logger.info(f"  Pushes: {pushes}")
+        logger.info(f"  Pending: {pending}")
 
         # P&L
         total_pnl = sum(p.pnl for p in evaluated_picks if p.pnl is not None)
-        print(f"\nTotal P&L: ${total_pnl:,.2f}")
+        logger.info(f"Total P&L: ${total_pnl:,.2f}")
 
         return evaluated_picks
 
@@ -455,7 +458,7 @@ class EndToEndPipeline:
         self, picks: List[EvaluatedPick], output_path: str, include_summary: bool = True
     ):
         """Export evaluated picks to Excel."""
-        print(f"\nExporting to {output_path}...")
+        logger.info(f"Exporting to {output_path}...")
 
         # Convert to DataFrame
         data = []
@@ -498,7 +501,7 @@ class EndToEndPipeline:
         else:
             df.to_excel(output_path, index=False)
 
-        print(f"  Exported {len(picks)} picks")
+        logger.info(f"Exported {len(picks)} picks")
 
     def _create_summary(self, picks: List[EvaluatedPick]) -> pd.DataFrame:
         """Create summary statistics DataFrame."""
@@ -605,5 +608,6 @@ def run_pipeline(
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(name)s] %(levelname)s: %(message)s')
     # Default run
     run_pipeline(date_range=("2025-12-12", "2025-12-27"), output_excel="pick_results.xlsx")

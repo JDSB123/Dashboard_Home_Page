@@ -37,7 +37,11 @@
 
 const { getAllowedOrigins, buildCorsHeaders, sendResponse } = require("../shared/http");
 const { validateSharedKey } = require("../shared/auth");
+const { createLogger } = require("../shared/logger");
+const { RateLimiter } = require("../shared/rate-limiter");
 const { getContainer, isSport, normalizeSport } = require("./helpers");
+
+const limiter = new RateLimiter({ windowMs: 60000, maxRequests: 100 });
 const {
   handleListPicks,
   handleGetPick,
@@ -62,10 +66,19 @@ module.exports = async function (context, req) {
     methods: "GET,POST,PATCH,DELETE,OPTIONS",
     headers: "Content-Type, x-functions-key, Authorization, x-confirm-clear",
   });
+  const log = createLogger("PicksAPI", context);
 
   // Handle preflight
   if (req.method === "OPTIONS") {
     context.res = { status: 204, headers: corsHeaders };
+    return;
+  }
+
+  // Rate limiting
+  const ip = req.headers["x-forwarded-for"] || req.headers["x-real-ip"] || "unknown";
+  if (!limiter.allow(ip)) {
+    log.warn("Rate limited", { ip });
+    sendResponse(context, 429, { error: "Too many requests" }, corsHeaders);
     return;
   }
 
@@ -92,7 +105,7 @@ module.exports = async function (context, req) {
     }
   }
 
-  const routeCtx = { sport, action, pickId, corsHeaders };
+  const routeCtx = { sport, action, pickId, corsHeaders, log };
 
   try {
     // Auth for write operations
@@ -129,7 +142,7 @@ module.exports = async function (context, req) {
     // Unknown route
     sendResponse(context, 400, { error: "Invalid request" }, corsHeaders);
   } catch (error) {
-    context.log.error("[PicksAPI] Error:", error.message, error.stack);
+    log.error("Request failed", { error: error.message });
     sendResponse(
       context, 500,
       { success: false, error: "Internal server error", message: error.message },

@@ -3,6 +3,7 @@ Box Score Database Module
 Robust storage, retrieval, and sequencing of box score history using SQLite.
 """
 
+import logging
 import sqlite3
 import json
 import os
@@ -10,6 +11,8 @@ from pathlib import Path
 from typing import List, Dict, Optional, Tuple
 from datetime import datetime, date
 from contextlib import contextmanager
+
+logger = logging.getLogger(__name__)
 
 
 class BoxScoreDatabase:
@@ -216,18 +219,18 @@ class BoxScoreDatabase:
                 continue
             
             league = league_dir.name
-            print(f"Importing {league}...")
+            logger.info(f"Importing {league}...")
             
             json_files = list(league_dir.glob("*.json"))
-            print(f"  Found {len(json_files)} JSON files")
+            logger.info(f"Found {len(json_files)} JSON files")
             
             for json_file in json_files:
                 try:
                     self.import_from_json_file(str(json_file), league, source=f"file_{json_file.stem}")
                 except Exception as e:
-                    print(f"  Error importing {json_file.name}: {e}")
+                    logger.error(f"Error importing {json_file.name}: {e}")
             
-            print(f"  Completed {league}")
+            logger.info(f"Completed {league}")
     
     def get_game(self, game_id: str, league: str) -> Optional[Dict]:
         """

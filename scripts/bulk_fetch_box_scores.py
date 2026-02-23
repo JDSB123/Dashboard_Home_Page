@@ -9,12 +9,15 @@ Usage:
 
 import argparse
 import json
+import logging
 import os
 import sys
 import time
 import requests
 from datetime import datetime, timedelta
 from pathlib import Path
+
+logger = logging.getLogger(__name__)
 
 
 BASE_URL = "https://v1.basketball.api-sports.io"
@@ -169,11 +172,11 @@ def main():
     skipped_cached = 0
     errors = []
 
-    print(f"\n{'='*60}")
-    print(f"  Bulk Box Score Fetch: {league}")
-    print(f"  Date range: {start} → {end} ({total_days} days)")
-    print(f"  Output: {output_dir.resolve()}")
-    print(f"{'='*60}\n")
+    logger.info("=" * 60)
+    logger.info(f"  Bulk Box Score Fetch: {league}")
+    logger.info(f"  Date range: {start} -> {end} ({total_days} days)")
+    logger.info(f"  Output: {output_dir.resolve()}")
+    logger.info("=" * 60)
 
     current = start
     day_num = 0
@@ -191,7 +194,7 @@ def main():
                 total_games += n
                 total_final += sum(1 for g in cached if g.get("status") == "final")
                 skipped_cached += 1
-                print(f"  [{day_num}/{total_days}] {game_date} — cached ({n} games)")
+                logger.info(f"  [{day_num}/{total_days}] {game_date} -- cached ({n} games)")
             except Exception:
                 pass
             current += timedelta(days=1)
@@ -213,38 +216,39 @@ def main():
 
             # Save to file
             cache_file.write_text(json.dumps(box_scores, indent=2))
-            print(
-                f"  [{day_num}/{total_days}] {game_date} — {len(box_scores)} games ({final_count} final)"
+            logger.info(
+                f"  [{day_num}/{total_days}] {game_date} -- {len(box_scores)} games ({final_count} final)"
             )
 
         except requests.exceptions.HTTPError as e:
             status_code = e.response.status_code if e.response else "?"
             errors.append((game_date, str(e)))
-            print(f"  [{day_num}/{total_days}] {game_date} — ERROR {status_code}: {e}")
+            logger.error(f"  [{day_num}/{total_days}] {game_date} -- ERROR {status_code}: {e}")
             if status_code == 429:
-                print("    ⚠ Rate limited! Waiting 60s...")
+                logger.warning("Rate limited! Waiting 60s...")
                 time.sleep(60)
         except Exception as e:
             errors.append((game_date, str(e)))
-            print(f"  [{day_num}/{total_days}] {game_date} — ERROR: {e}")
+            logger.error(f"  [{day_num}/{total_days}] {game_date} -- ERROR: {e}")
 
         current += timedelta(days=1)
         if current <= end:
             time.sleep(args.delay)
 
     # Summary
-    print(f"\n{'='*60}")
-    print(f"  DONE: {league} Box Scores")
-    print(f"  Days processed: {total_days} ({skipped_cached} from cache)")
-    print(f"  Total games:    {total_games}")
-    print(f"  Final games:    {total_final}")
-    print(f"  Output:         {output_dir.resolve()}")
+    logger.info("=" * 60)
+    logger.info(f"  DONE: {league} Box Scores")
+    logger.info(f"  Days processed: {total_days} ({skipped_cached} from cache)")
+    logger.info(f"  Total games:    {total_games}")
+    logger.info(f"  Final games:    {total_final}")
+    logger.info(f"  Output:         {output_dir.resolve()}")
     if errors:
-        print(f"  Errors:         {len(errors)}")
+        logger.error(f"  Errors:         {len(errors)}")
         for d, e in errors:
-            print(f"    {d}: {e}")
-    print(f"{'='*60}\n")
+            logger.error(f"    {d}: {e}")
+    logger.info("=" * 60)
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(name)s] %(levelname)s: %(message)s')
     main()

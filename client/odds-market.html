@@ -39,30 +39,13 @@
       rel="stylesheet"
     />
 
-    <!-- CSS: Bundled for performance -->
-    <link rel="stylesheet" href="dist/bundle.min.css?v=34.00.0" />
-    <!-- Mobile Responsive Styles (includes consolidated hotfixes) -->
-    <link
-      rel="stylesheet"
-      href="assets/css/components/mobile-responsive.css?v=34.00.0"
-    />
-    <link rel="stylesheet" href="assets/css/base/utilities.css?v=1" />
+    <!-- Bundled CSS -->
+    <link rel="stylesheet" href="dist/core.min.css?v=36.00.0" />
+    <!-- Page-specific CSS -->
+    <link rel="stylesheet" href="assets/css/pages/odds-market-critical.css?v=1" />
 
-    <script src="config.js?v=34.00.0" defer></script>
-    <script src="assets/js/core/debug-config.js?v=34.00.0" defer></script>
-    <script src="assets/js/utils/logo-loader.js?v=1.0.1" defer></script>
-    <script src="assets/js/utils/logo-url-rewriter.js?v=1.0.0" defer></script>
-
-    <!-- Page Transition Handler (smooth navigation with loading state) -->
-    <script
-      src="assets/js/utils/page-transition-handler.js?v=1.0.0"
-      defer
-    ></script>
-
-    <link
-      rel="stylesheet"
-      href="assets/css/pages/odds-market-critical.css?v=1"
-    />
+    <!-- Runtime config (separate — per-environment) -->
+    <script src="config.js?v=36.00.0" defer></script>
   </head>
   <body class="page-glow page-odds-market">
     <nav class="brand-nav" role="navigation" aria-label="Main navigation">
@@ -567,22 +550,10 @@
       </div>
     </aside>
 
-    <!-- Scripts -->
-    <script src="assets/js/utils/shared-utils.js?v=20251222" defer></script>
-    <script src="assets/js/core/navigation.js?v=20251222" defer></script>
-    <script
-      src="assets/js/features/import-options.js?v=20251222"
-      defer
-    ></script>
-    <script src="assets/js/features/odds-market.js?v=20251222" defer></script>
-
-    <!-- Mobile Navigation Drawer -->
-    <script
-      src="assets/js/mobile/mobile-nav-drawer.js?v=34.01.0"
-      defer
-    ></script>
-
-    <!-- Shared Bottom Navigation -->
-    <script src="assets/js/mobile/shared-bottom-nav.js?v=1.0.0" defer></script>
+    <!-- Bundled JS (shared core) -->
+    <script src="dist/core.min.js?v=36.00.0" defer></script>
+    <!-- Page-specific scripts -->
+    <script src="assets/js/features/import-options.js?v=36.00.0" defer></script>
+    <script src="assets/js/features/odds-market.js?v=36.00.0" defer></script>
   </body>
 </html>

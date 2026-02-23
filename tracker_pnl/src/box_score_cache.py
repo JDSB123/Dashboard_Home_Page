@@ -3,12 +3,15 @@ Box Score Cache Module
 Manages caching and storage of box scores with segment/period data.
 """
 
+import logging
 import json
 import os
 from pathlib import Path
 from typing import List, Dict, Optional
 from datetime import datetime, date
 import hashlib
+
+logger = logging.getLogger(__name__)
 
 
 class BoxScoreCache:
@@ -66,7 +69,7 @@ class BoxScoreCache:
         with open(file_path, 'w', encoding='utf-8') as f:
             json.dump(normalized_scores, f, indent=2, ensure_ascii=False)
         
-        print(f"Stored {len(normalized_scores)} box scores for {league} on {game_date}")
+        logger.info(f"Stored {len(normalized_scores)} box scores for {league} on {game_date}")
     
     def load_box_scores(self, league: str, game_date: str) -> List[Dict]:
         """
@@ -88,7 +91,7 @@ class BoxScoreCache:
             with open(file_path, 'r', encoding='utf-8') as f:
                 return json.load(f)
         except Exception as e:
-            print(f"Error loading box scores from {file_path}: {e}")
+            logger.error(f"Error loading box scores from {file_path}: {e}")
             return []
     
     def _normalize_box_score(self, box_score: Dict, league: str) -> Dict:

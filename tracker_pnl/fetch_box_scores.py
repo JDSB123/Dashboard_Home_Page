@@ -3,9 +3,12 @@ Script to fetch and cache box scores for all leagues.
 """
 
 import argparse
+import logging
 import sys
 from pathlib import Path
 from datetime import datetime, timedelta
+
+logger = logging.getLogger(__name__)
 
 sys.path.insert(0, str(Path(__file__).parent))
 
@@ -45,11 +48,11 @@ def main():
             elif args.league == 'NCAAM':
                 fetcher.fetch_ncaam_box_scores(args.date, use_cache)
             elif args.league == 'NCAAF':
-                print("NCAAF requires week number. Use --start-date and --end-date with week calculation.")
+                logger.warning("NCAAF requires week number. Use --start-date and --end-date with week calculation.")
     else:
         # Today
         today = datetime.now().strftime("%Y-%m-%d")
-        print(f"Fetching box scores for today ({today})...")
+        logger.info(f"Fetching box scores for today ({today})...")
         if args.league == 'ALL':
             fetcher.fetch_all_leagues(today, use_cache)
         else:
@@ -62,4 +65,5 @@ def main():
 
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(name)s] %(levelname)s: %(message)s')
     main()

@@ -1,8 +1,11 @@
 """Simple CLI for the `pnl` aggregator."""
 
 import argparse
+import logging
 import sys
 from pathlib import Path
+
+logger = logging.getLogger(__name__)
 
 # Enable running as script from repo root
 repo_root = Path(__file__).parent.parent
@@ -17,8 +20,9 @@ def main():
     p.add_argument('--out', '-o', default='data/derived')
     args = p.parse_args()
     summary, paths = aggregate_and_write(args.input, args.out)
-    print('Wrote:', paths)
+    logger.info(f'Wrote: {paths}')
 
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(name)s] %(levelname)s: %(message)s')
     main()

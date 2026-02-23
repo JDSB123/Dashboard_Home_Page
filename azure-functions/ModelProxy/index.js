@@ -1,7 +1,11 @@
 const axios = require("axios");
 const { getAllowedOrigins, buildCorsHeaders } = require("../shared/http");
+const { createLogger } = require("../shared/logger");
+const { CircuitBreaker } = require("../shared/circuit-breaker");
+const cache = require("../shared/cache");
 
 const ALLOWED_ORIGINS = getAllowedOrigins();
+const breaker = new CircuitBreaker("ModelACA", { threshold: 3, cooldownMs: 15000 });
 
 function formatCstDate(offsetDays = 0) {
   const now = new Date();
@@ -40,6 +44,7 @@ function normalizeNcaamPath(path) {
 
 module.exports = async function (context, req) {
   const corsHeaders = buildCorsHeaders(req, ALLOWED_ORIGINS);
+  const log = createLogger("ModelProxy", context);
 
   if (req.method === "OPTIONS") {
     context.res = { status: 204, headers: corsHeaders };
@@ -48,6 +53,7 @@ module.exports = async function (context, req) {
 
   const sport = (context.bindingData.sport || "").toLowerCase();
   const path = context.bindingData.path || "";
+  log.info("Proxying model request", { sport, path });
 
   const baseUrl = resolveBaseUrl(sport);
   if (!baseUrl) {
@@ -69,17 +75,37 @@ module.exports = async function (context, req) {
 
   const upstreamUrl = `${baseUrl.replace(/\/+$/, "")}${upstreamPath}`;
 
+  // Check server-side cache for GET requests
+  const cacheKey = `model-${sport}-${upstreamPath}-${JSON.stringify(req.query || {})}`;
+  const cached = cache.get(cacheKey);
+  if (cached) {
+    log.info("Cache hit", { cacheKey });
+    context.res = {
+      status: 200,
+      headers: { ...corsHeaders, "content-type": "application/json" },
+      body: cached,
+    };
+    return;
+  }
+
   try {
-    const upstreamRes = await axios.get(upstreamUrl, {
-      params: req.query || {},
-      timeout: 20000,
-      validateStatus: () => true,
-      headers: {
-        Accept: req.headers?.accept || "application/json",
-      },
-    });
+    const upstreamRes = await breaker.call(() =>
+      axios.get(upstreamUrl, {
+        params: req.query || {},
+        timeout: 20000,
+        validateStatus: () => true,
+        headers: {
+          Accept: req.headers?.accept || "application/json",
+        },
+      }),
+    );
 
     const contentType = upstreamRes.headers?.["content-type"];
+
+    // Cache successful responses for 2 minutes
+    if (upstreamRes.status >= 200 && upstreamRes.status < 300) {
+      cache.set(cacheKey, upstreamRes.data, 120000);
+    }
 
     context.res = {
       status: upstreamRes.status,
@@ -90,7 +116,12 @@ module.exports = async function (context, req) {
       body: upstreamRes.data,
     };
   } catch (err) {
-    context.log.error("[ModelProxy] Upstream request failed", err);
+    if (err.message.includes("Circuit breaker OPEN")) {
+      log.warn("Circuit open for ModelACA", { error: err.message, sport });
+      context.res = { status: 503, headers: corsHeaders, body: { success: false, error: "Model service temporarily unavailable", retry: true } };
+      return;
+    }
+    log.error("Upstream request failed", { error: err?.message || String(err), sport });
     context.res = {
       status: 502,
       headers: corsHeaders,

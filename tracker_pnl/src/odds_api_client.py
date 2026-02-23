@@ -7,10 +7,13 @@ Auth: apiKey= query parameter
 Rate limits tracked via response headers: x-requests-used, x-requests-remaining
 """
 
+import logging
 import os
 import time
 from datetime import datetime
 from typing import Dict, List, Optional, Tuple
+
+logger = logging.getLogger(__name__)
 
 import requests
 from dotenv import load_dotenv
@@ -403,9 +406,9 @@ class OddsAPIClient:
         """Print a human-readable quota summary."""
         if self.requests_used is not None:
             total = (self.requests_used or 0) + (self.requests_remaining or 0)
-            print(
+            logger.info(
                 f"Odds API quota: {self.requests_used}/{total} used, "
                 f"{self.requests_remaining} remaining"
             )
         else:
-            print("Odds API quota: unknown (make a request first)")
+            logger.info("Odds API quota: unknown (make a request first)")

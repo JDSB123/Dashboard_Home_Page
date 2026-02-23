@@ -11,9 +11,12 @@ Usage:
 
 import argparse
 import csv
+import logging
 import sys
 from decimal import Decimal
 from pathlib import Path
+
+logger = logging.getLogger(__name__)
 
 # Allow running from the tracker_pnl directory
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -47,7 +50,7 @@ def main():
 
     input_path = Path(args.input)
     if not input_path.exists():
-        print(f"ERROR: File not found: {input_path}", file=sys.stderr)
+        logger.error(f"File not found: {input_path}")
         sys.exit(1)
 
     output_path = (
@@ -62,10 +65,10 @@ def main():
     telegram_parser = ConversationalTelegramParser()
     picks = telegram_parser.parse_file(str(input_path), date_range)
 
-    print(f"Parsed {len(picks)} confirmed picks from {input_path.name}")
+    logger.info(f"Parsed {len(picks)} confirmed picks from {input_path.name}")
 
     if not picks:
-        print("No picks found – nothing to write.")
+        logger.info("No picks found – nothing to write.")
         sys.exit(0)
 
     # Sort chronologically
@@ -93,7 +96,7 @@ def main():
                 ]
             )
 
-    print(f"Wrote {len(picks)} picks → {output_path}")
+    logger.info(f"Wrote {len(picks)} picks -> {output_path}")
 
     # Quick summary
     leagues = {}
@@ -101,15 +104,16 @@ def main():
         lg = p.league or "Unknown"
         leagues[lg] = leagues.get(lg, 0) + 1
 
-    print("\n--- Summary ---")
+    logger.info("--- Summary ---")
     for lg, count in sorted(leagues.items(), key=lambda x: -x[1]):
-        print(f"  {lg:10s}  {count:4d} picks")
-    print(f"  {'TOTAL':10s}  {len(picks):4d} picks")
+        logger.info(f"  {lg:10s}  {count:4d} picks")
+    logger.info(f"  {'TOTAL':10s}  {len(picks):4d} picks")
 
     dates = sorted(set(p.date for p in picks if p.date))
     if dates:
-        print(f"\n  Date range: {dates[0]} → {dates[-1]}")
+        logger.info(f"  Date range: {dates[0]} -> {dates[-1]}")
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(name)s] %(levelname)s: %(message)s')
     main()

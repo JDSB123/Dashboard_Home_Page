@@ -3,10 +3,13 @@ Box Score Matcher Module
 Matches picks with box scores to extract scores and segment information.
 """
 
+import logging
 import json
 import os
 from typing import Optional, List, Dict
 from datetime import datetime
+
+logger = logging.getLogger(__name__)
 
 from .pick_tracker import Pick
 
@@ -49,7 +52,7 @@ class BoxScoreMatcher:
                 self.box_scores_cache[cache_key] = scores
                 return scores
         except Exception as e:
-            print(f"Error loading box scores from {file_path}: {e}")
+            logger.error(f"Error loading box scores from {file_path}: {e}")
             return []
     
     def match_pick_to_game(self, pick: Pick) -> Optional[Dict]:

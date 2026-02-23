@@ -2,12 +2,15 @@
 Tracker Evaluator - Evaluate picks directly from the tracker Excel file
 """
 
+import logging
 import re
 from dataclasses import dataclass
 from datetime import datetime
 from decimal import Decimal
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
+
+logger = logging.getLogger(__name__)
 
 import pandas as pd
 
@@ -230,7 +233,7 @@ class TrackerEvaluator:
         # Skip header/summary rows
         df = df[df['League'].notna() & (df['League'] != 'ALL')]
         
-        print(f"Processing {len(df)} picks...")
+        logger.info(f"Processing {len(df)} picks...")
         
         picks = []
         evaluated = 0
@@ -242,7 +245,7 @@ class TrackerEvaluator:
                 if pick.evaluated_result and pick.evaluated_result != "Pending":
                     evaluated += 1
         
-        print(f"  Evaluated: {evaluated}/{len(picks)}")
+        logger.info(f"Evaluated: {evaluated}/{len(picks)}")
         return picks
     
     def _process_row(self, row: pd.Series) -> Optional[TrackerPick]:
@@ -316,7 +319,7 @@ class TrackerEvaluator:
             return pick
             
         except Exception as e:
-            print(f"Error processing row: {e}")
+            logger.error(f"Error processing row: {e}")
             return None
     
     def _evaluate_pick(self, pick: TrackerPick):
@@ -726,13 +729,13 @@ class TrackerEvaluator:
             df.to_excel(writer, sheet_name="Results", index=False)
             summary_df.to_excel(writer, sheet_name="Summary", index=False)
         
-        print(f"\nExported to {output_path}")
-        print(f"  Total: {total}, Evaluated: {evaluated}")
-        print(f"  Hits: {hits}, Misses: {misses}, Pushes: {pushes}")
-        print(f"  Win Rate: {hits/(hits+misses)*100:.1f}%" if hits+misses > 0 else "  Win Rate: N/A")
-        print(f"  P&L: ${float(total_pnl):,.2f}")
+        logger.info(f"Exported to {output_path}")
+        logger.info(f"Total: {total}, Evaluated: {evaluated}")
+        logger.info(f"Hits: {hits}, Misses: {misses}, Pushes: {pushes}")
+        logger.info(f"Win Rate: {hits/(hits+misses)*100:.1f}%" if hits+misses > 0 else "Win Rate: N/A")
+        logger.info(f"P&L: ${float(total_pnl):,.2f}")
         if with_existing > 0:
-            print(f"  Accuracy vs Tracker: {matches}/{with_existing} ({matches/with_existing*100:.1f}%)")
+            logger.info(f"Accuracy vs Tracker: {matches}/{with_existing} ({matches/with_existing*100:.1f}%)")
 
 
 def run_tracker_evaluation(
@@ -749,4 +752,5 @@ def run_tracker_evaluation(
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(name)s] %(levelname)s: %(message)s')
     run_tracker_evaluation()

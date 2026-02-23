@@ -1,5 +1,9 @@
+import logging
+
 import pandas as pd
 from datetime import datetime
+
+logger = logging.getLogger(__name__)
 
 # Missing picks from Dec 28 through Jan 6 extracted from telegram
 # Format: Date, League, Matchup, Segment, Pick (Odds), Risk
@@ -263,17 +267,19 @@ picks_data.extend([
     ("2026-01-06", "NBA", "Lakers vs Pelicans", "2H", "Under 118.5", 25000),
 ])
 
-print(f"Total picks for Dec 28 - Jan 6: {len(picks_data)}")
-print(f"Dec 28: {len([p for p in picks_data if p[0] == '2025-12-28'])}")
-print(f"Dec 29: {len([p for p in picks_data if p[0] == '2025-12-29'])}")
-print(f"Dec 30: {len([p for p in picks_data if p[0] == '2025-12-30'])}")
-print(f"Dec 31: {len([p for p in picks_data if p[0] == '2025-12-31'])}")
-print(f"Jan 1: {len([p for p in picks_data if p[0] == '2026-01-01'])}")
-print(f"Jan 2: {len([p for p in picks_data if p[0] == '2026-01-02'])}")
-print(f"Jan 3: {len([p for p in picks_data if p[0] == '2026-01-03'])}")
-print(f"Jan 4: {len([p for p in picks_data if p[0] == '2026-01-04'])}")
-print(f"Jan 5: {len([p for p in picks_data if p[0] == '2026-01-05'])}")
-print(f"Jan 6: {len([p for p in picks_data if p[0] == '2026-01-06'])}")
+logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(name)s] %(levelname)s: %(message)s')
+
+logger.info(f"Total picks for Dec 28 - Jan 6: {len(picks_data)}")
+logger.info(f"Dec 28: {len([p for p in picks_data if p[0] == '2025-12-28'])}")
+logger.info(f"Dec 29: {len([p for p in picks_data if p[0] == '2025-12-29'])}")
+logger.info(f"Dec 30: {len([p for p in picks_data if p[0] == '2025-12-30'])}")
+logger.info(f"Dec 31: {len([p for p in picks_data if p[0] == '2025-12-31'])}")
+logger.info(f"Jan 1: {len([p for p in picks_data if p[0] == '2026-01-01'])}")
+logger.info(f"Jan 2: {len([p for p in picks_data if p[0] == '2026-01-02'])}")
+logger.info(f"Jan 3: {len([p for p in picks_data if p[0] == '2026-01-03'])}")
+logger.info(f"Jan 4: {len([p for p in picks_data if p[0] == '2026-01-04'])}")
+logger.info(f"Jan 5: {len([p for p in picks_data if p[0] == '2026-01-05'])}")
+logger.info(f"Jan 6: {len([p for p in picks_data if p[0] == '2026-01-06'])}")
 
 # Create DataFrame
 df = pd.DataFrame(picks_data, columns=['Date', 'League', 'Matchup', 'Segment', 'Pick (Odds)', 'Risk'])
@@ -284,4 +290,4 @@ df['PnL'] = ''
 # Save to CSV for review
 output_path = r'C:\Users\JB\green-bier-ventures\DASHBOARD_main\picks_dec28_jan6_draft.csv'
 df.to_csv(output_path, index=False)
-print(f"\nSaved draft tracker to {output_path}")
+logger.info(f"Saved draft tracker to {output_path}")

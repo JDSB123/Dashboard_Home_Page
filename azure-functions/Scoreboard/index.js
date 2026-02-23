@@ -8,11 +8,16 @@
 
 const https = require("https");
 const { getAllowedOrigins, buildCorsHeaders } = require("../shared/http");
+const { createLogger } = require("../shared/logger");
+const { CircuitBreaker } = require("../shared/circuit-breaker");
+const cache = require("../shared/cache");
 
 const ALLOWED_ORIGINS = getAllowedOrigins();
+const breaker = new CircuitBreaker("SportsDataIO", { threshold: 5, cooldownMs: 30000 });
 
 module.exports = async function (context, req) {
   const corsHeaders = buildCorsHeaders(req, ALLOWED_ORIGINS);
+  const log = createLogger("Scoreboard", context);
 
   // Handle CORS preflight
   if (req.method === "OPTIONS") {
@@ -46,7 +51,7 @@ module.exports = async function (context, req) {
   // Get API key from environment
   const apiKey = process.env.SDIO_KEY;
   if (!apiKey) {
-    context.log.error("SDIO_KEY not configured in app settings");
+    log.error("SDIO_KEY not configured in app settings");
     context.res = {
       status: 500,
       headers: corsHeaders,
@@ -98,22 +103,45 @@ module.exports = async function (context, req) {
   }
 
   const url = `https://api.sportsdata.io/v3/${sportPath}/scores/json/ScoresByDate/${dateParam}`;
-  context.log(`[Scoreboard] Fetching: ${url}`);
+  log.info("Fetching scoreboard", { sport, date: dateParam });
+
+  // Check server-side cache
+  const cacheKey = `scoreboard-${sportPath}-${dateParam}`;
+  const cached = cache.get(cacheKey);
+  if (cached) {
+    log.info("Cache hit", { cacheKey });
+    context.res = {
+      status: 200,
+      headers: { ...corsHeaders, "Content-Type": "application/json", "Cache-Control": "public, max-age=300" },
+      body: cached,
+    };
+    return;
+  }
 
   try {
-    const data = await fetchJSON(url, apiKey);
+    const data = await breaker.call(() => fetchJSON(url, apiKey));
+    cache.set(cacheKey, data, 300000); // 5 minute server-side cache
 
     context.res = {
       status: 200,
       headers: {
         ...corsHeaders,
         "Content-Type": "application/json",
-        "Cache-Control": "public, max-age=30", // Cache for 30 seconds
+        "Cache-Control": "public, max-age=300",
       },
       body: data,
     };
   } catch (error) {
-    context.log.error(`[Scoreboard] Error fetching ${sport}:`, error.message);
+    if (error.message.includes("Circuit breaker OPEN")) {
+      log.warn("Circuit open for SportsDataIO", { error: error.message });
+      context.res = {
+        status: 503,
+        headers: corsHeaders,
+        body: { error: "Service temporarily unavailable", retry: true },
+      };
+      return;
+    }
+    log.error("Error fetching scoreboard", { sport, error: error.message });
     context.res = {
       status: error.statusCode || 500,
       headers: corsHeaders,

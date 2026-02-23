@@ -5,9 +5,14 @@ Endpoint URLs are read from environment variables (set via load-secrets.sh or
 GitHub Variables). No hardcoded infrastructure URLs.
 """
 
+import logging
+
 from azure.data.tables import TableServiceClient, TableEntity
 import os
 from datetime import datetime, timezone
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(name)s] %(levelname)s: %(message)s')
+logger = logging.getLogger(__name__)
 
 # Get connection string from environment
 conn_str = os.environ.get("AZURE_FUNCTIONS_STORAGE_CONNECTION")
@@ -52,6 +57,6 @@ for model, endpoint in endpoints.items():
     entity["healthy"] = True
 
     table_client.upsert_entity(entity)
-    print(f"✅ {model}: {endpoint}")
+    logger.info(f"{model}: {endpoint}")
 
-print("\n🎉 Registry seeded successfully!")
+logger.info("Registry seeded successfully!")

@@ -1,8 +1,11 @@
+import logging
 import os
 import pandas as pd
 from datetime import datetime, timedelta
 from pathlib import Path
 from sportsdataio_client import get_games_by_date, build_team_index_from_games, infer_matchup_from_row
+
+logger = logging.getLogger(__name__)
 
 FILE_PATH = Path(__file__).parent / "20251222_bombay711_tracker_consolidated.xlsx"
 OUTPUT_PATH = Path(__file__).parent / "20251222_completed_matchups_sdio.csv"
@@ -13,8 +16,8 @@ SUPPORTED_LEAGUES = ["nba", "nfl", "cbb"]
 
 def main():
     if not os.environ.get("SPORTSDATAIO_API_KEY"):
-        print("SPORTSDATAIO_API_KEY not set. Please set it as an environment variable.")
-        print("Example (PowerShell): $Env:SPORTSDATAIO_API_KEY = 'your_key_here'")
+        logger.error("SPORTSDATAIO_API_KEY not set. Please set it as an environment variable.")
+        logger.error("Example (PowerShell): $Env:SPORTSDATAIO_API_KEY = 'your_key_here'")
         return
 
     xl = pd.ExcelFile(FILE_PATH)
@@ -22,7 +25,7 @@ def main():
     df["Date"] = pd.to_datetime(df["Date"], errors="coerce")
     picks_df = df[df["Date"].dt.date == TARGET_DATE.date()].copy()
     if picks_df.empty:
-        print(f"No rows found for {TARGET_DATE.date()}.")
+        logger.info(f"No rows found for {TARGET_DATE.date()}.")
         return
 
     # Build indexes for target date and +/-1 day (to catch NFL variability)
@@ -33,7 +36,7 @@ def main():
             try:
                 games = get_games_by_date(lg, d)
             except Exception as e:
-                print(f"Warning: {lg} {d.date()} fetch failed: {e}")
+                logger.warning(f"{lg} {d.date()} fetch failed: {e}")
                 continue
             part = build_team_index_from_games(games)
             idx.update(part)
@@ -53,9 +56,10 @@ def main():
     out_df = picks_df.copy()
     out_df.loc[:, "Matchup"] = completed
     out_df.to_csv(OUTPUT_PATH, index=False)
-    print(f"Completed matchups written to: {OUTPUT_PATH}")
-    print(out_df[["League", "Segment", "Pick (Odds)", "Matchup"]].to_string(index=False))
+    logger.info(f"Completed matchups written to: {OUTPUT_PATH}")
+    logger.info(out_df[["League", "Segment", "Pick (Odds)", "Matchup"]].to_string(index=False))
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(name)s] %(levelname)s: %(message)s')
     main()

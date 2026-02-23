@@ -8,11 +8,13 @@
  *   NBA_API_URL, NCAAM_API_URL, NFL_API_URL, NCAAF_API_URL
  */
 const { getAllowedOrigins, buildCorsHeaders } = require("../shared/http");
+const { createLogger } = require("../shared/logger");
 
 const ALLOWED_ORIGINS = getAllowedOrigins();
 
 module.exports = async function (context, req) {
   const corsHeaders = buildCorsHeaders(req, ALLOWED_ORIGINS);
+  const log = createLogger("ModelRegistry", context);
 
   if (req.method === "OPTIONS") {
     context.res = { status: 204, headers: corsHeaders };
@@ -30,6 +32,7 @@ module.exports = async function (context, req) {
     }
   }
 
+  log.info("Registry requested", { sports: Object.keys(registry) });
   context.res = {
     status: 200,
     headers: { ...corsHeaders, "Content-Type": "application/json" },

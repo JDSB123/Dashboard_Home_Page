@@ -3,12 +3,15 @@
 import argparse
 import getpass
 import json
+import logging
 import os
 import re
 import shutil
 import subprocess
 import sys
 from pathlib import Path
+
+logger = logging.getLogger(__name__)
 
 
 def run(cmd, check=True):
@@ -94,12 +97,12 @@ def main():
     args = parser.parse_args()
 
     if shutil.which("gh") is None:
-        print("ERROR: GitHub CLI (gh) is required. Install it or run in the devcontainer.")
+        logger.error("GitHub CLI (gh) is required. Install it or run in the devcontainer.")
         sys.exit(1)
 
     repo = args.repo or detect_repo()
     if not repo:
-        print("ERROR: Could not determine GitHub repo. Use --repo owner/name.")
+        logger.error("Could not determine GitHub repo. Use --repo owner/name.")
         sys.exit(1)
 
     apps = [app.strip() for app in args.apps.split(",") if app.strip()]
@@ -108,7 +111,7 @@ def main():
 
     if not env_path.exists() and env_example_path.exists():
         env_path.write_text(env_example_path.read_text())
-        print(f"Created {env_path} from {env_example_path}.")
+        logger.info(f"Created {env_path} from {env_example_path}.")
 
     env_lines, key_index = load_env_lines(env_path)
 
@@ -118,10 +121,10 @@ def main():
             names = list_secrets(app, repo)
             secret_names.update(names)
         except Exception as exc:
-            print(f"WARN: Failed to list {app} secrets: {exc}")
+            logger.warning(f"Failed to list {app} secrets: {exc}")
 
     if not secret_names:
-        print("WARN: No secrets found. Check GH auth or repo permissions.")
+        logger.warning("No secrets found. Check GH auth or repo permissions.")
         sys.exit(1)
 
     updated = False
@@ -153,10 +156,11 @@ def main():
 
     if updated:
         env_path.write_text("\n".join(env_lines) + "\n")
-        print(f"Updated {env_path} with GitHub secrets.")
+        logger.info(f"Updated {env_path} with GitHub secrets.")
     else:
-        print("INFO: No updates made; .env already had values for listed secrets.")
+        logger.info("No updates made; .env already had values for listed secrets.")
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(name)s] %(levelname)s: %(message)s')
     main()

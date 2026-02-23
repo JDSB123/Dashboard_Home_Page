@@ -2,8 +2,10 @@
  * Health check endpoint for orchestrator monitoring
  */
 const { TableClient } = require("@azure/data-tables");
+const { createLogger } = require("../shared/logger");
 
 module.exports = async function (context, req) {
+  const log = createLogger("Health", context);
   const healthChecks = {
     status: "healthy",
     timestamp: new Date().toISOString(),
@@ -86,7 +88,7 @@ module.exports = async function (context, req) {
     // Uptime
     healthChecks.uptime = Math.round(process.uptime()) + " seconds";
   } catch (error) {
-    context.log.error("Health check error:", error);
+    log.error("Health check error", { error: error.message });
     healthChecks.status = "unhealthy";
     healthChecks.error = error.message;
   }

@@ -39,6 +39,7 @@ venv/
 *.tmp
 *.temp
 nul
+client/dist/_tmp_*
 
 # Azurite local emulator state
 __azurite_db*.json

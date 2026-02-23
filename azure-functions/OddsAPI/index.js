@@ -19,8 +19,14 @@
 
 const https = require("https");
 const { getAllowedOrigins, buildCorsHeaders } = require("../shared/http");
+const { createLogger } = require("../shared/logger");
+const { CircuitBreaker } = require("../shared/circuit-breaker");
+const { RateLimiter } = require("../shared/rate-limiter");
+const cache = require("../shared/cache");
 
 const ALLOWED_ORIGINS = getAllowedOrigins();
+const breaker = new CircuitBreaker("TheOddsAPI", { threshold: 3, cooldownMs: 60000 });
+const limiter = new RateLimiter({ windowMs: 60000, maxRequests: 30 });
 
 // Map friendly sport names → The Odds API sport keys
 const SPORT_KEY_MAP = {
@@ -35,10 +41,19 @@ const SPORT_KEY_MAP = {
 
 module.exports = async function (context, req) {
   const corsHeaders = buildCorsHeaders(req, ALLOWED_ORIGINS);
+  const log = createLogger("OddsAPI", context);
 
   // CORS preflight
   if (req.method === "OPTIONS") {
     context.res = { status: 204, headers: corsHeaders };
+    return;
+  }
+
+  // Rate limiting
+  const ip = req.headers["x-forwarded-for"] || req.headers["x-real-ip"] || "unknown";
+  if (!limiter.allow(ip)) {
+    log.warn("Rate limited", { ip });
+    context.res = { status: 429, headers: corsHeaders, body: { error: "Too many requests" } };
     return;
   }
 
@@ -59,7 +74,7 @@ module.exports = async function (context, req) {
 
   const apiKey = process.env.ODDS_API_KEY;
   if (!apiKey) {
-    context.log.error("ODDS_API_KEY not configured");
+    log.error("ODDS_API_KEY not configured");
     context.res = {
       status: 500,
       headers: corsHeaders,
@@ -103,9 +118,26 @@ module.exports = async function (context, req) {
   }
 
   const url = `https://api.the-odds-api.com${path}?${params.toString()}`;
+  log.info("Fetching odds", { sport, action });
+
+  // Check server-side cache
+  const cacheTtl = action === "odds" ? 120000 : 300000; // 2min odds, 5min scores/events
+  const cacheKey = `odds-${sport}-${action}-${req.query.regions || "us"}`;
+  const cached = cache.get(cacheKey);
+  if (cached) {
+    log.info("Cache hit", { cacheKey });
+    context.res = {
+      status: 200,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      body: cached,
+    };
+    return;
+  }
 
   try {
-    const data = await fetchJson(url, context);
+    const data = await breaker.call(() => fetchJson(url, context));
+
+    cache.set(cacheKey, data.body, cacheTtl);
 
     // Forward quota headers from the upstream response
     const responseHeaders = {
@@ -114,6 +146,7 @@ module.exports = async function (context, req) {
     };
     if (data._quotaUsed != null) {
       responseHeaders["x-requests-used"] = String(data._quotaUsed);
+      log.info("Quota update", { used: data._quotaUsed, remaining: data._quotaRemaining });
     }
     if (data._quotaRemaining != null) {
       responseHeaders["x-requests-remaining"] = String(data._quotaRemaining);
@@ -125,7 +158,12 @@ module.exports = async function (context, req) {
       body: data.body,
     };
   } catch (err) {
-    context.log.error("OddsAPI proxy error:", err.message);
+    if (err.message.includes("Circuit breaker OPEN")) {
+      log.warn("Circuit open for TheOddsAPI", { error: err.message });
+      context.res = { status: 503, headers: corsHeaders, body: { error: "Service temporarily unavailable", retry: true } };
+      return;
+    }
+    log.error("OddsAPI proxy error", { error: err.message });
     context.res = {
       status: 502,
       headers: corsHeaders,

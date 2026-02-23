@@ -1,8 +1,11 @@
+import logging
 import re
 from datetime import datetime, timedelta
 from pathlib import Path
 import pandas as pd
 import requests
+
+logger = logging.getLogger(__name__)
 
 FILE_PATH = Path(__file__).parent / "20251222_bombay711_tracker_consolidated.xlsx"
 OUTPUT_PATH = Path(__file__).parent / "20251222_completed_matchups.csv"
@@ -113,7 +116,7 @@ def main():
     df["Date"] = pd.to_datetime(df["Date"], errors="coerce")
     picks_df = df[df["Date"].dt.date == TARGET_DATE.date()].copy()
     if picks_df.empty:
-        print(f"No rows found for {TARGET_DATE.date()}.")
+        logger.info(f"No rows found for {TARGET_DATE.date()}.")
         return
 
     # Build scoreboards and indexes per league
@@ -128,7 +131,7 @@ def main():
                 idx.update(part)
             team_indexes[lg] = idx
         except Exception as e:
-            print(f"Warning: league {lg} scoreboard fetch failed: {e}")
+            logger.warning(f"League {lg} scoreboard fetch failed: {e}")
 
     completed = []
     for _, row in picks_df.iterrows():
@@ -143,9 +146,10 @@ def main():
     out_df = picks_df.copy()
     out_df.loc[:, "Matchup"] = completed
     out_df.to_csv(OUTPUT_PATH, index=False)
-    print(f"Completed matchups written to: {OUTPUT_PATH}")
-    print(out_df[["League", "Segment", "Pick (Odds)", "Matchup"]].to_string(index=False))
+    logger.info(f"Completed matchups written to: {OUTPUT_PATH}")
+    logger.info(out_df[["League", "Segment", "Pick (Odds)", "Matchup"]].to_string(index=False))
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(name)s] %(levelname)s: %(message)s')
     main()

@@ -1,9 +1,12 @@
+import logging
 import re
 import json
 from datetime import datetime
 from pathlib import Path
 import pandas as pd
 import requests
+
+logger = logging.getLogger(__name__)
 
 FILE_PATH = Path(__file__).parent / "20251222_bombay711_tracker_consolidated.xlsx"
 OUTPUT_PATH = Path(__file__).parent / "20251222_bombay711_tracker_results.csv"
@@ -281,7 +284,7 @@ def main():
     df[col_date] = pd.to_datetime(df[col_date], errors="coerce")
     picks_df = df[df[col_date].dt.date == TARGET_DATE.date()].copy()
     if picks_df.empty:
-        print(f"No picks found for {TARGET_DATE.date()}.")
+        logger.info(f"No picks found for {TARGET_DATE.date()}.")
         return
 
     # Optional: override Matchup using SportsDataIO-completed CSV if present
@@ -305,7 +308,7 @@ def main():
                     # Prefer SDIO-completed matchup when available
                     picks_df[col_matchup] = merged["Matchup"].fillna(picks_df[col_matchup])
         except Exception as e:
-            print(f"Warning: could not merge SDIO matchups CSV: {e}")
+            logger.warning(f"Could not merge SDIO matchups CSV: {e}")
 
     # Fetch scoreboard per league for the date
     league_col = cols.get("league")
@@ -365,9 +368,10 @@ def main():
 
     out_df = pd.DataFrame(results)
     out_df.to_csv(OUTPUT_PATH, index=False)
-    print(f"Results written to: {OUTPUT_PATH}")
-    print(out_df.to_string(index=False))
+    logger.info(f"Results written to: {OUTPUT_PATH}")
+    logger.info(out_df.to_string(index=False))
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(name)s] %(levelname)s: %(message)s')
     main()

@@ -4,9 +4,12 @@ Generate Full Tracker Excel
 Create the telegram_analysis_2025-12-28.xlsx file with all 18 columns
 including box scores from cache.
 """
+import logging
 import pandas as pd
 import sys
 from pathlib import Path
+
+logger = logging.getLogger(__name__)
 
 # Fix import for running as script
 repo_root = Path(__file__).parent.parent
@@ -26,7 +29,7 @@ def generate_full_tracker(
 
     # Load graded CSV (all 218 picks)
     graded_df = pd.read_csv(graded_csv)
-    print(f'Loaded {len(graded_df)} graded picks')
+    logger.info(f'Loaded {len(graded_df)} graded picks')
 
     # Build full tracker with expected columns
     main_df = pd.DataFrame()
@@ -96,7 +99,7 @@ def generate_full_tracker(
 
     # Count how many got scores
     filled = sum(1 for s in scores_full if s)
-    print(f'Built tracker with {len(main_df)} rows, {filled} with box scores')
+    logger.info(f'Built tracker with {len(main_df)} rows, {filled} with box scores')
 
     # Aggregates from graded data
     agg = compute_aggregates(graded_csv)
@@ -125,9 +128,10 @@ def generate_full_tracker(
         # Aggregates (full $) with totals
         agg_full[['Pick Count', 'Wins', 'Win %', 'Risk ($)', 'PnL ($)', 'ROE %']].to_excel(writer, sheet_name='Aggregates (Full $)', index=True)
 
-    print(f'Full tracker Excel (all columns): {excel_path}')
+    logger.info(f'Full tracker Excel (all columns): {excel_path}')
     return str(excel_path)
 
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(name)s] %(levelname)s: %(message)s')
     generate_full_tracker()

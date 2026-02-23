@@ -120,4 +120,116 @@ describe("PicksAPI", () => {
     await picksApi(ctx, req);
     expect(ctx.res.status).toBe(401);
   });
+
+  test("PATCH /picks/{sport}/{id} updates existing pick", async () => {
+    const ctx = makeContext();
+    ctx.bindingData = { action: "NBA", id: "test-1" };
+    const req = makeReq({
+      method: "PATCH",
+      body: { status: "win", result: "W" },
+    });
+    await picksApi(ctx, req);
+    expect(ctx.res.status).toBe(200);
+    expect(ctx.res.body.success).toBe(true);
+  });
+
+  test("PATCH /picks/{sport}/{id} returns 404 for non-existent pick", async () => {
+    const cosmos = require("@azure/cosmos");
+    cosmos.__mockItem.read.mockImplementationOnce(() => {
+      const err = new Error("Not found");
+      err.code = 404;
+      throw err;
+    });
+    cosmos.__mockItems.query.mockReturnValueOnce({
+      fetchAll: jest.fn(() => ({ resources: [] })),
+    });
+
+    const ctx = makeContext();
+    ctx.bindingData = { action: "NBA", id: "missing-id" };
+    const req = makeReq({
+      method: "PATCH",
+      body: { status: "win" },
+    });
+    await picksApi(ctx, req);
+    expect(ctx.res.status).toBe(404);
+  });
+
+  test("DELETE /picks/{sport}/{id} deletes single pick", async () => {
+    const ctx = makeContext();
+    ctx.bindingData = { action: "NBA", id: "test-1" };
+    const req = makeReq({ method: "DELETE" });
+    await picksApi(ctx, req);
+    expect(ctx.res.status).toBe(200);
+    expect(ctx.res.body.success).toBe(true);
+  });
+
+  test("DELETE /picks/{sport}/clear without confirmation returns 400", async () => {
+    const ctx = makeContext();
+    ctx.bindingData = { action: "NBA", id: "clear" };
+    const req = makeReq({
+      method: "DELETE",
+      headers: { origin: "http://localhost:3000" },
+    });
+    await picksApi(ctx, req);
+    expect(ctx.res.status).toBe(400);
+    expect(ctx.res.body.error).toMatch(/[Cc]onfirmation/);
+  });
+
+  test("DELETE /picks/{sport}/clear with confirmation returns 200", async () => {
+    const ctx = makeContext();
+    ctx.bindingData = { action: "NBA", id: "clear" };
+    const req = makeReq({
+      method: "DELETE",
+      headers: { origin: "http://localhost:3000", "x-confirm-clear": "true" },
+    });
+    await picksApi(ctx, req);
+    expect(ctx.res.status).toBe(200);
+    expect(ctx.res.body.success).toBe(true);
+  });
+
+  test("POST /picks/{sport}/archive archives settled picks", async () => {
+    const ctx = makeContext();
+    ctx.bindingData = { action: "NBA", id: "archive" };
+    const req = makeReq({ method: "POST" });
+    await picksApi(ctx, req);
+    expect(ctx.res.status).toBe(200);
+    expect(ctx.res.body.success).toBe(true);
+    expect(ctx.res.body.sport).toBe("NBA");
+  });
+
+  test("GET /picks/{sport} filters by sport", async () => {
+    const ctx = makeContext();
+    ctx.bindingData = { action: "NBA", id: "" };
+    const req = makeReq();
+    await picksApi(ctx, req);
+    expect(ctx.res.status).toBe(200);
+    expect(ctx.res.body.filters.sport).toBe("NBA");
+  });
+
+  test("GET /picks with query params passes them through", async () => {
+    const ctx = makeContext();
+    const req = makeReq({
+      params: { action: "", id: "" },
+      query: { date: "2026-02-22", sportsbook: "DraftKings" },
+    });
+    await picksApi(ctx, req);
+    expect(ctx.res.status).toBe(200);
+    expect(ctx.res.body.filters.date).toBe("2026-02-22");
+    expect(ctx.res.body.filters.sportsbook).toBe("DraftKings");
+  });
+
+  test("POST /picks with array body creates multiple picks", async () => {
+    const ctx = makeContext();
+    ctx.bindingData = { action: "NBA", id: "" };
+    const req = makeReq({
+      method: "POST",
+      body: [
+        { sport: "NBA", game: "Lakers @ Celtics", pickType: "spread", line: -3 },
+        { sport: "NBA", game: "Heat @ Bucks", pickType: "total", line: 220 },
+      ],
+    });
+    await picksApi(ctx, req);
+    expect([200, 201]).toContain(ctx.res.status);
+    expect(ctx.res.body.created).toBe(2);
+  });
 });

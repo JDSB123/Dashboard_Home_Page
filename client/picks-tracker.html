@@ -25,34 +25,14 @@
       rel="stylesheet"
     />
 
-    <!-- Design tokens -->
-    <link rel="stylesheet" href="assets/css/base/variables.css?v=34.00.0" />
-    <link rel="stylesheet" href="assets/css/base/reset.css?v=34.00.0" />
-    <link rel="stylesheet" href="assets/css/layout/page-layout.css?v=34.00.0" />
-    <link
-      rel="stylesheet"
-      href="assets/css/components/navigation.css?v=34.00.0"
-    />
-    <link
-      rel="stylesheet"
-      href="assets/css/components/status-badges.css?v=34.00.0"
-    />
-    <link
-      rel="stylesheet"
-      href="assets/css/components/mobile-responsive.css?v=34.00.0"
-    />
-
-    <!-- Page-specific -->
+    <!-- Bundled CSS -->
+    <link rel="stylesheet" href="dist/core.min.css?v=36.00.0" />
+    <!-- Page-specific CSS -->
     <link rel="stylesheet" href="assets/css/pages/picks-tracker.css?v=1.0.0" />
+    <link rel="stylesheet" href="assets/css/pages/picks-tracker-mobile.css?v=1.0.0" />
 
-    <!-- Runtime config -->
-    <script src="config.js?v=34.00.0" defer></script>
-
-    <!-- Mobile-specific tracker styles -->
-    <link
-      rel="stylesheet"
-      href="assets/css/pages/picks-tracker-mobile.css?v=1.0.0"
-    />
+    <!-- Runtime config (separate — per-environment) -->
+    <script src="config.js?v=36.00.0" defer></script>
   </head>
   <body class="page-picks-tracker">
     <noscript>
@@ -164,20 +144,9 @@
       </div>
     </main>
 
-    <!-- Core navigation (hamburger menu + keyboard nav) -->
-    <script src="assets/js/utils/shared-utils.js?v=34.00.0" defer></script>
-    <script src="assets/js/core/navigation.js?v=34.00.0" defer></script>
-
-    <!-- Mobile Navigation Drawer -->
-    <script
-      src="assets/js/mobile/mobile-nav-drawer.js?v=34.01.0"
-      defer
-    ></script>
-
-    <!-- Shared Bottom Navigation -->
-    <script src="assets/js/mobile/shared-bottom-nav.js?v=1.0.0" defer></script>
-
-    <!-- Tracker script -->
+    <!-- Bundled JS (shared core) -->
+    <script src="dist/core.min.js?v=36.00.0" defer></script>
+    <!-- Page-specific script -->
     <script src="assets/js/features/picks-tracker.js?v=1.0.0" defer></script>
   </body>
 </html>

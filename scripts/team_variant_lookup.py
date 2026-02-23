@@ -4,9 +4,12 @@ Team Variant Lookup Utility
 Provides helper functions to work with team variant data.
 """
 
+import logging
 import json
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
+
+logger = logging.getLogger(__name__)
 
 
 class TeamVariantLookup:
@@ -35,7 +38,7 @@ class TeamVariantLookup:
         """Load JSON file."""
         filepath = self.data_dir / filename
         if not filepath.exists():
-            print(f"Warning: {filename} not found")
+            logger.warning(f"{filename} not found")
             return {}
 
         with open(filepath, "r", encoding="utf-8") as f:
@@ -328,57 +331,58 @@ def main():
     """Example usage."""
     lookup = TeamVariantLookup()
 
-    print("=" * 60)
-    print("Team Variant Lookup - Examples")
-    print("=" * 60)
+    logger.info("=" * 60)
+    logger.info("Team Variant Lookup - Examples")
+    logger.info("=" * 60)
 
     # Example 1: Find NFL team
-    print("\n1. Find NFL team by abbreviation:")
+    logger.info("1. Find NFL team by abbreviation:")
     team = lookup.find_nfl_team("ARI")
     if team:
-        print(f"   Team: {team['names'][0]}")
-        print(f"   All abbreviations: {', '.join(team['abbreviations'])}")
+        logger.info(f"   Team: {team['names'][0]}")
+        logger.info(f"   All abbreviations: {', '.join(team['abbreviations'])}")
 
     # Example 2: Find by name
-    print("\n2. Find NFL team by name:")
+    logger.info("2. Find NFL team by name:")
     team = lookup.find_nfl_team("Raiders")
     if team:
-        print(f"   Current: {team['historical'][-1]['full_name']}")
-        print(f"   Location history: {[h['location'] for h in team['historical'][-3:]]}")
+        logger.info(f"   Current: {team['historical'][-1]['full_name']}")
+        logger.info(f"   Location history: {[h['location'] for h in team['historical'][-3:]]}")
 
     # Example 3: Find NCAAM team
-    print("\n3. Find NCAAM teams:")
+    logger.info("3. Find NCAAM teams:")
     for query in ["DUKE", "North Carolina", "Wildcats"]:
         team = lookup.find_ncaam_team(query)
         if team:
-            print(f"   {query} → {team['name']} ({team['abbreviations'][0]})")
+            logger.info(f"   {query} -> {team['name']} ({team['abbreviations'][0]})")
 
     # Example 4: Normalize abbreviation
-    print("\n4. Normalize abbreviations:")
+    logger.info("4. Normalize abbreviations:")
     for abbrev in ["BKN", "BRK"]:
         normalized = lookup.normalize_nba_abbreviation(abbrev)
-        print(f"   {abbrev} → {normalized}")
+        logger.info(f"   {abbrev} -> {normalized}")
 
     # Example 5: Get all variants
-    print("\n5. Get all variants for a team:")
+    logger.info("5. Get all variants for a team:")
     variants = lookup.get_team_variants("NFL", "LAC")
-    print(f"   LAC variants: {', '.join(variants[:5])}...")
+    logger.info(f"   LAC variants: {', '.join(variants[:5])}...")
 
     # Example 6: Search across leagues
-    print("\n6. Search across all leagues:")
+    logger.info("6. Search across all leagues:")
     results = lookup.search_teams("State")
     for league, teams in results.items():
         if teams:
             team_names = [t.get("name") or t["names"][0] for t in teams[:3]]
-            print(f"   {league.upper()}: {', '.join(team_names)}")
+            logger.info(f"   {league.upper()}: {', '.join(team_names)}")
 
-    print(f"\n7. Total teams loaded:")
-    print(f"   NFL: {len(lookup.nfl_teams)}")
-    print(f"   NBA: {len(lookup.nba_teams)}")
-    print(f"   NCAAM: {len(lookup.ncaam_teams)}")
+    logger.info(f"7. Total teams loaded:")
+    logger.info(f"   NFL: {len(lookup.nfl_teams)}")
+    logger.info(f"   NBA: {len(lookup.nba_teams)}")
+    logger.info(f"   NCAAM: {len(lookup.ncaam_teams)}")
 
-    print("\n" + "=" * 60)
+    logger.info("=" * 60)
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(name)s] %(levelname)s: %(message)s')
     main()

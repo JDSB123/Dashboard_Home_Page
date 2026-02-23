@@ -3,10 +3,14 @@ Box Score Reporter Module
 Provides reporting and analytics on box score data.
 """
 
+import logging
+
 import pandas as pd
 from typing import List, Dict, Optional
 from datetime import datetime
 from pathlib import Path
+
+logger = logging.getLogger(__name__)
 
 from .box_score_database import BoxScoreDatabase
 
@@ -153,7 +157,7 @@ class BoxScoreReporter:
         
         if output_file:
             df.to_csv(output_file, index=False)
-            print(f"Report saved to {output_file}")
+            logger.info(f"Report saved to {output_file}")
         
         return df
     
@@ -221,4 +225,4 @@ class BoxScoreReporter:
             coverage_df = self.generate_date_coverage_report()
             coverage_df.to_excel(writer, sheet_name='Coverage', index=False)
         
-        print(f"Excel report saved to {output_file}")
+        logger.info(f"Excel report saved to {output_file}")

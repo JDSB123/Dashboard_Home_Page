@@ -2,10 +2,13 @@
 Full analysis with improved parser and alignment.
 """
 
+import logging
 import sys
 from pathlib import Path
 
 import pandas as pd
+
+logger = logging.getLogger(__name__)
 
 sys.path.insert(0, str(Path(__file__).parent))
 
@@ -65,43 +68,43 @@ def main():
     start_date = "2025-12-12"
     end_date = "2025-12-27"
     
-    print("=" * 80)
-    print("LOADING DATA")
-    print("=" * 80)
-    
+    logger.info("=" * 80)
+    logger.info("LOADING DATA")
+    logger.info("=" * 80)
+
     # Load tracker
     tracker_df = load_tracker_data(start_date, end_date)
-    print(f"Tracker rows loaded: {len(tracker_df)}")
-    print(f"Date range: {tracker_df['Date'].min()} to {tracker_df['Date'].max()}")
-    print(f"Leagues: {dict(tracker_df['League'].value_counts())}")
-    
+    logger.info(f"Tracker rows loaded: {len(tracker_df)}")
+    logger.info(f"Date range: {tracker_df['Date'].min()} to {tracker_df['Date'].max()}")
+    logger.info(f"Leagues: {dict(tracker_df['League'].value_counts())}")
+
     # Load Telegram
     telegram_df = load_telegram_picks(start_date, end_date)
-    print(f"\nTelegram picks parsed: {len(telegram_df)}")
-    
+    logger.info(f"Telegram picks parsed: {len(telegram_df)}")
+
     if telegram_df.empty:
-        print("ERROR: No Telegram picks parsed!")
+        logger.error("No Telegram picks parsed!")
         return
-    
-    print(f"Date range: {telegram_df['date'].min()} to {telegram_df['date'].max()}")
-    print(f"Leagues: {dict(telegram_df['league'].value_counts(dropna=False))}")
-    
+
+    logger.info(f"Date range: {telegram_df['date'].min()} to {telegram_df['date'].max()}")
+    logger.info(f"Leagues: {dict(telegram_df['league'].value_counts(dropna=False))}")
+
     # Show sample picks
-    print("\n" + "-" * 40)
-    print("Sample Telegram picks:")
+    logger.debug("-" * 40)
+    logger.debug("Sample Telegram picks:")
     for _, row in telegram_df.head(10).iterrows():
-        print(f"  {row['date']} | {row['pick_description']} | {row['segment']} | {row['league']}")
-    
+        logger.debug(f"  {row['date']} | {row['pick_description']} | {row['segment']} | {row['league']}")
+
     # Run alignment
-    print("\n" + "=" * 80)
-    print("RUNNING ALIGNMENT")
-    print("=" * 80)
+    logger.info("=" * 80)
+    logger.info("RUNNING ALIGNMENT")
+    logger.info("=" * 80)
     
     alignment_df = align_picks(tracker_df, telegram_df, score_threshold=0.5)
     
     # Generate report
     report = generate_detailed_report(alignment_df)
-    print(report)
+    logger.info(report)
     
     # Save results
     output_path = Path("improved_alignment_results.xlsx")
@@ -110,29 +113,30 @@ def main():
         telegram_df.to_excel(writer, sheet_name="Telegram Picks", index=False)
         tracker_df.to_excel(writer, sheet_name="Tracker Data", index=False)
     
-    print(f"\nResults saved to {output_path}")
-    
+    logger.info(f"Results saved to {output_path}")
+
     # Additional diagnostics
-    print("\n" + "=" * 80)
-    print("DIAGNOSTICS")
-    print("=" * 80)
+    logger.info("=" * 80)
+    logger.info("DIAGNOSTICS")
+    logger.info("=" * 80)
     
     # Check date coverage
     tracker_dates = set(tracker_df["Date"].dt.strftime("%Y-%m-%d"))
     telegram_dates = set(telegram_df[telegram_df["date"].notna()]["date"])
     
-    print(f"\nTracker unique dates: {len(tracker_dates)}")
-    print(f"Telegram unique dates: {len(telegram_dates)}")
-    
+    logger.info(f"Tracker unique dates: {len(tracker_dates)}")
+    logger.info(f"Telegram unique dates: {len(telegram_dates)}")
+
     # Find matches by date
-    print("\nMatches by date:")
+    logger.info("Matches by date:")
     for date in sorted(tracker_dates):
         tracker_count = len(tracker_df[tracker_df["Date"].dt.strftime("%Y-%m-%d") == date])
         telegram_count = len(telegram_df[telegram_df["date"] == date])
-        matched_count = len(alignment_df[(alignment_df["tracker_date"].dt.strftime("%Y-%m-%d") == date) & 
+        matched_count = len(alignment_df[(alignment_df["tracker_date"].dt.strftime("%Y-%m-%d") == date) &
                                          alignment_df["matched"]])
-        print(f"  {date}: Tracker={tracker_count}, Telegram={telegram_count}, Matched={matched_count}")
+        logger.info(f"  {date}: Tracker={tracker_count}, Telegram={telegram_count}, Matched={matched_count}")
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(name)s] %(levelname)s: %(message)s')
     main()

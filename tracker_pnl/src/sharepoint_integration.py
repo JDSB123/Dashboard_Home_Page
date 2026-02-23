@@ -3,9 +3,12 @@ SharePoint Integration Module
 Handles uploading and updating tracker files in SharePoint.
 """
 
+import logging
 import os
 from typing import Optional
 from pathlib import Path
+
+logger = logging.getLogger(__name__)
 from office365.sharepoint.client_context import ClientContext
 from office365.runtime.auth.authentication_context import AuthenticationContext
 
@@ -41,7 +44,7 @@ class SharePointIntegration:
             # Create context
             self.ctx = ClientContext(self.site_url, auth_ctx)
         except Exception as e:
-            print(f"SharePoint authentication error: {e}")
+            logger.error(f"SharePoint authentication error: {e}")
             raise
     
     def upload_file(self, local_file_path: str, sharepoint_folder_path: str,
@@ -74,10 +77,10 @@ class SharePointIntegration:
             uploaded_file = target_folder.upload_file(file_name, file_content)
             self.ctx.execute_query()
             
-            print(f"Successfully uploaded {file_name} to SharePoint")
+            logger.info(f"Successfully uploaded {file_name} to SharePoint")
             
         except Exception as e:
-            print(f"Error uploading file to SharePoint: {e}")
+            logger.error(f"Error uploading file to SharePoint: {e}")
             raise
     
     def download_file(self, sharepoint_file_path: str, local_file_path: str):
@@ -102,10 +105,10 @@ class SharePointIntegration:
                 file.download(f)
                 self.ctx.execute_query()
             
-            print(f"Successfully downloaded file from SharePoint to {local_file_path}")
+            logger.info(f"Successfully downloaded file from SharePoint to {local_file_path}")
             
         except Exception as e:
-            print(f"Error downloading file from SharePoint: {e}")
+            logger.error(f"Error downloading file from SharePoint: {e}")
             raise
     
     def upload_tracker(self, tracker: PickTracker, sharepoint_folder_path: str,

@@ -12,11 +12,14 @@ Requires BETSAPI_TOKEN in .env or --token flag.
 
 import argparse
 import json
+import logging
 import os
 import sys
 import time
 from datetime import datetime, timedelta
 from pathlib import Path
+
+logger = logging.getLogger(__name__)
 
 # Ensure project root is on sys.path for relative imports
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -73,7 +76,7 @@ def main():
 
     # Init client
     client = BetsAPIClient(token=args.token)
-    print(f"BetsAPI client initialised (token={client.token[:8]}...)")
+    logger.info(f"BetsAPI client initialised (token={client.token[:8]}...)")
 
     for league in leagues:
         output_dir = base_dir / league
@@ -85,11 +88,11 @@ def main():
         skipped_cached = 0
         errors = []
 
-        print(f"\n{'='*60}")
-        print(f"  Bulk Box Score Fetch: {league} (BetsAPI)")
-        print(f"  Date range: {start} → {end} ({total_days} days)")
-        print(f"  Output: {output_dir.resolve()}")
-        print(f"{'='*60}\n")
+        logger.info("=" * 60)
+        logger.info(f"  Bulk Box Score Fetch: {league} (BetsAPI)")
+        logger.info(f"  Date range: {start} -> {end} ({total_days} days)")
+        logger.info(f"  Output: {output_dir.resolve()}")
+        logger.info("=" * 60)
 
         current = start
         day_num = 0
@@ -106,7 +109,7 @@ def main():
                     total_games += n
                     total_final += sum(1 for g in cached if g.get("status") == "final")
                     skipped_cached += 1
-                    print(f"  [{day_num}/{total_days}] {game_date} — cached ({n} games)")
+                    logger.info(f"  [{day_num}/{total_days}] {game_date} -- cached ({n} games)")
                 except Exception:
                     pass
                 current += timedelta(days=1)
@@ -128,17 +131,17 @@ def main():
 
                 # Save
                 cache_file.write_text(json.dumps(scores, indent=2))
-                print(
-                    f"  [{day_num}/{total_days}] {game_date} — "
+                logger.info(
+                    f"  [{day_num}/{total_days}] {game_date} -- "
                     f"{len(scores)} games ({final_count} final)"
                 )
 
             except Exception as e:
                 errors.append((game_date, str(e)))
-                print(f"  [{day_num}/{total_days}] {game_date} — ERROR: {e}")
+                logger.error(f"  [{day_num}/{total_days}] {game_date} -- ERROR: {e}")
                 # On rate limit, back off
                 if "429" in str(e) or "Too Many" in str(e):
-                    print("    ⚠ Rate limited! Waiting 60s...")
+                    logger.warning("Rate limited! Waiting 60s...")
                     time.sleep(60)
 
             current += timedelta(days=1)
@@ -146,18 +149,19 @@ def main():
                 time.sleep(args.delay)
 
         # Summary
-        print(f"\n{'='*60}")
-        print(f"  DONE: {league} Box Scores (BetsAPI)")
-        print(f"  Days processed: {total_days} ({skipped_cached} from cache)")
-        print(f"  Total games:    {total_games}")
-        print(f"  Final games:    {total_final}")
-        print(f"  Output:         {output_dir.resolve()}")
+        logger.info("=" * 60)
+        logger.info(f"  DONE: {league} Box Scores (BetsAPI)")
+        logger.info(f"  Days processed: {total_days} ({skipped_cached} from cache)")
+        logger.info(f"  Total games:    {total_games}")
+        logger.info(f"  Final games:    {total_final}")
+        logger.info(f"  Output:         {output_dir.resolve()}")
         if errors:
-            print(f"  Errors:         {len(errors)}")
+            logger.error(f"  Errors:         {len(errors)}")
             for d, e in errors:
-                print(f"    {d}: {e}")
-        print(f"{'='*60}\n")
+                logger.error(f"    {d}: {e}")
+        logger.info("=" * 60)
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(name)s] %(levelname)s: %(message)s')
     main()

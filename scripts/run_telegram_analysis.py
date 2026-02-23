@@ -17,12 +17,15 @@ Env vars / .env file:
 
 import argparse
 import json
+import logging
 import os
 import sys
 from datetime import datetime, timedelta
 from decimal import Decimal
 from pathlib import Path
 from typing import List
+
+logger = logging.getLogger(__name__)
 
 # Ensure the project root is on sys.path for relative imports
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -74,7 +77,7 @@ def ensure_box_scores(date_str: str, leagues: List[str] | None = None):
         cache_file = BOX_SCORE_DIR / league / f"{date_str}.json"
         if cache_file.exists():
             continue
-        print(f"Fetching {league} box scores for {date_str}...", file=sys.stderr)
+        logger.info(f"Fetching {league} box scores for {date_str}...")
         try:
             if league == "NFL":
                 fetcher.fetch_nfl_box_scores(date_str, use_cache=False)
@@ -85,7 +88,7 @@ def ensure_box_scores(date_str: str, leagues: List[str] | None = None):
             elif league == "NCAAM":
                 fetcher.fetch_ncaam_box_scores(date_str, use_cache=False)
         except Exception as exc:
-            print(f"  Warning: {league} fetch failed – {exc}", file=sys.stderr)
+            logger.warning(f"{league} fetch failed: {exc}")
 
 
 def find_telegram_html_files() -> List[str]:

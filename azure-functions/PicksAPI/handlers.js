@@ -5,10 +5,11 @@
 
 const { sendResponse } = require("../shared/http");
 const { normalizePick, buildQuery } = require("./helpers");
+const cache = require("../shared/cache");
 
 // ── GET /picks - List picks ──────────────────────────────────────────────
 
-async function handleListPicks(context, req, container, { sport, action, corsHeaders }) {
+async function handleListPicks(context, req, container, { sport, action, corsHeaders, log }) {
   const queryOptions = {
     sport: sport || req.query.sport,
     status: req.query.status,
@@ -26,8 +27,17 @@ async function handleListPicks(context, req, container, { sport, action, corsHea
     limit: parseInt(req.query.limit) || 100,
   };
 
+  // Check cache for GET list requests
+  const cacheKey = `picks-${sport || "all"}-${action || "list"}-${JSON.stringify(queryOptions)}`;
+  const cached = cache.get(cacheKey);
+  if (cached) {
+    if (log) log.info("Cache hit", { cacheKey });
+    sendResponse(context, 200, cached, corsHeaders);
+    return;
+  }
+
   const { query, parameters } = buildQuery(queryOptions);
-  context.log(`[PicksAPI] Query: ${query}`);
+  if (log) log.info("Query", { query });
 
   const { resources: picks } = await container.items.query({ query, parameters }).fetchAll();
 
@@ -36,11 +46,9 @@ async function handleListPicks(context, req, container, { sport, action, corsHea
     return acc;
   }, {});
 
-  sendResponse(
-    context, 200,
-    { success: true, count: picks.length, bySport, filters: { sport, action, ...req.query }, picks },
-    corsHeaders,
-  );
+  const responseBody = { success: true, count: picks.length, bySport, filters: { sport, action, ...req.query }, picks };
+  cache.set(cacheKey, responseBody, 30000); // 30s cache for picks lists
+  sendResponse(context, 200, responseBody, corsHeaders);
 }
 
 // ── GET /picks/{sport}/{id} - Single pick ────────────────────────────────
@@ -76,7 +84,7 @@ async function handleGetPick(context, req, container, { sport, pickId, corsHeade
 
 // ── POST /picks - Create pick(s) ────────────────────────────────────────
 
-async function handleCreatePicks(context, req, container, { sport, corsHeaders }) {
+async function handleCreatePicks(context, req, container, { sport, corsHeaders, log }) {
   const body = req.body;
   if (!body) {
     sendResponse(context, 400, { success: false, error: "Request body required" }, corsHeaders);
@@ -97,13 +105,14 @@ async function handleCreatePicks(context, req, container, { sport, corsHeaders }
       const normalized = normalizePick(pick, sport);
       const { resource } = await container.items.upsert(normalized);
       results.push(resource);
-      context.log(`[PicksAPI] Created pick ${normalized.id} for ${normalized.sport}`);
+      if (log) log.info("Created pick", { id: normalized.id, sport: normalized.sport });
     } catch (err) {
       errors.push({ id: pick.id || "unknown", error: err.message });
-      context.log.warn(`[PicksAPI] Error creating pick: ${err.message}`);
+      if (log) log.warn("Error creating pick", { error: err.message });
     }
   }
 
+  cache.invalidate("picks-"); // bust stale list caches
   sendResponse(
     context,
     results.length > 0 ? 201 : 400,
@@ -120,7 +129,7 @@ async function handleCreatePicks(context, req, container, { sport, corsHeaders }
 
 // ── POST /{sport}/archive - Archive settled picks ────────────────────────
 
-async function handleArchive(context, req, container, { sport, corsHeaders }) {
+async function handleArchive(context, req, container, { sport, corsHeaders, log }) {
   const { resources: settledPicks } = await container.items
     .query({
       query: `SELECT * FROM c WHERE c.sport = @sport AND LOWER(c.status) IN ('win', 'won', 'loss', 'lost', 'push')`,
@@ -135,10 +144,11 @@ async function handleArchive(context, req, container, { sport, corsHeaders }) {
       await container.items.upsert(updated);
       archived++;
     } catch (e) {
-      context.log.warn(`[PicksAPI] Failed to archive ${pick.id}: ${e.message}`);
+      if (log) log.warn("Failed to archive pick", { id: pick.id, error: e.message });
     }
   }
 
+  cache.invalidate("picks-");
   sendResponse(
     context, 200,
     { success: true, sport, archived, message: `Archived ${archived} settled picks for ${sport}` },
@@ -148,7 +158,7 @@ async function handleArchive(context, req, container, { sport, corsHeaders }) {
 
 // ── PATCH /picks/{sport}/{id} - Update pick ──────────────────────────────
 
-async function handleUpdatePick(context, req, container, { sport, pickId, corsHeaders }) {
+async function handleUpdatePick(context, req, container, { sport, pickId, corsHeaders, log }) {
   const updates = req.body;
 
   let existing;
@@ -186,14 +196,15 @@ async function handleUpdatePick(context, req, container, { sport, pickId, corsHe
   };
 
   const { resource } = await container.items.upsert(updated);
-  context.log(`[PicksAPI] Updated pick ${pickId}`);
+  cache.invalidate("picks-");
+  if (log) log.info("Updated pick", { id: pickId });
 
   sendResponse(context, 200, { success: true, pick: resource }, corsHeaders);
 }
 
 // ── DELETE - Delete pick or clear sport ──────────────────────────────────
 
-async function handleDelete(context, req, container, { sport, pickId, action, corsHeaders }) {
+async function handleDelete(context, req, container, { sport, pickId, action, corsHeaders, log }) {
   // Clear all picks for sport
   if (action === "clear" && sport) {
     if (req.headers["x-confirm-clear"] !== "true") {
@@ -218,10 +229,11 @@ async function handleDelete(context, req, container, { sport, pickId, action, co
         await container.item(pick.id, pick.sport).delete();
         deleted++;
       } catch (e) {
-        context.log.warn(`[PicksAPI] Failed to delete ${pick.id}: ${e.message}`);
+        if (log) log.warn("Failed to delete pick", { id: pick.id, error: e.message });
       }
     }
 
+    cache.invalidate("picks-");
     sendResponse(
       context, 200,
       { success: true, sport, deleted, message: `Deleted ${deleted} picks for ${sport}` },
@@ -250,7 +262,8 @@ async function handleDelete(context, req, container, { sport, pickId, action, co
     }
 
     await container.item(pickId, pickSport).delete();
-    context.log(`[PicksAPI] Deleted pick ${pickId}`);
+    cache.invalidate("picks-");
+    if (log) log.info("Deleted pick", { id: pickId });
 
     sendResponse(context, 200, { success: true, deleted: pickId }, corsHeaders);
     return;
