@@ -39,7 +39,15 @@
 
     "_comment_telegram": "=== TELEGRAM ===",
     "TELEGRAM_BOT_TOKEN": "YOUR_TELEGRAM_BOT_TOKEN",
-    "TELEGRAM_WEBHOOK_SECRET": "YOUR_WEBHOOK_SECRET"
+    "TELEGRAM_WEBHOOK_SECRET": "YOUR_WEBHOOK_SECRET",
+
+    "_comment_grading": "=== AUTO-GRADING ===",
+    "GRADE_PICKS_SCHEDULE": "0 */30 16-23 * * *",
+    "GRADE_PICKS_ENABLED": "true",
+
+    "_comment_notifications": "=== NOTIFICATIONS ===",
+    "TEAMS_WEBHOOK_URL": "YOUR_TEAMS_WEBHOOK_URL",
+    "SLACK_WEBHOOK_URL": "YOUR_SLACK_WEBHOOK_URL"
   },
   "Host": {
     "LocalHttpPort": 7072,
