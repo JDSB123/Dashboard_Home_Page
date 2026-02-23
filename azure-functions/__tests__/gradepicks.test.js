@@ -37,6 +37,7 @@ const {
 } = require("../GradePicks/score-fetcher");
 
 const { resolveTeam, teamMatchesScore } = require("../shared/team-names");
+const { normalizeGameDate } = require("../PicksAPI/helpers");
 
 // ── Test data fixtures ───────────────────────────────────────────────────────
 
@@ -500,6 +501,48 @@ describe("getBasketballSeason", () => {
 
   test("returns prior season for Jan-Sep", () => {
     expect(getBasketballSeason("2026-02-23")).toBe("2025-2026");
+  });
+});
+
+// ── Game date normalization ───────────────────────────────────────────────────
+
+describe("normalizeGameDate", () => {
+  test("passes through YYYY-MM-DD unchanged", () => {
+    expect(normalizeGameDate("2026-02-23")).toBe("2026-02-23");
+  });
+
+  test("extracts date from ISO datetime", () => {
+    expect(normalizeGameDate("2026-02-23T21:30:00.000Z")).toBe("2026-02-23");
+  });
+
+  test("converts 'Sun, Feb 22' to YYYY-MM-DD", () => {
+    const result = normalizeGameDate("Sun, Feb 22");
+    expect(result).toMatch(/^\d{4}-02-22$/);
+  });
+
+  test("converts 'Sun, Jan 11' to YYYY-MM-DD", () => {
+    const result = normalizeGameDate("Sun, Jan 11");
+    expect(result).toMatch(/^\d{4}-01-11$/);
+  });
+
+  test("converts 'Feb 22' (no day-of-week) to YYYY-MM-DD", () => {
+    const result = normalizeGameDate("Feb 22");
+    expect(result).toMatch(/^\d{4}-02-22$/);
+  });
+
+  test("pads single-digit day", () => {
+    const result = normalizeGameDate("Jan 5");
+    expect(result).toMatch(/^\d{4}-01-05$/);
+  });
+
+  test("returns today for null/empty", () => {
+    const today = new Date().toISOString().split("T")[0];
+    expect(normalizeGameDate(null)).toBe(today);
+    expect(normalizeGameDate("")).toBe(today);
+  });
+
+  test("returns unrecognized format as-is", () => {
+    expect(normalizeGameDate("sometime next week")).toBe("sometime next week");
   });
 });
 

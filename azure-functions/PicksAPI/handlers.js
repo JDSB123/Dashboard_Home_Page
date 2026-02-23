@@ -4,7 +4,7 @@
  */
 
 const { sendResponse } = require("../shared/http");
-const { normalizePick, buildQuery } = require("./helpers");
+const { normalizePick, normalizeGameDate, buildQuery } = require("./helpers");
 const cache = require("../shared/cache");
 
 // ── GET /picks - List picks ──────────────────────────────────────────────
@@ -272,6 +272,48 @@ async function handleDelete(context, req, container, { sport, pickId, action, co
   sendResponse(context, 400, { error: "Invalid delete request" }, corsHeaders);
 }
 
+// ── POST /picks/migrate-dates - One-time date format migration ───────────
+
+async function handleMigrateDates(context, req, container, { corsHeaders, log }) {
+  const { resources: allPicks } = await container.items
+    .query({ query: "SELECT * FROM c" })
+    .fetchAll();
+
+  let migrated = 0;
+  let skipped = 0;
+  const errors = [];
+
+  for (const pick of allPicks) {
+    const original = pick.gameDate || "";
+    const normalized = normalizeGameDate(original);
+
+    if (normalized === original) {
+      skipped++;
+      continue;
+    }
+
+    try {
+      const updated = { ...pick, gameDate: normalized, updatedAt: new Date().toISOString() };
+      await container.items.upsert(updated);
+      migrated++;
+      if (log) log.info("Migrated pick date", { id: pick.id, from: original, to: normalized });
+    } catch (err) {
+      errors.push({ id: pick.id, error: err.message });
+      if (log) log.warn("Failed to migrate pick", { id: pick.id, error: err.message });
+    }
+  }
+
+  cache.invalidate("picks-");
+  sendResponse(context, 200, {
+    success: true,
+    total: allPicks.length,
+    migrated,
+    skipped,
+    errors: errors.length,
+    errorDetails: errors.length > 0 ? errors : undefined,
+  }, corsHeaders);
+}
+
 module.exports = {
   handleListPicks,
   handleGetPick,
@@ -279,4 +321,5 @@ module.exports = {
   handleArchive,
   handleUpdatePick,
   handleDelete,
+  handleMigrateDates,
 };

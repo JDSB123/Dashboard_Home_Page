@@ -49,6 +49,7 @@ const {
   handleArchive,
   handleUpdatePick,
   handleDelete,
+  handleMigrateDates,
 } = require("./handlers");
 
 // CORS configuration
@@ -128,6 +129,9 @@ module.exports = async function (context, req) {
     }
     if (req.method === "POST" && action === "archive" && sport) {
       return handleArchive(context, req, container, routeCtx);
+    }
+    if (req.method === "POST" && param1 === "migrate-dates") {
+      return handleMigrateDates(context, req, container, routeCtx);
     }
     if (req.method === "POST") {
       return handleCreatePicks(context, req, container, routeCtx);

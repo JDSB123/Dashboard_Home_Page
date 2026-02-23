@@ -56,6 +56,47 @@ function isSport(str) {
   return str && normalizeSport(str) !== null;
 }
 
+const MONTH_MAP = {
+  jan: "01", feb: "02", mar: "03", apr: "04", may: "05", jun: "06",
+  jul: "07", aug: "08", sep: "09", oct: "10", nov: "11", dec: "12",
+};
+
+/**
+ * Normalize a gameDate to YYYY-MM-DD format.
+ * Handles: "YYYY-MM-DD", "Sun, Feb 22", "Feb 22", "2026-02-22T...".
+ * For formats without a year, infers the most recent matching date.
+ */
+function normalizeGameDate(dateStr) {
+  if (!dateStr) return new Date().toISOString().split("T")[0];
+
+  const trimmed = dateStr.trim();
+
+  // Already YYYY-MM-DD
+  if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) return trimmed;
+
+  // ISO datetime — take the date part
+  if (/^\d{4}-\d{2}-\d{2}T/.test(trimmed)) return trimmed.split("T")[0];
+
+  // "Day, Mon DD" or "Mon DD" (e.g., "Sun, Feb 22" or "Feb 22")
+  const match = trimmed.match(/([A-Za-z]{3})\s+(\d{1,2})$/);
+  if (match) {
+    const monthKey = match[1].toLowerCase();
+    const day = match[2].padStart(2, "0");
+    const mm = MONTH_MAP[monthKey];
+    if (mm) {
+      // Infer year: use current year; if that date is >60 days in the future, use last year
+      const now = new Date();
+      const currentYear = now.getFullYear();
+      const candidate = new Date(`${currentYear}-${mm}-${day}T12:00:00Z`);
+      const sixtyDaysMs = 60 * 24 * 60 * 60 * 1000;
+      const year = candidate - now > sixtyDaysMs ? currentYear - 1 : currentYear;
+      return `${year}-${mm}-${day}`;
+    }
+  }
+
+  return trimmed;
+}
+
 function generatePickId(pick) {
   const sport = normalizeSport(pick.sport || pick.league) || "UNKNOWN";
   const date = pick.gameDate || pick.date || new Date().toISOString().split("T")[0];
@@ -91,7 +132,7 @@ function normalizePick(pick, forceSport = null) {
     toWin: parseFloat(pick.toWin || pick.win) || 0,
     segment: pick.segment || "Full Game",
     sportsbook: pick.sportsbook || pick.book || "Manual",
-    gameDate: pick.gameDate || pick.date || now.split("T")[0],
+    gameDate: normalizeGameDate(pick.gameDate || pick.date || now.split("T")[0]),
     gameTime: pick.gameTime || "",
     status: (pick.status || "pending").toLowerCase(),
     result: pick.result || "",
@@ -193,6 +234,7 @@ module.exports = {
   normalizeSport,
   isSport,
   generatePickId,
+  normalizeGameDate,
   normalizePick,
   buildQuery,
 };
