@@ -1,0 +1,593 @@
+/**
+ * Mobile Responsiveness Enhancements v2.0
+ * Refactored to use proper CSS cascade and specificity instead of !important hacks
+ *
+ * Breakpoints:
+ *   Small phones: < 480px
+ *   Phones: 480px - 767px
+ *   Tablets: 768px - 1024px
+ *   Desktop: > 1024px
+ *
+ * Key improvements:
+ *   - Removed ~150+ !important declarations
+ *   - Fixed touch targets to 44px minimum (WCAG)
+ *   - Proper safe area inset handling (iOS notch)
+ *   - Single source of truth for mobile styles
+ */
+
+/* ===== BASE MOBILE SETTINGS ===== */
+
+html,
+body {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  overflow-x: hidden;
+}
+
+/* Prevent accidental pinch zoom */
+body {
+  touch-action: manipulation;
+}
+
+/* ===== SAFE AREA SUPPORT (iOS NOTCH) ===== */
+
+@supports (padding: max(0px)) {
+  html,
+  body {
+    padding-top: max(8px, env(safe-area-inset-top));
+    padding-left: max(8px, env(safe-area-inset-left));
+    padding-right: max(8px, env(safe-area-inset-right));
+  }
+
+  .brand-nav {
+    padding-top: max(12px, env(safe-area-inset-top));
+    padding-left: max(12px, env(safe-area-inset-left));
+    padding-right: max(12px, env(safe-area-inset-right));
+    margin-top: 0;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .main-container,
+  main {
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+  }
+
+  .mobile-bottom-nav {
+    padding-bottom: max(8px, env(safe-area-inset-bottom));
+  }
+}
+
+/* ===== REDUCED MOTION ACCESSIBILITY ===== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none;
+    transition: none;
+  }
+}
+
+/* ===== FIXED NAVIGATION ===== */
+
+.brand-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0;
+  pointer-events: auto;
+}
+
+/* Adjust content for fixed nav */
+body.is-mobile
+  > :not(.brand-nav):not(.mobile-fab):not(.mobile-bottom-nav):not(style) {
+  margin-top: 56px;
+}
+
+/* ===== NAVIGATION LINKS ===== */
+
+.brand-nav .nav-links {
+  display: flex;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.brand-nav .nav-links li {
+  margin: 0;
+  padding: 4px 8px;
+}
+
+.brand-nav .nav-links a {
+  display: inline-block;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 8px 12px;
+  font-size: 12px;
+  text-decoration: none;
+  border-radius: 6px;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.brand-nav .nav-links a:active,
+.brand-nav .nav-links a:hover {
+  background-color: rgba(0, 214, 137, 0.1);
+}
+
+/* ===== MOBILE BOTTOM NAVIGATION ===== */
+
+.mobile-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background: rgba(3, 11, 22, 0.95);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(0, 214, 137, 0.1);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 9998;
+}
+
+.mobile-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  flex: 1;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 6px;
+  color: rgba(200, 210, 220, 0.7);
+  text-decoration: none;
+  transition: color 0.2s ease;
+  font-size: 10px;
+  text-align: center;
+  border-top: 3px solid transparent;
+}
+
+.mobile-nav-item:active,
+.mobile-nav-item:focus {
+  outline: none;
+}
+
+.mobile-nav-item[aria-current="page"],
+.mobile-nav-item.active {
+  color: rgba(0, 214, 137, 1);
+  border-top-color: rgba(0, 214, 137, 0.8);
+}
+
+/* ===== MOBILE FAB (FLOATING ACTION BUTTON) ===== */
+
+.mobile-fab {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 214, 137, 0.9),
+    rgba(0, 180, 120, 0.9)
+  );
+  border: 2px solid rgba(0, 255, 170, 0.3);
+  color: white;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 9999;
+  box-shadow: 0 4px 12px rgba(0, 214, 137, 0.3);
+  transition: all 0.2s ease;
+  min-height: 56px;
+  min-width: 56px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobile-fab:active,
+.mobile-fab:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 16px rgba(0, 214, 137, 0.4);
+}
+
+/* ===== TOUCH-FRIENDLY FORM CONTROLS ===== */
+
+input,
+select,
+button,
+textarea,
+.action-btn,
+.action-btn-compact,
+.action-btn-cta {
+  font-size: 16px; /* Prevents auto-zoom on iOS */
+  min-height: 44px;
+  min-width: 44px;
+  padding: 12px 16px;
+}
+
+/* Override small button styles for mobile accessibility */
+.action-btn-compact {
+  min-height: 44px;
+  padding: 12px 14px;
+  height: auto;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* ===== RESPONSIVE BREAKPOINTS ===== */
+
+/* Small phones: < 480px */
+@media (max-width: 479px) {
+  body {
+    font-size: 14px;
+  }
+
+  h1 {
+    font-size: 20px;
+  }
+
+  h2 {
+    font-size: 16px;
+  }
+
+  /* Ensure full width usage */
+  .container,
+  .main-container {
+    padding: 8px;
+  }
+
+  /* Single column layouts */
+  .grid-2,
+  .grid-3 {
+    grid-template-columns: 1fr;
+  }
+
+  /* Simplify tables on very small screens */
+  .picks-table {
+    font-size: 11px;
+  }
+
+  .picks-table td,
+  .picks-table th {
+    padding: 6px 4px;
+  }
+
+  /* Expand touch targets even more on tiny screens */
+  input,
+  select,
+  button {
+    min-height: 48px;
+  }
+}
+
+/* Phones: 480px - 767px */
+@media (min-width: 480px) and (max-width: 767px) {
+  body {
+    font-size: 15px;
+  }
+
+  .container,
+  .main-container {
+    padding: 12px;
+  }
+
+  .grid-2 {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .grid-3 {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* Picks table optimizations */
+  .picks-table {
+    font-size: 12px;
+  }
+
+  .picks-table td,
+  .picks-table th {
+    padding: 8px 6px;
+  }
+}
+
+/* Tablets: 768px - 1024px */
+@media (min-width: 768px) and (max-width: 1024px) {
+  body {
+    font-size: 16px;
+  }
+
+  .container,
+  .main-container {
+    padding: 16px;
+  }
+
+  .grid-3 {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+/* Desktop: > 1024px */
+@media (min-width: 1025px) {
+  .mobile-fab,
+  .mobile-bottom-nav,
+  .mobile-simplified-ui {
+    display: none;
+  }
+
+  .is-mobile {
+    display: none;
+  }
+}
+
+/* ===== SPORTSBOOK CARD UPLOAD FIX ===== */
+
+.sportsbook-card.upload-picks-card {
+  padding: 8px 10px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 4px;
+}
+
+.sportsbook-card.upload-picks-card .sportsbook-upload-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.sportsbook-card.upload-picks-card .import-options-popup {
+  display: none;
+  visibility: hidden;
+  height: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.sportsbook-card.upload-picks-card .import-options-popup:not([hidden]) {
+  display: block;
+  visibility: visible;
+  height: auto;
+}
+
+.sportsbook-card.upload-picks-card .upload-destination {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.sportsbook-card.upload-picks-card .upload-label {
+  display: none;
+}
+
+.sportsbook-card.upload-picks-card .sportsbook-select {
+  flex: 1;
+  height: 44px; /* Fixed from 24px to WCAG minimum */
+  min-height: 44px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: #cfd8dc;
+  font-family: var(--sportsbook-heading-font);
+  font-size: 12px; /* Increased from 10px */
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 10px 6px;
+  border-radius: 3px;
+  margin: 0;
+  line-height: 24px;
+  box-sizing: border-box;
+}
+
+.sportsbook-card.upload-picks-card .sportsbook-select:hover,
+.sportsbook-card.upload-picks-card .sportsbook-select:focus {
+  background: rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.15);
+  outline: none;
+}
+
+.sportsbook-card.upload-picks-card .sportsbook-actions-compact {
+  display: flex;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  width: auto;
+  align-items: center;
+}
+
+.sportsbook-card.upload-picks-card .action-btn-cta {
+  display: none;
+}
+
+.sportsbook-card.upload-picks-card .action-btn-compact {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 10px 12px;
+  height: auto;
+  flex: 1;
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+/* ===== TABLE RESPONSIVE LAYOUT ===== */
+
+/* Transform table to card layout on small screens */
+@media (max-width: 767px) {
+  .picks-table {
+    display: block;
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  .picks-table thead {
+    display: none;
+  }
+
+  .picks-table tbody {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .picks-table tbody tr {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "pick status"
+      "league league"
+      "teams teams"
+      "spread spread"
+      "money money";
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(0, 214, 137, 0.15);
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 8px;
+  }
+
+  .picks-table tbody tr td {
+    padding: 8px 0;
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+  }
+
+  .picks-table tbody tr td::before {
+    content: attr(data-label);
+    font-weight: 700;
+    font-size: 11px;
+    color: rgba(0, 214, 137, 0.8);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    min-width: 60px;
+    margin-right: 8px;
+  }
+
+  /* Grid area assignments */
+  .picks-table tbody tr td:nth-child(1) {
+    grid-area: pick;
+  }
+
+  .picks-table tbody tr td:nth-child(2) {
+    grid-area: league;
+  }
+
+  .picks-table tbody tr td:nth-child(3) {
+    grid-area: teams;
+  }
+
+  .picks-table tbody tr td:nth-child(4) {
+    grid-area: spread;
+  }
+
+  .picks-table tbody tr td:nth-child(5) {
+    grid-area: status;
+  }
+
+  .picks-table tbody tr td:nth-child(6) {
+    grid-area: money;
+  }
+}
+
+/* ===== MODAL AND POPUP FIXES ===== */
+
+.modal,
+.modal-overlay {
+  z-index: 10000;
+}
+
+.modal-content {
+  max-height: 90vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ===== SCROLLING OPTIMIZATION ===== */
+
+.table-container {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid rgba(0, 214, 137, 0.1);
+  border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar {
+  height: 4px;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: rgba(0, 214, 137, 0.4);
+  border-radius: 2px;
+}
+
+/* ===== KEYBOARD SUPPORT ===== */
+
+/* Visible focus states for keyboard navigation */
+button:focus,
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 2px solid rgba(0, 214, 137, 0.6);
+  outline-offset: 2px;
+}
+
+/* ===== UTILITY CLASSES ===== */
+
+.is-mobile {
+  /* Applied to body when mobile UI is active */
+}
+
+.mobile-simplified-ui {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.mobile-refresh-btn {
+  min-height: 44px;
+  padding: 12px 16px;
+  background: rgba(0, 214, 137, 0.12);
+  border: 1px solid rgba(0, 214, 137, 0.3);
+  color: rgba(0, 214, 137, 1);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.mobile-refresh-btn:active,
+.mobile-refresh-btn:hover {
+  background: rgba(0, 214, 137, 0.2);
+  border-color: rgba(0, 214, 137, 0.6);
+}

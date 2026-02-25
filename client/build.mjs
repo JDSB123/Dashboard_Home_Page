@@ -39,8 +39,7 @@ const SHARED_JS = [
   "assets/js/features/base-sport-fetcher.js",
   "assets/js/core/navigation.js",
   "assets/js/init/disable-form-submit.js",
-  "assets/js/mobile/mobile-nav-drawer.js",
-  "assets/js/mobile/shared-bottom-nav.js",
+  "assets/js/mobile/mobile-unified.js",
   "assets/js/core/signalr-client.js",
   "assets/js/core/auth-client.js",
 ];
@@ -103,8 +102,6 @@ const WEEKLY_LINEUP_JS = [
   "assets/js/features/image-ocr-parser.js",
   "assets/js/features/basketball-api-client.js",
   "assets/js/features/sportsbook-connector.js",
-  "assets/js/mobile/mobile-enhancements.js",
-  "assets/js/weekly-lineup-mobile.js",
 ];
 
 // ── CSS bundles ───────────────────────────────────────────────────────────
@@ -118,7 +115,7 @@ const SHARED_CSS = [
   "assets/css/components/notifications-enhanced.css",
   "assets/css/components/loading-skeleton.css",
   "assets/css/base/utilities.css",
-  "assets/css/components/mobile-responsive.css",
+  "assets/css/components/mobile-responsive-v2.css",
 ];
 
 // Dashboard-specific CSS (index.html only)
