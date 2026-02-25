@@ -5,13 +5,21 @@
 
 window.LogoLoader = (() => {
   // Prefer custom Front Door / CDN host, then blob storage as fallback
-  const CONFIG_BASE = (window.APP_CONFIG && (window.APP_CONFIG.LOGO_PRIMARY_URL || window.APP_CONFIG.LOGO_BASE_URL)) || null;
-  const CONFIG_FALLBACK = (window.APP_CONFIG && window.APP_CONFIG.LOGO_FALLBACK_URL) || null;
-  const AZURE_BLOB_URL = 'https://gbsvorchestratorstorage.blob.core.windows.net/team-logos';
-  const CANDIDATE_BASES = [CONFIG_BASE, CONFIG_FALLBACK, AZURE_BLOB_URL].filter(Boolean);
+  const CONFIG_BASE =
+    (window.APP_CONFIG &&
+      (window.APP_CONFIG.LOGO_PRIMARY_URL ||
+        window.APP_CONFIG.LOGO_BASE_URL)) ||
+    null;
+  const CONFIG_FALLBACK =
+    (window.APP_CONFIG && window.APP_CONFIG.LOGO_FALLBACK_URL) || null;
+  const AZURE_BLOB_URL =
+    "https://gbsvorchestratorstorage.blob.core.windows.net/team-logos";
+  const CANDIDATE_BASES = [CONFIG_BASE, CONFIG_FALLBACK, AZURE_BLOB_URL].filter(
+    Boolean,
+  );
 
   // ESPN CDN URL (last-resort fallback only)
-  const ESPN_CDN_URL = 'https://a.espncdn.com/i/teamlogos';
+  const ESPN_CDN_URL = "https://a.espncdn.com/i/teamlogos";
 
   // Cache for loaded logos
   const logoCache = new Map();
@@ -25,7 +33,7 @@ window.LogoLoader = (() => {
         await new Promise((resolve, reject) => {
           const img = new Image();
           img.onload = () => resolve();
-          img.onerror = () => reject(new Error('probe failed'));
+          img.onerror = () => reject(new Error("probe failed"));
           // Cache-bust to ensure we actually test reachability
           const ts = Date.now();
           img.src = `${base}/leagues-500-nba.png?probe=${ts}`;
@@ -64,12 +72,12 @@ window.LogoLoader = (() => {
 
     // Map league names to folder structure
     const leagueMap = {
-      'nba': 'nba',
-      'nfl': 'nfl',
-      'ncaam': 'ncaa',
-      'ncaab': 'ncaa',
-      'ncaaf': 'ncaa',
-      'ncaf': 'ncaa'
+      nba: "nba",
+      nfl: "nfl",
+      ncaam: "ncaa",
+      ncaab: "ncaa",
+      ncaaf: "ncaa",
+      ncaf: "ncaa",
     };
 
     const folder = leagueMap[league] || league;
@@ -89,23 +97,28 @@ window.LogoLoader = (() => {
    * @returns {string} Logo URL
    */
   function getLeagueLogoUrl(league) {
-    if (!league) return '';
+    if (!league) return "";
     const normalizedLeague = league.toString().toLowerCase();
 
     // NCAA league icons are not guaranteed to exist in blob storage.
     // Use local, non-copyright SVG icons instead.
-    if (normalizedLeague === 'ncaab' || normalizedLeague === 'ncaam' || normalizedLeague === 'ncaa-basketball') {
-      return '/assets/icons/league-ncaam.svg';
+    if (
+      normalizedLeague === "ncaab" ||
+      normalizedLeague === "ncaam" ||
+      normalizedLeague === "ncaa-basketball"
+    ) {
+      return "/assets/icons/league-ncaam.svg";
     }
-    if (normalizedLeague === 'ncaaf' || normalizedLeague === 'ncaa-football') {
-      return '/assets/icons/league-ncaaf.svg';
+    if (normalizedLeague === "ncaaf" || normalizedLeague === "ncaa-football") {
+      return "/assets/icons/league-ncaaf.svg";
     }
 
     const leagueFileMap = {
-      nba: 'leagues-500-nba.png',
-      nfl: 'leagues-500-nfl.png'
+      nba: "leagues-500-nba.png",
+      nfl: "leagues-500-nfl.png",
     };
-    const fileName = leagueFileMap[normalizedLeague] || `leagues-500-${normalizedLeague}.png`;
+    const fileName =
+      leagueFileMap[normalizedLeague] || `leagues-500-${normalizedLeague}.png`;
     const baseUrl = getBaseUrl();
     if (baseUrl) {
       return `${baseUrl}/${fileName}`;
@@ -120,7 +133,7 @@ window.LogoLoader = (() => {
    * @param {Array} logoSpecs - Array of {league, teamId} objects
    */
   function preloadLogos(logoSpecs) {
-    logoSpecs.forEach(spec => {
+    logoSpecs.forEach((spec) => {
       const url = getLogoUrl(spec.league, spec.teamId);
       const img = new Image();
       img.src = url;
@@ -134,7 +147,7 @@ window.LogoLoader = (() => {
     return {
       cached: logoCache.size,
       storageUrl: getBaseUrl(),
-      fallbackUrl: ESPN_CDN_URL
+      fallbackUrl: ESPN_CDN_URL,
     };
   }
 
@@ -144,7 +157,7 @@ window.LogoLoader = (() => {
     preloadLogos,
     getStats,
     AZURE_BLOB_URL,
-    ESPN_CDN_URL
+    ESPN_CDN_URL,
   };
 })();
 

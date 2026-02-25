@@ -142,8 +142,8 @@
       if (!authContainer) return;
 
       if (this.isAuthenticated && this.user) {
-        const esc = window.SharedUtils?.escapeHtml || ((s) => String(s ?? ''));
-        const picUrl = this.user.picture ? esc(this.user.picture) : '';
+        const esc = window.SharedUtils?.escapeHtml || ((s) => String(s ?? ""));
+        const picUrl = this.user.picture ? esc(this.user.picture) : "";
         const displayName = esc(this.user.name || this.user.email);
         authContainer.innerHTML = `
                     <div class="user-profile">
@@ -177,7 +177,7 @@
       const modal = document.createElement("div");
       modal.id = "auth-modal";
       modal.className = "auth-modal-overlay";
-      const esc = window.SharedUtils?.escapeHtml || ((s) => String(s ?? ''));
+      const esc = window.SharedUtils?.escapeHtml || ((s) => String(s ?? ""));
       modal.innerHTML = `
                 <div class="auth-modal">
                     <div class="auth-modal-header">

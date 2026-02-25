@@ -8,372 +8,396 @@
 
 /* ===== PAGE BACKGROUND & VARIABLES ===== */
 body.page-daily-slate {
-    --daily-accent: #00d689; /* Emerald 500 */
-    --daily-accent-dim: rgba(0, 214, 137, 0.15);
-    --daily-gold: #ffb700;
-    --daily-text: #e6f2f6;
-    --daily-text-muted: #94a3b8;
-    --daily-surface: rgba(8, 16, 28, 0.65);
-    --daily-border: rgba(80, 100, 130, 0.25);
+  --daily-accent: #00d689; /* Emerald 500 */
+  --daily-accent-dim: rgba(0, 214, 137, 0.15);
+  --daily-gold: #ffb700;
+  --daily-text: #e6f2f6;
+  --daily-text-muted: #94a3b8;
+  --daily-surface: rgba(8, 16, 28, 0.65);
+  --daily-border: rgba(80, 100, 130, 0.25);
 
-    /* Matching Weekly Lineup Background */
-    background-color: rgba(3, 11, 22, 0.18);
-    background-image: url('../../../assets/JB_Bearish_Market_FULL_page.png');
-    background-size: cover;
-    background-position: center top;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    position: relative;
-    isolation: isolate;
+  /* Matching Weekly Lineup Background */
+  background-color: rgba(3, 11, 22, 0.18);
+  background-image: url("../../../assets/JB_Bearish_Market_FULL_page.png");
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  position: relative;
+  isolation: isolate;
 }
 
 /* Overlays matching Weekly Lineup */
 body.page-daily-slate::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    background: linear-gradient(180deg,
-        rgba(4, 10, 20, 0.12) 0%,
-        rgba(4, 10, 20, 0.10) 15%,
-        rgba(4, 10, 20, 0.08) 30%,
-        rgba(4, 10, 20, 0.14) 50%,
-        rgba(4, 10, 20, 0.18) 75%,
-        rgba(4, 10, 20, 0.25) 100%);
-    pointer-events: none;
-    opacity: 0.2;
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    180deg,
+    rgba(4, 10, 20, 0.12) 0%,
+    rgba(4, 10, 20, 0.1) 15%,
+    rgba(4, 10, 20, 0.08) 30%,
+    rgba(4, 10, 20, 0.14) 50%,
+    rgba(4, 10, 20, 0.18) 75%,
+    rgba(4, 10, 20, 0.25) 100%
+  );
+  pointer-events: none;
+  opacity: 0.2;
 }
 
 body.page-daily-slate::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: -2;
-    background: rgba(3, 11, 22, 0.75);
-    mix-blend-mode: multiply;
-    pointer-events: none;
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background: rgba(3, 11, 22, 0.75);
+  mix-blend-mode: multiply;
+  pointer-events: none;
 }
 
 /* ==========================================================================
    NAV & HEADER - EXACT MATCH TO WEEKLY LINEUP
    ========================================================================== */
 body.page-daily-slate .brand-nav {
-    background: transparent;
-    border-bottom: none;
-    box-shadow: none;
-    padding-left: 0.5in;
-    padding-right: 0.5in;
+  background: transparent;
+  border-bottom: none;
+  box-shadow: none;
+  padding-left: 0.5in;
+  padding-right: 0.5in;
 }
 
 body.page-daily-slate .nav-link {
-    color: rgba(222, 235, 240, 0.86);
-    font-family: var(--font-body); /* Ensure font match */
-    padding: 1rem 1.25rem; /* Standard nav padding */
+  color: rgba(222, 235, 240, 0.86);
+  font-family: var(--font-body); /* Ensure font match */
+  padding: 1rem 1.25rem; /* Standard nav padding */
 }
 
 body.page-daily-slate .nav-link:hover,
 body.page-daily-slate .nav-link:focus-visible {
-    color: #fefefe;
-    text-shadow: 0 2px 10px rgba(0, 214, 137, 0.35);
-    background: transparent;
+  color: #fefefe;
+  text-shadow: 0 2px 10px rgba(0, 214, 137, 0.35);
+  background: transparent;
 }
 
 body.page-daily-slate .nav-link.active {
-    color: #fdfdfd;
-    border-bottom: 2px solid var(--daily-accent);
-    background: transparent;
-    box-shadow: none;
+  color: #fdfdfd;
+  border-bottom: 2px solid var(--daily-accent);
+  background: transparent;
+  box-shadow: none;
 }
 
 /* Layout Shell - Matching Weekly Lineup Spacing */
 body.page-daily-slate .main-container {
-    padding: 0 0 20px;
-    margin-top: 12px;
-    background: transparent;
-    max-width: 100%; /* Reset max-width to full fluid */
+  padding: 0 0 20px;
+  margin-top: 12px;
+  background: transparent;
+  max-width: 100%; /* Reset max-width to full fluid */
 }
 
 body.page-daily-slate .main-dashboard-layout {
-    gap: 8px;
-    display: grid; /* Restore grid layout if originally grid */
+  gap: 8px;
+  display: grid; /* Restore grid layout if originally grid */
 }
 
 /* Dashboard Topline - Matching Weekly Lineup */
 body.page-daily-slate .dashboard-topline {
-    background: transparent;
-    border: none;
-    box-shadow: none;
-    border-radius: 0;
-    padding: 6px 0.5in 8px;
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 24px;
-    margin: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 6px 0.5in 8px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin: 0;
 }
 
 /* Brand Header - Matching Weekly Lineup */
 body.page-daily-slate .brand-header-inline {
-    background: transparent;
-    border: none;
-    box-shadow: none;
-    gap: 12px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  gap: 12px;
 }
 
 body.page-daily-slate .brand-line-1 {
-    color: var(--daily-text-muted);
-    font-family: var(--font-body);
-    letter-spacing: 0.12em;
+  color: var(--daily-text-muted);
+  font-family: var(--font-body);
+  letter-spacing: 0.12em;
 }
 
 body.page-daily-slate .brand-line-2 {
-    color: var(--daily-text);
-    font-family: var(--font-display); /* Oswald */
-    letter-spacing: 0.02em;
+  color: var(--daily-text);
+  font-family: var(--font-display); /* Oswald */
+  letter-spacing: 0.02em;
 }
 
 /* ==========================================================================
    KPI TILES - GLASS STYLE
    ========================================================================== */
 body.page-daily-slate .kpi-tiles {
-    gap: 10px;
-    padding: 0 4px;
+  gap: 10px;
+  padding: 0 4px;
 }
 
 body.page-daily-slate .kpi-tile {
-    background: linear-gradient(160deg, rgba(10, 18, 32, 0.82) 0%, rgba(8, 16, 28, 0.78) 100%);
-    border: 1px solid rgba(80, 100, 130, 0.25);
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
-    border-radius: 8px;
-    min-width: 100px;
-    padding: 12px 16px;
+  background: linear-gradient(
+    160deg,
+    rgba(10, 18, 32, 0.82) 0%,
+    rgba(8, 16, 28, 0.78) 100%
+  );
+  border: 1px solid rgba(80, 100, 130, 0.25);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  border-radius: 8px;
+  min-width: 100px;
+  padding: 12px 16px;
 }
 
 body.page-daily-slate .kpi-tile:hover {
-    border-color: rgba(100, 120, 150, 0.35);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
-    transform: translateY(-1px);
+  border-color: rgba(100, 120, 150, 0.35);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+  transform: translateY(-1px);
 }
 
 body.page-daily-slate .kpi-value {
-    font-family: var(--font-display);
-    font-size: 1.4rem;
-    color: var(--daily-text);
-    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  color: var(--daily-text);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 /* ==========================================================================
    LEAGUE TABS - GLASS STYLE
    ========================================================================== */
 .page-daily-slate .slate-league-tabs {
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(8px);
-    padding: 4px;
-    border-radius: 8px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+  padding: 4px;
+  border-radius: 8px;
 }
 
 .page-daily-slate .slate-league-tab {
-    color: rgba(222, 235, 240, 0.7);
-    font-family: var(--font-body);
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    border-radius: 4px;
+  color: rgba(222, 235, 240, 0.7);
+  font-family: var(--font-body);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 4px;
 }
 
 .page-daily-slate .slate-league-tab:hover {
-    color: #fff;
-    background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .page-daily-slate .slate-league-tab.active {
-    background: linear-gradient(135deg, var(--daily-accent) 0%, #00b47d 100%);
-    color: #fff;
-    box-shadow: 0 2px 8px rgba(0, 214, 137, 0.3);
+  background: linear-gradient(135deg, var(--daily-accent) 0%, #00b47d 100%);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 214, 137, 0.3);
 }
 
 /* ==========================================================================
    TABLE CONTAINER - GLASS & GLOW
    ========================================================================== */
 body.page-daily-slate .table-container {
-    margin: 0 0.5in; /* Match header padding */
-    width: calc(100% - 1in);
-    background: rgba(5, 12, 22, 0.65); /* Semi-transparent */
-    border: 1px solid rgba(80, 100, 130, 0.25);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-    border-radius: 12px;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    overflow: hidden;
+  margin: 0 0.5in; /* Match header padding */
+  width: calc(100% - 1in);
+  background: rgba(5, 12, 22, 0.65); /* Semi-transparent */
+  border: 1px solid rgba(80, 100, 130, 0.25);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  border-radius: 12px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  overflow: hidden;
 }
 
 /* ==========================================================================
    TABLE HEADER - DARK GLASS
    ========================================================================== */
 .page-daily-slate .slate-table thead th {
-    background: rgba(8, 12, 22, 0.95) !important;
-    border-bottom: 1px solid rgba(0, 214, 137, 0.3);
-    color: var(--daily-text);
-    font-family: var(--font-display); /* Oswald */
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    padding: 12px 16px;
-    font-size: 0.85rem;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+  background: rgba(8, 12, 22, 0.95) !important;
+  border-bottom: 1px solid rgba(0, 214, 137, 0.3);
+  color: var(--daily-text);
+  font-family: var(--font-display); /* Oswald */
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 12px 16px;
+  font-size: 0.85rem;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
 }
 
 /* Header Gradient Overlay */
 .page-daily-slate .slate-table thead th::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgba(0, 214, 137, 0.1) 0%, transparent 100%);
-    opacity: 0.5;
-    pointer-events: none;
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 214, 137, 0.1) 0%,
+    transparent 100%
+  );
+  opacity: 0.5;
+  pointer-events: none;
 }
 
 /* ==========================================================================
    TABLE ROWS - VEGAS STRIPING
    ========================================================================== */
 .page-daily-slate .slate-table tbody tr {
-    border-bottom: 1px solid rgba(80, 100, 130, 0.1);
-    background: transparent;
+  border-bottom: 1px solid rgba(80, 100, 130, 0.1);
+  background: transparent;
 }
 
 .page-daily-slate .slate-table tbody tr:nth-child(even) {
-    background: rgba(30, 55, 85, 0.15); /* Subtle blue tint */
+  background: rgba(30, 55, 85, 0.15); /* Subtle blue tint */
 }
 
 .page-daily-slate .slate-table tbody tr:hover {
-    background: rgba(0, 214, 137, 0.08); /* Hover glow */
+  background: rgba(0, 214, 137, 0.08); /* Hover glow */
 }
 
 /* ==========================================================================
    TYPOGRAPHY & CELLS
    ========================================================================== */
 .page-daily-slate .slate-table tbody td {
-    padding: 12px 16px;
-    color: var(--daily-text);
-    font-family: var(--font-body);
+  padding: 12px 16px;
+  color: var(--daily-text);
+  font-family: var(--font-body);
 }
 
 /* Team Names - Strong & Clear */
 .page-daily-slate .team-name {
-    font-family: var(--font-display); /* Oswald */
-    font-size: 0.95rem;
-    letter-spacing: 0.02em;
-    color: #fff;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+  font-family: var(--font-display); /* Oswald */
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .page-daily-slate .team-record {
-    font-family: 'Roboto Mono', monospace;
-    color: var(--daily-text-muted);
-    font-size: 0.75rem;
+  font-family: "Roboto Mono", monospace;
+  color: var(--daily-text-muted);
+  font-size: 0.75rem;
 }
 
 /* Date & Time */
 .page-daily-slate .game-time {
-    font-family: 'Roboto Mono', monospace;
-    color: var(--daily-accent); /* Green time for urgency */
-    font-weight: 500;
+  font-family: "Roboto Mono", monospace;
+  color: var(--daily-accent); /* Green time for urgency */
+  font-weight: 500;
 }
 
 /* ==========================================================================
    ODDS BUTTONS - PREMIUM FEEL
    ========================================================================== */
 .page-daily-slate .odds-btn {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 6px;
-    min-width: 80px;
-    padding: 8px;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
-    transition: all 0.2s ease;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  min-width: 80px;
+  padding: 8px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transition: all 0.2s ease;
 }
 
 .page-daily-slate .odds-btn:hover {
-    background: rgba(0, 214, 137, 0.1);
-    border-color: rgba(0, 214, 137, 0.4);
-    box-shadow: 0 0 12px rgba(0, 214, 137, 0.15);
-    transform: translateY(-1px);
+  background: rgba(0, 214, 137, 0.1);
+  border-color: rgba(0, 214, 137, 0.4);
+  box-shadow: 0 0 12px rgba(0, 214, 137, 0.15);
+  transform: translateY(-1px);
 }
 
 .page-daily-slate .odds-btn.selected {
-    background: linear-gradient(135deg, rgba(0, 214, 137, 0.25) 0%, rgba(0, 180, 120, 0.2) 100%);
-    border-color: var(--daily-accent);
-    box-shadow: 0 0 16px rgba(0, 214, 137, 0.25), inset 0 0 0 1px rgba(0,255,170,0.2);
+  background: linear-gradient(
+    135deg,
+    rgba(0, 214, 137, 0.25) 0%,
+    rgba(0, 180, 120, 0.2) 100%
+  );
+  border-color: var(--daily-accent);
+  box-shadow:
+    0 0 16px rgba(0, 214, 137, 0.25),
+    inset 0 0 0 1px rgba(0, 255, 170, 0.2);
 }
 
 .page-daily-slate .odds-line {
-    font-family: var(--font-display);
-    font-size: 0.9rem;
-    color: #fff;
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  color: #fff;
 }
 
 .page-daily-slate .odds-juice {
-    font-family: 'Roboto Mono', monospace;
-    font-size: 0.75rem;
-    opacity: 0.9;
+  font-family: "Roboto Mono", monospace;
+  font-size: 0.75rem;
+  opacity: 0.9;
 }
 
-.page-daily-slate .odds-juice.plus { color: var(--daily-accent); }
-.page-daily-slate .odds-juice.minus { color: var(--daily-gold); }
+.page-daily-slate .odds-juice.plus {
+  color: var(--daily-accent);
+}
+.page-daily-slate .odds-juice.minus {
+  color: var(--daily-gold);
+}
 
 /* ==========================================================================
    FILTER CHIPS - FLOATING GLASS
    ========================================================================== */
 .page-daily-slate .table-filter-chips {
-    background: rgba(8, 16, 28, 0.8);
-    border: 1px solid rgba(0, 214, 137, 0.3);
-    backdrop-filter: blur(8px);
-    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  background: rgba(8, 16, 28, 0.8);
+  border: 1px solid rgba(0, 214, 137, 0.3);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
 .page-daily-slate .filter-chip {
-    background: rgba(0, 214, 137, 0.15);
-    border: 1px solid rgba(0, 214, 137, 0.4);
-    color: var(--daily-accent);
-    box-shadow: 0 2px 8px rgba(0, 214, 137, 0.1);
+  background: rgba(0, 214, 137, 0.15);
+  border: 1px solid rgba(0, 214, 137, 0.4);
+  color: var(--daily-accent);
+  box-shadow: 0 2px 8px rgba(0, 214, 137, 0.1);
 }
 
 /* ==========================================================================
    BETSLIP - DARK GLASS
    ========================================================================== */
 .page-daily-slate .betslip-panel {
-    background: rgba(8, 12, 22, 0.95);
-    border-left: 1px solid rgba(0, 214, 137, 0.3);
-    backdrop-filter: blur(16px);
-    box-shadow: -8px 0 32px rgba(0,0,0,0.6);
+  background: rgba(8, 12, 22, 0.95);
+  border-left: 1px solid rgba(0, 214, 137, 0.3);
+  backdrop-filter: blur(16px);
+  box-shadow: -8px 0 32px rgba(0, 0, 0, 0.6);
 }
 
 .page-daily-slate .betslip-header {
-    background: linear-gradient(180deg, rgba(0, 214, 137, 0.15) 0%, transparent 100%);
-    border-bottom: 1px solid rgba(255,255,255,0.05);
+  background: linear-gradient(
+    180deg,
+    rgba(0, 214, 137, 0.15) 0%,
+    transparent 100%
+  );
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .page-daily-slate .place-bets-btn {
-    background: linear-gradient(135deg, var(--daily-accent) 0%, #00b47d 100%);
-    box-shadow: 0 4px 12px rgba(0, 214, 137, 0.3);
-    color: #000; /* Dark text on bright button */
-    font-weight: 800;
+  background: linear-gradient(135deg, var(--daily-accent) 0%, #00b47d 100%);
+  box-shadow: 0 4px 12px rgba(0, 214, 137, 0.3);
+  color: #000; /* Dark text on bright button */
+  font-weight: 800;
 }
 
 /* ==========================================================================
    RESPONSIVE
    ========================================================================== */
 @media (max-width: 1200px) {
-    body.page-daily-slate .dashboard-topline {
-        padding: 6px 20px 8px; /* Adjusted to match mobile nav padding */
-    }
-    
-    body.page-daily-slate .brand-nav {
-        padding: 0 20px;
-    }
+  body.page-daily-slate .dashboard-topline {
+    padding: 6px 20px 8px; /* Adjusted to match mobile nav padding */
+  }
 
-    body.page-daily-slate .table-container {
-        margin: 0 20px;
-        width: calc(100% - 40px);
-    }
+  body.page-daily-slate .brand-nav {
+    padding: 0 20px;
+  }
+
+  body.page-daily-slate .table-container {
+    margin: 0 20px;
+    width: calc(100% - 40px);
+  }
 }

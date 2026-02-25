@@ -92,7 +92,10 @@ window.GBSV_CONFIG = {
   if (typeof window === "undefined" || !window.APP_CONFIG) return;
 
   const cfg = window.APP_CONFIG;
-  const primary = (cfg.LOGO_PRIMARY_URL || cfg.LOGO_BASE_URL || "").replace(/\/$/, "");
+  const primary = (cfg.LOGO_PRIMARY_URL || cfg.LOGO_BASE_URL || "").replace(
+    /\/$/,
+    "",
+  );
   const fallback = (cfg.LOGO_FALLBACK_URL || "").replace(/\/$/, "");
 
   if (!primary || !fallback || primary === fallback) return;
