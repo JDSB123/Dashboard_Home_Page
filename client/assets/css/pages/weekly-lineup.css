@@ -46,7 +46,7 @@ body.page-weekly-lineup {
     --zebra-even: rgba(30, 55, 85, 0.08);
 
     background-color: rgba(3, 11, 22, 0.18);
-    background-image: url('/assets/JB_Bearish_Market_FULL_page.png');
+    background-image: url('../../../assets/JB_Bearish_Market_FULL_page.png');
     background-size: cover;
     background-position: center top;
     background-repeat: no-repeat;

@@ -7,7 +7,7 @@ body {
 }
 
 body.page-active-picks {
-  background-image: url("/assets/JB_Bearish_Market_FULL_page.png");
+  background-image: url("../../JB_Bearish_Market_FULL_page.png");
   background-size: cover;
   background-position: center top;
   background-repeat: no-repeat;
@@ -15,7 +15,7 @@ body.page-active-picks {
 }
 
 body.page-weekly-lineup {
-  background-image: url("/assets/JB_Bearish_Market_FULL_page.png");
+  background-image: url("../../JB_Bearish_Market_FULL_page.png");
   background-size: cover;
   background-position: center top;
   background-repeat: no-repeat;
@@ -23,7 +23,7 @@ body.page-weekly-lineup {
 }
 
 body.page-odds-market {
-  background-image: url("/assets/JB_Bearish_Market_FULL_page.png");
+  background-image: url("../../JB_Bearish_Market_FULL_page.png");
   background-size: cover;
   background-position: center top;
   background-repeat: no-repeat;

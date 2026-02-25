@@ -1,6 +1,6 @@
 /* Odds Market page critical overrides extracted from inline <style> */
 body.page-odds-market {
-  background-image: url("assets/JB_Bearish_Market_FULL_page.png") !important;
+  background-image: url("../../JB_Bearish_Market_FULL_page.png") !important;
   background-size: cover !important;
   background-position: center top !important;
   background-attachment: fixed !important;

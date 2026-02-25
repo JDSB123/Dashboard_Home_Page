@@ -55,6 +55,7 @@ window.APP_CONFIG = {
 
   // Static Assets (Front Door / CDN)
   LOGO_BASE_URL: "__LOGO_BASE_URL__",
+  LOGO_PRIMARY_URL: "__LOGO_BASE_URL__",
   LOGO_FALLBACK_URL: "__LOGO_FALLBACK_URL__",
 
   // Feature Flags
@@ -83,6 +84,48 @@ window.GBSV_CONFIG = {
   FUNCTIONS_URL: "https://www.greenbiersportventures.com",
   PICKS_API_ENDPOINT: "https://www.greenbiersportventures.com/nba/picks",
 };
+
+// ── Logo Host Auto Failover / Switchback ───────────────────────────────
+// Default to fallback immediately to avoid broken logo renders,
+// then promote back to primary host when a probe succeeds.
+(function () {
+  if (typeof window === "undefined" || !window.APP_CONFIG) return;
+
+  const cfg = window.APP_CONFIG;
+  const primary = (cfg.LOGO_PRIMARY_URL || cfg.LOGO_BASE_URL || "").replace(/\/$/, "");
+  const fallback = (cfg.LOGO_FALLBACK_URL || "").replace(/\/$/, "");
+
+  if (!primary || !fallback || primary === fallback) return;
+
+  cfg.LOGO_BASE_URL = fallback;
+  if (typeof console !== "undefined" && typeof console.info === "function") {
+    console.info(`[LogoHost] failover active -> ${fallback}`);
+  }
+
+  const probe = new Image();
+  let settled = false;
+  const timeout = setTimeout(() => {
+    if (!settled) settled = true;
+  }, 2500);
+
+  probe.onload = function () {
+    if (settled) return;
+    settled = true;
+    clearTimeout(timeout);
+    cfg.LOGO_BASE_URL = primary;
+    if (typeof console !== "undefined" && typeof console.info === "function") {
+      console.info(`[LogoHost] primary restored -> ${primary}`);
+    }
+  };
+
+  probe.onerror = function () {
+    if (settled) return;
+    settled = true;
+    clearTimeout(timeout);
+  };
+
+  probe.src = `${primary}/leagues-500-nba.png?probe=${Date.now()}`;
+})();
 
 // Export for module usage if needed
 if (typeof module !== "undefined" && module.exports) {

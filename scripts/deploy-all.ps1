@@ -686,6 +686,8 @@ function Update-DashboardConfig {
         $content = $content.Replace('__NFL_FUNCTION_URL__', $Config.models.nfl.functionUrl)
         $content = $content.Replace('__NFL_API_URL__', $Config.models.nfl.endpoint)
         $content = $content.Replace('__NCAAF_API_URL__', $Config.models.ncaaf.endpoint)
+        $content = $content.Replace('__LOGO_BASE_URL__', 'https://www.greenbiersportventures.com/team-logos')
+        $content = $content.Replace('__LOGO_FALLBACK_URL__', 'https://gbsvorchestratorstorage.blob.core.windows.net/team-logos')
 
         $content | Set-Content $targetFile
 

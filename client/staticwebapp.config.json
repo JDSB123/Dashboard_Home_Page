@@ -3,6 +3,7 @@
     "rewrite": "/index.html",
     "exclude": [
       "/assets/*",
+      "/team-logos/*",
       "/dist/*",
       "/dashboard/*",
       "/config.js",

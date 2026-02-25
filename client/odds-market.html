@@ -24,6 +24,22 @@
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="assets/Logo%208.5.png?v=20251216" />
 
+    <!-- Local dev helper: if Live Server runs from repo root, fix base href -->
+    <script>
+      (function () {
+        if (
+          location.hostname === "localhost" ||
+          location.hostname === "127.0.0.1"
+        ) {
+          if (!location.pathname.startsWith("/client/")) {
+            var base = document.createElement("base");
+            base.href = "/client/";
+            document.head.prepend(base);
+          }
+        }
+      })();
+    </script>
+
     <!-- Preload critical background image -->
     <link
       rel="preload"

@@ -181,7 +181,7 @@
       modal.innerHTML = `
                 <div class="auth-modal">
                     <div class="auth-modal-header">
-                        <img src="/assets/Logo%208.5.png" alt="GBSV" class="auth-logo">
+                        <img src="assets/Logo%208.5.png" alt="GBSV" class="auth-logo">
                         <h2>Welcome to GBSV</h2>
                     </div>
                     <div class="auth-modal-body">

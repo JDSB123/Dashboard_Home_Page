@@ -88,3 +88,5 @@ tracker_pnl/input_telegram.txt
 
 # Diagnostic scratch files
 tracker_pnl/diagnose_output.py
+
+.fake

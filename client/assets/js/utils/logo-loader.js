@@ -5,7 +5,7 @@
 
 window.LogoLoader = (() => {
   // Prefer custom Front Door / CDN host, then blob storage as fallback
-  const CONFIG_BASE = (window.APP_CONFIG && window.APP_CONFIG.LOGO_BASE_URL) || null;
+  const CONFIG_BASE = (window.APP_CONFIG && (window.APP_CONFIG.LOGO_PRIMARY_URL || window.APP_CONFIG.LOGO_BASE_URL)) || null;
   const CONFIG_FALLBACK = (window.APP_CONFIG && window.APP_CONFIG.LOGO_FALLBACK_URL) || null;
   const AZURE_BLOB_URL = 'https://gbsvorchestratorstorage.blob.core.windows.net/team-logos';
   const CANDIDATE_BASES = [CONFIG_BASE, CONFIG_FALLBACK, AZURE_BLOB_URL].filter(Boolean);
@@ -45,7 +45,8 @@ window.LogoLoader = (() => {
 
   // Resolve the current best base (may still be resolving)
   function getBaseUrl() {
-    return resolvedBase || CANDIDATE_BASES[0] || AZURE_BLOB_URL;
+    if (resolvedBase) return resolvedBase;
+    return CONFIG_FALLBACK || CONFIG_BASE || AZURE_BLOB_URL;
   }
 
   /**

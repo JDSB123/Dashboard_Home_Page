@@ -44,7 +44,7 @@
       this.drawer.className = "mobile-nav-drawer";
       this.drawer.innerHTML = `
                 <div class="drawer-header">
-                    <img src="/assets/Logo%208.5.png" alt="GBSV" class="drawer-logo">
+                    <img src="assets/Logo%208.5.png" alt="GBSV" class="drawer-logo">
                     <button class="drawer-close" aria-label="Close menu">×</button>
                 </div>
                 <ul class="drawer-menu">

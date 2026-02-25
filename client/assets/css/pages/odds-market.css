@@ -32,7 +32,7 @@ body.page-odds-market {
   position: relative;
   min-height: 100vh;
   background-color: var(--color-bg-deep);
-  background-image: url("/assets/JB_Bearish_Market_FULL_page.png");
+  background-image: url("../../../assets/JB_Bearish_Market_FULL_page.png");
   background-size: cover;
   background-position: center top;
   background-repeat: no-repeat;

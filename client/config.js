@@ -37,7 +37,8 @@ window.APP_CONFIG = {
     "https://nhl-gbsv-v1-az-aca.lemonsand-51e2acaf.eastus2.azurecontainerapps.io",
 
   // Static Assets (Front Door / CDN)
-  LOGO_BASE_URL: "https://www.greenbiersportventures.com/team-logos", // Served via Front Door/custom domain
+  LOGO_BASE_URL: "https://www.greenbiersportventures.com/team-logos", // Preferred custom domain route
+  LOGO_PRIMARY_URL: "https://www.greenbiersportventures.com/team-logos",
   LOGO_FALLBACK_URL:
     "https://gbsvorchestratorstorage.blob.core.windows.net/team-logos", // Direct blob fallback
 
@@ -113,6 +114,48 @@ window.GBSV_CONFIG = {
 
   window.GBSV_CONFIG.FUNCTIONS_URL = LOCAL_BASE;
   window.GBSV_CONFIG.PICKS_API_ENDPOINT = LOCAL_BASE + "/nba/picks";
+})();
+
+// ── Logo Host Auto Failover / Switchback ───────────────────────────────
+// Default to fallback immediately to avoid broken logo renders,
+// then promote back to primary host when a probe succeeds.
+(function () {
+  if (typeof window === "undefined" || !window.APP_CONFIG) return;
+
+  const cfg = window.APP_CONFIG;
+  const primary = (cfg.LOGO_PRIMARY_URL || cfg.LOGO_BASE_URL || "").replace(/\/$/, "");
+  const fallback = (cfg.LOGO_FALLBACK_URL || "").replace(/\/$/, "");
+
+  if (!primary || !fallback || primary === fallback) return;
+
+  cfg.LOGO_BASE_URL = fallback;
+  if (typeof console !== "undefined" && typeof console.info === "function") {
+    console.info(`[LogoHost] failover active -> ${fallback}`);
+  }
+
+  const probe = new Image();
+  let settled = false;
+  const timeout = setTimeout(() => {
+    if (!settled) settled = true;
+  }, 2500);
+
+  probe.onload = function () {
+    if (settled) return;
+    settled = true;
+    clearTimeout(timeout);
+    cfg.LOGO_BASE_URL = primary;
+    if (typeof console !== "undefined" && typeof console.info === "function") {
+      console.info(`[LogoHost] primary restored -> ${primary}`);
+    }
+  };
+
+  probe.onerror = function () {
+    if (settled) return;
+    settled = true;
+    clearTimeout(timeout);
+  };
+
+  probe.src = `${primary}/leagues-500-nba.png?probe=${Date.now()}`;
 })();
 
 // Export for module usage if needed

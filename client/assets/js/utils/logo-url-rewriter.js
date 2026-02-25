@@ -5,11 +5,12 @@
  */
 (function () {
     'use strict';
-
-    const configBase = (window.APP_CONFIG && window.APP_CONFIG.LOGO_BASE_URL) || null;
-    const fallbackBase = (window.APP_CONFIG && window.APP_CONFIG.LOGO_FALLBACK_URL) || null;
     const defaultBase = 'https://gbsvorchestratorstorage.blob.core.windows.net/team-logos';
-    const LOGO_BASE = configBase || fallbackBase || defaultBase;
+
+    function getLogoBase() {
+        const cfg = window.APP_CONFIG || {};
+        return cfg.LOGO_BASE_URL || cfg.LOGO_FALLBACK_URL || defaultBase;
+    }
 
     /**
      * Transform an ESPN CDN URL into our CDN layout.
@@ -37,7 +38,7 @@
             if (next === 'leagues') {
                 const league = maybeFile.replace('.png', '');
                 if (!league) return null;
-                return `${LOGO_BASE}/leagues-500-${league}.png`;
+                return `${getLogoBase()}/leagues-500-${league}.png`;
             }
 
             // Team logos: /teamlogos/nba/500/ny.png
@@ -46,7 +47,7 @@
             const teamId = file.replace('.png', '');
             if (!league || !teamId) return null;
 
-            return `${LOGO_BASE}/${league}-500-${teamId}.png`;
+            return `${getLogoBase()}/${league}-500-${teamId}.png`;
         } catch (_) {
             return null;
         }
