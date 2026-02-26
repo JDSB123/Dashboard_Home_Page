@@ -561,6 +561,7 @@ html, body {
     body.page-weekly-lineup .brand-logo-inline {
         width: 50px !important;
         height: 50px !important;
+        min-width: 0 !important;
     }
     
     body.page-weekly-lineup .brand-line-1 {
@@ -580,6 +581,7 @@ html, body {
     body.page-weekly-lineup .brand-logo-inline {
         width: 40px !important;
         height: 40px !important;
+        min-width: 0 !important;
     }
 }
 
@@ -1578,6 +1580,7 @@ html, body {
     body.page-weekly-lineup .brand-logo-small {
         width: 45px !important;
         height: 45px !important;
+        min-width: 0 !important;
     }
 
     body.page-active-picks .brand-line-1,
@@ -1598,6 +1601,7 @@ html, body {
     body.page-weekly-lineup .brand-logo-small {
         width: 36px !important;
         height: 36px !important;
+        min-width: 0 !important;
     }
 
     body.page-active-picks .brand-line-1,

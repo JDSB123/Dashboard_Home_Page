@@ -778,7 +778,6 @@
         color: rgba(0, 214, 137, 0.85); /* Maintain high contrast */
         text-shadow: 0 0 3px rgba(0, 214, 137, 0.4); /* Slightly stronger glow for visibility */
     }
-}
 
     .date-input {
         font-size: 0.48rem; /* Tighter font */

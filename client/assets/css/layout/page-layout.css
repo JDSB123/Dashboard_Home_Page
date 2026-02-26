@@ -7,7 +7,7 @@
 :root {
     --layout-gutter: clamp(24px, 4vw, 60px);
     --hero-band-height: clamp(220px, 32vh, 320px);
-    --hero-bear-image: url("../../JB_Bearish_Market_FULL_page.png");
+    --hero-bear-image: url("../assets/JB_Bearish_Market_FULL_page.png");
 }
 
 /* ===== PAGE GLOW EFFECT ===== */

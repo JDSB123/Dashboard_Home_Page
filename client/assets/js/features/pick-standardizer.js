@@ -195,14 +195,14 @@
     kansas: "Kansas Jayhawks",
     gonzaga: "Gonzaga Bulldogs",
     auburn: "Auburn Tigers",
-    tennessee: "Tennessee Volunteers",
+    // tennessee: "Tennessee Volunteers", // Duplicate key, conflicts with Titans
     purdue: "Purdue Boilermakers",
     uconn: "UConn Huskies",
     "iowa state": "Iowa State Cyclones",
     "iowa st": "Iowa State Cyclones",
-    houston: "Houston Cougars",
+    // houston: "Houston Cougars", // Duplicate key, conflicts with Rockets/Texans
     baylor: "Baylor Bears",
-    arizona: "Arizona Wildcats",
+    // arizona: "Arizona Wildcats", // Duplicate key, conflicts with Cardinals
     ucla: "UCLA Bruins",
     florida: "Florida Gators",
     lsu: "LSU Tigers",
@@ -235,10 +235,10 @@
     "youngstown state": "Youngstown State Penguins",
     "youngstown st": "Youngstown State Penguins",
     "wisc green bay": "Green Bay Phoenix",
-    "green bay": "Green Bay Phoenix",
+    // "green bay": "Green Bay Phoenix", // Duplicate key, conflicts with Packers
     "wisconsin green bay": "Green Bay Phoenix",
     "detroit mercy": "Detroit Mercy Titans",
-    detroit: "Detroit Mercy Titans",
+    // detroit: "Detroit Mercy Titans", // Duplicate key, conflicts with Lions/Pistons
     rice: "Rice Owls",
     utsa: "UTSA Roadrunners",
     tulane: "Tulane Green Wave",
@@ -246,7 +246,7 @@
     "louisiana tech": "Louisiana Tech Bulldogs",
     "la tech": "Louisiana Tech Bulldogs",
     "wisc milwaukee": "Milwaukee Panthers",
-    milwaukee: "Milwaukee Panthers",
+    // milwaukee: "Milwaukee Panthers", // Duplicate key, conflicts with Bucks
     "wisconsin milwaukee": "Milwaukee Panthers",
     uwm: "Milwaukee Panthers",
     oakland: "Oakland Golden Grizzlies",
@@ -260,8 +260,8 @@
     canisius: "Canisius Golden Griffins",
     "mount st marys": "Mount St. Mary's Mountaineers",
     wagner: "Wagner Seahawks",
-    "youngstown state": "Youngstown State Penguins",
-    "purdue fort wayne": "Purdue Fort Wayne Mastodons",
+    // "youngstown state": "Youngstown State Penguins", // Duplicate key
+    // "purdue fort wayne": "Purdue Fort Wayne Mastodons", // Duplicate key
     marshall: "Marshall Thundering Herd",
     wku: "Western Kentucky Hilltoppers",
     "western kentucky": "Western Kentucky Hilltoppers",
@@ -270,7 +270,7 @@
     mtsu: "Middle Tennessee Blue Raiders",
     "old dominion": "Old Dominion Monarchs",
     odu: "Old Dominion Monarchs",
-    charlotte: "Charlotte 49ers",
+    // charlotte: "Charlotte 49ers", // Duplicate key, conflicts with Hornets
     "east carolina": "East Carolina Pirates",
     ecu: "East Carolina Pirates",
     "north texas": "North Texas Mean Green",

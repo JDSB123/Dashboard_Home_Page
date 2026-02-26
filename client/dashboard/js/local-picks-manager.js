@@ -367,12 +367,12 @@
       league: "ncaam",
       logoId: "2000",
     },
-    arizona: {
-      abbr: "ARIZ",
-      fullName: "Arizona Wildcats",
-      league: "ncaam",
-      logoId: "12",
-    },
+    // arizona: {
+    //   abbr: "ARIZ",
+    //   fullName: "Arizona Wildcats",
+    //   league: "ncaam",
+    //   logoId: "12",
+    // },
     "arizona wildcats": {
       abbr: "ARIZ",
       fullName: "Arizona Wildcats",
