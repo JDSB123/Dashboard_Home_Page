@@ -6853,23 +6853,25 @@ body.page-weekly-lineup .brand-content-inline {
 
 body.page-weekly-lineup .brand-text-stacked {
   display: flex !important;
-  flex-direction: column !important;
-  justify-content: center !important;
-  line-height: 1.05 !important;
+  flex-direction: row !important;
+  align-items: baseline !important;
+  gap: 0.55rem !important;
+  line-height: 1 !important;
 }
 
 body.page-weekly-lineup .brand-line-1 {
-  display: block !important;
-  font-size: 1.9rem !important;
+  display: inline-block !important;
+  font-size: 2.9rem !important;
   font-weight: 600 !important;
   letter-spacing: 0.01em !important;
 }
 
 body.page-weekly-lineup .brand-line-2 {
-  display: block !important;
-  font-size: 1.15rem !important;
+  display: inline-block !important;
+  font-size: 1.45rem !important;
   font-weight: 600 !important;
-  letter-spacing: 0.08em !important;
+  letter-spacing: 0.06em !important;
+  white-space: nowrap !important;
 }
 
 body.page-weekly-lineup .brand-word {
@@ -6883,12 +6885,21 @@ body.page-weekly-lineup .brand-word {
     min-height: auto !important;
   }
 
+  body.page-weekly-lineup .brand-text-stacked {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0 !important;
+    line-height: 1.05 !important;
+  }
+
   body.page-weekly-lineup .brand-line-1 {
     font-size: 1.25rem !important;
+    display: block !important;
   }
 
   body.page-weekly-lineup .brand-line-2 {
     font-size: 0.9rem !important;
+    display: block !important;
   }
 }
 
