@@ -30,7 +30,6 @@
     "AZURE_CONFIG_DIR": "${workspaceFolder}/.dev/azure",
     "PATH": "${workspaceFolder}/.dev/dotnet;${workspaceFolder}/.dev/go-sdk/go/bin;${workspaceFolder}/.dev/go/bin;${workspaceFolder}/.dev/cargo/bin;${env:PATH}"
   },
-  "dotnet.dotnetPath": "${workspaceFolder}/.dev/dotnet/dotnet.exe",
   "dotnet.server.dotnetPath": "${workspaceFolder}/.dev/dotnet/dotnet.exe",
   "csharp.dotnetPath": "${workspaceFolder}/.dev/dotnet/dotnet.exe",
   "dotnet.server.runtimeEnvironment": {

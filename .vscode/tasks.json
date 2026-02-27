@@ -5,13 +5,18 @@
 			"type": "shell",
 			"label": "kill-port-7072",
 			"command": "$p = (Get-NetTCPConnection -LocalPort 7072 -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty OwningProcess); if ($p) { Write-Host \"Killing stale func PID $p\"; Stop-Process -Id $p -Force -ErrorAction SilentlyContinue } else { Write-Host \"Port 7072 is free\" }",
-			"type": "shell",
 			"problemMatcher": [],
-			"presentation": { "reveal": "silent", "panel": "shared" },
+			"presentation": {
+				"reveal": "silent",
+				"panel": "shared"
+			},
 			"options": {
 				"shell": {
 					"executable": "pwsh",
-					"args": ["-NoProfile", "-Command"]
+					"args": [
+						"-NoProfile",
+						"-Command"
+					]
 				}
 			}
 		},
@@ -21,7 +26,10 @@
 			"command": "host start",
 			"problemMatcher": "$func-node-watch",
 			"isBackground": true,
-			"dependsOn": ["kill-port-7072", "npm install (functions)"],
+			"dependsOn": [
+				"kill-port-7072",
+				"npm install (functions)"
+			],
 			"options": {
 				"cwd": "${workspaceFolder}/azure-functions"
 			}
@@ -49,10 +57,33 @@
 			"command": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/start-local-dev.ps1 -Port 7072",
 			"problemMatcher": [],
 			"group": "build",
-			"presentation": { "reveal": "always", "panel": "dedicated" },
+			"presentation": {
+				"reveal": "always",
+				"panel": "dedicated"
+			},
 			"options": {
 				"cwd": "${workspaceFolder}"
 			}
+		},
+		{
+			"label": "deploy-weekly-header-hotfix",
+			"type": "shell",
+			"command": "Set-Location client; git add assets/css/pages/weekly-lineup.css dist/weekly-lineup.min.css dist/weekly-lineup.min.css.map weekly-lineup.html; git commit -m \"hotfix: restore single-line weekly header text lockup\"; git push origin main"
+		},
+		{
+			"label": "deploy-weekly-header-hotfix-2",
+			"type": "shell",
+			"command": "Set-Location client; git commit -m 'hotfix: restore single-line weekly header text lockup'; git push origin main"
+		},
+		{
+			"label": "poll-swa-3502a58",
+			"type": "shell",
+			"command": "$sha='3502a58'; $url='https://api.github.com/repos/JDSB123/Dashboard_Home_Page/actions/runs?per_page=8'; for($i=0; $i -lt 30; $i++){ $runs=(Invoke-RestMethod -Uri $url -Headers @{ 'User-Agent'='Copilot-Deploy-Poll' }).workflow_runs; $run=$runs | Where-Object { $_.name -eq 'Azure Static Web Apps CI/CD' -and $_.head_sha -like \"$sha*\" } | Select-Object -First 1; if($run){ Write-Host (\"attempt={0} status={1} conclusion={2} run={3}\" -f $i,$run.status,$run.conclusion,$run.html_url); if($run.status -eq 'completed'){ break } }; Start-Sleep -Seconds 10 }"
+		},
+		{
+			"label": "show-head-sha",
+			"type": "shell",
+			"command": "Set-Location client; git rev-parse HEAD"
 		}
 	]
 }

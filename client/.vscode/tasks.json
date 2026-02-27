@@ -1,0 +1,27 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "deploy-weekly-header-hotfix",
+			"type": "shell",
+			"command": "git",
+			"args": [
+				"add",
+				"assets/css/pages/weekly-lineup.css",
+				"dist/weekly-lineup.min.css",
+				"dist/weekly-lineup.min.css.map",
+				"weekly-lineup.html",
+				";",
+				"git",
+				"commit",
+				"-m",
+				"hotfix: restore single-line weekly header text lockup",
+				";",
+				"git",
+				"push",
+				"origin",
+				"main"
+			]
+		}
+	]
+}

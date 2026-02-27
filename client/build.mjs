@@ -140,7 +140,6 @@ const WEEKLY_LINEUP_CSS = [
   "assets/css/components/status-badges.css",
   "assets/css/components/table-columns.css",
   "assets/css/pages/weekly-lineup-critical.css",
-  "assets/css/weekly-lineup-mobile-complete.css",
 ];
 
 // ── Build logic ───────────────────────────────────────────────────────────

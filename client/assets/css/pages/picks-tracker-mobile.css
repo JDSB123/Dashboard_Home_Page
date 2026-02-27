@@ -73,7 +73,7 @@
   }
 
   .kpi-label {
-    font-size: 9px;
+    font-size: 14px;
   }
 
   /* ===== GAME CARDS ===== */
@@ -146,7 +146,7 @@
   /* Detail — full width */
   #straights-tbody tr td:nth-child(4) {
     flex: 0 0 100%;
-    font-size: 12px;
+    font-size: 14px;
     color: rgba(160, 175, 190, 0.7);
   }
 
@@ -156,7 +156,7 @@
   #straights-tbody tr td:nth-child(7) {
     flex: 1;
     text-align: center;
-    font-size: 12px;
+    font-size: 14px;
   }
 
   /* Round robin card layout */
@@ -187,12 +187,12 @@
   #rr-tbody tr td:nth-child(6) {
     flex: 1;
     text-align: center;
-    font-size: 12px;
+    font-size: 14px;
   }
 
   /* Section titles */
   .section-title {
-    font-size: 0.95rem;
+    font-size: 1rem;
     margin: 20px 0 10px;
   }
 
@@ -201,7 +201,7 @@
     min-height: 44px;
     min-width: 44px;
     padding: 10px 18px;
-    font-size: 13px;
+    font-size: 14px;
   }
 }
 
