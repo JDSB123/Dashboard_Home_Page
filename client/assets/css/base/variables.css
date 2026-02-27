@@ -317,12 +317,55 @@
         --hero-safe-top: 260px; /* +120px */
         --kpi-bar-h: 66px;
         --sticky-total: calc(var(--sticky-offset) + var(--kpi-bar-h));
+
+        /* ===== MOBILE TYPOGRAPHY OVERRIDES - 14px minimum ===== */
+        --text-xs: 0.875rem;     /* 14px (was 11px) */
+        --text-sm: 0.875rem;     /* 14px (was 12px) */
+        --text-base: 0.9375rem;  /* 15px (was 13px) */
+        --text-md: 1rem;         /* 16px (was 14px) */
+        --text-lg: 1.0625rem;    /* 17px (was 15px) */
+        --text-xl: 1.1875rem;    /* 19px (was 17px) */
+
+        /* Component tokens */
+        --text-kpi-heading: 0.9375rem;   /* 15px (was 12px) */
+        --text-kpi-value: 1rem;          /* 16px (was 14px) */
+        --text-kpi-subtext: 0.875rem;    /* 14px (was 10px) */
+        --text-table-header: 0.875rem;   /* 14px (was 10px) */
+        --text-table-body: 0.9375rem;    /* 15px (was 12px) */
+        --text-numeric: 0.9375rem;       /* 15px (was 12px) */
+        --text-filter: 0.875rem;         /* 14px (was 11px) */
+        --text-caption: 0.875rem;        /* 14px (was 10px) */
+
+        /* Filter tokens */
+        --filter-text-xs: 0.875rem;      /* 14px (was 10px) */
+        --filter-text-sm: 0.9375rem;     /* 15px (was 12px) */
+        --filter-text-base: 1rem;        /* 16px (was 13px) */
+        --filter-text-md: 1.0625rem;     /* 17px (was 14px) */
+
+        /* Sportsbook tokens */
+        --sportsbook-title-size: 0.875rem;    /* 14px (was 10.4px) */
+        --sportsbook-label-size: 0.875rem;    /* 14px (was 9px) */
+        --sportsbook-caption-size: 0.875rem;  /* 14px (was 8px) */
     }
 }
 
 @media (max-width: 480px) {
     :root {
         --hero-safe-top: 230px; /* +120px */
+
+        /* ===== SMALL PHONE TYPOGRAPHY - 15px minimum ===== */
+        --text-xs: 0.9375rem;    /* 15px */
+        --text-sm: 0.9375rem;    /* 15px */
+        --text-base: 1rem;       /* 16px */
+        --text-md: 1.0625rem;    /* 17px */
+        --text-lg: 1.125rem;     /* 18px */
+        --text-xl: 1.25rem;      /* 20px */
+
+        --text-table-header: 0.9375rem;  /* 15px */
+        --text-table-body: 1rem;         /* 16px */
+        --text-kpi-subtext: 0.9375rem;   /* 15px */
+        --text-caption: 0.9375rem;       /* 15px */
+        --sportsbook-caption-size: 0.9375rem; /* 15px */
     }
 }
 

@@ -1962,9 +1962,9 @@ body.boxscores-collapsed .picks-table tbody tr.row-collapsed.parlay-row:hover {
 }
 
 @media (max-width: 640px) {
-    /* Ensure table has minimum width for horizontal scroll */
+    /* Mobile card layout — no forced min-width */
     .picks-table {
-        min-width: 600px;
+        min-width: 0;
     }
     
     .table-container {
@@ -2005,9 +2005,9 @@ body.boxscores-collapsed .picks-table tbody tr.row-collapsed.parlay-row:hover {
         border-radius: 6px;
     }
     
-    /* Tighter table for very small screens */
+    /* Mobile card layout — no forced min-width */
     .picks-table {
-        min-width: 520px;
+        min-width: 0;
     }
 
     .picks-table thead th {

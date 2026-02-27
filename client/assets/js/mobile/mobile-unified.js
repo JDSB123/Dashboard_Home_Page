@@ -266,7 +266,7 @@
                     color: ${item.isActive ? "rgba(0, 214, 137, 1)" : "rgba(200, 210, 220, 0.7)"};
                     text-decoration: none;
                     transition: color 0.2s ease;
-                    font-size: 10px;
+                    font-size: 14px;
                     min-width: 44px;
                     min-height: 44px;
                     padding: 6px;
@@ -306,7 +306,7 @@
                     color: rgba(0, 214, 137, 1);
                     border-radius: 6px;
                     cursor: pointer;
-                    font-size: 12px;
+                    font-size: 14px;
                     font-weight: 700;
                     transition: all 0.2s ease;
                 `;
