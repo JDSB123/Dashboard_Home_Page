@@ -3765,9 +3765,9 @@ body.page-weekly-lineup .filter-title,
   outline: none;
   letter-spacing: 0.02em;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
-  appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
+  appearance: none;
 }
 
 .weekly-lineup-table .datetime-cell .sportsbook-select:focus {
@@ -6495,7 +6495,6 @@ body.page-weekly-lineup .brand-header-inline {
   /* Allow table to scroll horizontally */
   body.page-weekly-lineup .table-container {
     overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
   }
 
   body.page-weekly-lineup .weekly-lineup-table {
@@ -6642,7 +6641,6 @@ body.page-weekly-lineup .brand-header-inline {
     display: flex;
     flex-wrap: nowrap;
     overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     gap: 8px;
   }
@@ -6965,12 +6963,12 @@ body.page-weekly-lineup .brand-word {
 
   body.page-weekly-lineup .brand-header-inline {
     height: auto !important;
-    min-height: auto !important;
+    min-height: 0 !important;
     gap: 10px !important;
   }
 
   body.page-weekly-lineup .brand-content-inline {
-    min-height: auto !important;
+    min-height: 0 !important;
   }
 
   body.page-weekly-lineup .brand-line-1 {

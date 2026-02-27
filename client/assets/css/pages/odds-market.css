@@ -1340,7 +1340,6 @@ body.page-odds-market.slip-open .bet-slip-toggle .toggle-icon {
 
   .bet-slip-body {
     overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
     max-height: calc(55vh - 120px);
   }
 

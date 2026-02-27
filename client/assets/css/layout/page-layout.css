@@ -787,6 +787,7 @@ nav {
 
   /* Vegas sportsbook dark panel using design variables */
   background: var(--color-bg-panel);
+  -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(var(--color-primary-rgb), 0.2);
   border-radius: 4px;

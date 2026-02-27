@@ -20,6 +20,17 @@
   margin-bottom: 20px;
 }
 
+.tracker-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.tracker-table th.text-right,
+.tracker-table td.text-right {
+  text-align: right;
+}
+
 .tracker-header h1 {
   font-family: var(--font-heading);
   font-weight: var(--weight-bold);
