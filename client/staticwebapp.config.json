@@ -11,7 +11,8 @@
       "/*.png",
       "/*.ico",
       "/*.css",
-      "/*.js"
+      "/*.js",
+      "/manifest.json"
     ]
   },
   "routes": [
@@ -19,6 +20,13 @@
       "route": "/",
       "rewrite": "/index.html",
       "headers": {
+        "Cache-Control": "no-cache, no-store, must-revalidate"
+      }
+    },
+    {
+      "route": "/manifest.json",
+      "headers": {
+        "Content-Type": "application/manifest+json",
         "Cache-Control": "no-cache, no-store, must-revalidate"
       }
     },

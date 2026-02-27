@@ -1,0 +1,46 @@
+{
+  "name": "Green Bier Sport Ventures",
+  "short_name": "GBSV",
+  "description": "Sports analytics dashboard — predictive picks, odds comparison, and weekly lineup tracking",
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#030b16",
+  "theme_color": "#030b16",
+  "categories": ["sports", "entertainment"],
+  "icons": [
+    {
+      "src": "assets/Logo%208.5.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "url": "/index.html",
+      "icons": [{ "src": "assets/Logo%208.5.png", "sizes": "512x512" }]
+    },
+    {
+      "name": "Weekly Lineup",
+      "short_name": "Lineup",
+      "url": "/weekly-lineup.html",
+      "icons": [{ "src": "assets/Logo%208.5.png", "sizes": "512x512" }]
+    },
+    {
+      "name": "Odds Market",
+      "short_name": "Odds",
+      "url": "/odds-market.html",
+      "icons": [{ "src": "assets/Logo%208.5.png", "sizes": "512x512" }]
+    },
+    {
+      "name": "Picks Tracker",
+      "short_name": "Picks",
+      "url": "/picks-tracker.html",
+      "icons": [{ "src": "assets/Logo%208.5.png", "sizes": "512x512" }]
+    }
+  ]
+}

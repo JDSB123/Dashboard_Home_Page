@@ -3,6 +3,10 @@
   <head>
     <link rel="stylesheet" href="assets/css/base/critical.css?v=36.00.7" />
     <meta name="theme-color" content="#030b16" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="apple-touch-icon" href="assets/Logo%208.5.png" />
     <meta charset="utf-8" />
     <meta
       name="viewport"
@@ -58,7 +62,10 @@
     <!-- Bundled CSS -->
     <link rel="stylesheet" href="dist/core.min.css?v=36.00.7" />
     <!-- Page-specific CSS -->
-    <link rel="stylesheet" href="assets/css/pages/picks-tracker.css?v=36.00.7" />
+    <link
+      rel="stylesheet"
+      href="assets/css/pages/picks-tracker.css?v=36.00.7"
+    />
     <link
       rel="stylesheet"
       href="assets/css/pages/picks-tracker-mobile.css?v=36.00.7"
@@ -181,5 +188,18 @@
     <script src="dist/core.min.js?v=36.00.7" defer></script>
     <!-- Page-specific script -->
     <script src="assets/js/features/picks-tracker.js?v=36.00.7" defer></script>
+    <script>
+      (function () {
+        try {
+          if ("serviceWorker" in navigator) {
+            window.addEventListener("load", function () {
+              navigator.serviceWorker
+                .register("/sw.js?v=3.0.0", { updateViaCache: "none" })
+                .catch(function () {});
+            });
+          }
+        } catch (e) {}
+      })();
+    </script>
   </body>
 </html>
