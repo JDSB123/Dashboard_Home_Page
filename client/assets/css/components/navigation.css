@@ -136,7 +136,7 @@ body.page-active-picks .brand-nav {
 .nav-link::before {
     content: '';
     position: absolute;
-    bottom: 1px;
+    bottom: 3px;
     left: 0;
     right: 0;
     height: 1.5px; /* Thinner, more elegant */
@@ -209,7 +209,7 @@ body.page-active-picks .brand-nav {
 .brand-nav .nav-dropdown-trigger.has-selection::before {
     content: '';
     position: absolute;
-    bottom: 1px;
+    bottom: 3px;
     left: 0;
     right: 0;
     height: 1.5px;

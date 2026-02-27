@@ -435,9 +435,9 @@ body.page-active-picks .picks-table thead th:last-child {
 
 /* Sticky header (matches weekly lineup) */
 body.page-active-picks .picks-table thead {
-  display: table-header-group !important; /* CRITICAL: Maintain table structure */
+  display: table-header-group !important;
   position: sticky !important;
-  top: 0;
+  top: 48px;
   z-index: 110;
   background: transparent !important;
 }
@@ -1220,9 +1220,19 @@ body.page-active-picks .toolbar-container.toolbar-layout {
   width: 100%;
   padding: 0;
   box-sizing: border-box;
+  position: sticky !important;
+  top: 0;
+  z-index: 200;
+  background: transparent !important;
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 
 .toolbar-container.toolbar-layout .filter-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: transparent !important;
   width: 100%;
 }
 
