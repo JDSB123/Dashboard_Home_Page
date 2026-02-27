@@ -136,7 +136,7 @@ body.page-active-picks .brand-nav {
 .nav-link::before {
     content: '';
     position: absolute;
-    bottom: -1px;
+    bottom: 1px;
     left: 0;
     right: 0;
     height: 1.5px; /* Thinner, more elegant */
@@ -887,16 +887,11 @@ body.page-active-picks .brand-nav {
     left: 0 !important;
     right: 0 !important;
     margin-top: 0 !important;
-    padding-top: 8px !important;
-    padding-bottom: 6px !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
     padding-left: 0.75in !important;
     padding-right: 0.75in !important;
     z-index: 1000 !important;
-    /* Frosted glass nav bar - eliminates dark-strip look */
-    background: linear-gradient(180deg, rgba(3, 11, 22, 0.45) 0%, rgba(3, 11, 22, 0.30) 100%) !important;
-    -webkit-backdrop-filter: blur(10px) !important;
-    backdrop-filter: blur(10px) !important;
-    border-bottom: 1px solid rgba(0, 214, 137, 0.12) !important;
 }
 
 body.page-weekly-lineup .nav-links,
@@ -917,7 +912,7 @@ body.page-active-picks .nav-link {
     text-shadow: 
         0 1px 2px rgba(0, 31, 63, 0.9); /* Removed green glow from default state */
     opacity: 0.85 !important; /* Slightly reduced opacity for non-active */
-    padding: 3px 8px !important; /* Tighter vertical padding for closer underline */
+    padding: 4px 8px !important;
     -webkit-font-smoothing: antialiased;
     transition: color 0.3s ease, text-shadow 0.3s ease, background 0.3s ease, transform 0.2s ease;
 }

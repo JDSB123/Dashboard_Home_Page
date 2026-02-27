@@ -143,6 +143,21 @@ const WEEKLY_LINEUP_CSS = [
   "assets/css/pages/weekly-lineup-critical.css",
 ];
 
+// Fetch-picks-specific JS (display-only model viewer)
+const FETCH_PICKS_JS = [
+  "assets/js/features/fetch-picks-controller.js",
+];
+
+// Fetch-picks-specific CSS
+const FETCH_PICKS_CSS = [
+  "assets/css/components/brand-header.css",
+  "assets/css/pages/fetch-picks.css",
+  "assets/css/components/picks-table.css",
+  "assets/css/components/status-badges.css",
+  "assets/css/components/table-columns.css",
+  "assets/css/pages/fetch-picks-critical.css",
+];
+
 // ── Build logic ───────────────────────────────────────────────────────────
 
 function concatenateFiles(files, label) {
@@ -199,11 +214,13 @@ await Promise.all([
   buildBundle("core", [...SHARED_JS, ...FETCHER_JS], "js"),
   buildBundle("dashboard", DASHBOARD_JS, "js"),
   buildBundle("weekly-lineup", WEEKLY_LINEUP_JS, "js"),
+  buildBundle("fetch-picks", FETCH_PICKS_JS, "js"),
 
   // CSS bundles
   buildBundle("core", SHARED_CSS, "css"),
   buildBundle("dashboard", DASHBOARD_CSS, "css"),
   buildBundle("weekly-lineup", WEEKLY_LINEUP_CSS, "css"),
+  buildBundle("fetch-picks", FETCH_PICKS_CSS, "css"),
 ]);
 
 const elapsed = Date.now() - start;

@@ -22,7 +22,7 @@ module.exports = async function (context, req) {
   }
 
   const registry = {};
-  const sports = ["nba", "ncaam", "nfl", "ncaaf"];
+  const sports = ["nba", "ncaam", "nfl", "ncaaf", "nhl"];
 
   for (const sport of sports) {
     const envKey = `${sport.toUpperCase()}_API_URL`;

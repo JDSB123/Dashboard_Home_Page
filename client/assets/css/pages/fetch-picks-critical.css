@@ -1,0 +1,20 @@
+/* Critical mobile overrides for Fetch Picks page — CSP hardened */
+@media (max-width: 767px) {
+  body.page-fetch-picks .filter-toolbar,
+  body.page-fetch-picks .toolbar-layout,
+  body.page-fetch-picks .dashboard-topline,
+  body.page-fetch-picks .unified-filter,
+  body.page-fetch-picks .date-toggle-group,
+  body.page-fetch-picks .export-import-controls {
+    display: none !important;
+  }
+
+  body.page-fetch-picks {
+    padding-top: 48px !important;
+  }
+
+  body.page-fetch-picks .main-container {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}

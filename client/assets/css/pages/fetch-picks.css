@@ -1,0 +1,889 @@
+/* ==========================================================================
+   FETCH PICKS PAGE - CUSTOM STYLES
+   ==========================================================================
+   Lightweight model-picks viewer. Mirrors the weekly-lineup look & feel
+   but with a simplified 7-column table (no Track column) and no Cosmos sync.
+   ========================================================================== */
+
+/* ===== TOOLBAR LAYOUT ===== */
+body.page-fetch-picks .toolbar-layout {
+  margin-left: 0.75in;
+  margin-right: 0.75in;
+  width: calc(100% - 1.5in);
+  box-sizing: border-box;
+}
+
+@media (max-width: 900px) {
+  body.page-fetch-picks .toolbar-layout {
+    margin-left: 0.5in;
+    margin-right: 0.5in;
+    width: calc(100% - 1in);
+  }
+}
+
+@media (max-width: 600px) {
+  body.page-fetch-picks .toolbar-layout {
+    margin-left: 0.25in;
+    margin-right: 0.25in;
+    width: calc(100% - 0.5in);
+  }
+}
+
+/* ===== PAGE SPECIFIC ===== */
+body.page-fetch-picks {
+  --fp-accent-primary: var(--emerald-500);
+  --fp-accent-secondary: var(--gold-400);
+  --fp-surface: rgba(8, 16, 28, 0.75);
+  --fp-border: rgba(80, 100, 130, 0.25);
+  --fp-text: #e6f2f6;
+  --dashboard-topline-height: 91px;
+  --table-font: var(--font-body);
+
+  /* Zebra Stripes */
+  --zebra-odd: rgba(4, 12, 24, 0.15);
+  --zebra-even: rgba(30, 55, 85, 0.08);
+
+  background-color: rgba(3, 11, 22, 0.18);
+  background-image: url("../assets/JB_Bearish_Market_FULL_page.png");
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  position: relative;
+  isolation: isolate;
+}
+
+/* ===== OVERLAY EFFECTS ===== */
+body.page-fetch-picks::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    180deg,
+    rgba(4, 10, 20, 0.12) 0%,
+    rgba(4, 10, 20, 0.1) 15%,
+    rgba(4, 10, 20, 0.08) 30%,
+    rgba(4, 10, 20, 0.14) 50%,
+    rgba(4, 10, 20, 0.18) 75%,
+    rgba(4, 10, 20, 0.25) 100%
+  );
+  pointer-events: none;
+  opacity: 0.2;
+}
+
+body.page-fetch-picks::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background: rgba(3, 11, 22, 0.75);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   NAV & HEADER (floating / transparent)
+   ========================================================================== */
+body.page-fetch-picks .brand-nav {
+  background: transparent;
+  border-bottom: none;
+  box-shadow: none;
+}
+
+body.page-fetch-picks .nav-links { margin-top: 0; }
+
+body.page-fetch-picks .nav-link {
+  color: #e6f2f6 !important;
+  font-family: "Cormorant Garamond", serif !important;
+  font-weight: 600 !important;
+  font-size: 0.875rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.1em !important;
+  padding: 4px 8px !important;
+}
+
+body.page-fetch-picks .nav-link:hover,
+body.page-fetch-picks .nav-link:focus-visible {
+  color: #00e6a3 !important;
+  text-shadow: 0 0 8px rgba(0, 214, 137, 0.5), 0 1px 2px rgba(0, 31, 63, 0.9) !important;
+  background: linear-gradient(135deg, rgba(0, 214, 137, 0.1), rgba(0, 31, 63, 0.1)) !important;
+}
+
+body.page-fetch-picks .nav-link.active {
+  color: #00e6a3 !important;
+  text-shadow: 0 0 6px rgba(0, 214, 137, 0.4), 0 1px 2px rgba(0, 31, 63, 0.9) !important;
+  background: linear-gradient(135deg, rgba(0, 214, 137, 0.15), rgba(0, 31, 63, 0.15)) !important;
+  border-bottom: none !important;
+}
+
+/* ==========================================================================
+   LAYOUT SHELL
+   ========================================================================== */
+body.page-fetch-picks .main-container {
+  padding: 0 0 20px;
+  margin-top: 12px;
+}
+
+body.page-fetch-picks .main-dashboard-layout { gap: 8px; }
+
+/* ===== TOPLINE ===== */
+body.page-fetch-picks .dashboard-topline {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 6px 0.5in 0;
+  margin-bottom: 8px;
+}
+
+body.page-fetch-picks .brand-header-inline,
+body.page-fetch-picks .brand-header {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+/* ==========================================================================
+   TABLE CONTAINER
+   ========================================================================== */
+body.page-fetch-picks .table-container,
+.page-fetch-picks .fetch-picks-table-wrapper {
+  margin-top: 0;
+  margin-left: 0.5in;
+  margin-right: 0.5in;
+  width: calc(100% - 1in);
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+  overflow: visible !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 0;
+  contain: none !important;
+}
+
+.page-fetch-picks .fetch-picks-table {
+  --table-font: var(--font-body) !important;
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: visible !important;
+}
+
+/* Prevent clipping in header */
+.page-fetch-picks .fetch-picks-table thead,
+.page-fetch-picks .fetch-picks-table thead tr,
+.page-fetch-picks .fetch-picks-table thead th {
+  overflow: visible !important;
+}
+
+/* Cell overflow */
+.fetch-picks-table td {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  word-wrap: break-word !important;
+  white-space: nowrap !important;
+  max-width: 0 !important;
+  padding: 0.5rem 0.75rem !important;
+  box-sizing: border-box;
+}
+
+/* Compact columns */
+.fetch-picks-table td:nth-child(2),
+.fetch-picks-table td:nth-child(4),
+.fetch-picks-table td:nth-child(6) {
+  padding: 0.4rem 0.5rem !important;
+  white-space: nowrap !important;
+}
+
+/* Allow Matchup and Pick to wrap */
+.fetch-picks-table td:nth-child(3),
+.fetch-picks-table td[data-label="Matchup"] {
+  white-space: normal !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  word-wrap: break-word !important;
+  max-width: 0 !important;
+}
+
+.fetch-picks-table td:nth-child(5),
+.fetch-picks-table td[data-label="Pick"] {
+  white-space: normal !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  word-wrap: break-word !important;
+  max-width: 0 !important;
+}
+
+/* ==========================================================================
+   COLUMN WIDTHS — 7 columns (total 100%)
+   1: Date/Time 13%  2: League 8%  3: Matchup 28%  4: Segment 10%
+   5: Pick 23%  6: Edge 10%  7: Fire 8%
+   ========================================================================== */
+.fetch-picks-table thead th:nth-child(1),
+.fetch-picks-table tbody td:nth-child(1) {
+  width: 13% !important; min-width: 120px !important; max-width: 13% !important;
+}
+.fetch-picks-table thead th:nth-child(2),
+.fetch-picks-table tbody td:nth-child(2) {
+  width: 8% !important; min-width: 65px !important; max-width: 8% !important;
+}
+.fetch-picks-table thead th:nth-child(3),
+.fetch-picks-table tbody td:nth-child(3) {
+  width: 28% !important; min-width: 220px !important; max-width: 28% !important;
+}
+.fetch-picks-table thead th:nth-child(4),
+.fetch-picks-table tbody td:nth-child(4) {
+  width: 10% !important; min-width: 80px !important; max-width: 10% !important;
+}
+.fetch-picks-table thead th:nth-child(5),
+.fetch-picks-table tbody td:nth-child(5) {
+  width: 23% !important; min-width: 160px !important; max-width: 23% !important;
+}
+.fetch-picks-table thead th:nth-child(6),
+.fetch-picks-table tbody td:nth-child(6) {
+  width: 10% !important; min-width: 75px !important; max-width: 10% !important;
+}
+.fetch-picks-table thead th:nth-child(7),
+.fetch-picks-table tbody td:nth-child(7) {
+  width: 8% !important; min-width: 70px !important; max-width: 8% !important;
+}
+
+/* ==========================================================================
+   TABLE HEADERS — transparent green gradient + sticky
+   ========================================================================== */
+body.page-fetch-picks .picks-table thead th,
+.fetch-picks-table thead th {
+  background: linear-gradient(
+    180deg,
+    rgba(0, 214, 137, 0.06) 0%,
+    rgba(0, 214, 137, 0.03) 45%,
+    rgba(8, 12, 22, 0.18) 100%
+  );
+  background-color: rgba(8, 12, 22, 0.15);
+  border-bottom: 1px solid rgba(0, 214, 137, 0.2);
+  border-right: 1px solid rgba(0, 214, 137, 0.08);
+  padding: 0.75rem 0.75rem;
+  text-align: center;
+  font-family: var(--font-display, "Oswald", sans-serif);
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #f4fbff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  line-height: 1.2;
+  position: relative;
+}
+
+.fetch-picks-table thead th:first-child { border-top-left-radius: 8px; }
+.fetch-picks-table thead th:last-child  { border-top-right-radius: 8px; border-right: none; }
+
+/* Sticky header */
+.page-fetch-picks .fetch-picks-table thead,
+.page-fetch-picks .picks-table thead {
+  position: sticky !important;
+  top: 0;
+  z-index: 110;
+  background: transparent !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.page-fetch-picks .fetch-picks-table thead th,
+.page-fetch-picks .picks-table thead th {
+  position: relative;
+  text-align: center;
+  padding: 8px 6px !important;
+  background-clip: padding-box;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+  vertical-align: middle;
+}
+
+.page-fetch-picks .fetch-picks-table th {
+  position: relative !important;
+  padding-right: 0 !important;
+}
+
+.page-fetch-picks .fetch-picks-table .th-header-shell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 0;
+}
+
+.page-fetch-picks .fetch-picks-table .th-sort-btn {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  padding: 2px 4px;
+  gap: 0;
+  min-height: unset;
+}
+
+.page-fetch-picks .fetch-picks-table .header-main-text {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.page-fetch-picks .fetch-picks-table .header-subtext {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: rgba(200, 215, 225, 0.7);
+  text-transform: none;
+  letter-spacing: 0.02em;
+  margin-top: 2px;
+  line-height: 1;
+}
+
+/* Sort icon */
+.page-fetch-picks .fetch-picks-table .sort-icon,
+.page-fetch-picks .picks-table .sort-icon {
+  position: absolute;
+  right: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 7px; line-height: 1; font-weight: bold;
+  color: rgba(34, 197, 94, 0.5);
+  opacity: 0.7;
+  margin: 0; pointer-events: none;
+  background: none; border: none; box-shadow: none; border-radius: 0;
+  transition: opacity 150ms ease, color 150ms ease;
+}
+
+.page-fetch-picks .fetch-picks-table th:hover .sort-icon { opacity: 1; color: rgba(74, 222, 128, 0.9); }
+
+.page-fetch-picks .fetch-picks-table th.sorted-asc .sort-icon,
+.page-fetch-picks .fetch-picks-table th.sorted-desc .sort-icon {
+  opacity: 1; color: rgba(34, 197, 94, 1);
+}
+
+/* ==========================================================================
+   TABLE BODY
+   ========================================================================== */
+.page-fetch-picks .picks-table tbody {
+  position: relative;
+  z-index: 10;
+  background: rgba(8, 12, 22, 0.52);
+}
+
+body.page-fetch-picks .picks-table tbody tr,
+.fetch-picks-table tbody tr {
+  border-bottom: 1px solid rgba(80, 100, 130, 0.12);
+  transition: background-color 0.2s ease;
+  background: transparent;
+}
+
+body.page-fetch-picks .picks-table tbody tr:nth-child(odd),
+.fetch-picks-table tbody tr:nth-child(odd) {
+  background: rgba(4, 12, 24, 0.42);
+}
+
+body.page-fetch-picks .picks-table tbody tr:nth-child(even),
+.fetch-picks-table tbody tr:nth-child(even) {
+  background: rgba(30, 55, 85, 0.28);
+}
+
+body.page-fetch-picks .picks-table tbody tr:hover,
+.fetch-picks-table tbody tr:hover {
+  background: rgba(40, 60, 90, 0.48);
+}
+
+.fetch-picks-table tbody td {
+  padding: 0.4rem 0.4rem;
+  color: rgba(232, 240, 242, 0.95);
+  vertical-align: middle;
+  font-family: var(--font-body, "Inter", sans-serif);
+  font-weight: 500;
+  font-size: 0.825rem;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+/* Center the Pick column (5th column) */
+.fetch-picks-table tbody td:nth-child(5) {
+  text-align: center;
+}
+
+/* ==========================================================================
+   CELL STYLES (Date, Matchup, Pick, Edge, Fire, League)
+   ========================================================================== */
+
+/* Time cell */
+.fetch-picks-table .cell-time {
+  font-family: var(--font-display, "Oswald", sans-serif);
+  font-weight: 500;
+  font-size: 0.8rem;
+  color: var(--neutral-300);
+  letter-spacing: 0.02em;
+}
+
+.fetch-picks-table .cell-book {
+  font-size: 0.65rem;
+  color: var(--neutral-500);
+  letter-spacing: 0.02em;
+}
+
+/* Matchup cell */
+.fetch-picks-table .matchup-inline {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  white-space: nowrap;
+}
+
+.fetch-picks-table .matchup-inline .team-logo {
+  width: 18px; height: 18px;
+  object-fit: contain;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.fetch-picks-table .matchup-inline .team-name-full {
+  font-family: var(--font-display, "Oswald", sans-serif);
+  font-weight: 600;
+  font-size: 0.825rem;
+  color: var(--neutral-100);
+  letter-spacing: 0.02em;
+}
+
+.fetch-picks-table .matchup-inline .vs-divider {
+  color: var(--neutral-500);
+  font-size: 0.65rem;
+  font-weight: 400;
+  margin: 0 0.1rem;
+}
+
+/* Pick cell */
+.fetch-picks-table .pick-inline {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.fetch-picks-table .pick-inline .pick-team {
+  font-family: var(--font-display, "Oswald", sans-serif);
+  font-weight: 700;
+  font-size: 0.825rem;
+  color: var(--emerald-400);
+  letter-spacing: 0.02em;
+}
+
+.fetch-picks-table .pick-inline .pick-odds {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--neutral-400);
+}
+
+/* League cell */
+.fetch-picks-table .league-logo {
+  width: 24px; height: 24px;
+  object-fit: contain;
+}
+
+/* Segment pill */
+.fetch-picks-table .segment-pill {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  font-family: var(--font-display, "Oswald", sans-serif);
+  font-weight: 600;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--neutral-200);
+  background: rgba(100, 116, 139, 0.15);
+  border: 1px solid rgba(100, 116, 139, 0.25);
+}
+
+/* Edge badge */
+.fetch-picks-table .edge-badge {
+  display: inline-block;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  font-family: var(--font-display, "Oswald", sans-serif);
+  font-weight: 700;
+  font-size: 0.85rem;
+  min-width: 42px;
+  text-align: center;
+  color: var(--emerald-400);
+  background: rgba(0, 214, 137, 0.12);
+  border: 1px solid rgba(0, 214, 137, 0.3);
+}
+
+/* Fire cell */
+.fetch-picks-table .fire-cell {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+/* ==========================================================================
+   FILTER TOOLBAR — mirrors weekly-lineup
+   ========================================================================== */
+body.page-fetch-picks .filter-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 16px;
+  background: linear-gradient(
+    180deg,
+    rgba(8, 14, 26, 0.6) 0%,
+    rgba(6, 12, 22, 0.55) 100%
+  );
+  border: 1px solid rgba(80, 100, 130, 0.2);
+  border-radius: 10px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+body.page-fetch-picks .ft-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+body.page-fetch-picks .ft-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* League pills */
+body.page-fetch-picks .ft-pill {
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-family: var(--font-display, "Oswald", sans-serif);
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--neutral-300);
+  background: rgba(100, 116, 139, 0.15);
+  border: 1px solid rgba(100, 116, 139, 0.25);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+body.page-fetch-picks .ft-pill:hover {
+  color: #fff;
+  background: rgba(0, 214, 137, 0.15);
+  border-color: rgba(0, 214, 137, 0.35);
+}
+
+body.page-fetch-picks .ft-pill.active {
+  color: #fff;
+  background: rgba(0, 214, 137, 0.2);
+  border-color: rgba(0, 214, 137, 0.5);
+  box-shadow: 0 0 8px rgba(0, 214, 137, 0.25);
+}
+
+/* Dropdowns */
+body.page-fetch-picks .ft-dropdown {
+  position: relative;
+}
+
+body.page-fetch-picks .ft-dropdown-btn {
+  padding: 4px 12px;
+  border-radius: 8px;
+  font-family: var(--font-display, "Oswald", sans-serif);
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  color: var(--neutral-300);
+  background: rgba(100, 116, 139, 0.12);
+  border: 1px solid rgba(100, 116, 139, 0.2);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+body.page-fetch-picks .ft-dropdown-btn:hover {
+  color: #fff;
+  border-color: rgba(0, 214, 137, 0.3);
+}
+
+body.page-fetch-picks .ft-dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 200px;
+  margin-top: 4px;
+  padding: 4px 0;
+  background: rgba(10, 16, 28, 0.95);
+  border: 1px solid rgba(80, 100, 130, 0.3);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  z-index: 200;
+  backdrop-filter: blur(10px);
+}
+
+body.page-fetch-picks .ft-dropdown-menu.open { display: block; }
+
+body.page-fetch-picks .ft-dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 8px 14px;
+  text-align: left;
+  font-size: 0.8rem;
+  color: var(--neutral-300);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+body.page-fetch-picks .ft-dropdown-item:hover {
+  background: rgba(0, 214, 137, 0.12);
+  color: #fff;
+}
+
+body.page-fetch-picks .ft-clear {
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  color: var(--neutral-400);
+  background: transparent;
+  border: 1px solid rgba(100, 116, 139, 0.2);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+body.page-fetch-picks .ft-clear:hover {
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+/* Fetch buttons */
+body.page-fetch-picks .ft-fetch-buttons {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+body.page-fetch-picks .ft-all-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+body.page-fetch-picks .ft-fetch-league-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-family: var(--font-display, "Oswald", sans-serif);
+  font-weight: 600;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--neutral-200);
+  background: rgba(0, 214, 137, 0.08);
+  border: 1px solid rgba(0, 214, 137, 0.2);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+body.page-fetch-picks .ft-fetch-league-btn:hover {
+  background: rgba(0, 214, 137, 0.18);
+  border-color: rgba(0, 214, 137, 0.4);
+  box-shadow: 0 0 10px rgba(0, 214, 137, 0.2);
+}
+
+body.page-fetch-picks .ft-fetch-league-btn.ft-fetch-all {
+  background: linear-gradient(135deg, rgba(0, 214, 137, 0.15), rgba(0, 100, 80, 0.15));
+  border-color: rgba(0, 214, 137, 0.35);
+}
+
+body.page-fetch-picks .ft-fetch-league-btn.ft-fetch-all:hover {
+  background: linear-gradient(135deg, rgba(0, 214, 137, 0.25), rgba(0, 100, 80, 0.25));
+  box-shadow: 0 0 12px rgba(0, 214, 137, 0.3);
+}
+
+body.page-fetch-picks .league-logo-sm {
+  width: 16px; height: 16px;
+  object-fit: contain;
+}
+
+body.page-fetch-picks .ft-last-refreshed {
+  font-size: 0.7rem;
+  color: var(--neutral-500);
+  white-space: nowrap;
+}
+
+body.page-fetch-picks .fetch-separator {
+  width: 1px;
+  height: 20px;
+  background: rgba(100, 116, 139, 0.3);
+  margin: 0 4px;
+}
+
+body.page-fetch-picks .refresh-icon {
+  width: 14px; height: 14px;
+}
+
+/* Coming soon buttons */
+body.page-fetch-picks .ft-coming-soon {
+  opacity: 0.35;
+  cursor: not-allowed !important;
+  pointer-events: none;
+}
+
+body.page-fetch-picks .coming-soon-label {
+  font-style: italic;
+}
+
+/* ==========================================================================
+   EMPTY STATE
+   ========================================================================== */
+body.page-fetch-picks .empty-state-cell {
+  padding: 60px 20px !important;
+  text-align: center;
+}
+
+body.page-fetch-picks .empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: var(--neutral-400);
+}
+
+body.page-fetch-picks .empty-icon {
+  font-size: 2.5rem;
+}
+
+body.page-fetch-picks .empty-message {
+  font-family: var(--font-body, "Inter", sans-serif);
+  font-size: 0.9rem;
+  color: var(--neutral-400);
+  max-width: 360px;
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   LOADING SKELETON
+   ========================================================================== */
+body.page-fetch-picks .skeleton-row td {
+  position: relative;
+  overflow: hidden !important;
+}
+
+body.page-fetch-picks .skeleton-row td::after {
+  content: "";
+  display: block;
+  height: 14px;
+  width: 60%;
+  border-radius: 4px;
+  background: linear-gradient(
+    90deg,
+    rgba(100, 116, 139, 0.1) 25%,
+    rgba(100, 116, 139, 0.2) 50%,
+    rgba(100, 116, 139, 0.1) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeletonShimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes skeletonShimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ==========================================================================
+   FETCH-IN-PROGRESS SPINNER
+   ========================================================================== */
+body.page-fetch-picks .ft-fetch-league-btn.fetching {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+body.page-fetch-picks .ft-fetch-league-btn.fetching .refresh-icon {
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
+   PICKS COUNT BADGE
+   ========================================================================== */
+body.page-fetch-picks .picks-count-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 10px;
+  font-family: var(--font-display, "Oswald", sans-serif);
+  font-weight: 700;
+  font-size: 0.7rem;
+  color: #fff;
+  background: linear-gradient(135deg, var(--emerald-600), var(--emerald-500));
+  margin-left: 6px;
+}
+
+/* ==========================================================================
+   RESPONSIVE — TABLET
+   ========================================================================== */
+@media (max-width: 1024px) {
+  body.page-fetch-picks .table-container,
+  .page-fetch-picks .fetch-picks-table-wrapper {
+    margin-left: 0.25in;
+    margin-right: 0.25in;
+    width: calc(100% - 0.5in);
+  }
+}
+
+/* ==========================================================================
+   RESPONSIVE — MOBILE (<767px)
+   Table transforms to cards via mobile-responsive-v2.css (core bundle)
+   ========================================================================== */
+@media (max-width: 767px) {
+  body.page-fetch-picks .table-container,
+  .page-fetch-picks .fetch-picks-table-wrapper {
+    margin-left: 8px;
+    margin-right: 8px;
+    width: calc(100% - 16px);
+  }
+
+  /* Card layout data labels for mobile */
+  .fetch-picks-table td:nth-child(1)::before { content: "Date/Time"; }
+  .fetch-picks-table td:nth-child(2)::before { content: "League"; }
+  .fetch-picks-table td:nth-child(3)::before { content: "Matchup"; }
+  .fetch-picks-table td:nth-child(4)::before { content: "Segment"; }
+  .fetch-picks-table td:nth-child(5)::before { content: "Pick"; }
+  .fetch-picks-table td:nth-child(6)::before { content: "Edge"; }
+  .fetch-picks-table td:nth-child(7)::before { content: "Fire"; }
+
+  /* Reset column constraints for card layout */
+  .fetch-picks-table thead th,
+  .fetch-picks-table tbody td {
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+  }
+}

@@ -437,7 +437,7 @@ body.page-active-picks .picks-table thead th:last-child {
 body.page-active-picks .picks-table thead {
   display: table-header-group !important; /* CRITICAL: Maintain table structure */
   position: sticky !important;
-  top: 42px; /* Sits below sticky filter toolbar */
+  top: 0;
   z-index: 110;
   background: transparent !important;
 }
@@ -1219,16 +1219,6 @@ body.page-active-picks .toolbar-container.toolbar-layout {
   width: 100%;
   padding: 0;
   box-sizing: border-box;
-  /* Sticky filter toolbar on scroll */
-  position: sticky;
-  top: 0;
-  z-index: 200;
-  background: linear-gradient(180deg, rgba(3, 11, 22, 0.95) 0%, rgba(3, 11, 22, 0.88) 100%);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-  padding-top: 6px;
-  padding-bottom: 6px;
-  border-bottom: 1px solid rgba(0, 214, 137, 0.10);
 }
 
 .toolbar-container.toolbar-layout .filter-toolbar {
