@@ -51,7 +51,8 @@
     }
 
     const asNum = parseInt(str, 10);
-    if (!Number.isNaN(asNum) && str !== "") return Math.max(0, Math.min(5, asNum));
+    if (!Number.isNaN(asNum) && str !== "")
+      return Math.max(0, Math.min(5, asNum));
 
     // Fallback: derive from edge value
     if (typeof edgeFallback === "number" && edgeFallback > 0) {
@@ -71,7 +72,13 @@
   }
 
   function getFunctionsBase() {
-    return window.APP_CONFIG?.FUNCTIONS_BASE_URL || window.location.origin;
+    const configured =
+      window.APP_CONFIG?.FUNCTIONS_BASE_URL || window.location.origin;
+    const normalized = String(configured || "").replace(/\/+$/, "");
+
+    // Guard against local/dev configs that accidentally include `/api`
+    // because sport fetchers append `/api/...` routes themselves.
+    return normalized.replace(/\/api$/i, "");
   }
 
   function getContainerEndpoint(sport) {
@@ -171,7 +178,11 @@
       }
       return { status: "error", code: response.status, containerApp: endpoint };
     } catch (error) {
-      return { status: "error", message: error.message, containerApp: endpoint };
+      return {
+        status: "error",
+        message: error.message,
+        containerApp: endpoint,
+      };
     }
   };
 

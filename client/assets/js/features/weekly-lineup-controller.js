@@ -111,6 +111,28 @@
     return { src: "", alt: s };
   };
 
+  const getTeamLogoUrl = (teamName, sport) => {
+    const normalizedSport = normalizeSport(sport);
+    const leagueKey =
+      normalizedSport === "NCAAB" ? "ncaam" : normalizedSport.toLowerCase();
+
+    const teamAbbr =
+      window.SharedUtils?.getTeamAbbr?.(teamName) ||
+      safeText(teamName).split(" ").pop() ||
+      "";
+    const teamId = safeText(teamAbbr).toLowerCase();
+
+    if (!teamId) return "";
+
+    if (window.LogoLoader?.getLogoUrl) {
+      return window.LogoLoader.getLogoUrl(leagueKey, teamId);
+    }
+
+    const espnLeague =
+      leagueKey === "ncaam" || leagueKey === "ncaaf" ? "ncaa" : leagueKey;
+    return `https://a.espncdn.com/i/teamlogos/${espnLeague}/500/${teamId}.png`;
+  };
+
   const fireEmoji = (fire) => {
     const n = Math.max(0, Math.min(5, parseInt(fire, 10) || 0));
     if (n <= 0) return "";
@@ -144,7 +166,7 @@
 
     tbody.innerHTML = `
       <tr class="empty-state-row">
-        <td colspan="9" class="empty-state-cell">
+        <td colspan="8" class="empty-state-cell">
           <div class="empty-state">
             <span class="empty-icon">📊</span>
             <span class="empty-message">${safeText(message || "No picks")}</span>
@@ -168,6 +190,8 @@
     for (const pick of picks) {
       const sport = normalizeSport(pick.sport || pick.league);
       const leagueLogo = getLeagueLogo(sport);
+      const awayLogo = getTeamLogoUrl(pick.awayTeam, sport);
+      const homeLogo = getTeamLogoUrl(pick.homeTeam, sport);
       const edge =
         typeof pick.edge === "number"
           ? pick.edge
@@ -202,9 +226,15 @@
         </td>
         <td class="col-matchup">
           <div class="matchup-cell matchup-inline">
-            <span class="team-line"><span class="team-name-full">${safeText(pick.awayTeam)}</span></span>
+            <span class="team-line">
+              ${awayLogo ? `<img src="${awayLogo}" class="team-logo" alt="${safeText(pick.awayTeam)}" loading="lazy" onerror="this.style.display='none'" />` : ""}
+              <span class="team-name-full">${safeText(pick.awayTeam)}</span>
+            </span>
             <span class="vs-divider">@</span>
-            <span class="team-line"><span class="team-name-full">${safeText(pick.homeTeam)}</span></span>
+            <span class="team-line">
+              ${homeLogo ? `<img src="${homeLogo}" class="team-logo" alt="${safeText(pick.homeTeam)}" loading="lazy" onerror="this.style.display='none'" />` : ""}
+              <span class="team-name-full">${safeText(pick.homeTeam)}</span>
+            </span>
           </div>
         </td>
         <td class="center col-segment">

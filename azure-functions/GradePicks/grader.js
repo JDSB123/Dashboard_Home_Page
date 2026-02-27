@@ -232,7 +232,7 @@ function gradePick(pick, games) {
 
   const pnl = calculatePnl(result, pick.risk, pick.toWin);
 
-  return { result, pnl, finalScore, segmentScore, gradeNote };
+  return { result, pnl, finalScore, segmentScore, gradeNote, game };
 }
 
 module.exports = {

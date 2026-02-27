@@ -22,15 +22,28 @@
     <!-- Local dev helper: if Live Server runs from repo root, fix base href -->
     <script>
       (function () {
-        if (
+        var isLocal =
           location.hostname === "localhost" ||
-          location.hostname === "127.0.0.1"
-        ) {
+          location.hostname === "127.0.0.1";
+
+        if (isLocal) {
+          // Fix base href if not already set
           if (!location.pathname.startsWith("/client/")) {
             var base = document.createElement("base");
             base.href = "/client/";
             document.head.prepend(base);
           }
+
+          // Override global config for local dev
+          window.DEV_OVERRIDE_CONFIG = {
+            API_BASE_URL: "http://localhost:7072/api",
+            FUNCTIONS_BASE_URL: "http://localhost:7072",
+            ENABLE_DB_SYNC: true,
+          };
+
+          console.log(
+            "[DEV] Local environment detected - API redirected to port 7072",
+          );
         }
       })();
     </script>
@@ -41,6 +54,7 @@
       as="image"
       href="assets/JB_Bearish_Market_FULL_page.png"
     />
+    <link rel="preload" as="image" href="assets/Logo%208.5.png?v=20251216" />
 
     <!-- Google Fonts: Athletic Prestige Design -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -53,13 +67,13 @@
     <!-- Cache version: 34.00.0 - Standardized versioning + consolidated hotfixes -->
 
     <!-- Bundled CSS (replaces 15 individual stylesheets) -->
-    <link rel="stylesheet" href="dist/core.min.css?v=36.00.0" />
-    <link rel="stylesheet" href="dist/dashboard.min.css?v=36.00.0" />
+    <link rel="stylesheet" href="dist/core.min.css?v=36.00.1" />
+    <link rel="stylesheet" href="dist/dashboard.min.css?v=36.00.1" />
 
     <!-- Dashboard styles consolidated in assets/css/pages/dashboard.css v5.1 -->
 
     <!-- Runtime config (separate — per-environment) -->
-    <script src="config.js?v=36.00.0" defer></script>
+    <script src="config.js?v=36.00.1" defer></script>
     <!-- Prefetch Weekly Lineup assets to speed up navigation -->
     <link rel="prefetch" href="weekly-lineup.html" as="document" />
     <link
@@ -1027,8 +1041,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.min.js"></script>
 
     <!-- Bundled JS (replaces ~40 individual scripts) -->
-    <script src="dist/core.min.js?v=36.00.0" defer></script>
-    <script src="dist/dashboard.min.js?v=36.00.0" defer></script>
+    <script src="dist/core.min.js?v=36.00.1" defer></script>
+    <script src="dist/dashboard.min.js?v=36.00.1" defer></script>
     <script>
       // Modular date range filter logic
       document.addEventListener("DOMContentLoaded", function () {
@@ -1101,8 +1115,8 @@
       (function () {
         try {
           if ("serviceWorker" in navigator) {
-            var swUrl = "/sw.js?v=2.0.3";
-            var expectedSwVersion = "v2.0.3";
+            var swUrl = "/sw.js?v=2.0.5";
+            var expectedSwVersion = "v2.0.5";
 
             async function hardResetCachesAndReload() {
               try {

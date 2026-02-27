@@ -20,15 +20,28 @@
     <!-- Local dev helper: if Live Server runs from repo root, fix base href -->
     <script>
       (function () {
-        if (
+        var isLocal =
           location.hostname === "localhost" ||
-          location.hostname === "127.0.0.1"
-        ) {
+          location.hostname === "127.0.0.1";
+
+        if (isLocal) {
+          // Fix base href if not already set
           if (!location.pathname.startsWith("/client/")) {
             var base = document.createElement("base");
             base.href = "/client/";
             document.head.prepend(base);
           }
+
+          // Override global config for local dev
+          window.DEV_OVERRIDE_CONFIG = {
+            API_BASE_URL: "http://localhost:7072/api",
+            FUNCTIONS_BASE_URL: "http://localhost:7072",
+            ENABLE_DB_SYNC: true,
+          };
+
+          console.log(
+            "[DEV] Local environment detected - API redirected to port 7072",
+          );
         }
       })();
     </script>
@@ -47,11 +60,11 @@
       rel="stylesheet"
     />
     <!-- Bundled CSS (replaces 8 individual stylesheets) -->
-    <link rel="stylesheet" href="dist/core.min.css?v=36.00.0" />
-    <link rel="stylesheet" href="dist/weekly-lineup.min.css?v=36.00.0" />
+    <link rel="stylesheet" href="dist/core.min.css?v=36.00.1" />
+    <link rel="stylesheet" href="dist/weekly-lineup.min.css?v=36.00.1" />
 
     <!-- Runtime config (separate — per-environment) -->
-    <script src="config.js?v=36.00.0" defer></script>
+    <script src="config.js?v=36.00.1" defer></script>
   </head>
   <body class="page-glow page-weekly-lineup">
     <noscript>
@@ -432,6 +445,10 @@
               <!-- Segment -->
               <col class="w-25" />
               <!-- Pick -->
+              <col class="w-8" />
+              <!-- Edge -->
+              <col class="w-6" />
+              <!-- Fire -->
               <col class="w-16" />
               <!-- Track -->
             </colgroup>
@@ -697,6 +714,25 @@
                     </div>
                   </div>
                 </th>
+                <th scope="col" data-sort="edge" class="center col-edge">
+                  <div class="th-header-shell">
+                    <button class="th-sort-btn" aria-label="Sort by edge">
+                      <span class="header-main-text">Edge</span
+                      ><span class="sort-icon" aria-hidden="true">▲</span>
+                    </button>
+                  </div>
+                </th>
+                <th scope="col" data-sort="fire" class="center col-fire">
+                  <div class="th-header-shell">
+                    <button
+                      class="th-sort-btn"
+                      aria-label="Sort by fire rating"
+                    >
+                      <span class="header-main-text">Fire</span
+                      ><span class="sort-icon" aria-hidden="true">▲</span>
+                    </button>
+                  </div>
+                </th>
                 <th scope="col" class="tracker-column center col-track">
                   <div class="th-header-shell">
                     <span class="header-main-text">Track</span>
@@ -706,7 +742,7 @@
             </thead>
             <tbody id="picks-tbody">
               <tr class="empty-state-row">
-                <td colspan="9" class="empty-state-cell">
+                <td colspan="8" class="empty-state-cell">
                   <div class="empty-state">
                     <span class="empty-icon">📊</span>
                     <span class="empty-message"
@@ -740,17 +776,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.min.js"></script>
 
     <!-- Bundled JS (replaces ~40 individual scripts) -->
-    <script src="dist/core.min.js?v=36.00.0" defer></script>
-    <script src="dist/weekly-lineup.min.js?v=36.00.0" defer></script>
+    <script src="dist/core.min.js?v=36.00.1" defer></script>
+    <script src="dist/weekly-lineup.min.js?v=36.00.1" defer></script>
 
     <script>
       // Service worker registration (versioned to bust caches)
       (function () {
         try {
           if ("serviceWorker" in navigator) {
-            var swUrl = "/sw.js?v=2.0.3";
+            var swUrl = "/sw.js?v=2.0.5";
 
-            var expectedSwVersion = "v2.0.3";
+            var expectedSwVersion = "v2.0.5";
 
             async function hardResetCachesAndReload() {
               try {

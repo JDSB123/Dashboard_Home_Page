@@ -44,6 +44,10 @@ add("Toronto Raptors", "raptors", "toronto");
 add("Utah Jazz", "jazz", "utah");
 add("Washington Wizards", "wizards");
 
+add("Florida Atlantic", "lantic", "am", "fau");
+add("Michigan State Spartans", "st", "state", "msu");
+add("Ohio State Buckeyes", "osu", "ohio state");
+
 // ── NFL (32 teams) ──
 add("Philadelphia Eagles", "eagles");
 add("Kansas City Chiefs", "chiefs");

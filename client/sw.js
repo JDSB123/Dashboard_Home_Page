@@ -1,5 +1,5 @@
 /* Simple service worker for asset caching */
-const VERSION = "v2.0.4";
+const VERSION = "v2.0.5";
 const CORE_CACHE = `core-${VERSION}`;
 const ASSET_CACHE = `assets-${VERSION}`;
 
@@ -19,12 +19,12 @@ const EXTERNAL_DOMAINS = [
 
 // Assets to pre-cache (weekly lineup critical)
 const PRECACHE_URLS = [
-  "/dist/bundle.min.css",
-  "/dist/core.min.js",
-  "/dist/dashboard.min.js",
-  "/dist/bundle.min.js",
-  "/assets/JB_Bearish_Market_FULL_page.png",
-  "/assets/Logo%208.5.png",
+  "dist/core.min.css",
+  "dist/dashboard.min.css",
+  "dist/core.min.js",
+  "dist/dashboard.min.js",
+  "assets/JB_Bearish_Market_FULL_page.png",
+  "assets/Logo%208.5.png",
 ];
 
 self.addEventListener("install", (event) => {

@@ -27,15 +27,29 @@
     <!-- Local dev helper: if Live Server runs from repo root, fix base href -->
     <script>
       (function () {
-        if (
+        var isLocal =
           location.hostname === "localhost" ||
-          location.hostname === "127.0.0.1"
-        ) {
+          location.hostname === "127.0.0.1";
+
+        if (isLocal) {
+          // Fix base href if not already set
           if (!location.pathname.startsWith("/client/")) {
             var base = document.createElement("base");
             base.href = "/client/";
             document.head.prepend(base);
           }
+
+          // Override global config for local dev
+          window.DEV_OVERRIDE_CONFIG = {
+            API_BASE_URL: "http://localhost:7072/api",
+            FUNCTIONS_BASE_URL: "http://localhost:7072",
+            ORCHESTRATOR_URL: "http://localhost:7072/api",
+            ENABLE_DB_SYNC: true,
+          };
+
+          console.log(
+            "[DEV] Local environment detected - API redirected to port 7072",
+          );
         }
       })();
     </script>
@@ -56,7 +70,7 @@
     />
 
     <!-- Bundled CSS -->
-    <link rel="stylesheet" href="dist/core.min.css?v=36.00.0" />
+    <link rel="stylesheet" href="dist/core.min.css?v=36.00.1" />
     <!-- Page-specific CSS -->
     <link
       rel="stylesheet"
@@ -64,7 +78,7 @@
     />
 
     <!-- Runtime config (separate — per-environment) -->
-    <script src="config.js?v=36.00.0" defer></script>
+    <script src="config.js?v=36.00.1" defer></script>
   </head>
   <body class="page-glow page-odds-market">
     <nav class="brand-nav" role="navigation" aria-label="Main navigation">
@@ -570,9 +584,9 @@
     </aside>
 
     <!-- Bundled JS (shared core) -->
-    <script src="dist/core.min.js?v=36.00.0" defer></script>
+    <script src="dist/core.min.js?v=36.00.1" defer></script>
     <!-- Page-specific scripts -->
-    <script src="assets/js/features/import-options.js?v=36.00.0" defer></script>
-    <script src="assets/js/features/odds-market.js?v=36.00.0" defer></script>
+    <script src="assets/js/features/import-options.js?v=36.00.1" defer></script>
+    <script src="assets/js/features/odds-market.js?v=36.00.1" defer></script>
   </body>
 </html>

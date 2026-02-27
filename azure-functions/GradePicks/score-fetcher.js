@@ -193,7 +193,7 @@ async function fetchOddsApiScores(sport, log) {
   }
 
   const sportKey = ODDS_API_SPORT_KEYS[sport];
-  const url = `https://api.the-odds-api.com/v4/sports/${sportKey}/scores?apiKey=${apiKey}&daysFrom=3&dateFormat=iso`;
+  const url = `https://api.the-odds-api.com/v4/sports/${sportKey}/scores?apiKey=${apiKey}&daysFrom=7&dateFormat=iso`;
 
   try {
     const data = await fetchJSON(url, {});

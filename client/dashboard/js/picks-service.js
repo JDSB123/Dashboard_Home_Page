@@ -10,15 +10,15 @@ const PicksService = (function () {
 
   // API Configuration
   const apiBaseFromConfig =
-    window.GBSV_CONFIG?.FUNCTIONS_URL ||
-    window.APP_CONFIG?.FUNCTIONS_BASE_URL ||
-    (window.APP_CONFIG?.API_BASE_URL
-      ? window.APP_CONFIG.API_BASE_URL.replace(/\/api$/, "")
+    window.DEV_OVERRIDE_CONFIG?.API_BASE_URL ||
+    window.APP_CONFIG?.API_BASE_URL ||
+    (window.APP_CONFIG?.FUNCTIONS_BASE_URL
+      ? `${window.APP_CONFIG.FUNCTIONS_BASE_URL.replace(/\/+$/, "")}/api`
       : "") ||
     window.APP_CONFIG?.API_BASE_FALLBACK ||
-    window.location.origin;
+    "/api";
   const API_BASE = apiBaseFromConfig;
-  const PICKS_ENDPOINT = `${API_BASE}/picks`;
+  const PICKS_ENDPOINT = `${API_BASE.replace(/\/+$/, "")}/picks`;
 
   // Cache for performance (optional local caching)
   let picksCache = null;

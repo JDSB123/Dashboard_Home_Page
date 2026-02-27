@@ -23,6 +23,9 @@
     if (!rawUrl) return null;
     try {
       const url = new URL(rawUrl, window.location.origin);
+      if (url.searchParams.get("gbsvNoRewrite") === "1") {
+        return null;
+      }
       if (
         !/espncdn\.com$/.test(url.hostname) &&
         !/\.espncdn\.com$/.test(url.hostname)
@@ -59,8 +62,25 @@
 
   function rewriteImage(img) {
     if (!img || !img.src) return;
+    const original = img.src;
     const mapped = convertEspnUrl(img.src);
     if (mapped && mapped !== img.src) {
+      if (!img.dataset.logoFallbackBound) {
+        img.dataset.logoFallbackBound = "1";
+        img.addEventListener(
+          "error",
+          () => {
+            try {
+              const fallbackUrl = new URL(original, window.location.origin);
+              fallbackUrl.searchParams.set("gbsvNoRewrite", "1");
+              if (img.src !== fallbackUrl.toString()) {
+                img.src = fallbackUrl.toString();
+              }
+            } catch (_) {}
+          },
+          { once: true },
+        );
+      }
       img.src = mapped;
     }
   }
