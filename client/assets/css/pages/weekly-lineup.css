@@ -102,7 +102,7 @@ body.page-weekly-lineup .nav-link {
   color: #e6f2f6 !important;
   font-family: "Cormorant Garamond", serif !important;
   font-weight: 600 !important;
-  font-size: 0.75rem !important;
+  font-size: 0.875rem !important;
   text-transform: uppercase !important;
   letter-spacing: 0.1em !important;
   padding: 4px 8px !important;
@@ -6276,7 +6276,7 @@ body.page-weekly-lineup
 }
 
 .ft-fetch-league-btn .league-label {
-  font-size: 0.6rem;
+  font-size: 0.875rem;
   font-weight: 600;
   letter-spacing: 0.02em;
 }
@@ -6298,7 +6298,7 @@ body.page-weekly-lineup
     gap: 6px;
   }
   .ft-last-refreshed {
-    font-size: 0.6rem;
+    font-size: 0.875rem;
   }
   .ft-fetch-league-btn {
     min-width: 32px;
@@ -6978,7 +6978,7 @@ body.page-weekly-lineup .brand-word {
   }
 
   body.page-weekly-lineup .brand-line-2 {
-    font-size: 0.9rem !important;
+    font-size: 1rem !important;
     letter-spacing: 0.25em !important;
   }
 }
@@ -6994,7 +6994,7 @@ body.page-weekly-lineup .brand-word {
   }
 
   body.page-weekly-lineup .brand-line-2 {
-    font-size: 0.7rem !important;
+    font-size: 0.875rem !important;
     letter-spacing: 0.2em !important;
   }
 }

@@ -2789,7 +2789,7 @@ body.page-active-picks .filter-chip .chip-remove:hover {
 
   /* Compact KPI text */
   body.page-active-picks .kpi-label {
-    font-size: 0.65rem;
+    font-size: 0.875rem;
   }
 
   body.page-active-picks .kpi-value {
@@ -2947,7 +2947,7 @@ body.page-active-picks .filter-chip .chip-remove:hover {
   /* Status badge in card */
   body.page-active-picks .picks-table tbody .status-badge {
     padding: 3px 8px;
-    font-size: 0.7rem;
+    font-size: 14px;
   }
 
   /* Risk/Win inputs: full-width and touch-friendly */
@@ -3000,7 +3000,7 @@ body.page-active-picks .filter-chip .chip-remove:hover {
   /* Sportsbook dropdown touch-friendly */
   body.page-active-picks .picks-table .sportsbook-dropdown {
     min-height: 32px;
-    font-size: 12px;
+    font-size: 14px;
     width: 100%;
     border-radius: 6px;
   }

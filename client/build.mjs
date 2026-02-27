@@ -135,6 +135,7 @@ const DASHBOARD_CSS = [
 
 // Weekly-lineup-specific CSS
 const WEEKLY_LINEUP_CSS = [
+  "assets/css/components/brand-header.css",
   "assets/css/pages/weekly-lineup.css",
   "assets/css/components/picks-table.css",
   "assets/css/components/status-badges.css",
