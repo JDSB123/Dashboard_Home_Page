@@ -6812,3 +6812,27 @@ body.page-weekly-lineup .brand-header-inline {
     overflow-y: auto;
   }
 }
+
+/* Final guardrail: keep shield logo aspect ratio intact on all breakpoints */
+body.page-weekly-lineup .brand-logo-inline {
+  width: auto !important;
+  height: var(--dashboard-topline-height, 76px) !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  aspect-ratio: auto !important;
+  object-fit: contain !important;
+}
+
+@media (max-width: 767px) {
+  body.page-weekly-lineup .brand-logo-inline {
+    width: auto !important;
+    height: 50px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  body.page-weekly-lineup .brand-logo-inline {
+    width: auto !important;
+    height: 38px !important;
+  }
+}

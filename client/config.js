@@ -36,11 +36,13 @@ window.APP_CONFIG = {
   NHL_API_URL:
     "https://nhl-gbsv-v1-az-aca.lemonsand-51e2acaf.eastus2.azurecontainerapps.io",
 
-  // Static Assets (Front Door / CDN)
-  LOGO_BASE_URL: "https://www.greenbiersportventures.com/team-logos", // Preferred custom domain route
-  LOGO_PRIMARY_URL: "https://www.greenbiersportventures.com/team-logos",
+  // Static Assets (Team logos)
+  // Temporary hotfix: route directly to blob until custom-domain /team-logos is restored.
+  LOGO_BASE_URL: "https://gbsvorchestratorstorage.blob.core.windows.net/team-logos",
+  LOGO_PRIMARY_URL:
+    "https://gbsvorchestratorstorage.blob.core.windows.net/team-logos",
   LOGO_FALLBACK_URL:
-    "https://gbsvorchestratorstorage.blob.core.windows.net/team-logos", // Direct blob fallback
+    "https://gbsvorchestratorstorage.blob.core.windows.net/team-logos",
 
   // Feature Flags
   AUTH_ENABLED: false,
