@@ -1,0 +1,477 @@
+<!doctype html>
+<!--
+  FETCH PICKS PAGE (v36.01.0)
+  Lightweight model picks viewer — fetch from NBA, NCAAM, NHL and future models
+-->
+<html lang="en">
+  <head>
+    <!-- Critical styles moved to external CSS for CSP hardening -->
+    <link rel="stylesheet" href="assets/css/base/critical.css?v=1" />
+    <meta name="theme-color" content="#030b16" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="apple-touch-icon" href="assets/Logo%208.5.png" />
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>Bears & Bulls — Fetch Picks</title>
+    <link rel="icon" type="image/png" href="assets/Logo%208.5.png?v=20251216" />
+
+    <!-- Local dev helper -->
+    <script>
+      (function () {
+        var isLocal =
+          location.hostname === "localhost" ||
+          location.hostname === "127.0.0.1";
+        if (isLocal) {
+          if (!location.pathname.startsWith("/client/")) {
+            var base = document.createElement("base");
+            base.href = "/client/";
+            document.head.prepend(base);
+          }
+          window.DEV_OVERRIDE_CONFIG = {
+            API_BASE_URL: "http://localhost:7072/api",
+            FUNCTIONS_BASE_URL: "http://localhost:7072",
+            ENABLE_DB_SYNC: true,
+          };
+          console.log(
+            "[DEV] Local environment detected - API redirected to port 7072",
+          );
+        }
+      })();
+    </script>
+
+    <!-- Preload critical background image -->
+    <link
+      rel="preload"
+      as="image"
+      href="assets/JB_Bearish_Market_FULL_page.png"
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&amp;family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Oswald:wght@500;600;700&amp;family=Bebas+Neue&amp;family=Inter:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;family=Exo+2:wght@400;500;600&amp;family=Roboto+Mono:wght@400;500&amp;display=swap"
+      rel="stylesheet"
+    />
+    <!-- Bundled CSS -->
+    <link rel="stylesheet" href="dist/core.min.css?v=36.01.0" />
+    <link rel="stylesheet" href="dist/fetch-picks.min.css?v=36.01.0" />
+
+    <!-- Runtime config -->
+    <script src="config.js?v=36.01.0" defer></script>
+  </head>
+  <body class="page-glow page-fetch-picks">
+    <noscript>
+      <div class="noscript-warning" role="alert">
+        <strong>JavaScript Required:</strong> This dashboard requires
+        JavaScript.
+      </div>
+    </noscript>
+
+    <nav class="brand-nav" role="navigation" aria-label="Main navigation">
+      <ul class="nav-links" aria-label="Primary">
+        <li><a href="index.html" class="nav-link">Dashboard</a></li>
+        <li>
+          <a href="weekly-lineup.html" class="nav-link">Weekly Lineup</a>
+        </li>
+        <li><a href="odds-market.html" class="nav-link">Odds Market</a></li>
+        <li>
+          <a href="picks-tracker.html" class="nav-link">Picks Tracker</a>
+        </li>
+        <li>
+          <a href="fetch-picks.html" class="nav-link" aria-current="page"
+            >Fetch Picks</a
+          >
+        </li>
+      </ul>
+    </nav>
+
+    <main class="main-container">
+      <div id="dashboard" class="main-dashboard-layout">
+        <div class="dashboard-topline">
+          <div class="brand-header-inline" role="banner">
+            <img
+              src="assets/Logo%208.5.png?v=20251216"
+              alt="Bears & Bulls"
+              class="brand-logo-inline"
+              loading="eager"
+            />
+            <div class="brand-content-inline">
+              <div class="brand-text-stacked">
+                <span class="brand-line-1">Bears & Bulls</span>
+                <span class="brand-line-2"
+                  ><span class="brand-word">FETCH PICKS</span></span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter Toolbar -->
+        <div class="toolbar-container toolbar-layout">
+          <div class="filter-toolbar" id="filter-toolbar">
+            <div class="ft-left">
+              <!-- League pills -->
+              <button class="ft-pill ft-league" data-league="nba">NBA</button>
+              <button class="ft-pill ft-league" data-league="ncaab">
+                NCAAM
+              </button>
+              <button class="ft-pill ft-league" data-league="nhl">NHL</button>
+              <!-- Segment dropdown -->
+              <div class="ft-dropdown">
+                <button class="ft-dropdown-btn" id="segment-dropdown-btn">
+                  Segment ▾
+                </button>
+                <div class="ft-dropdown-menu" id="segment-dropdown-menu">
+                  <button
+                    class="ft-dropdown-item"
+                    data-f="segment"
+                    data-v="full"
+                  >
+                    <strong>FG</strong> · Full Game
+                  </button>
+                  <button class="ft-dropdown-item" data-f="segment" data-v="1h">
+                    <strong>1H</strong> · First Half
+                  </button>
+                  <button class="ft-dropdown-item" data-f="segment" data-v="2h">
+                    <strong>2H</strong> · Second Half
+                  </button>
+                </div>
+              </div>
+              <!-- Pick Type dropdown -->
+              <div class="ft-dropdown">
+                <button class="ft-dropdown-btn" id="picktype-dropdown-btn">
+                  Pick Type ▾
+                </button>
+                <div class="ft-dropdown-menu" id="picktype-dropdown-menu">
+                  <button
+                    class="ft-dropdown-item"
+                    data-f="pick-type"
+                    data-v="spread"
+                  >
+                    <strong>Spread</strong> · Point spread
+                  </button>
+                  <button
+                    class="ft-dropdown-item"
+                    data-f="pick-type"
+                    data-v="moneyline"
+                  >
+                    <strong>Moneyline</strong> · Win/loss only
+                  </button>
+                  <button
+                    class="ft-dropdown-item"
+                    data-f="pick-type"
+                    data-v="total"
+                  >
+                    <strong>Total</strong> · Over/Under
+                  </button>
+                  <button
+                    class="ft-dropdown-item"
+                    data-f="pick-type"
+                    data-v="team-total"
+                  >
+                    <strong>Team Total</strong> · Single team O/U
+                  </button>
+                </div>
+              </div>
+              <button class="ft-clear" id="ft-clear">✕ Clear</button>
+            </div>
+            <div class="ft-right">
+              <div class="fetch-controls-wrapper">
+                <div class="ft-fetch-buttons">
+                  <div class="ft-all-group">
+                    <button
+                      class="ft-fetch-league-btn ft-fetch-all"
+                      data-fetch="all"
+                      title="Refresh All"
+                    >
+                      <svg
+                        class="refresh-icon"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <path
+                          d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"
+                        />
+                      </svg>
+                      <span>All</span>
+                    </button>
+                    <span class="ft-last-refreshed" id="ft-last-refreshed"
+                      >Last: <span class="sync-time">-</span></span
+                    >
+                  </div>
+                  <div class="fetch-separator"></div>
+                  <button
+                    class="ft-fetch-league-btn"
+                    data-fetch="nba"
+                    title="Fetch NBA"
+                  >
+                    <img
+                      src="assets/nba-logo.png"
+                      class="league-logo-sm"
+                      alt="NBA"
+                    />
+                    <span class="league-label">NBA</span>
+                  </button>
+                  <button
+                    class="ft-fetch-league-btn"
+                    data-fetch="ncaab"
+                    title="Fetch NCAAM"
+                  >
+                    <img
+                      src="assets/ncaam-logo.png"
+                      class="league-logo-sm"
+                      alt="NCAAM"
+                    />
+                    <span class="league-label">NCAAM</span>
+                  </button>
+                  <button
+                    class="ft-fetch-league-btn"
+                    data-fetch="nhl"
+                    title="Fetch NHL"
+                  >
+                    <img
+                      src="assets/nhl-logo.png"
+                      class="league-logo-sm"
+                      alt="NHL"
+                    />
+                    <span class="league-label">NHL</span>
+                  </button>
+                  <div class="fetch-separator"></div>
+                  <button
+                    class="ft-fetch-league-btn ft-coming-soon"
+                    data-fetch="nfl"
+                    title="NFL — Coming Soon"
+                    disabled
+                  >
+                    <span class="league-label coming-soon-label">NFL</span>
+                  </button>
+                  <button
+                    class="ft-fetch-league-btn ft-coming-soon"
+                    data-fetch="mlb"
+                    title="MLB — Coming Soon"
+                    disabled
+                  >
+                    <span class="league-label coming-soon-label">MLB</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter Chips -->
+        <div class="chips-container toolbar-layout">
+          <div class="table-filter-chips-wrapper">
+            <div
+              class="table-filter-chips filter-chips"
+              id="table-filter-chips"
+              aria-live="polite"
+              data-has-chips="false"
+            ></div>
+          </div>
+        </div>
+
+        <div class="table-container fetch-picks-table-wrapper">
+          <table
+            class="picks-table fetch-picks-table"
+            aria-label="Model picks — sorted by edge"
+          >
+            <colgroup>
+              <col class="w-13" />
+              <!-- Date/Time -->
+              <col class="w-8" />
+              <!-- League -->
+              <col class="w-28" />
+              <!-- Matchup -->
+              <col class="w-10" />
+              <!-- Segment -->
+              <col class="w-23" />
+              <!-- Pick -->
+              <col class="w-10" />
+              <!-- Edge -->
+              <col class="w-8" />
+              <!-- Fire -->
+            </colgroup>
+            <thead>
+              <tr>
+                <th scope="col" data-sort="date" class="col-datetime">
+                  <div class="th-header-shell">
+                    <button
+                      class="th-sort-btn"
+                      aria-label="Sort by date and time (CST)"
+                    >
+                      <span class="header-main-text">Date & Time</span>
+                      <span class="header-subtext">(CST)</span>
+                      <span class="sort-icon" aria-hidden="true">▲</span>
+                    </button>
+                  </div>
+                </th>
+                <th scope="col" data-sort="league" class="center col-league">
+                  <div class="th-header-shell">
+                    <button class="th-sort-btn" aria-label="Sort by league">
+                      <span class="header-main-text">League</span>
+                      <span class="sort-icon" aria-hidden="true">▲</span>
+                    </button>
+                  </div>
+                </th>
+                <th scope="col" data-sort="matchup" class="col-matchup">
+                  <div class="th-header-shell">
+                    <button class="th-sort-btn" aria-label="Sort by Matchup">
+                      <span class="header-main-text">Matchup</span>
+                      <span class="header-subtext">(Away @ Home)</span>
+                      <span class="sort-icon" aria-hidden="true">▲</span>
+                    </button>
+                  </div>
+                </th>
+                <th scope="col" data-sort="segment" class="center col-segment">
+                  <div class="th-header-shell">
+                    <button class="th-sort-btn" aria-label="Sort by segment">
+                      <span class="header-main-text">Segment</span>
+                      <span class="sort-icon" aria-hidden="true">▲</span>
+                    </button>
+                  </div>
+                </th>
+                <th scope="col" data-sort="pick" class="col-pick">
+                  <div class="th-header-shell">
+                    <button class="th-sort-btn" aria-label="Sort by pick">
+                      <span class="header-main-text">Pick</span>
+                      <span class="sort-icon" aria-hidden="true">▲</span>
+                    </button>
+                  </div>
+                </th>
+                <th scope="col" data-sort="edge" class="center col-edge">
+                  <div class="th-header-shell">
+                    <button class="th-sort-btn" aria-label="Sort by edge">
+                      <span class="header-main-text">Edge</span>
+                      <span class="sort-icon" aria-hidden="true">▲</span>
+                    </button>
+                  </div>
+                </th>
+                <th scope="col" data-sort="fire" class="center col-fire">
+                  <div class="th-header-shell">
+                    <button
+                      class="th-sort-btn"
+                      aria-label="Sort by fire rating"
+                    >
+                      <span class="header-main-text">Fire</span>
+                      <span class="sort-icon" aria-hidden="true">▲</span>
+                    </button>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody id="picks-tbody">
+              <tr class="empty-state-row">
+                <td colspan="7" class="empty-state-cell">
+                  <div class="empty-state">
+                    <span class="empty-icon">📊</span>
+                    <span class="empty-message"
+                      >No picks fetched yet. Tap a league or Fetch All to load
+                      model predictions.</span
+                    >
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+    <!-- Mobile Fetch FAB (phones only) -->
+    <div class="mobile-fab-menu" id="mobile-fetch-menu" hidden>
+      <h4>Fetch Picks</h4>
+      <div class="fab-list">
+        <button class="fab-item" data-fetch="all">All</button>
+        <button class="fab-item" data-fetch="nba">NBA</button>
+        <button class="fab-item" data-fetch="ncaab">NCAAM</button>
+        <button class="fab-item" data-fetch="nhl">NHL</button>
+      </div>
+    </div>
+    <button class="mobile-fab" id="mobile-fetch-fab" aria-label="Fetch picks">
+      ↻
+    </button>
+
+    <!-- SignalR CDN (external — not bundled) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.min.js"></script>
+
+    <!-- Bundled JS -->
+    <script src="dist/core.min.js?v=36.01.0" defer></script>
+    <script src="dist/fetch-picks.min.js?v=36.01.0" defer></script>
+
+    <script>
+      // Service worker registration
+      (function () {
+        try {
+          if ("serviceWorker" in navigator) {
+            var swUrl = "/sw.js?v=3.0.0";
+            var expectedSwVersion = "v3.0.0";
+
+            async function hardResetCachesAndReload() {
+              try {
+                var regs = await navigator.serviceWorker.getRegistrations();
+                await Promise.all(regs.map(function (r) { return r.unregister(); }));
+              } catch (e) {}
+              try {
+                if (window.caches && caches.keys) {
+                  var keys = await caches.keys();
+                  await Promise.all(keys.map(function (k) { return caches.delete(k); }));
+                }
+              } catch (e) {}
+              try {
+                var url = new URL(window.location.href);
+                url.searchParams.set("r", String(Date.now()));
+                window.location.replace(url.toString());
+              } catch (e) { window.location.reload(); }
+            }
+
+            function getSwVersion(controller) {
+              return new Promise(function (resolve) {
+                try {
+                  if (!controller) return resolve(null);
+                  var channel = new MessageChannel();
+                  channel.port1.onmessage = function (evt) {
+                    resolve((evt && evt.data && evt.data.version) || null);
+                  };
+                  controller.postMessage({ type: "GET_VERSION" }, [channel.port2]);
+                  setTimeout(function () { resolve(null); }, 1500);
+                } catch (e) { resolve(null); }
+              });
+            }
+
+            async function ensureFreshClient() {
+              try {
+                var params = new URLSearchParams(window.location.search);
+                if (params.get("reset") === "1") { await hardResetCachesAndReload(); return; }
+              } catch (e) {}
+              try {
+                var controller = navigator.serviceWorker.controller;
+                var activeVersion = await getSwVersion(controller);
+                if (activeVersion && activeVersion !== expectedSwVersion) { await hardResetCachesAndReload(); }
+              } catch (e) {}
+            }
+
+            window.addEventListener("load", function () {
+              navigator.serviceWorker
+                .register(swUrl, { updateViaCache: "none" })
+                .then(function (reg) {
+                  try { reg.update(); } catch (e) {}
+                  try { if (reg.waiting) { reg.waiting.postMessage({ type: "SKIP_WAITING" }); } } catch (e) {}
+                  ensureFreshClient();
+                })
+                .catch(function () {});
+            });
+            navigator.serviceWorker.addEventListener("controllerchange", function () {});
+          }
+        } catch (e) {}
+      })();
+    </script>
+  </body>
+</html>

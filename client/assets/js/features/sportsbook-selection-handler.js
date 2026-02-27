@@ -94,33 +94,13 @@
         const trigger = document.getElementById('sportsbooks-trigger');
         if (!trigger) return;
         
-        // Map book keys to display names
-        const bookNames = {
-            'hulkwager': 'Hulk Wager',
-            'bombay711': 'Bombay 711',
-            'kingofsports': 'King of Sports',
-            'primetimeaction': 'Prime Time Action'
-        };
-        
-        const displayName = bookNames[bookKey];
-        
-        if (displayName) {
+        if (bookKey) {
             trigger.classList.add('has-selection');
-            // Update text to show selected book (keep the dropdown arrow)
-            trigger.textContent = displayName;
-            // Re-add the arrow since we just replaced textContent
-            const arrow = document.createElement('span');
-            arrow.style.marginLeft = '4px';
-            arrow.textContent = '▼';
-            trigger.appendChild(arrow);
         } else {
             trigger.classList.remove('has-selection');
-            trigger.textContent = 'Sports Books';
-            const arrow = document.createElement('span');
-            arrow.style.marginLeft = '4px';
-            arrow.textContent = '▼';
-            trigger.appendChild(arrow);
         }
+        // Always keep trigger text as "My Sports Books"
+        trigger.textContent = 'My Sports Books';
     }
 
     /**
@@ -144,11 +124,7 @@
         const trigger = document.getElementById('sportsbooks-trigger');
         if (trigger) {
             trigger.classList.remove('has-selection');
-            trigger.textContent = 'Sports Books';
-            const arrow = document.createElement('span');
-            arrow.style.marginLeft = '4px';
-            arrow.textContent = '▼';
-            trigger.appendChild(arrow);
+            trigger.textContent = 'My Sports Books';
         }
     }
 
