@@ -6836,3 +6836,68 @@ body.page-weekly-lineup .brand-logo-inline {
     height: 38px !important;
   }
 }
+
+/* Final brand header stabilization: preserve logo placement + title hierarchy */
+body.page-weekly-lineup .brand-header-inline {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 12px !important;
+  min-height: var(--dashboard-topline-height, 76px) !important;
+}
+
+body.page-weekly-lineup .brand-content-inline {
+  display: flex !important;
+  align-items: center !important;
+}
+
+body.page-weekly-lineup .brand-text-stacked {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  line-height: 1.05 !important;
+}
+
+body.page-weekly-lineup .brand-line-1 {
+  display: block !important;
+  font-size: 1.9rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.01em !important;
+}
+
+body.page-weekly-lineup .brand-line-2 {
+  display: block !important;
+  font-size: 1.15rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.08em !important;
+}
+
+body.page-weekly-lineup .brand-word {
+  display: inline-block !important;
+}
+
+@media (max-width: 767px) {
+  body.page-weekly-lineup .brand-header-inline {
+    justify-content: center !important;
+    gap: 10px !important;
+    min-height: auto !important;
+  }
+
+  body.page-weekly-lineup .brand-line-1 {
+    font-size: 1.25rem !important;
+  }
+
+  body.page-weekly-lineup .brand-line-2 {
+    font-size: 0.9rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  body.page-weekly-lineup .brand-line-1 {
+    font-size: 1rem !important;
+  }
+
+  body.page-weekly-lineup .brand-line-2 {
+    font-size: 0.75rem !important;
+  }
+}
