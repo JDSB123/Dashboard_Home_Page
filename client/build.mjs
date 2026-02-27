@@ -54,7 +54,7 @@ const FETCHER_JS = [
   "assets/js/features/unified-picks-fetcher.js",
 ];
 
-// Dashboard-specific JS (index.html only)
+// Dashboard-specific JS (dashboard.html only)
 const DASHBOARD_JS = [
   "assets/js/utils/team-data-loader.js",
   "assets/js/utils/filter-state-persistence.js",
@@ -118,7 +118,7 @@ const SHARED_CSS = [
   "assets/css/components/mobile-responsive-v2.css",
 ];
 
-// Dashboard-specific CSS (index.html only)
+// Dashboard-specific CSS (dashboard.html only)
 const DASHBOARD_CSS = [
   "assets/css/pages/dashboard.css",
   "assets/css/components/brand-header.css",

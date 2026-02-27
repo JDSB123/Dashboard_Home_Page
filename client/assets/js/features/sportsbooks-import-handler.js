@@ -319,7 +319,7 @@ ${escapeHtml(rawText)}
             return;
         }
 
-        // Use the SAME parseAndAdd function as manual-upload.js (index.html)
+        // Use the SAME parseAndAdd function as manual-upload.js (dashboard.html)
         // This ensures: parsing, enrichment, and prevents stale data mixing
         if (window.LocalPicksManager?.parseAndAdd) {
             window.LocalPicksManager.parseAndAdd(rawText, 'Sportsbooks Import')

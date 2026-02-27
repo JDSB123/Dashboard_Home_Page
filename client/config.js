@@ -5,7 +5,7 @@
  * Repository:  github.com/JDSB123/Dashboard_Home_Page
  * Azure RG:    Dashboard_Home_Page (eastus)
  * Owner:       jb@greenbiercapital.com
- * Version:     34.00.1
+ * Version:     36.01.0
  * ═══════════════════════════════════════════════════════════════════════════
  */
 
@@ -13,7 +13,7 @@
 window.APP_CONFIG = {
   // Project Identification
   PROJECT_NAME: "Dashboard_Home_Page",
-  VERSION: "34.00.1",
+  VERSION: "36.01.0",
   ENVIRONMENT: "production",
 
   // Azure Configuration
@@ -78,7 +78,7 @@ window.GBSV_CONFIG = {
 
 // ── Local Development Override ──────────────────────────────────────────
 // When served from localhost / 127.0.0.1 (e.g. VS Code Live Server),
-// keep using production APIs by default.
+// keep using production APIs by default so the dashboard renders real data.
 //
 // If you want to run the full stack locally (Azure Functions on your machine),
 // opt-in using ONE of:
@@ -97,12 +97,11 @@ window.GBSV_CONFIG = {
 
   const urlParams = new URLSearchParams(loc.search || "");
 
-  // Auto-route to local Functions when on localhost.
-  // Override with ?localApi=0 or localStorage LOCAL_API=0 to force prod APIs.
-  const forceProduction =
-    urlParams.get("localApi") === "0" ||
-    localStorage.getItem("LOCAL_API") === "0";
-  if (forceProduction) return;
+  // Opt-in to local Functions with ?localApi=1 or localStorage LOCAL_API=1
+  const useLocal =
+    urlParams.get("localApi") === "1" ||
+    localStorage.getItem("LOCAL_API") === "1";
+  if (!useLocal) return;
 
   // Default local Functions port configured in local.settings.json
   const LOCAL_API = "http://localhost:7072/api";

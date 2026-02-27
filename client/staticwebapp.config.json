@@ -1,6 +1,6 @@
 {
   "navigationFallback": {
-    "rewrite": "/index.html",
+    "rewrite": "/dashboard.html",
     "exclude": [
       "/assets/*",
       "/team-logos/*",
@@ -18,7 +18,7 @@
   "routes": [
     {
       "route": "/",
-      "rewrite": "/index.html",
+      "rewrite": "/dashboard.html",
       "headers": {
         "Cache-Control": "no-cache, no-store, must-revalidate"
       }
@@ -37,14 +37,21 @@
       }
     },
     {
+      "route": "/dashboard.html",
+      "headers": {
+        "Cache-Control": "no-cache, no-store, must-revalidate"
+      }
+    },
+    {
       "route": "/index.html",
+      "rewrite": "/dashboard.html",
       "headers": {
         "Cache-Control": "no-cache, no-store, must-revalidate"
       }
     },
     {
       "route": "/dashboard",
-      "rewrite": "/index.html",
+      "rewrite": "/dashboard.html",
       "headers": {
         "Cache-Control": "no-cache, no-store, must-revalidate"
       }
@@ -116,7 +123,7 @@
   ],
   "responseOverrides": {
     "404": {
-      "rewrite": "/index.html"
+      "rewrite": "/dashboard.html"
     }
   },
   "globalHeaders": {

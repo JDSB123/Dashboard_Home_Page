@@ -60,7 +60,7 @@
             const nav = document.createElement('nav');
             nav.className = 'mobile-bottom-nav';
             nav.innerHTML = `
-                <a href="index.html" class="mobile-nav-item">
+                <a href="dashboard.html" class="mobile-nav-item">
                     <span>📊</span>
                     <span>Dashboard</span>
                 </a>

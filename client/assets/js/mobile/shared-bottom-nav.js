@@ -28,9 +28,9 @@
       const pages = [
         {
           label: "Dashboard",
-          href: "/index.html",
+          href: "/dashboard.html",
           icon: "📊",
-          match: ["/index.html", "/"],
+          match: ["/dashboard.html", "/"],
         },
         {
           label: "Lineup",

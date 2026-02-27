@@ -1,5 +1,5 @@
 /* Simple service worker for asset caching */
-const VERSION = "v3.0.0";
+const VERSION = "v36.01.0";
 const CORE_CACHE = `core-${VERSION}`;
 const ASSET_CACHE = `assets-${VERSION}`;
 
@@ -20,9 +20,18 @@ const EXTERNAL_DOMAINS = [
 // Assets to pre-cache (weekly lineup critical)
 const PRECACHE_URLS = [
   "dist/core.min.css",
-  "dist/dashboard.min.css",
   "dist/core.min.js",
+  "dist/dashboard.min.css",
   "dist/dashboard.min.js",
+  "dist/weekly-lineup.min.css",
+  "dist/weekly-lineup.min.js",
+  "dist/fetch-picks.min.css",
+  "dist/fetch-picks.min.js",
+  "assets/css/pages/odds-market-critical.css",
+  "assets/css/pages/odds-market.css",
+  "assets/css/pages/picks-tracker.css",
+  "assets/js/features/odds-market.js",
+  "assets/js/features/picks-tracker.js",
   "assets/JB_Bearish_Market_FULL_page.png",
   "assets/Logo%208.5.png",
 ];
@@ -70,7 +79,7 @@ function shouldBypassCaching(url) {
   if (
     url.pathname.endsWith(".html") ||
     url.pathname === "/" ||
-    url.pathname === "/index.html"
+    url.pathname === "/dashboard.html"
   )
     return true;
   if (url.pathname === "/config.js" || url.pathname.startsWith("/config."))
@@ -127,11 +136,11 @@ async function networkFirstNavigation(event) {
     // Force a real revalidation to avoid browser HTTP cache returning stale HTML.
     const response = await fetch(new Request(request, { cache: "reload" }));
     if (response && response.status === 200) {
-      cache.put("/index.html", response.clone());
+      cache.put("/dashboard.html", response.clone());
     }
     return response;
   } catch (err) {
-    const cached = await cache.match("/index.html");
+    const cached = await cache.match("/dashboard.html");
     if (cached) return cached;
     return new Response("Offline", { status: 502, statusText: "Offline" });
   }

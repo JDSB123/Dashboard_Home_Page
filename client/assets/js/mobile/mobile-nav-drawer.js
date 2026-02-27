@@ -32,7 +32,6 @@
       this._setupEventListeners();
 
       this.initialized = true;
-      console.log("Mobile navigation drawer initialized");
     }
 
     /**
@@ -48,7 +47,7 @@
                     <button class="drawer-close" aria-label="Close menu">×</button>
                 </div>
                 <ul class="drawer-menu">
-                    <li><a href="/index.html" class="drawer-link ${this._isActive("/index.html") ? "active" : ""}">
+                    <li><a href="/dashboard.html" class="drawer-link ${this._isActive("/dashboard.html") ? "active" : ""}">
                         <span class="drawer-icon">📊</span> Dashboard
                     </a></li>
                     <li><a href="/weekly-lineup.html" class="drawer-link ${this._isActive("/weekly-lineup.html") ? "active" : ""}">
@@ -59,6 +58,9 @@
                     </a></li>
                     <li><a href="/picks-tracker.html" class="drawer-link ${this._isActive("/picks-tracker.html") ? "active" : ""}">
                         <span class="drawer-icon">🎯</span> Picks Tracker
+                    </a></li>
+                    <li><a href="/fetch-picks.html" class="drawer-link ${this._isActive("/fetch-picks.html") ? "active" : ""}">
+                        <span class="drawer-icon">📥</span> Fetch Picks
                     </a></li>
                 </ul>
                 <div class="drawer-section">
@@ -77,7 +79,7 @@
                         <span class="status-dot online"></span>
                         <span>Connected</span>
                     </div>
-                    <div class="drawer-version">v34.00.0</div>
+                    <div class="drawer-version">v36.01.0</div>
                 </div>
             `;
 
@@ -282,7 +284,7 @@
     _isActive(path) {
       return (
         window.location.pathname.endsWith(path) ||
-        (path === "/index.html" && window.location.pathname === "/")
+        (path === "/dashboard.html" && window.location.pathname === "/")
       );
     }
 

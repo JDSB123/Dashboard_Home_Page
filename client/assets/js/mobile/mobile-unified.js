@@ -35,11 +35,9 @@
     init() {
       this.detectMobile();
       if (!this.isMobile) {
-        console.log("[Mobile] Desktop detected, skipping mobile UI");
         return;
       }
 
-      console.log("[Mobile] Initializing unified mobile experience");
       this.isActive = true;
 
       // Detect which page we're on
@@ -161,7 +159,7 @@
       this.fab.className = `mobile-fab ${fabClass}`;
       this.fab.setAttribute(
         "aria-label",
-        `Mobile ${faLabel === "✓" ? "confirm" : fabLabel} action`,
+        `Mobile ${fabLabel === "✓" ? "confirm" : fabLabel} action`,
       );
       this.fab.innerHTML = fabLabel;
       this.fab.style.cssText = `
@@ -225,7 +223,7 @@
 
       const navItems = [
         {
-          href: "index.html",
+          href: "dashboard.html",
           icon: "🏠",
           label: "Dashboard",
           isActive: this.currentPage === "dashboard",

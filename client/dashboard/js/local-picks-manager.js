@@ -5,7 +5,7 @@
  *
  * @deprecated This module uses localStorage for pick storage. Prefer the
  *   Cosmos DB-backed picks-service.js for new features. This file is still
- *   loaded by index.html and weekly-lineup.html for backward compatibility
+ *   loaded by dashboard.html and weekly-lineup.html for backward compatibility
  *   and will be removed once all callers migrate to the DB-backed service.
  */
 
@@ -1845,7 +1845,7 @@
     if (path.includes("weekly-lineup") || path.includes("odds-market")) {
       return false;
     }
-    // Default to true if on index.html or dashboard-like page
+    // Default to true if on dashboard.html or dashboard-like page
     return true;
   }
 

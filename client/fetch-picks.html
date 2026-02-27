@@ -20,25 +20,15 @@
     <title>Bears & Bulls — Fetch Picks</title>
     <link rel="icon" type="image/png" href="assets/Logo%208.5.png?v=20251216" />
 
-    <!-- Local dev helper -->
+    <!-- Local dev config handled by config.js -->
     <script>
       (function () {
         var isLocal =
           location.hostname === "localhost" ||
           location.hostname === "127.0.0.1";
         if (isLocal) {
-          if (!location.pathname.startsWith("/client/")) {
-            var base = document.createElement("base");
-            base.href = "/client/";
-            document.head.prepend(base);
-          }
-          window.DEV_OVERRIDE_CONFIG = {
-            API_BASE_URL: "http://localhost:7072/api",
-            FUNCTIONS_BASE_URL: "http://localhost:7072",
-            ENABLE_DB_SYNC: true,
-          };
           console.log(
-            "[DEV] Local environment detected - API redirected to port 7072",
+            "[DEV] Local environment detected — using production APIs by default. Add ?localApi=1 for local Functions.",
           );
         }
       })();
@@ -74,11 +64,15 @@
 
     <nav class="brand-nav" role="navigation" aria-label="Main navigation">
       <ul class="nav-links" aria-label="Primary">
-        <li><a href="index.html" class="nav-link">Dashboard</a></li>
+        <li>
+          <a href="dashboard.html" class="nav-link">Dashboard</a>
+        </li>
         <li>
           <a href="weekly-lineup.html" class="nav-link">Weekly Lineup</a>
         </li>
-        <li><a href="odds-market.html" class="nav-link">Odds Market</a></li>
+        <li>
+          <a href="odds-market.html" class="nav-link">Odds Market</a>
+        </li>
         <li>
           <a href="picks-tracker.html" class="nav-link">Picks Tracker</a>
         </li>
@@ -86,6 +80,388 @@
           <a href="fetch-picks.html" class="nav-link" aria-current="page"
             >Fetch Picks</a
           >
+        </li>
+        <li class="nav-dropdown">
+          <button
+            class="nav-link nav-dropdown-trigger"
+            id="sportsbooks-trigger"
+            aria-expanded="false"
+            aria-haspopup="true"
+            aria-controls="sportsbooks-menu"
+          >
+            My Sports Books
+          </button>
+          <div
+            class="nav-dropdown-menu"
+            id="sportsbooks-menu"
+            aria-labelledby="sportsbooks-trigger"
+            role="region"
+            aria-label="Connected sportsbooks"
+            hidden
+          >
+            <!-- Hulk Wager -->
+            <section
+              class="sportsbook-card"
+              data-book="hulkwager"
+              aria-labelledby="nav-sportsbook-hulkwager-name"
+            >
+              <div class="sportsbook-card-header">
+                <div
+                  class="sportsbook-name-group"
+                  id="nav-sportsbook-hulkwager-name"
+                >
+                  <span class="connection-status disconnected"></span>
+                  <span class="sportsbook-name">Hulk Wager</span>
+                </div>
+                <div class="sportsbook-meta-compact">
+                  <span class="sportsbook-last-sync"
+                    >Last: <span class="sync-time">--</span></span
+                  >
+                  <button
+                    type="button"
+                    class="sportsbook-fetch-compact"
+                    data-book="hulkwager"
+                    aria-label="Fetch picks from Hulk Wager"
+                  >
+                    <span class="fetch-icon">↻</span>
+                  </button>
+                </div>
+              </div>
+              <form class="sportsbook-actions-row">
+                <div class="sportsbook-credentials-group">
+                  <input
+                    type="text"
+                    id="nav-hulk-username"
+                    class="credential-input-compact"
+                    placeholder="Username"
+                    name="nav-hulkwager-login"
+                    autocomplete="off"
+                    spellcheck="false"
+                    data-form-type="other"
+                    inputmode="text"
+                    aria-label="Hulk Wager username"
+                  />
+                  <input
+                    type="password"
+                    id="nav-hulk-password"
+                    class="credential-input-compact"
+                    placeholder="Password"
+                    name="nav-hulkwager-secret"
+                    autocomplete="new-password"
+                    spellcheck="false"
+                    data-form-type="other"
+                    inputmode="text"
+                    aria-label="Hulk Wager password"
+                  />
+                </div>
+              </form>
+            </section>
+            <!-- Bombay 711 -->
+            <section
+              class="sportsbook-card"
+              data-book="bombay711"
+              aria-labelledby="nav-sportsbook-bombay711-name"
+            >
+              <div class="sportsbook-card-header">
+                <div
+                  class="sportsbook-name-group"
+                  id="nav-sportsbook-bombay711-name"
+                >
+                  <span class="connection-status disconnected"></span>
+                  <span class="sportsbook-name">Bombay 711</span>
+                </div>
+                <div class="sportsbook-meta-compact">
+                  <span class="sportsbook-last-sync"
+                    >Last: <span class="sync-time">--</span></span
+                  >
+                  <button
+                    type="button"
+                    class="sportsbook-fetch-compact"
+                    data-book="bombay711"
+                    aria-label="Fetch picks from Bombay 711"
+                  >
+                    <span class="fetch-icon">↻</span>
+                  </button>
+                </div>
+              </div>
+              <form class="sportsbook-actions-row">
+                <div class="sportsbook-credentials-group">
+                  <input
+                    type="text"
+                    id="nav-bombay-username"
+                    class="credential-input-compact"
+                    placeholder="Username"
+                    name="nav-bombay711-login"
+                    autocomplete="off"
+                    spellcheck="false"
+                    data-form-type="other"
+                    inputmode="text"
+                    aria-label="Bombay 711 username"
+                  />
+                  <input
+                    type="password"
+                    id="nav-bombay-password"
+                    class="credential-input-compact"
+                    placeholder="Password"
+                    name="nav-bombay711-secret"
+                    autocomplete="new-password"
+                    spellcheck="false"
+                    data-form-type="other"
+                    inputmode="text"
+                    aria-label="Bombay 711 password"
+                  />
+                </div>
+              </form>
+            </section>
+            <!-- King of Sports -->
+            <section
+              class="sportsbook-card"
+              data-book="kingofsports"
+              aria-labelledby="nav-sportsbook-kingofsports-name"
+            >
+              <div class="sportsbook-card-header">
+                <div
+                  class="sportsbook-name-group"
+                  id="nav-sportsbook-kingofsports-name"
+                >
+                  <span class="connection-status disconnected"></span>
+                  <span class="sportsbook-name">King of Sports</span>
+                </div>
+                <div class="sportsbook-meta-compact">
+                  <span class="sportsbook-last-sync"
+                    >Last: <span class="sync-time">--</span></span
+                  >
+                  <button
+                    type="button"
+                    class="sportsbook-fetch-compact"
+                    data-book="kingofsports"
+                    aria-label="Fetch picks from King of Sports"
+                  >
+                    <span class="fetch-icon">↻</span>
+                  </button>
+                </div>
+              </div>
+              <form class="sportsbook-actions-row">
+                <div class="sportsbook-credentials-group">
+                  <input
+                    type="text"
+                    id="nav-kingofsports-username"
+                    class="credential-input-compact"
+                    placeholder="Username"
+                    name="nav-kingofsports-login"
+                    autocomplete="off"
+                    spellcheck="false"
+                    data-form-type="other"
+                    inputmode="text"
+                    aria-label="King of Sports username"
+                  />
+                  <input
+                    type="password"
+                    id="nav-kingofsports-password"
+                    class="credential-input-compact"
+                    placeholder="Password"
+                    name="nav-kingofsports-secret"
+                    autocomplete="new-password"
+                    spellcheck="false"
+                    data-form-type="other"
+                    inputmode="text"
+                    aria-label="King of Sports password"
+                  />
+                </div>
+              </form>
+            </section>
+            <!-- Prime Time Action -->
+            <section
+              class="sportsbook-card"
+              data-book="primetimeaction"
+              aria-labelledby="nav-sportsbook-primetimeaction-name"
+            >
+              <div class="sportsbook-card-header">
+                <div
+                  class="sportsbook-name-group"
+                  id="nav-sportsbook-primetimeaction-name"
+                >
+                  <span class="connection-status disconnected"></span>
+                  <span class="sportsbook-name">Prime Time Action</span>
+                </div>
+                <div class="sportsbook-meta-compact">
+                  <span class="sportsbook-last-sync"
+                    >Last: <span class="sync-time">--</span></span
+                  >
+                  <button
+                    type="button"
+                    class="sportsbook-fetch-compact"
+                    data-book="primetimeaction"
+                    aria-label="Fetch picks from Prime Time Action"
+                  >
+                    <span class="fetch-icon">↻</span>
+                  </button>
+                </div>
+              </div>
+              <form class="sportsbook-actions-row">
+                <div class="sportsbook-credentials-group">
+                  <input
+                    type="text"
+                    id="nav-primetime-username"
+                    class="credential-input-compact"
+                    placeholder="Username"
+                    name="nav-primetimeaction-login"
+                    autocomplete="off"
+                    spellcheck="false"
+                    data-form-type="other"
+                    inputmode="text"
+                    aria-label="Prime Time Action username"
+                  />
+                  <input
+                    type="password"
+                    id="nav-primetime-password"
+                    class="credential-input-compact"
+                    placeholder="Password"
+                    name="nav-primetimeaction-secret"
+                    autocomplete="new-password"
+                    spellcheck="false"
+                    data-form-type="other"
+                    inputmode="text"
+                    aria-label="Prime Time Action password"
+                  />
+                </div>
+              </form>
+            </section>
+
+            <!-- Upload Section Divider -->
+            <div class="dropdown-section-divider">
+              <span class="divider-label">Upload Picks</span>
+            </div>
+
+            <!-- Manual Upload -->
+            <section
+              class="sportsbook-card upload-picks-card"
+              aria-labelledby="upload-picks-title"
+            >
+              <div class="sportsbook-card-header">
+                <div class="sportsbook-name-group">
+                  <span class="connection-status connected"></span>
+                  <span class="sportsbook-name" id="upload-picks-title"
+                    >Upload Picks</span
+                  >
+                </div>
+                <div class="sportsbook-meta-compact">
+                  <span class="sportsbook-last-sync"
+                    >Attach slips or paste text</span
+                  >
+                </div>
+              </div>
+              <div class="sportsbook-upload-shell">
+                <div class="upload-destination">
+                  <label for="upload-sportsbook-select" class="upload-label"
+                    >Assign sportsbook</label
+                  >
+                  <select
+                    id="upload-sportsbook-select"
+                    class="sportsbook-select"
+                    aria-label="Assign uploaded picks to a sportsbook"
+                  >
+                    <option value="">Select Book...</option>
+                    <option value="hulkwager">Hulk Wager</option>
+                    <option value="bombay711">Bombay 711</option>
+                    <option value="kingofsports">King of Sports</option>
+                    <option value="primetimeaction">Prime Time Action</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+                <div
+                  class="sportsbook-actions-compact is-hidden"
+                  id="action-buttons"
+                >
+                  <div class="action-btn-cta">
+                    Choose an option to add picks
+                  </div>
+                  <button
+                    class="action-btn-compact add-book-btn-compact"
+                    type="button"
+                  >
+                    + Add Book
+                  </button>
+                  <button
+                    class="action-btn-compact import-picks-btn"
+                    type="button"
+                  >
+                    Upload Picks
+                  </button>
+                </div>
+                <div class="import-options-popup" id="import-options">
+                  <div class="import-header">
+                    <div class="import-title-group">
+                      <span class="import-title">Upload Picks</span>
+                      <span class="import-subtitle"
+                        >Drag in bet slips or paste picks below.</span
+                      >
+                    </div>
+                    <button
+                      type="button"
+                      class="import-back-btn"
+                      aria-label="Back to sportsbook list"
+                    >
+                      Back
+                    </button>
+                  </div>
+                  <label
+                    for="file-upload"
+                    class="import-option-item import-file-zone"
+                    id="drop-zone"
+                  >
+                    <span class="import-option-label">Upload Files</span>
+                    <span class="import-option-desc"
+                      >PDFs, images, HTML, or text files</span
+                    >
+                    <input
+                      type="file"
+                      id="file-upload"
+                      name="picks-file"
+                      accept=".pdf,.jpg,.jpeg,.png,.html,.htm,.txt,.csv"
+                      multiple=""
+                      class="file-input-hidden"
+                    />
+                  </label>
+                  <div id="file-list"></div>
+                  <button
+                    type="button"
+                    id="upload-files-btn"
+                    class="paste-action-btn paste-process-btn is-hidden"
+                  >
+                    Upload Selected Files
+                  </button>
+                  <div class="import-paste-container">
+                    <label for="paste-area" class="import-paste-label"
+                      >Paste HTML or Text</label
+                    >
+                    <textarea
+                      id="paste-area"
+                      class="import-paste-textarea"
+                      placeholder="Paste picks (e.g., Lakers -3.5 -110 $200)"
+                      rows="4"
+                    ></textarea>
+                    <div class="import-paste-actions">
+                      <button
+                        type="button"
+                        class="paste-action-btn paste-process-btn"
+                        id="upload-paste-btn"
+                      >
+                        Upload Pasted Content
+                      </button>
+                      <button
+                        type="button"
+                        class="paste-action-btn paste-clear-btn"
+                      >
+                        Clear
+                      </button>
+                    </div>
+                  </div>
+                  <div id="upload-status"></div>
+                </div>
+              </div>
+            </section>
+          </div>
         </li>
       </ul>
     </nav>
@@ -243,23 +619,6 @@
                     />
                     <span class="league-label">NHL</span>
                   </button>
-                  <div class="fetch-separator"></div>
-                  <button
-                    class="ft-fetch-league-btn ft-coming-soon"
-                    data-fetch="nfl"
-                    title="NFL — Coming Soon"
-                    disabled
-                  >
-                    <span class="league-label coming-soon-label">NFL</span>
-                  </button>
-                  <button
-                    class="ft-fetch-league-btn ft-coming-soon"
-                    data-fetch="mlb"
-                    title="MLB — Coming Soon"
-                    disabled
-                  >
-                    <span class="league-label coming-soon-label">MLB</span>
-                  </button>
                 </div>
               </div>
             </div>
@@ -411,8 +770,8 @@
       (function () {
         try {
           if ("serviceWorker" in navigator) {
-            var swUrl = "/sw.js?v=3.0.0";
-            var expectedSwVersion = "v3.0.0";
+            var swUrl = "/sw.js?v=36.01.0";
+            var expectedSwVersion = "v36.01.0";
 
             async function hardResetCachesAndReload() {
               try {

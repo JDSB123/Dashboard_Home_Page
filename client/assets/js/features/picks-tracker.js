@@ -1,5 +1,5 @@
 /**
- * Picks Tracker v1.0 — Feb 22, 2026
+ * Picks Tracker v1.1
  * Live tracking for today's picks with real-time ESPN scores
  */
 (function () {
@@ -589,8 +589,26 @@
   // ═══════════════════════════════════════════════════════════════════
   let pollInterval = null;
 
+  function setDynamicDate() {
+    var now = new Date();
+    var opts = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
+    var formatted = now.toLocaleDateString("en-US", opts);
+    var dateLabel = document.getElementById("tracker-date-label");
+    if (dateLabel) dateLabel.textContent = formatted;
+
+    var shortOpts = { month: "short", day: "numeric", year: "numeric" };
+    var shortDate = now.toLocaleDateString("en-US", shortOpts);
+    document.title = "Picks Tracker \u2014 " + shortDate + " | GBSV";
+  }
+
+  function updateTableCounts() {
+    setText("straights-count", STRAIGHTS.length.toString());
+    setText("rr-count", ROUND_ROBINS.length.toString());
+  }
+
   function init() {
-    console.log("[TRACKER] Initializing picks tracker...");
+    setDynamicDate();
+    updateTableCounts();
     fetchScores();
     pollInterval = setInterval(fetchScores, 30000);
   }

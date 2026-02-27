@@ -106,7 +106,7 @@ jobs:
         run: |
           http-server client -p 8080 &
           sleep 10
-          pa11y-ci --chrome-launch-config '{"args": ["--no-sandbox", "--disable-setuid-sandbox", "--headless"]}' --sitemap http://localhost:8080/index.html
+          pa11y-ci --chrome-launch-config '{"args": ["--no-sandbox", "--disable-setuid-sandbox", "--headless"]}' --sitemap http://localhost:8080/dashboard.html
 
   test-functions:
     name: Azure Functions Tests
@@ -554,8 +554,8 @@ jobs:
             echo "ERROR: client/staticwebapp.config.json not found"
             exit 1
           fi
-          if [ ! -f "client/index.html" ]; then
-            echo "ERROR: client/index.html not found"
+          if [ ! -f "client/dashboard.html" ]; then
+            echo "ERROR: client/dashboard.html not found"
             exit 1
           fi
           if ! python3 -m json.tool client/staticwebapp.config.json > /dev/null 2>&1; then

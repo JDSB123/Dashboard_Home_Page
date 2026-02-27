@@ -37,8 +37,8 @@ jobs:
             echo "ERROR: client/staticwebapp.config.json not found"
             exit 1
           fi
-          if [ ! -f "client/index.html" ]; then
-            echo "ERROR: client/index.html not found"
+          if [ ! -f "client/dashboard.html" ]; then
+            echo "ERROR: client/dashboard.html not found"
             exit 1
           fi
           # Use Python for JSON validation

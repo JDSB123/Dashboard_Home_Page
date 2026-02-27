@@ -22,29 +22,15 @@
     <link rel="icon" type="image/png" href="assets/Logo%208.5.png?v=20251216" />
 
     <!-- Local dev helper: if Live Server runs from repo root, fix base href -->
+    <!-- Local dev config handled by config.js -->
     <script>
       (function () {
         var isLocal =
           location.hostname === "localhost" ||
           location.hostname === "127.0.0.1";
-
         if (isLocal) {
-          // Fix base href if not already set
-          if (!location.pathname.startsWith("/client/")) {
-            var base = document.createElement("base");
-            base.href = "/client/";
-            document.head.prepend(base);
-          }
-
-          // Override global config for local dev
-          window.DEV_OVERRIDE_CONFIG = {
-            API_BASE_URL: "http://localhost:7072/api",
-            FUNCTIONS_BASE_URL: "http://localhost:7072",
-            ENABLE_DB_SYNC: true,
-          };
-
           console.log(
-            "[DEV] Local environment detected - API redirected to port 7072",
+            "[DEV] Local environment detected — using production APIs by default. Add ?localApi=1 for local Functions.",
           );
         }
       })();
@@ -64,11 +50,11 @@
       rel="stylesheet"
     />
     <!-- Bundled CSS (replaces 8 individual stylesheets) -->
-    <link rel="stylesheet" href="dist/core.min.css?v=36.00.9" />
-    <link rel="stylesheet" href="dist/weekly-lineup.min.css?v=36.00.9" />
+    <link rel="stylesheet" href="dist/core.min.css?v=36.01.0" />
+    <link rel="stylesheet" href="dist/weekly-lineup.min.css?v=36.01.0" />
 
     <!-- Runtime config (separate — per-environment) -->
-    <script src="config.js?v=36.00.9" defer></script>
+    <script src="config.js?v=36.01.0" defer></script>
   </head>
   <body class="page-glow page-weekly-lineup">
     <noscript>
@@ -80,7 +66,7 @@
 
     <nav class="brand-nav" role="navigation" aria-label="Main navigation">
       <ul class="nav-links" aria-label="Primary">
-        <li><a href="index.html" class="nav-link">Dashboard</a></li>
+        <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
         <li>
           <a href="weekly-lineup.html" class="nav-link" aria-current="page"
             >Weekly Lineup</a
@@ -781,17 +767,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.min.js"></script>
 
     <!-- Bundled JS (replaces ~40 individual scripts) -->
-    <script src="dist/core.min.js?v=36.00.9" defer></script>
-    <script src="dist/weekly-lineup.min.js?v=36.00.9" defer></script>
+    <script src="dist/core.min.js?v=36.01.0" defer></script>
+    <script src="dist/weekly-lineup.min.js?v=36.01.0" defer></script>
 
     <script>
       // Service worker registration (versioned to bust caches)
       (function () {
         try {
           if ("serviceWorker" in navigator) {
-            var swUrl = "/sw.js?v=3.0.0";
+            var swUrl = "/sw.js?v=36.01.0";
 
-            var expectedSwVersion = "v3.0.0";
+            var expectedSwVersion = "v36.01.0";
 
             async function hardResetCachesAndReload() {
               try {
@@ -891,8 +877,8 @@
           // These are truly optional features that can wait
           setTimeout(() => {
             window.LazyScriptLoader.loadWhenIdle([
-              "assets/js/features/pdf-parser.js?v=34.00.0",
-              "assets/js/features/image-ocr-parser.js?v=34.00.0",
+              "assets/js/features/pdf-parser.js?v=36.01.0",
+              "assets/js/features/image-ocr-parser.js?v=36.01.0",
             ]);
           }, 3000);
         });

@@ -142,8 +142,8 @@
                     // Only intercept internal navigation
                     if (href && !href.startsWith('http') && !href.startsWith('#')) {
                         // Check if it's a different page
-                        const currentPage = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
-                        const targetPage = (href.split('/').pop() || 'index.html').toLowerCase();
+                        const currentPage = (location.pathname.split('/').pop() || 'dashboard.html').toLowerCase();
+                        const targetPage = (href.split('/').pop() || 'dashboard.html').toLowerCase();
 
                         if (currentPage !== targetPage) {
                             e.preventDefault();
