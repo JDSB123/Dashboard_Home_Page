@@ -5,7 +5,7 @@
   "description": "Green Bier Sport Ventures Dashboard - Client Build",
   "scripts": {
     "build": "node build.mjs",
-    "build:watch": "node build.mjs --watch"
+    "build:watch": "node --watch-path=assets --watch-path=dashboard --watch-path=build.mjs build.mjs"
   },
   "devDependencies": {
     "esbuild": "^0.24.0"
