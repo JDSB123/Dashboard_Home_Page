@@ -539,10 +539,16 @@
       mlb: "mlb",
       nhl: "nhl",
       ncaab: "ncaa",
+      ncaam: "ncaa",
       ncaaf: "ncaa",
     };
-    const espnLeague = leagueMap[league] || league;
-    return `https://a.espncdn.com/i/teamlogos/${espnLeague}/500/${abbr.toLowerCase()}.png`;
+    const folder = leagueMap[league] || league;
+    const logoBase = (
+      window.APP_CONFIG?.LOGO_BASE_URL ||
+      window.APP_CONFIG?.LOGO_FALLBACK_URL ||
+      "https://gbsvorchestratorstorage.blob.core.windows.net/team-logos"
+    ).replace(/\/+$/, "");
+    return `${logoBase}/${folder}-500-${abbr.toLowerCase()}.png`;
   }
 
   // ===== EVENT HANDLERS =====

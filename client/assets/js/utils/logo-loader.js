@@ -1,6 +1,6 @@
 /**
  * Logo Loader - Loads team logos from Azure Blob Storage
- * Fallback to ESPN CDN if Azure is unavailable
+ * Uses indexed logo mappings plus deterministic blob naming for all teams.
  */
 
 window.LogoLoader = (() => {
@@ -18,12 +18,28 @@ window.LogoLoader = (() => {
     Boolean,
   );
 
-  // ESPN CDN URL (last-resort fallback only)
-  const ESPN_CDN_URL = "https://a.espncdn.com/i/teamlogos";
-
   // Cache for loaded logos
   const logoCache = new Map();
   let resolvedBase = null;
+  let mappingsData = { logoMappings: {}, leagueLogos: {} };
+
+  async function loadMappings() {
+    try {
+      const response = await fetch("/assets/data/logo-mappings.json", {
+        headers: { Accept: "application/json" },
+      });
+      if (!response.ok) return;
+      const parsed = await response.json();
+      if (parsed && typeof parsed === "object") {
+        mappingsData = {
+          logoMappings: parsed.logoMappings || {},
+          leagueLogos: parsed.leagueLogos || {},
+        };
+      }
+    } catch {
+      // Non-fatal: deterministic naming still works.
+    }
+  }
 
   // Resolve the first reachable base URL using an <img> probe to avoid connect-src CSP
   async function resolveBaseUrl() {
@@ -50,6 +66,7 @@ window.LogoLoader = (() => {
 
   // Kick off resolution asynchronously
   resolveBaseUrl();
+  loadMappings();
 
   // Resolve the current best base (may still be resolving)
   function getBaseUrl() {
@@ -74,17 +91,24 @@ window.LogoLoader = (() => {
     const leagueMap = {
       nba: "nba",
       nfl: "nfl",
+      nhl: "nhl",
+      mlb: "mlb",
       ncaam: "ncaa",
       ncaab: "ncaa",
       ncaaf: "ncaa",
       ncaf: "ncaa",
     };
 
-    const folder = leagueMap[league] || league;
+    const normalizedLeague = String(league || "").toLowerCase();
+    const normalizedTeamId = String(teamId || "").toLowerCase();
+    const folder = leagueMap[normalizedLeague] || normalizedLeague;
+    const mappedFile =
+      mappingsData.logoMappings?.[normalizedLeague]?.[normalizedTeamId] || "";
 
     // Try Front Door/CDN first, then blob fallback
     const baseUrl = getBaseUrl();
-    let url = `${baseUrl}/${folder}-500-${teamId}.png`;
+    const fileName = mappedFile || `${folder}-500-${normalizedTeamId}.png`;
+    const url = `${baseUrl}/${fileName}`;
 
     // Store in cache
     logoCache.set(cacheKey, url);
@@ -113,12 +137,20 @@ window.LogoLoader = (() => {
       return "/assets/icons/league-ncaaf.svg";
     }
 
-    const leagueFileMap = {
-      nba: "leagues-500-nba.png",
-      nfl: "leagues-500-nfl.png",
-    };
-    const fileName =
-      leagueFileMap[normalizedLeague] || `leagues-500-${normalizedLeague}.png`;
+    const indexedLeagueLogo =
+      mappingsData.leagueLogos?.[normalizedLeague] || "";
+    if (indexedLeagueLogo) {
+      if (
+        indexedLeagueLogo.startsWith("/") ||
+        indexedLeagueLogo.startsWith("http://") ||
+        indexedLeagueLogo.startsWith("https://")
+      ) {
+        return indexedLeagueLogo;
+      }
+      return `${getBaseUrl()}/${indexedLeagueLogo}`;
+    }
+
+    const fileName = `leagues-500-${normalizedLeague}.png`;
     const baseUrl = getBaseUrl();
     if (baseUrl) {
       return `${baseUrl}/${fileName}`;
@@ -147,7 +179,7 @@ window.LogoLoader = (() => {
     return {
       cached: logoCache.size,
       storageUrl: getBaseUrl(),
-      fallbackUrl: ESPN_CDN_URL,
+      mappingsLoaded: Object.keys(mappingsData.logoMappings || {}).length,
     };
   }
 
@@ -157,7 +189,6 @@ window.LogoLoader = (() => {
     preloadLogos,
     getStats,
     AZURE_BLOB_URL,
-    ESPN_CDN_URL,
   };
 })();
 

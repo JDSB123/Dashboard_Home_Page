@@ -14,8 +14,8 @@
 
   // League logo URLs (prefer dynamic LogoLoader, keep static fallback map)
   const LEAGUE_LOGOS = {
-    NBA: "assets/nba-logo.png",
-    NFL: "assets/nfl-logo.png",
+    NBA: "/assets/nba-logo.png",
+    NFL: "/assets/nfl-logo.png",
     NHL: "/assets/icons/league-nhl.svg",
     MLB: "/assets/icons/league-mlb.svg",
     NCAAB: "/assets/icons/league-ncaam.svg",
@@ -200,9 +200,6 @@
 
     const leagueKey =
       league.toLowerCase() === "ncaab" ? "ncaam" : league.toLowerCase();
-    const espnLeague =
-      leagueKey === "ncaam" || leagueKey === "ncaaf" ? "ncaa" : leagueKey;
-
     // Get ESPN ID mapping
     const espnId = ESPN_TEAM_IDS[teamId.toLowerCase()] || teamId.toLowerCase();
 
@@ -213,7 +210,14 @@
       return window.LogoLoader.getLogoUrl(leagueKey, espnId);
     }
 
-    return `https://a.espncdn.com/i/teamlogos/${espnLeague}/500/${espnId}.png`;
+    const logoBase = (
+      window.APP_CONFIG?.LOGO_BASE_URL ||
+      window.APP_CONFIG?.LOGO_FALLBACK_URL ||
+      "https://gbsvorchestratorstorage.blob.core.windows.net/team-logos"
+    ).replace(/\/+$/, "");
+    const folder =
+      leagueKey === "ncaam" || leagueKey === "ncaaf" ? "ncaa" : leagueKey;
+    return `${logoBase}/${folder}-500-${espnId}.png`;
   }
 
   /**

@@ -128,9 +128,14 @@
       return window.LogoLoader.getLogoUrl(leagueKey, teamId);
     }
 
-    const espnLeague =
+    const logoBase = (
+      window.APP_CONFIG?.LOGO_BASE_URL ||
+      window.APP_CONFIG?.LOGO_FALLBACK_URL ||
+      "https://gbsvorchestratorstorage.blob.core.windows.net/team-logos"
+    ).replace(/\/+$/, "");
+    const folder =
       leagueKey === "ncaam" || leagueKey === "ncaaf" ? "ncaa" : leagueKey;
-    return `https://a.espncdn.com/i/teamlogos/${espnLeague}/500/${teamId}.png`;
+    return `${logoBase}/${folder}-500-${teamId}.png`;
   };
 
   const fireEmoji = (fire) => {

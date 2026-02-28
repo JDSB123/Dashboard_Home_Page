@@ -40,6 +40,71 @@ function validateRequiredArtifacts() {
   }
 }
 
+function readJson(relativePath) {
+  const fullPath = join(ROOT, relativePath);
+  return JSON.parse(readFileSync(fullPath, "utf8"));
+}
+
+function validateLogoIndex() {
+  const teamConfig = readJson("assets/data/team-config.json");
+  const mappings = readJson("assets/data/logo-mappings.json");
+  const logoMappings = mappings.logoMappings || {};
+  const leagueLogos = mappings.leagueLogos || {};
+
+  const requiredLeagueLogoKeys = ["nba", "nfl", "ncaam", "ncaaf", "nhl", "mlb"];
+  const missingLeagueLogos = requiredLeagueLogoKeys.filter(
+    (key) => !leagueLogos[key],
+  );
+  if (missingLeagueLogos.length > 0) {
+    throw new Error(
+      `[LOGO-INDEX] Missing league logo mapping(s): ${missingLeagueLogos.join(", ")}`,
+    );
+  }
+
+  const localLeagueLogoPaths = Object.values(leagueLogos)
+    .filter((value) => typeof value === "string")
+    .filter((value) => value.startsWith("/assets/"))
+    .map((value) => value.replace(/^\//, ""));
+
+  const missingLocalLeagueLogoFiles = localLeagueLogoPaths.filter(
+    (relativePath) => !existsSync(join(ROOT, relativePath)),
+  );
+  if (missingLocalLeagueLogoFiles.length > 0) {
+    throw new Error(
+      `[LOGO-INDEX] League logo file(s) missing: ${missingLocalLeagueLogoFiles.join(", ")}`,
+    );
+  }
+
+  const configLeagueToIndexLeague = {
+    nfl: "nfl",
+    nba: "nba",
+    nhl: "nhl",
+    ncaab: "ncaam",
+    ncaaf: "ncaaf",
+  };
+
+  const missingTeamMappings = [];
+  for (const [configLeague, indexLeague] of Object.entries(
+    configLeagueToIndexLeague,
+  )) {
+    const teams = teamConfig?.[configLeague]?.teams || {};
+    const teamIds = Object.keys(teams).map((abbr) => abbr.toLowerCase());
+    const leagueMap = logoMappings[indexLeague] || {};
+
+    for (const teamId of teamIds) {
+      if (!leagueMap[teamId]) {
+        missingTeamMappings.push(`${indexLeague}:${teamId}`);
+      }
+    }
+  }
+
+  if (missingTeamMappings.length > 0) {
+    throw new Error(
+      `[LOGO-INDEX] Missing team logo mapping(s): ${missingTeamMappings.join(", ")}`,
+    );
+  }
+}
+
 // ── JS bundles ────────────────────────────────────────────────────────────
 // Files listed in dependency order (matching <script defer> order in HTML)
 
@@ -137,6 +202,8 @@ const SHARED_CSS = [
   "assets/css/components/loading-skeleton.css",
   "assets/css/base/utilities.css",
   "assets/css/components/mobile-responsive-v2.css",
+  "assets/css/mobile-overhaul.css",
+  "assets/css/mobile-buttons-fix.css",
 ];
 
 // Dashboard-specific CSS (dashboard.html only)
@@ -226,6 +293,7 @@ async function buildBundle(name, files, ext) {
 
 console.log("Building GBSV Dashboard bundles...\n");
 validateRequiredArtifacts();
+validateLogoIndex();
 
 const start = Date.now();
 
