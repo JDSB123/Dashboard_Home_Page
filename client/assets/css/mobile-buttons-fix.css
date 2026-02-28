@@ -143,26 +143,7 @@
     }
 }
 
-/* ============================================
-   SPORTSBOOK SECTION - HIDE ON MOBILE
-   ============================================ */
-
-@media (max-width: 767px) {
-    /* Hide the entire sportsbook dropdown */
-    body .nav-dropdown[aria-label*="Sports Books"],
-    body .nav-dropdown .nav-dropdown-trigger[id*="sportsbooks"] {
-        display: none;
-    }
-
-    /* Move sportsbook functionality to settings */
-    .mobile-settings-link {
-        display: block;
-        padding: 16px 24px;
-        border-top: 1px solid rgba(255, 255, 255, 0.08);
-        color: rgba(255, 255, 255, 0.6);
-        font-size: 14px;
-    }
-}
+/* Sportsbook dropdown: visible on all viewports (added to all pages in v36.01.0) */
 
 /* ============================================
    IMPORT/EXPORT BUTTONS - CONSOLIDATE
@@ -266,34 +247,11 @@
    ============================================ */
 
 @media (max-width: 767px) {
-    /* Simplified nav bar */
-    body .brand-nav {
-        height: 48px;
-        padding: 0 12px;
-    }
-
-    /* Hide nav actions on mobile */
+    /* Hide nav actions on mobile (handled by mobile drawer) */
     body .nav-actions,
     body .last-refresh,
     body .user-avatar {
         display: none;
-    }
-
-    /* Center logo/title */
-    body .brand-nav::before {
-        content: 'Weekly Lineup';
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: 16px;
-        font-weight: 600;
-        color: #fff;
-    }
-
-    /* Hamburger only on left */
-    .mobile-nav-toggle {
-        position: absolute;
-        left: 8px;
     }
 }
 

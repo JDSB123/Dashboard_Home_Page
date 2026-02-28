@@ -74,53 +74,7 @@ body.page-odds-market::after {
   pointer-events: none;
 }
 
-/* ==========================================================================
-   NAV & HEADER (odds market - matching weekly lineup floating style)
-   ========================================================================== */
-body.page-odds-market .brand-nav {
-  background: transparent;
-  border-bottom: none;
-  box-shadow: none;
-  padding-left: 0.75in;
-  padding-right: 0.75in;
-  margin-top: 0.25in;
-}
-
-body.page-odds-market .nav-link {
-  color: #e6f2f6 !important;
-  font-family: "Cormorant Garamond", serif !important;
-  font-weight: 600 !important;
-  font-size: 0.875rem !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.1em !important;
-  padding: 4px 8px !important;
-}
-
-body.page-odds-market .nav-link:hover,
-body.page-odds-market .nav-link:focus-visible {
-  color: #00e6a3 !important;
-  text-shadow:
-    0 0 8px rgba(0, 214, 137, 0.5),
-    0 1px 2px rgba(0, 31, 63, 0.9) !important;
-  background: linear-gradient(
-    135deg,
-    rgba(0, 214, 137, 0.1),
-    rgba(0, 31, 63, 0.1)
-  ) !important;
-}
-
-body.page-odds-market .nav-link.active {
-  color: #00e6a3 !important;
-  text-shadow:
-    0 0 6px rgba(0, 214, 137, 0.4),
-    0 1px 2px rgba(0, 31, 63, 0.9) !important;
-  background: linear-gradient(
-    135deg,
-    rgba(0, 214, 137, 0.15),
-    rgba(0, 31, 63, 0.15)
-  ) !important;
-  border-bottom: none !important;
-}
+/* Nav styling consolidated in navigation.css (core.min.css) */
 
 /* Scoped sportsbook dropdown (odds market) */
 .page-odds-market .nav-dropdown {
