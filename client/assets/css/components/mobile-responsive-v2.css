@@ -69,59 +69,21 @@ body {
   }
 }
 
-/* ===== FIXED NAVIGATION ===== */
+/* ===== FIXED NAVIGATION (mobile content offset) ===== */
+/* Nav positioning now handled by navigation.css — mobile fixed + desktop absolute */
 
-.brand-nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 9999;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 0;
-  pointer-events: auto;
-}
-
-/* Adjust content for fixed nav */
+/* Adjust content for fixed nav on mobile */
 body.is-mobile
   > :not(.brand-nav):not(.mobile-fab):not(.mobile-bottom-nav):not(style) {
   margin-top: 56px;
 }
 
-/* ===== NAVIGATION LINKS ===== */
-
-.brand-nav .nav-links {
-  display: flex;
-  gap: 8px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.brand-nav .nav-links li {
-  margin: 0;
-  padding: 4px 8px;
-}
-
-.brand-nav .nav-links a {
-  display: inline-block;
-  min-height: 44px;
-  min-width: 44px;
-  padding: 8px 12px;
-  font-size: 14px;
-  text-decoration: none;
-  border-radius: 6px;
-  transition:
-    background-color 0.2s ease,
-    color 0.2s ease;
-}
-
-.brand-nav .nav-links a:active,
-.brand-nav .nav-links a:hover {
-  background-color: rgba(0, 214, 137, 0.1);
+/* WCAG touch targets for mobile nav links */
+@media (max-width: 1024px) {
+  .brand-nav .nav-links a {
+    min-height: 44px;
+    min-width: 44px;
+  }
 }
 
 /* ===== MOBILE BOTTOM NAVIGATION ===== */

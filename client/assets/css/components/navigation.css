@@ -28,7 +28,7 @@
 
 /* Ensure nav is always visible */
 body.page-active-picks .brand-nav {
-    z-index: 9999 !important;
+    z-index: 1000;
     background: transparent;
     border-bottom: none;
     box-shadow: none;
@@ -70,7 +70,7 @@ body.page-active-picks .brand-nav {
     position: relative;
     background: transparent !important;
     border: none;
-    text-shadow: 0 0 4px rgba(255, 255, 255, 0.35), 0 0 2px rgba(255, 255, 255, 0.2), 0 2px 10px rgba(0, 0, 0, 0.95), 0 1px 4px rgba(0, 0, 0, 1), 0 0 2px rgba(0, 0, 0, 0.8); /* Subtle glow + enhanced contrast shadow for better readability */
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 0 2px rgba(0, 0, 0, 0.7);
     opacity: 1; /* Full opacity */
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -89,7 +89,7 @@ body.page-active-picks .brand-nav {
     /* No opacity or cursor changes - looks like regular link for design */
     color: #e8f0f2; /* Slightly softer white but still readable */
     opacity: 0.85; /* Increased opacity for better readability */
-    text-shadow: 0 0 3px rgba(255, 255, 255, 0.25), 0 0 1px rgba(255, 255, 255, 0.15), 0 2px 10px rgba(0, 0, 0, 0.9), 0 1px 4px rgba(0, 0, 0, 0.95), 0 0 2px rgba(0, 0, 0, 0.7); /* Subtle glow + enhanced contrast shadow */
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 0 2px rgba(0, 0, 0, 0.7);
 }
 
 .nav-link[aria-disabled="true"]::before {
@@ -101,7 +101,7 @@ body.page-active-picks .brand-nav {
 .nav-link:hover {
     color: #ffffff; /* Even brighter on hover */
     background: transparent !important;
-    text-shadow: 0 0 16px rgba(var(--color-primary-bright-rgb), 0.7), 0 2px 10px rgba(0, 0, 0, 0.95), 0 1px 4px rgba(0, 0, 0, 1), 0 0 2px rgba(0, 0, 0, 0.8); /* Enhanced glow with stronger contrast */
+    text-shadow: 0 0 10px rgba(0, 214, 137, 0.5), 0 1px 3px rgba(0, 0, 0, 0.9);
     opacity: 1;
     transform: translateY(-1px); /* Subtle lift effect */
 }
@@ -111,7 +111,7 @@ body.page-active-picks .brand-nav {
     outline: none;
     background: transparent !important;
     color: #ffffff;
-    text-shadow: 0 0 20px rgba(var(--color-primary-bright-rgb), 0.9), 0 2px 10px rgba(0, 0, 0, 0.95), 0 1px 4px rgba(0, 0, 0, 1), 0 0 2px rgba(0, 0, 0, 0.8);
+    text-shadow: 0 0 12px rgba(0, 214, 137, 0.6), 0 1px 3px rgba(0, 0, 0, 0.9);
 }
 
 .nav-link.active,
@@ -120,11 +120,8 @@ body.page-active-picks .brand-nav {
     font-weight: 700; /* Increased weight to match other links */
     background: transparent !important;
     text-shadow:
-        0 0 20px rgba(0, 255, 170, 0.8),
-        0 0 12px rgba(var(--color-primary-bright-rgb), 0.6),
-        0 2px 10px rgba(0, 0, 0, 0.95),
-        0 1px 4px rgba(0, 0, 0, 1),
-        0 0 2px rgba(0, 0, 0, 0.8); /* Enhanced glow with stronger contrast */
+        0 0 14px rgba(0, 255, 170, 0.7),
+        0 1px 3px rgba(0, 0, 0, 0.9);
     opacity: 1;
 }
 
@@ -878,71 +875,97 @@ body.page-active-picks .brand-nav {
    Consistent nav transitions across dashboard, weekly-lineup, odds-market
    ========================================================================== */
 
-/* Unified nav positioning for all bear-background pages */
-body.page-weekly-lineup .brand-nav,
-body.page-odds-market .brand-nav,
-body.page-active-picks .brand-nav {
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    margin-top: 0 !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-    padding-left: 0.75in !important;
-    padding-right: 0.75in !important;
-    z-index: 1000 !important;
+/* Unified nav positioning for all bear-background pages — desktop only */
+@media (min-width: 1025px) {
+    body.page-active-picks .brand-nav,
+    body.page-weekly-lineup .brand-nav,
+    body.page-odds-market .brand-nav,
+    body.page-picks-tracker .brand-nav,
+    body.page-fetch-picks .brand-nav {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        margin-top: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+        padding-left: 24px;
+        padding-right: 24px;
+        z-index: 1000;
+    }
 }
 
+body.page-active-picks .nav-links,
 body.page-weekly-lineup .nav-links,
 body.page-odds-market .nav-links,
-body.page-active-picks .nav-links {
+body.page-picks-tracker .nav-links,
+body.page-fetch-picks .nav-links {
     margin-top: 0;
 }
 
+/* Bear-background nav link styling — all pages */
+body.page-active-picks .nav-link,
 body.page-weekly-lineup .nav-link,
 body.page-odds-market .nav-link,
-body.page-active-picks .nav-link {
-    color: #e6f2f6 !important; /* Soft emerald-tinted white for readability */
-    font-family: 'Cormorant Garamond', serif !important;
-    font-weight: 600 !important;
-    font-size: 0.75rem !important; /* Consistent font size */
-    text-transform: uppercase !important;
-    letter-spacing: 0.1em !important;
-    text-shadow: 
-        0 1px 2px rgba(0, 31, 63, 0.9); /* Removed green glow from default state */
-    opacity: 0.85 !important; /* Slightly reduced opacity for non-active */
-    padding: 4px 8px !important;
+body.page-picks-tracker .nav-link,
+body.page-fetch-picks .nav-link {
+    color: #e6f2f6;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-shadow: 0 1px 2px rgba(0, 31, 63, 0.9);
+    opacity: 0.85;
+    padding: 4px 8px;
     -webkit-font-smoothing: antialiased;
-    transition: color 0.3s ease, text-shadow 0.3s ease, background 0.3s ease, transform 0.2s ease;
+    transition: color 0.3s ease, text-shadow 0.3s ease, transform 0.2s ease;
 }
 
+body.page-active-picks .nav-link:hover,
 body.page-weekly-lineup .nav-link:hover,
 body.page-odds-market .nav-link:hover,
-body.page-active-picks .nav-link:hover {
-    color: #00e6a3; /* Brighter emerald on hover */
-    text-shadow: 
+body.page-picks-tracker .nav-link:hover,
+body.page-fetch-picks .nav-link:hover {
+    color: #00e6a3;
+    text-shadow:
         0 0 8px rgba(0, 214, 137, 0.5),
         0 1px 2px rgba(0, 31, 63, 0.9);
-    background: transparent !important; /* Clean hover, no background */
+    background: transparent;
     transform: translateY(-1px);
-    opacity: 1 !important;
+    opacity: 1;
 }
 
+body.page-active-picks .nav-link.active,
+body.page-active-picks .nav-link[aria-current="page"],
 body.page-weekly-lineup .nav-link.active,
 body.page-weekly-lineup .nav-link[aria-current="page"],
 body.page-odds-market .nav-link.active,
 body.page-odds-market .nav-link[aria-current="page"],
-body.page-active-picks .nav-link.active,
-body.page-active-picks .nav-link[aria-current="page"] {
-    color: #00e6a3; /* Emerald for active */
-    text-shadow: 
-        0 0 6px rgba(0, 214, 137, 0.4),
+body.page-picks-tracker .nav-link.active,
+body.page-picks-tracker .nav-link[aria-current="page"],
+body.page-fetch-picks .nav-link.active,
+body.page-fetch-picks .nav-link[aria-current="page"] {
+    color: #00ffaa; /* Brighter than hover (#00e6a3) for clear active state */
+    text-shadow:
+        0 0 10px rgba(0, 255, 170, 0.6),
         0 1px 2px rgba(0, 31, 63, 0.9);
-    background: transparent !important; /* Only underline for active state */
-    opacity: 1 !important;
+    background: transparent;
+    opacity: 1;
 }
 
+
+/* ===== Mobile Fixed Nav ===== */
+@media (max-width: 1024px) {
+    .brand-nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 9999;
+        width: 100%;
+    }
+}
 
 /* ===== Responsive Adjustments ===== */
 @media (max-width: 1200px) {
