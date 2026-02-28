@@ -46,6 +46,20 @@ jobs:
             echo "ERROR: staticwebapp.config.json is not valid JSON"
             exit 1
           fi
+          required_assets=(
+            "client/assets/nba-logo.png"
+            "client/assets/ncaam-logo.png"
+            "client/assets/nfl-logo.png"
+            "client/assets/ncaaf-logo.png"
+            "client/assets/icons/league-nhl.svg"
+            "client/assets/icons/league-mlb.svg"
+          )
+          for asset in "${required_assets[@]}"; do
+            if [ ! -f "$asset" ]; then
+              echo "ERROR: Required asset missing: $asset"
+              exit 1
+            fi
+          done
           echo "✅ Configuration validation passed"
 
       - name: Setup Node.js

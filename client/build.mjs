@@ -165,9 +165,7 @@ const WEEKLY_LINEUP_CSS = [
 ];
 
 // Fetch-picks-specific JS (display-only model viewer)
-const FETCH_PICKS_JS = [
-  "assets/js/features/fetch-picks-controller.js",
-];
+const FETCH_PICKS_JS = ["assets/js/features/fetch-picks-controller.js"];
 
 // Fetch-picks-specific CSS
 const FETCH_PICKS_CSS = [

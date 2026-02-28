@@ -10,7 +10,10 @@
     <meta name="theme-color" content="#030b16" />
     <link rel="manifest" href="/manifest.json" />
     <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
     <link rel="apple-touch-icon" href="assets/Logo%208.5.png" />
     <meta charset="utf-8" />
     <meta
@@ -783,19 +786,29 @@
             async function hardResetCachesAndReload() {
               try {
                 var regs = await navigator.serviceWorker.getRegistrations();
-                await Promise.all(regs.map(function (r) { return r.unregister(); }));
+                await Promise.all(
+                  regs.map(function (r) {
+                    return r.unregister();
+                  }),
+                );
               } catch (e) {}
               try {
                 if (window.caches && caches.keys) {
                   var keys = await caches.keys();
-                  await Promise.all(keys.map(function (k) { return caches.delete(k); }));
+                  await Promise.all(
+                    keys.map(function (k) {
+                      return caches.delete(k);
+                    }),
+                  );
                 }
               } catch (e) {}
               try {
                 var url = new URL(window.location.href);
                 url.searchParams.set("r", String(Date.now()));
                 window.location.replace(url.toString());
-              } catch (e) { window.location.reload(); }
+              } catch (e) {
+                window.location.reload();
+              }
             }
 
             function getSwVersion(controller) {
@@ -806,21 +819,32 @@
                   channel.port1.onmessage = function (evt) {
                     resolve((evt && evt.data && evt.data.version) || null);
                   };
-                  controller.postMessage({ type: "GET_VERSION" }, [channel.port2]);
-                  setTimeout(function () { resolve(null); }, 1500);
-                } catch (e) { resolve(null); }
+                  controller.postMessage({ type: "GET_VERSION" }, [
+                    channel.port2,
+                  ]);
+                  setTimeout(function () {
+                    resolve(null);
+                  }, 1500);
+                } catch (e) {
+                  resolve(null);
+                }
               });
             }
 
             async function ensureFreshClient() {
               try {
                 var params = new URLSearchParams(window.location.search);
-                if (params.get("reset") === "1") { await hardResetCachesAndReload(); return; }
+                if (params.get("reset") === "1") {
+                  await hardResetCachesAndReload();
+                  return;
+                }
               } catch (e) {}
               try {
                 var controller = navigator.serviceWorker.controller;
                 var activeVersion = await getSwVersion(controller);
-                if (activeVersion && activeVersion !== expectedSwVersion) { await hardResetCachesAndReload(); }
+                if (activeVersion && activeVersion !== expectedSwVersion) {
+                  await hardResetCachesAndReload();
+                }
               } catch (e) {}
             }
 
@@ -828,13 +852,22 @@
               navigator.serviceWorker
                 .register(swUrl, { updateViaCache: "none" })
                 .then(function (reg) {
-                  try { reg.update(); } catch (e) {}
-                  try { if (reg.waiting) { reg.waiting.postMessage({ type: "SKIP_WAITING" }); } } catch (e) {}
+                  try {
+                    reg.update();
+                  } catch (e) {}
+                  try {
+                    if (reg.waiting) {
+                      reg.waiting.postMessage({ type: "SKIP_WAITING" });
+                    }
+                  } catch (e) {}
                   ensureFreshClient();
                 })
                 .catch(function () {});
             });
-            navigator.serviceWorker.addEventListener("controllerchange", function () {});
+            navigator.serviceWorker.addEventListener(
+              "controllerchange",
+              function () {},
+            );
           }
         } catch (e) {}
       })();

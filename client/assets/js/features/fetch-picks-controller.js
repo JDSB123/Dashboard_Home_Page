@@ -169,9 +169,7 @@
     for (let i = 0; i < count; i++) {
       const tr = document.createElement("tr");
       tr.className = "skeleton-row";
-      tr.innerHTML = Array(7)
-        .fill('<td class="skeleton-cell"></td>')
-        .join("");
+      tr.innerHTML = Array(7).fill('<td class="skeleton-cell"></td>').join("");
       tbody.appendChild(tr);
     }
   };
@@ -462,7 +460,11 @@
 
       // Close menu on outside tap
       document.addEventListener("click", (evt) => {
-        if (!fabMenu.hidden && !fabMenu.contains(evt.target) && evt.target !== fab) {
+        if (
+          !fabMenu.hidden &&
+          !fabMenu.contains(evt.target) &&
+          evt.target !== fab
+        ) {
           fabMenu.hidden = true;
           fab.setAttribute("aria-expanded", "false");
         }
