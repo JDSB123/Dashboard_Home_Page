@@ -31,8 +31,10 @@
     "_comment_model_apis": "=== MODEL API URLS ===",
     "NBA_API_URL": "https://YOUR-NBA-APP.azurecontainerapps.io",
     "NCAAM_API_URL": "https://YOUR-NCAAM-APP.azurecontainerapps.io",
+    "NHL_API_URL": "https://YOUR-NHL-APP.azurecontainerapps.io",
     "NFL_API_URL": "https://YOUR-NFL-APP.azurecontainerapps.io",
     "NCAAF_API_URL": "https://YOUR-NCAAF-APP.azurecontainerapps.io",
+    "MLB_API_URL": "https://YOUR-MLB-APP.azurecontainerapps.io",
 
     "_comment_sportsbook": "=== SPORTSBOOK ENCRYPTION ===",
     "SPORTSBOOK_ENCRYPTION_KEY": "YOUR_64_CHAR_HEX_KEY_FROM_OPENSSL_RAND_HEX_32",

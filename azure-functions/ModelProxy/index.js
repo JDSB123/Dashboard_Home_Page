@@ -25,6 +25,8 @@ function resolveBaseUrl(sport) {
   if (s === "ncaam" || s === "ncaab") return process.env.NCAAM_API_URL;
   if (s === "nfl") return process.env.NFL_API_URL;
   if (s === "ncaaf" || s === "cfb") return process.env.NCAAF_API_URL;
+  if (s === "nhl") return process.env.NHL_API_URL;
+  if (s === "mlb") return process.env.MLB_API_URL;
   return null;
 }
 
@@ -97,7 +99,7 @@ module.exports = async function (context, req) {
         headers: {
           Accept: req.headers?.accept || "application/json",
         },
-      }),
+      })
     );
 
     const contentType = upstreamRes.headers?.["content-type"];
@@ -118,7 +120,11 @@ module.exports = async function (context, req) {
   } catch (err) {
     if (err.message.includes("Circuit breaker OPEN")) {
       log.warn("Circuit open for ModelACA", { error: err.message, sport });
-      context.res = { status: 503, headers: corsHeaders, body: { success: false, error: "Model service temporarily unavailable", retry: true } };
+      context.res = {
+        status: 503,
+        headers: corsHeaders,
+        body: { success: false, error: "Model service temporarily unavailable", retry: true },
+      };
       return;
     }
     log.error("Upstream request failed", { error: err?.message || String(err), sport });

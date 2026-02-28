@@ -21,16 +21,16 @@ window.APP_CONFIG = {
   AZURE_REGION: "eastus",
 
   // API Configuration
-  API_BASE_URL: "https://www.greenbiersportventures.com/api",
-  ORCHESTRATOR_URL: "https://www.greenbiersportventures.com/api",
-  FUNCTIONS_BASE_URL: "https://www.greenbiersportventures.com",
-  API_BASE_FALLBACK: "https://www.greenbiersportventures.com/api",
+  API_BASE_URL: "https://gbsv-orchestrator.azurewebsites.net/api",
+  ORCHESTRATOR_URL: "https://gbsv-orchestrator.azurewebsites.net/api",
+  FUNCTIONS_BASE_URL: "https://gbsv-orchestrator.azurewebsites.net",
+  API_BASE_FALLBACK: "https://gbsv-orchestrator.azurewebsites.net/api",
   DYNAMIC_REGISTRY_ENABLED: true,
 
   // Model API Endpoints — sport models removed; endpoints live in their own repos
   // Direct Container App fallbacks (used only if Front Door route fails)
   NBA_API_URL:
-    "https://nbagbsvv5-aca.blackglacier-f1574637.centralus.azurecontainerapps.io",
+    "https://nbagbsvv5-api.blackglacier-f1574637.centralus.azurecontainerapps.io",
   NCAAM_API_URL:
     "https://ca-ncaamgbsvv20.braveriver-ed513377.eastus2.azurecontainerapps.io",
   NHL_API_URL:
@@ -38,7 +38,8 @@ window.APP_CONFIG = {
 
   // Static Assets (Team logos)
   // Temporary hotfix: route directly to blob until custom-domain /team-logos is restored.
-  LOGO_BASE_URL: "https://gbsvorchestratorstorage.blob.core.windows.net/team-logos",
+  LOGO_BASE_URL:
+    "https://gbsvorchestratorstorage.blob.core.windows.net/team-logos",
   LOGO_PRIMARY_URL:
     "https://gbsvorchestratorstorage.blob.core.windows.net/team-logos",
   LOGO_FALLBACK_URL:
