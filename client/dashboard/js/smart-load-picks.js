@@ -1998,8 +1998,17 @@ function buildPickRow(pick, index) {
   /**
    * Create a properly formatted table row matching the EXACT template structure
    */
+  // SKIP STALE/EMPTY DATA: If we don't have a valid description/selection, 
+  // or it's a "TBD" mockup without actual pick data, don't render it.
   const description =
     pick.description || pick.selection || buildDescriptionFromFields(pick);
+
+  if (!description || description.toLowerCase().includes("tbd") || 
+      (!pick.game && !pick.awayTeam && !pick.homeTeam && !description)) {
+    console.log("[PICKS LOADER] Skipping stale/empty pick row:", pick);
+    return null;
+  }
+
   const parsedPick = combinePickDetails(
     parsePickDescription(description),
     pick,
@@ -2396,7 +2405,9 @@ async function loadAndAppendPicks() {
     picks.forEach((pick, index) => {
       try {
         const row = buildPickRow(pick, index);
-        tbody.appendChild(row);
+        if (row) {
+          tbody.appendChild(row);
+        }
       } catch (error) {
         console.error(
           `[PICKS LOADER] ERROR creating row for pick ${index + 1}:`,
