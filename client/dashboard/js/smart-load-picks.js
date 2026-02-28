@@ -1998,13 +1998,16 @@ function buildPickRow(pick, index) {
   /**
    * Create a properly formatted table row matching the EXACT template structure
    */
-  // SKIP STALE/EMPTY DATA: If we don't have a valid description/selection, 
+  // SKIP STALE/EMPTY DATA: If we don't have a valid description/selection,
   // or it's a "TBD" mockup without actual pick data, don't render it.
   const description =
     pick.description || pick.selection || buildDescriptionFromFields(pick);
 
-  if (!description || description.toLowerCase().includes("tbd") || 
-      (!pick.game && !pick.awayTeam && !pick.homeTeam && !description)) {
+  if (
+    !description ||
+    description.toLowerCase().includes("tbd") ||
+    (!pick.game && !pick.awayTeam && !pick.homeTeam && !description)
+  ) {
     console.log("[PICKS LOADER] Skipping stale/empty pick row:", pick);
     return null;
   }
@@ -2500,10 +2503,7 @@ async function loadTeamRecords(options = {}) {
           ? `${window.APP_CONFIG.FUNCTIONS_BASE_URL.replace(/\/+$/, "")}/api`
           : "") ||
         "/api";
-      if (
-        apiUrl &&
-        window.APP_CONFIG?.TEAM_RECORDS_API_ENABLED === true
-      ) {
+      if (apiUrl && window.APP_CONFIG?.TEAM_RECORDS_API_ENABLED === true) {
         // Check if DB sync is enabled
         if (
           window.APP_CONFIG?.ENABLE_DB_SYNC === false &&
@@ -2514,7 +2514,9 @@ async function loadTeamRecords(options = {}) {
           // Actually, defaulting to skip is safer if we want to avoid 404s
         } else {
           try {
-            const response = await fetch(`${apiUrl.replace(/\/+$/, "")}/team-records`);
+            const response = await fetch(
+              `${apiUrl.replace(/\/+$/, "")}/team-records`,
+            );
             if (response.ok) {
               const data = await response.json();
               if (data.records) {
@@ -2665,7 +2667,9 @@ async function loadPicksFromDatabase() {
     }
 
     // Correct path for new PicksAPI is /picks not /get-picks
-    const response = await fetch(`${apiUrl.replace(/\/+$/, "")}/picks?limit=100`);
+    const response = await fetch(
+      `${apiUrl.replace(/\/+$/, "")}/picks?limit=100`,
+    );
 
     if (!response.ok) {
       console.log(
