@@ -300,17 +300,17 @@ textarea,
 /* ===== SPORTSBOOK CARD UPLOAD FIX ===== */
 
 .sportsbook-card.upload-picks-card {
-  padding: 8px 10px;
+  padding: 5px 8px;
   height: auto;
   display: flex;
   flex-direction: column;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 .sportsbook-card.upload-picks-card .sportsbook-upload-shell {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
   margin: 0;
   padding: 0;
   width: 100%;
@@ -333,7 +333,7 @@ textarea,
 .sportsbook-card.upload-picks-card .upload-destination {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   margin: 0;
   padding: 0;
   width: 100%;
@@ -345,8 +345,8 @@ textarea,
 
 .sportsbook-card.upload-picks-card .sportsbook-select {
   flex: 1;
-  height: 44px; /* Fixed from 24px to WCAG minimum */
-  min-height: 44px;
+  height: 32px;
+  min-height: 32px;
   background: rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.06);
   color: #cfd8dc;
@@ -371,7 +371,7 @@ textarea,
 
 .sportsbook-card.upload-picks-card .sportsbook-actions-compact {
   display: flex;
-  gap: 4px;
+  gap: 3px;
   margin: 0;
   padding: 0;
   border: none;
@@ -384,9 +384,9 @@ textarea,
 }
 
 .sportsbook-card.upload-picks-card .action-btn-compact {
-  min-height: 44px;
-  min-width: 44px;
-  padding: 10px 12px;
+  min-height: 36px;
+  min-width: 36px;
+  padding: 6px 10px;
   height: auto;
   flex: 1;
   font-size: 10px;

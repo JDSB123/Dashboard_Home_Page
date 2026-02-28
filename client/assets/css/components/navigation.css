@@ -268,9 +268,9 @@ body.page-active-picks .brand-nav {
 /* Dropdown Menu - Premium Dark Theme */
 .nav-dropdown-menu {
     position: absolute;
-    top: calc(100% + 10px);
+    top: calc(100% + 6px);
     right: 0;
-    width: 280px;
+    width: 260px;
     max-height: 85vh;
     background: rgba(13, 27, 51, 0.98);
     -webkit-backdrop-filter: blur(20px);
@@ -280,7 +280,7 @@ body.page-active-picks .brand-nav {
         0 16px 40px rgba(0, 0, 0, 0.6),
         0 0 0 1px rgba(0, 143, 88, 0.12) inset;
     border-radius: 8px;
-    padding: 10px 12px 12px;
+    padding: 6px 8px 8px;
     z-index: 10001; /* Above nav */
     overflow-y: auto;
     overflow-x: hidden;
@@ -303,21 +303,21 @@ body.page-active-picks .brand-nav {
 .sportsbook-actions-row {
     display: flex !important;
     align-items: center;
-    gap: 4px;
+    gap: 3px;
     width: 100%;
-    margin-top: 3px;
+    margin-top: 2px;
 }
 
 .sportsbook-credentials-group {
     display: flex;
-    gap: 3px;
+    gap: 2px;
     flex: 1;
 }
 
 /* ===== Sportsbook Cards ===== */
 .sportsbook-card {
-    padding: 8px 10px;
-    margin-bottom: 4px;
+    padding: 5px 8px;
+    margin-bottom: 2px;
     background: linear-gradient(140deg, rgba(8, 17, 33, 0.88), rgba(6, 22, 26, 0.92));
     border: 1px solid rgba(255, 255, 255, 0.04);
     border-left: 2px solid rgba(0, 143, 88, 0.4);
@@ -403,8 +403,8 @@ body.page-active-picks .brand-nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 6px;
-    margin-bottom: 3px;
+    gap: 4px;
+    margin-bottom: 2px;
 }
 
 .sportsbook-meta-compact {
@@ -528,7 +528,7 @@ body.page-active-picks .brand-nav {
 .sportsbook-credentials-row {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 3px;
 }
 
 .credential-input-compact {
@@ -542,7 +542,7 @@ body.page-active-picks .brand-nav {
     font-weight: 500;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    padding: 4px 6px;
+    padding: 3px 5px;
     border-radius: 3px;
     transition: all 0.2s ease;
 }
@@ -1231,8 +1231,8 @@ body.page-fetch-picks .nav-link[aria-current="page"] {
 .dropdown-section-divider {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin: 12px 0 8px 0;
+    gap: 8px;
+    margin: 8px 0 5px 0;
     padding: 0 4px;
 }
 
