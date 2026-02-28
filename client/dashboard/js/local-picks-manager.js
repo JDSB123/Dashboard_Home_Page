@@ -1048,13 +1048,13 @@
 
     // Legacy fallback (should rarely be used)
     const LEAGUE_LOGOS_FALLBACK = {
-      NBA: "/assets/nba-logo.png",
-      NFL: "/assets/nfl-logo.png",
-      NCAAB: "/assets/ncaam-logo.png",
-      NCAAM: "/assets/ncaam-logo.png",
-      NCAAF: "/assets/ncaaf-logo.png",
-      MLB: "/assets/mlb-logo.png",
-      NHL: "/assets/nhl-logo.png",
+      NBA: "assets/nba-logo.png",
+      NFL: "assets/nfl-logo.png",
+      NCAAB: "assets/ncaam-logo.png",
+      NCAAM: "assets/ncaam-logo.png",
+      NCAAF: "assets/ncaaf-logo.png",
+      MLB: "assets/icons/league-mlb.svg",
+      NHL: "assets/icons/league-nhl.svg",
     };
     return LEAGUE_LOGOS_FALLBACK[leagueUpper] || "";
   }

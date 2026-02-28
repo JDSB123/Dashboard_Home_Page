@@ -101,7 +101,7 @@
     if (s === "NCAAB") return { src: "assets/ncaam-logo.png", alt: "NCAAM" };
     if (s === "NFL") return { src: "assets/nfl-logo.png", alt: "NFL" };
     if (s === "NCAAF") return { src: "assets/ncaaf-logo.png", alt: "NCAAF" };
-    if (s === "NHL") return { src: "assets/nhl-logo.png", alt: "NHL" };
+    if (s === "NHL") return { src: "assets/icons/league-nhl.svg", alt: "NHL" };
     return { src: "", alt: s };
   };
 

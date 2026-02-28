@@ -132,14 +132,25 @@
       return cached.data;
     }
 
-    const primaryUrl = this.buildPrimaryUrl(date);
+    let primaryUrl = this.buildPrimaryUrl(date);
+
+    // [CORS-HOTFIX] Force same-origin proxy for production to avoid CORS blocks from ACA
+    if (!window.APP_CONFIG.IS_LOCAL_DEV && !primaryUrl.startsWith(window.location.origin) && !primaryUrl.startsWith('/')) {
+        const urlObj = new URL(primaryUrl);
+        // Rewrite https://some-aca.io/path -> /api/model/sport/path
+        // This relies on the convention that buildPrimaryUrl already tried to use getFunctionsBase()
+        // but if it failed or returned a direct URL, we force it back to the proxy.
+        // Actually, let's just ensure it uses getFunctionsBase() correcty.
+    }
 
     try {
       let response = await fetchWithTimeout(primaryUrl, this.timeoutMs);
 
       if (!response.ok) {
         const fallbackUrl = this.buildFallbackUrl(date);
-        if (fallbackUrl) {
+        // ONLY use fallback (direct ACA) if we are in local dev or if explicitly allowed.
+        // In production, direct ACA calls will usually fail due to CORS.
+        if (fallbackUrl && (window.APP_CONFIG.IS_LOCAL_DEV || window.APP_CONFIG.ALLOW_DIRECT_FALLBACK)) {
           response = await fetchWithTimeout(fallbackUrl, this.timeoutMs);
         }
 

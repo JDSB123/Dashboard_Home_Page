@@ -23,7 +23,7 @@
     buildPrimaryUrl(date) {
       const base = getFunctionsBase();
       const dateParam = date && date !== "today" ? `?date=${date}` : "";
-      return `${base}/api/model/nhl/api/slate${dateParam}`;
+      return `${base}/api/model/nhl/slate${dateParam}`;
     },
 
     buildFallbackUrl(date) {

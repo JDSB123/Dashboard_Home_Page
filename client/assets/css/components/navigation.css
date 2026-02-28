@@ -11,15 +11,15 @@
        as .main-dashboard-layout (min(100%, 1900px)) so right edges align */
     left: 0;
     right: 0;
-    padding: 12px var(--layout-gutter); /* Match main-container horizontal gutter */
+    padding: 8px var(--layout-gutter); /* Reduced vertical padding */
     z-index: 100; /* Above content but not extreme */
     display: flex;
     align-items: center;
     pointer-events: auto;
     margin: 0 !important;
-    background: transparent;
-    border-bottom: none;
-    box-shadow: none;
+    background: rgba(0, 0, 0, 0.2); /* Added subtle dark backplate */
+    backdrop-filter: blur(4px); /* Glass effect */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .brand-nav * {
@@ -29,16 +29,15 @@
 /* Ensure nav is always visible */
 body.page-active-picks .brand-nav {
     z-index: 1000;
-    background: transparent;
-    border-bottom: none;
-    box-shadow: none;
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(4px);
 }
 
 /* Navigation Links */
 .nav-links {
     display: flex;
     list-style: none;
-    gap: 4px; /* Tighter, more compact spacing */
+    gap: 1.5rem; /* Increased but controlled gap */
     align-items: center;
     margin: 0;
     padding: 0;
@@ -55,32 +54,47 @@ body.page-active-picks .brand-nav {
 
 /* Navigation Link Styles - Premium Serif Typography */
 .nav-link {
-    font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
-    font-weight: 700; /* Increased weight for better readability */
-    font-size: 0.8rem; /* More compact size */
+    font-family: 'Montserrat', 'Inter', sans-serif; /* Switched to cleaner Sans for UI */
+    font-weight: 500;
+    font-size: 0.65rem; /* Sleeker, smaller size */
     text-transform: uppercase;
-    letter-spacing: 0.12em; /* Tighter, more elegant spacing */
-    color: #ffffff; /* Pure white for max contrast */
+    letter-spacing: 0.15em; /* Elegant track */
+    color: rgba(255, 255, 255, 0.7); /* Slightly muted for premium feel */
     text-decoration: none;
-    padding: 4px 6px; /* More compact padding */
+    padding: 6px 0; /* Vertical only, rely on gap for horizontal */
     display: inline-flex;
     align-items: center;
     cursor: pointer;
-    transition: color 0.25s ease, text-shadow 0.25s ease, transform 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     background: transparent !important;
     border: none;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 0 2px rgba(0, 0, 0, 0.7);
-    opacity: 1; /* Full opacity */
+    opacity: 1;
     -webkit-user-select: none;
-    -moz-user-select: none;
     user-select: none;
     outline: none;
-    caret-color: transparent;
-    /* Sharper text rendering */
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
+}
+
+/* Hover & Active States */
+.nav-link:hover {
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.nav-link[aria-current="page"] {
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.nav-link[aria-current="page"]::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #00ff9d, transparent);
+    box-shadow: 0 1px 4px rgba(0, 255, 157, 0.5);
 }
 
 /* Disabled / placeholder nav links */

@@ -11,13 +11,34 @@
  */
 
 import { build } from "esbuild";
-import { readFileSync, writeFileSync, mkdirSync } from "fs";
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from "fs";
 import { join, resolve } from "path";
 
 const ROOT = resolve(import.meta.dirname);
 const DIST = join(ROOT, "dist");
 
 mkdirSync(DIST, { recursive: true });
+
+const REQUIRED_ARTIFACTS = [
+  "assets/nba-logo.png",
+  "assets/ncaam-logo.png",
+  "assets/nfl-logo.png",
+  "assets/ncaaf-logo.png",
+  "assets/icons/league-nhl.svg",
+  "assets/icons/league-mlb.svg",
+];
+
+function validateRequiredArtifacts() {
+  const missing = REQUIRED_ARTIFACTS.filter(
+    (relativePath) => !existsSync(join(ROOT, relativePath)),
+  );
+
+  if (missing.length > 0) {
+    throw new Error(
+      `[ARTIFACTS] Missing required asset artifact(s): ${missing.join(", ")}`,
+    );
+  }
+}
 
 // ── JS bundles ────────────────────────────────────────────────────────────
 // Files listed in dependency order (matching <script defer> order in HTML)
@@ -206,6 +227,7 @@ async function buildBundle(name, files, ext) {
 // ── Main ──────────────────────────────────────────────────────────────────
 
 console.log("Building GBSV Dashboard bundles...\n");
+validateRequiredArtifacts();
 
 const start = Date.now();
 

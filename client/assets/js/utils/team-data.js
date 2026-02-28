@@ -14,10 +14,10 @@
 
   // League logo URLs (prefer dynamic LogoLoader, keep static fallback map)
   const LEAGUE_LOGOS = {
-    NBA: "/assets/nba-logo.png",
-    NFL: "/assets/nfl-logo.png",
-    NHL: "/assets/nfl-logo.png",
-    MLB: "/assets/nfl-logo.png",
+    NBA: "assets/nba-logo.png",
+    NFL: "assets/nfl-logo.png",
+    NHL: "/assets/icons/league-nhl.svg",
+    MLB: "/assets/icons/league-mlb.svg",
     NCAAB: "/assets/icons/league-ncaam.svg",
     NCAAM: "/assets/icons/league-ncaam.svg",
     NCAAF: "/assets/icons/league-ncaaf.svg",
