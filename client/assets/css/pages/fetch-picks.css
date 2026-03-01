@@ -258,8 +258,8 @@ body.page-fetch-picks .picks-table thead th,
   top: 0;
   z-index: 110;
   background: transparent !important;
-  backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
 }
 
 .page-fetch-picks .fetch-picks-table thead th,
@@ -518,8 +518,8 @@ body.page-fetch-picks .filter-toolbar {
   );
   border: 1px solid rgba(80, 100, 130, 0.2);
   border-radius: 10px;
-  backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
 }
 
 body.page-fetch-picks .ft-left {
@@ -601,6 +601,7 @@ body.page-fetch-picks .ft-dropdown-menu {
   border-radius: 8px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
   z-index: 200;
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
 }
 
