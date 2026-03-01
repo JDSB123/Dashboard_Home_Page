@@ -21,10 +21,10 @@ window.APP_CONFIG = {
   AZURE_REGION: "eastus",
 
   // API Configuration
-  API_BASE_URL: "https://gbsv-orchestrator.azurewebsites.net/api",
-  ORCHESTRATOR_URL: "https://gbsv-orchestrator.azurewebsites.net/api",
-  FUNCTIONS_BASE_URL: "https://gbsv-orchestrator.azurewebsites.net",
-  API_BASE_FALLBACK: "https://gbsv-orchestrator.azurewebsites.net/api",
+  API_BASE_URL: "https://www.greenbiersportventures.com/api",
+  ORCHESTRATOR_URL: "https://www.greenbiersportventures.com/api",
+  FUNCTIONS_BASE_URL: "https://www.greenbiersportventures.com",
+  API_BASE_FALLBACK: "https://www.greenbiersportventures.com/api",
   DYNAMIC_REGISTRY_ENABLED: true,
 
   // Model API Endpoints — sport models removed; endpoints live in their own repos

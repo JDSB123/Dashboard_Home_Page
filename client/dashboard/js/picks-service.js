@@ -48,10 +48,24 @@ const PicksService = (function () {
 
     try {
       const response = await fetch(url, config);
-      const data = await response.json();
+      const rawBody = await response.text();
+      let data = {};
+
+      if (rawBody) {
+        try {
+          data = JSON.parse(rawBody);
+        } catch (_parseError) {
+          data = { raw: rawBody };
+        }
+      }
 
       if (!response.ok) {
-        throw new Error(data.error || `API error: ${response.status}`);
+        const message =
+          data.error ||
+          data.message ||
+          (typeof data.raw === "string" && data.raw.trim()) ||
+          `API error: ${response.status}`;
+        throw new Error(message);
       }
 
       return data;
