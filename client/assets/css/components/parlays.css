@@ -185,8 +185,6 @@
     transition: transform 0.25s ease, color 0.2s ease;
     display: inline-block;
     vertical-align: middle;
-    user-select: none;
-    -webkit-user-select: none;
     margin-right: 8px;
 }
 

@@ -60,7 +60,9 @@
   font-weight: var(--weight-semibold);
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  transition: background 0.2s, border-color 0.2s;
+  transition:
+    background 0.2s,
+    border-color 0.2s;
 }
 
 #refresh-btn:hover {
@@ -82,7 +84,11 @@
 }
 
 .kpi-card {
-  background: linear-gradient(180deg, rgba(8, 18, 32, 0.95), rgba(4, 12, 24, 0.98));
+  background: linear-gradient(
+    180deg,
+    rgba(8, 18, 32, 0.95),
+    rgba(4, 12, 24, 0.98)
+  );
   border: 1px solid rgba(0, 214, 137, 0.15);
   border-radius: 8px;
   padding: 14px 16px;
@@ -107,8 +113,12 @@
   letter-spacing: 0.02em;
 }
 
-.kpi-value.positive { color: var(--status-hit-color); }
-.kpi-value.negative { color: var(--status-miss-color); }
+.kpi-value.positive {
+  color: var(--status-hit-color);
+}
+.kpi-value.negative {
+  color: var(--status-miss-color);
+}
 
 /* ===== SECTION HEADERS ===== */
 .section-title {
@@ -132,7 +142,11 @@
 }
 
 .game-card {
-  background: linear-gradient(180deg, rgba(8, 18, 32, 0.96), rgba(4, 12, 24, 0.98));
+  background: linear-gradient(
+    180deg,
+    rgba(8, 18, 32, 0.96),
+    rgba(4, 12, 24, 0.98)
+  );
   border: 1px solid rgba(0, 214, 137, 0.15);
   border-radius: 8px;
   overflow: hidden;
@@ -215,7 +229,8 @@
   font-family: var(--font-body);
 }
 
-.sb-header, .sb-row {
+.sb-header,
+.sb-row {
   display: grid;
   grid-template-columns: minmax(90px, 1fr) repeat(var(--periods, 2), 32px) 38px;
   align-items: center;
@@ -223,7 +238,8 @@
 }
 
 /* Default: halves (NCAAM) */
-.sb-header, .sb-row {
+.sb-header,
+.sb-row {
   --periods: 2;
 }
 
@@ -308,7 +324,9 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.03);
 }
 
-.leg-row:last-child { border-bottom: none; }
+.leg-row:last-child {
+  border-bottom: none;
+}
 
 .leg-label {
   font-family: var(--font-body);
@@ -333,7 +351,6 @@
 /* ===== BET TABLES ===== */
 .tracker-table-wrap {
   overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
   margin-bottom: 8px;
 }
 
@@ -345,7 +362,11 @@
 }
 
 .tracker-table thead th {
-  background: linear-gradient(180deg, rgba(0, 214, 137, 0.08), rgba(0, 214, 137, 0.03));
+  background: linear-gradient(
+    180deg,
+    rgba(0, 214, 137, 0.08),
+    rgba(0, 214, 137, 0.03)
+  );
   color: rgba(0, 214, 137, 0.85);
   font-weight: var(--weight-semibold);
   font-size: var(--text-xs);
@@ -357,7 +378,9 @@
   white-space: nowrap;
 }
 
-.tracker-table thead th.center { text-align: center; }
+.tracker-table thead th.center {
+  text-align: center;
+}
 
 .tracker-table tbody tr {
   border-bottom: 1px solid rgba(255, 255, 255, 0.04);
@@ -374,7 +397,9 @@
   color: rgba(220, 225, 235, 0.9);
 }
 
-.tracker-table td.center { text-align: center; }
+.tracker-table td.center {
+  text-align: center;
+}
 
 .label-cell {
   font-weight: var(--weight-semibold);
@@ -398,10 +423,18 @@
   white-space: nowrap;
 }
 
-.money-cell.risk { color: rgba(200, 210, 220, 0.8); }
-.money-cell.win  { color: rgba(0, 214, 137, 0.85); }
-.money-cell.pnl.positive { color: var(--status-hit-color); }
-.money-cell.pnl.negative { color: var(--status-miss-color); }
+.money-cell.risk {
+  color: rgba(200, 210, 220, 0.8);
+}
+.money-cell.win {
+  color: rgba(0, 214, 137, 0.85);
+}
+.money-cell.pnl.positive {
+  color: var(--status-hit-color);
+}
+.money-cell.pnl.negative {
+  color: var(--status-miss-color);
+}
 
 /* ===== ROUND ROBIN TABLE ===== */
 .rr-type-cell {
@@ -433,12 +466,24 @@
   flex-shrink: 0;
 }
 
-.status-dot[data-status="pending"]  { background: rgba(136, 140, 149, 0.6); }
-.status-dot[data-status="on-track"] { background: var(--status-on-track-color); }
-.status-dot[data-status="at-risk"]  { background: var(--status-at-risk-color); }
-.status-dot[data-status="win"]      { background: var(--status-hit-color); }
-.status-dot[data-status="loss"]     { background: var(--status-miss-color); }
-.status-dot[data-status="push"]     { background: rgba(184, 197, 208, 0.6); }
+.status-dot[data-status="pending"] {
+  background: rgba(136, 140, 149, 0.6);
+}
+.status-dot[data-status="on-track"] {
+  background: var(--status-on-track-color);
+}
+.status-dot[data-status="at-risk"] {
+  background: var(--status-at-risk-color);
+}
+.status-dot[data-status="win"] {
+  background: var(--status-hit-color);
+}
+.status-dot[data-status="loss"] {
+  background: var(--status-miss-color);
+}
+.status-dot[data-status="push"] {
+  background: rgba(184, 197, 208, 0.6);
+}
 
 /* Win/Loss row highlighting */
 .tracker-table tbody tr[data-status="win"] {
@@ -450,7 +495,9 @@
 
 /* ===== MOBILE ===== */
 @media (max-width: 768px) {
-  .tracker-page { padding: 0 12px 40px; }
+  .tracker-page {
+    padding: 0 12px 40px;
+  }
 
   #game-cards {
     grid-template-columns: 1fr;
@@ -461,16 +508,28 @@
     gap: 8px;
   }
 
-  .kpi-card { padding: 10px 8px; }
-  .kpi-value { font-size: 1.1rem; }
+  .kpi-card {
+    padding: 10px 8px;
+  }
+  .kpi-value {
+    font-size: 1.1rem;
+  }
 
-  .tracker-header h1 { font-size: 1.1rem; }
+  .tracker-header h1 {
+    font-size: 1.1rem;
+  }
 
-  .tracker-table { font-size: var(--text-sm); }
+  .tracker-table {
+    font-size: var(--text-sm);
+  }
   .tracker-table thead th,
-  .tracker-table tbody td { padding: 6px 6px; }
+  .tracker-table tbody td {
+    padding: 6px 6px;
+  }
 
-  .rr-legs-cell { gap: 4px 6px; }
+  .rr-legs-cell {
+    gap: 4px 6px;
+  }
 }
 
 @media (max-width: 480px) {

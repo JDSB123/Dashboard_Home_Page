@@ -7,10 +7,12 @@
   <head>
     <!-- Critical styles moved to external CSS for CSP hardening -->
     <link rel="stylesheet" href="assets/css/base/critical.css?v=1" />
-    <meta name="theme-color" content="#030b16" />
     <link rel="manifest" href="/manifest.json" />
     <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
     <link rel="apple-touch-icon" href="assets/Logo%208.5.png" />
     <meta charset="utf-8" />
     <!-- Page-level CSP meta removed to defer to SWA global CSP -->
@@ -93,9 +95,16 @@
             aria-label="Connected sportsbooks"
             hidden
           >
-            <section class="sportsbook-card" data-book="hulkwager">
+            <section
+              class="sportsbook-card"
+              data-book="hulkwager"
+              aria-labelledby="nav-sportsbook-hulkwager-name"
+            >
               <div class="sportsbook-card-header">
-                <div class="sportsbook-name-group">
+                <div
+                  class="sportsbook-name-group"
+                  id="nav-sportsbook-hulkwager-name"
+                >
                   <span class="connection-status disconnected"></span>
                   <span class="sportsbook-name">Hulk Wager</span>
                 </div>
@@ -109,34 +118,49 @@
                     data-book="hulkwager"
                     aria-label="Fetch picks from Hulk Wager"
                   >
-                    <span class="fetch-icon">&#8635;</span>
+                    <span class="fetch-icon">↻</span>
                   </button>
                 </div>
               </div>
-              <div class="sportsbook-actions-row">
-                <form class="sportsbook-credentials-group" autocomplete="off">
+              <form class="sportsbook-actions-row">
+                <div class="sportsbook-credentials-group">
                   <input
                     type="text"
-                    id="hulk-username"
+                    id="nav-hulk-username"
                     class="credential-input-compact"
                     placeholder="Username"
+                    name="nav-hulkwager-login"
+                    autocomplete="off"
+                    spellcheck="false"
+                    data-form-type="other"
+                    inputmode="text"
                     aria-label="Hulk Wager username"
-                    autocomplete="username"
                   />
                   <input
                     type="password"
-                    id="hulk-password"
+                    id="nav-hulk-password"
                     class="credential-input-compact"
                     placeholder="Password"
+                    name="nav-hulkwager-secret"
+                    autocomplete="new-password"
+                    spellcheck="false"
+                    data-form-type="other"
+                    inputmode="text"
                     aria-label="Hulk Wager password"
-                    autocomplete="current-password"
                   />
-                </form>
-              </div>
+                </div>
+              </form>
             </section>
-            <section class="sportsbook-card" data-book="bombay711">
+            <section
+              class="sportsbook-card"
+              data-book="bombay711"
+              aria-labelledby="nav-sportsbook-bombay711-name"
+            >
               <div class="sportsbook-card-header">
-                <div class="sportsbook-name-group">
+                <div
+                  class="sportsbook-name-group"
+                  id="nav-sportsbook-bombay711-name"
+                >
                   <span class="connection-status disconnected"></span>
                   <span class="sportsbook-name">Bombay 711</span>
                 </div>
@@ -150,34 +174,49 @@
                     data-book="bombay711"
                     aria-label="Fetch picks from Bombay 711"
                   >
-                    <span class="fetch-icon">&#8635;</span>
+                    <span class="fetch-icon">↻</span>
                   </button>
                 </div>
               </div>
-              <div class="sportsbook-actions-row">
-                <form class="sportsbook-credentials-group" autocomplete="off">
+              <form class="sportsbook-actions-row">
+                <div class="sportsbook-credentials-group">
                   <input
                     type="text"
-                    id="bombay-username"
+                    id="nav-bombay-username"
                     class="credential-input-compact"
                     placeholder="Username"
+                    name="nav-bombay711-login"
+                    autocomplete="off"
+                    spellcheck="false"
+                    data-form-type="other"
+                    inputmode="text"
                     aria-label="Bombay 711 username"
-                    autocomplete="username"
                   />
                   <input
                     type="password"
-                    id="bombay-password"
+                    id="nav-bombay-password"
                     class="credential-input-compact"
                     placeholder="Password"
+                    name="nav-bombay711-secret"
+                    autocomplete="new-password"
+                    spellcheck="false"
+                    data-form-type="other"
+                    inputmode="text"
                     aria-label="Bombay 711 password"
-                    autocomplete="current-password"
                   />
-                </form>
-              </div>
+                </div>
+              </form>
             </section>
-            <section class="sportsbook-card" data-book="kingofsports">
+            <section
+              class="sportsbook-card"
+              data-book="kingofsports"
+              aria-labelledby="nav-sportsbook-kingofsports-name"
+            >
               <div class="sportsbook-card-header">
-                <div class="sportsbook-name-group">
+                <div
+                  class="sportsbook-name-group"
+                  id="nav-sportsbook-kingofsports-name"
+                >
                   <span class="connection-status disconnected"></span>
                   <span class="sportsbook-name">King of Sports</span>
                 </div>
@@ -191,34 +230,49 @@
                     data-book="kingofsports"
                     aria-label="Fetch picks from King of Sports"
                   >
-                    <span class="fetch-icon">&#8635;</span>
+                    <span class="fetch-icon">↻</span>
                   </button>
                 </div>
               </div>
-              <div class="sportsbook-actions-row">
-                <form class="sportsbook-credentials-group" autocomplete="off">
+              <form class="sportsbook-actions-row">
+                <div class="sportsbook-credentials-group">
                   <input
                     type="text"
-                    id="kingofsports-username"
+                    id="nav-kingofsports-username"
                     class="credential-input-compact"
                     placeholder="Username"
+                    name="nav-kingofsports-login"
+                    autocomplete="off"
+                    spellcheck="false"
+                    data-form-type="other"
+                    inputmode="text"
                     aria-label="King of Sports username"
-                    autocomplete="username"
                   />
                   <input
                     type="password"
-                    id="kingofsports-password"
+                    id="nav-kingofsports-password"
                     class="credential-input-compact"
                     placeholder="Password"
+                    name="nav-kingofsports-secret"
+                    autocomplete="new-password"
+                    spellcheck="false"
+                    data-form-type="other"
+                    inputmode="text"
                     aria-label="King of Sports password"
-                    autocomplete="current-password"
                   />
-                </form>
-              </div>
+                </div>
+              </form>
             </section>
-            <section class="sportsbook-card" data-book="primetimeaction">
+            <section
+              class="sportsbook-card"
+              data-book="primetimeaction"
+              aria-labelledby="nav-sportsbook-primetimeaction-name"
+            >
               <div class="sportsbook-card-header">
-                <div class="sportsbook-name-group">
+                <div
+                  class="sportsbook-name-group"
+                  id="nav-sportsbook-primetimeaction-name"
+                >
                   <span class="connection-status disconnected"></span>
                   <span class="sportsbook-name">Prime Time Action</span>
                 </div>
@@ -232,29 +286,160 @@
                     data-book="primetimeaction"
                     aria-label="Fetch picks from Prime Time Action"
                   >
-                    <span class="fetch-icon">&#8635;</span>
+                    <span class="fetch-icon">↻</span>
                   </button>
                 </div>
               </div>
-              <div class="sportsbook-actions-row">
-                <form class="sportsbook-credentials-group" autocomplete="off">
+              <form class="sportsbook-actions-row">
+                <div class="sportsbook-credentials-group">
                   <input
                     type="text"
-                    id="primetimeaction-username"
+                    id="nav-primetime-username"
                     class="credential-input-compact"
                     placeholder="Username"
+                    name="nav-primetimeaction-login"
+                    autocomplete="off"
+                    spellcheck="false"
+                    data-form-type="other"
+                    inputmode="text"
                     aria-label="Prime Time Action username"
-                    autocomplete="username"
                   />
                   <input
                     type="password"
-                    id="primetimeaction-password"
+                    id="nav-primetime-password"
                     class="credential-input-compact"
                     placeholder="Password"
+                    name="nav-primetimeaction-secret"
+                    autocomplete="new-password"
+                    spellcheck="false"
+                    data-form-type="other"
+                    inputmode="text"
                     aria-label="Prime Time Action password"
-                    autocomplete="current-password"
                   />
-                </form>
+                </div>
+              </form>
+            </section>
+
+            <div class="dropdown-section-divider">
+              <span class="divider-label">Upload Picks</span>
+            </div>
+
+            <section
+              class="sportsbook-card upload-picks-card"
+              aria-labelledby="upload-picks-title"
+            >
+              <div class="sportsbook-card-header">
+                <div class="sportsbook-name-group">
+                  <span class="connection-status connected"></span>
+                  <span class="sportsbook-name" id="upload-picks-title"
+                    >Upload Picks</span
+                  >
+                </div>
+                <div class="sportsbook-meta-compact">
+                  <span class="sportsbook-last-sync"
+                    >Attach slips or paste text</span
+                  >
+                </div>
+              </div>
+              <div class="sportsbook-upload-shell">
+                <div class="upload-destination">
+                  <label for="upload-sportsbook-select" class="upload-label"
+                    >Assign sportsbook</label
+                  >
+                  <select
+                    id="upload-sportsbook-select"
+                    class="sportsbook-select"
+                    aria-label="Assign uploaded picks to a sportsbook"
+                  >
+                    <option value="">Select Book...</option>
+                    <option value="hulkwager">Hulk Wager</option>
+                    <option value="bombay711">Bombay 711</option>
+                    <option value="kingofsports">King of Sports</option>
+                    <option value="primetimeaction">Prime Time Action</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+                <div
+                  class="sportsbook-actions-compact is-hidden"
+                  id="action-buttons"
+                >
+                  <div class="action-btn-cta">
+                    Choose an option to add picks
+                  </div>
+                  <button
+                    class="action-btn-compact add-book-btn-compact"
+                    type="button"
+                  >
+                    + Add Book
+                  </button>
+                  <button
+                    class="action-btn-compact import-picks-btn"
+                    type="button"
+                  >
+                    Upload Picks
+                  </button>
+                </div>
+                <div class="import-options-popup" id="import-options">
+                  <div class="import-header">
+                    <div class="import-title-group">
+                      <span class="import-title">Upload Picks</span>
+                      <span class="import-subtitle"
+                        >Drag in bet slips or paste picks below.</span
+                      >
+                    </div>
+                    <button
+                      type="button"
+                      class="import-back-btn"
+                      aria-label="Back to sportsbook list"
+                    >
+                      Back
+                    </button>
+                  </div>
+                  <label
+                    for="file-upload"
+                    class="import-option-item import-file-zone"
+                    id="drop-zone"
+                  >
+                    <span class="import-option-label">Upload Files</span>
+                    <span class="import-option-desc"
+                      >PDFs, images, HTML, or text files</span
+                    >
+                    <input
+                      type="file"
+                      id="file-upload"
+                      name="picks-file"
+                      accept=".pdf,.jpg,.jpeg,.png,.html,.htm,.txt,.csv"
+                      multiple=""
+                      class="file-input-hidden"
+                    />
+                  </label>
+                  <div id="file-list"></div>
+                  <button
+                    type="button"
+                    class="import-option-item import-manual-btn"
+                    id="manual-entry-btn"
+                  >
+                    <span class="import-option-label">Manual Entry</span>
+                    <span class="import-option-desc"
+                      >Paste picks text directly into parser</span
+                    >
+                  </button>
+                  <div id="manual-entry-area" class="manual-entry-area hidden">
+                    <textarea
+                      id="manual-picks-input"
+                      placeholder="Paste picks text here..."
+                    ></textarea>
+                    <div class="manual-actions">
+                      <button
+                        type="button"
+                        class="manual-submit-btn"
+                        id="submit-manual-picks"
+                      >
+                        Process Picks
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </section>
           </div>

@@ -77,8 +77,6 @@
   border: none;
   border-radius: 0;
   padding: 0;
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative; /* For popup positioning */
   box-shadow: none; /* Let the chips themselves glow, not a container */
@@ -104,9 +102,6 @@
   white-space: nowrap;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
   outline: none;
   caret-color: transparent;
 }
@@ -169,9 +164,6 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
   outline: none;
   caret-color: transparent;
 }
@@ -228,8 +220,6 @@
   border-radius: 14px; /* Sleeker radius */
   padding: 10px 10px 9px;
   border: var(--border-emerald, 1px solid rgba(0, 214, 137, 0.25));
-  -webkit-backdrop-filter: var(--blur-glass, blur(20px));
-  backdrop-filter: var(--blur-glass, blur(20px));
   box-shadow:
     0 10px 30px rgba(0, 0, 0, 0.7),
     var(--glow-emerald-subtle, 0 0 8px rgba(0, 214, 137, 0.25));
@@ -289,9 +279,6 @@
   background: transparent;
   cursor: pointer;
   transition: var(--transition-fast, all 0.2s ease-in-out);
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
   outline: none;
   caret-color: transparent;
 }
@@ -439,9 +426,6 @@
   justify-content: center;
   cursor: pointer;
   transition: var(--transition-micro, all 0.15s ease-in-out);
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
   outline: none;
   caret-color: transparent;
 }
@@ -513,9 +497,6 @@
   justify-content: center;
   cursor: pointer;
   transition: var(--transition-micro, all 0.15s ease-in-out);
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
   outline: none;
   caret-color: transparent;
 }
@@ -658,9 +639,6 @@
   margin-top: 3px; /* Tighter margin */
   text-shadow: 0 0 4px rgba(0, 214, 137, 0.2); /* Subtler glow */
   opacity: 0.8; /* Slight transparency for minimalism */
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
   outline: none;
   caret-color: transparent;
 }
@@ -701,9 +679,6 @@
   display: flex;
   align-items: center;
   gap: 2px;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
   outline: none;
   caret-color: transparent;
 }
@@ -732,8 +707,6 @@
   border: 1px solid rgba(0, 214, 137, 0.3);
   border-radius: 8px;
   padding: 4px;
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
   z-index: 1000;
   flex-direction: column;
@@ -910,8 +883,6 @@ input[type="date"]::-webkit-calendar-picker-indicator:active {
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   width: 100%;
   cursor: pointer;
-  -webkit-backdrop-filter: blur(8px); /* Subtle blur for floating effect */
-  backdrop-filter: blur(8px);
 }
 
 .date-input:hover {
@@ -1098,8 +1069,6 @@ input[type="date"]:focus::-webkit-calendar-picker-indicator {
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
   z-index: 1001;
   overflow: hidden;
-  -webkit-backdrop-filter: blur(24px);
-  backdrop-filter: blur(24px);
 }
 
 .custom-calendar-card::before {
