@@ -56,6 +56,12 @@ window.APP_CONFIG = {
   // Leagues to hide from Weekly Lineup (off-season or not modeled)
   WEEKLY_LINEUP_DISABLED_LEAGUES: ["NFL", "NCAAF"],
 
+  // Picks Tracker sport scope
+  // - auto: include all locked picks (future sports auto-onboard)
+  // - allowlist: include only TRACKER_SPORT_ALLOWLIST sports
+  TRACKER_SPORT_SCOPE_MODE: "auto",
+  TRACKER_SPORT_ALLOWLIST: ["NBA", "NCAAB"],
+
   // Repository Info
   REPO_URL: "https://github.com/JDSB123/Dashboard_Home_Page",
   OWNER: "jb@greenbiercapital.com",

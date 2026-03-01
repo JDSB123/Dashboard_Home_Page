@@ -507,6 +507,35 @@
     getActivePicks() {
       return state.activePicks || [];
     },
+    exportToDashboard() {
+      return (state.activePicks || []).map((pick) => toCosmosPick(pick));
+    },
+    syncDashboardOutcomes(updatedPicks) {
+      if (!Array.isArray(updatedPicks) || updatedPicks.length === 0) return;
+
+      const updatesById = new Map(
+        updatedPicks
+          .filter((p) => p && p.id)
+          .map((p) => [
+            p.id,
+            {
+              status: p.status,
+              result: p.result,
+              pnl: p.pnl,
+            },
+          ]),
+      );
+
+      if (updatesById.size === 0) return;
+
+      state.activePicks = (state.activePicks || []).map((pick) => {
+        const updates = updatesById.get(pick.id);
+        return updates ? { ...pick, ...updates } : pick;
+      });
+
+      renderRows(state.activePicks);
+      persistWeeklyLineupCache(state.activePicks);
+    },
     populateTable(picks) {
       // Compatibility for other callers
       state.activePicks = Array.isArray(picks) ? picks : [];

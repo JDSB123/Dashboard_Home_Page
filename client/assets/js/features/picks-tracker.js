@@ -111,34 +111,242 @@
   // UNIQUE GAMES — deduplicated from legs (for score fetching)
   // ═══════════════════════════════════════════════════════════════════
   const GAMES = {};
-  LEGS.forEach((leg) => {
-    const key = `${leg.away}__${leg.home}`.toLowerCase().replace(/[^a-z0-9_]/g, "");
-    if (!GAMES[key]) {
-      GAMES[key] = {
-        sport: leg.sport,
-        away: leg.away,
-        home: leg.home,
-        awayScore: 0,
-        homeScore: 0,
-        awayHalf1: 0,
-        homeHalf1: 0,
-        status: "scheduled",
-        statusDetail: "",
-        period: 0,
-        clock: "",
-        isFinal: false,
-        isLive: false,
-        legIds: [],
-      };
-    }
-    GAMES[key].legIds.push(leg.id);
-  });
 
   // Map leg → game key for lookups
   const LEG_TO_GAME = {};
-  Object.entries(GAMES).forEach(([key, g]) => {
-    g.legIds.forEach((id) => (LEG_TO_GAME[id] = key));
-  });
+
+  function rebuildGameMaps() {
+    Object.keys(GAMES).forEach((k) => delete GAMES[k]);
+    Object.keys(LEG_TO_GAME).forEach((k) => delete LEG_TO_GAME[k]);
+
+    LEGS.forEach((leg) => {
+      const key = `${leg.away}__${leg.home}`
+        .toLowerCase()
+        .replace(/[^a-z0-9_]/g, "");
+      if (!GAMES[key]) {
+        GAMES[key] = {
+          sport: leg.sport,
+          away: leg.away,
+          home: leg.home,
+          awayScore: 0,
+          homeScore: 0,
+          awayHalf1: 0,
+          homeHalf1: 0,
+          status: "scheduled",
+          statusDetail: "",
+          period: 0,
+          clock: "",
+          isFinal: false,
+          isLive: false,
+          legIds: [],
+        };
+      }
+      GAMES[key].legIds.push(leg.id);
+      LEG_TO_GAME[leg.id] = key;
+    });
+  }
+
+  rebuildGameMaps();
+
+  const parseNumber = (value, fallback = 0) => {
+    if (typeof value === "number" && Number.isFinite(value)) return value;
+    if (typeof value === "string") {
+      const cleaned = value.replace(/[^0-9.+-]/g, "");
+      const parsed = parseFloat(cleaned);
+      if (Number.isFinite(parsed)) return parsed;
+    }
+    return fallback;
+  };
+
+  const parseOdds = (value, fallback = -110) => {
+    const parsed = parseNumber(value, fallback);
+    return Number.isFinite(parsed) ? parsed : fallback;
+  };
+
+  const calcToWinFromOdds = (risk, odds) => {
+    if (!Number.isFinite(risk) || risk <= 0) return 0;
+    if (!Number.isFinite(odds) || odds === 0) return 0;
+    if (odds > 0) return (risk * odds) / 100;
+    return (risk * 100) / Math.abs(odds);
+  };
+
+  const normalizeSportForTracker = (sport) => {
+    const s = String(sport || "nba").toLowerCase();
+    if (s === "ncaab") return "ncaam";
+    return s;
+  };
+
+  const normalizeSportForApi = (sport) => {
+    const upper = String(sport || "").trim().toUpperCase();
+    if (!upper) return "";
+    if (upper === "NCAAM") return "NCAAB";
+    return upper;
+  };
+
+  const getTrackerSportScopeConfig = () => {
+    const cfg = window.APP_CONFIG || {};
+    const mode = String(cfg.TRACKER_SPORT_SCOPE_MODE || "auto").toLowerCase();
+    const allowlist = Array.isArray(cfg.TRACKER_SPORT_ALLOWLIST)
+      ? cfg.TRACKER_SPORT_ALLOWLIST
+          .map((s) => normalizeSportForApi(s))
+          .filter(Boolean)
+      : [];
+    return {
+      mode: mode === "allowlist" ? "allowlist" : "auto",
+      allowlist,
+    };
+  };
+
+  const inferPickType = (pick) => {
+    const raw = String(pick.pickType || pick.market || "spread").toLowerCase();
+    if (raw.includes("moneyline") || raw === "ml") return "ml";
+    if (raw.includes("total") || raw.includes("over") || raw.includes("under")) return "total";
+    return "spread";
+  };
+
+  const inferPickSide = (pick, type) => {
+    const direction = String(pick.pickDirection || "").toLowerCase();
+    const pickTeam = String(pick.pickTeam || pick.pick || "").toLowerCase();
+    const away = String(pick.awayTeam || "").toLowerCase();
+    const home = String(pick.homeTeam || "").toLowerCase();
+
+    if (type === "total") {
+      if (direction.includes("under") || pickTeam === "under") return "under";
+      return "over";
+    }
+
+    if (direction.includes("away")) return "away";
+    if (direction.includes("home")) return "home";
+    if (pickTeam && away && pickTeam === away) return "away";
+    if (pickTeam && home && pickTeam === home) return "home";
+    return "home";
+  };
+
+  const formatLineValue = (line) => {
+    if (line === null || line === undefined || line === "") return "";
+    const num = parseNumber(line, NaN);
+    if (Number.isNaN(num)) return String(line);
+    if (Number.isInteger(num)) return String(num);
+    return String(num);
+  };
+
+  const buildLegLabel = (type, side, line, odds, awayTeam, homeTeam, pickTeam) => {
+    const awayShort = String(awayTeam || "Away").split(" ").slice(-1)[0];
+    const homeShort = String(homeTeam || "Home").split(" ").slice(-1)[0];
+    const lineText = formatLineValue(line);
+
+    if (type === "total") {
+      const prefix = side === "under" ? "U" : "O";
+      return `${awayShort}/${homeShort} ${prefix} ${lineText}`.trim();
+    }
+
+    if (type === "ml") {
+      const team = pickTeam || (side === "away" ? awayTeam : homeTeam);
+      return `${team} ML ${odds >= 0 ? `+${odds}` : odds}`.trim();
+    }
+
+    const team = pickTeam || (side === "away" ? awayTeam : homeTeam);
+    const spreadText = lineText ? (String(lineText).startsWith("-") ? lineText : `+${lineText}`) : "";
+    return `${team} ${spreadText}`.trim();
+  };
+
+  const mapPickToLeg = (pick, index) => {
+    const awayTeam = String(pick.awayTeam || "").trim();
+    const homeTeam = String(pick.homeTeam || "").trim();
+    if (!awayTeam || !homeTeam) return null;
+
+    const type = inferPickType(pick);
+    const side = inferPickSide(pick, type);
+    const line = type === "ml" ? null : parseNumber(pick.line, 0);
+    const odds = parseOdds(pick.odds, -110);
+    const pickTeam = String(pick.pickTeam || pick.pick || "").trim();
+    const label = buildLegLabel(type, side, line, odds, awayTeam, homeTeam, pickTeam);
+    const segment = String(pick.segment || "").toUpperCase().includes("1H") ? "1H" : undefined;
+
+    const fallbackId = `${awayTeam}-${homeTeam}-${type}-${index}`
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+
+    return {
+      id: String(pick.id || fallbackId),
+      sport: normalizeSportForTracker(pick.sport || pick.league),
+      type,
+      side,
+      line,
+      odds,
+      away: awayTeam,
+      home: homeTeam,
+      label,
+      pickTeam,
+      segment,
+      resultStatus: String(pick.status || "").toLowerCase(),
+    };
+  };
+
+  async function loadLockedPicksFromService() {
+    if (!window.PicksService?.getAll) return false;
+
+    try {
+      const scope = getTrackerSportScopeConfig();
+      let rows = [];
+
+      if (scope.mode === "allowlist" && scope.allowlist.length > 0) {
+        const responses = await Promise.all(
+          scope.allowlist.map((sport) =>
+            window.PicksService.getAll({
+              locked: true,
+              sport,
+              limit: 300,
+            }),
+          ),
+        );
+        rows = responses.flat();
+      } else {
+        rows = await window.PicksService.getAll({ locked: true, limit: 300 });
+      }
+
+      if (!Array.isArray(rows) || rows.length === 0) return false;
+
+      const deduped = [];
+      const seenIds = new Set();
+      rows.forEach((pick) => {
+        const id = String(pick?.id || "");
+        if (!id) {
+          deduped.push(pick);
+          return;
+        }
+        if (seenIds.has(id)) return;
+        seenIds.add(id);
+        deduped.push(pick);
+      });
+
+      const legs = [];
+      const straights = [];
+
+      deduped.forEach((pick, idx) => {
+        const leg = mapPickToLeg(pick, idx);
+        if (!leg) return;
+
+        const risk = parseNumber(pick.risk, 100);
+        const toWin = parseNumber(pick.toWin, calcToWinFromOdds(risk, leg.odds));
+
+        legs.push(leg);
+        straights.push({ legId: leg.id, risk, toWin });
+      });
+
+      if (legs.length === 0) return false;
+
+      LEGS.splice(0, LEGS.length, ...legs);
+      STRAIGHTS.splice(0, STRAIGHTS.length, ...straights);
+      ROUND_ROBINS.splice(0, ROUND_ROBINS.length);
+      rebuildGameMaps();
+      return true;
+    } catch (error) {
+      console.warn("[TRACKER] Failed to load locked picks from PicksService:", error);
+      return false;
+    }
+  }
 
   // ═══════════════════════════════════════════════════════════════════
   // ESPN TEAM-NAME ALIASES (for fuzzy matching)
@@ -272,6 +480,16 @@
   // LEG RESULT EVALUATION
   // ═══════════════════════════════════════════════════════════════════
   function evaluateLeg(leg) {
+    if (leg.resultStatus === "won" || leg.resultStatus === "win") {
+      return { status: "win", detail: "Graded WIN" };
+    }
+    if (leg.resultStatus === "lost" || leg.resultStatus === "loss") {
+      return { status: "loss", detail: "Graded LOSS" };
+    }
+    if (leg.resultStatus === "push") {
+      return { status: "push", detail: "Graded PUSH" };
+    }
+
     const gameKey = LEG_TO_GAME[leg.id];
     const game = GAMES[gameKey];
     if (!game) return { status: "pending", detail: "" };
@@ -606,11 +824,22 @@
     setText("rr-count", ROUND_ROBINS.length.toString());
   }
 
-  function init() {
+  async function init() {
     setDynamicDate();
+
+    await loadLockedPicksFromService();
+
     updateTableCounts();
     fetchScores();
     pollInterval = setInterval(fetchScores, 30000);
+
+    window.addEventListener("picksUpdated", async () => {
+      const loaded = await loadLockedPicksFromService();
+      if (loaded) {
+        updateTableCounts();
+        fetchScores();
+      }
+    });
   }
 
   // Visibility API — pause when tab hidden
