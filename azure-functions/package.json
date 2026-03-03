@@ -24,7 +24,7 @@
   "devDependencies": {
     "azure-functions-core-tools": "^4.x",
     "jest": "^30.2.0",
-    "eslint": "^9.13.0",
+    "eslint": "^10.0.1",
     "prettier": "^3.3.3",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1"
