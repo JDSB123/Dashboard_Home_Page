@@ -33,7 +33,14 @@ module.exports = async function (context, timer) {
 
     // Query pending/live picks for the last 7 days to ensure nothing is missed
     const today = new Date().toISOString().split("T")[0];
+    const yesterday = new Date(Date.now() - 86400000).toISOString().split("T")[0];
     const lookbackDate = new Date(Date.now() - 7 * 86400000).toISOString().split("T")[0];
+
+    // Build date list from lookbackDate through today so stale picks are covered
+    const datesToQuery = [];
+    for (let d = new Date(lookbackDate + "T12:00:00Z"); d <= new Date(today + "T12:00:00Z"); d.setDate(d.getDate() + 1)) {
+      datesToQuery.push(d.toISOString().split("T")[0]);
+    }
 
     const { resources: picks } = await container.items
       .query({
@@ -65,7 +72,6 @@ module.exports = async function (context, timer) {
 
     // Fetch scores per sport
     const scoresBySport = {};
-    const datesToQuery = [yesterday, today];
 
     for (const sport of Object.keys(bySport)) {
       try {

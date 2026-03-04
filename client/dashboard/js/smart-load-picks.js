@@ -2626,9 +2626,9 @@ async function loadPicksFromDatabase() {
         console.log("[DB LOADER] Migration result:", migrationResult);
       }
 
-      // Fetch picks from Azure (Dashboard is the "locked portfolio")
+      // Fetch picks from Azure — no locked filter: picks entered via dashboard
+      // are the portfolio by definition; locking is not enforced in current workflow
       const picks = await window.PicksService.getAll({
-        locked: true,
         limit: 200,
       });
 
