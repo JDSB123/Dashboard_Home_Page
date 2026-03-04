@@ -199,6 +199,9 @@ const SHARED_CSS = [
   "assets/css/base/reset.css",
   "assets/css/layout/page-layout.css",
   "assets/css/components/navigation.css",
+  "assets/css/components/brand-header.css",
+  "assets/css/components/kpi-tiles.css",
+  "assets/css/components/date-toggles.css",
   "assets/css/components/notifications-enhanced.css",
   "assets/css/components/loading-skeleton.css",
   "assets/css/base/utilities.css",
@@ -210,9 +213,6 @@ const SHARED_CSS = [
 // Dashboard-specific CSS (dashboard.html only)
 const DASHBOARD_CSS = [
   "assets/css/pages/dashboard.css",
-  "assets/css/components/brand-header.css",
-  "assets/css/components/kpi-tiles.css",
-  "assets/css/components/date-toggles.css",
   "assets/css/components/picks-table.css",
   "assets/css/components/boxscores.css",
   "assets/css/components/status-badges.css",
@@ -224,7 +224,6 @@ const DASHBOARD_CSS = [
 
 // Weekly-lineup-specific CSS
 const WEEKLY_LINEUP_CSS = [
-  "assets/css/components/brand-header.css",
   "assets/css/pages/weekly-lineup.css",
   "assets/css/components/picks-table.css",
   "assets/css/components/status-badges.css",
@@ -237,7 +236,6 @@ const FETCH_PICKS_JS = ["assets/js/features/fetch-picks-controller.js"];
 
 // Fetch-picks-specific CSS
 const FETCH_PICKS_CSS = [
-  "assets/css/components/brand-header.css",
   "assets/css/pages/fetch-picks.css",
   "assets/css/components/picks-table.css",
   "assets/css/components/status-badges.css",

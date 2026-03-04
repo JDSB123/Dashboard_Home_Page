@@ -6404,7 +6404,7 @@ body.page-weekly-lineup .filter-toolbar {
   box-shadow: none;
   align-items: center;
   gap: 8px;
-  margin-bottom: 8px;
+  margin-bottom: 14px;
   padding: 0;
   border-radius: 0;
 }
@@ -6465,6 +6465,54 @@ body.page-weekly-lineup .filter-toolbar .ft-right {
   flex-shrink: 0;
 }
 
+/* Weekly lineup: right fetch controls smaller + cleaner like dashboard */
+body.page-weekly-lineup .filter-toolbar .ft-right .fetch-controls-wrapper {
+  gap: 8px;
+}
+
+body.page-weekly-lineup .filter-toolbar .ft-right .ft-fetch-buttons {
+  padding: 2px;
+  gap: 1px;
+  border-radius: 5px;
+}
+
+body.page-weekly-lineup .filter-toolbar .ft-right .ft-all-group {
+  gap: 5px;
+}
+
+body.page-weekly-lineup .filter-toolbar .ft-right .ft-fetch-league-btn {
+  height: 24px;
+  min-height: 24px;
+  padding: 3px 8px;
+  gap: 4px;
+  font-size: 0.62rem;
+  border-radius: 4px;
+}
+
+body.page-weekly-lineup
+  .filter-toolbar
+  .ft-right
+  .ft-fetch-league-btn
+  .league-logo-sm,
+body.page-weekly-lineup
+  .filter-toolbar
+  .ft-right
+  .ft-fetch-league-btn
+  .refresh-icon {
+  width: 11px;
+  height: 11px;
+}
+
+body.page-weekly-lineup .filter-toolbar .ft-right .ft-last-refreshed {
+  font-size: 0.58rem;
+  line-height: 1;
+}
+
+body.page-weekly-lineup .filter-toolbar .ft-right .fetch-separator {
+  margin: 0 2px;
+  height: 14px;
+}
+
 /* Desktop/tablet toolbar parity with dashboard: stable 2-zone layout */
 @media (min-width: 768px) {
   body.page-weekly-lineup .filter-toolbar {
@@ -6499,7 +6547,7 @@ body.page-weekly-lineup .filter-toolbar .ft-right {
 /* Ensure toolbar container is transparent */
 body.page-weekly-lineup .toolbar-container {
   background: transparent;
-  margin-bottom: 4px;
+  margin-bottom: 12px;
 }
 
 body.page-weekly-lineup .main-container {

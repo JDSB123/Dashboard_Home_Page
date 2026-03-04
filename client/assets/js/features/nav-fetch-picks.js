@@ -1,42 +1,59 @@
 /**
  * Nav Fetch Picks Handler
  * Intercepts clicks on the Fetch Picks nav dropdown.
- * Fetches model picks in-place (no navigation) and stores them
- * in localStorage so the Weekly Lineup table picks them up on next visit.
+ * Fetches model picks in-place (no navigation) and shows
+ * inline status directly on the clicked link row — no toasts.
  */
 (function () {
   "use strict";
 
   const WEEKLY_LINEUP_KEY = "gbsv_weekly_lineup_picks";
-  let isFetching = false;
+  let activeSport = null; // only one fetch at a time
 
   const normalizeSport = (s) => {
     const u = (s || "").toUpperCase();
     if (u === "NCAAB" || u === "NCAAM") return "NCAAM";
     return u || "NBA";
   };
-
   const nowIso = () => new Date().toISOString();
 
-  /**
-   * Fetch picks for a sport and persist to localStorage.
-   * Shows toast notifications for progress / success / error.
-   */
-  const fetchSport = async (sport) => {
-    if (isFetching) return;
+  /* ── inline status helpers ── */
+
+  /** Show a tiny spinner + "Syncing" on the sublabel */
+  function setLinkLoading(link) {
+    const sub = link.querySelector(".fetch-picks-nav-sublabel");
+    if (!sub) return;
+    sub.dataset.original = sub.textContent;
+    sub.textContent = "Syncing…";
+    link.classList.add("fp-loading");
+    link.classList.remove("fp-ok", "fp-warn", "fp-err");
+  }
+
+  /** Flash a result, then revert after 1.6 s */
+  function setLinkResult(link, text, cls) {
+    const sub = link.querySelector(".fetch-picks-nav-sublabel");
+    if (!sub) return;
+    const original = sub.dataset.original || "";
+    sub.textContent = text;
+    link.classList.remove("fp-loading");
+    link.classList.add(cls);
+    setTimeout(() => {
+      sub.textContent = original;
+      link.classList.remove(cls);
+    }, 1600);
+  }
+
+  /* ── core fetch ── */
+  const fetchSport = async (sport, link) => {
+    if (activeSport) return;
 
     if (!window.UnifiedPicksFetcher?.fetchPicks) {
-      window.Notify?.error("Model fetchers not ready — try again in a moment");
+      setLinkResult(link, "Not ready", "fp-err");
       return;
     }
 
-    const label = sport.toUpperCase();
-    isFetching = true;
-
-    // Show loading toast
-    const loadingToast = window.Notify?.loading
-      ? window.Notify.loading(`${label} — syncing model picks`)
-      : null;
+    activeSport = sport;
+    setLinkLoading(link);
 
     try {
       const result = await window.UnifiedPicksFetcher.fetchPicks(
@@ -48,34 +65,34 @@
       const picks = Array.isArray(result?.picks) ? result.picks : [];
 
       if (picks.length === 0) {
-        loadingToast?.dismiss?.();
-        window.Notify?.warning(`${label} — no picks on today's slate`);
+        setLinkResult(link, "No picks today", "fp-warn");
         return;
       }
 
-      // Enrich picks with IDs and normalized sport
+      // Enrich picks
       const enriched = picks.map((p) => {
         const copy = { ...p };
         copy.sport = normalizeSport(copy.sport || copy.league);
         copy.gameDate = (copy.gameDate || copy.date || nowIso())
           .toString()
           .slice(0, 10);
-        copy.id = copy.id || [
-          copy.sport,
-          copy.gameDate,
-          (copy.awayTeam || "").toLowerCase().replace(/\s+/g, "-"),
-          (copy.homeTeam || "").toLowerCase().replace(/\s+/g, "-"),
-          (copy.pickType || "spread").toLowerCase(),
-          (copy.segment || "FG").toLowerCase(),
-          (copy.pickDirection || "").toLowerCase(),
-        ].join("_");
+        copy.id =
+          copy.id ||
+          [
+            copy.sport,
+            copy.gameDate,
+            (copy.awayTeam || "").toLowerCase().replace(/\s+/g, "-"),
+            (copy.homeTeam || "").toLowerCase().replace(/\s+/g, "-"),
+            (copy.pickType || "spread").toLowerCase(),
+            (copy.segment || "FG").toLowerCase(),
+            (copy.pickDirection || "").toLowerCase(),
+          ].join("_");
         copy.locked = copy.locked === true;
         return copy;
       });
-
       enriched.sort((a, b) => (b.edge || 0) - (a.edge || 0));
 
-      // Merge into existing weekly lineup cache (don't overwrite other sports)
+      // Merge into localStorage
       let existing = [];
       try {
         const raw = localStorage.getItem(WEEKLY_LINEUP_KEY);
@@ -85,23 +102,18 @@
         }
       } catch (_) {}
 
-      // Remove old picks for this sport, then add new ones
       const otherSports = existing.filter(
         (p) => normalizeSport(p.sport || p.league) !== normalizeSport(sport),
       );
       const merged = [...enriched, ...otherSports];
-
       localStorage.setItem(
         WEEKLY_LINEUP_KEY,
         JSON.stringify({ picks: merged, fetchedAt: nowIso() }),
       );
 
-      loadingToast?.dismiss?.();
-      window.Notify?.success(
-        `${label} — ${picks.length} pick${picks.length === 1 ? "" : "s"} synced`,
-      );
+      setLinkResult(link, `✓ ${picks.length} synced`, "fp-ok");
 
-      // If we're already on the weekly-lineup page, trigger a re-render
+      // If on weekly-lineup page, trigger re-render
       if (
         window.WeeklyLineup?.getActivePicks &&
         document.body.classList.contains("page-weekly-lineup")
@@ -111,17 +123,13 @@
         );
       }
     } catch (e) {
-      loadingToast?.dismiss?.();
-      window.Notify?.error(`${label} — sync failed`);
+      setLinkResult(link, "Sync failed", "fp-err");
     } finally {
-      isFetching = false;
+      activeSport = null;
     }
   };
 
-  /**
-   * Wire up all fetch-picks nav links (on any page).
-   * Links have class="fetch-picks-nav-link" and data-sport="ncaam|nba|mlb".
-   */
+  /* ── event wiring ── */
   const init = () => {
     document.addEventListener("click", (evt) => {
       const link = evt.target.closest(".fetch-picks-nav-link[data-sport]");
@@ -133,26 +141,28 @@
       const sport = link.getAttribute("data-sport");
       if (!sport) return;
 
-      // Close the nav dropdown
-      const dropdown = link.closest(".nav-dropdown");
-      if (dropdown) {
-        dropdown.classList.remove("open");
-        const trigger = dropdown.querySelector(".nav-dropdown-trigger");
-        trigger?.setAttribute("aria-expanded", "false");
-        const menu = dropdown.querySelector(".nav-dropdown-menu");
-        menu?.setAttribute("hidden", "");
-      }
-
-      // On fetch-picks page, also render into the page table
+      // On fetch-picks page, delegate to page controller
       if (
         document.body.classList.contains("page-fetch-picks") &&
         window.FetchPicks?.fetchSport
       ) {
+        // Close dropdown then delegate
+        const dropdown = link.closest(".nav-dropdown");
+        if (dropdown) {
+          dropdown.classList.remove("open");
+          dropdown
+            .querySelector(".nav-dropdown-trigger")
+            ?.setAttribute("aria-expanded", "false");
+          dropdown
+            .querySelector(".nav-dropdown-menu")
+            ?.setAttribute("hidden", "");
+        }
         window.FetchPicks.fetchSport(sport);
-        return; // FetchPicks handles its own notification
+        return;
       }
 
-      fetchSport(sport);
+      // Keep dropdown open so user sees inline status
+      fetchSport(sport, link);
     });
   };
 

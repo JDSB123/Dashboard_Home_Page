@@ -22,7 +22,7 @@ body.page-odds-market {
   --market-surface: rgba(8, 16, 28, 0.75);
   --market-border: rgba(80, 100, 130, 0.25);
   --market-text: #e6f2f6;
-  --dashboard-topline-height: 91px;
+  --dashboard-topline-height: 72px;
 
   /* Zebra Stripe - Matching Weekly Lineup */
   --zebra-odd: rgba(4, 12, 24, 0.32);
@@ -115,9 +115,9 @@ body.page-odds-market::after {
    LAYOUT SHELL (odds market - matching weekly lineup)
    ========================================================================== */
 body.page-odds-market .main-container {
-  padding: 0 0 20px;
+  padding: 0 0.5in 20px;
   padding-right: 60px;
-  margin-top: 12px;
+  margin-top: 8px;
   transition: padding-right 0.3s ease;
 }
 
@@ -135,7 +135,8 @@ body.page-odds-market .dashboard-topline {
   border: none;
   box-shadow: none;
   border-radius: 0;
-  padding: 6px 0.5in 8px;
+  padding: 6px 0 8px;
+  margin-bottom: 8px;
 }
 
 /* ===== BRAND HEADER STYLING ===== */
@@ -145,11 +146,44 @@ body.page-odds-market .brand-header {
   border: none;
   box-shadow: none;
   border-radius: 0;
+  height: var(--dashboard-topline-height) !important;
+  min-height: var(--dashboard-topline-height) !important;
+  gap: 8px !important;
 }
 
-body.page-odds-market .brand-line-1,
+body.page-odds-market .brand-logo-inline {
+  height: var(--dashboard-topline-height) !important;
+  width: auto !important;
+  min-width: var(--dashboard-topline-height) !important;
+  max-height: var(--dashboard-topline-height) !important;
+  aspect-ratio: auto !important;
+}
+
+body.page-odds-market .brand-content-inline {
+  height: 100% !important;
+  min-height: var(--dashboard-topline-height) !important;
+}
+
+body.page-odds-market .brand-text-stacked {
+  gap: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+body.page-odds-market .brand-line-1 {
+  font-size: calc(var(--dashboard-topline-height) * 0.58) !important;
+  font-weight: 900 !important;
+}
+
 body.page-odds-market .brand-line-2 {
-  color: var(--market-text);
+  font-size: calc(var(--dashboard-topline-height) * 0.36) !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.35em !important;
+}
+
+body.page-odds-market .brand-line-2 .brand-word {
+  display: inline-flex !important;
+  letter-spacing: inherit !important;
 }
 
 /* ==========================================================================
@@ -213,9 +247,9 @@ body.page-odds-market .kpi-subtext {
 
 .odds-board {
   margin-top: 0;
-  margin-left: 0.5in;
-  margin-right: 0.5in;
-  width: calc(100% - 1in);
+  margin-left: 0;
+  margin-right: 0;
+  width: 100%;
   box-sizing: border-box;
   background: rgba(5, 12, 22, 0.4);
   border: none;
@@ -1152,6 +1186,15 @@ body.page-odds-market.slip-open .bet-slip-toggle .toggle-icon {
   body.page-odds-market .main-container,
   body.page-odds-market.slip-open .main-container {
     padding-right: 20px;
+    padding-left: 20px;
+  }
+
+  body.page-odds-market .brand-line-1 {
+    font-size: calc(var(--dashboard-topline-height) * 0.52) !important;
+  }
+  body.page-odds-market .brand-line-2 {
+    font-size: calc(var(--dashboard-topline-height) * 0.28) !important;
+    letter-spacing: 0.4em !important;
   }
 
   .bet-slip {
@@ -1194,6 +1237,46 @@ body.page-odds-market.slip-open .bet-slip-toggle .toggle-icon {
 }
 
 @media (max-width: 768px) {
+  body.page-odds-market {
+    --dashboard-topline-height: 56px;
+  }
+
+  body.page-odds-market .main-container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  body.page-odds-market .dashboard-topline {
+    flex-wrap: wrap;
+    padding: 4px 0 6px;
+    margin-bottom: 6px;
+  }
+
+  body.page-odds-market .brand-logo-inline {
+    height: 50px !important;
+    min-width: 50px !important;
+  }
+
+  body.page-odds-market .brand-line-1 {
+    font-size: 1.4rem !important;
+  }
+  body.page-odds-market .brand-line-2 {
+    font-size: 0.85rem !important;
+    letter-spacing: 0.25em !important;
+  }
+
+  body.page-odds-market .kpi-tiles {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .odds-board {
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
+    border-radius: 0;
+  }
+
   .books-header {
     display: none;
   }
@@ -1241,6 +1324,23 @@ body.page-odds-market.slip-open .bet-slip-toggle .toggle-icon {
 }
 
 @media (max-width: 480px) {
+  body.page-odds-market {
+    --dashboard-topline-height: 44px;
+  }
+
+  body.page-odds-market .brand-logo-inline {
+    height: 38px !important;
+    min-width: 38px !important;
+  }
+
+  body.page-odds-market .brand-line-1 {
+    font-size: 1.1rem !important;
+  }
+  body.page-odds-market .brand-line-2 {
+    font-size: 0.75rem !important;
+    letter-spacing: 0.2em !important;
+  }
+
   .book-odds-col {
     flex: 1 1 100%;
     min-width: 100%;

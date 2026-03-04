@@ -443,6 +443,47 @@ body.page-active-picks .brand-nav {
   color: rgba(0, 255, 170, 0.45);
 }
 
+/* inline fetch status states */
+@keyframes _fpSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.fetch-picks-nav-link.fp-loading {
+  pointer-events: none;
+  opacity: 0.65;
+}
+
+.fetch-picks-nav-link.fp-loading .fetch-picks-nav-sublabel {
+  color: rgba(0, 214, 137, 0.5);
+}
+
+.fetch-picks-nav-link.fp-loading .fetch-picks-nav-sublabel::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
+  border-top-color: rgba(0, 214, 137, 0.7);
+  border-radius: 50%;
+  animation: _fpSpin 0.55s linear infinite;
+  vertical-align: middle;
+  margin-right: 4px;
+}
+
+.fetch-picks-nav-link.fp-ok .fetch-picks-nav-sublabel {
+  color: rgba(0, 214, 137, 0.6);
+}
+
+.fetch-picks-nav-link.fp-warn .fetch-picks-nav-sublabel {
+  color: rgba(200, 165, 40, 0.55);
+}
+
+.fetch-picks-nav-link.fp-err .fetch-picks-nav-sublabel {
+  color: rgba(255, 95, 109, 0.6);
+}
+
 /* ===== Sleek Fetch Button at Sportsbook Level ===== */
 .sportsbook-actions-row {
   display: flex !important;
@@ -1076,6 +1117,21 @@ body.page-active-picks .brand-nav {
     padding-left: var(--layout-gutter);
     padding-right: var(--layout-gutter);
     z-index: 1000;
+  }
+
+  /* When user has scrolled past the nav, pin it with a frosted background */
+  body.page-active-picks .brand-nav.nav-pinned,
+  body.page-weekly-lineup .brand-nav.nav-pinned,
+  body.page-odds-market .brand-nav.nav-pinned,
+  body.page-picks-tracker .brand-nav.nav-pinned,
+  body.page-fetch-picks .brand-nav.nav-pinned {
+    position: fixed;
+    background: rgba(2, 8, 18, 0.82);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    padding-top: 8px;
+    padding-bottom: 8px;
   }
 }
 

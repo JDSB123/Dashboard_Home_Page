@@ -92,7 +92,9 @@ body.page-fetch-picks .main-container {
   margin-top: 12px;
 }
 
-body.page-fetch-picks .main-dashboard-layout { gap: 8px; }
+body.page-fetch-picks .main-dashboard-layout {
+  gap: 8px;
+}
 
 /* ===== TOPLINE ===== */
 body.page-fetch-picks .dashboard-topline {
@@ -194,31 +196,45 @@ body.page-fetch-picks .table-container,
    ========================================================================== */
 .fetch-picks-table thead th:nth-child(1),
 .fetch-picks-table tbody td:nth-child(1) {
-  width: 13% !important; min-width: 120px !important; max-width: 13% !important;
+  width: 13% !important;
+  min-width: 120px !important;
+  max-width: 13% !important;
 }
 .fetch-picks-table thead th:nth-child(2),
 .fetch-picks-table tbody td:nth-child(2) {
-  width: 8% !important; min-width: 65px !important; max-width: 8% !important;
+  width: 8% !important;
+  min-width: 65px !important;
+  max-width: 8% !important;
 }
 .fetch-picks-table thead th:nth-child(3),
 .fetch-picks-table tbody td:nth-child(3) {
-  width: 28% !important; min-width: 220px !important; max-width: 28% !important;
+  width: 28% !important;
+  min-width: 220px !important;
+  max-width: 28% !important;
 }
 .fetch-picks-table thead th:nth-child(4),
 .fetch-picks-table tbody td:nth-child(4) {
-  width: 10% !important; min-width: 80px !important; max-width: 10% !important;
+  width: 10% !important;
+  min-width: 80px !important;
+  max-width: 10% !important;
 }
 .fetch-picks-table thead th:nth-child(5),
 .fetch-picks-table tbody td:nth-child(5) {
-  width: 23% !important; min-width: 160px !important; max-width: 23% !important;
+  width: 23% !important;
+  min-width: 160px !important;
+  max-width: 23% !important;
 }
 .fetch-picks-table thead th:nth-child(6),
 .fetch-picks-table tbody td:nth-child(6) {
-  width: 10% !important; min-width: 75px !important; max-width: 10% !important;
+  width: 10% !important;
+  min-width: 75px !important;
+  max-width: 10% !important;
 }
 .fetch-picks-table thead th:nth-child(7),
 .fetch-picks-table tbody td:nth-child(7) {
-  width: 8% !important; min-width: 70px !important; max-width: 8% !important;
+  width: 8% !important;
+  min-width: 70px !important;
+  max-width: 8% !important;
 }
 
 /* ==========================================================================
@@ -248,8 +264,13 @@ body.page-fetch-picks .picks-table thead th,
   position: relative;
 }
 
-.fetch-picks-table thead th:first-child { border-top-left-radius: 8px; }
-.fetch-picks-table thead th:last-child  { border-top-right-radius: 8px; border-right: none; }
+.fetch-picks-table thead th:first-child {
+  border-top-left-radius: 8px;
+}
+.fetch-picks-table thead th:last-child {
+  border-top-right-radius: 8px;
+  border-right: none;
+}
 
 /* Sticky header */
 .page-fetch-picks .fetch-picks-table thead,
@@ -326,19 +347,31 @@ body.page-fetch-picks .picks-table thead th,
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 7px; line-height: 1; font-weight: bold;
+  font-size: 7px;
+  line-height: 1;
+  font-weight: bold;
   color: rgba(34, 197, 94, 0.5);
   opacity: 0.7;
-  margin: 0; pointer-events: none;
-  background: none; border: none; box-shadow: none; border-radius: 0;
-  transition: opacity 150ms ease, color 150ms ease;
+  margin: 0;
+  pointer-events: none;
+  background: none;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  transition:
+    opacity 150ms ease,
+    color 150ms ease;
 }
 
-.page-fetch-picks .fetch-picks-table th:hover .sort-icon { opacity: 1; color: rgba(74, 222, 128, 0.9); }
+.page-fetch-picks .fetch-picks-table th:hover .sort-icon {
+  opacity: 1;
+  color: rgba(74, 222, 128, 0.9);
+}
 
 .page-fetch-picks .fetch-picks-table th.sorted-asc .sort-icon,
 .page-fetch-picks .fetch-picks-table th.sorted-desc .sort-icon {
-  opacity: 1; color: rgba(34, 197, 94, 1);
+  opacity: 1;
+  color: rgba(34, 197, 94, 1);
 }
 
 /* ==========================================================================
@@ -417,7 +450,8 @@ body.page-fetch-picks .picks-table tbody tr:hover,
 }
 
 .fetch-picks-table .matchup-inline .team-logo {
-  width: 18px; height: 18px;
+  width: 18px;
+  height: 18px;
   object-fit: contain;
   border-radius: 2px;
   flex-shrink: 0;
@@ -462,7 +496,8 @@ body.page-fetch-picks .picks-table tbody tr:hover,
 
 /* League cell */
 .fetch-picks-table .league-logo {
-  width: 24px; height: 24px;
+  width: 24px;
+  height: 24px;
   object-fit: contain;
 }
 
@@ -605,7 +640,9 @@ body.page-fetch-picks .ft-dropdown-menu {
   backdrop-filter: blur(10px);
 }
 
-body.page-fetch-picks .ft-dropdown-menu.open { display: block; }
+body.page-fetch-picks .ft-dropdown-menu.open {
+  display: block;
+}
 
 body.page-fetch-picks .ft-dropdown-item {
   display: block;
@@ -679,17 +716,26 @@ body.page-fetch-picks .ft-fetch-league-btn:hover {
 }
 
 body.page-fetch-picks .ft-fetch-league-btn.ft-fetch-all {
-  background: linear-gradient(135deg, rgba(0, 214, 137, 0.15), rgba(0, 100, 80, 0.15));
+  background: linear-gradient(
+    135deg,
+    rgba(0, 214, 137, 0.15),
+    rgba(0, 100, 80, 0.15)
+  );
   border-color: rgba(0, 214, 137, 0.35);
 }
 
 body.page-fetch-picks .ft-fetch-league-btn.ft-fetch-all:hover {
-  background: linear-gradient(135deg, rgba(0, 214, 137, 0.25), rgba(0, 100, 80, 0.25));
+  background: linear-gradient(
+    135deg,
+    rgba(0, 214, 137, 0.25),
+    rgba(0, 100, 80, 0.25)
+  );
   box-shadow: 0 0 12px rgba(0, 214, 137, 0.3);
 }
 
 body.page-fetch-picks .league-logo-sm {
-  width: 16px; height: 16px;
+  width: 16px;
+  height: 16px;
   object-fit: contain;
 }
 
@@ -707,7 +753,8 @@ body.page-fetch-picks .fetch-separator {
 }
 
 body.page-fetch-picks .refresh-icon {
-  width: 14px; height: 14px;
+  width: 14px;
+  height: 14px;
 }
 
 /* Coming soon buttons */
@@ -774,8 +821,12 @@ body.page-fetch-picks .skeleton-row td::after {
 }
 
 @keyframes skeletonShimmer {
-  0%   { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 /* ==========================================================================
@@ -791,8 +842,12 @@ body.page-fetch-picks .ft-fetch-league-btn.fetching .refresh-icon {
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* ==========================================================================
@@ -839,13 +894,27 @@ body.page-fetch-picks .picks-count-badge {
   }
 
   /* Card layout data labels for mobile */
-  .fetch-picks-table td:nth-child(1)::before { content: "Date/Time"; }
-  .fetch-picks-table td:nth-child(2)::before { content: "League"; }
-  .fetch-picks-table td:nth-child(3)::before { content: "Matchup"; }
-  .fetch-picks-table td:nth-child(4)::before { content: "Segment"; }
-  .fetch-picks-table td:nth-child(5)::before { content: "Pick"; }
-  .fetch-picks-table td:nth-child(6)::before { content: "Edge"; }
-  .fetch-picks-table td:nth-child(7)::before { content: "Fire"; }
+  .fetch-picks-table td:nth-child(1)::before {
+    content: "Date/Time";
+  }
+  .fetch-picks-table td:nth-child(2)::before {
+    content: "League";
+  }
+  .fetch-picks-table td:nth-child(3)::before {
+    content: "Matchup";
+  }
+  .fetch-picks-table td:nth-child(4)::before {
+    content: "Segment";
+  }
+  .fetch-picks-table td:nth-child(5)::before {
+    content: "Pick";
+  }
+  .fetch-picks-table td:nth-child(6)::before {
+    content: "Edge";
+  }
+  .fetch-picks-table td:nth-child(7)::before {
+    content: "Fire";
+  }
 
   /* Reset column constraints for card layout */
   .fetch-picks-table thead th,
