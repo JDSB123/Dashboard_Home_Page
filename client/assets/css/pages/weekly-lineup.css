@@ -6243,13 +6243,25 @@ body.page-weekly-lineup
 
 @media (max-width: 768px) {
   .filter-toolbar {
-    flex-wrap: wrap;
-    gap: 8px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
     margin: 0 12px;
   }
-  .ft-left,
+  .ft-left {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    gap: 6px;
+    padding-bottom: 4px;
+  }
+  .ft-left::-webkit-scrollbar {
+    display: none;
+  }
   .ft-right {
     gap: 6px;
+    width: 100%;
   }
   .ft-last-refreshed {
     font-size: 0.875rem;
@@ -6590,17 +6602,71 @@ body.page-weekly-lineup .brand-header-inline {
     font-size: 0.9rem;
   }
 
-  /* Filter toolbar horizontal scroll */
+  /* Filter toolbar - stack vertically on mobile */
   body.page-weekly-lineup .filter-toolbar {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    margin: 0 8px;
+  }
+
+  /* Left filters scroll horizontally */
+  body.page-weekly-lineup .filter-toolbar .ft-left {
     display: flex;
     flex-wrap: nowrap;
     overflow-x: auto;
     scrollbar-width: none;
-    gap: 8px;
+    gap: 6px;
+    padding-bottom: 4px;
   }
 
-  body.page-weekly-lineup .filter-toolbar::-webkit-scrollbar {
+  body.page-weekly-lineup .filter-toolbar .ft-left::-webkit-scrollbar {
     display: none;
+  }
+
+  /* Right fetch controls full-width row below filters */
+  body.page-weekly-lineup .filter-toolbar .ft-right {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+  }
+
+  body.page-weekly-lineup .filter-toolbar .ft-right .fetch-controls-wrapper {
+    width: 100%;
+  }
+
+  body.page-weekly-lineup .filter-toolbar .ft-right .ft-fetch-buttons {
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  /* Hide text labels on fetch buttons - show only icons */
+  body.page-weekly-lineup .ft-fetch-league-btn .league-label {
+    display: none;
+  }
+
+  /* Compact fetch buttons */
+  body.page-weekly-lineup .ft-fetch-league-btn {
+    padding: 4px 8px;
+    min-width: 36px;
+  }
+
+  /* Compact "All" button */
+  body.page-weekly-lineup .ft-fetch-all span {
+    font-size: 0.6rem;
+  }
+
+  /* Hide separator on mobile */
+  body.page-weekly-lineup .fetch-separator {
+    display: none;
+  }
+
+  /* Compact last-refreshed */
+  body.page-weekly-lineup .ft-last-refreshed {
+    font-size: 0.55rem;
   }
 
   /* KPI tiles grid */

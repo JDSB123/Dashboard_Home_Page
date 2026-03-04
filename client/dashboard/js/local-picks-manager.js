@@ -1785,14 +1785,17 @@
       const hasMatchup =
         (pick.game && pick.game.trim().length > 0) ||
         (pick.matchup && pick.matchup.trim().length > 0) ||
-        (pick.awayTeam && pick.awayTeam.trim().length > 0 && pick.homeTeam && pick.homeTeam.trim().length > 0);
+        (pick.awayTeam &&
+          pick.awayTeam.trim().length > 0 &&
+          pick.homeTeam &&
+          pick.homeTeam.trim().length > 0);
 
       // Must have some form of pick selection (not just segment)
       const hasPick =
         (pick.pick && pick.pick.trim().length > 0) ||
         (pick.pickTeam && pick.pickTeam.trim().length > 0) ||
         (pick.selection && pick.selection.trim().length > 0) ||
-        (pick.line !== undefined && pick.line !== null && pick.line !== '');
+        (pick.line !== undefined && pick.line !== null && pick.line !== "");
 
       // A pick is valid ONLY if it has BOTH matchup AND pick info
       const isValid = hasMatchup && hasPick;
