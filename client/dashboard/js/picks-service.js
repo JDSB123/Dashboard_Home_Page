@@ -84,6 +84,34 @@ const PicksService = (function () {
   }
 
   /**
+   * Filter out and automatically delete stale demo/mock picks
+   */
+  async function _filterAndCleanDemoPicks(picks) {
+    if (!Array.isArray(picks)) return picks;
+    const demoPicks = picks.filter(p => 
+        p.isDemo === true || 
+        p.isSample === true || 
+        p.sportsbook === 'Demo Book' || 
+        (p.awayTeam && typeof p.awayTeam === 'string' && p.awayTeam.includes('MOCK')) || 
+        (p.homeTeam && typeof p.homeTeam === 'string' && p.homeTeam.includes('MOCK')) ||
+        (p.awayTeam && p.awayTeam === 'PHI' && p.homeTeam === 'BOS' && p.odds === '+150') || // Specific hardcoded old mock
+        (p.awayTeam && p.awayTeam === 'LAL' && p.homeTeam === 'DEN') // Just in case
+    );
+    
+    if (demoPicks.length > 0) {
+        console.warn(`[PicksService] Found ${demoPicks.length} stale demo picks from backend, purging...`);
+        // Fire and forget deletions to clean up CosmosDB
+        demoPicks.forEach(p => {
+            if (p.id) {
+                remove(p.id).catch(e => console.error("[PicksService] Auto-delete demo pick failed:", e));
+            }
+        });
+    }
+    
+    return picks.filter(p => !demoPicks.includes(p));
+  }
+
+  /**
    * Get all picks with optional filtering
    * @param {Object} filters - Query filters (status, league, date, etc.)
    * @returns {Promise<Array>} Array of pick objects
@@ -101,7 +129,7 @@ const PicksService = (function () {
 
     try {
       const response = await apiRequest(query);
-      return response.picks || [];
+      return _filterAndCleanDemoPicks(response.picks || []);
     } catch (error) {
       console.error("[PicksService] Failed to get picks:", error);
       return [];
@@ -115,7 +143,7 @@ const PicksService = (function () {
   async function getActive() {
     try {
       const response = await apiRequest("/active");
-      return response.picks || [];
+      return _filterAndCleanDemoPicks(response.picks || []);
     } catch (error) {
       console.error("[PicksService] Failed to get active picks:", error);
       return [];
@@ -129,7 +157,7 @@ const PicksService = (function () {
   async function getSettled() {
     try {
       const response = await apiRequest("/settled");
-      return response.picks || [];
+      return _filterAndCleanDemoPicks(response.picks || []);
     } catch (error) {
       console.error("[PicksService] Failed to get settled picks:", error);
       return [];
