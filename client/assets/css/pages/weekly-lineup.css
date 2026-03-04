@@ -6084,10 +6084,9 @@ body.page-weekly-lineup
 .ft-all-group {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
-  gap: 6px 10px;
-  max-width: 360px;
+  gap: 6px;
 }
 
 .ft-last-refreshed {
@@ -6123,11 +6122,13 @@ body.page-weekly-lineup
 .ft-fetch-buttons {
   display: flex;
   align-items: center;
+  flex-wrap: nowrap;
   background: rgba(15, 25, 40, 0.6);
   border: 1px solid rgba(60, 80, 110, 0.4);
   border-radius: 6px;
   padding: 3px;
   gap: 2px;
+  white-space: nowrap;
 }
 
 .fetch-separator {

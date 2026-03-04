@@ -1768,6 +1768,63 @@
     localStorage.setItem(LAST_CLEANUP_KEY, today);
   }
 
+  /**
+   * Clean up incomplete/invalid picks that are missing essential data
+   * These are placeholder or corrupted picks that show empty rows in the table
+   * Runs on every page load to catch any bad data
+   */
+  function cleanupIncompletePicks() {
+    const picks = getAllPicks();
+    if (picks.length === 0) {
+      return;
+    }
+
+    // Filter out picks that are missing essential data
+    const validPicks = picks.filter((pick) => {
+      // Must have either a game/matchup or both away/home teams
+      const hasMatchup =
+        (pick.game && pick.game.trim().length > 0) ||
+        (pick.matchup && pick.matchup.trim().length > 0) ||
+        (pick.awayTeam && pick.awayTeam.trim().length > 0 && pick.homeTeam && pick.homeTeam.trim().length > 0);
+
+      // Must have some form of pick selection (not just segment)
+      const hasPick =
+        (pick.pick && pick.pick.trim().length > 0) ||
+        (pick.pickTeam && pick.pickTeam.trim().length > 0) ||
+        (pick.selection && pick.selection.trim().length > 0) ||
+        (pick.line !== undefined && pick.line !== null && pick.line !== '');
+
+      // A pick is valid ONLY if it has BOTH matchup AND pick info
+      const isValid = hasMatchup && hasPick;
+
+      if (!isValid) {
+        console.log(
+          `🗑️ [Incomplete Cleanup] Removing invalid pick: ${JSON.stringify({
+            id: pick.id,
+            league: pick.league || pick.sport,
+            game: pick.game,
+            matchup: pick.matchup,
+            awayTeam: pick.awayTeam,
+            homeTeam: pick.homeTeam,
+            pick: pick.pick,
+            pickTeam: pick.pickTeam,
+            segment: pick.segment,
+          })}`,
+        );
+      }
+
+      return isValid;
+    });
+
+    if (validPicks.length < picks.length) {
+      const removed = picks.length - validPicks.length;
+      console.log(
+        `🗑️ [Incomplete Cleanup] Removed ${removed} incomplete/invalid picks, kept ${validPicks.length} valid picks`,
+      );
+      savePicks(validPicks);
+    }
+  }
+
   function cleanupSampleData() {
     const CLEANUP_VERSION_KEY = "gbsv_cleanup_v5"; // Bump version to re-run cleanup
 
@@ -1856,6 +1913,9 @@
 
     // Clean up any legacy sample/demo data (runs once)
     cleanupSampleData();
+
+    // Clean up incomplete/invalid picks missing essential data (runs once per version)
+    cleanupIncompletePicks();
 
     // Clean up stale pending picks (runs daily)
     cleanupStalePicks(7); // Remove pending picks older than 7 days
@@ -2046,6 +2106,7 @@
     setUnitMultiplier,
     archiveOldPicks,
     cleanupStale: cleanupStalePicks, // Manually trigger stale picks cleanup
+    cleanupIncomplete: cleanupIncompletePicks, // Manually trigger incomplete picks cleanup
     // Debug helpers
     debug: () => {
       const picks = getAllPicks();

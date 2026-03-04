@@ -32,21 +32,18 @@ body {
 /* ===== SAFE AREA SUPPORT (iOS NOTCH) ===== */
 
 @supports (padding: max(0px)) {
+  /* Use 0px fallback so desktop (no safe-area insets) gets no extra padding */
   html,
   body {
-    padding-top: max(8px, env(safe-area-inset-top));
-    padding-left: max(8px, env(safe-area-inset-left));
-    padding-right: max(8px, env(safe-area-inset-right));
+    padding-top: max(0px, env(safe-area-inset-top));
+    padding-left: max(0px, env(safe-area-inset-left));
+    padding-right: max(0px, env(safe-area-inset-right));
   }
 
-  .brand-nav {
-    padding-top: max(12px, env(safe-area-inset-top));
-    padding-left: max(12px, env(safe-area-inset-left));
-    padding-right: max(12px, env(safe-area-inset-right));
-    margin-top: 0;
-    margin-left: 0;
-    margin-right: 0;
-  }
+  /* NOTE: .brand-nav padding intentionally NOT overridden here.
+     Navigation padding is set by navigation.css (var(--layout-gutter)) and
+     mobile-overhaul.css (@media max-width: 767px). Overriding padding-left/right
+     here at a lower specificity clobbed the gutter on desktop. */
 
   .main-container,
   main {

@@ -100,8 +100,45 @@
         <li>
           <a href="picks-tracker.html" class="nav-link">Picks Tracker</a>
         </li>
-        <li>
-          <a href="fetch-picks.html" class="nav-link">Fetch Picks</a>
+        <li class="nav-dropdown">
+          <button
+            class="nav-link nav-dropdown-trigger"
+            id="fetch-picks-trigger"
+            aria-expanded="false"
+            aria-haspopup="true"
+            aria-controls="fetch-picks-nav-menu"
+          >
+            Fetch Picks
+          </button>
+          <div
+            class="nav-dropdown-menu fetch-picks-nav-menu"
+            id="fetch-picks-nav-menu"
+            aria-labelledby="fetch-picks-trigger"
+            hidden
+          >
+            <div class="fetch-picks-nav-header">Model Picks</div>
+            <a href="fetch-picks.html?sport=ncaam" class="fetch-picks-nav-link">
+              <img src="assets/icons/league-ncaam.svg" class="fetch-picks-nav-logo" alt="" aria-hidden="true" />
+              <span class="fetch-picks-nav-label">
+                <span class="fetch-picks-nav-sport-name">NCAAM</span>
+                <span class="fetch-picks-nav-sublabel">College Basketball</span>
+              </span>
+            </a>
+            <a href="fetch-picks.html?sport=nba" class="fetch-picks-nav-link">
+              <img src="assets/nba-logo.png" class="fetch-picks-nav-logo" alt="" aria-hidden="true" />
+              <span class="fetch-picks-nav-label">
+                <span class="fetch-picks-nav-sport-name">NBA</span>
+                <span class="fetch-picks-nav-sublabel">Pro Basketball</span>
+              </span>
+            </a>
+            <a href="fetch-picks.html?sport=mlb" class="fetch-picks-nav-link">
+              <img src="assets/icons/league-mlb.svg" class="fetch-picks-nav-logo" alt="" aria-hidden="true" />
+              <span class="fetch-picks-nav-label">
+                <span class="fetch-picks-nav-sport-name">MLB</span>
+                <span class="fetch-picks-nav-sublabel">Major League Baseball</span>
+              </span>
+            </a>
+          </div>
         </li>
         <li class="nav-dropdown">
           <button

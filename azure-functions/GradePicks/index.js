@@ -38,7 +38,11 @@ module.exports = async function (context, timer) {
 
     // Build date list from lookbackDate through today so stale picks are covered
     const datesToQuery = [];
-    for (let d = new Date(lookbackDate + "T12:00:00Z"); d <= new Date(today + "T12:00:00Z"); d.setDate(d.getDate() + 1)) {
+    for (
+      let d = new Date(lookbackDate + "T12:00:00Z");
+      d <= new Date(today + "T12:00:00Z");
+      d.setDate(d.getDate() + 1)
+    ) {
       datesToQuery.push(d.toISOString().split("T")[0]);
     }
 
