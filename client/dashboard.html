@@ -118,21 +118,21 @@
           >
             <div class="fetch-picks-nav-header">Model Picks</div>
             <a href="fetch-picks.html?sport=ncaam" class="fetch-picks-nav-link">
-              <img src="assets/icons/league-ncaam.svg" class="fetch-picks-nav-logo" alt="" aria-hidden="true" />
+              <img src="assets/ncaam-logo.png" width="20" height="20" class="fetch-picks-nav-logo" alt="" />
               <span class="fetch-picks-nav-label">
                 <span class="fetch-picks-nav-sport-name">NCAAM</span>
                 <span class="fetch-picks-nav-sublabel">College Basketball</span>
               </span>
             </a>
             <a href="fetch-picks.html?sport=nba" class="fetch-picks-nav-link">
-              <img src="assets/nba-logo.png" class="fetch-picks-nav-logo" alt="" aria-hidden="true" />
+              <img src="assets/nba-logo.png" width="20" height="20" class="fetch-picks-nav-logo" alt="" />
               <span class="fetch-picks-nav-label">
                 <span class="fetch-picks-nav-sport-name">NBA</span>
                 <span class="fetch-picks-nav-sublabel">Pro Basketball</span>
               </span>
             </a>
             <a href="fetch-picks.html?sport=mlb" class="fetch-picks-nav-link">
-              <img src="assets/icons/league-mlb.svg" class="fetch-picks-nav-logo" alt="" aria-hidden="true" />
+              <img src="assets/mlb-logo.svg" width="20" height="20" class="fetch-picks-nav-logo" alt="" />
               <span class="fetch-picks-nav-label">
                 <span class="fetch-picks-nav-sport-name">MLB</span>
                 <span class="fetch-picks-nav-sublabel">Major League Baseball</span>
@@ -1110,7 +1110,13 @@
           }
           fetchPromise.then((picks) => {
             picksTbody.innerHTML = "";
-            picks.forEach((pick) => {
+            // Filter out incomplete picks before rendering
+            const validPicks = picks.filter((pick) => {
+              const hasMatchup = pick.matchup || pick.game || (pick.awayTeam && pick.homeTeam);
+              const hasPick = pick.pick || pick.pickTeam || pick.selection || pick.line;
+              return hasMatchup && hasPick;
+            });
+            validPicks.forEach((pick) => {
               // Modular row rendering (simplified)
               const tr = document.createElement("tr");
               tr.setAttribute("data-league", pick.league || "");

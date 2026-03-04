@@ -336,31 +336,39 @@ body.page-active-picks .brand-nav {
 
 /* ===== Fetch Picks Nav Dropdown ===== */
 .fetch-picks-nav-menu {
-  width: 218px;
+  width: 200px;
   padding: 0;
   overflow: hidden;
-  /* override the base menu right-align so it hugs the trigger */
-  left: 0;
+  left: 50%;
   right: auto;
+  transform-origin: top center;
+  /* shift left so menu centers under trigger */
+  margin-left: -100px;
+}
+
+/* override the base animation transform to keep centering */
+.nav-dropdown.open .fetch-picks-nav-menu:not([hidden]) {
+  transform: translateY(0) scale(1);
 }
 
 .fetch-picks-nav-header {
-  padding: 10px 14px 7px;
+  padding: 8px 14px 6px;
   font-family: var(--font-display, "Oswald", sans-serif);
-  font-size: 0.58rem;
+  font-size: 0.54rem;
   font-weight: 700;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: rgba(0, 255, 170, 0.45);
-  border-bottom: 1px solid rgba(0, 143, 88, 0.18);
+  color: rgba(0, 255, 170, 0.4);
+  border-bottom: 1px solid rgba(0, 143, 88, 0.15);
+  pointer-events: none;
 }
 
 .fetch-picks-nav-link {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px 14px;
-  color: rgba(205, 225, 242, 0.88);
+  gap: 11px;
+  padding: 9px 14px;
+  color: rgba(205, 225, 242, 0.85);
   text-decoration: none;
   border-left: 2px solid transparent;
   transition:
@@ -368,6 +376,10 @@ body.page-active-picks .brand-nav {
     color 0.18s ease,
     border-left-color 0.18s ease;
   position: relative;
+}
+
+.fetch-picks-nav-link + .fetch-picks-nav-link {
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 /* suppress inherited nav-link pseudo effects */
@@ -379,55 +391,61 @@ body.page-active-picks .brand-nav {
 .fetch-picks-nav-link:hover {
   background: linear-gradient(
     90deg,
-    rgba(0, 214, 137, 0.11),
-    rgba(0, 214, 137, 0.04) 80%
+    rgba(0, 214, 137, 0.10),
+    transparent 85%
   );
   color: #00ffaa;
   border-left-color: #00d689;
-  text-shadow: 0 0 10px rgba(0, 255, 170, 0.3);
 }
 
 .fetch-picks-nav-logo {
-  width: 22px;
-  height: 22px;
+  display: block;
+  width: 20px;
+  height: 20px;
+  max-width: 20px;
+  max-height: 20px;
+  min-width: 20px;
+  min-height: 20px;
   object-fit: contain;
-  flex-shrink: 0;
-  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.55));
+  flex: 0 0 20px;
+  border-radius: 2px;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4));
   transition: filter 0.18s ease;
 }
 
 .fetch-picks-nav-link:hover .fetch-picks-nav-logo {
-  filter: drop-shadow(0 0 5px rgba(0, 214, 137, 0.45))
-    drop-shadow(0 1px 3px rgba(0, 0, 0, 0.55));
+  filter: drop-shadow(0 0 4px rgba(0, 214, 137, 0.35))
+    drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4));
 }
 
 .fetch-picks-nav-label {
   display: flex;
   flex-direction: column;
   gap: 1px;
+  min-width: 0;
 }
 
 .fetch-picks-nav-sport-name {
   font-family: var(--font-display, "Oswald", sans-serif);
   font-weight: 600;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  line-height: 1.1;
+  line-height: 1.15;
 }
 
 .fetch-picks-nav-sublabel {
-  font-family: var(--font-body, "Montserrat", sans-serif);
-  font-size: 0.56rem;
+  font-family: "Montserrat", "Inter", sans-serif;
+  font-size: 0.52rem;
   font-weight: 400;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.03em;
   text-transform: none;
-  color: rgba(145, 175, 200, 0.6);
-  line-height: 1.2;
+  color: rgba(145, 175, 200, 0.5);
+  line-height: 1.15;
 }
 
 .fetch-picks-nav-link:hover .fetch-picks-nav-sublabel {
-  color: rgba(0, 255, 170, 0.5);
+  color: rgba(0, 255, 170, 0.45);
 }
 
 /* ===== Sleek Fetch Button at Sportsbook Level ===== */
