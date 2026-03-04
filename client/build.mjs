@@ -128,6 +128,7 @@ const SHARED_JS = [
   "assets/js/mobile/mobile-unified.js",
   "assets/js/core/signalr-client.js",
   "assets/js/core/auth-client.js",
+  "assets/js/features/nav-fetch-picks.js",
 ];
 
 // Sport fetchers — shared across dashboard and weekly-lineup

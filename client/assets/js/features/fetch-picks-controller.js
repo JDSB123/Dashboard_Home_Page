@@ -515,6 +515,9 @@
     showEmptyState(message) {
       renderEmptyState(message);
     },
+    fetchSport(league) {
+      return fetchAndRender(league, null);
+    },
   };
 
   /* ── Init ────────────────────────────────────────────────────── */
@@ -523,14 +526,6 @@
     attachFetchHandlers();
     attachSortHandlers();
     attachDropdownHandlers();
-    // Auto-fetch sport from URL query param (e.g. fetch-picks.html?sport=ncaam)
-    const urlSport = new URLSearchParams(window.location.search).get("sport");
-    if (urlSport) {
-      const code = urlSport.toLowerCase();
-      const normalizedCode =
-        code === "ncaab" || code === "ncaam" ? "ncaam" : code;
-      setTimeout(() => fetchAndRender(normalizedCode, null), 150);
-    }
   };
 
   if (document.readyState === "loading") {

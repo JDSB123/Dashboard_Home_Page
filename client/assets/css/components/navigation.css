@@ -389,11 +389,7 @@ body.page-active-picks .brand-nav {
 }
 
 .fetch-picks-nav-link:hover {
-  background: linear-gradient(
-    90deg,
-    rgba(0, 214, 137, 0.10),
-    transparent 85%
-  );
+  background: linear-gradient(90deg, rgba(0, 214, 137, 0.1), transparent 85%);
   color: #00ffaa;
   border-left-color: #00d689;
 }

@@ -5528,11 +5528,9 @@ body.page-weekly-lineup
 .filter-toolbar {
   display: flex;
   justify-content: space-between;
-  /* Bottom-align fetch controls with filter pills */
-  align-items: flex-end;
+  align-items: center;
   padding: 2px 0 0;
-  margin: 0 0 -4px 0;
-  /* Above sticky table header (which sits around z-index ~110) */
+  margin: 0 0 8px 0;
   position: relative;
   z-index: 10050;
   background: transparent !important;
@@ -6393,7 +6391,7 @@ body.page-weekly-lineup .weekly-lineup-table-wrapper {
   border: none;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
   border-radius: 8px;
-  margin-top: 0;
+  margin-top: 8px;
   margin-left: 0.75in;
   margin-right: 0.75in;
   width: calc(100% - 1.5in);
@@ -6401,15 +6399,68 @@ body.page-weekly-lineup .weekly-lineup-table-wrapper {
 
 /* Remove black fill from filter toolbar */
 body.page-weekly-lineup .filter-toolbar {
-  background: transparent;
+  background: rgba(8, 16, 30, 0.28);
   border-bottom: none;
-  box-shadow: none;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  padding: 6px 8px;
+  border-radius: 10px;
+}
+
+/* Left side: pills & dropdowns in a single row, don't shrink */
+body.page-weekly-lineup .filter-toolbar .ft-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Right side: fetch controls hug the right, never wrap under pills */
+body.page-weekly-lineup .filter-toolbar .ft-right {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* Desktop/tablet toolbar parity with dashboard: stable 2-zone layout */
+@media (min-width: 768px) {
+  body.page-weekly-lineup .filter-toolbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: 12px;
+  }
+
+  body.page-weekly-lineup .filter-toolbar .ft-left {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    min-width: 0;
+  }
+
+  body.page-weekly-lineup .filter-toolbar .ft-left::-webkit-scrollbar {
+    display: none;
+  }
+
+  body.page-weekly-lineup .filter-toolbar .ft-left > * {
+    flex: 0 0 auto;
+  }
+
+  body.page-weekly-lineup .filter-toolbar .ft-right,
+  body.page-weekly-lineup .filter-toolbar .ft-right .fetch-controls-wrapper,
+  body.page-weekly-lineup .filter-toolbar .ft-right .ft-fetch-buttons {
+    flex: 0 0 auto;
+  }
 }
 
 /* Ensure toolbar container is transparent */
 body.page-weekly-lineup .toolbar-container {
   background: transparent;
-  margin-bottom: 0;
+  margin-bottom: 10px;
 }
 
 body.page-weekly-lineup .main-container {

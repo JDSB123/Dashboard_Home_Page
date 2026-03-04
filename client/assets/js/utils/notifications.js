@@ -45,47 +45,51 @@
         
         // Type-specific styling
         const colors = {
-            success: { bg: 'rgba(0, 214, 137, 0.95)', icon: '✓', border: '#00ffaa' },
-            error: { bg: 'rgba(229, 57, 53, 0.95)', icon: '✕', border: '#ff5f6d' },
-            warning: { bg: 'rgba(251, 140, 0, 0.95)', icon: '⚠', border: '#fb8c00' },
-            info: { bg: 'rgba(74, 182, 255, 0.95)', icon: 'ℹ', border: '#4ab6ff' }
+            success: { bg: 'rgba(10, 22, 40, 0.94)', icon: '✓', border: 'rgba(0, 214, 137, 0.45)', accent: '#00d689' },
+            error: { bg: 'rgba(10, 22, 40, 0.94)', icon: '✕', border: 'rgba(229, 57, 53, 0.45)', accent: '#ff5f6d' },
+            warning: { bg: 'rgba(10, 22, 40, 0.94)', icon: '⚠', border: 'rgba(251, 191, 36, 0.40)', accent: '#fbbf24' },
+            info: { bg: 'rgba(10, 22, 40, 0.94)', icon: '›', border: 'rgba(100, 160, 220, 0.35)', accent: '#8bb8e8' }
         };
         
         const style = colors[type] || colors.info;
         
         notification.style.cssText = `
             display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            padding: 14px 18px;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
             background: ${style.bg};
             border: 1px solid ${style.border};
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-            color: white;
-            font-family: 'Cormorant Garamond', Georgia, serif;
-            font-size: 0.95rem;
+            border-left: 3px solid ${style.accent};
+            border-radius: 6px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255,255,255,0.03) inset;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            color: rgba(220, 235, 248, 0.92);
+            font-family: 'Montserrat', 'Inter', system-ui, sans-serif;
+            font-size: 0.78rem;
             font-weight: 500;
-            line-height: 1.4;
+            letter-spacing: 0.02em;
+            line-height: 1.35;
             pointer-events: auto;
             opacity: 0;
-            transform: translateX(100%);
-            transition: opacity 0.3s ease, transform 0.3s ease;
+            transform: translateX(40px);
+            transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
         `;
         
         notification.innerHTML = `
-            <span style="font-size: 1.2rem; line-height: 1;">${style.icon}</span>
+            <span style="font-size: 0.85rem; line-height: 1; color: ${style.accent}; flex-shrink: 0; font-weight: 700;">${style.icon}</span>
             <span style="flex: 1;">${message}</span>
             <button onclick="this.parentElement.remove()" style="
                 background: none;
                 border: none;
-                color: white;
-                opacity: 0.7;
+                color: rgba(220, 235, 248, 0.35);
                 cursor: pointer;
-                font-size: 1.2rem;
-                padding: 0;
+                font-size: 1rem;
+                padding: 0 0 0 4px;
                 line-height: 1;
-            " onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.7">×</button>
+                transition: color 0.15s ease;
+            " onmouseover="this.style.color='rgba(220,235,248,0.8)'" onmouseout="this.style.color='rgba(220,235,248,0.35)'">×</button>
         `;
         
         container.appendChild(notification);
@@ -113,7 +117,7 @@
         if (!notification) return;
         
         notification.style.opacity = '0';
-        notification.style.transform = 'translateX(100%)';
+        notification.style.transform = 'translateX(40px)';
         
         setTimeout(() => {
             notification.remove();

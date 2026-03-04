@@ -1,0 +1,4181 @@
+{
+  "generatedAt": "2026-03-04T21:20:34.647Z",
+  "storageAccount": "gbsvorchestratorstorage",
+  "container": "team-logos",
+  "blobBaseUrl": "https://gbsvorchestratorstorage.blob.core.windows.net/team-logos",
+  "counts": {
+    "leagues": 3,
+    "nba": 30,
+    "nfl": 35,
+    "nhl": 33,
+    "ncaab": 362
+  },
+  "total": 463,
+  "failed": [],
+  "files": [
+    {
+      "blobName": "leagues-500-nba.png",
+      "league": "leagues",
+      "teamName": "NBA",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/leagues/500/nba.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\leagues-500-nba.png"
+    },
+    {
+      "blobName": "leagues-500-nfl.png",
+      "league": "leagues",
+      "teamName": "NFL",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/leagues/500/nfl.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\leagues-500-nfl.png"
+    },
+    {
+      "blobName": "leagues-500-nhl.png",
+      "league": "leagues",
+      "teamName": "NHL",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/leagues/500/nhl.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\leagues-500-nhl.png"
+    },
+    {
+      "blobName": "nba-500-atl.png",
+      "league": "nba",
+      "teamName": "Atlanta Hawks",
+      "abbr": "ATL",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nba/500/atl.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nba-500-atl.png"
+    },
+    {
+      "blobName": "nba-500-bos.png",
+      "league": "nba",
+      "teamName": "Boston Celtics",
+      "abbr": "BOS",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nba/500/bos.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nba-500-bos.png"
+    },
+    {
+      "blobName": "nba-500-bkn.png",
+      "league": "nba",
+      "teamName": "Brooklyn Nets",
+      "abbr": "BKN",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nba/500/bkn.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nba-500-bkn.png"
+    },
+    {
+      "blobName": "nba-500-cha.png",
+      "league": "nba",
+      "teamName": "Charlotte Hornets",
+      "abbr": "CHA",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nba/500/cha.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nba-500-cha.png"
+    },
+    {
+      "blobName": "nba-500-chi.png",
+      "league": "nba",
+      "teamName": "Chicago Bulls",
+      "abbr": "CHI",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nba/500/chi.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nba-500-chi.png"
+    },
+    {
+      "blobName": "nba-500-cle.png",
+      "league": "nba",
+      "teamName": "Cleveland Cavaliers",
+      "abbr": "CLE",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nba/500/cle.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nba-500-cle.png"
+    },
+    {
+      "blobName": "nba-500-dal.png",
+      "league": "nba",
+      "teamName": "Dallas Mavericks",
+      "abbr": "DAL",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nba/500/dal.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nba-500-dal.png"
+    },
+    {
+      "blobName": "nba-500-den.png",
+      "league": "nba",
+      "teamName": "Denver Nuggets",
+      "abbr": "DEN",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nba/500/den.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nba-500-den.png"
+    },
+    {
+      "blobName": "nba-500-det.png",
+      "league": "nba",
+      "teamName": "Detroit Pistons",
+      "abbr": "DET",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nba/500/det.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nba-500-det.png"
+    },
+    {
+      "blobName": "nba-500-gs.png",
+      "league": "nba",
+      "teamName": "Golden State Warriors",
+      "abbr": "GSW",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nba/500/gs.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nba-500-gs.png"
+    },
+    {
+      "blobName": "nba-500-hou.png",
+      "league": "nba",
+      "teamName": "Houston Rockets",
+      "abbr": "HOU",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nba/500/hou.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nba-500-hou.png"
+    },
+    {
+      "blobName": "nba-500-ind.png",
+      "league": "nba",
+      "teamName": "Indiana Pacers",
+      "abbr": "IND",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nba/500/ind.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nba-500-ind.png"
+    },
+    {
+      "blobName": "nba-500-lac.png",
+      "league": "nba",
+      "teamName": "Los Angeles Clippers",
+      "abbr": "LAC",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nba/500/lac.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nba-500-lac.png"
+    },
+    {
+      "blobName": "nba-500-lal.png",
+      "league": "nba",
+      "teamName": "Los Angeles Lakers",
+      "abbr": "LAL",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nba/500/lal.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nba-500-lal.png"
+    },
+    {
+      "blobName": "nba-500-mem.png",
+      "league": "nba",
+      "teamName": "Memphis Grizzlies",
+      "abbr": "MEM",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nba/500/mem.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nba-500-mem.png"
+    },
+    {
+      "blobName": "nba-500-mia.png",
+      "league": "nba",
+      "teamName": "Miami Heat",
+      "abbr": "MIA",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nba/500/mia.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nba-500-mia.png"
+    },
+    {
+      "blobName": "nba-500-mil.png",
+      "league": "nba",
+      "teamName": "Milwaukee Bucks",
+      "abbr": "MIL",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nba/500/mil.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nba-500-mil.png"
+    },
+    {
+      "blobName": "nba-500-min.png",
+      "league": "nba",
+      "teamName": "Minnesota Timberwolves",
+      "abbr": "MIN",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nba/500/min.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nba-500-min.png"
+    },
+    {
+      "blobName": "nba-500-no.png",
+      "league": "nba",
+      "teamName": "New Orleans Pelicans",
+      "abbr": "NOP",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nba/500/no.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nba-500-no.png"
+    },
+    {
+      "blobName": "nba-500-ny.png",
+      "league": "nba",
+      "teamName": "New York Knicks",
+      "abbr": "NYK",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nba/500/ny.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nba-500-ny.png"
+    },
+    {
+      "blobName": "nba-500-okc.png",
+      "league": "nba",
+      "teamName": "Oklahoma City Thunder",
+      "abbr": "OKC",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nba/500/okc.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nba-500-okc.png"
+    },
+    {
+      "blobName": "nba-500-orl.png",
+      "league": "nba",
+      "teamName": "Orlando Magic",
+      "abbr": "ORL",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nba/500/orl.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nba-500-orl.png"
+    },
+    {
+      "blobName": "nba-500-phi.png",
+      "league": "nba",
+      "teamName": "Philadelphia 76ers",
+      "abbr": "PHI",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nba/500/phi.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nba-500-phi.png"
+    },
+    {
+      "blobName": "nba-500-phx.png",
+      "league": "nba",
+      "teamName": "Phoenix Suns",
+      "abbr": "PHX",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nba/500/phx.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nba-500-phx.png"
+    },
+    {
+      "blobName": "nba-500-por.png",
+      "league": "nba",
+      "teamName": "Portland Trail Blazers",
+      "abbr": "POR",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nba/500/por.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nba-500-por.png"
+    },
+    {
+      "blobName": "nba-500-sac.png",
+      "league": "nba",
+      "teamName": "Sacramento Kings",
+      "abbr": "SAC",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nba/500/sac.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nba-500-sac.png"
+    },
+    {
+      "blobName": "nba-500-sa.png",
+      "league": "nba",
+      "teamName": "San Antonio Spurs",
+      "abbr": "SAS",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nba/500/sa.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nba-500-sa.png"
+    },
+    {
+      "blobName": "nba-500-tor.png",
+      "league": "nba",
+      "teamName": "Toronto Raptors",
+      "abbr": "TOR",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nba/500/tor.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nba-500-tor.png"
+    },
+    {
+      "blobName": "nba-500-utah.png",
+      "league": "nba",
+      "teamName": "Utah Jazz",
+      "abbr": "UTA",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nba/500/utah.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nba-500-utah.png"
+    },
+    {
+      "blobName": "nba-500-wsh.png",
+      "league": "nba",
+      "teamName": "Washington Wizards",
+      "abbr": "WAS",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nba/500/wsh.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nba-500-wsh.png"
+    },
+    {
+      "blobName": "nfl-500-ari.png",
+      "league": "nfl",
+      "teamName": "Arizona Cardinals",
+      "abbr": "ARI",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nfl/500/ari.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nfl-500-ari.png"
+    },
+    {
+      "blobName": "nfl-500-atl.png",
+      "league": "nfl",
+      "teamName": "Atlanta Falcons",
+      "abbr": "ATL",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nfl/500/atl.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nfl-500-atl.png"
+    },
+    {
+      "blobName": "nfl-500-bal.png",
+      "league": "nfl",
+      "teamName": "Baltimore Ravens",
+      "abbr": "BAL",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nfl/500/bal.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nfl-500-bal.png"
+    },
+    {
+      "blobName": "nfl-500-buf.png",
+      "league": "nfl",
+      "teamName": "Buffalo Bills",
+      "abbr": "BUF",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nfl/500/buf.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nfl-500-buf.png"
+    },
+    {
+      "blobName": "nfl-500-car.png",
+      "league": "nfl",
+      "teamName": "Carolina Panthers",
+      "abbr": "CAR",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nfl/500/car.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nfl-500-car.png"
+    },
+    {
+      "blobName": "nfl-500-chi.png",
+      "league": "nfl",
+      "teamName": "Chicago Bears",
+      "abbr": "CHI",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nfl/500/chi.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nfl-500-chi.png"
+    },
+    {
+      "blobName": "nfl-500-cin.png",
+      "league": "nfl",
+      "teamName": "Cincinnati Bengals",
+      "abbr": "CIN",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nfl/500/cin.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nfl-500-cin.png"
+    },
+    {
+      "blobName": "nfl-500-cle.png",
+      "league": "nfl",
+      "teamName": "Cleveland Browns",
+      "abbr": "CLE",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nfl/500/cle.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nfl-500-cle.png"
+    },
+    {
+      "blobName": "nfl-500-dal.png",
+      "league": "nfl",
+      "teamName": "Dallas Cowboys",
+      "abbr": "DAL",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nfl/500/dal.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nfl-500-dal.png"
+    },
+    {
+      "blobName": "nfl-500-den.png",
+      "league": "nfl",
+      "teamName": "Denver Broncos",
+      "abbr": "DEN",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nfl/500/den.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nfl-500-den.png"
+    },
+    {
+      "blobName": "nfl-500-det.png",
+      "league": "nfl",
+      "teamName": "Detroit Lions",
+      "abbr": "DET",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nfl/500/det.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nfl-500-det.png"
+    },
+    {
+      "blobName": "nfl-500-gb.png",
+      "league": "nfl",
+      "teamName": "Green Bay Packers",
+      "abbr": "GB",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nfl/500/gb.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nfl-500-gb.png"
+    },
+    {
+      "blobName": "nfl-500-hou.png",
+      "league": "nfl",
+      "teamName": "Houston Texans",
+      "abbr": "HOU",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nfl/500/hou.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nfl-500-hou.png"
+    },
+    {
+      "blobName": "nfl-500-ind.png",
+      "league": "nfl",
+      "teamName": "Indianapolis Colts",
+      "abbr": "IND",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nfl/500/ind.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nfl-500-ind.png"
+    },
+    {
+      "blobName": "nfl-500-jax.png",
+      "league": "nfl",
+      "teamName": "Jacksonville Jaguars",
+      "abbr": "JAX",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nfl/500/jax.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nfl-500-jax.png"
+    },
+    {
+      "blobName": "nfl-500-kc.png",
+      "league": "nfl",
+      "teamName": "Kansas City Chiefs",
+      "abbr": "KC",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nfl/500/kc.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nfl-500-kc.png"
+    },
+    {
+      "blobName": "nfl-500-mia.png",
+      "league": "nfl",
+      "teamName": "Miami Dolphins",
+      "abbr": "MIA",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nfl/500/mia.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nfl-500-mia.png"
+    },
+    {
+      "blobName": "nfl-500-min.png",
+      "league": "nfl",
+      "teamName": "Minnesota Vikings",
+      "abbr": "MIN",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nfl/500/min.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nfl-500-min.png"
+    },
+    {
+      "blobName": "nfl-500-ne.png",
+      "league": "nfl",
+      "teamName": "New England Patriots",
+      "abbr": "NE",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nfl/500/ne.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nfl-500-ne.png"
+    },
+    {
+      "blobName": "nfl-500-no.png",
+      "league": "nfl",
+      "teamName": "New Orleans Saints",
+      "abbr": "NO",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nfl/500/no.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nfl-500-no.png"
+    },
+    {
+      "blobName": "nfl-500-nyg.png",
+      "league": "nfl",
+      "teamName": "New York Giants",
+      "abbr": "NYG",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nfl/500/nyg.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nfl-500-nyg.png"
+    },
+    {
+      "blobName": "nfl-500-nyj.png",
+      "league": "nfl",
+      "teamName": "New York Jets",
+      "abbr": "NYJ",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nfl/500/nyj.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nfl-500-nyj.png"
+    },
+    {
+      "blobName": "nfl-500-oak.png",
+      "league": "nfl",
+      "teamName": "Oakland Raiders",
+      "abbr": "OAK",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nfl/500/oak.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nfl-500-oak.png"
+    },
+    {
+      "blobName": "nfl-500-phi.png",
+      "league": "nfl",
+      "teamName": "Philadelphia Eagles",
+      "abbr": "PHI",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nfl/500/phi.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nfl-500-phi.png"
+    },
+    {
+      "blobName": "nfl-500-pit.png",
+      "league": "nfl",
+      "teamName": "Pittsburgh Steelers",
+      "abbr": "PIT",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nfl/500/pit.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nfl-500-pit.png"
+    },
+    {
+      "blobName": "nfl-500-sd.png",
+      "league": "nfl",
+      "teamName": "San Diego Chargers",
+      "abbr": "SD",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nfl/500/sd.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nfl-500-sd.png"
+    },
+    {
+      "blobName": "nfl-500-sea.png",
+      "league": "nfl",
+      "teamName": "Seattle Seahawks",
+      "abbr": "SEA",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nfl/500/sea.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nfl-500-sea.png"
+    },
+    {
+      "blobName": "nfl-500-sf.png",
+      "league": "nfl",
+      "teamName": "San Francisco 49ers",
+      "abbr": "SF",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nfl/500/sf.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nfl-500-sf.png"
+    },
+    {
+      "blobName": "nfl-500-stl.png",
+      "league": "nfl",
+      "teamName": "St Louis Rams",
+      "abbr": "STL",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nfl/500/stl.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nfl-500-stl.png"
+    },
+    {
+      "blobName": "nfl-500-tb.png",
+      "league": "nfl",
+      "teamName": "Tampa Bay Buccaneers",
+      "abbr": "TB",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nfl/500/tb.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nfl-500-tb.png"
+    },
+    {
+      "blobName": "nfl-500-ten.png",
+      "league": "nfl",
+      "teamName": "Tennessee Titans",
+      "abbr": "TEN",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nfl/500/ten.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nfl-500-ten.png"
+    },
+    {
+      "blobName": "nfl-500-wsh.png",
+      "league": "nfl",
+      "teamName": "Washington Commanders",
+      "abbr": "WAS",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nfl/500/wsh.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nfl-500-wsh.png"
+    },
+    {
+      "blobName": "nfl-500-la.png",
+      "league": "nfl",
+      "teamName": "Los Angeles Rams",
+      "abbr": "LA",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nfl/500/la.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nfl-500-la.png"
+    },
+    {
+      "blobName": "nfl-500-lac.png",
+      "league": "nfl",
+      "teamName": "Los Angeles Chargers",
+      "abbr": "LAC",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nfl/500/lac.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nfl-500-lac.png"
+    },
+    {
+      "blobName": "nfl-500-lv.png",
+      "league": "nfl",
+      "teamName": "Las Vegas Raiders",
+      "abbr": "LV",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nfl/500/lv.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nfl-500-lv.png"
+    },
+    {
+      "blobName": "nhl-500-ana.png",
+      "league": "nhl",
+      "teamName": "Anaheim Ducks",
+      "abbr": "ANA",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nhl/500/ana.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nhl-500-ana.png"
+    },
+    {
+      "blobName": "nhl-500-ari.png",
+      "league": "nhl",
+      "teamName": "Arizona Coyotes",
+      "abbr": "ARI",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nhl/500/ari.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nhl-500-ari.png"
+    },
+    {
+      "blobName": "nhl-500-bos.png",
+      "league": "nhl",
+      "teamName": "Boston Bruins",
+      "abbr": "BOS",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nhl/500/bos.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nhl-500-bos.png"
+    },
+    {
+      "blobName": "nhl-500-buf.png",
+      "league": "nhl",
+      "teamName": "Buffalo Sabres",
+      "abbr": "BUF",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nhl/500/buf.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nhl-500-buf.png"
+    },
+    {
+      "blobName": "nhl-500-cgy.png",
+      "league": "nhl",
+      "teamName": "Calgary Flames",
+      "abbr": "CGY",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nhl/500/cgy.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nhl-500-cgy.png"
+    },
+    {
+      "blobName": "nhl-500-car.png",
+      "league": "nhl",
+      "teamName": "Carolina Hurricanes",
+      "abbr": "CAR",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nhl/500/car.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nhl-500-car.png"
+    },
+    {
+      "blobName": "nhl-500-chi.png",
+      "league": "nhl",
+      "teamName": "Chicago Blackhawks",
+      "abbr": "CHI",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nhl/500/chi.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nhl-500-chi.png"
+    },
+    {
+      "blobName": "nhl-500-col.png",
+      "league": "nhl",
+      "teamName": "Colorado Avalanche",
+      "abbr": "COL",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nhl/500/col.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nhl-500-col.png"
+    },
+    {
+      "blobName": "nhl-500-cbj.png",
+      "league": "nhl",
+      "teamName": "Columbus Blue Jackets",
+      "abbr": "CBJ",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nhl/500/cbj.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nhl-500-cbj.png"
+    },
+    {
+      "blobName": "nhl-500-dal.png",
+      "league": "nhl",
+      "teamName": "Dallas Stars",
+      "abbr": "DAL",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nhl/500/dal.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nhl-500-dal.png"
+    },
+    {
+      "blobName": "nhl-500-det.png",
+      "league": "nhl",
+      "teamName": "Detroit Red Wings",
+      "abbr": "DET",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nhl/500/det.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nhl-500-det.png"
+    },
+    {
+      "blobName": "nhl-500-edm.png",
+      "league": "nhl",
+      "teamName": "Edmonton Oilers",
+      "abbr": "EDM",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nhl/500/edm.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nhl-500-edm.png"
+    },
+    {
+      "blobName": "nhl-500-fla.png",
+      "league": "nhl",
+      "teamName": "Florida Panthers",
+      "abbr": "FLA",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nhl/500/fla.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nhl-500-fla.png"
+    },
+    {
+      "blobName": "nhl-500-la.png",
+      "league": "nhl",
+      "teamName": "Los Angeles Kings",
+      "abbr": "LA",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nhl/500/la.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nhl-500-la.png"
+    },
+    {
+      "blobName": "nhl-500-min.png",
+      "league": "nhl",
+      "teamName": "Minnesota Wild",
+      "abbr": "MIN",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nhl/500/min.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nhl-500-min.png"
+    },
+    {
+      "blobName": "nhl-500-mtl.png",
+      "league": "nhl",
+      "teamName": "Montreal Canadiens",
+      "abbr": "MTL",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nhl/500/mtl.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nhl-500-mtl.png"
+    },
+    {
+      "blobName": "nhl-500-nsh.png",
+      "league": "nhl",
+      "teamName": "Nashville Predators",
+      "abbr": "NSH",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nhl/500/nsh.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nhl-500-nsh.png"
+    },
+    {
+      "blobName": "nhl-500-njd.png",
+      "league": "nhl",
+      "teamName": "New Jersey Devils",
+      "abbr": "NJD",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nhl/500/njd.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nhl-500-njd.png"
+    },
+    {
+      "blobName": "nhl-500-nyi.png",
+      "league": "nhl",
+      "teamName": "New York Islanders",
+      "abbr": "NYI",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nhl/500/nyi.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nhl-500-nyi.png"
+    },
+    {
+      "blobName": "nhl-500-nyr.png",
+      "league": "nhl",
+      "teamName": "New York Rangers",
+      "abbr": "NYR",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nhl/500/nyr.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nhl-500-nyr.png"
+    },
+    {
+      "blobName": "nhl-500-ott.png",
+      "league": "nhl",
+      "teamName": "Ottawa Senators",
+      "abbr": "OTT",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nhl/500/ott.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nhl-500-ott.png"
+    },
+    {
+      "blobName": "nhl-500-phi.png",
+      "league": "nhl",
+      "teamName": "Philadelphia Flyers",
+      "abbr": "PHI",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nhl/500/phi.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nhl-500-phi.png"
+    },
+    {
+      "blobName": "nhl-500-pit.png",
+      "league": "nhl",
+      "teamName": "Pittsburgh Penguins",
+      "abbr": "PIT",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nhl/500/pit.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nhl-500-pit.png"
+    },
+    {
+      "blobName": "nhl-500-sjs.png",
+      "league": "nhl",
+      "teamName": "San Jose Sharks",
+      "abbr": "SJS",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nhl/500/sj.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nhl-500-sjs.png"
+    },
+    {
+      "blobName": "nhl-500-sea.png",
+      "league": "nhl",
+      "teamName": "Seattle Kraken",
+      "abbr": "SEA",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nhl/500/sea.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nhl-500-sea.png"
+    },
+    {
+      "blobName": "nhl-500-stl.png",
+      "league": "nhl",
+      "teamName": "St. Louis Blues",
+      "abbr": "STL",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nhl/500/stl.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nhl-500-stl.png"
+    },
+    {
+      "blobName": "nhl-500-tbl.png",
+      "league": "nhl",
+      "teamName": "Tampa Bay Lightning",
+      "abbr": "TBL",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nhl/500/tb.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nhl-500-tbl.png"
+    },
+    {
+      "blobName": "nhl-500-tor.png",
+      "league": "nhl",
+      "teamName": "Toronto Maple Leafs",
+      "abbr": "TOR",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nhl/500/tor.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nhl-500-tor.png"
+    },
+    {
+      "blobName": "nhl-500-uta.png",
+      "league": "nhl",
+      "teamName": "Utah Hockey Club",
+      "abbr": "UTA",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nhl/500/uta.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nhl-500-uta.png"
+    },
+    {
+      "blobName": "nhl-500-van.png",
+      "league": "nhl",
+      "teamName": "Vancouver Canucks",
+      "abbr": "VAN",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nhl/500/van.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nhl-500-van.png"
+    },
+    {
+      "blobName": "nhl-500-vgk.png",
+      "league": "nhl",
+      "teamName": "Vegas Golden Knights",
+      "abbr": "VGK",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nhl/500/vgk.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nhl-500-vgk.png"
+    },
+    {
+      "blobName": "nhl-500-wpg.png",
+      "league": "nhl",
+      "teamName": "Winnipeg Jets",
+      "abbr": "WPG",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nhl/500/wpg.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nhl-500-wpg.png"
+    },
+    {
+      "blobName": "nhl-500-wsh.png",
+      "league": "nhl",
+      "teamName": "Washington Capitals",
+      "abbr": "WSH",
+      "espnId": null,
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/nhl/500/wsh.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\nhl-500-wsh.png"
+    },
+    {
+      "blobName": "ncaa-500-2000.png",
+      "league": "ncaab",
+      "teamName": "Abilene Christian Wildcats",
+      "abbr": "ACU",
+      "espnId": "2000",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2000.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2000.png"
+    },
+    {
+      "blobName": "ncaa-500-2005.png",
+      "league": "ncaab",
+      "teamName": "Air Force Falcons",
+      "abbr": "AF",
+      "espnId": "2005",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2005.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2005.png"
+    },
+    {
+      "blobName": "ncaa-500-2006.png",
+      "league": "ncaab",
+      "teamName": "Akron Zips",
+      "abbr": "AKR",
+      "espnId": "2006",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2006.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2006.png"
+    },
+    {
+      "blobName": "ncaa-500-2010.png",
+      "league": "ncaab",
+      "teamName": "Alabama A&M Bulldogs",
+      "abbr": "AAMU",
+      "espnId": "2010",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2010.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2010.png"
+    },
+    {
+      "blobName": "ncaa-500-333.png",
+      "league": "ncaab",
+      "teamName": "Alabama Crimson Tide",
+      "abbr": "ALA",
+      "espnId": "333",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/333.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-333.png"
+    },
+    {
+      "blobName": "ncaa-500-2011.png",
+      "league": "ncaab",
+      "teamName": "Alabama State Hornets",
+      "abbr": "ALST",
+      "espnId": "2011",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2011.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2011.png"
+    },
+    {
+      "blobName": "ncaa-500-2016.png",
+      "league": "ncaab",
+      "teamName": "Alcorn State Braves",
+      "abbr": "ALCN",
+      "espnId": "2016",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2016.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2016.png"
+    },
+    {
+      "blobName": "ncaa-500-44.png",
+      "league": "ncaab",
+      "teamName": "American University Eagles",
+      "abbr": "AMER",
+      "espnId": "44",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/44.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-44.png"
+    },
+    {
+      "blobName": "ncaa-500-2026.png",
+      "league": "ncaab",
+      "teamName": "App State Mountaineers",
+      "abbr": "APP",
+      "espnId": "2026",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2026.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2026.png"
+    },
+    {
+      "blobName": "ncaa-500-9.png",
+      "league": "ncaab",
+      "teamName": "Arizona State Sun Devils",
+      "abbr": "ASU",
+      "espnId": "9",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/9.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-9.png"
+    },
+    {
+      "blobName": "ncaa-500-12.png",
+      "league": "ncaab",
+      "teamName": "Arizona Wildcats",
+      "abbr": "ARIZ",
+      "espnId": "12",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/12.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-12.png"
+    },
+    {
+      "blobName": "ncaa-500-8.png",
+      "league": "ncaab",
+      "teamName": "Arkansas Razorbacks",
+      "abbr": "ARK",
+      "espnId": "8",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/8.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-8.png"
+    },
+    {
+      "blobName": "ncaa-500-2032.png",
+      "league": "ncaab",
+      "teamName": "Arkansas State Red Wolves",
+      "abbr": "ARST",
+      "espnId": "2032",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2032.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2032.png"
+    },
+    {
+      "blobName": "ncaa-500-2029.png",
+      "league": "ncaab",
+      "teamName": "Arkansas-Pine Bluff Golden Lions",
+      "abbr": "UAPB",
+      "espnId": "2029",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2029.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2029.png"
+    },
+    {
+      "blobName": "ncaa-500-349.png",
+      "league": "ncaab",
+      "teamName": "Army Black Knights",
+      "abbr": "ARMY",
+      "espnId": "349",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/349.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-349.png"
+    },
+    {
+      "blobName": "ncaa-500-2.png",
+      "league": "ncaab",
+      "teamName": "Auburn Tigers",
+      "abbr": "AUB",
+      "espnId": "2",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2.png"
+    },
+    {
+      "blobName": "ncaa-500-2046.png",
+      "league": "ncaab",
+      "teamName": "Austin Peay Governors",
+      "abbr": "APSU",
+      "espnId": "2046",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2046.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2046.png"
+    },
+    {
+      "blobName": "ncaa-500-252.png",
+      "league": "ncaab",
+      "teamName": "BYU Cougars",
+      "abbr": "BYU",
+      "espnId": "252",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/252.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-252.png"
+    },
+    {
+      "blobName": "ncaa-500-2050.png",
+      "league": "ncaab",
+      "teamName": "Ball State Cardinals",
+      "abbr": "BALL",
+      "espnId": "2050",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2050.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2050.png"
+    },
+    {
+      "blobName": "ncaa-500-239.png",
+      "league": "ncaab",
+      "teamName": "Baylor Bears",
+      "abbr": "BAY",
+      "espnId": "239",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/239.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-239.png"
+    },
+    {
+      "blobName": "ncaa-500-91.png",
+      "league": "ncaab",
+      "teamName": "Bellarmine Knights",
+      "abbr": "BELL",
+      "espnId": "91",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/91.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-91.png"
+    },
+    {
+      "blobName": "ncaa-500-2057.png",
+      "league": "ncaab",
+      "teamName": "Belmont Bruins",
+      "abbr": "BEL",
+      "espnId": "2057",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2057.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2057.png"
+    },
+    {
+      "blobName": "ncaa-500-2065.png",
+      "league": "ncaab",
+      "teamName": "Bethune-Cookman Wildcats",
+      "abbr": "BCU",
+      "espnId": "2065",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2065.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2065.png"
+    },
+    {
+      "blobName": "ncaa-500-2066.png",
+      "league": "ncaab",
+      "teamName": "Binghamton Bearcats",
+      "abbr": "BING",
+      "espnId": "2066",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2066.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2066.png"
+    },
+    {
+      "blobName": "ncaa-500-68.png",
+      "league": "ncaab",
+      "teamName": "Boise State Broncos",
+      "abbr": "BOIS",
+      "espnId": "68",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/68.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-68.png"
+    },
+    {
+      "blobName": "ncaa-500-103.png",
+      "league": "ncaab",
+      "teamName": "Boston College Eagles",
+      "abbr": "BC",
+      "espnId": "103",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/103.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-103.png"
+    },
+    {
+      "blobName": "ncaa-500-104.png",
+      "league": "ncaab",
+      "teamName": "Boston University Terriers",
+      "abbr": "BU",
+      "espnId": "104",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/104.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-104.png"
+    },
+    {
+      "blobName": "ncaa-500-189.png",
+      "league": "ncaab",
+      "teamName": "Bowling Green Falcons",
+      "abbr": "BGSU",
+      "espnId": "189",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/189.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-189.png"
+    },
+    {
+      "blobName": "ncaa-500-71.png",
+      "league": "ncaab",
+      "teamName": "Bradley Braves",
+      "abbr": "BRAD",
+      "espnId": "71",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/71.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-71.png"
+    },
+    {
+      "blobName": "ncaa-500-225.png",
+      "league": "ncaab",
+      "teamName": "Brown Bears",
+      "abbr": "BRWN",
+      "espnId": "225",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/225.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-225.png"
+    },
+    {
+      "blobName": "ncaa-500-2803.png",
+      "league": "ncaab",
+      "teamName": "Bryant Bulldogs",
+      "abbr": "BRY",
+      "espnId": "2803",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2803.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2803.png"
+    },
+    {
+      "blobName": "ncaa-500-2083.png",
+      "league": "ncaab",
+      "teamName": "Bucknell Bison",
+      "abbr": "BUCK",
+      "espnId": "2083",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2083.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2083.png"
+    },
+    {
+      "blobName": "ncaa-500-2084.png",
+      "league": "ncaab",
+      "teamName": "Buffalo Bulls",
+      "abbr": "BUF",
+      "espnId": "2084",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2084.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2084.png"
+    },
+    {
+      "blobName": "ncaa-500-2086.png",
+      "league": "ncaab",
+      "teamName": "Butler Bulldogs",
+      "abbr": "BUT",
+      "espnId": "2086",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2086.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2086.png"
+    },
+    {
+      "blobName": "ncaa-500-13.png",
+      "league": "ncaab",
+      "teamName": "Cal Poly Mustangs",
+      "abbr": "CP",
+      "espnId": "13",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/13.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-13.png"
+    },
+    {
+      "blobName": "ncaa-500-2934.png",
+      "league": "ncaab",
+      "teamName": "Cal State Bakersfield Roadrunners",
+      "abbr": "CSUB",
+      "espnId": "2934",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2934.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2934.png"
+    },
+    {
+      "blobName": "ncaa-500-2239.png",
+      "league": "ncaab",
+      "teamName": "Cal State Fullerton Titans",
+      "abbr": "CSUF",
+      "espnId": "2239",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2239.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2239.png"
+    },
+    {
+      "blobName": "ncaa-500-2463.png",
+      "league": "ncaab",
+      "teamName": "Cal State Northridge Matadors",
+      "abbr": "CSUN",
+      "espnId": "2463",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2463.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2463.png"
+    },
+    {
+      "blobName": "ncaa-500-2856.png",
+      "league": "ncaab",
+      "teamName": "California Baptist Lancers",
+      "abbr": "CBU",
+      "espnId": "2856",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2856.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2856.png"
+    },
+    {
+      "blobName": "ncaa-500-25.png",
+      "league": "ncaab",
+      "teamName": "California Golden Bears",
+      "abbr": "CAL",
+      "espnId": "25",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/25.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-25.png"
+    },
+    {
+      "blobName": "ncaa-500-2097.png",
+      "league": "ncaab",
+      "teamName": "Campbell Fighting Camels",
+      "abbr": "CAM",
+      "espnId": "2097",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2097.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2097.png"
+    },
+    {
+      "blobName": "ncaa-500-2099.png",
+      "league": "ncaab",
+      "teamName": "Canisius Golden Griffins",
+      "abbr": "CAN",
+      "espnId": "2099",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2099.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2099.png"
+    },
+    {
+      "blobName": "ncaa-500-2110.png",
+      "league": "ncaab",
+      "teamName": "Central Arkansas Bears",
+      "abbr": "CARK",
+      "espnId": "2110",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2110.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2110.png"
+    },
+    {
+      "blobName": "ncaa-500-2115.png",
+      "league": "ncaab",
+      "teamName": "Central Connecticut Blue Devils",
+      "abbr": "CCSU",
+      "espnId": "2115",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2115.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2115.png"
+    },
+    {
+      "blobName": "ncaa-500-2117.png",
+      "league": "ncaab",
+      "teamName": "Central Michigan Chippewas",
+      "abbr": "CMU",
+      "espnId": "2117",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2117.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2117.png"
+    },
+    {
+      "blobName": "ncaa-500-232.png",
+      "league": "ncaab",
+      "teamName": "Charleston Cougars",
+      "abbr": "COFC",
+      "espnId": "232",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/232.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-232.png"
+    },
+    {
+      "blobName": "ncaa-500-2127.png",
+      "league": "ncaab",
+      "teamName": "Charleston Southern Buccaneers",
+      "abbr": "CHSO",
+      "espnId": "2127",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2127.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2127.png"
+    },
+    {
+      "blobName": "ncaa-500-2429.png",
+      "league": "ncaab",
+      "teamName": "Charlotte 49ers",
+      "abbr": "CLT",
+      "espnId": "2429",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2429.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2429.png"
+    },
+    {
+      "blobName": "ncaa-500-236.png",
+      "league": "ncaab",
+      "teamName": "Chattanooga Mocs",
+      "abbr": "UTC",
+      "espnId": "236",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/236.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-236.png"
+    },
+    {
+      "blobName": "ncaa-500-2130.png",
+      "league": "ncaab",
+      "teamName": "Chicago State Cougars",
+      "abbr": "CHST",
+      "espnId": "2130",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2130.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2130.png"
+    },
+    {
+      "blobName": "ncaa-500-2132.png",
+      "league": "ncaab",
+      "teamName": "Cincinnati Bearcats",
+      "abbr": "CIN",
+      "espnId": "2132",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2132.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2132.png"
+    },
+    {
+      "blobName": "ncaa-500-228.png",
+      "league": "ncaab",
+      "teamName": "Clemson Tigers",
+      "abbr": "CLEM",
+      "espnId": "228",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/228.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-228.png"
+    },
+    {
+      "blobName": "ncaa-500-325.png",
+      "league": "ncaab",
+      "teamName": "Cleveland State Vikings",
+      "abbr": "CLE",
+      "espnId": "325",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/325.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-325.png"
+    },
+    {
+      "blobName": "ncaa-500-324.png",
+      "league": "ncaab",
+      "teamName": "Coastal Carolina Chanticleers",
+      "abbr": "CCU",
+      "espnId": "324",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/324.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-324.png"
+    },
+    {
+      "blobName": "ncaa-500-2142.png",
+      "league": "ncaab",
+      "teamName": "Colgate Raiders",
+      "abbr": "COLG",
+      "espnId": "2142",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2142.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2142.png"
+    },
+    {
+      "blobName": "ncaa-500-38.png",
+      "league": "ncaab",
+      "teamName": "Colorado Buffaloes",
+      "abbr": "COLO",
+      "espnId": "38",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/38.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-38.png"
+    },
+    {
+      "blobName": "ncaa-500-36.png",
+      "league": "ncaab",
+      "teamName": "Colorado State Rams",
+      "abbr": "CSU",
+      "espnId": "36",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/36.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-36.png"
+    },
+    {
+      "blobName": "ncaa-500-171.png",
+      "league": "ncaab",
+      "teamName": "Columbia Lions",
+      "abbr": "COLU",
+      "espnId": "171",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/171.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-171.png"
+    },
+    {
+      "blobName": "ncaa-500-2154.png",
+      "league": "ncaab",
+      "teamName": "Coppin State Eagles",
+      "abbr": "COPP",
+      "espnId": "2154",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2154.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2154.png"
+    },
+    {
+      "blobName": "ncaa-500-172.png",
+      "league": "ncaab",
+      "teamName": "Cornell Big Red",
+      "abbr": "COR",
+      "espnId": "172",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/172.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-172.png"
+    },
+    {
+      "blobName": "ncaa-500-156.png",
+      "league": "ncaab",
+      "teamName": "Creighton Bluejays",
+      "abbr": "CREI",
+      "espnId": "156",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/156.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-156.png"
+    },
+    {
+      "blobName": "ncaa-500-159.png",
+      "league": "ncaab",
+      "teamName": "Dartmouth Big Green",
+      "abbr": "DART",
+      "espnId": "159",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/159.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-159.png"
+    },
+    {
+      "blobName": "ncaa-500-2166.png",
+      "league": "ncaab",
+      "teamName": "Davidson Wildcats",
+      "abbr": "DAV",
+      "espnId": "2166",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2166.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2166.png"
+    },
+    {
+      "blobName": "ncaa-500-2168.png",
+      "league": "ncaab",
+      "teamName": "Dayton Flyers",
+      "abbr": "DAY",
+      "espnId": "2168",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2168.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2168.png"
+    },
+    {
+      "blobName": "ncaa-500-305.png",
+      "league": "ncaab",
+      "teamName": "DePaul Blue Demons",
+      "abbr": "DEP",
+      "espnId": "305",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/305.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-305.png"
+    },
+    {
+      "blobName": "ncaa-500-48.png",
+      "league": "ncaab",
+      "teamName": "Delaware Blue Hens",
+      "abbr": "DEL",
+      "espnId": "48",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/48.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-48.png"
+    },
+    {
+      "blobName": "ncaa-500-2169.png",
+      "league": "ncaab",
+      "teamName": "Delaware State Hornets",
+      "abbr": "DSU",
+      "espnId": "2169",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2169.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2169.png"
+    },
+    {
+      "blobName": "ncaa-500-2172.png",
+      "league": "ncaab",
+      "teamName": "Denver Pioneers",
+      "abbr": "DEN",
+      "espnId": "2172",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2172.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2172.png"
+    },
+    {
+      "blobName": "ncaa-500-2174.png",
+      "league": "ncaab",
+      "teamName": "Detroit Mercy Titans",
+      "abbr": "DETM",
+      "espnId": "2174",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2174.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2174.png"
+    },
+    {
+      "blobName": "ncaa-500-2181.png",
+      "league": "ncaab",
+      "teamName": "Drake Bulldogs",
+      "abbr": "DRKE",
+      "espnId": "2181",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2181.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2181.png"
+    },
+    {
+      "blobName": "ncaa-500-2182.png",
+      "league": "ncaab",
+      "teamName": "Drexel Dragons",
+      "abbr": "DREX",
+      "espnId": "2182",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2182.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2182.png"
+    },
+    {
+      "blobName": "ncaa-500-150.png",
+      "league": "ncaab",
+      "teamName": "Duke Blue Devils",
+      "abbr": "DUKE",
+      "espnId": "150",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/150.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-150.png"
+    },
+    {
+      "blobName": "ncaa-500-2184.png",
+      "league": "ncaab",
+      "teamName": "Duquesne Dukes",
+      "abbr": "DUQ",
+      "espnId": "2184",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2184.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2184.png"
+    },
+    {
+      "blobName": "ncaa-500-151.png",
+      "league": "ncaab",
+      "teamName": "East Carolina Pirates",
+      "abbr": "ECU",
+      "espnId": "151",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/151.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-151.png"
+    },
+    {
+      "blobName": "ncaa-500-2193.png",
+      "league": "ncaab",
+      "teamName": "East Tennessee State Buccaneers",
+      "abbr": "ETSU",
+      "espnId": "2193",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2193.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2193.png"
+    },
+    {
+      "blobName": "ncaa-500-2837.png",
+      "league": "ncaab",
+      "teamName": "East Texas A&M Lions",
+      "abbr": "ETAM",
+      "espnId": "2837",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2837.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2837.png"
+    },
+    {
+      "blobName": "ncaa-500-2197.png",
+      "league": "ncaab",
+      "teamName": "Eastern Illinois Panthers",
+      "abbr": "EIU",
+      "espnId": "2197",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2197.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2197.png"
+    },
+    {
+      "blobName": "ncaa-500-2198.png",
+      "league": "ncaab",
+      "teamName": "Eastern Kentucky Colonels",
+      "abbr": "EKU",
+      "espnId": "2198",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2198.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2198.png"
+    },
+    {
+      "blobName": "ncaa-500-2199.png",
+      "league": "ncaab",
+      "teamName": "Eastern Michigan Eagles",
+      "abbr": "EMU",
+      "espnId": "2199",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2199.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2199.png"
+    },
+    {
+      "blobName": "ncaa-500-331.png",
+      "league": "ncaab",
+      "teamName": "Eastern Washington Eagles",
+      "abbr": "EWU",
+      "espnId": "331",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/331.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-331.png"
+    },
+    {
+      "blobName": "ncaa-500-2210.png",
+      "league": "ncaab",
+      "teamName": "Elon Phoenix",
+      "abbr": "ELON",
+      "espnId": "2210",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2210.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2210.png"
+    },
+    {
+      "blobName": "ncaa-500-339.png",
+      "league": "ncaab",
+      "teamName": "Evansville Purple Aces",
+      "abbr": "EVAN",
+      "espnId": "339",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/339.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-339.png"
+    },
+    {
+      "blobName": "ncaa-500-2217.png",
+      "league": "ncaab",
+      "teamName": "Fairfield Stags",
+      "abbr": "FAIR",
+      "espnId": "2217",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2217.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2217.png"
+    },
+    {
+      "blobName": "ncaa-500-161.png",
+      "league": "ncaab",
+      "teamName": "Fairleigh Dickinson Knights",
+      "abbr": "FDU",
+      "espnId": "161",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/161.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-161.png"
+    },
+    {
+      "blobName": "ncaa-500-50.png",
+      "league": "ncaab",
+      "teamName": "Florida A&M Rattlers",
+      "abbr": "FAMU",
+      "espnId": "50",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/50.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-50.png"
+    },
+    {
+      "blobName": "ncaa-500-2226.png",
+      "league": "ncaab",
+      "teamName": "Florida Atlantic Owls",
+      "abbr": "FAU",
+      "espnId": "2226",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2226.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2226.png"
+    },
+    {
+      "blobName": "ncaa-500-57.png",
+      "league": "ncaab",
+      "teamName": "Florida Gators",
+      "abbr": "FLA",
+      "espnId": "57",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/57.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-57.png"
+    },
+    {
+      "blobName": "ncaa-500-526.png",
+      "league": "ncaab",
+      "teamName": "Florida Gulf Coast Eagles",
+      "abbr": "FGCU",
+      "espnId": "526",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/526.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-526.png"
+    },
+    {
+      "blobName": "ncaa-500-2229.png",
+      "league": "ncaab",
+      "teamName": "Florida International Panthers",
+      "abbr": "FIU",
+      "espnId": "2229",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2229.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2229.png"
+    },
+    {
+      "blobName": "ncaa-500-52.png",
+      "league": "ncaab",
+      "teamName": "Florida State Seminoles",
+      "abbr": "FSU",
+      "espnId": "52",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/52.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-52.png"
+    },
+    {
+      "blobName": "ncaa-500-2230.png",
+      "league": "ncaab",
+      "teamName": "Fordham Rams",
+      "abbr": "FOR",
+      "espnId": "2230",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2230.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2230.png"
+    },
+    {
+      "blobName": "ncaa-500-278.png",
+      "league": "ncaab",
+      "teamName": "Fresno State Bulldogs",
+      "abbr": "FRES",
+      "espnId": "278",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/278.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-278.png"
+    },
+    {
+      "blobName": "ncaa-500-231.png",
+      "league": "ncaab",
+      "teamName": "Furman Paladins",
+      "abbr": "FUR",
+      "espnId": "231",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/231.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-231.png"
+    },
+    {
+      "blobName": "ncaa-500-2241.png",
+      "league": "ncaab",
+      "teamName": "Gardner-Webb Runnin' Bulldogs",
+      "abbr": "GWEB",
+      "espnId": "2241",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2241.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2241.png"
+    },
+    {
+      "blobName": "ncaa-500-2244.png",
+      "league": "ncaab",
+      "teamName": "George Mason Patriots",
+      "abbr": "GMU",
+      "espnId": "2244",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2244.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2244.png"
+    },
+    {
+      "blobName": "ncaa-500-45.png",
+      "league": "ncaab",
+      "teamName": "George Washington Revolutionaries",
+      "abbr": "GW",
+      "espnId": "45",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/45.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-45.png"
+    },
+    {
+      "blobName": "ncaa-500-46.png",
+      "league": "ncaab",
+      "teamName": "Georgetown Hoyas",
+      "abbr": "GTWN",
+      "espnId": "46",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/46.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-46.png"
+    },
+    {
+      "blobName": "ncaa-500-61.png",
+      "league": "ncaab",
+      "teamName": "Georgia Bulldogs",
+      "abbr": "UGA",
+      "espnId": "61",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/61.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-61.png"
+    },
+    {
+      "blobName": "ncaa-500-290.png",
+      "league": "ncaab",
+      "teamName": "Georgia Southern Eagles",
+      "abbr": "GASO",
+      "espnId": "290",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/290.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-290.png"
+    },
+    {
+      "blobName": "ncaa-500-2247.png",
+      "league": "ncaab",
+      "teamName": "Georgia State Panthers",
+      "abbr": "GAST",
+      "espnId": "2247",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2247.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2247.png"
+    },
+    {
+      "blobName": "ncaa-500-59.png",
+      "league": "ncaab",
+      "teamName": "Georgia Tech Yellow Jackets",
+      "abbr": "GT",
+      "espnId": "59",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/59.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-59.png"
+    },
+    {
+      "blobName": "ncaa-500-2250.png",
+      "league": "ncaab",
+      "teamName": "Gonzaga Bulldogs",
+      "abbr": "GONZ",
+      "espnId": "2250",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2250.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2250.png"
+    },
+    {
+      "blobName": "ncaa-500-2755.png",
+      "league": "ncaab",
+      "teamName": "Grambling Tigers",
+      "abbr": "GRAM",
+      "espnId": "2755",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2755.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2755.png"
+    },
+    {
+      "blobName": "ncaa-500-2253.png",
+      "league": "ncaab",
+      "teamName": "Grand Canyon Lopes",
+      "abbr": "GCU",
+      "espnId": "2253",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2253.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2253.png"
+    },
+    {
+      "blobName": "ncaa-500-2739.png",
+      "league": "ncaab",
+      "teamName": "Green Bay Phoenix",
+      "abbr": "GB",
+      "espnId": "2739",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2739.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2739.png"
+    },
+    {
+      "blobName": "ncaa-500-2261.png",
+      "league": "ncaab",
+      "teamName": "Hampton Pirates",
+      "abbr": "HAMP",
+      "espnId": "2261",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2261.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2261.png"
+    },
+    {
+      "blobName": "ncaa-500-108.png",
+      "league": "ncaab",
+      "teamName": "Harvard Crimson",
+      "abbr": "HARV",
+      "espnId": "108",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/108.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-108.png"
+    },
+    {
+      "blobName": "ncaa-500-62.png",
+      "league": "ncaab",
+      "teamName": "Hawai'i Rainbow Warriors",
+      "abbr": "HAW",
+      "espnId": "62",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/62.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-62.png"
+    },
+    {
+      "blobName": "ncaa-500-2272.png",
+      "league": "ncaab",
+      "teamName": "High Point Panthers",
+      "abbr": "HPU",
+      "espnId": "2272",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2272.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2272.png"
+    },
+    {
+      "blobName": "ncaa-500-2275.png",
+      "league": "ncaab",
+      "teamName": "Hofstra Pride",
+      "abbr": "HOF",
+      "espnId": "2275",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2275.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2275.png"
+    },
+    {
+      "blobName": "ncaa-500-107.png",
+      "league": "ncaab",
+      "teamName": "Holy Cross Crusaders",
+      "abbr": "HC",
+      "espnId": "107",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/107.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-107.png"
+    },
+    {
+      "blobName": "ncaa-500-2277.png",
+      "league": "ncaab",
+      "teamName": "Houston Christian Huskies",
+      "abbr": "HCU",
+      "espnId": "2277",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2277.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2277.png"
+    },
+    {
+      "blobName": "ncaa-500-248.png",
+      "league": "ncaab",
+      "teamName": "Houston Cougars",
+      "abbr": "HOU",
+      "espnId": "248",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/248.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-248.png"
+    },
+    {
+      "blobName": "ncaa-500-47.png",
+      "league": "ncaab",
+      "teamName": "Howard Bison",
+      "abbr": "HOW",
+      "espnId": "47",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/47.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-47.png"
+    },
+    {
+      "blobName": "ncaa-500-85.png",
+      "league": "ncaab",
+      "teamName": "IU Indianapolis Jaguars",
+      "abbr": "IUIN",
+      "espnId": "85",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/85.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-85.png"
+    },
+    {
+      "blobName": "ncaa-500-304.png",
+      "league": "ncaab",
+      "teamName": "Idaho State Bengals",
+      "abbr": "IDST",
+      "espnId": "304",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/304.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-304.png"
+    },
+    {
+      "blobName": "ncaa-500-70.png",
+      "league": "ncaab",
+      "teamName": "Idaho Vandals",
+      "abbr": "IDHO",
+      "espnId": "70",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/70.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-70.png"
+    },
+    {
+      "blobName": "ncaa-500-356.png",
+      "league": "ncaab",
+      "teamName": "Illinois Fighting Illini",
+      "abbr": "ILL",
+      "espnId": "356",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/356.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-356.png"
+    },
+    {
+      "blobName": "ncaa-500-2287.png",
+      "league": "ncaab",
+      "teamName": "Illinois State Redbirds",
+      "abbr": "ILST",
+      "espnId": "2287",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2287.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2287.png"
+    },
+    {
+      "blobName": "ncaa-500-2916.png",
+      "league": "ncaab",
+      "teamName": "Incarnate Word Cardinals",
+      "abbr": "UIW",
+      "espnId": "2916",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2916.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2916.png"
+    },
+    {
+      "blobName": "ncaa-500-84.png",
+      "league": "ncaab",
+      "teamName": "Indiana Hoosiers",
+      "abbr": "IU",
+      "espnId": "84",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/84.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-84.png"
+    },
+    {
+      "blobName": "ncaa-500-282.png",
+      "league": "ncaab",
+      "teamName": "Indiana State Sycamores",
+      "abbr": "INST",
+      "espnId": "282",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/282.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-282.png"
+    },
+    {
+      "blobName": "ncaa-500-314.png",
+      "league": "ncaab",
+      "teamName": "Iona Gaels",
+      "abbr": "IONA",
+      "espnId": "314",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/314.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-314.png"
+    },
+    {
+      "blobName": "ncaa-500-2294.png",
+      "league": "ncaab",
+      "teamName": "Iowa Hawkeyes",
+      "abbr": "IOWA",
+      "espnId": "2294",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2294.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2294.png"
+    },
+    {
+      "blobName": "ncaa-500-66.png",
+      "league": "ncaab",
+      "teamName": "Iowa State Cyclones",
+      "abbr": "ISU",
+      "espnId": "66",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/66.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-66.png"
+    },
+    {
+      "blobName": "ncaa-500-2296.png",
+      "league": "ncaab",
+      "teamName": "Jackson State Tigers",
+      "abbr": "JKST",
+      "espnId": "2296",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2296.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2296.png"
+    },
+    {
+      "blobName": "ncaa-500-294.png",
+      "league": "ncaab",
+      "teamName": "Jacksonville Dolphins",
+      "abbr": "JAX",
+      "espnId": "294",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/294.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-294.png"
+    },
+    {
+      "blobName": "ncaa-500-55.png",
+      "league": "ncaab",
+      "teamName": "Jacksonville State Gamecocks",
+      "abbr": "JXST",
+      "espnId": "55",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/55.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-55.png"
+    },
+    {
+      "blobName": "ncaa-500-256.png",
+      "league": "ncaab",
+      "teamName": "James Madison Dukes",
+      "abbr": "JMU",
+      "espnId": "256",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/256.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-256.png"
+    },
+    {
+      "blobName": "ncaa-500-140.png",
+      "league": "ncaab",
+      "teamName": "Kansas City Roos",
+      "abbr": "KC",
+      "espnId": "140",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/140.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-140.png"
+    },
+    {
+      "blobName": "ncaa-500-2305.png",
+      "league": "ncaab",
+      "teamName": "Kansas Jayhawks",
+      "abbr": "KU",
+      "espnId": "2305",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2305.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2305.png"
+    },
+    {
+      "blobName": "ncaa-500-2306.png",
+      "league": "ncaab",
+      "teamName": "Kansas State Wildcats",
+      "abbr": "KSU",
+      "espnId": "2306",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2306.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2306.png"
+    },
+    {
+      "blobName": "ncaa-500-338.png",
+      "league": "ncaab",
+      "teamName": "Kennesaw State Owls",
+      "abbr": "KENN",
+      "espnId": "338",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/338.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-338.png"
+    },
+    {
+      "blobName": "ncaa-500-2309.png",
+      "league": "ncaab",
+      "teamName": "Kent State Golden Flashes",
+      "abbr": "KENT",
+      "espnId": "2309",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2309.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2309.png"
+    },
+    {
+      "blobName": "ncaa-500-96.png",
+      "league": "ncaab",
+      "teamName": "Kentucky Wildcats",
+      "abbr": "UK",
+      "espnId": "96",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/96.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-96.png"
+    },
+    {
+      "blobName": "ncaa-500-99.png",
+      "league": "ncaab",
+      "teamName": "LSU Tigers",
+      "abbr": "LSU",
+      "espnId": "99",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/99.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-99.png"
+    },
+    {
+      "blobName": "ncaa-500-2325.png",
+      "league": "ncaab",
+      "teamName": "La Salle Explorers",
+      "abbr": "LAS",
+      "espnId": "2325",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2325.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2325.png"
+    },
+    {
+      "blobName": "ncaa-500-322.png",
+      "league": "ncaab",
+      "teamName": "Lafayette Leopards",
+      "abbr": "LAF",
+      "espnId": "322",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/322.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-322.png"
+    },
+    {
+      "blobName": "ncaa-500-2320.png",
+      "league": "ncaab",
+      "teamName": "Lamar Cardinals",
+      "abbr": "LAM",
+      "espnId": "2320",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2320.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2320.png"
+    },
+    {
+      "blobName": "ncaa-500-2330.png",
+      "league": "ncaab",
+      "teamName": "Le Moyne Dolphins",
+      "abbr": "LEM",
+      "espnId": "2330",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2330.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2330.png"
+    },
+    {
+      "blobName": "ncaa-500-2329.png",
+      "league": "ncaab",
+      "teamName": "Lehigh Mountain Hawks",
+      "abbr": "LEH",
+      "espnId": "2329",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2329.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2329.png"
+    },
+    {
+      "blobName": "ncaa-500-2335.png",
+      "league": "ncaab",
+      "teamName": "Liberty Flames",
+      "abbr": "LIB",
+      "espnId": "2335",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2335.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2335.png"
+    },
+    {
+      "blobName": "ncaa-500-288.png",
+      "league": "ncaab",
+      "teamName": "Lipscomb Bisons",
+      "abbr": "LIP",
+      "espnId": "288",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/288.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-288.png"
+    },
+    {
+      "blobName": "ncaa-500-2031.png",
+      "league": "ncaab",
+      "teamName": "Little Rock Trojans",
+      "abbr": "LR",
+      "espnId": "2031",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2031.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2031.png"
+    },
+    {
+      "blobName": "ncaa-500-299.png",
+      "league": "ncaab",
+      "teamName": "Long Beach State Beach",
+      "abbr": "LBSU",
+      "espnId": "299",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/299.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-299.png"
+    },
+    {
+      "blobName": "ncaa-500-112358.png",
+      "league": "ncaab",
+      "teamName": "Long Island University Sharks",
+      "abbr": "LIU",
+      "espnId": "112358",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/112358.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-112358.png"
+    },
+    {
+      "blobName": "ncaa-500-2344.png",
+      "league": "ncaab",
+      "teamName": "Longwood Lancers",
+      "abbr": "LONG",
+      "espnId": "2344",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2344.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2344.png"
+    },
+    {
+      "blobName": "ncaa-500-309.png",
+      "league": "ncaab",
+      "teamName": "Louisiana Ragin' Cajuns",
+      "abbr": "UL",
+      "espnId": "309",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/309.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-309.png"
+    },
+    {
+      "blobName": "ncaa-500-2348.png",
+      "league": "ncaab",
+      "teamName": "Louisiana Tech Bulldogs",
+      "abbr": "LT",
+      "espnId": "2348",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2348.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2348.png"
+    },
+    {
+      "blobName": "ncaa-500-97.png",
+      "league": "ncaab",
+      "teamName": "Louisville Cardinals",
+      "abbr": "LOU",
+      "espnId": "97",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/97.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-97.png"
+    },
+    {
+      "blobName": "ncaa-500-2350.png",
+      "league": "ncaab",
+      "teamName": "Loyola Chicago Ramblers",
+      "abbr": "LUC",
+      "espnId": "2350",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2350.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2350.png"
+    },
+    {
+      "blobName": "ncaa-500-2352.png",
+      "league": "ncaab",
+      "teamName": "Loyola Maryland Greyhounds",
+      "abbr": "L-MD",
+      "espnId": "2352",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2352.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2352.png"
+    },
+    {
+      "blobName": "ncaa-500-2351.png",
+      "league": "ncaab",
+      "teamName": "Loyola Marymount Lions",
+      "abbr": "LMU",
+      "espnId": "2351",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2351.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2351.png"
+    },
+    {
+      "blobName": "ncaa-500-311.png",
+      "league": "ncaab",
+      "teamName": "Maine Black Bears",
+      "abbr": "ME",
+      "espnId": "311",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/311.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-311.png"
+    },
+    {
+      "blobName": "ncaa-500-2363.png",
+      "league": "ncaab",
+      "teamName": "Manhattan Jaspers",
+      "abbr": "MAN",
+      "espnId": "2363",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2363.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2363.png"
+    },
+    {
+      "blobName": "ncaa-500-2368.png",
+      "league": "ncaab",
+      "teamName": "Marist Red Foxes",
+      "abbr": "MRST",
+      "espnId": "2368",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2368.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2368.png"
+    },
+    {
+      "blobName": "ncaa-500-269.png",
+      "league": "ncaab",
+      "teamName": "Marquette Golden Eagles",
+      "abbr": "MARQ",
+      "espnId": "269",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/269.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-269.png"
+    },
+    {
+      "blobName": "ncaa-500-276.png",
+      "league": "ncaab",
+      "teamName": "Marshall Thundering Herd",
+      "abbr": "MRSH",
+      "espnId": "276",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/276.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-276.png"
+    },
+    {
+      "blobName": "ncaa-500-2379.png",
+      "league": "ncaab",
+      "teamName": "Maryland Eastern Shore Hawks",
+      "abbr": "UMES",
+      "espnId": "2379",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2379.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2379.png"
+    },
+    {
+      "blobName": "ncaa-500-120.png",
+      "league": "ncaab",
+      "teamName": "Maryland Terrapins",
+      "abbr": "MD",
+      "espnId": "120",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/120.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-120.png"
+    },
+    {
+      "blobName": "ncaa-500-113.png",
+      "league": "ncaab",
+      "teamName": "Massachusetts Minutemen",
+      "abbr": "MASS",
+      "espnId": "113",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/113.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-113.png"
+    },
+    {
+      "blobName": "ncaa-500-2377.png",
+      "league": "ncaab",
+      "teamName": "McNeese Cowboys",
+      "abbr": "MCN",
+      "espnId": "2377",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2377.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2377.png"
+    },
+    {
+      "blobName": "ncaa-500-235.png",
+      "league": "ncaab",
+      "teamName": "Memphis Tigers",
+      "abbr": "MEM",
+      "espnId": "235",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/235.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-235.png"
+    },
+    {
+      "blobName": "ncaa-500-2382.png",
+      "league": "ncaab",
+      "teamName": "Mercer Bears",
+      "abbr": "MER",
+      "espnId": "2382",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2382.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2382.png"
+    },
+    {
+      "blobName": "ncaa-500-2385.png",
+      "league": "ncaab",
+      "teamName": "Mercyhurst Lakers",
+      "abbr": "MERC",
+      "espnId": "2385",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2385.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2385.png"
+    },
+    {
+      "blobName": "ncaa-500-2771.png",
+      "league": "ncaab",
+      "teamName": "Merrimack Warriors",
+      "abbr": "MRMK",
+      "espnId": "2771",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2771.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2771.png"
+    },
+    {
+      "blobName": "ncaa-500-193.png",
+      "league": "ncaab",
+      "teamName": "Miami (OH) RedHawks",
+      "abbr": "M-OH",
+      "espnId": "193",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/193.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-193.png"
+    },
+    {
+      "blobName": "ncaa-500-2390.png",
+      "league": "ncaab",
+      "teamName": "Miami Hurricanes",
+      "abbr": "MIA",
+      "espnId": "2390",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2390.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2390.png"
+    },
+    {
+      "blobName": "ncaa-500-127.png",
+      "league": "ncaab",
+      "teamName": "Michigan State Spartans",
+      "abbr": "MSU",
+      "espnId": "127",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/127.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-127.png"
+    },
+    {
+      "blobName": "ncaa-500-130.png",
+      "league": "ncaab",
+      "teamName": "Michigan Wolverines",
+      "abbr": "MICH",
+      "espnId": "130",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/130.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-130.png"
+    },
+    {
+      "blobName": "ncaa-500-2393.png",
+      "league": "ncaab",
+      "teamName": "Middle Tennessee Blue Raiders",
+      "abbr": "MTSU",
+      "espnId": "2393",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2393.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2393.png"
+    },
+    {
+      "blobName": "ncaa-500-270.png",
+      "league": "ncaab",
+      "teamName": "Milwaukee Panthers",
+      "abbr": "MILW",
+      "espnId": "270",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/270.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-270.png"
+    },
+    {
+      "blobName": "ncaa-500-135.png",
+      "league": "ncaab",
+      "teamName": "Minnesota Golden Gophers",
+      "abbr": "MINN",
+      "espnId": "135",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/135.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-135.png"
+    },
+    {
+      "blobName": "ncaa-500-344.png",
+      "league": "ncaab",
+      "teamName": "Mississippi State Bulldogs",
+      "abbr": "MSST",
+      "espnId": "344",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/344.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-344.png"
+    },
+    {
+      "blobName": "ncaa-500-2400.png",
+      "league": "ncaab",
+      "teamName": "Mississippi Valley State Delta Devils",
+      "abbr": "MVSU",
+      "espnId": "2400",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2400.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2400.png"
+    },
+    {
+      "blobName": "ncaa-500-2623.png",
+      "league": "ncaab",
+      "teamName": "Missouri State Bears",
+      "abbr": "MOST",
+      "espnId": "2623",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2623.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2623.png"
+    },
+    {
+      "blobName": "ncaa-500-142.png",
+      "league": "ncaab",
+      "teamName": "Missouri Tigers",
+      "abbr": "MIZ",
+      "espnId": "142",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/142.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-142.png"
+    },
+    {
+      "blobName": "ncaa-500-2405.png",
+      "league": "ncaab",
+      "teamName": "Monmouth Hawks",
+      "abbr": "MONM",
+      "espnId": "2405",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2405.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2405.png"
+    },
+    {
+      "blobName": "ncaa-500-149.png",
+      "league": "ncaab",
+      "teamName": "Montana Grizzlies",
+      "abbr": "MONT",
+      "espnId": "149",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/149.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-149.png"
+    },
+    {
+      "blobName": "ncaa-500-147.png",
+      "league": "ncaab",
+      "teamName": "Montana State Bobcats",
+      "abbr": "MTST",
+      "espnId": "147",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/147.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-147.png"
+    },
+    {
+      "blobName": "ncaa-500-2413.png",
+      "league": "ncaab",
+      "teamName": "Morehead State Eagles",
+      "abbr": "MORE",
+      "espnId": "2413",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2413.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2413.png"
+    },
+    {
+      "blobName": "ncaa-500-2415.png",
+      "league": "ncaab",
+      "teamName": "Morgan State Bears",
+      "abbr": "MORG",
+      "espnId": "2415",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2415.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2415.png"
+    },
+    {
+      "blobName": "ncaa-500-116.png",
+      "league": "ncaab",
+      "teamName": "Mount St. Mary's Mountaineers",
+      "abbr": "MSM",
+      "espnId": "116",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/116.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-116.png"
+    },
+    {
+      "blobName": "ncaa-500-93.png",
+      "league": "ncaab",
+      "teamName": "Murray State Racers",
+      "abbr": "MUR",
+      "espnId": "93",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/93.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-93.png"
+    },
+    {
+      "blobName": "ncaa-500-152.png",
+      "league": "ncaab",
+      "teamName": "NC State Wolfpack",
+      "abbr": "NCSU",
+      "espnId": "152",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/152.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-152.png"
+    },
+    {
+      "blobName": "ncaa-500-2885.png",
+      "league": "ncaab",
+      "teamName": "NJIT Highlanders",
+      "abbr": "NJIT",
+      "espnId": "2885",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2885.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2885.png"
+    },
+    {
+      "blobName": "ncaa-500-2426.png",
+      "league": "ncaab",
+      "teamName": "Navy Midshipmen",
+      "abbr": "NAVY",
+      "espnId": "2426",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2426.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2426.png"
+    },
+    {
+      "blobName": "ncaa-500-158.png",
+      "league": "ncaab",
+      "teamName": "Nebraska Cornhuskers",
+      "abbr": "NEB",
+      "espnId": "158",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/158.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-158.png"
+    },
+    {
+      "blobName": "ncaa-500-2440.png",
+      "league": "ncaab",
+      "teamName": "Nevada Wolf Pack",
+      "abbr": "NEV",
+      "espnId": "2440",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2440.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2440.png"
+    },
+    {
+      "blobName": "ncaa-500-160.png",
+      "league": "ncaab",
+      "teamName": "New Hampshire Wildcats",
+      "abbr": "UNH",
+      "espnId": "160",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/160.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-160.png"
+    },
+    {
+      "blobName": "ncaa-500-2441.png",
+      "league": "ncaab",
+      "teamName": "New Haven Chargers",
+      "abbr": "NHVN",
+      "espnId": "2441",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2441.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2441.png"
+    },
+    {
+      "blobName": "ncaa-500-167.png",
+      "league": "ncaab",
+      "teamName": "New Mexico Lobos",
+      "abbr": "UNM",
+      "espnId": "167",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/167.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-167.png"
+    },
+    {
+      "blobName": "ncaa-500-166.png",
+      "league": "ncaab",
+      "teamName": "New Mexico State Aggies",
+      "abbr": "NMSU",
+      "espnId": "166",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/166.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-166.png"
+    },
+    {
+      "blobName": "ncaa-500-2443.png",
+      "league": "ncaab",
+      "teamName": "New Orleans Privateers",
+      "abbr": "UNO",
+      "espnId": "2443",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2443.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2443.png"
+    },
+    {
+      "blobName": "ncaa-500-315.png",
+      "league": "ncaab",
+      "teamName": "Niagara Purple Eagles",
+      "abbr": "NIA",
+      "espnId": "315",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/315.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-315.png"
+    },
+    {
+      "blobName": "ncaa-500-2447.png",
+      "league": "ncaab",
+      "teamName": "Nicholls Colonels",
+      "abbr": "NICH",
+      "espnId": "2447",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2447.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2447.png"
+    },
+    {
+      "blobName": "ncaa-500-2450.png",
+      "league": "ncaab",
+      "teamName": "Norfolk State Spartans",
+      "abbr": "NORF",
+      "espnId": "2450",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2450.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2450.png"
+    },
+    {
+      "blobName": "ncaa-500-2453.png",
+      "league": "ncaab",
+      "teamName": "North Alabama Lions",
+      "abbr": "UNA",
+      "espnId": "2453",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2453.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2453.png"
+    },
+    {
+      "blobName": "ncaa-500-2448.png",
+      "league": "ncaab",
+      "teamName": "North Carolina A&T Aggies",
+      "abbr": "NCAT",
+      "espnId": "2448",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2448.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2448.png"
+    },
+    {
+      "blobName": "ncaa-500-2428.png",
+      "league": "ncaab",
+      "teamName": "North Carolina Central Eagles",
+      "abbr": "NCCU",
+      "espnId": "2428",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2428.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2428.png"
+    },
+    {
+      "blobName": "ncaa-500-153.png",
+      "league": "ncaab",
+      "teamName": "North Carolina Tar Heels",
+      "abbr": "UNC",
+      "espnId": "153",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/153.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-153.png"
+    },
+    {
+      "blobName": "ncaa-500-155.png",
+      "league": "ncaab",
+      "teamName": "North Dakota Fighting Hawks",
+      "abbr": "UND",
+      "espnId": "155",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/155.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-155.png"
+    },
+    {
+      "blobName": "ncaa-500-2449.png",
+      "league": "ncaab",
+      "teamName": "North Dakota State Bison",
+      "abbr": "NDSU",
+      "espnId": "2449",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2449.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2449.png"
+    },
+    {
+      "blobName": "ncaa-500-2454.png",
+      "league": "ncaab",
+      "teamName": "North Florida Ospreys",
+      "abbr": "UNF",
+      "espnId": "2454",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2454.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2454.png"
+    },
+    {
+      "blobName": "ncaa-500-249.png",
+      "league": "ncaab",
+      "teamName": "North Texas Mean Green",
+      "abbr": "UNT",
+      "espnId": "249",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/249.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-249.png"
+    },
+    {
+      "blobName": "ncaa-500-111.png",
+      "league": "ncaab",
+      "teamName": "Northeastern Huskies",
+      "abbr": "NE",
+      "espnId": "111",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/111.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-111.png"
+    },
+    {
+      "blobName": "ncaa-500-2464.png",
+      "league": "ncaab",
+      "teamName": "Northern Arizona Lumberjacks",
+      "abbr": "NAU",
+      "espnId": "2464",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2464.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2464.png"
+    },
+    {
+      "blobName": "ncaa-500-2458.png",
+      "league": "ncaab",
+      "teamName": "Northern Colorado Bears",
+      "abbr": "UNCO",
+      "espnId": "2458",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2458.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2458.png"
+    },
+    {
+      "blobName": "ncaa-500-2459.png",
+      "league": "ncaab",
+      "teamName": "Northern Illinois Huskies",
+      "abbr": "NIU",
+      "espnId": "2459",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2459.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2459.png"
+    },
+    {
+      "blobName": "ncaa-500-2460.png",
+      "league": "ncaab",
+      "teamName": "Northern Iowa Panthers",
+      "abbr": "UNI",
+      "espnId": "2460",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2460.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2460.png"
+    },
+    {
+      "blobName": "ncaa-500-94.png",
+      "league": "ncaab",
+      "teamName": "Northern Kentucky Norse",
+      "abbr": "NKU",
+      "espnId": "94",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/94.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-94.png"
+    },
+    {
+      "blobName": "ncaa-500-2466.png",
+      "league": "ncaab",
+      "teamName": "Northwestern State Demons",
+      "abbr": "NWST",
+      "espnId": "2466",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2466.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2466.png"
+    },
+    {
+      "blobName": "ncaa-500-77.png",
+      "league": "ncaab",
+      "teamName": "Northwestern Wildcats",
+      "abbr": "NU",
+      "espnId": "77",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/77.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-77.png"
+    },
+    {
+      "blobName": "ncaa-500-87.png",
+      "league": "ncaab",
+      "teamName": "Notre Dame Fighting Irish",
+      "abbr": "ND",
+      "espnId": "87",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/87.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-87.png"
+    },
+    {
+      "blobName": "ncaa-500-2473.png",
+      "league": "ncaab",
+      "teamName": "Oakland Golden Grizzlies",
+      "abbr": "OAK",
+      "espnId": "2473",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2473.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2473.png"
+    },
+    {
+      "blobName": "ncaa-500-195.png",
+      "league": "ncaab",
+      "teamName": "Ohio Bobcats",
+      "abbr": "OHIO",
+      "espnId": "195",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/195.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-195.png"
+    },
+    {
+      "blobName": "ncaa-500-194.png",
+      "league": "ncaab",
+      "teamName": "Ohio State Buckeyes",
+      "abbr": "OSU",
+      "espnId": "194",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/194.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-194.png"
+    },
+    {
+      "blobName": "ncaa-500-201.png",
+      "league": "ncaab",
+      "teamName": "Oklahoma Sooners",
+      "abbr": "OU",
+      "espnId": "201",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/201.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-201.png"
+    },
+    {
+      "blobName": "ncaa-500-197.png",
+      "league": "ncaab",
+      "teamName": "Oklahoma State Cowboys",
+      "abbr": "OKST",
+      "espnId": "197",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/197.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-197.png"
+    },
+    {
+      "blobName": "ncaa-500-295.png",
+      "league": "ncaab",
+      "teamName": "Old Dominion Monarchs",
+      "abbr": "ODU",
+      "espnId": "295",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/295.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-295.png"
+    },
+    {
+      "blobName": "ncaa-500-145.png",
+      "league": "ncaab",
+      "teamName": "Ole Miss Rebels",
+      "abbr": "MISS",
+      "espnId": "145",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/145.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-145.png"
+    },
+    {
+      "blobName": "ncaa-500-2437.png",
+      "league": "ncaab",
+      "teamName": "Omaha Mavericks",
+      "abbr": "OMA",
+      "espnId": "2437",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2437.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2437.png"
+    },
+    {
+      "blobName": "ncaa-500-198.png",
+      "league": "ncaab",
+      "teamName": "Oral Roberts Golden Eagles",
+      "abbr": "ORU",
+      "espnId": "198",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/198.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-198.png"
+    },
+    {
+      "blobName": "ncaa-500-2483.png",
+      "league": "ncaab",
+      "teamName": "Oregon Ducks",
+      "abbr": "ORE",
+      "espnId": "2483",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2483.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2483.png"
+    },
+    {
+      "blobName": "ncaa-500-204.png",
+      "league": "ncaab",
+      "teamName": "Oregon State Beavers",
+      "abbr": "ORST",
+      "espnId": "204",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/204.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-204.png"
+    },
+    {
+      "blobName": "ncaa-500-279.png",
+      "league": "ncaab",
+      "teamName": "Pacific Tigers",
+      "abbr": "PAC",
+      "espnId": "279",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/279.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-279.png"
+    },
+    {
+      "blobName": "ncaa-500-213.png",
+      "league": "ncaab",
+      "teamName": "Penn State Nittany Lions",
+      "abbr": "PSU",
+      "espnId": "213",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/213.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-213.png"
+    },
+    {
+      "blobName": "ncaa-500-219.png",
+      "league": "ncaab",
+      "teamName": "Pennsylvania Quakers",
+      "abbr": "PENN",
+      "espnId": "219",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/219.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-219.png"
+    },
+    {
+      "blobName": "ncaa-500-2492.png",
+      "league": "ncaab",
+      "teamName": "Pepperdine Waves",
+      "abbr": "PEPP",
+      "espnId": "2492",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2492.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2492.png"
+    },
+    {
+      "blobName": "ncaa-500-221.png",
+      "league": "ncaab",
+      "teamName": "Pittsburgh Panthers",
+      "abbr": "PITT",
+      "espnId": "221",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/221.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-221.png"
+    },
+    {
+      "blobName": "ncaa-500-2501.png",
+      "league": "ncaab",
+      "teamName": "Portland Pilots",
+      "abbr": "PORT",
+      "espnId": "2501",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2501.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2501.png"
+    },
+    {
+      "blobName": "ncaa-500-2502.png",
+      "league": "ncaab",
+      "teamName": "Portland State Vikings",
+      "abbr": "PRST",
+      "espnId": "2502",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2502.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2502.png"
+    },
+    {
+      "blobName": "ncaa-500-2504.png",
+      "league": "ncaab",
+      "teamName": "Prairie View A&M Panthers",
+      "abbr": "PV",
+      "espnId": "2504",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2504.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2504.png"
+    },
+    {
+      "blobName": "ncaa-500-2506.png",
+      "league": "ncaab",
+      "teamName": "Presbyterian Blue Hose",
+      "abbr": "PRES",
+      "espnId": "2506",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2506.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2506.png"
+    },
+    {
+      "blobName": "ncaa-500-163.png",
+      "league": "ncaab",
+      "teamName": "Princeton Tigers",
+      "abbr": "PRIN",
+      "espnId": "163",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/163.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-163.png"
+    },
+    {
+      "blobName": "ncaa-500-2507.png",
+      "league": "ncaab",
+      "teamName": "Providence Friars",
+      "abbr": "PROV",
+      "espnId": "2507",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2507.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2507.png"
+    },
+    {
+      "blobName": "ncaa-500-2509.png",
+      "league": "ncaab",
+      "teamName": "Purdue Boilermakers",
+      "abbr": "PUR",
+      "espnId": "2509",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2509.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2509.png"
+    },
+    {
+      "blobName": "ncaa-500-2870.png",
+      "league": "ncaab",
+      "teamName": "Purdue Fort Wayne Mastodons",
+      "abbr": "PFW",
+      "espnId": "2870",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2870.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2870.png"
+    },
+    {
+      "blobName": "ncaa-500-2514.png",
+      "league": "ncaab",
+      "teamName": "Quinnipiac Bobcats",
+      "abbr": "QUIN",
+      "espnId": "2514",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2514.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2514.png"
+    },
+    {
+      "blobName": "ncaa-500-2515.png",
+      "league": "ncaab",
+      "teamName": "Radford Highlanders",
+      "abbr": "RAD",
+      "espnId": "2515",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2515.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2515.png"
+    },
+    {
+      "blobName": "ncaa-500-227.png",
+      "league": "ncaab",
+      "teamName": "Rhode Island Rams",
+      "abbr": "URI",
+      "espnId": "227",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/227.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-227.png"
+    },
+    {
+      "blobName": "ncaa-500-242.png",
+      "league": "ncaab",
+      "teamName": "Rice Owls",
+      "abbr": "RICE",
+      "espnId": "242",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/242.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-242.png"
+    },
+    {
+      "blobName": "ncaa-500-257.png",
+      "league": "ncaab",
+      "teamName": "Richmond Spiders",
+      "abbr": "RICH",
+      "espnId": "257",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/257.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-257.png"
+    },
+    {
+      "blobName": "ncaa-500-2520.png",
+      "league": "ncaab",
+      "teamName": "Rider Broncs",
+      "abbr": "RID",
+      "espnId": "2520",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2520.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2520.png"
+    },
+    {
+      "blobName": "ncaa-500-2523.png",
+      "league": "ncaab",
+      "teamName": "Robert Morris Colonials",
+      "abbr": "RMU",
+      "espnId": "2523",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2523.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2523.png"
+    },
+    {
+      "blobName": "ncaa-500-164.png",
+      "league": "ncaab",
+      "teamName": "Rutgers Scarlet Knights",
+      "abbr": "RUTG",
+      "espnId": "164",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/164.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-164.png"
+    },
+    {
+      "blobName": "ncaa-500-2545.png",
+      "league": "ncaab",
+      "teamName": "SE Louisiana Lions",
+      "abbr": "SELA",
+      "espnId": "2545",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2545.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2545.png"
+    },
+    {
+      "blobName": "ncaa-500-2565.png",
+      "league": "ncaab",
+      "teamName": "SIU Edwardsville Cougars",
+      "abbr": "SIUE",
+      "espnId": "2565",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2565.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2565.png"
+    },
+    {
+      "blobName": "ncaa-500-2567.png",
+      "league": "ncaab",
+      "teamName": "SMU Mustangs",
+      "abbr": "SMU",
+      "espnId": "2567",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2567.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2567.png"
+    },
+    {
+      "blobName": "ncaa-500-16.png",
+      "league": "ncaab",
+      "teamName": "Sacramento State Hornets",
+      "abbr": "SAC",
+      "espnId": "16",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/16.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-16.png"
+    },
+    {
+      "blobName": "ncaa-500-2529.png",
+      "league": "ncaab",
+      "teamName": "Sacred Heart Pioneers",
+      "abbr": "SHU",
+      "espnId": "2529",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2529.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2529.png"
+    },
+    {
+      "blobName": "ncaa-500-2598.png",
+      "league": "ncaab",
+      "teamName": "Saint Francis Red Flash",
+      "abbr": "SFPA",
+      "espnId": "2598",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2598.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2598.png"
+    },
+    {
+      "blobName": "ncaa-500-2603.png",
+      "league": "ncaab",
+      "teamName": "Saint Joseph's Hawks",
+      "abbr": "JOES",
+      "espnId": "2603",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2603.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2603.png"
+    },
+    {
+      "blobName": "ncaa-500-139.png",
+      "league": "ncaab",
+      "teamName": "Saint Louis Billikens",
+      "abbr": "SLU",
+      "espnId": "139",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/139.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-139.png"
+    },
+    {
+      "blobName": "ncaa-500-2608.png",
+      "league": "ncaab",
+      "teamName": "Saint Mary's Gaels",
+      "abbr": "SMC",
+      "espnId": "2608",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2608.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2608.png"
+    },
+    {
+      "blobName": "ncaa-500-2612.png",
+      "league": "ncaab",
+      "teamName": "Saint Peter's Peacocks",
+      "abbr": "SPU",
+      "espnId": "2612",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2612.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2612.png"
+    },
+    {
+      "blobName": "ncaa-500-2534.png",
+      "league": "ncaab",
+      "teamName": "Sam Houston Bearkats",
+      "abbr": "SHSU",
+      "espnId": "2534",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2534.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2534.png"
+    },
+    {
+      "blobName": "ncaa-500-2535.png",
+      "league": "ncaab",
+      "teamName": "Samford Bulldogs",
+      "abbr": "SAM",
+      "espnId": "2535",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2535.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2535.png"
+    },
+    {
+      "blobName": "ncaa-500-21.png",
+      "league": "ncaab",
+      "teamName": "San Diego State Aztecs",
+      "abbr": "SDSU",
+      "espnId": "21",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/21.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-21.png"
+    },
+    {
+      "blobName": "ncaa-500-301.png",
+      "league": "ncaab",
+      "teamName": "San Diego Toreros",
+      "abbr": "USD",
+      "espnId": "301",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/301.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-301.png"
+    },
+    {
+      "blobName": "ncaa-500-2539.png",
+      "league": "ncaab",
+      "teamName": "San Francisco Dons",
+      "abbr": "SF",
+      "espnId": "2539",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2539.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2539.png"
+    },
+    {
+      "blobName": "ncaa-500-23.png",
+      "league": "ncaab",
+      "teamName": "San José State Spartans",
+      "abbr": "SJSU",
+      "espnId": "23",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/23.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-23.png"
+    },
+    {
+      "blobName": "ncaa-500-2541.png",
+      "league": "ncaab",
+      "teamName": "Santa Clara Broncos",
+      "abbr": "SCU",
+      "espnId": "2541",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2541.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2541.png"
+    },
+    {
+      "blobName": "ncaa-500-2547.png",
+      "league": "ncaab",
+      "teamName": "Seattle U Redhawks",
+      "abbr": "SEA",
+      "espnId": "2547",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2547.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2547.png"
+    },
+    {
+      "blobName": "ncaa-500-2550.png",
+      "league": "ncaab",
+      "teamName": "Seton Hall Pirates",
+      "abbr": "HALL",
+      "espnId": "2550",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2550.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2550.png"
+    },
+    {
+      "blobName": "ncaa-500-2561.png",
+      "league": "ncaab",
+      "teamName": "Siena Saints",
+      "abbr": "SIE",
+      "espnId": "2561",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2561.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2561.png"
+    },
+    {
+      "blobName": "ncaa-500-6.png",
+      "league": "ncaab",
+      "teamName": "South Alabama Jaguars",
+      "abbr": "USA",
+      "espnId": "6",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/6.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-6.png"
+    },
+    {
+      "blobName": "ncaa-500-2579.png",
+      "league": "ncaab",
+      "teamName": "South Carolina Gamecocks",
+      "abbr": "SC",
+      "espnId": "2579",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2579.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2579.png"
+    },
+    {
+      "blobName": "ncaa-500-2569.png",
+      "league": "ncaab",
+      "teamName": "South Carolina State Bulldogs",
+      "abbr": "SCST",
+      "espnId": "2569",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2569.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2569.png"
+    },
+    {
+      "blobName": "ncaa-500-2908.png",
+      "league": "ncaab",
+      "teamName": "South Carolina Upstate Spartans",
+      "abbr": "UPST",
+      "espnId": "2908",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2908.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2908.png"
+    },
+    {
+      "blobName": "ncaa-500-233.png",
+      "league": "ncaab",
+      "teamName": "South Dakota Coyotes",
+      "abbr": "SDAK",
+      "espnId": "233",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/233.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-233.png"
+    },
+    {
+      "blobName": "ncaa-500-2571.png",
+      "league": "ncaab",
+      "teamName": "South Dakota State Jackrabbits",
+      "abbr": "SDST",
+      "espnId": "2571",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2571.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2571.png"
+    },
+    {
+      "blobName": "ncaa-500-58.png",
+      "league": "ncaab",
+      "teamName": "South Florida Bulls",
+      "abbr": "USF",
+      "espnId": "58",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/58.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-58.png"
+    },
+    {
+      "blobName": "ncaa-500-2546.png",
+      "league": "ncaab",
+      "teamName": "Southeast Missouri State Redhawks",
+      "abbr": "SEMO",
+      "espnId": "2546",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2546.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2546.png"
+    },
+    {
+      "blobName": "ncaa-500-79.png",
+      "league": "ncaab",
+      "teamName": "Southern Illinois Salukis",
+      "abbr": "SIU",
+      "espnId": "79",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/79.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-79.png"
+    },
+    {
+      "blobName": "ncaa-500-2582.png",
+      "league": "ncaab",
+      "teamName": "Southern Jaguars",
+      "abbr": "SOU",
+      "espnId": "2582",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2582.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2582.png"
+    },
+    {
+      "blobName": "ncaa-500-2572.png",
+      "league": "ncaab",
+      "teamName": "Southern Miss Golden Eagles",
+      "abbr": "USM",
+      "espnId": "2572",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2572.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2572.png"
+    },
+    {
+      "blobName": "ncaa-500-253.png",
+      "league": "ncaab",
+      "teamName": "Southern Utah Thunderbirds",
+      "abbr": "SUU",
+      "espnId": "253",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/253.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-253.png"
+    },
+    {
+      "blobName": "ncaa-500-179.png",
+      "league": "ncaab",
+      "teamName": "St. Bonaventure Bonnies",
+      "abbr": "SBU",
+      "espnId": "179",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/179.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-179.png"
+    },
+    {
+      "blobName": "ncaa-500-2599.png",
+      "league": "ncaab",
+      "teamName": "St. John's Red Storm",
+      "abbr": "SJU",
+      "espnId": "2599",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2599.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2599.png"
+    },
+    {
+      "blobName": "ncaa-500-2900.png",
+      "league": "ncaab",
+      "teamName": "St. Thomas-Minnesota Tommies",
+      "abbr": "STMN",
+      "espnId": "2900",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2900.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2900.png"
+    },
+    {
+      "blobName": "ncaa-500-24.png",
+      "league": "ncaab",
+      "teamName": "Stanford Cardinal",
+      "abbr": "STAN",
+      "espnId": "24",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/24.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-24.png"
+    },
+    {
+      "blobName": "ncaa-500-2617.png",
+      "league": "ncaab",
+      "teamName": "Stephen F. Austin Lumberjacks",
+      "abbr": "SFA",
+      "espnId": "2617",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2617.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2617.png"
+    },
+    {
+      "blobName": "ncaa-500-56.png",
+      "league": "ncaab",
+      "teamName": "Stetson Hatters",
+      "abbr": "STET",
+      "espnId": "56",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/56.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-56.png"
+    },
+    {
+      "blobName": "ncaa-500-284.png",
+      "league": "ncaab",
+      "teamName": "Stonehill Skyhawks",
+      "abbr": "STO",
+      "espnId": "284",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/284.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-284.png"
+    },
+    {
+      "blobName": "ncaa-500-2619.png",
+      "league": "ncaab",
+      "teamName": "Stony Brook Seawolves",
+      "abbr": "STBK",
+      "espnId": "2619",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2619.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2619.png"
+    },
+    {
+      "blobName": "ncaa-500-183.png",
+      "league": "ncaab",
+      "teamName": "Syracuse Orange",
+      "abbr": "SYR",
+      "espnId": "183",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/183.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-183.png"
+    },
+    {
+      "blobName": "ncaa-500-2628.png",
+      "league": "ncaab",
+      "teamName": "TCU Horned Frogs",
+      "abbr": "TCU",
+      "espnId": "2628",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2628.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2628.png"
+    },
+    {
+      "blobName": "ncaa-500-2627.png",
+      "league": "ncaab",
+      "teamName": "Tarleton State Texans",
+      "abbr": "TAR",
+      "espnId": "2627",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2627.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2627.png"
+    },
+    {
+      "blobName": "ncaa-500-218.png",
+      "league": "ncaab",
+      "teamName": "Temple Owls",
+      "abbr": "TEM",
+      "espnId": "218",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/218.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-218.png"
+    },
+    {
+      "blobName": "ncaa-500-2634.png",
+      "league": "ncaab",
+      "teamName": "Tennessee State Tigers",
+      "abbr": "TNST",
+      "espnId": "2634",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2634.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2634.png"
+    },
+    {
+      "blobName": "ncaa-500-2635.png",
+      "league": "ncaab",
+      "teamName": "Tennessee Tech Golden Eagles",
+      "abbr": "TNTC",
+      "espnId": "2635",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2635.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2635.png"
+    },
+    {
+      "blobName": "ncaa-500-2633.png",
+      "league": "ncaab",
+      "teamName": "Tennessee Volunteers",
+      "abbr": "TENN",
+      "espnId": "2633",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2633.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2633.png"
+    },
+    {
+      "blobName": "ncaa-500-245.png",
+      "league": "ncaab",
+      "teamName": "Texas A&M Aggies",
+      "abbr": "TA&M",
+      "espnId": "245",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/245.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-245.png"
+    },
+    {
+      "blobName": "ncaa-500-357.png",
+      "league": "ncaab",
+      "teamName": "Texas A&M-Corpus Christi Islanders",
+      "abbr": "AMCC",
+      "espnId": "357",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/357.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-357.png"
+    },
+    {
+      "blobName": "ncaa-500-251.png",
+      "league": "ncaab",
+      "teamName": "Texas Longhorns",
+      "abbr": "TEX",
+      "espnId": "251",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/251.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-251.png"
+    },
+    {
+      "blobName": "ncaa-500-2640.png",
+      "league": "ncaab",
+      "teamName": "Texas Southern Tigers",
+      "abbr": "TXSO",
+      "espnId": "2640",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2640.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2640.png"
+    },
+    {
+      "blobName": "ncaa-500-326.png",
+      "league": "ncaab",
+      "teamName": "Texas State Bobcats",
+      "abbr": "TXST",
+      "espnId": "326",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/326.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-326.png"
+    },
+    {
+      "blobName": "ncaa-500-2641.png",
+      "league": "ncaab",
+      "teamName": "Texas Tech Red Raiders",
+      "abbr": "TTU",
+      "espnId": "2641",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2641.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2641.png"
+    },
+    {
+      "blobName": "ncaa-500-2643.png",
+      "league": "ncaab",
+      "teamName": "The Citadel Bulldogs",
+      "abbr": "CIT",
+      "espnId": "2643",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2643.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2643.png"
+    },
+    {
+      "blobName": "ncaa-500-2649.png",
+      "league": "ncaab",
+      "teamName": "Toledo Rockets",
+      "abbr": "TOL",
+      "espnId": "2649",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2649.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2649.png"
+    },
+    {
+      "blobName": "ncaa-500-119.png",
+      "league": "ncaab",
+      "teamName": "Towson Tigers",
+      "abbr": "TOW",
+      "espnId": "119",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/119.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-119.png"
+    },
+    {
+      "blobName": "ncaa-500-2653.png",
+      "league": "ncaab",
+      "teamName": "Troy Trojans",
+      "abbr": "TROY",
+      "espnId": "2653",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2653.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2653.png"
+    },
+    {
+      "blobName": "ncaa-500-2655.png",
+      "league": "ncaab",
+      "teamName": "Tulane Green Wave",
+      "abbr": "TULN",
+      "espnId": "2655",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2655.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2655.png"
+    },
+    {
+      "blobName": "ncaa-500-202.png",
+      "league": "ncaab",
+      "teamName": "Tulsa Golden Hurricane",
+      "abbr": "TLSA",
+      "espnId": "202",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/202.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-202.png"
+    },
+    {
+      "blobName": "ncaa-500-5.png",
+      "league": "ncaab",
+      "teamName": "UAB Blazers",
+      "abbr": "UAB",
+      "espnId": "5",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/5.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-5.png"
+    },
+    {
+      "blobName": "ncaa-500-399.png",
+      "league": "ncaab",
+      "teamName": "UAlbany Great Danes",
+      "abbr": "UALB",
+      "espnId": "399",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/399.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-399.png"
+    },
+    {
+      "blobName": "ncaa-500-302.png",
+      "league": "ncaab",
+      "teamName": "UC Davis Aggies",
+      "abbr": "UCD",
+      "espnId": "302",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/302.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-302.png"
+    },
+    {
+      "blobName": "ncaa-500-300.png",
+      "league": "ncaab",
+      "teamName": "UC Irvine Anteaters",
+      "abbr": "UCI",
+      "espnId": "300",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/300.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-300.png"
+    },
+    {
+      "blobName": "ncaa-500-27.png",
+      "league": "ncaab",
+      "teamName": "UC Riverside Highlanders",
+      "abbr": "UCR",
+      "espnId": "27",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/27.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-27.png"
+    },
+    {
+      "blobName": "ncaa-500-28.png",
+      "league": "ncaab",
+      "teamName": "UC San Diego Tritons",
+      "abbr": "UCSD",
+      "espnId": "28",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/28.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-28.png"
+    },
+    {
+      "blobName": "ncaa-500-2540.png",
+      "league": "ncaab",
+      "teamName": "UC Santa Barbara Gauchos",
+      "abbr": "UCSB",
+      "espnId": "2540",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2540.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2540.png"
+    },
+    {
+      "blobName": "ncaa-500-2116.png",
+      "league": "ncaab",
+      "teamName": "UCF Knights",
+      "abbr": "UCF",
+      "espnId": "2116",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2116.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2116.png"
+    },
+    {
+      "blobName": "ncaa-500-26.png",
+      "league": "ncaab",
+      "teamName": "UCLA Bruins",
+      "abbr": "UCLA",
+      "espnId": "26",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/26.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-26.png"
+    },
+    {
+      "blobName": "ncaa-500-41.png",
+      "league": "ncaab",
+      "teamName": "UConn Huskies",
+      "abbr": "CONN",
+      "espnId": "41",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/41.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-41.png"
+    },
+    {
+      "blobName": "ncaa-500-82.png",
+      "league": "ncaab",
+      "teamName": "UIC Flames",
+      "abbr": "UIC",
+      "espnId": "82",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/82.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-82.png"
+    },
+    {
+      "blobName": "ncaa-500-2433.png",
+      "league": "ncaab",
+      "teamName": "UL Monroe Warhawks",
+      "abbr": "ULM",
+      "espnId": "2433",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2433.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2433.png"
+    },
+    {
+      "blobName": "ncaa-500-2378.png",
+      "league": "ncaab",
+      "teamName": "UMBC Retrievers",
+      "abbr": "UMBC",
+      "espnId": "2378",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2378.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2378.png"
+    },
+    {
+      "blobName": "ncaa-500-2349.png",
+      "league": "ncaab",
+      "teamName": "UMass Lowell River Hawks",
+      "abbr": "UML",
+      "espnId": "2349",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2349.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2349.png"
+    },
+    {
+      "blobName": "ncaa-500-2427.png",
+      "league": "ncaab",
+      "teamName": "UNC Asheville Bulldogs",
+      "abbr": "UNCA",
+      "espnId": "2427",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2427.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2427.png"
+    },
+    {
+      "blobName": "ncaa-500-2430.png",
+      "league": "ncaab",
+      "teamName": "UNC Greensboro Spartans",
+      "abbr": "UNCG",
+      "espnId": "2430",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2430.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2430.png"
+    },
+    {
+      "blobName": "ncaa-500-350.png",
+      "league": "ncaab",
+      "teamName": "UNC Wilmington Seahawks",
+      "abbr": "UNCW",
+      "espnId": "350",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/350.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-350.png"
+    },
+    {
+      "blobName": "ncaa-500-2439.png",
+      "league": "ncaab",
+      "teamName": "UNLV Rebels",
+      "abbr": "UNLV",
+      "espnId": "2439",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2439.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2439.png"
+    },
+    {
+      "blobName": "ncaa-500-30.png",
+      "league": "ncaab",
+      "teamName": "USC Trojans",
+      "abbr": "USC",
+      "espnId": "30",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/30.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-30.png"
+    },
+    {
+      "blobName": "ncaa-500-250.png",
+      "league": "ncaab",
+      "teamName": "UT Arlington Mavericks",
+      "abbr": "UTA",
+      "espnId": "250",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/250.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-250.png"
+    },
+    {
+      "blobName": "ncaa-500-2630.png",
+      "league": "ncaab",
+      "teamName": "UT Martin Skyhawks",
+      "abbr": "UTM",
+      "espnId": "2630",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2630.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2630.png"
+    },
+    {
+      "blobName": "ncaa-500-292.png",
+      "league": "ncaab",
+      "teamName": "UT Rio Grande Valley Vaqueros",
+      "abbr": "RGV",
+      "espnId": "292",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/292.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-292.png"
+    },
+    {
+      "blobName": "ncaa-500-2638.png",
+      "league": "ncaab",
+      "teamName": "UTEP Miners",
+      "abbr": "UTEP",
+      "espnId": "2638",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2638.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2638.png"
+    },
+    {
+      "blobName": "ncaa-500-2636.png",
+      "league": "ncaab",
+      "teamName": "UTSA Roadrunners",
+      "abbr": "UTSA",
+      "espnId": "2636",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2636.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2636.png"
+    },
+    {
+      "blobName": "ncaa-500-328.png",
+      "league": "ncaab",
+      "teamName": "Utah State Aggies",
+      "abbr": "USU",
+      "espnId": "328",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/328.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-328.png"
+    },
+    {
+      "blobName": "ncaa-500-3101.png",
+      "league": "ncaab",
+      "teamName": "Utah Tech Trailblazers",
+      "abbr": "UTU",
+      "espnId": "3101",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/3101.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-3101.png"
+    },
+    {
+      "blobName": "ncaa-500-254.png",
+      "league": "ncaab",
+      "teamName": "Utah Utes",
+      "abbr": "UTAH",
+      "espnId": "254",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/254.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-254.png"
+    },
+    {
+      "blobName": "ncaa-500-3084.png",
+      "league": "ncaab",
+      "teamName": "Utah Valley Wolverines",
+      "abbr": "UVU",
+      "espnId": "3084",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/3084.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-3084.png"
+    },
+    {
+      "blobName": "ncaa-500-2670.png",
+      "league": "ncaab",
+      "teamName": "VCU Rams",
+      "abbr": "VCU",
+      "espnId": "2670",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2670.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2670.png"
+    },
+    {
+      "blobName": "ncaa-500-2678.png",
+      "league": "ncaab",
+      "teamName": "VMI Keydets",
+      "abbr": "VMI",
+      "espnId": "2678",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2678.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2678.png"
+    },
+    {
+      "blobName": "ncaa-500-2674.png",
+      "league": "ncaab",
+      "teamName": "Valparaiso Beacons",
+      "abbr": "VAL",
+      "espnId": "2674",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2674.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2674.png"
+    },
+    {
+      "blobName": "ncaa-500-238.png",
+      "league": "ncaab",
+      "teamName": "Vanderbilt Commodores",
+      "abbr": "VAN",
+      "espnId": "238",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/238.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-238.png"
+    },
+    {
+      "blobName": "ncaa-500-261.png",
+      "league": "ncaab",
+      "teamName": "Vermont Catamounts",
+      "abbr": "UVM",
+      "espnId": "261",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/261.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-261.png"
+    },
+    {
+      "blobName": "ncaa-500-222.png",
+      "league": "ncaab",
+      "teamName": "Villanova Wildcats",
+      "abbr": "VILL",
+      "espnId": "222",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/222.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-222.png"
+    },
+    {
+      "blobName": "ncaa-500-258.png",
+      "league": "ncaab",
+      "teamName": "Virginia Cavaliers",
+      "abbr": "UVA",
+      "espnId": "258",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/258.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-258.png"
+    },
+    {
+      "blobName": "ncaa-500-259.png",
+      "league": "ncaab",
+      "teamName": "Virginia Tech Hokies",
+      "abbr": "VT",
+      "espnId": "259",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/259.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-259.png"
+    },
+    {
+      "blobName": "ncaa-500-2681.png",
+      "league": "ncaab",
+      "teamName": "Wagner Seahawks",
+      "abbr": "WAG",
+      "espnId": "2681",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2681.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2681.png"
+    },
+    {
+      "blobName": "ncaa-500-154.png",
+      "league": "ncaab",
+      "teamName": "Wake Forest Demon Deacons",
+      "abbr": "WAKE",
+      "espnId": "154",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/154.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-154.png"
+    },
+    {
+      "blobName": "ncaa-500-264.png",
+      "league": "ncaab",
+      "teamName": "Washington Huskies",
+      "abbr": "WASH",
+      "espnId": "264",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/264.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-264.png"
+    },
+    {
+      "blobName": "ncaa-500-265.png",
+      "league": "ncaab",
+      "teamName": "Washington State Cougars",
+      "abbr": "WSU",
+      "espnId": "265",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/265.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-265.png"
+    },
+    {
+      "blobName": "ncaa-500-2692.png",
+      "league": "ncaab",
+      "teamName": "Weber State Wildcats",
+      "abbr": "WEB",
+      "espnId": "2692",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2692.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2692.png"
+    },
+    {
+      "blobName": "ncaa-500-2698.png",
+      "league": "ncaab",
+      "teamName": "West Georgia Wolves",
+      "abbr": "WGA",
+      "espnId": "2698",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2698.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2698.png"
+    },
+    {
+      "blobName": "ncaa-500-277.png",
+      "league": "ncaab",
+      "teamName": "West Virginia Mountaineers",
+      "abbr": "WVU",
+      "espnId": "277",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/277.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-277.png"
+    },
+    {
+      "blobName": "ncaa-500-2717.png",
+      "league": "ncaab",
+      "teamName": "Western Carolina Catamounts",
+      "abbr": "WCU",
+      "espnId": "2717",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2717.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2717.png"
+    },
+    {
+      "blobName": "ncaa-500-2710.png",
+      "league": "ncaab",
+      "teamName": "Western Illinois Leathernecks",
+      "abbr": "WIU",
+      "espnId": "2710",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2710.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2710.png"
+    },
+    {
+      "blobName": "ncaa-500-98.png",
+      "league": "ncaab",
+      "teamName": "Western Kentucky Hilltoppers",
+      "abbr": "WKU",
+      "espnId": "98",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/98.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-98.png"
+    },
+    {
+      "blobName": "ncaa-500-2711.png",
+      "league": "ncaab",
+      "teamName": "Western Michigan Broncos",
+      "abbr": "WMU",
+      "espnId": "2711",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2711.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2711.png"
+    },
+    {
+      "blobName": "ncaa-500-2724.png",
+      "league": "ncaab",
+      "teamName": "Wichita State Shockers",
+      "abbr": "WICH",
+      "espnId": "2724",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2724.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2724.png"
+    },
+    {
+      "blobName": "ncaa-500-2729.png",
+      "league": "ncaab",
+      "teamName": "William & Mary Tribe",
+      "abbr": "W&M",
+      "espnId": "2729",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2729.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2729.png"
+    },
+    {
+      "blobName": "ncaa-500-2737.png",
+      "league": "ncaab",
+      "teamName": "Winthrop Eagles",
+      "abbr": "WIN",
+      "espnId": "2737",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2737.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2737.png"
+    },
+    {
+      "blobName": "ncaa-500-275.png",
+      "league": "ncaab",
+      "teamName": "Wisconsin Badgers",
+      "abbr": "WIS",
+      "espnId": "275",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/275.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-275.png"
+    },
+    {
+      "blobName": "ncaa-500-2747.png",
+      "league": "ncaab",
+      "teamName": "Wofford Terriers",
+      "abbr": "WOF",
+      "espnId": "2747",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2747.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2747.png"
+    },
+    {
+      "blobName": "ncaa-500-2750.png",
+      "league": "ncaab",
+      "teamName": "Wright State Raiders",
+      "abbr": "WRST",
+      "espnId": "2750",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2750.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2750.png"
+    },
+    {
+      "blobName": "ncaa-500-2751.png",
+      "league": "ncaab",
+      "teamName": "Wyoming Cowboys",
+      "abbr": "WYO",
+      "espnId": "2751",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2751.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2751.png"
+    },
+    {
+      "blobName": "ncaa-500-2752.png",
+      "league": "ncaab",
+      "teamName": "Xavier Musketeers",
+      "abbr": "XAV",
+      "espnId": "2752",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2752.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2752.png"
+    },
+    {
+      "blobName": "ncaa-500-43.png",
+      "league": "ncaab",
+      "teamName": "Yale Bulldogs",
+      "abbr": "YALE",
+      "espnId": "43",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/43.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-43.png"
+    },
+    {
+      "blobName": "ncaa-500-2754.png",
+      "league": "ncaab",
+      "teamName": "Youngstown State Penguins",
+      "abbr": "YSU",
+      "espnId": "2754",
+      "espnUrl": "https://a.espncdn.com/i/teamlogos/ncaa/500/2754.png",
+      "localPath": "C:\\Users\\JDSB\\dev\\green_bier_sport_ventures\\Dashboard_Home_Page\\artifacts\\team-logos\\ncaa-500-2754.png"
+    }
+  ]
+}

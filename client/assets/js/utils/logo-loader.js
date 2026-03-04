@@ -22,6 +22,8 @@ window.LogoLoader = (() => {
   const logoCache = new Map();
   let resolvedBase = null;
   let mappingsData = { logoMappings: {}, leagueLogos: {} };
+  /** abbr / name / location / espn_id → espn_id string  (NCAAB fallback) */
+  const ncaamEspnIds = new Map();
 
   async function loadMappings() {
     try {
@@ -35,9 +37,39 @@ window.LogoLoader = (() => {
           logoMappings: parsed.logoMappings || {},
           leagueLogos: parsed.leagueLogos || {},
         };
+        // After logo-mappings loads, clear the cache so callers that resolved
+        // before mappings were ready will get corrected URLs on next call.
+        logoCache.clear();
       }
     } catch {
       // Non-fatal: deterministic naming still works.
+    }
+  }
+
+  /** Pre-build ESPN-ID lookup from team-variants so NCAAB logos resolve even
+   *  before logo-mappings.json has fully loaded (race-condition guard). */
+  async function loadNcaamVariants() {
+    try {
+      const r = await fetch(
+        "/assets/data/team-variants/ncaam_team_variants.json",
+      );
+      if (!r.ok) return;
+      const variants = await r.json();
+      for (const [abbr, team] of Object.entries(variants)) {
+        if (!team.espn_id) continue;
+        const id = team.espn_id;
+        ncaamEspnIds.set(abbr.toLowerCase(), id);
+        (team.abbreviations || []).forEach((a) =>
+          ncaamEspnIds.set(a.toLowerCase(), id),
+        );
+        if (team.location) ncaamEspnIds.set(team.location.toLowerCase(), id);
+        if (team.nickname) ncaamEspnIds.set(team.nickname.toLowerCase(), id);
+        if (team.name) ncaamEspnIds.set(team.name.toLowerCase(), id);
+        // Allow direct numeric ESPN ID lookup (e.g. "150" → "150")
+        ncaamEspnIds.set(id, id);
+      }
+    } catch {
+      // Non-fatal.
     }
   }
 
@@ -67,6 +99,7 @@ window.LogoLoader = (() => {
   // Kick off resolution asynchronously
   resolveBaseUrl();
   loadMappings();
+  loadNcaamVariants();
 
   // Resolve the current best base (may still be resolving)
   function getBaseUrl() {
@@ -107,6 +140,21 @@ window.LogoLoader = (() => {
 
     // Try Front Door/CDN first, then blob fallback
     const baseUrl = getBaseUrl();
+
+    // NCAAB/NCAAM: if no mapping yet, look up ESPN numeric ID from team-variants
+    // so we construct the correct ncaa-500-{espnId}.png blob filename.
+    if (
+      !mappedFile &&
+      (normalizedLeague === "ncaam" || normalizedLeague === "ncaab")
+    ) {
+      const espnId = ncaamEspnIds.get(normalizedTeamId);
+      if (espnId) {
+        const url = `${baseUrl}/ncaa-500-${espnId}.png`;
+        logoCache.set(cacheKey, url);
+        return url;
+      }
+    }
+
     const fileName = mappedFile || `${folder}-500-${normalizedTeamId}.png`;
     const url = `${baseUrl}/${fileName}`;
 

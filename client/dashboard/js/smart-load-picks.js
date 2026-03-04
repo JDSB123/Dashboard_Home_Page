@@ -1998,19 +1998,38 @@ function buildPickRow(pick, index) {
   /**
    * Create a properly formatted table row matching the EXACT template structure
    */
-  // SKIP STALE/EMPTY DATA: If we don't have a valid description/selection,
-  // or it's a "TBD" mockup without actual pick data, don't render it.
-  const description =
-    pick.description || pick.selection || buildDescriptionFromFields(pick);
+  // STRICT VALIDATION: Require both a valid matchup AND pick selection
+  // This filters out stale placeholder data
+  const hasValidMatchup =
+    pick.game ||
+    pick.matchup ||
+    (pick.awayTeam && pick.homeTeam) ||
+    (pick.description && !pick.description.toLowerCase().includes("tbd"));
 
-  if (
-    !description ||
-    description.toLowerCase().includes("tbd") ||
-    (!pick.game && !pick.awayTeam && !pick.homeTeam && !description)
-  ) {
-    console.log("[PICKS LOADER] Skipping stale/empty pick row:", pick);
+  const hasValidPick =
+    pick.pick ||
+    pick.pickTeam ||
+    pick.selection ||
+    (pick.description &&
+      !pick.description.toLowerCase().includes("tbd") &&
+      pick.description.trim().length > 2);
+
+  if (!hasValidMatchup || !hasValidPick) {
+    console.log(
+      "[PICKS LOADER] Skipping incomplete pick (missing matchup or pick):",
+      {
+        id: pick.id,
+        league: pick.league,
+        segment: pick.segment,
+        hasValidMatchup,
+        hasValidPick,
+      },
+    );
     return null;
   }
+
+  const description =
+    pick.description || pick.selection || buildDescriptionFromFields(pick);
 
   const parsedPick = combinePickDetails(
     parsePickDescription(description),
