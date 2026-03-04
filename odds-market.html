@@ -1,27 +1,134 @@
-"""Fix odds-market.html broken HTML structure.
+<!doctype html>
+<!--
+  ODDS MARKET PAGE (v36.01.0)
+  Vegas-style elite odds comparison - multiple sportsbooks side-by-side
+  Consistent with main dashboard styling
+-->
+<html lang="en">
+  <head>
+    <!-- Critical styles moved to external CSS for CSP hardening -->
+    <link rel="stylesheet" href="assets/css/base/critical.css?v=36.01.0" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <link rel="apple-touch-icon" href="assets/Logo%208.5.png" />
+    <meta charset="utf-8" />
+    <!-- Page-level CSP meta removed to defer to SWA global CSP -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta
+      http-equiv="Cache-Control"
+      content="no-cache, no-store, must-revalidate"
+    />
+    <title>Green Bier Sport Ventures — Market Odds</title>
 
-Problem: Lines 131-580 contain a duplicate nested 'My Sports Books' dropdown,
-missing nav/main closing/opening tags, KPI tiles outside containers, and
-no brand header.
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/Logo%208.5.png?v=20251216" />
 
-Fix: Replace lines 131-580 with correct structure matching weekly-lineup.html.
-"""
-import pathlib
+    <!-- Local dev config handled by config.js -->
+    <script>
+      (function () {
+        var isLocal =
+          location.hostname === "localhost" ||
+          location.hostname === "127.0.0.1";
+        if (isLocal) {
+          console.log(
+            "[DEV] Local environment detected — using production APIs by default. Add ?localApi=1 for local Functions.",
+          );
+        }
+      })();
+    </script>
 
-SRC = pathlib.Path(r'c:\Users\JDSB\dev\green_bier_sport_ventures\Dashboard_Home_Page\client\odds-market.html')
+    <!-- Preload critical background image -->
+    <link
+      rel="preload"
+      as="image"
+      href="assets/JB_Bearish_Market_FULL_page.png"
+    />
 
-lines = SRC.read_text(encoding='utf-8').splitlines(keepends=True)
-print(f'Read {len(lines)} lines')
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&amp;family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Oswald:wght@500;600;700&amp;family=Bebas+Neue&amp;family=Inter:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;family=Exo+2:wght@400;500;600&amp;family=Roboto+Mono:wght@400;500&amp;display=swap"
+      rel="stylesheet"
+    />
 
-# Keep lines 1-130 (0-indexed 0-129) — head + nav through Fetch Picks </li>
-before = lines[:130]
+    <!-- Bundled CSS -->
+    <link rel="stylesheet" href="dist/core.min.css?v=36.01.0" />
+    <!-- Page-specific CSS -->
+    <link
+      rel="stylesheet"
+      href="assets/css/pages/odds-market-critical.css?v=36.01.0"
+    />
+    <link rel="stylesheet" href="assets/css/pages/odds-market.css?v=36.01.0" />
 
-# Keep lines 581-end (0-indexed 580+) — Odds Comparison Board + bet slip + scripts
-after = lines[580:]
-print(f'After section starts with: {after[0].strip()[:60]}')
-
-# Build the replacement section
-replacement = r'''        <li class="nav-dropdown">
+    <!-- Runtime config (separate — per-environment) -->
+    <script src="config.js?v=36.01.0" defer></script>
+  </head>
+  <body class="page-glow page-odds-market">
+    <nav class="brand-nav" role="navigation" aria-label="Main navigation">
+      <ul class="nav-links" aria-label="Primary">
+        <li>
+          <a href="dashboard.html" class="nav-link">Dashboard</a>
+        </li>
+        <li>
+          <a href="weekly-lineup.html" class="nav-link">Weekly Lineup</a>
+        </li>
+        <li>
+          <a href="odds-market.html" class="nav-link" aria-current="page"
+            >Odds Market</a
+          >
+        </li>
+        <li>
+          <a href="picks-tracker.html" class="nav-link">Picks Tracker</a>
+        </li>
+        <li class="nav-dropdown">
+          <button
+            class="nav-link nav-dropdown-trigger"
+            id="fetch-picks-trigger"
+            aria-expanded="false"
+            aria-haspopup="true"
+            aria-controls="fetch-picks-nav-menu"
+          >
+            Fetch Picks
+          </button>
+          <div
+            class="nav-dropdown-menu fetch-picks-nav-menu"
+            id="fetch-picks-nav-menu"
+            aria-labelledby="fetch-picks-trigger"
+            hidden
+          >
+            <div class="fetch-picks-nav-header">Model Picks</div>
+            <a href="#" data-sport="ncaam" class="fetch-picks-nav-link">
+              <img src="assets/ncaam-logo.png" width="20" height="20" class="fetch-picks-nav-logo" alt="" />
+              <span class="fetch-picks-nav-label">
+                <span class="fetch-picks-nav-sport-name">NCAAM</span>
+                <span class="fetch-picks-nav-sublabel">College Basketball</span>
+              </span>
+            </a>
+            <a href="#" data-sport="nba" class="fetch-picks-nav-link">
+              <img src="assets/nba-logo.png" width="20" height="20" class="fetch-picks-nav-logo" alt="" />
+              <span class="fetch-picks-nav-label">
+                <span class="fetch-picks-nav-sport-name">NBA</span>
+                <span class="fetch-picks-nav-sublabel">Pro Basketball</span>
+              </span>
+            </a>
+            <a href="#" data-sport="mlb" class="fetch-picks-nav-link">
+              <img src="assets/mlb-logo.png" width="20" height="20" class="fetch-picks-nav-logo" alt="" />
+              <span class="fetch-picks-nav-label">
+                <span class="fetch-picks-nav-sport-name">MLB</span>
+                <span class="fetch-picks-nav-sublabel">Major League Baseball</span>
+              </span>
+            </a>
+          </div>
+        </li>
+        <li class="nav-dropdown">
           <button
             class="nav-link nav-dropdown-trigger"
             id="sportsbooks-trigger"
@@ -31,6 +138,7 @@ replacement = r'''        <li class="nav-dropdown">
           >
             My Sports Books
           </button>
+          <!-- Sportsbook Dropdown Menu -->
           <div
             class="nav-dropdown-menu"
             id="sportsbooks-menu"
@@ -39,6 +147,7 @@ replacement = r'''        <li class="nav-dropdown">
             aria-label="Connected sportsbooks"
             hidden
           >
+            <!-- Hulk Wager -->
             <section
               class="sportsbook-card"
               data-book="hulkwager"
@@ -62,7 +171,7 @@ replacement = r'''        <li class="nav-dropdown">
                     data-book="hulkwager"
                     aria-label="Fetch picks from Hulk Wager"
                   >
-                    <span class="fetch-icon">↻</span>
+                    <span class="fetch-icon">&#8635;</span>
                   </button>
                 </div>
               </div>
@@ -95,6 +204,7 @@ replacement = r'''        <li class="nav-dropdown">
                 </div>
               </form>
             </section>
+            <!-- Bombay 711 -->
             <section
               class="sportsbook-card"
               data-book="bombay711"
@@ -118,7 +228,7 @@ replacement = r'''        <li class="nav-dropdown">
                     data-book="bombay711"
                     aria-label="Fetch picks from Bombay 711"
                   >
-                    <span class="fetch-icon">↻</span>
+                    <span class="fetch-icon">&#8635;</span>
                   </button>
                 </div>
               </div>
@@ -151,6 +261,7 @@ replacement = r'''        <li class="nav-dropdown">
                 </div>
               </form>
             </section>
+            <!-- King of Sports -->
             <section
               class="sportsbook-card"
               data-book="kingofsports"
@@ -174,7 +285,7 @@ replacement = r'''        <li class="nav-dropdown">
                     data-book="kingofsports"
                     aria-label="Fetch picks from King of Sports"
                   >
-                    <span class="fetch-icon">↻</span>
+                    <span class="fetch-icon">&#8635;</span>
                   </button>
                 </div>
               </div>
@@ -207,6 +318,7 @@ replacement = r'''        <li class="nav-dropdown">
                 </div>
               </form>
             </section>
+            <!-- Prime Time Action -->
             <section
               class="sportsbook-card"
               data-book="primetimeaction"
@@ -230,7 +342,7 @@ replacement = r'''        <li class="nav-dropdown">
                     data-book="primetimeaction"
                     aria-label="Fetch picks from Prime Time Action"
                   >
-                    <span class="fetch-icon">↻</span>
+                    <span class="fetch-icon">&#8635;</span>
                   </button>
                 </div>
               </div>
@@ -394,32 +506,7 @@ replacement = r'''        <li class="nav-dropdown">
     <main class="main-container">
       <div class="main-dashboard-layout">
         <div class="dashboard-topline">
-          <div class="brand-header-inline" role="banner">
-            <img
-              src="assets/Logo%208.5.png?v=20251216"
-              alt="Green Bier Sport Ventures"
-              class="brand-logo-inline"
-              loading="eager"
-            />
-            <div class="brand-content-inline">
-              <div class="brand-text-stacked">
-                <span class="brand-line-1">Green Bier</span>
-                <span class="brand-line-2"
-                  ><span class="brand-word">MARKET ODDS</span></span
-                >
-              </div>
-            </div>
-          </div>
           <div class="kpi-tiles">
-            <div class="kpi-tile" data-tile-id="1" role="button" tabindex="0">
-              <div class="kpi-tile-content">
-                <div class="kpi-tile-layer kpi-tile-front active">
-                  <div class="kpi-label">Games Today</div>
-                  <div class="kpi-value" id="kpi-games">0</div>
-                  <div class="kpi-subtext">Live Markets</div>
-                </div>
-              </div>
-            </div>
             <div class="kpi-tile" data-tile-id="2" role="button" tabindex="0">
               <div class="kpi-tile-content">
                 <div class="kpi-tile-layer kpi-tile-front active">
@@ -455,17 +542,108 @@ replacement = r'''        <li class="nav-dropdown">
           </div>
         </div>
 
-'''
+        <!-- Odds Comparison Board -->
+        <div class="odds-board">
+          <!-- Market Type Selector -->
+          <div class="market-selector">
+            <button class="market-btn active" data-market="spread">
+              Spread
+            </button>
+            <button class="market-btn" data-market="moneyline">
+              Moneyline
+            </button>
+            <button class="market-btn" data-market="total">Total</button>
+            <div class="market-selector-right">
+              <div class="live-filter">
+                <input type="checkbox" id="live-only" class="live-checkbox" />
+                <label for="live-only" class="live-label">
+                  <span class="live-dot"></span>
+                  Live Only
+                </label>
+              </div>
+              <button class="refresh-btn" id="refresh-btn" type="button">
+                <span class="refresh-icon">↻</span>
+                <span class="refresh-time" id="refresh-time">--:--</span>
+              </button>
+            </div>
+          </div>
 
-result = ''.join(before) + replacement + ''.join(after)
-SRC.write_text(result, encoding='utf-8')
+          <!-- Sportsbook Headers -->
+          <div class="books-header">
+            <div class="books-header-game">Matchup</div>
+            <div class="books-header-books" id="books-header-row">
+              <!-- Book columns rendered by JS -->
+            </div>
+          </div>
 
-# Verify
-new_lines = result.splitlines()
-print(f'Written {len(new_lines)} lines')
+          <!-- Games List -->
+          <div class="games-list" id="games-list">
+            <!-- Game rows rendered by JS -->
+          </div>
 
-# Check for key structural elements
-checks = ['</nav>', '</ul>', '<main', 'dashboard-topline', 'main-dashboard-layout', 'brand-header', 'kpi-tiles']
-for c in checks:
-    found = [i+1 for i, l in enumerate(new_lines) if c in l]
-    print(f'  {c}: lines {found}')
+          <!-- Empty State -->
+          <div class="odds-empty" id="odds-empty" hidden>
+            <span class="empty-icon">📊</span>
+            <span class="empty-text">No games match current filters</span>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Bet Slip Panel (slides in from right) -->
+    <aside class="bet-slip" id="bet-slip" aria-label="Bet Slip">
+      <div class="bet-slip-header">
+        <h2 class="bet-slip-title">Bet Slip</h2>
+        <span class="bet-slip-count" id="slip-count">0</span>
+        <button
+          class="bet-slip-toggle"
+          id="slip-toggle"
+          aria-label="Toggle bet slip"
+        >
+          <span class="toggle-icon">◀</span>
+        </button>
+      </div>
+      <div class="bet-slip-body" id="slip-body">
+        <div class="bet-slip-empty" id="slip-empty">
+          <span class="slip-empty-icon">🎯</span>
+          <span class="slip-empty-text">Click any odds to add to slip</span>
+        </div>
+        <div class="bet-slip-picks" id="slip-picks">
+          <!-- Selections rendered by JS -->
+        </div>
+      </div>
+      <div class="bet-slip-footer" id="slip-footer" hidden>
+        <div class="slip-summary">
+          <div class="slip-row">
+            <span class="slip-label">Total Risk</span>
+            <span class="slip-value" id="slip-risk">$0</span>
+          </div>
+          <div class="slip-row">
+            <span class="slip-label">To Win</span>
+            <span class="slip-value slip-win" id="slip-win">$0</span>
+          </div>
+        </div>
+        <button class="slip-clear-btn" id="slip-clear">Clear All</button>
+      </div>
+    </aside>
+
+    <!-- Bundled JS (shared core) -->
+    <script src="dist/core.min.js?v=36.01.0" defer></script>
+    <!-- Page-specific scripts -->
+    <script src="assets/js/features/import-options.js?v=36.01.0" defer></script>
+    <script src="assets/js/features/odds-market.js?v=36.01.0" defer></script>
+    <script>
+      (function () {
+        try {
+          if ("serviceWorker" in navigator) {
+            window.addEventListener("load", function () {
+              navigator.serviceWorker
+                .register("/sw.js?v=36.01.0", { updateViaCache: "none" })
+                .catch(function () {});
+            });
+          }
+        } catch (e) {}
+      })();
+    </script>
+  </body>
+</html>

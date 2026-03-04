@@ -1,6 +1,5 @@
 /**
- * Notification System
- * Provides user feedback for API operations and errors
+ * Notification System — bottom-center snackbar (Linear / Vercel style)
  */
 
 (function() {
@@ -8,182 +7,118 @@
 
     let container = null;
 
-    /**
-     * Initialize notification container
-     */
     function initContainer() {
         if (container) return container;
-        
+
         container = document.createElement('div');
         container.id = 'notification-container';
         container.style.cssText = `
             position: fixed;
-            top: 20px;
-            right: 20px;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
             z-index: 10001;
             display: flex;
-            flex-direction: column;
-            gap: 10px;
-            max-width: 400px;
+            flex-direction: column-reverse;
+            align-items: center;
+            gap: 6px;
             pointer-events: none;
         `;
         document.body.appendChild(container);
         return container;
     }
 
-    /**
-     * Show notification toast
-     * @param {string} message - Message to display
-     * @param {string} type - Type: 'success', 'error', 'warning', 'info'
-     * @param {number} duration - Duration in ms (default 5000, 0 = persistent)
-     */
-    function showNotification(message, type = 'info', duration = 5000) {
+    function showNotification(message, type = 'info', duration = 3000) {
         initContainer();
-        
+
         const notification = document.createElement('div');
         notification.className = `notification notification-${type}`;
-        
-        // Type-specific styling
-        const colors = {
-            success: { bg: 'rgba(10, 22, 40, 0.94)', icon: '✓', border: 'rgba(0, 214, 137, 0.45)', accent: '#00d689' },
-            error: { bg: 'rgba(10, 22, 40, 0.94)', icon: '✕', border: 'rgba(229, 57, 53, 0.45)', accent: '#ff5f6d' },
-            warning: { bg: 'rgba(10, 22, 40, 0.94)', icon: '⚠', border: 'rgba(251, 191, 36, 0.40)', accent: '#fbbf24' },
-            info: { bg: 'rgba(10, 22, 40, 0.94)', icon: '›', border: 'rgba(100, 160, 220, 0.35)', accent: '#8bb8e8' }
-        };
-        
-        const style = colors[type] || colors.info;
-        
+
+        const dot = { success: '#00c875', error: '#f45', warning: '#e0a000', info: '#7ab4db' };
+        const c = dot[type] || dot.info;
+
         notification.style.cssText = `
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            gap: 10px;
-            padding: 12px 16px;
-            background: ${style.bg};
-            border: 1px solid ${style.border};
-            border-left: 3px solid ${style.accent};
-            border-radius: 6px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255,255,255,0.03) inset;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            color: rgba(220, 235, 248, 0.92);
-            font-family: 'Montserrat', 'Inter', system-ui, sans-serif;
-            font-size: 0.78rem;
-            font-weight: 500;
-            letter-spacing: 0.02em;
-            line-height: 1.35;
+            gap: 6px;
+            padding: 5px 12px;
+            background: rgba(12, 18, 30, 0.88);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 20px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            color: rgba(200,215,230,0.9);
+            font: 500 11px/1 'Inter','Montserrat',system-ui,sans-serif;
+            letter-spacing: 0.01em;
+            white-space: nowrap;
             pointer-events: auto;
+            cursor: default;
             opacity: 0;
-            transform: translateX(40px);
-            transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+            transform: translateY(8px) scale(0.96);
+            transition: opacity .18s ease, transform .18s cubic-bezier(.2,.8,.2,1);
         `;
-        
-        notification.innerHTML = `
-            <span style="font-size: 0.85rem; line-height: 1; color: ${style.accent}; flex-shrink: 0; font-weight: 700;">${style.icon}</span>
-            <span style="flex: 1;">${message}</span>
-            <button onclick="this.parentElement.remove()" style="
-                background: none;
-                border: none;
-                color: rgba(220, 235, 248, 0.35);
-                cursor: pointer;
-                font-size: 1rem;
-                padding: 0 0 0 4px;
-                line-height: 1;
-                transition: color 0.15s ease;
-            " onmouseover="this.style.color='rgba(220,235,248,0.8)'" onmouseout="this.style.color='rgba(220,235,248,0.35)'">×</button>
-        `;
-        
+
+        notification.innerHTML =
+            `<span style="width:5px;height:5px;border-radius:50%;background:${c};flex-shrink:0"></span>` +
+            `<span>${message}</span>`;
+
         container.appendChild(notification);
-        
-        // Animate in
+
         requestAnimationFrame(() => {
             notification.style.opacity = '1';
-            notification.style.transform = 'translateX(0)';
+            notification.style.transform = 'translateY(0) scale(1)';
         });
-        
-        // Auto-dismiss
+
         if (duration > 0) {
-            setTimeout(() => {
-                dismissNotification(notification);
-            }, duration);
+            setTimeout(() => dismissNotification(notification), duration);
         }
-        
+
         return notification;
     }
 
-    /**
-     * Dismiss a notification
-     */
-    function dismissNotification(notification) {
-        if (!notification) return;
-        
-        notification.style.opacity = '0';
-        notification.style.transform = 'translateX(40px)';
-        
-        setTimeout(() => {
-            notification.remove();
-        }, 300);
+    function dismissNotification(el) {
+        if (!el) return;
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(6px) scale(0.96)';
+        setTimeout(() => el.remove(), 200);
     }
 
-    /**
-     * Show loading indicator
-     * @param {string} message - Loading message
-     * @returns {Object} - Loading indicator with dismiss method
-     */
-    function showLoading(message = 'Loading...') {
-        const notification = showNotification(
-            `<span class="loading-spinner"></span> ${message}`,
-            'info',
-            0
-        );
-        
-        // Add spinner animation
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes spin {
-                to { transform: rotate(360deg); }
-            }
-            .loading-spinner {
-                display: inline-block;
-                width: 14px;
-                height: 14px;
-                border: 2px solid rgba(255,255,255,0.3);
-                border-top-color: white;
-                border-radius: 50%;
-                animation: spin 1s linear infinite;
-                margin-right: 8px;
-                vertical-align: middle;
-            }
-        `;
-        if (!document.querySelector('style[data-loading-spinner]')) {
-            style.setAttribute('data-loading-spinner', 'true');
-            document.head.appendChild(style);
+    function showLoading(message = 'Loading…') {
+        const notification = showNotification(message, 'info', 0);
+
+        // swap dot for spinner
+        const dotEl = notification.querySelector('span');
+        if (dotEl) {
+            dotEl.style.cssText = `
+                width:9px;height:9px;flex-shrink:0;
+                border:1.5px solid rgba(255,255,255,0.15);
+                border-top-color:rgba(255,255,255,0.7);
+                border-radius:50%;
+                animation:_gbsv_spin .7s linear infinite;
+            `;
         }
-        
+
+        if (!document.querySelector('style[data-loading-spinner]')) {
+            const s = document.createElement('style');
+            s.setAttribute('data-loading-spinner', 'true');
+            s.textContent = '@keyframes _gbsv_spin{to{transform:rotate(360deg)}}';
+            document.head.appendChild(s);
+        }
+
         return {
             dismiss: () => dismissNotification(notification),
-            update: (newMessage) => {
-                const textSpan = notification.querySelector('span:nth-child(2)');
-                if (textSpan) textSpan.innerHTML = `<span class="loading-spinner"></span> ${newMessage}`;
+            update: (msg) => {
+                const t = notification.querySelector('span:nth-child(2)');
+                if (t) t.textContent = msg;
             }
         };
     }
 
-    // Convenience methods
-    function success(message, duration) {
-        return showNotification(message, 'success', duration);
-    }
-
-    function error(message, duration = 8000) {
-        return showNotification(message, 'error', duration);
-    }
-
-    function warning(message, duration) {
-        return showNotification(message, 'warning', duration);
-    }
-
-    function info(message, duration) {
-        return showNotification(message, 'info', duration);
-    }
+    function success(msg, d) { return showNotification(msg, 'success', d); }
+    function error(msg, d = 4500) { return showNotification(msg, 'error', d); }
+    function warning(msg, d) { return showNotification(msg, 'warning', d); }
+    function info(msg, d) { return showNotification(msg, 'info', d); }
 
     // Export
     window.Notify = {

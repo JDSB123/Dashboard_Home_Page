@@ -1109,7 +1109,10 @@
     // Render each pick as a row (using sync version for immediate rendering)
     picks.forEach((pick, idx) => {
       const row = createPickRow(pick, idx);
-      tbody.appendChild(row);
+      if (row) {
+        // Only append if row is valid (not null from incomplete pick)
+        tbody.appendChild(row);
+      }
     });
 
     console.log(`📊 Displayed ${picks.length} picks in table`);
@@ -1276,6 +1279,35 @@
   // Async team data loading happens in background via TeamDataLoader
 
   function createPickRow(pick, idx) {
+    // STRICT VALIDATION: Skip incomplete picks that would show empty rows
+    const hasValidMatchup =
+      pick.game ||
+      pick.matchup ||
+      (pick.awayTeam && pick.homeTeam) ||
+      (pick.description && !pick.description.toLowerCase().includes("tbd"));
+
+    const hasValidPick =
+      pick.pick ||
+      pick.pickTeam ||
+      pick.selection ||
+      (pick.description &&
+        !pick.description.toLowerCase().includes("tbd") &&
+        pick.description.trim().length > 2);
+
+    if (!hasValidMatchup || !hasValidPick) {
+      console.log(
+        "[LocalPicksManager] Skipping incomplete pick in createPickRow:",
+        {
+          id: pick.id,
+          league: pick.league,
+          segment: pick.segment,
+          hasValidMatchup,
+          hasValidPick,
+        },
+      );
+      return null;
+    }
+
     const row = document.createElement("tr");
     const pickTeamInfo = getTeamInfoSync(pick.pickTeam);
     const awayTeam = pick.awayTeam || pick.pickTeam || "TBD";

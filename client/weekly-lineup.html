@@ -45,8 +45,8 @@
       rel="stylesheet"
     />
     <!-- Bundled CSS (replaces 8 individual stylesheets) -->
-    <link rel="stylesheet" href="dist/core.min.css?v=36.01.0" />
-    <link rel="stylesheet" href="dist/weekly-lineup.min.css?v=36.01.0" />
+    <link rel="stylesheet" href="dist/core.min.css?v=36.01.2" />
+    <link rel="stylesheet" href="dist/weekly-lineup.min.css?v=36.01.2" />
 
     <!-- Runtime config (separate — per-environment) -->
     <script src="config.js?v=36.01.0" defer></script>
@@ -508,6 +508,42 @@
               <button class="ft-pill ft-league" data-league="nba">NBA</button>
               <button class="ft-pill ft-league" data-league="ncaab">
                 NCAAM
+              </button>
+              <button
+                class="ft-pill ft-league is-disabled"
+                data-league="nfl"
+                disabled
+                aria-disabled="true"
+                title="NFL coming soon"
+              >
+                NFL
+              </button>
+              <button
+                class="ft-pill ft-league is-disabled"
+                data-league="ncaaf"
+                disabled
+                aria-disabled="true"
+                title="NCAAF coming soon"
+              >
+                NCAAF
+              </button>
+              <button
+                class="ft-pill ft-league is-disabled"
+                data-league="nhl"
+                disabled
+                aria-disabled="true"
+                title="NHL coming soon"
+              >
+                NHL
+              </button>
+              <button
+                class="ft-pill ft-league is-disabled"
+                data-league="mlb"
+                disabled
+                aria-disabled="true"
+                title="MLB coming soon"
+              >
+                MLB
               </button>
               <!-- Segment dropdown -->
               <div class="ft-dropdown">
@@ -984,8 +1020,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.min.js"></script>
 
     <!-- Bundled JS (replaces ~40 individual scripts) -->
-    <script src="dist/core.min.js?v=36.01.0" defer></script>
-    <script src="dist/weekly-lineup.min.js?v=36.01.0" defer></script>
+    <script src="dist/core.min.js?v=36.01.2" defer></script>
+    <script src="dist/weekly-lineup.min.js?v=36.01.2" defer></script>
 
     <script>
       // Service worker registration (versioned to bust caches)

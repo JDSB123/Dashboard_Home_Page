@@ -1,10 +1,10 @@
 {
   "scripts": {
-    "ingest-logos":          "node scripts/ingest-all-logos.js",
-    "ingest-logos:nhl":      "node scripts/ingest-all-logos.js --nhl",
-    "ingest-logos:ncaab":    "node scripts/ingest-all-logos.js --ncaab",
-    "ingest-logos:dry-run":  "node scripts/ingest-all-logos.js --dry-run",
-    "ingest-logos:local":    "node scripts/ingest-all-logos.js --skip-upload"
+    "ingest-logos": "node scripts/ingest-all-logos.js",
+    "ingest-logos:nhl": "node scripts/ingest-all-logos.js --nhl",
+    "ingest-logos:ncaab": "node scripts/ingest-all-logos.js --ncaab",
+    "ingest-logos:dry-run": "node scripts/ingest-all-logos.js --dry-run",
+    "ingest-logos:local": "node scripts/ingest-all-logos.js --skip-upload"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"

@@ -6399,24 +6399,63 @@ body.page-weekly-lineup .weekly-lineup-table-wrapper {
 
 /* Remove black fill from filter toolbar */
 body.page-weekly-lineup .filter-toolbar {
-  background: rgba(8, 16, 30, 0.28);
+  background: transparent;
   border-bottom: none;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+  box-shadow: none;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 14px;
-  padding: 6px 8px;
-  border-radius: 10px;
+  gap: 8px;
+  margin-bottom: 8px;
+  padding: 0;
+  border-radius: 0;
 }
 
 /* Left side: pills & dropdowns in a single row, don't shrink */
 body.page-weekly-lineup .filter-toolbar .ft-left {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   flex-wrap: wrap;
   flex: 1 1 auto;
   min-width: 0;
+}
+
+/* Weekly lineup: compact controls (dashboard-inspired) */
+body.page-weekly-lineup .filter-toolbar .ft-pill,
+body.page-weekly-lineup .filter-toolbar .ft-dropdown-btn,
+body.page-weekly-lineup .filter-toolbar .ft-clear {
+  padding: 4px 10px;
+  min-height: 28px;
+  font-size: 0.68rem;
+  border-radius: 12px;
+}
+
+/* Inactive leagues shown but disabled/greyed-out */
+body.page-weekly-lineup .filter-toolbar .ft-pill.is-disabled,
+body.page-weekly-lineup .filter-toolbar .ft-pill:disabled {
+  color: rgba(170, 180, 195, 0.55);
+  border-color: rgba(120, 135, 155, 0.25);
+  background: linear-gradient(
+    135deg,
+    rgba(28, 36, 50, 0.82) 0%,
+    rgba(20, 28, 42, 0.9) 100%
+  );
+  box-shadow: none;
+  text-shadow: none;
+  cursor: not-allowed;
+  opacity: 0.85;
+  filter: grayscale(0.2);
+}
+
+body.page-weekly-lineup .filter-toolbar .ft-pill.is-disabled:hover,
+body.page-weekly-lineup .filter-toolbar .ft-pill:disabled:hover {
+  color: rgba(170, 180, 195, 0.55);
+  border-color: rgba(120, 135, 155, 0.25);
+  background: linear-gradient(
+    135deg,
+    rgba(28, 36, 50, 0.82) 0%,
+    rgba(20, 28, 42, 0.9) 100%
+  );
+  box-shadow: none;
 }
 
 /* Right side: fetch controls hug the right, never wrap under pills */
@@ -6460,7 +6499,7 @@ body.page-weekly-lineup .filter-toolbar .ft-right {
 /* Ensure toolbar container is transparent */
 body.page-weekly-lineup .toolbar-container {
   background: transparent;
-  margin-bottom: 10px;
+  margin-bottom: 4px;
 }
 
 body.page-weekly-lineup .main-container {
