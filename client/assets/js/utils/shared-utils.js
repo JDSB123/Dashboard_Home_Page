@@ -146,7 +146,39 @@
             'spurs': 'SAS', 'san antonio spurs': 'SAS',
             'rockets': 'HOU', 'houston rockets': 'HOU',
             'mavericks': 'DAL', 'dallas mavericks': 'DAL',
-            'kings': 'SAC', 'sacramento kings': 'SAC'
+            'kings': 'SAC', 'sacramento kings': 'SAC',
+
+            // NBA short-form aliases (ACA outputs "{ABBR} {Nickname}" format, e.g. "NY Knicks")
+            'ny knicks': 'NYK', 'nyc knicks': 'NYK', 'nyknicks': 'NYK',
+            'okc thunder': 'OKC',
+            'bos celtics': 'BOS',
+            'cha hornets': 'CHA',
+            'chi bulls': 'CHI',
+            'cle cavaliers': 'CLE', 'cle cavs': 'CLE', 'cavs': 'CLE',
+            'dal mavericks': 'DAL', 'dal mavs': 'DAL', 'mavs': 'DAL',
+            'den nuggets': 'DEN',
+            'det pistons': 'DET',
+            'gs warriors': 'GSW', 'gsw warriors': 'GSW', 'golden st warriors': 'GSW',
+            'hou rockets': 'HOU',
+            'ind pacers': 'IND',
+            'lac clippers': 'LAC',
+            'lal lakers': 'LAL', 'la lakers': 'LAL',
+            'mem grizzlies': 'MEM',
+            'mia heat': 'MIA',
+            'mil bucks': 'MIL',
+            'min timberwolves': 'MIN', 'min t-wolves': 'MIN',
+            'nop pelicans': 'NOP', 'no pelicans': 'NOP', 'nola pelicans': 'NOP',
+            'orl magic': 'ORL',
+            'phi 76ers': 'PHI', 'phi sixers': 'PHI',
+            'phx suns': 'PHX',
+            'por trail blazers': 'POR', 'por blazers': 'POR',
+            'sac kings': 'SAC',
+            'sas spurs': 'SAS', 'sa spurs': 'SAS',
+            'tor raptors': 'TOR',
+            'uta jazz': 'UTA',
+            'atl hawks': 'ATL',
+            'bkn nets': 'BKN', 'bk nets': 'BKN', 'brk nets': 'BKN',
+            'was wizards': 'WAS', 'wsh wizards': 'WAS'
         };
         
         const key = teamName.toLowerCase().trim();
