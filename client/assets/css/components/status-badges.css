@@ -82,6 +82,7 @@
 .status-badge--mini {
     cursor: pointer;
     text-align: center;
+    -webkit-user-select: none;
     user-select: none;
     transition: box-shadow 0.12s ease-out, border-color 0.12s ease-out, transform 0.12s ease-out;
 }

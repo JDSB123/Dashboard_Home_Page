@@ -96,7 +96,7 @@ body.page-weekly-lineup .main-container {
 }
 
 body.page-weekly-lineup .main-dashboard-layout {
-  gap: 8px;
+  gap: 4px;
 }
 
 /* ===== DASHBOARD TOPLINE - FLOATING/TRANSPARENT ===== */
@@ -5528,7 +5528,7 @@ body.page-weekly-lineup
   justify-content: space-between;
   align-items: center;
   padding: 2px 0 0;
-  margin: 0 0 8px 0;
+  margin: 0;
   position: relative;
   z-index: 10050;
   background: transparent !important;
@@ -6402,9 +6402,11 @@ body.page-weekly-lineup .filter-toolbar {
   box-shadow: none;
   align-items: center;
   gap: 8px;
-  margin-bottom: 14px;
-  padding: 0;
+  margin-bottom: 0;
+  padding: 0 0 4px;
   border-radius: 0;
+  top: auto; /* Reset the 56px offset from mobile-overhaul.css */
+  position: relative;
 }
 
 /* Left side: pills & dropdowns in a single row, don't shrink */

@@ -14,6 +14,7 @@
         overflow-x: hidden !important;
         -webkit-text-size-adjust: 100%;
         -ms-text-size-adjust: 100%;
+        text-size-adjust: 100%;
     }
     
     body {
@@ -585,9 +586,9 @@
         transform: none !important;
     }
     
-    /* Smooth scrolling */
+    /* Smooth scrolling — momentum scrolling is default on iOS 13+; no vendor property needed */
     * {
-        -webkit-overflow-scrolling: touch !important;
+        /* -webkit-overflow-scrolling removed: deprecated and no-op on all modern browsers */
     }
     
     /* Prevent text selection on UI elements */

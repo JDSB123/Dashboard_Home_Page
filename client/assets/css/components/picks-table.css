@@ -2001,7 +2001,6 @@ body.boxscores-collapsed .picks-table tbody tr.row-collapsed.parlay-row:hover {
 
   .table-container {
     margin: 0 8px;
-    -webkit-overflow-scrolling: touch; /* Smooth scroll on iOS */
   }
 
   .picks-table thead th {

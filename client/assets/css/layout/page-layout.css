@@ -1028,6 +1028,19 @@ nav {
   scrollbar-color: rgba(var(--color-primary-bright-rgb), 0.3) transparent;
 }
 
+.filter-options::-webkit-scrollbar {
+  width: 4px;
+}
+
+.filter-options::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.filter-options::-webkit-scrollbar-thumb {
+  background: rgba(var(--color-primary-bright-rgb), 0.3);
+  border-radius: 2px;
+}
+
 .filter-option {
   display: flex;
   align-items: center;
@@ -1321,6 +1334,19 @@ nav {
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: rgba(var(--color-primary-bright-rgb), 0.3) transparent;
+}
+
+.filter-grid-options::-webkit-scrollbar {
+  width: 4px;
+}
+
+.filter-grid-options::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.filter-grid-options::-webkit-scrollbar-thumb {
+  background: rgba(var(--color-primary-bright-rgb), 0.3);
+  border-radius: 2px;
 }
 
 /* Compact option for grid columns */
@@ -1742,6 +1768,19 @@ nav {
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: rgba(var(--color-primary-bright-rgb), 0.25) transparent;
+}
+
+.matchup-teams-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.matchup-teams-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.matchup-teams-list::-webkit-scrollbar-thumb {
+  background: rgba(var(--color-primary-bright-rgb), 0.25);
+  border-radius: 2px;
 }
 
 .team-filter-option {
