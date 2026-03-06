@@ -494,33 +494,40 @@
       <!-- Fetch Toolbar — primary action, top of page -->
       <div class="mp-fetch-section">
         <div class="mp-fetch-bar">
-          <button
-            class="mp-fetch-btn mp-fetch-all"
-            data-mp-fetch="all"
-            aria-label="Fetch all model picks"
-            type="button"
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
-              <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
-            </svg>
-            Fetch All
-          </button>
-          <button class="mp-fetch-btn" data-mp-fetch="nba" aria-label="Fetch NBA picks" type="button">
-            <img src="assets/nba-logo.png" class="mp-btn-icon" alt="" aria-hidden="true" />
-            NBA
-          </button>
-          <button class="mp-fetch-btn" data-mp-fetch="ncaab" aria-label="Fetch NCAAM picks" type="button">
-            <img src="assets/ncaam-logo.png" class="mp-btn-icon" alt="" aria-hidden="true" />
-            NCAAM
-          </button>
-          <button class="mp-fetch-btn" data-mp-fetch="nhl" aria-label="Fetch NHL picks" type="button">
-            <img src="assets/nhl-logo.png" class="mp-btn-icon" alt="" aria-hidden="true" />
-            NHL
-          </button>
-          <button class="mp-fetch-btn" data-mp-fetch="mlb" aria-label="Fetch MLB picks" type="button">
-            <img src="assets/mlb-logo.png" class="mp-btn-icon" alt="" aria-hidden="true" />
-            MLB
-          </button>
+          <div class="mp-dropdown" id="mp-fetch-dropdown">
+            <button
+              class="mp-fetch-btn mp-fetch-trigger"
+              id="mp-fetch-trigger"
+              aria-label="Fetch model picks by league"
+              aria-expanded="false"
+              aria-haspopup="true"
+              type="button"
+            >
+              <span>Leagues</span>
+              <span aria-hidden="true">▾</span>
+            </button>
+            <div class="mp-dropdown-menu" id="mp-fetch-menu" hidden>
+              <button class="mp-fetch-item" data-mp-fetch="all" type="button">
+                <span>All Leagues</span>
+              </button>
+              <button class="mp-fetch-item" data-mp-fetch="nba" type="button">
+                <img src="assets/nba-logo.png" class="mp-btn-icon" alt="" aria-hidden="true" />
+                <span>NBA</span>
+              </button>
+              <button class="mp-fetch-item" data-mp-fetch="ncaab" type="button">
+                <img src="assets/ncaam-logo.png" class="mp-btn-icon" alt="" aria-hidden="true" />
+                <span>NCAAM</span>
+              </button>
+              <button class="mp-fetch-item" data-mp-fetch="nhl" type="button">
+                <img src="assets/icons/league-nhl-official.svg" class="mp-btn-icon" alt="" aria-hidden="true" />
+                <span>NHL</span>
+              </button>
+              <button class="mp-fetch-item" data-mp-fetch="mlb" type="button">
+                <img src="assets/mlb-logo.png" class="mp-btn-icon" alt="" aria-hidden="true" />
+                <span>MLB</span>
+              </button>
+            </div>
+          </div>
           <button class="mp-clear-btn" id="mp-clear-picks" type="button" aria-label="Clear all tracked picks">
             Clear
           </button>
@@ -528,89 +535,41 @@
         <span class="mp-last-sync" id="mp-last-refreshed" aria-live="polite"></span>
       </div>
 
-      <!-- Model Picks cards -->
-      <div
-        class="mp-cards-container"
-        id="model-picks-cards"
-        aria-live="polite"
-        aria-atomic="false"
-      >
-        <div class="mp-empty-state">
-          <span class="mp-empty-icon">📊</span>
-          <span>Tap a button above to load today's model picks</span>
-        </div>
+      <!-- KPI inline bar -->
+      <div class="kpi-bar">
+        <span class="kpi-item"><span class="kpi-k">Risk</span> <span class="kpi-v" id="kpi-risk">--</span></span>
+        <span class="kpi-sep"></span>
+        <span class="kpi-item"><span class="kpi-k">Win</span> <span class="kpi-v" id="kpi-to-win">--</span></span>
+        <span class="kpi-sep"></span>
+        <span class="kpi-item"><span class="kpi-k">P&amp;L</span> <span class="kpi-v" id="kpi-pnl">--</span></span>
+        <span class="kpi-sep"></span>
+        <span class="kpi-item"><span class="kpi-k">W-L</span> <span class="kpi-v" id="kpi-record">--</span></span>
+        <span class="kpi-sep"></span>
+        <span class="kpi-item"><span class="kpi-k">Live</span> <span class="kpi-v" id="kpi-live">--</span></span>
+        <span class="kpi-sep"></span>
+        <span class="kpi-item"><span class="kpi-k">Pend</span> <span class="kpi-v" id="kpi-pending">--</span></span>
       </div>
 
-      <!-- KPI strip -->
-      <div class="tracker-kpis">
-        <div class="kpi-card">
-          <div class="kpi-label">Risk</div>
-          <div class="kpi-value" id="kpi-risk">--</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">To Win</div>
-          <div class="kpi-value" id="kpi-to-win">--</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">P&amp;L</div>
-          <div class="kpi-value" id="kpi-pnl">--</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">Live</div>
-          <div class="kpi-value" id="kpi-live">--</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">Pending</div>
-          <div class="kpi-value" id="kpi-pending">--</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">W-L</div>
-          <div class="kpi-value" id="kpi-record">--</div>
-        </div>
-      </div>
-
-      <!-- Straight Bets -->
-      <h2 class="section-title">
-        Straight Bets (<span id="straights-count">0</span>)
-      </h2>
-      <div class="tracker-table-wrap">
-        <table class="tracker-table">
-          <thead>
-            <tr>
-              <th>Pick</th>
-              <th class="center">Score</th>
-              <th class="center">Status</th>
-              <th>Detail</th>
-              <th class="text-right">Risk</th>
-              <th class="text-right">To Win</th>
-              <th class="text-right">P&amp;L</th>
-            </tr>
-          </thead>
-          <tbody id="straights-tbody"></tbody>
-        </table>
+      <!-- Unified pick cards feed -->
+      <div class="mp-cards-container mp-hidden" id="model-picks-cards" aria-live="polite" aria-atomic="false"></div>
+      <div class="pick-feed" id="straights-feed" aria-live="polite"></div>
+      <div class="pick-feed-empty" id="feed-empty">
+        Open Leagues to fetch today's picks
       </div>
 
       <!-- Live Scoreboard -->
-      <h2 class="section-title">Live Scoreboard</h2>
       <div id="game-cards"></div>
 
-      <!-- Round Robins -->
-      <h2 class="section-title">Round Robins (<span id="rr-count">0</span>)</h2>
-      <div class="tracker-table-wrap">
-        <table class="tracker-table">
-          <thead>
-            <tr>
-              <th>Type</th>
-              <th>Legs</th>
-              <th class="center">Status</th>
-              <th class="text-right">Risk</th>
-              <th class="text-right">To Win</th>
-              <th class="text-right">P&amp;L</th>
-            </tr>
-          </thead>
-          <tbody id="rr-tbody"></tbody>
-        </table>
+      <!-- Round Robins (shown by JS when populated) -->
+      <div id="rr-section" class="rr-section-hidden">
+        <div class="section-label">Round Robins <span id="rr-count">0</span></div>
+        <div id="rr-feed"></div>
       </div>
+
+      <!-- Legacy table containers (kept for JS compat) -->
+      <span id="straights-count" class="mp-hidden">0</span>
+      <table class="mp-hidden"><tbody id="straights-tbody"></tbody></table>
+      <table class="mp-hidden"><tbody id="rr-tbody"></tbody></table>
     </main>
 
     <!-- Bundled JS (shared core) -->

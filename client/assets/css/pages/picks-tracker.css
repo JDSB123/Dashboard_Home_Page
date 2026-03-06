@@ -521,6 +521,10 @@
   flex-wrap: wrap;
 }
 
+.mp-dropdown {
+  position: relative;
+}
+
 .mp-fetch-btn {
   display: inline-flex;
   align-items: center;
@@ -625,6 +629,45 @@
 .mp-fetch-all {
   border-color: rgba(0, 214, 137, 0.35);
   background: rgba(0, 214, 137, 0.09);
+}
+
+.mp-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 190px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 214, 137, 0.2);
+  background: rgba(7, 18, 30, 0.98);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+  z-index: 25;
+}
+
+.mp-fetch-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 9px 10px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: rgba(220, 232, 238, 0.92);
+  font-size: 13px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+.mp-fetch-item:hover,
+.mp-fetch-item:focus-visible {
+  background: rgba(0, 214, 137, 0.14);
+  color: #fff;
+  outline: none;
 }
 
 /* Last-refreshed timestamp */
@@ -946,6 +989,290 @@
   .rr-legs-cell {
     gap: 4px 6px;
   }
+}
+
+/* ===== UTILITY CLASSES ===== */
+.mp-hidden {
+  display: none !important;
+}
+
+.rr-section-hidden {
+  display: none !important;
+}
+
+/* ===== KPI INLINE BAR ===== */
+.kpi-bar {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 10px 16px;
+  margin-bottom: 16px;
+  border-radius: 10px;
+  background: linear-gradient(
+    180deg,
+    rgba(8, 18, 32, 0.95),
+    rgba(4, 12, 24, 0.98)
+  );
+  border: 1px solid rgba(0, 214, 137, 0.1);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.kpi-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.kpi-item {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  white-space: nowrap;
+  padding: 0 12px;
+}
+
+.kpi-k {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(0, 214, 137, 0.7);
+}
+
+.kpi-v {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+}
+
+.kpi-v.positive {
+  color: var(--status-hit-color, #00d689);
+}
+
+.kpi-v.negative {
+  color: var(--status-miss-color, #e53935);
+}
+
+.kpi-sep {
+  width: 1px;
+  height: 18px;
+  background: rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+}
+
+/* ===== SECTION LABEL ===== */
+.section-label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(0, 214, 137, 0.8);
+  padding: 12px 0 8px;
+  border-bottom: 1px solid rgba(0, 214, 137, 0.08);
+  margin-bottom: 10px;
+}
+
+.section-label span {
+  font-weight: 400;
+  color: rgba(160, 175, 190, 0.5);
+  margin-left: 6px;
+}
+
+/* ===== PICK FEED — unified card stream ===== */
+.pick-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pick-feed-empty {
+  text-align: center;
+  padding: 40px 16px;
+  color: rgba(160, 175, 190, 0.45);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* ── Pick Feed Card ── */
+.pf-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 214, 137, 0.1);
+  background: linear-gradient(
+    165deg,
+    rgba(8, 20, 36, 0.96),
+    rgba(4, 12, 24, 0.99)
+  );
+  overflow: hidden;
+  transition: border-color 0.15s;
+}
+
+.pf-card:hover {
+  border-color: rgba(0, 214, 137, 0.2);
+}
+
+/* Status-colored left border */
+.pf-card[data-status="win"] {
+  border-left: 3px solid rgba(0, 214, 137, 0.6);
+}
+
+.pf-card[data-status="loss"] {
+  border-left: 3px solid rgba(229, 57, 53, 0.6);
+}
+
+.pf-card[data-status="on-track"] {
+  border-left: 3px solid rgba(0, 191, 255, 0.6);
+}
+
+.pf-card[data-status="at-risk"] {
+  border-left: 3px solid rgba(251, 140, 0, 0.6);
+}
+
+.pf-card[data-status="push"] {
+  border-left: 3px solid rgba(184, 197, 208, 0.4);
+}
+
+/* Top row: sport tag + status */
+.pf-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px 0;
+}
+
+.pf-sport {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(0, 214, 137, 0.7);
+}
+
+.pf-status {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 2px 8px;
+  border-radius: 8px;
+}
+
+.pf-status[data-status="pending"] {
+  color: rgba(160, 175, 190, 0.7);
+  background: rgba(160, 175, 190, 0.1);
+}
+
+.pf-status[data-status="on-track"] {
+  color: rgba(0, 191, 255, 0.9);
+  background: rgba(0, 191, 255, 0.1);
+}
+
+.pf-status[data-status="at-risk"] {
+  color: rgba(251, 140, 0, 0.9);
+  background: rgba(251, 140, 0, 0.1);
+}
+
+.pf-status[data-status="win"] {
+  color: rgba(0, 214, 137, 0.95);
+  background: rgba(0, 214, 137, 0.12);
+}
+
+.pf-status[data-status="loss"] {
+  color: rgba(229, 57, 53, 0.95);
+  background: rgba(229, 57, 53, 0.1);
+}
+
+.pf-status[data-status="push"] {
+  color: rgba(184, 197, 208, 0.7);
+  background: rgba(184, 197, 208, 0.08);
+}
+
+.pf-status[data-status="live"] {
+  color: rgba(255, 68, 68, 0.95);
+  background: rgba(255, 68, 68, 0.1);
+}
+
+/* Pick label — main hero text */
+.pf-pick {
+  padding: 4px 12px 2px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.3;
+}
+
+/* Matchup line */
+.pf-matchup {
+  padding: 0 12px;
+  font-size: 12px;
+  color: rgba(200, 210, 220, 0.7);
+  line-height: 1.4;
+}
+
+/* Evaluation detail */
+.pf-detail {
+  padding: 2px 12px;
+  font-size: 11px;
+  color: rgba(160, 175, 190, 0.55);
+}
+
+/* Money row */
+.pf-money {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 8px 12px 10px;
+  margin-top: 4px;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.pf-m {
+  flex: 1;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: rgba(220, 230, 240, 0.9);
+  font-variant-numeric: tabular-nums;
+}
+
+.pf-ml {
+  display: block;
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(160, 175, 190, 0.45);
+  margin-bottom: 1px;
+}
+
+.pf-pnl.positive {
+  color: var(--status-hit-color, #00d689);
+}
+
+.pf-pnl.negative {
+  color: var(--status-miss-color, #e53935);
+}
+
+/* ── Round Robin Feed Cards ── */
+.pf-rr-legs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  padding: 4px 12px 6px;
+}
+
+.pf-rr-leg {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: rgba(200, 210, 220, 0.8);
+}
+
+.pf-rr-leg .status-dot {
+  width: 6px;
+  height: 6px;
 }
 
 /* Mobile overrides handled by picks-tracker-mobile.css */

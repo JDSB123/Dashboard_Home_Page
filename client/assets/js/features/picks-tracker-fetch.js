@@ -161,7 +161,9 @@
   };
 
   const allButtons = () =>
-    Array.from(document.querySelectorAll(".mp-fetch-btn[data-mp-fetch]"));
+    Array.from(
+      document.querySelectorAll("#mp-fetch-trigger, .mp-fetch-item[data-mp-fetch]"),
+    );
 
   const fetchAndRender = async (sport, btn) => {
     if (activeFetch) return;
@@ -224,7 +226,7 @@
     } catch (_err) {
       container.innerHTML =
         '<div class="mp-empty-state mp-err-state">' +
-        "<span>Failed to load picks. Tap a button to retry.</span></div>";
+        "<span>Failed to load picks. Open Leagues to retry.</span></div>";
       setButtonState(btn, "err");
       setTimeout(() => setButtonState(btn, null), 3000);
     } finally {
@@ -236,12 +238,48 @@
   };
 
   const init = () => {
+    const closeMenu = () => {
+      const menu = document.getElementById("mp-fetch-menu");
+      const trigger = document.getElementById("mp-fetch-trigger");
+      if (!menu || !trigger) return;
+      menu.hidden = true;
+      trigger.setAttribute("aria-expanded", "false");
+    };
+
+    // Handle fetch from dropdown items
     document.addEventListener("click", (e) => {
-      const btn = e.target.closest(".mp-fetch-btn[data-mp-fetch]");
+      const btn = e.target.closest(".mp-fetch-item[data-mp-fetch]");
       if (!btn) return;
+      e.preventDefault();
       const sport = btn.getAttribute("data-mp-fetch");
-      if (sport) fetchAndRender(sport, btn);
+      closeMenu();
+      if (!sport) return;
+      const trigger = document.getElementById("mp-fetch-trigger");
+      fetchAndRender(sport, trigger || btn);
     });
+
+    // Dropdown toggle
+    const trigger = document.getElementById("mp-fetch-trigger");
+    const menu = document.getElementById("mp-fetch-menu");
+    if (trigger && menu) {
+      trigger.addEventListener("click", () => {
+        const open = !menu.hidden;
+        menu.hidden = open;
+        trigger.setAttribute("aria-expanded", String(!open));
+      });
+      // Close on outside click
+      document.addEventListener("click", (e) => {
+        if (!e.target.closest("#mp-fetch-dropdown") && !menu.hidden) {
+          closeMenu();
+        }
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && !menu.hidden) {
+          closeMenu();
+        }
+      });
+    }
   };
 
   if (document.readyState === "loading") {
