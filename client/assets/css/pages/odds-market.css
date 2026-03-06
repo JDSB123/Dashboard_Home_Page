@@ -255,7 +255,7 @@ body.page-odds-market .kpi-subtext { color: var(--market-accent-secondary); opac
 }
 .book-group-label {
   text-align: center; padding: 3px 0;
-  font-family: var(--font-body); font-size: 0.58rem;
+  font-family: var(--font-body); font-size: 0.64rem;
   font-weight: var(--weight-bold); text-transform: uppercase;
   letter-spacing: 0.15em;
 }
