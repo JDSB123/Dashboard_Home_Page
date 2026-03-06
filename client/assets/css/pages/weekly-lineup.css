@@ -4537,6 +4537,45 @@ body.page-weekly-lineup .filter-title,
   color: rgba(180, 195, 210, 0.7);
 }
 
+/* Team Search */
+.ft-team-search {
+  position: relative;
+}
+
+.ft-team-search-input {
+  width: 140px;
+  padding: 5px 10px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  font-family: inherit;
+  color: rgba(200, 215, 230, 0.95);
+  background: linear-gradient(
+    135deg,
+    rgba(20, 35, 60, 0.92) 0%,
+    rgba(15, 28, 50, 0.96) 100%
+  );
+  border: 1px solid rgba(100, 130, 170, 0.35);
+  border-radius: 14px;
+  outline: none;
+  transition: all 0.15s ease;
+  box-shadow:
+    0 1px 4px rgba(0, 0, 0, 0.35),
+    0 0 6px rgba(80, 120, 180, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.ft-team-search-input::placeholder {
+  color: rgba(160, 175, 195, 0.6);
+}
+
+.ft-team-search-input:focus {
+  border-color: rgba(0, 214, 137, 0.5);
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.4),
+    0 0 10px rgba(0, 214, 137, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
 /* Dropdown */
 .ft-dropdown {
   position: relative;

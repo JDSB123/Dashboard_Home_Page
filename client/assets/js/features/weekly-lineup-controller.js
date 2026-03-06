@@ -19,6 +19,7 @@
       league: "all",
       segment: "all",
       pickType: "all",
+      teamSearch: "",
     },
     sort: {
       key: "edge",
@@ -228,6 +229,9 @@
     state.filters.league = "all";
     state.filters.segment = "all";
     state.filters.pickType = "all";
+    state.filters.teamSearch = "";
+    const searchInput = document.getElementById("ft-team-search");
+    if (searchInput) searchInput.value = "";
     updateToolbarDropdownLabel("segment");
     updateToolbarDropdownLabel("pickType");
   };
@@ -252,6 +256,22 @@
       state.filters.pickType !== pickType
     ) {
       return false;
+    }
+
+    if (state.filters.teamSearch) {
+      const q = state.filters.teamSearch;
+      const away = safeText(pick.awayTeam).toLowerCase();
+      const home = safeText(pick.homeTeam).toLowerCase();
+      const awayFull = resolveFullName(pick.awayTeam, pick.sport || pick.league).toLowerCase();
+      const homeFull = resolveFullName(pick.homeTeam, pick.sport || pick.league).toLowerCase();
+      if (
+        !away.includes(q) &&
+        !home.includes(q) &&
+        !awayFull.includes(q) &&
+        !homeFull.includes(q)
+      ) {
+        return false;
+      }
     }
 
     return true;
@@ -355,6 +375,9 @@
     if (state.filters.pickType !== "all") {
       chips.push({ key: "pickType", label: `Pick: ${state.filters.pickType}` });
     }
+    if (state.filters.teamSearch) {
+      chips.push({ key: "teamSearch", label: `Team: ${state.filters.teamSearch}` });
+    }
 
     host.innerHTML = "";
     host.setAttribute("data-has-chips", chips.length > 0 ? "true" : "false");
@@ -374,6 +397,7 @@
     if (state.filters.league !== "all") count += 1;
     if (state.filters.segment !== "all") count += 1;
     if (state.filters.pickType !== "all") count += 1;
+    if (state.filters.teamSearch) count += 1;
     return count;
   };
 
@@ -883,9 +907,9 @@
       tr.innerHTML = `
         <td class="col-datetime">
           <div class="datetime-cell">
-            ${dateText ? `<div class="cell-date">${safeText(dateText)}</div>` : ""}
-            <div class="cell-time">${safeText(timeCst)}</div>
-            <div class="cell-book">${safeText(modelLabel)}</div>
+            <span class="date-value">${safeText(dateText)}</span>
+            <span class="time-value">${safeText(timeCst)}</span>
+            <span class="sportsbook-value">${safeText(pick.sportsbook || pick.book || "Model")}</span>
           </div>
         </td>
         <td class="center col-league">
@@ -914,7 +938,7 @@
         <td class="col-pick" data-label="Recommended Pick">
           <div class="pick-display">
             <span class="pick-label">${safeText(pickLabel)}</span>
-            <span class="pick-odds">${safeText(odds)}</span>
+            <span class="pick-odds">(${safeText(odds)})</span>
           </div>
         </td>
         <td class="col-model-prediction" data-label="Model Prediction">
@@ -1352,6 +1376,11 @@
         if (key === "league") state.filters.league = "all";
         if (key === "segment") state.filters.segment = "all";
         if (key === "pickType") state.filters.pickType = "all";
+        if (key === "teamSearch") {
+          state.filters.teamSearch = "";
+          const searchInput = document.getElementById("ft-team-search");
+          if (searchInput) searchInput.value = "";
+        }
         updateToolbarDropdownLabel("segment");
         updateToolbarDropdownLabel("pickType");
         renderFilteredRows();
@@ -1412,6 +1441,18 @@
         closeToolbarDropdowns();
       }
     });
+
+    const searchInput = document.getElementById("ft-team-search");
+    if (searchInput) {
+      let debounceTimer = null;
+      searchInput.addEventListener("input", () => {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+          state.filters.teamSearch = searchInput.value.trim().toLowerCase();
+          renderFilteredRows();
+        }, 200);
+      });
+    }
   };
 
   const attachSortHandlers = () => {
