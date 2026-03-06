@@ -19,7 +19,7 @@
 (function () {
   "use strict";
 
-  const { normalizeFireRating, getFunctionsBase, getContainerEndpoint } =
+  const { normalizeFireRating, getFunctionsBase, getContainerEndpoint, resolveTeam } =
     window.BaseSportFetcher?.utils || {};
 
   // NCAAM-specific: trigger picks generation via proxy
@@ -64,9 +64,7 @@
       const endpoint = getContainerEndpoint("ncaam");
       if (!endpoint) return "";
       const d = date && date !== "today" ? date : null;
-      return d
-        ? `${endpoint}/api/picks/${d}`
-        : `${endpoint}/api/picks/active`;
+      return d ? `${endpoint}/api/picks/${d}` : `${endpoint}/api/picks/active`;
     },
 
     // NCAAM-specific retry: trigger picks generation on 503
@@ -78,10 +76,9 @@
           const proxyBase = `${getFunctionsBase()}/api/model/ncaam`;
           const d = date && date !== "today" ? date : null;
           const picksPath = d ? `/api/picks/${d}` : "/api/picks/active";
-          const retryResponse = await fetch(
-            `${proxyBase}${picksPath}`,
-            { signal: AbortSignal.timeout(60000) },
-          );
+          const retryResponse = await fetch(`${proxyBase}${picksPath}`, {
+            signal: AbortSignal.timeout(60000),
+          });
           return retryResponse;
         }
       }
@@ -92,11 +89,12 @@
       // v2 fireRating may be emoji string ("🔥🔥🔥") — count emojis for numeric value
       const rawFire = pick.fire_rating || pick.fireRating || pick.confidence;
       const emojiCount = (String(rawFire || "").match(/🔥/g) || []).length;
-      const fireNum = emojiCount > 0
-        ? Math.min(5, emojiCount)
-        : (normalizeFireRating
+      const fireNum =
+        emojiCount > 0
+          ? Math.min(5, emojiCount)
+          : normalizeFireRating
             ? normalizeFireRating(rawFire, parseFloat(pick.edge) || 0)
-            : 3);
+            : 3;
 
       const marketType = (pick.market || "spread").toLowerCase();
 
@@ -110,19 +108,22 @@
         timeStr = timeParts.slice(1).join(" ");
       }
 
-      const awayTeam =
+      const rawAway =
         pick.awayTeam ||
         pick.away_team ||
         (pick.matchup ? pick.matchup.split(" @ ")[0] : "") ||
         "";
-      const homeTeam =
+      const rawHome =
         pick.homeTeam ||
         pick.home_team ||
         (pick.matchup ? pick.matchup.split(" @ ")[1] : "") ||
         "";
+      const awayTeam = resolveTeam(rawAway, "ncaab").fullName || rawAway;
+      const homeTeam = resolveTeam(rawHome, "ncaab").fullName || rawHome;
 
       // v2: pickLabel = "Howard ML"; fall back to selection-derived label or raw pick field
-      const pickTeam = pick.predictedWinner || pick.pick || pick.pickLabel || "";
+      const pickTeam =
+        pick.predictedWinner || pick.pick || pick.pickLabel || "";
       let pickDirection = "";
       const upperPick = pickTeam.toUpperCase();
       if (upperPick === "OVER" || upperPick === "UNDER") {
@@ -147,14 +148,20 @@
         time: timeStr,
         awayTeam,
         homeTeam,
+        awayRecord: pick.away_record || pick.awayRecord || "",
+        homeRecord: pick.home_record || pick.homeRecord || "",
         game: pick.matchup || `${awayTeam} @ ${homeTeam}`,
         pick: pickTeam,
         pickTeam,
         pickDirection,
         pickType: marketType,
         // v2 fields: oddsAmerican (number), segment, modelLine, marketLine
-        odds: pick.pick_odds != null ? String(pick.pick_odds)
-            : (pick.oddsAmerican != null ? String(pick.oddsAmerican) : "-110"),
+        odds:
+          pick.pick_odds != null
+            ? String(pick.pick_odds)
+            : pick.oddsAmerican != null
+              ? String(pick.oddsAmerican)
+              : "-110",
         edge: edgeValue,
         confidence: fireNum,
         fire: fireNum,
@@ -162,8 +169,10 @@
         market: marketType,
         segment: pick.period || pick.segment || "FG",
         line: pick.marketSpread || pick.market_line || pick.marketLine || "",
-        modelPrice: pick.predictedMargin || pick.model_line || pick.modelLine || "",
-        modelSpread: pick.predictedMargin || pick.model_line || pick.modelLine || "",
+        modelPrice:
+          pick.predictedMargin || pick.model_line || pick.modelLine || "",
+        modelSpread:
+          pick.predictedMargin || pick.model_line || pick.modelLine || "",
         fire_rating: pick.fire_rating || pick.fireRating || "",
         rationale:
           pick.rationale ||

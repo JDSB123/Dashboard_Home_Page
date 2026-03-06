@@ -8,19 +8,13 @@
   --font-ui: "Cormorant Garamond", Georgia, serif;
 
   /* ===== SPORTSBOOK DROPDOWN TYPOGRAPHY ===== */
-  --sportsbook-heading-font: var(
-    --font-heading,
-    "Cormorant Garamond",
-    "Playfair Display",
-    Georgia,
-    serif
-  );
-  --sportsbook-body-font: "Exo 2", "Inter", sans-serif;
-  --sportsbook-mono-font: "Roboto Mono", "SF Mono", monospace;
-  --sportsbook-title-size: 0.65rem; /* ~10.4px - sportsbook names */
-  --sportsbook-label-size: 0.5625rem; /* ~9px - labels, inputs, buttons */
-  --sportsbook-caption-size: 0.5rem; /* ~8px - sync time, fetch icons */
-  --sportsbook-letter-wide: 0.05em;
+  --sportsbook-heading-font: "Cormorant Garamond", Georgia, serif;
+  --sportsbook-body-font: "Cormorant Garamond", Georgia, serif;
+  --sportsbook-mono-font: "Cormorant Garamond", Georgia, serif;
+  --sportsbook-title-size: 0.72rem; /* ~11.5px - sportsbook names */
+  --sportsbook-label-size: 0.625rem; /* ~10px - labels, inputs, buttons */
+  --sportsbook-caption-size: 0.5625rem; /* ~9px - sync time, fetch icons */
+  --sportsbook-letter-wide: 0.03em;
 
   /* ===== LAYOUT TOKENS ===== */
   --layout-gutter: clamp(24px, 4vw, 60px);

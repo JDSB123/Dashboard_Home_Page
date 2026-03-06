@@ -12,7 +12,7 @@
 (function () {
   "use strict";
 
-  const { normalizeFireRating, getContainerEndpoint } =
+  const { normalizeFireRating, getContainerEndpoint, resolveTeam } =
     window.BaseSportFetcher?.utils || {};
 
   /**
@@ -72,8 +72,10 @@
         ? normalizeFireRating(pick.fire_rating ?? pick.confidence, parseFloat(pick.edge) || 0)
         : 3;
 
-      const awayTeam = pick.away_team || pick.awayTeam || "";
-      const homeTeam = pick.home_team || pick.homeTeam || "";
+      const rawAway = pick.away_team || pick.awayTeam || "";
+      const rawHome = pick.home_team || pick.homeTeam || "";
+      const awayTeam = resolveTeam(rawAway, "nfl").fullName || rawAway;
+      const homeTeam = resolveTeam(rawHome, "nfl").fullName || rawHome;
 
       const pickDisplay =
         pick.pick_display || pick.pick || pick.recommendation || "";

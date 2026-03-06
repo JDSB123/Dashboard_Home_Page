@@ -237,13 +237,12 @@ body.page-weekly-lineup .table-container,
   overflow: visible !important;
 }
 
-/* Prevent table cell overflow - add ellipsis for long content */
+/* Table cell base - allow content to define layout within fixed columns */
 .weekly-lineup-table td {
   overflow: hidden !important;
   text-overflow: ellipsis !important;
   word-wrap: break-word !important;
   white-space: nowrap !important;
-  max-width: 0 !important; /* Required for ellipsis with table-layout: fixed */
   padding: 0.5rem 0.75rem !important;
   box-sizing: border-box;
 }
@@ -264,7 +263,6 @@ body.page-weekly-lineup .table-container,
   overflow: hidden !important;
   text-overflow: ellipsis !important;
   word-wrap: break-word !important;
-  max-width: 0 !important;
 }
 
 .weekly-lineup-table td:nth-child(5),
@@ -273,7 +271,6 @@ body.page-weekly-lineup .table-container,
   overflow: hidden !important;
   text-overflow: ellipsis !important;
   word-wrap: break-word !important;
-  max-width: 0 !important;
 }
 
 /* Column widths for weekly lineup - 8 columns (total: 100%)
@@ -281,9 +278,9 @@ body.page-weekly-lineup .table-container,
    Override base component min-widths and apply fixed widths to both th and td */
 .weekly-lineup-table thead th:nth-child(1),
 .weekly-lineup-table tbody td:nth-child(1) {
-  width: 12% !important;
-  min-width: 120px !important;
-  max-width: 12% !important;
+  width: 15% !important;
+  min-width: 145px !important;
+  max-width: 15% !important;
 } /* Date & Time (CST) */
 .weekly-lineup-table thead th:nth-child(2),
 .weekly-lineup-table tbody td:nth-child(2) {
@@ -1120,8 +1117,9 @@ body.page-weekly-lineup .picks-table tbody tr:hover,
 .weekly-lineup-table .cell-date {
   font-weight: 600;
   color: var(--neutral-100);
-  font-size: 0.9rem;
-  margin-bottom: 0.25rem;
+  font-size: 0.8rem;
+  margin-bottom: 0.15rem;
+  white-space: nowrap;
 }
 
 .weekly-lineup-table .cell-time {
@@ -3613,7 +3611,8 @@ body.page-weekly-lineup .filter-title,
 .weekly-lineup-table .matchup-cell .team-name-full {
   font-weight: 600;
   color: var(--neutral-100);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  white-space: nowrap;
 }
 
 .weekly-lineup-table .matchup-cell .team-record {
@@ -3744,8 +3743,8 @@ body.page-weekly-lineup .filter-title,
 
 /* Team logos in matchup cell */
 .weekly-lineup-table .team-logo {
-  width: 22px;
-  height: 22px;
+  width: 30px;
+  height: 30px;
   object-fit: contain;
   border-radius: 2px;
   flex-shrink: 0;
@@ -3797,8 +3796,12 @@ body.page-weekly-lineup .filter-title,
 }
 
 .weekly-lineup-table .vs-divider {
-  color: var(--neutral-500);
-  font-size: 0.6rem;
+  color: var(--neutral-400);
+  font-size: 0.7rem;
+  font-weight: 500;
+  font-style: italic;
+  letter-spacing: 0.03em;
+  text-transform: lowercase;
   font-weight: 500;
   text-transform: lowercase;
   padding-left: 1.75rem;
@@ -4037,18 +4040,18 @@ body.page-weekly-lineup .filter-title,
   margin-left: 0.25rem;
 }
 
-/* League cell - centered with logo stacked above text */
+/* League cell - centered logo both vertically and horizontally */
 .weekly-lineup-table .league-cell {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.25rem;
+  width: 100%;
+  padding: 4px 0;
 }
 
 .weekly-lineup-table .league-logo {
-  width: 24px;
-  height: 24px;
+  width: 34px;
+  height: 34px;
   object-fit: contain;
 }
 
@@ -6356,7 +6359,14 @@ body.page-weekly-lineup
   flex-shrink: 0;
 }
 
-.weekly-lineup-table tbody td .league-cell,
+.weekly-lineup-table tbody td .league-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
 .weekly-lineup-table tbody td .datetime-cell {
   display: inline-flex;
   flex-direction: column;
@@ -6366,8 +6376,8 @@ body.page-weekly-lineup
 
 /* Ensure league logo is reasonably sized */
 .weekly-lineup-table tbody td .league-logo {
-  width: 24px;
-  height: 24px;
+  width: 34px;
+  height: 34px;
   object-fit: contain;
 }
 
@@ -7153,4 +7163,181 @@ body.page-weekly-lineup .brand-word {
     font-size: 0.875rem !important;
     letter-spacing: 0.2em !important;
   }
+}
+
+/* ==========================================================================
+   ENHANCED CELL STYLES (v36.02)
+   ========================================================================== */
+
+/* ===== CELL-BOOK / MODEL LABEL ===== */
+.weekly-lineup-table .cell-book {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--emerald-400, #34d399);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: 0.85;
+  margin-top: 1px;
+}
+
+/* ===== TEAM RECORD (W-L-T) ===== */
+.weekly-lineup-table .team-record {
+  font-family: var(--font-body, "Inter", sans-serif);
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: var(--neutral-500, #64748b);
+  margin-left: 0.25rem;
+  letter-spacing: 0.01em;
+}
+
+/* ===== SEGMENT - PLAIN TEXT, NO PILL ===== */
+.weekly-lineup-table .segment-tag {
+  display: inline-block;
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  border: none;
+  font-family: var(--font-body, "Inter", sans-serif);
+  font-weight: 500;
+  font-size: 0.8rem;
+  color: var(--neutral-300, #cbd5e1);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+/* ===== PICK CELL - CLEAN STACKED LAYOUT ===== */
+.weekly-lineup-table .pick-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  white-space: nowrap;
+  justify-content: center;
+}
+
+.weekly-lineup-table .pick-display .pick-label {
+  font-family: var(--font-body, "Inter", sans-serif);
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: var(--neutral-100, #f1f5f9);
+  letter-spacing: 0.01em;
+}
+
+.weekly-lineup-table .pick-display .pick-odds {
+  font-family: var(--font-mono, "Roboto Mono", monospace);
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: var(--neutral-400, #94a3b8);
+  letter-spacing: 0.02em;
+}
+
+/* ===== EDGE - CLEAN INLINE, NO BORDER ===== */
+.weekly-lineup-table .edge-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  border-radius: 0;
+  padding: 0.15rem 0.35rem;
+  cursor: pointer;
+  min-width: 48px;
+}
+
+.weekly-lineup-table .edge-toggle:hover {
+  border-color: transparent;
+}
+
+.weekly-lineup-table .edge-toggle .edge-val {
+  font-family: var(--font-mono, "Roboto Mono", monospace);
+  font-weight: 500;
+  font-size: 0.82rem;
+  color: var(--neutral-100, #f1f5f9);
+  letter-spacing: 0.02em;
+  text-align: center;
+}
+
+/* ===== EDGE FILTER PILLS ===== */
+.edge-range-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.edge-range-pills .edge-pill {
+  padding: 0.3rem 0.55rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 4px;
+  border: 1px solid rgba(180, 160, 120, 0.15);
+  background: rgba(180, 160, 120, 0.04);
+  color: var(--neutral-200, #e2e8f0);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.edge-range-pills .edge-pill:hover {
+  background: rgba(180, 160, 120, 0.08);
+  border-color: rgba(180, 160, 120, 0.25);
+}
+
+.edge-range-pills .edge-pill.active {
+  background: rgba(180, 160, 120, 0.12);
+  border-color: rgba(180, 160, 120, 0.35);
+  color: var(--gold-400, #fbbf24);
+}
+
+/* ===== CLEAR SLATE BUTTON ===== */
+.ft-clear-slate-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--neutral-300, #cbd5e1);
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.ft-clear-slate-btn:hover {
+  background: rgba(239, 68, 68, 0.18);
+  border-color: rgba(239, 68, 68, 0.45);
+  color: #fca5a5;
+}
+
+.ft-clear-slate-btn .clear-icon {
+  opacity: 0.7;
+}
+
+.ft-clear-slate-btn:hover .clear-icon {
+  opacity: 1;
+}
+
+/* ===== DISABLED LEAGUE PILLS - GREYED OUT ===== */
+.ft-pill.ft-league.is-disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  filter: grayscale(100%);
+  pointer-events: none;
+  position: relative;
+}
+
+.ft-pill.ft-league.is-disabled::after {
+  content: "Soon";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.5rem;
+  font-weight: 600;
+  color: var(--neutral-500, #64748b);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
 }

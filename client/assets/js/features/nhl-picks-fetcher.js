@@ -12,7 +12,7 @@
 (function () {
   "use strict";
 
-  const { normalizeFireRating, getFunctionsBase, getContainerEndpoint } =
+  const { normalizeFireRating, getFunctionsBase, getContainerEndpoint, resolveTeam } =
     window.BaseSportFetcher?.utils || {};
 
   const fetcher = new window.BaseSportFetcher({
@@ -38,8 +38,10 @@
         ? normalizeFireRating(pick.fire_rating ?? pick.confidence, parseFloat(pick.edge) || 0)
         : 3;
 
-      const awayTeam = pick.away_team || pick.awayTeam || pick.away || "";
-      const homeTeam = pick.home_team || pick.homeTeam || pick.home || "";
+      const rawAway = pick.away_team || pick.awayTeam || pick.away || "";
+      const rawHome = pick.home_team || pick.homeTeam || pick.home || "";
+      const awayTeam = resolveTeam(rawAway, "nhl").fullName || rawAway;
+      const homeTeam = resolveTeam(rawHome, "nhl").fullName || rawHome;
       const marketType = (pick.market || pick.market_type || "puckline").toLowerCase();
 
       let pickTeam = pick.pick || "";
@@ -62,6 +64,8 @@
         time: pick.time || pick.game_time || pick.time_cst || "",
         awayTeam,
         homeTeam,
+        awayRecord: pick.away_record || pick.awayRecord || "",
+        homeRecord: pick.home_record || pick.homeRecord || "",
         game: pick.matchup || `${awayTeam} @ ${homeTeam}`,
         pick: pickTeam,
         pickTeam,

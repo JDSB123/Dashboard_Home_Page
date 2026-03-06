@@ -437,12 +437,7 @@
                 </div>
                 <div class="import-options-popup" id="import-options">
                   <div class="import-header">
-                    <div class="import-title-group">
-                      <span class="import-title">Upload Picks</span>
-                      <span class="import-subtitle"
-                        >Drag in bet slips or paste picks below.</span
-                      >
-                    </div>
+                    <span class="import-title">Add Picks</span>
                     <button
                       type="button"
                       class="import-back-btn"
@@ -451,38 +446,36 @@
                       Back
                     </button>
                   </div>
-                  <label
-                    for="file-upload"
-                    class="import-option-item import-file-zone"
-                    id="drop-zone"
-                  >
-                    <span class="import-option-label">Upload Files</span>
-                    <span class="import-option-desc"
-                      >PDFs, images, HTML, or text files</span
+                  <div class="import-mode-row">
+                    <label
+                      for="file-upload"
+                      class="import-mode-btn import-file-zone"
+                      id="drop-zone"
                     >
-                    <input
-                      type="file"
-                      id="file-upload"
-                      name="picks-file"
-                      accept=".pdf,.jpg,.jpeg,.png,.html,.htm,.txt,.csv"
-                      multiple=""
-                      class="file-input-hidden"
-                    />
-                  </label>
+                      Upload Files
+                      <input
+                        type="file"
+                        id="file-upload"
+                        name="picks-file"
+                        accept=".pdf,.jpg,.jpeg,.png,.html,.htm,.txt,.csv"
+                        multiple=""
+                        class="file-input-hidden"
+                      />
+                    </label>
+                    <button
+                      type="button"
+                      class="import-mode-btn import-manual-btn"
+                      id="manual-entry-btn"
+                    >
+                      Paste Text
+                    </button>
+                  </div>
+                  <div class="import-mode-desc">PDFs, images, HTML, text files — or paste picks directly</div>
                   <div id="file-list"></div>
-                  <button
-                    type="button"
-                    class="import-option-item import-manual-btn"
-                    id="manual-entry-btn"
-                  >
-                    <span class="import-option-label">Manual Entry</span>
-                    <span class="import-option-desc"
-                      >Paste picks text directly into parser</span
-                    >
-                  </button>
                   <div id="manual-entry-area" class="manual-entry-area hidden">
                     <textarea
                       id="manual-picks-input"
+                      class="manual-picks-input"
                       placeholder="Paste picks text here..."
                     ></textarea>
                     <div class="manual-actions">

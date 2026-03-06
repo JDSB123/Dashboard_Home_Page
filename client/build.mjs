@@ -172,6 +172,7 @@ const DASHBOARD_JS = [
 
 // Weekly-lineup-specific JS
 const WEEKLY_LINEUP_JS = [
+  "assets/js/utils/team-data.js",
   "assets/js/modules/picks-dom-utils.js",
   "assets/js/modules/picks-state-manager.js",
   "assets/js/modules/picks-table-renderer.js",

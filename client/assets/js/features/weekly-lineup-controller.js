@@ -15,6 +15,16 @@
     activePicks: [],
     lastFetchedAt: null,
     isFetching: false,
+    filters: {
+      league: "all",
+      segment: "all",
+      pickType: "all",
+    },
+  };
+
+  const FILTER_CONTROL_IDS = {
+    segment: "segment-dropdown-btn",
+    pickType: "picktype-dropdown-btn",
   };
 
   const el = {
@@ -25,13 +35,48 @@
 
   const nowIso = () => new Date().toISOString();
 
-  const formatMmDd = (isoDate) => {
+  const formatDateFull = (isoDate) => {
     if (!isoDate) return "";
     const d = new Date(isoDate);
     if (Number.isNaN(d.getTime())) return String(isoDate);
-    const mm = String(d.getMonth() + 1).padStart(2, "0");
-    const dd = String(d.getDate()).padStart(2, "0");
-    return `${mm}/${dd}`;
+    return d.toLocaleDateString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+      timeZone: "America/Chicago",
+    });
+  };
+
+  const formatTimeCst = (timeStr) => {
+    if (!timeStr) return "";
+    // If already formatted (e.g. "7:00 PM CST"), return as-is
+    if (/CST/i.test(timeStr)) return timeStr;
+    // Try to parse and convert to CST (UTC-6)
+    const d = new Date(timeStr);
+    if (!Number.isNaN(d.getTime())) {
+      return d.toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+        timeZone: "America/Chicago",
+      }) + " CST";
+    }
+    // Fallback: append CST if it looks like a time
+    if (/\d/.test(timeStr)) return timeStr + " CST";
+    return timeStr;
+  };
+
+  const getModelLabel = (pick) => {
+    const sport = normalizeSport(pick.sport || pick.league);
+    const sportName = {
+      NBA: "NBA",
+      NCAAB: "NCAAM",
+      NFL: "NFL",
+      NCAAF: "NCAAF",
+      NHL: "NHL",
+      MLB: "MLB",
+    }[sport] || sport;
+    return `GBSV ${sportName} Pick`;
   };
 
   const safeText = (value) => (value ?? "").toString();
@@ -49,6 +94,199 @@
     if (upper === "NCAAM") return "NCAAB";
     if (upper === "NCAAB") return "NCAAB";
     return upper || "NBA";
+  };
+
+  const normalizeSegment = (segment) => {
+    const value = safeText(segment).trim().toUpperCase();
+    if (!value) return "FG";
+    if (value === "FULL" || value === "FULL GAME") return "FG";
+    if (value === "FG") return "FG";
+    if (value === "1H") return "1H";
+    if (value === "2H") return "2H";
+    return value;
+  };
+
+  const normalizePickType = (type) => {
+    const value = safeText(type).trim().toLowerCase();
+    if (!value) return "spread";
+    if (value === "ml") return "moneyline";
+    return value;
+  };
+
+  const updateToolbarDropdownLabel = (type) => {
+    const id = FILTER_CONTROL_IDS[type];
+    if (!id) return;
+    const btn = document.getElementById(id);
+    if (!btn) return;
+
+    if (type === "segment") {
+      const labelMap = {
+        all: "Segment",
+        full: "Segment: FG",
+        "1h": "Segment: 1H",
+        "2h": "Segment: 2H",
+      };
+      btn.textContent = `${labelMap[state.filters.segment] || "Segment"} ▾`;
+      return;
+    }
+
+    if (type === "pickType") {
+      const labelMap = {
+        all: "Pick Type",
+        spread: "Pick Type: Spread",
+        moneyline: "Pick Type: ML",
+        total: "Pick Type: O/U",
+        "team-total": "Pick Type: Team Total",
+      };
+      btn.textContent = `${labelMap[state.filters.pickType] || "Pick Type"} ▾`;
+    }
+  };
+
+  const setLeagueFilter = (league) => {
+    const normalized = safeText(league).toLowerCase();
+    if (!normalized) return;
+    state.filters.league = state.filters.league === normalized ? "all" : normalized;
+  };
+
+  const setSegmentFilter = (segment) => {
+    const normalized = safeText(segment).toLowerCase();
+    state.filters.segment = normalized || "all";
+    updateToolbarDropdownLabel("segment");
+  };
+
+  const setPickTypeFilter = (pickType) => {
+    const normalized = safeText(pickType).toLowerCase();
+    state.filters.pickType = normalized || "all";
+    updateToolbarDropdownLabel("pickType");
+  };
+
+  const clearFilters = () => {
+    state.filters.league = "all";
+    state.filters.segment = "all";
+    state.filters.pickType = "all";
+    updateToolbarDropdownLabel("segment");
+    updateToolbarDropdownLabel("pickType");
+  };
+
+  const pickMatchesFilters = (pick) => {
+    const league = normalizeSport(pick.sport || pick.league).toLowerCase();
+    const segment = normalizeSegment(pick.segment).toLowerCase();
+    const pickType = normalizePickType(pick.pickType);
+
+    if (state.filters.league !== "all" && state.filters.league !== league) {
+      return false;
+    }
+
+    if (state.filters.segment !== "all") {
+      if (state.filters.segment === "full" && segment !== "fg") return false;
+      if (state.filters.segment === "1h" && segment !== "1h") return false;
+      if (state.filters.segment === "2h" && segment !== "2h") return false;
+    }
+
+    if (state.filters.pickType !== "all" && state.filters.pickType !== pickType) {
+      return false;
+    }
+
+    return true;
+  };
+
+  const getVisiblePicks = () => (state.activePicks || []).filter(pickMatchesFilters);
+
+  const syncFilterUi = () => {
+    document.querySelectorAll(".ft-pill.ft-league[data-league]").forEach((pill) => {
+      const value = safeText(pill.getAttribute("data-league")).toLowerCase();
+      const isActive = state.filters.league !== "all" && value === state.filters.league;
+      pill.classList.toggle("active", isActive);
+      pill.setAttribute("aria-pressed", isActive ? "true" : "false");
+    });
+
+    document.querySelectorAll(".league-pill[data-league]").forEach((pill) => {
+      const value = safeText(pill.getAttribute("data-league")).toLowerCase();
+      const isActive =
+        (state.filters.league === "all" && value === "all") ||
+        (state.filters.league !== "all" && value === state.filters.league);
+      pill.classList.toggle("active", isActive);
+    });
+
+    document.querySelectorAll(".segment-pill[data-segment]").forEach((pill) => {
+      const value = safeText(pill.getAttribute("data-segment")).toLowerCase();
+      const isActive =
+        (state.filters.segment === "all" && value === "all") ||
+        (state.filters.segment !== "all" && value === state.filters.segment);
+      pill.classList.toggle("active", isActive);
+    });
+
+    document.querySelectorAll(".pick-pill[data-pick]").forEach((pill) => {
+      const value = safeText(pill.getAttribute("data-pick")).toLowerCase();
+      const isActive =
+        (state.filters.pickType === "all" && value === "all") ||
+        (state.filters.pickType !== "all" && value === state.filters.pickType);
+      pill.classList.toggle("active", isActive);
+    });
+  };
+
+  const renderFilterChips = () => {
+    const host = document.getElementById("table-filter-chips");
+    if (!host) return;
+
+    const chips = [];
+    if (state.filters.league !== "all") {
+      chips.push({ key: "league", label: `League: ${state.filters.league.toUpperCase()}` });
+    }
+    if (state.filters.segment !== "all") {
+      const label = state.filters.segment === "full" ? "FG" : state.filters.segment.toUpperCase();
+      chips.push({ key: "segment", label: `Segment: ${label}` });
+    }
+    if (state.filters.pickType !== "all") {
+      chips.push({ key: "pickType", label: `Pick: ${state.filters.pickType}` });
+    }
+
+    host.innerHTML = "";
+    host.setAttribute("data-has-chips", chips.length > 0 ? "true" : "false");
+
+    chips.forEach((chip) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "filter-chip-btn";
+      button.textContent = chip.label;
+      button.setAttribute("data-clear-filter", chip.key);
+      host.appendChild(button);
+    });
+  };
+
+  const renderFilteredRows = () => {
+    renderRows(getVisiblePicks());
+    syncFilterUi();
+    renderFilterChips();
+  };
+
+  const closeHeaderDropdowns = () => {
+    document.querySelectorAll(".th-filter-btn[aria-controls]").forEach((btn) => {
+      btn.setAttribute("aria-expanded", "false");
+      btn.classList.remove("active");
+    });
+    document.querySelectorAll(".th-filter-dropdown").forEach((dropdown) => {
+      dropdown.classList.remove("open");
+      dropdown.hidden = true;
+    });
+  };
+
+  const openHeaderDropdown = (btn, dropdown) => {
+    closeHeaderDropdowns();
+    btn.setAttribute("aria-expanded", "true");
+    btn.classList.add("active");
+    dropdown.hidden = false;
+    dropdown.classList.add("open");
+  };
+
+  const closeToolbarDropdowns = () => {
+    document.querySelectorAll(".ft-dropdown-menu").forEach((menu) => {
+      menu.classList.remove("open");
+    });
+    document.querySelectorAll(".ft-dropdown-btn").forEach((btn) => {
+      btn.classList.remove("open");
+      btn.setAttribute("aria-expanded", "false");
+    });
   };
 
   // Deterministic ID to avoid duplicates across refreshes
@@ -138,6 +376,13 @@
     return `${logoBase}/${folder}-500-${teamId}.png`;
   };
 
+  // Resolve abbreviated team names (e.g. "UTA Jazz") to full names ("Utah Jazz")
+  const resolveFullName = (teamName, sport) => {
+    if (!teamName) return "";
+    const info = window.TeamData?.getTeamInfo?.(teamName, sport?.toLowerCase());
+    return (info && info.fullName) || teamName;
+  };
+
   const fireEmoji = (fire) => {
     const n = Math.max(0, Math.min(5, parseInt(fire, 10) || 0));
     if (n <= 0) return "";
@@ -195,6 +440,8 @@
     for (const pick of picks) {
       const sport = normalizeSport(pick.sport || pick.league);
       const leagueLogo = getLeagueLogo(sport);
+      const awayFull = resolveFullName(pick.awayTeam, sport);
+      const homeFull = resolveFullName(pick.homeTeam, sport);
       const awayLogo = getTeamLogoUrl(pick.awayTeam, sport);
       const homeLogo = getTeamLogoUrl(pick.homeTeam, sport);
       const edge =
@@ -208,20 +455,40 @@
       tr.setAttribute("data-row-id", pick.id);
       tr.setAttribute("data-pick-id", pick.id);
       tr.setAttribute("data-league", sport);
+      tr.setAttribute("data-segment", normalizeSegment(segment));
+      tr.setAttribute("data-pick-type", normalizePickType(pick.pickType));
+      tr.setAttribute("data-away", slug(awayFull));
+      tr.setAttribute("data-home", slug(homeFull));
 
       const date = pick.gameDate || pick.date;
-      const dateText = formatMmDd(date);
+      const dateText = formatDateFull(date);
+      const timeCst = formatTimeCst(pick.time || pick.gameTime || "");
+      const modelLabel = getModelLabel(pick);
 
       const odds = safeText(pick.odds || "-110");
       const segment = safeText(pick.segment || "FG");
+      const segmentLabel = {
+        FG: "Full Game", "1H": "1st Half", "2H": "2nd Half",
+        "1Q": "1st Qtr", "2Q": "2nd Qtr", "3Q": "3rd Qtr", "4Q": "4th Qtr",
+      }[segment.toUpperCase()] || segment;
       const pickLabel = formatPickLabel(pick);
+
+      // Team records (W-L or W-L-T)
+      const awayRec = safeText(pick.awayRecord || "");
+      const homeRec = safeText(pick.homeRecord || "");
+
+      // Edge: show pts with toggleable % view
+      const edgePts = edge ? edge.toFixed(1) : "";
+      const edgePct = pick.edgePct
+        ? parseFloat(String(pick.edgePct).replace("%", "")).toFixed(1)
+        : (edge ? (edge * 2.5).toFixed(1) : ""); // estimate % if not provided
 
       tr.innerHTML = `
         <td class="col-datetime">
           <div class="datetime-cell">
             <div class="cell-date">${safeText(dateText)}</div>
-            <div class="cell-time">${safeText(pick.time || pick.gameTime || "")}</div>
-            <div class="cell-book">${safeText(pick.sportsbook || pick.book || pick.source || "Model")}</div>
+            <div class="cell-time">${safeText(timeCst)}</div>
+            <div class="cell-book">${safeText(modelLabel)}</div>
           </div>
         </td>
         <td class="center col-league">
@@ -232,27 +499,32 @@
         <td class="col-matchup">
           <div class="matchup-cell matchup-inline">
             <span class="team-line">
-              ${awayLogo ? `<img src="${awayLogo}" class="team-logo" alt="${safeText(pick.awayTeam)}" loading="lazy" onerror="this.style.display='none'" />` : ""}
-              <span class="team-name-full">${safeText(pick.awayTeam)}</span>
+              ${awayLogo ? `<img src="${awayLogo}" class="team-logo" alt="${safeText(awayFull)}" loading="lazy" onerror="this.style.display='none'" />` : ""}
+              <span class="team-name-full">${safeText(awayFull)}</span>
+              ${awayRec ? `<span class="team-record">(${awayRec})</span>` : ""}
             </span>
-            <span class="vs-divider">@</span>
+            <span class="vs-divider">at</span>
             <span class="team-line">
-              ${homeLogo ? `<img src="${homeLogo}" class="team-logo" alt="${safeText(pick.homeTeam)}" loading="lazy" onerror="this.style.display='none'" />` : ""}
-              <span class="team-name-full">${safeText(pick.homeTeam)}</span>
+              ${homeLogo ? `<img src="${homeLogo}" class="team-logo" alt="${safeText(homeFull)}" loading="lazy" onerror="this.style.display='none'" />` : ""}
+              <span class="team-name-full">${safeText(homeFull)}</span>
+              ${homeRec ? `<span class="team-record">(${homeRec})</span>` : ""}
             </span>
           </div>
         </td>
         <td class="center col-segment">
-          <span class="segment-pill" data-segment="${slug(segment)}">${safeText(segment)}</span>
+          <span class="segment-tag" data-segment="${slug(segment)}">${safeText(segmentLabel)}</span>
         </td>
         <td class="col-pick">
-          <div class="pick-inline">
-            <span class="pick-team">${safeText(pickLabel)}</span>
-            <span class="pick-odds">(${safeText(odds)})</span>
+          <div class="pick-display">
+            <span class="pick-label">${safeText(pickLabel)}</span>
+            <span class="pick-odds">${safeText(odds)}</span>
           </div>
         </td>
-        <td class="center col-edge">
-          <span class="edge-badge">${edge ? `${edge.toFixed(1)}%` : "-"}</span>
+        <td class="center col-edge" data-edge-pts="${edgePts}" data-edge-pct="${edgePct}">
+          <button class="edge-toggle" type="button" title="Click to toggle pts / %">
+            <span class="edge-val edge-val-pts">${edgePts ? edgePts + " pts" : "-"}</span>
+            <span class="edge-val edge-val-pct" hidden>${edgePct ? edgePct + "%" : "-"}</span>
+          </button>
         </td>
         <td class="center col-fire">
           <span class="fire-cell" title="Fire rating">${fireEmoji(pick.fire)}</span>
@@ -401,6 +673,23 @@
       const isPressed = btn.getAttribute("aria-pressed") === "true";
       toggleLock(pickId, !isPressed);
     });
+
+    // Edge toggle: click toggles all edge cells between pts and %
+    tbody.addEventListener("click", (evt) => {
+      const toggle = evt.target.closest(".edge-toggle");
+      if (!toggle) return;
+      evt.preventDefault();
+      // Toggle ALL edge cells in the table at once
+      const allToggles = tbody.querySelectorAll(".edge-toggle");
+      allToggles.forEach((btn) => {
+        const pts = btn.querySelector(".edge-val-pts");
+        const pct = btn.querySelector(".edge-val-pct");
+        if (!pts || !pct) return;
+        const showingPts = !pts.hidden;
+        pts.hidden = showingPts;
+        pct.hidden = !showingPts;
+      });
+    });
   };
 
   const getDateParamForFetchers = () => {
@@ -442,7 +731,7 @@
       state.activePicks = enriched;
       state.lastFetchedAt = nowIso();
 
-      renderRows(enriched);
+      renderFilteredRows();
       setLastRefreshed(state.lastFetchedAt);
       persistWeeklyLineupCache(enriched);
 
@@ -460,11 +749,91 @@
     }
   };
 
+  const clearSlate = () => {
+    state.activePicks = [];
+    state.lastFetchedAt = null;
+    try {
+      localStorage.removeItem(WEEKLY_LINEUP_KEY);
+    } catch (e) {}
+    renderEmptyState("Slate cleared. Click Fetch to load fresh picks.");
+    renderFilterChips();
+    const target = el.lastRefreshed();
+    if (target) target.textContent = "-";
+    showToast("Slate cleared", "info");
+  };
+
   const attachFetchHandlers = () => {
     const root = document.querySelector(".filter-toolbar");
     if (!root) return;
 
     root.addEventListener("click", (evt) => {
+      const chipBtn = evt.target.closest("button[data-clear-filter]");
+      if (chipBtn) {
+        evt.preventDefault();
+        const key = chipBtn.getAttribute("data-clear-filter");
+        if (key === "league") state.filters.league = "all";
+        if (key === "segment") state.filters.segment = "all";
+        if (key === "pickType") state.filters.pickType = "all";
+        updateToolbarDropdownLabel("segment");
+        updateToolbarDropdownLabel("pickType");
+        renderFilteredRows();
+        return;
+      }
+
+      const leaguePill = evt.target.closest(".ft-pill.ft-league[data-league]");
+      if (leaguePill && !leaguePill.disabled) {
+        evt.preventDefault();
+        setLeagueFilter(leaguePill.getAttribute("data-league"));
+        renderFilteredRows();
+        return;
+      }
+
+      const toolbarDropdownBtn = evt.target.closest(".ft-dropdown-btn");
+      if (toolbarDropdownBtn) {
+        evt.preventDefault();
+        const menu = toolbarDropdownBtn.nextElementSibling;
+        const willOpen = !!menu && !menu.classList.contains("open");
+        closeToolbarDropdowns();
+        if (menu && willOpen) {
+          menu.classList.add("open");
+          toolbarDropdownBtn.classList.add("open");
+          toolbarDropdownBtn.setAttribute("aria-expanded", "true");
+        }
+        return;
+      }
+
+      const toolbarDropdownItem = evt.target.closest(".ft-dropdown-item[data-f][data-v]");
+      if (toolbarDropdownItem) {
+        evt.preventDefault();
+        const filterType = safeText(toolbarDropdownItem.getAttribute("data-f")).toLowerCase();
+        const value = safeText(toolbarDropdownItem.getAttribute("data-v")).toLowerCase();
+        if (filterType === "segment") {
+          setSegmentFilter(value);
+        } else if (filterType === "pick-type") {
+          setPickTypeFilter(value);
+        }
+        closeToolbarDropdowns();
+        renderFilteredRows();
+        return;
+      }
+
+      const toolbarClear = evt.target.closest("#ft-clear");
+      if (toolbarClear) {
+        evt.preventDefault();
+        clearFilters();
+        closeToolbarDropdowns();
+        renderFilteredRows();
+        return;
+      }
+
+      // Clear Slate button
+      const clearBtn = evt.target.closest("button[data-action='clear-slate']");
+      if (clearBtn) {
+        evt.preventDefault();
+        clearSlate();
+        return;
+      }
+
       const btn = evt.target.closest("button[data-fetch]");
       if (!btn) return;
 
@@ -485,6 +854,87 @@
 
       fetchAndRender(code);
     });
+
+    document.addEventListener("click", (evt) => {
+      if (!evt.target.closest(".ft-dropdown")) {
+        closeToolbarDropdowns();
+      }
+      if (!evt.target.closest(".th-filter-dropdown") && !evt.target.closest(".th-filter-btn")) {
+        closeHeaderDropdowns();
+      }
+    });
+
+    document.addEventListener("keydown", (evt) => {
+      if (evt.key === "Escape") {
+        closeToolbarDropdowns();
+        closeHeaderDropdowns();
+      }
+    });
+
+    document.querySelectorAll(".th-filter-btn[aria-controls]").forEach((btn) => {
+      btn.addEventListener("click", (evt) => {
+        evt.preventDefault();
+        evt.stopPropagation();
+        const dropdownId = btn.getAttribute("aria-controls");
+        const dropdown = dropdownId ? document.getElementById(dropdownId) : null;
+        if (!dropdown) return;
+        const isOpen = btn.getAttribute("aria-expanded") === "true";
+        if (isOpen) {
+          closeHeaderDropdowns();
+          return;
+        }
+        openHeaderDropdown(btn, dropdown);
+      });
+    });
+
+    root.addEventListener("click", (evt) => {
+      const leaguePill = evt.target.closest(".league-pill[data-league]");
+      if (leaguePill) {
+        evt.preventDefault();
+        const value = safeText(leaguePill.getAttribute("data-league")).toLowerCase();
+        state.filters.league = value || "all";
+        renderFilteredRows();
+        return;
+      }
+
+      const segmentPill = evt.target.closest(".segment-pill[data-segment]");
+      if (segmentPill) {
+        evt.preventDefault();
+        setSegmentFilter(segmentPill.getAttribute("data-segment"));
+        renderFilteredRows();
+        return;
+      }
+
+      const pickPill = evt.target.closest(".pick-pill[data-pick]");
+      if (pickPill) {
+        evt.preventDefault();
+        setPickTypeFilter(pickPill.getAttribute("data-pick"));
+        renderFilteredRows();
+        return;
+      }
+
+      const quickAction = evt.target.closest(".filter-action-btn[data-action]");
+      if (!quickAction) return;
+
+      evt.preventDefault();
+      const action = quickAction.getAttribute("data-action");
+      const dropdown = quickAction.closest(".th-filter-dropdown");
+      if (!dropdown) return;
+
+      if (action === "clear") {
+        if (dropdown.id === "filter-league") state.filters.league = "all";
+        if (dropdown.id === "filter-segment") state.filters.segment = "all";
+        if (dropdown.id === "filter-pick") state.filters.pickType = "all";
+      }
+
+      if (action === "select-all") {
+        if (dropdown.id === "filter-league") state.filters.league = "all";
+        if (dropdown.id === "filter-segment") state.filters.segment = "all";
+        if (dropdown.id === "filter-pick") state.filters.pickType = "all";
+      }
+
+      renderFilteredRows();
+    });
   };
 
   const bootstrapFromCache = () => {
@@ -497,7 +947,7 @@
       state.activePicks = parsed.picks;
       state.lastFetchedAt = parsed.fetchedAt || null;
 
-      renderRows(state.activePicks);
+      renderFilteredRows();
       if (state.lastFetchedAt) setLastRefreshed(state.lastFetchedAt);
     } catch (e) {}
   };
@@ -533,13 +983,13 @@
         return updates ? { ...pick, ...updates } : pick;
       });
 
-      renderRows(state.activePicks);
+      renderFilteredRows();
       persistWeeklyLineupCache(state.activePicks);
     },
     populateTable(picks) {
       // Compatibility for other callers
       state.activePicks = Array.isArray(picks) ? picks : [];
-      renderRows(state.activePicks);
+      renderFilteredRows();
       persistWeeklyLineupCache(state.activePicks);
     },
     showNotification(message, type) {
@@ -554,6 +1004,10 @@
     bootstrapFromCache();
     attachFetchHandlers();
     attachTrackHandlers();
+    syncFilterUi();
+    renderFilterChips();
+    updateToolbarDropdownLabel("segment");
+    updateToolbarDropdownLabel("pickType");
 
     // Initialize last refreshed label
     if (state.lastFetchedAt) {

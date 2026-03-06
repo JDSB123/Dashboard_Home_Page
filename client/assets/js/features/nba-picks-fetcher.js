@@ -12,7 +12,7 @@
 (function () {
   "use strict";
 
-  const { normalizeFireRating, getFunctionsBase, getContainerEndpoint } =
+  const { normalizeFireRating, getFunctionsBase, getContainerEndpoint, resolveTeam } =
     window.BaseSportFetcher?.utils || {};
 
   const fetcher = new window.BaseSportFetcher({
@@ -36,8 +36,10 @@
     formatPickForTable(play) {
       if (!play) return null;
 
-      const home = play.home_team || play.home || "Unknown";
-      const away = play.away_team || play.away || "Unknown";
+      const rawHome = play.home_team || play.home || "Unknown";
+      const rawAway = play.away_team || play.away || "Unknown";
+      const home = resolveTeam(rawHome, "nba").fullName;
+      const away = resolveTeam(rawAway, "nba").fullName;
       const matchup = play.matchup || `${away} @ ${home}`;
 
       // Determine pick display text
@@ -103,6 +105,8 @@
         time: play.time || "TBD",
         awayTeam: away,
         homeTeam: home,
+        awayRecord: play.away_record || play.awayRecord || "",
+        homeRecord: play.home_record || play.homeRecord || "",
         segment: play.segment || "FG",
         pickTeam: pickTeam,
         pickType: pickType,

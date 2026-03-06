@@ -213,6 +213,16 @@
     return this._lastSource;
   };
 
+  // ===== SHARED: Team name & record resolution via TeamData =====
+  function resolveTeam(rawName, sport) {
+    if (!rawName) return { fullName: "", abbr: "" };
+    const info = window.TeamData?.getTeamInfo?.(rawName, sport?.toLowerCase());
+    return {
+      fullName: (info && info.fullName) || rawName,
+      abbr: (info && info.abbr) || "",
+    };
+  }
+
   // Export shared utilities and base class
   window.BaseSportFetcher = BaseSportFetcher;
   window.BaseSportFetcher.utils = {
@@ -221,5 +231,6 @@
     getBaseApiUrl,
     getFunctionsBase,
     getContainerEndpoint,
+    resolveTeam,
   };
 })();

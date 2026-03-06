@@ -433,12 +433,7 @@
                 </div>
                 <div class="import-options-popup" id="import-options">
                   <div class="import-header">
-                    <div class="import-title-group">
-                      <span class="import-title">Upload Picks</span>
-                      <span class="import-subtitle"
-                        >Drag in bet slips or paste picks below.</span
-                      >
-                    </div>
+                    <span class="import-title">Add Picks</span>
                     <button
                       type="button"
                       class="import-back-btn"
@@ -447,38 +442,36 @@
                       Back
                     </button>
                   </div>
-                  <label
-                    for="file-upload"
-                    class="import-option-item import-file-zone"
-                    id="drop-zone"
-                  >
-                    <span class="import-option-label">Upload Files</span>
-                    <span class="import-option-desc"
-                      >PDFs, images, HTML, or text files</span
+                  <div class="import-mode-row">
+                    <label
+                      for="file-upload"
+                      class="import-mode-btn import-file-zone"
+                      id="drop-zone"
                     >
-                    <input
-                      type="file"
-                      id="file-upload"
-                      name="picks-file"
-                      accept=".pdf,.jpg,.jpeg,.png,.html,.htm,.txt,.csv"
-                      multiple=""
-                      class="file-input-hidden"
-                    />
-                  </label>
+                      Upload Files
+                      <input
+                        type="file"
+                        id="file-upload"
+                        name="picks-file"
+                        accept=".pdf,.jpg,.jpeg,.png,.html,.htm,.txt,.csv"
+                        multiple=""
+                        class="file-input-hidden"
+                      />
+                    </label>
+                    <button
+                      type="button"
+                      class="import-mode-btn import-manual-btn"
+                      id="manual-entry-btn"
+                    >
+                      Paste Text
+                    </button>
+                  </div>
+                  <div class="import-mode-desc">PDFs, images, HTML, text files — or paste picks directly</div>
                   <div id="file-list"></div>
-                  <button
-                    type="button"
-                    class="import-option-item import-manual-btn"
-                    id="manual-entry-btn"
-                  >
-                    <span class="import-option-label">Manual Entry</span>
-                    <span class="import-option-desc"
-                      >Paste picks text directly into parser</span
-                    >
-                  </button>
                   <div id="manual-entry-area" class="manual-entry-area hidden">
                     <textarea
                       id="manual-picks-input"
+                      class="manual-picks-input"
                       placeholder="Paste picks text here..."
                     ></textarea>
                     <div class="manual-actions">
@@ -674,6 +667,18 @@
                       alt="NCAAM"
                     />
                     <span class="league-label">NCAAM</span>
+                  </button>
+                  <div class="fetch-separator"></div>
+                  <button
+                    class="ft-clear-slate-btn"
+                    data-action="clear-slate"
+                    title="Clear all picks and start fresh"
+                    type="button"
+                  >
+                    <svg class="clear-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                      <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                    </svg>
+                    <span>Clear Slate</span>
                   </button>
                 </div>
               </div>
@@ -981,9 +986,51 @@
                 <th scope="col" data-sort="edge" class="center col-edge">
                   <div class="th-header-shell">
                     <button class="th-sort-btn" aria-label="Sort by edge">
-                      <span class="header-main-text">Edge</span
-                      ><span class="sort-icon" aria-hidden="true">▲</span>
+                      <span class="header-main-text">Edge</span>
+                      <span class="header-subtext">(Pts / %)</span>
+                      <span class="sort-icon" aria-hidden="true">▲</span>
                     </button>
+                    <button
+                      class="th-filter-btn"
+                      data-filter="edge"
+                      aria-label="Filter by edge"
+                      aria-expanded="false"
+                      aria-controls="filter-edge"
+                      type="button"
+                    ></button>
+                  </div>
+                  <div
+                    class="th-filter-dropdown nav-panel-dropdown filter-integrated"
+                    id="filter-edge"
+                    role="dialog"
+                    hidden
+                  >
+                    <div class="filter-header-integrated">
+                      <span class="filter-title">Edge</span>
+                      <div class="filter-quick-actions">
+                        <button
+                          class="filter-action-btn"
+                          data-action="select-all"
+                        >
+                          All</button
+                        ><button class="filter-action-btn" data-action="clear">
+                          Clear
+                        </button>
+                      </div>
+                    </div>
+                    <div class="filter-section-compact">
+                      <div class="edge-range-pills">
+                        <button class="edge-pill active" data-edge="all">
+                          All</button
+                        ><button class="edge-pill" data-edge="high" data-min="5">
+                          5+ pts</button
+                        ><button class="edge-pill" data-edge="medium" data-min="2" data-max="5">
+                          2-5 pts</button
+                        ><button class="edge-pill" data-edge="low" data-max="2">
+                          &lt; 2 pts
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </th>
                 <th scope="col" data-sort="fire" class="center col-fire">

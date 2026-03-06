@@ -48,11 +48,11 @@ describe("ModelProxy", () => {
 
     const proxy = require("../ModelProxy");
     const ctx = makeContext();
-    ctx.bindingData = { sport: "nba", path: "predictions/latest" };
+    ctx.bindingData = { sport: "nba", path: "api/predictions/latest" };
     await proxy(ctx, makeReq());
 
     expect(axios.get).toHaveBeenCalledWith(
-      "https://nba.example/predictions/latest",
+      "https://nba.example/api/predictions/latest",
       expect.objectContaining({ validateStatus: expect.any(Function) })
     );
     expect(ctx.res.status).toBe(200);

@@ -12,7 +12,7 @@
 (function () {
   "use strict";
 
-  const { normalizeFireRating, getContainerEndpoint } =
+  const { normalizeFireRating, getContainerEndpoint, resolveTeam } =
     window.BaseSportFetcher?.utils || {};
 
   /**
@@ -62,9 +62,18 @@
         ? normalizeFireRating(pick.fire_rating ?? pick.confidence, parseFloat(pick.edge) || 0)
         : 3;
 
+      const rawAway = pick.away_team || pick.awayTeam || "";
+      const rawHome = pick.home_team || pick.homeTeam || "";
+      const awayTeam = resolveTeam(rawAway, "ncaaf").fullName || rawAway;
+      const homeTeam = resolveTeam(rawHome, "ncaaf").fullName || rawHome;
+
       return {
         sport: "NCAAF",
-        game: `${pick.away_team || pick.awayTeam || ""} @ ${pick.home_team || pick.homeTeam || ""}`,
+        awayTeam,
+        homeTeam,
+        awayRecord: pick.away_record || pick.awayRecord || "",
+        homeRecord: pick.home_record || pick.homeRecord || "",
+        game: `${awayTeam} @ ${homeTeam}`,
         pick:
           pick.pick_display ||
           pick.pick ||
