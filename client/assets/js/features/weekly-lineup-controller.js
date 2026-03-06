@@ -497,7 +497,11 @@
     const teamLogo = window.TeamData?.getTeamLogo?.(teamName, leagueKey);
     if (teamLogo) return teamLogo;
 
-    // Fallback: resolve abbreviation then use LogoLoader
+    // Fallback: pass full team name to LogoLoader (has NCAAM variant data)
+    if (window.LogoLoader?.getLogoUrl) {
+      return window.LogoLoader.getLogoUrl(leagueKey, teamName.toLowerCase());
+    }
+
     const teamAbbr =
       window.SharedUtils?.getTeamAbbr?.(teamName) ||
       safeText(teamName).split(" ").pop() ||
@@ -505,10 +509,6 @@
     const teamId = safeText(teamAbbr).toLowerCase();
 
     if (!teamId) return "";
-
-    if (window.LogoLoader?.getLogoUrl) {
-      return window.LogoLoader.getLogoUrl(leagueKey, teamId);
-    }
 
     const logoBase = (
       window.APP_CONFIG?.LOGO_BASE_URL ||
@@ -739,9 +739,9 @@
 
     if (type === "moneyline" || type === "ml") {
       const team = safeText(pick.pickTeam);
-      // Avoid "Florida A&M ML ML" when model already appends ML
-      if (/\bML$/i.test(team)) return team;
-      return `${team} ML`.trim();
+      // Strip trailing "ML" if the model already appended it — just show team name
+      // Odds display separately below the pick label
+      return team.replace(/\s+ML$/i, "").trim() || team;
     }
 
     return `${safeText(pick.pickTeam)} ${line}`.trim();
@@ -783,7 +783,15 @@
     if (modelLine) {
       const pickType = normalizePickType(pick.pickType);
       if (pickType === "total") return `O/U ${modelLine}`;
-      if (pickType === "moneyline") return `ML ${modelLine}`;
+      if (pickType === "moneyline") {
+        // modelLine is often a probability (0.563) — display as "ML 0.503" is cryptic
+        const num = parseFloat(modelLine);
+        if (!Number.isNaN(num) && num > 0 && num < 1) {
+          return `Win ${(num * 100).toFixed(0)}%`;
+        }
+        // If it's already odds-like (e.g. -180, +150), show as ML odds
+        return `ML ${modelLine}`;
+      }
       return modelLine;
     }
 
@@ -875,7 +883,7 @@
       tr.innerHTML = `
         <td class="col-datetime">
           <div class="datetime-cell">
-            <div class="cell-date">${safeText(dateText)}</div>
+            ${dateText ? `<div class="cell-date">${safeText(dateText)}</div>` : ""}
             <div class="cell-time">${safeText(timeCst)}</div>
             <div class="cell-book">${safeText(modelLabel)}</div>
           </div>

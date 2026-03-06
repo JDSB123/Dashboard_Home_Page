@@ -270,14 +270,12 @@
     }
     if (bestSameLeague) return bestSameLeague;
 
-    // Fallback - generate basic info
+    // Fallback - generate basic info (no logo — let callers fall through to LogoLoader)
     return {
       abbr: generateAbbreviation(teamName),
       name: teamName,
       fullName: teamName,
-      logo: league
-        ? getTeamLogoUrl(teamName.toLowerCase().replace(/\s+/g, ""), league)
-        : "",
+      logo: "",
       league: league || "",
     };
   }
@@ -317,7 +315,14 @@
     const info = getTeamInfo(teamName, league);
     if (info.logo) return info.logo;
 
-    // Fallback to direct URL generation
+    // Fallback: pass full team name to LogoLoader which has variant data
+    // for NCAAM/NCAAF and can resolve "Florida A&M" → ESPN ID → correct logo
+    if (league && window.LogoLoader && typeof window.LogoLoader.getLogoUrl === "function") {
+      const leagueKey = league.toLowerCase() === "ncaab" ? "ncaam" : league.toLowerCase();
+      return window.LogoLoader.getLogoUrl(leagueKey, teamName.toLowerCase());
+    }
+
+    // Last resort: ESPN ID table or abbreviation
     if (league) {
       const id =
         ESPN_TEAM_IDS[teamName.toLowerCase()] ||
