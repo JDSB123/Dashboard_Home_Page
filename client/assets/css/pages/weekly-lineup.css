@@ -250,8 +250,8 @@ body.page-weekly-lineup .table-container,
 /* Ensure compact columns fit content */
 .weekly-lineup-table td:nth-child(2),
 .weekly-lineup-table td:nth-child(4),
-.weekly-lineup-table td:nth-child(6),
-.weekly-lineup-table td:nth-child(8) {
+.weekly-lineup-table td:nth-child(7),
+.weekly-lineup-table td:nth-child(9) {
   padding: 0.4rem 0.5rem !important;
   white-space: nowrap !important;
 }
@@ -266,15 +266,25 @@ body.page-weekly-lineup .table-container,
 }
 
 .weekly-lineup-table td:nth-child(5),
-.weekly-lineup-table td[data-label="Pick"] {
+.weekly-lineup-table td[data-label="Pick"],
+.weekly-lineup-table td[data-label="Recommended Pick"] {
   white-space: normal !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
   word-wrap: break-word !important;
 }
 
-/* Column widths for weekly lineup - 8 columns (total: 100%)
-   1: Date/Time  2: League  3: Matchup  4: Segment  5: Pick  6: Edge  7: Fire  8: Track
+.weekly-lineup-table td:nth-child(6),
+.weekly-lineup-table td[data-label="Model Prediction"] {
+  white-space: normal !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  word-wrap: break-word !important;
+}
+
+/* Column widths for weekly lineup - 9 columns (total: 100%)
+  1: Date/Time  2: League  3: Matchup  4: Segment  5: Recommended Pick
+  6: Model Prediction  7: Edge  8: Fire  9: Track
    Override base component min-widths and apply fixed widths to both th and td */
 .weekly-lineup-table thead th:nth-child(1),
 .weekly-lineup-table tbody td:nth-child(1) {
@@ -290,9 +300,9 @@ body.page-weekly-lineup .table-container,
 } /* League */
 .weekly-lineup-table thead th:nth-child(3),
 .weekly-lineup-table tbody td:nth-child(3) {
-  width: 25% !important;
-  min-width: 220px !important;
-  max-width: 25% !important;
+  width: 23% !important;
+  min-width: 210px !important;
+  max-width: 23% !important;
 } /* Matchup */
 .weekly-lineup-table thead th:nth-child(4),
 .weekly-lineup-table tbody td:nth-child(4) {
@@ -302,27 +312,33 @@ body.page-weekly-lineup .table-container,
 } /* Segment */
 .weekly-lineup-table thead th:nth-child(5),
 .weekly-lineup-table tbody td:nth-child(5) {
-  width: 18% !important;
-  min-width: 160px !important;
-  max-width: 18% !important;
-} /* Pick */
+  width: 16% !important;
+  min-width: 150px !important;
+  max-width: 16% !important;
+} /* Recommended Pick */
 .weekly-lineup-table thead th:nth-child(6),
 .weekly-lineup-table tbody td:nth-child(6) {
-  width: 8% !important;
-  min-width: 75px !important;
-  max-width: 8% !important;
-} /* Edge */
+  width: 12% !important;
+  min-width: 120px !important;
+  max-width: 12% !important;
+} /* Model Prediction */
 .weekly-lineup-table thead th:nth-child(7),
 .weekly-lineup-table tbody td:nth-child(7) {
-  width: 15% !important;
-  min-width: 130px !important;
-  max-width: 15% !important;
-} /* Fire */
+  width: 7% !important;
+  min-width: 72px !important;
+  max-width: 7% !important;
+} /* Edge */
 .weekly-lineup-table thead th:nth-child(8),
 .weekly-lineup-table tbody td:nth-child(8) {
-  width: 8% !important;
-  min-width: 70px !important;
-  max-width: 8% !important;
+  width: 6% !important;
+  min-width: 60px !important;
+  max-width: 6% !important;
+} /* Fire */
+.weekly-lineup-table thead th:nth-child(9),
+.weekly-lineup-table tbody td:nth-child(9) {
+  width: 11% !important;
+  min-width: 94px !important;
+  max-width: 11% !important;
 } /* Track */
 
 /* Tracker column header - prevent overflow */
@@ -4553,6 +4569,34 @@ body.page-weekly-lineup .th-filter-btn[aria-expanded="true"],
   opacity: 1;
 }
 
+/* Weekly header: avoid duplicate-looking vertical dot stacks in each column header. */
+body.page-weekly-lineup .th-header-shell .th-filter-btn::before,
+.page-weekly-lineup .th-header-shell .th-filter-btn::before {
+  content: "v";
+  width: auto;
+  height: auto;
+  background-image: none;
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 700;
+}
+
+body.page-weekly-lineup
+  .th-header-shell
+  .th-filter-btn[aria-expanded="true"]::before,
+.page-weekly-lineup
+  .th-header-shell
+  .th-filter-btn[aria-expanded="true"]::before {
+  content: "x";
+  font-size: 11px;
+  font-weight: 700;
+}
+
+body.page-weekly-lineup .filter-toolbar button,
+body.page-weekly-lineup .th-filter-btn {
+  touch-action: manipulation;
+}
+
 /* ==========================================================================
    COMPACT FILTER DROPDOWNS - Premium Vegas Sportsbook Design (Refined)
    ========================================================================== */
@@ -5841,24 +5885,23 @@ body.page-weekly-lineup
   display: none !important;
 }
 
-/* Clear button */
+/* Clear button — only visible when filters are active */
 .ft-clear {
   padding: 5px 10px;
   font-size: 0.68rem;
   font-weight: 500;
   font-family: inherit;
-  color: rgba(180, 180, 180, 0.6);
+  color: rgba(200, 200, 200, 0.7);
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 14px;
   cursor: pointer;
-  transition: all 0.12s ease;
+  transition: color 0.12s ease, border-color 0.12s ease;
 }
 
 .ft-clear:hover {
-  color: #ef5050;
-  border-color: rgba(239, 68, 68, 0.4);
-  background: rgba(239, 68, 68, 0.08);
+  color: #e8f0f2;
+  border-color: rgba(255, 255, 255, 0.25);
 }
 
 /* Menu divider */
@@ -6251,7 +6294,6 @@ body.page-weekly-lineup
     display: flex;
     flex-wrap: nowrap;
     overflow-x: auto;
-    scrollbar-width: none;
     gap: 6px;
     padding-bottom: 4px;
   }
@@ -6359,12 +6401,16 @@ body.page-weekly-lineup
   flex-shrink: 0;
 }
 
+/* League cell: td handles centering via vertical-align, div centers logo */
+.weekly-lineup-table tbody td.col-league {
+  text-align: center;
+  vertical-align: middle;
+}
+
 .weekly-lineup-table tbody td .league-cell {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 100%;
 }
 
 .weekly-lineup-table tbody td .datetime-cell {
@@ -6535,7 +6581,6 @@ body.page-weekly-lineup .filter-toolbar .ft-right .fetch-separator {
   body.page-weekly-lineup .filter-toolbar .ft-left {
     flex-wrap: nowrap;
     overflow-x: auto;
-    scrollbar-width: none;
     min-width: 0;
   }
 
@@ -6715,8 +6760,8 @@ body.page-weekly-lineup .brand-header-inline {
   }
 
   /* Hide Track column on phones */
-  body.page-weekly-lineup .weekly-lineup-table th:nth-child(8),
-  body.page-weekly-lineup .weekly-lineup-table td:nth-child(8) {
+  body.page-weekly-lineup .weekly-lineup-table th:nth-child(9),
+  body.page-weekly-lineup .weekly-lineup-table td:nth-child(9) {
     display: none;
   }
 
@@ -6725,7 +6770,7 @@ body.page-weekly-lineup .brand-header-inline {
     width: auto !important;
   }
 
-  body.page-weekly-lineup .weekly-lineup-table col:nth-child(8) {
+  body.page-weekly-lineup .weekly-lineup-table col:nth-child(9) {
     display: none;
   }
 
@@ -6764,7 +6809,6 @@ body.page-weekly-lineup .brand-header-inline {
     display: flex;
     flex-wrap: nowrap;
     overflow-x: auto;
-    scrollbar-width: none;
     gap: 6px;
     padding-bottom: 4px;
   }
@@ -6873,18 +6917,18 @@ body.page-weekly-lineup .brand-header-inline {
     padding: 6px 4px;
   }
 
-  /* Hide Segment (4) and Fire (7) columns on small phones */
+  /* Hide Segment (4) and Fire (8) columns on small phones */
   body.page-weekly-lineup .weekly-lineup-table th:nth-child(4),
   body.page-weekly-lineup .weekly-lineup-table td:nth-child(4),
-  body.page-weekly-lineup .weekly-lineup-table th:nth-child(7),
-  body.page-weekly-lineup .weekly-lineup-table td:nth-child(7) {
+  body.page-weekly-lineup .weekly-lineup-table th:nth-child(8),
+  body.page-weekly-lineup .weekly-lineup-table td:nth-child(8) {
     display: none;
   }
 
   /* Ensure colgroup matches hidden columns */
   body.page-weekly-lineup .weekly-lineup-table col:nth-child(4),
-  body.page-weekly-lineup .weekly-lineup-table col:nth-child(7),
-  body.page-weekly-lineup .weekly-lineup-table col:nth-child(8) {
+  body.page-weekly-lineup .weekly-lineup-table col:nth-child(8),
+  body.page-weekly-lineup .weekly-lineup-table col:nth-child(9) {
     display: none;
   }
 
@@ -6946,9 +6990,12 @@ body.page-weekly-lineup .brand-header-inline {
     content: "Matchup";
   }
   body.page-weekly-lineup .weekly-lineup-table tbody td:nth-child(5)::before {
-    content: "Pick";
+    content: "Recommended Pick";
   }
   body.page-weekly-lineup .weekly-lineup-table tbody td:nth-child(6)::before {
+    content: "Model Prediction";
+  }
+  body.page-weekly-lineup .weekly-lineup-table tbody td:nth-child(7)::before {
     content: "Edge";
   }
 
@@ -7231,6 +7278,15 @@ body.page-weekly-lineup .brand-word {
   letter-spacing: 0.02em;
 }
 
+.weekly-lineup-table .model-prediction-text {
+  display: inline-block;
+  font-family: var(--font-mono, "Roboto Mono", monospace);
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--neutral-200, #e2e8f0);
+  line-height: 1.25;
+}
+
 /* ===== EDGE - CLEAN INLINE, NO BORDER ===== */
 .weekly-lineup-table .edge-toggle {
   display: inline-flex;
@@ -7317,6 +7373,16 @@ body.page-weekly-lineup .brand-word {
 
 .ft-clear-slate-btn:hover .clear-icon {
   opacity: 1;
+}
+
+.ft-clear-slate-btn.is-cleared {
+  background: rgba(16, 185, 129, 0.14);
+  border-color: rgba(16, 185, 129, 0.45);
+  color: #86efac;
+}
+
+.ft-clear-slate-btn:disabled {
+  cursor: default;
 }
 
 /* ===== DISABLED LEAGUE PILLS - GREYED OUT ===== */

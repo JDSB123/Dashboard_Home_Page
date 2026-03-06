@@ -406,7 +406,9 @@
                       Paste Text
                     </button>
                   </div>
-                  <div class="import-mode-desc">PDFs, images, HTML, text files — or paste picks directly</div>
+                  <div class="import-mode-desc">
+                    PDFs, images, HTML, text files — or paste picks directly
+                  </div>
                   <div id="file-list"></div>
                   <div id="manual-entry-area" class="manual-entry-area hidden">
                     <textarea
@@ -555,7 +557,7 @@
                   </button>
                 </div>
               </div>
-              <button class="ft-clear" id="ft-clear">✕ Clear</button>
+              <button class="ft-clear" id="ft-clear" type="button" hidden>Clear</button>
             </div>
             <div class="ft-right">
               <div class="fetch-controls-wrapper">
@@ -639,26 +641,24 @@
                     title="Clear all picks and start fresh"
                     type="button"
                   >
-                    <svg class="clear-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-                      <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                    <svg
+                      class="clear-icon"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      width="14"
+                      height="14"
+                    >
+                      <path
+                        d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+                      />
                     </svg>
                     <span class="clear-label">Clear Slate</span>
                   </button>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-
-        <!-- Filter Chips (Moved outside wrapper to avoid background film) -->
-        <div class="chips-container toolbar-layout">
-          <div class="table-filter-chips-wrapper">
-            <div
-              class="table-filter-chips filter-chips"
-              id="table-filter-chips"
-              aria-live="polite"
-              data-has-chips="false"
-            ></div>
           </div>
         </div>
 
@@ -672,44 +672,134 @@
               <!-- Date/Time -->
               <col class="w-7" />
               <!-- League -->
-              <col class="w-30" />
+              <col class="w-26" />
               <!-- Matchup -->
               <col class="w-10" />
               <!-- Segment -->
-              <col class="w-25" />
-              <!-- Pick -->
+              <col class="w-17" />
+              <!-- Recommended Pick -->
+              <col class="w-13" />
+              <!-- Model Prediction -->
               <col class="w-8" />
               <!-- Edge -->
               <col class="w-6" />
               <!-- Fire -->
-              <col class="w-16" />
+              <col class="w-11" />
               <!-- Track -->
             </colgroup>
             <thead>
               <tr>
-                <th scope="col" class="col-datetime">
-                  <span class="header-main-text">Date & Time</span>
-                  <span class="header-subtext">(CST)</span>
+                <th scope="col" data-sort="date" class="col-datetime sortable">
+                  <div class="th-header-shell">
+                    <button
+                      type="button"
+                      class="th-sort-btn"
+                      aria-label="Sort by date and time (CST)"
+                    >
+                      <span class="header-main-text">Date & Time</span>
+                      <span class="header-subtext">(CST)</span>
+                      <span class="sort-icon" aria-hidden="true">▲</span>
+                    </button>
+                  </div>
                 </th>
-                <th scope="col" class="center col-league">
-                  <span class="header-main-text">League</span>
+                <th
+                  scope="col"
+                  data-sort="league"
+                  class="center col-league sortable"
+                >
+                  <div class="th-header-shell">
+                    <button
+                      type="button"
+                      class="th-sort-btn"
+                      aria-label="Sort by league"
+                    >
+                      <span class="header-main-text">League</span>
+                      <span class="sort-icon" aria-hidden="true">▲</span>
+                    </button>
+                  </div>
                 </th>
-                <th scope="col" class="col-matchup">
-                  <span class="header-main-text">Matchup</span>
-                  <span class="header-subtext">(Away vs. Home)</span>
+                <th
+                  scope="col"
+                  data-sort="matchup"
+                  class="col-matchup sortable"
+                >
+                  <div class="th-header-shell">
+                    <button
+                      type="button"
+                      class="th-sort-btn"
+                      aria-label="Sort by matchup"
+                    >
+                      <span class="header-main-text">Matchup</span>
+                      <span class="header-subtext">(Away vs. Home)</span>
+                      <span class="sort-icon" aria-hidden="true">▲</span>
+                    </button>
+                  </div>
                 </th>
-                <th scope="col" class="center col-segment">
-                  <span class="header-main-text">Segment</span>
+                <th
+                  scope="col"
+                  data-sort="segment"
+                  class="center col-segment sortable"
+                >
+                  <div class="th-header-shell">
+                    <button
+                      type="button"
+                      class="th-sort-btn"
+                      aria-label="Sort by segment"
+                    >
+                      <span class="header-main-text">Segment</span>
+                      <span class="sort-icon" aria-hidden="true">▲</span>
+                    </button>
+                  </div>
                 </th>
-                <th scope="col" class="col-pick">
-                  <span class="header-main-text">Pick</span>
+                <th scope="col" data-sort="pick" class="col-pick sortable">
+                  <div class="th-header-shell">
+                    <button
+                      type="button"
+                      class="th-sort-btn"
+                      aria-label="Sort by recommended pick"
+                    >
+                      <span class="header-main-text">Recommended Pick</span>
+                      <span class="sort-icon" aria-hidden="true">▲</span>
+                    </button>
+                  </div>
                 </th>
-                <th scope="col" class="center col-edge">
-                  <span class="header-main-text">Edge</span>
-                  <span class="header-subtext">(Pts / %)</span>
+                <th scope="col" class="col-model-prediction">
+                  <div class="th-header-shell">
+                    <span class="header-main-text">Model Prediction</span>
+                  </div>
                 </th>
-                <th scope="col" class="center col-fire">
-                  <span class="header-main-text">Fire</span>
+                <th
+                  scope="col"
+                  data-sort="edge"
+                  class="center col-edge sortable"
+                >
+                  <div class="th-header-shell">
+                    <button
+                      type="button"
+                      class="th-sort-btn"
+                      aria-label="Sort by edge"
+                    >
+                      <span class="header-main-text">Edge</span>
+                      <span class="header-subtext">(Pts / %)</span>
+                      <span class="sort-icon" aria-hidden="true">▲</span>
+                    </button>
+                  </div>
+                </th>
+                <th
+                  scope="col"
+                  data-sort="fire"
+                  class="center col-fire sortable"
+                >
+                  <div class="th-header-shell">
+                    <button
+                      type="button"
+                      class="th-sort-btn"
+                      aria-label="Sort by fire rating"
+                    >
+                      <span class="header-main-text">Fire</span>
+                      <span class="sort-icon" aria-hidden="true">▲</span>
+                    </button>
+                  </div>
                 </th>
                 <th scope="col" class="tracker-column center col-track">
                   <div class="th-header-shell">
@@ -720,7 +810,7 @@
             </thead>
             <tbody id="picks-tbody">
               <tr class="empty-state-row">
-                <td colspan="8" class="empty-state-cell">
+                <td colspan="9" class="empty-state-cell">
                   <div class="empty-state">
                     <span class="empty-icon">📊</span>
                     <span class="empty-message"
