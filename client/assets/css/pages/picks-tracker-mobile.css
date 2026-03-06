@@ -84,11 +84,14 @@
   }
 
   #refresh-btn {
-    width: 34px;
+    width: auto;
     height: 34px;
-    font-size: 16px;
     min-height: 34px;
-    padding: 0;
+    padding: 6px 10px;
+  }
+
+  #refresh-btn .refresh-label {
+    font-size: 0.62rem;
   }
 
   /* ===== FETCH SECTION — prominent CTA ===== */

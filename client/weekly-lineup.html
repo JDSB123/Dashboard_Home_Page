@@ -565,9 +565,99 @@
               <div class="fetch-controls-wrapper">
                 <div class="ft-fetch-buttons">
                   <div class="ft-all-group">
+                    <button
+                      class="ft-fetch-league-btn ft-fetch-all"
+                      data-fetch="all"
+                      title="Refresh All"
+                      type="button"
+                    >
+                      <svg
+                        class="refresh-icon"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <path d="M1 4v6h6"></path>
+                        <path d="M23 20v-6h-6"></path>
+                        <path d="M20.49 9A9 9 0 0 0 6.87 5.64L1 10"></path>
+                        <path d="M3.51 15a9 9 0 0 0 13.62 3.36L23 14"></path>
+                      </svg>
+                      <span>All</span>
+                    </button>
+
                     <span class="ft-last-refreshed" id="ft-last-refreshed"
                       >Last: <span class="sync-time">-</span></span
                     >
+                  </div>
+
+                  <div class="fetch-separator"></div>
+
+                  <div class="ft-dropdown ft-fetch-dropdown">
+                    <button
+                      class="ft-dropdown-btn ft-fetch-league-btn ft-fetch-dropdown-trigger"
+                      id="fetch-leagues-trigger"
+                      aria-expanded="false"
+                      aria-haspopup="true"
+                      title="Fetch by league"
+                      type="button"
+                    >
+                      <span>Leagues</span>
+                      <span aria-hidden="true">▾</span>
+                    </button>
+                    <div
+                      class="ft-dropdown-menu ft-fetch-menu"
+                      id="fetch-leagues-menu"
+                    >
+                      <button
+                        class="ft-dropdown-item league-fetch-item"
+                        data-fetch="nba"
+                        type="button"
+                      >
+                        <img
+                          src="assets/nba-logo.png"
+                          class="league-logo-sm"
+                          alt="NBA"
+                        />
+                        <span>NBA Picks</span>
+                      </button>
+                      <button
+                        class="ft-dropdown-item league-fetch-item"
+                        data-fetch="ncaab"
+                        type="button"
+                      >
+                        <img
+                          src="assets/ncaam-logo.png"
+                          class="league-logo-sm"
+                          alt="NCAAM"
+                        />
+                        <span>NCAAM Picks</span>
+                      </button>
+                      <button
+                        class="ft-dropdown-item league-fetch-item"
+                        data-fetch="mlb"
+                        type="button"
+                      >
+                        <img
+                          src="assets/mlb-logo.png"
+                          class="league-logo-sm"
+                          alt="MLB"
+                        />
+                        <span>MLB Picks</span>
+                      </button>
+                      <button
+                        class="ft-dropdown-item league-fetch-item"
+                        data-fetch="nhl"
+                        type="button"
+                      >
+                        <img
+                          src="assets/icons/league-nhl-official.svg"
+                          class="league-logo-sm"
+                          alt="NHL"
+                        />
+                        <span>NHL Picks</span>
+                      </button>
+                    </div>
                   </div>
 
                   <button

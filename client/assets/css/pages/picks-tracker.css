@@ -49,27 +49,45 @@
 }
 
 #refresh-btn {
-  background: rgba(0, 214, 137, 0.1);
-  border: 1px solid rgba(0, 214, 137, 0.25);
-  color: rgba(0, 214, 137, 0.85);
-  width: 36px;
-  height: 36px;
-  padding: 0;
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 18px;
-  line-height: 1;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition:
-    background 0.2s,
-    border-color 0.2s;
+  gap: 5px;
+  background: rgba(0, 214, 137, 0.08);
+  border: 1px solid rgba(0, 214, 137, 0.15);
+  color: #00d689;
+  width: auto;
+  height: 26px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  line-height: 1;
+  transition: all 0.15s ease;
 }
 
 #refresh-btn:hover {
-  background: rgba(0, 214, 137, 0.22);
-  border-color: rgba(0, 214, 137, 0.5);
+  color: #00d689;
+  background: rgba(0, 214, 137, 0.15);
+  border-color: rgba(0, 214, 137, 0.3);
+  box-shadow: 0 0 8px rgba(0, 214, 137, 0.1);
+}
+
+#refresh-btn:active {
+  transform: translateY(1px);
+}
+
+#refresh-btn .refresh-icon {
+  width: 12px;
+  height: 12px;
+  stroke: currentColor;
+}
+
+#refresh-btn .refresh-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  white-space: nowrap;
 }
 
 /* ===== FETCH SECTION ===== */

@@ -5578,8 +5578,25 @@ body.page-weekly-lineup .brand-header-inline {
   body.page-weekly-lineup .filter-toolbar .ft-right .ft-fetch-buttons {
     width: 100%;
     justify-content: space-between;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 4px;
+  }
+
+  body.page-weekly-lineup .filter-toolbar .ft-right .ft-all-group {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  body.page-weekly-lineup .filter-toolbar .ft-right .ft-clear-slate-btn {
+    flex: 0 0 auto;
+  }
+
+  body.page-weekly-lineup
+    .filter-toolbar
+    .ft-right
+    .ft-clear-slate-btn
+    .clear-label {
+    white-space: nowrap;
   }
 
   /* Hide text labels on fetch buttons - show only icons */

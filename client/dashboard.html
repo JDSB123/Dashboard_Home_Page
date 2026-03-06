@@ -436,11 +436,16 @@
                         class="file-input-hidden"
                       />
                     </label>
-                    <label for="paste-area" class="import-mode-btn import-paste-btn">
+                    <label
+                      for="paste-area"
+                      class="import-mode-btn import-paste-btn"
+                    >
                       Paste Text
                     </label>
                   </div>
-                  <div class="import-mode-desc">PDFs, images, HTML, text files — or paste picks directly</div>
+                  <div class="import-mode-desc">
+                    PDFs, images, HTML, text files — or paste picks directly
+                  </div>
                   <div id="file-list"></div>
                   <button
                     type="button"
@@ -891,7 +896,7 @@
             </div>
             <div class="ft-right">
               <button
-                class="refresh-btn"
+                class="refresh-btn ft-fetch-league-btn ft-fetch-all"
                 id="dashboard-refresh-btn"
                 title="Refresh scores"
                 aria-label="Refresh scores"
@@ -899,20 +904,17 @@
               >
                 <svg
                   class="refresh-icon"
-                  width="14"
-                  height="14"
-                  viewBox="0 0 16 16"
+                  viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
                   stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
                 >
-                  <path d="M1 1v5h5" />
-                  <path d="M1 6a7 7 0 0 1 12.9-3.5" />
-                  <path d="M15 15v-5h-5" />
-                  <path d="M15 10a7 7 0 0 1-12.9 3.5" />
+                  <path d="M1 4v6h6"></path>
+                  <path d="M23 20v-6h-6"></path>
+                  <path d="M20.49 9A9 9 0 0 0 6.87 5.64L1 10"></path>
+                  <path d="M3.51 15a9 9 0 0 0 13.62 3.36L23 14"></path>
                 </svg>
+                <span class="refresh-label">Refresh</span>
               </button>
               <button
                 class="ft-clear-slate-btn"

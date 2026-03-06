@@ -382,32 +382,38 @@ body.page-odds-market .date-toggle-btn.active {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 999px;
-  border: 1px solid rgba(0, 214, 137, 0.25);
-  background: rgba(8, 18, 32, 0.55);
-  color: rgba(232, 240, 242, 0.95);
+  gap: 5px;
+  width: auto;
+  height: 26px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 214, 137, 0.15);
+  background: rgba(0, 214, 137, 0.08);
+  color: #00d689;
   cursor: pointer;
-  transition:
-    transform 0.12s ease,
-    border-color 0.12s ease,
-    box-shadow 0.12s ease;
+  transition: all 0.15s ease;
 }
 .refresh-btn:hover {
-  transform: translateY(-1px);
-  border-color: rgba(0, 214, 137, 0.45);
-  background: rgba(0, 214, 137, 0.1);
-  box-shadow:
-    0 6px 14px rgba(0, 0, 0, 0.35),
-    0 0 18px rgba(0, 214, 137, 0.12);
+  color: #00d689;
+  background: rgba(0, 214, 137, 0.15);
+  border-color: rgba(0, 214, 137, 0.3);
+  box-shadow: 0 0 8px rgba(0, 214, 137, 0.1);
 }
 .refresh-btn .refresh-icon {
-  width: 14px;
-  height: 14px;
+  width: 12px;
+  height: 12px;
   stroke: currentColor;
   transition: transform 0.4s ease;
 }
+
+.refresh-btn .refresh-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
 .refresh-btn:hover .refresh-icon {
   transform: rotate(180deg);
 }

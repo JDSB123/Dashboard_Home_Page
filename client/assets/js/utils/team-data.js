@@ -246,17 +246,29 @@
       return teamLookup[key];
     }
 
-    // Try partial matches — prefer same-league matches to avoid cross-league collisions
+    // Try partial matches — ONLY within the same league to avoid cross-league collisions
+    // (e.g. NCAAM "Northeastern" matching NFL "ne" → New England Patriots)
     const normalizedLeague = league ? league.toLowerCase() : '';
-    let bestPartial = null;
+    // Treat ncaam/ncaab/cbb as equivalent league group
+    const leagueGroup = (l) => {
+      const lower = (l || '').toLowerCase();
+      if (lower === 'ncaam' || lower === 'ncaab' || lower === 'cbb') return 'ncaab';
+      if (lower === 'ncaaf' || lower === 'cfb') return 'ncaaf';
+      return lower;
+    };
+    const requestedGroup = leagueGroup(normalizedLeague);
+    let bestSameLeague = null;
     for (const [lookupKey, team] of Object.entries(teamLookup)) {
       if (lookupKey.includes(key) || key.includes(lookupKey)) {
-        const teamLeague = (team.league || '').toLowerCase();
-        if (normalizedLeague && teamLeague === normalizedLeague) return team;
-        if (!bestPartial) bestPartial = team;
+        const teamGroup = leagueGroup(team.league);
+        if (requestedGroup && teamGroup === requestedGroup) {
+          bestSameLeague = team;
+          break;
+        }
+        // Do NOT fall back to cross-league partial matches when league is specified
       }
     }
-    if (bestPartial) return bestPartial;
+    if (bestSameLeague) return bestSameLeague;
 
     // Fallback - generate basic info
     return {

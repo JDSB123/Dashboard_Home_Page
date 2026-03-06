@@ -24,6 +24,7 @@
       key: "edge",
       dir: "desc",
     },
+    activeFetchButtons: [],
   };
 
   const FILTER_CONTROL_IDS = {
@@ -38,6 +39,61 @@
   };
 
   const nowIso = () => new Date().toISOString();
+
+  const FETCH_TIMEOUT_MS = 30000;
+
+  const isNormalizationDebugEnabled = () => {
+    try {
+      if (window.APP_CONFIG?.WEEKLY_LINEUP_DEBUG_NORMALIZATION === true) {
+        return true;
+      }
+      const localValue = window.localStorage?.getItem(
+        "gbsv_weekly_lineup_debug_normalization",
+      );
+      return localValue === "1" || safeText(localValue).toLowerCase() === "true";
+    } catch (_error) {
+      return false;
+    }
+  };
+
+  const debugNormalization = (message, payload) => {
+    if (!isNormalizationDebugEnabled()) return;
+    if (payload === undefined) {
+      console.debug(`[WeeklyLineup] ${message}`);
+      return;
+    }
+    console.debug(`[WeeklyLineup] ${message}`, payload);
+  };
+
+  const setFetchButtonsLoading = (buttons, loading) => {
+    const active = (buttons || []).filter(Boolean);
+    if (!active.length) return;
+
+    active.forEach((btn) => {
+      btn.classList.toggle("loading", !!loading);
+      btn.disabled = !!loading;
+      btn.setAttribute("aria-busy", loading ? "true" : "false");
+    });
+  };
+
+  const getPrimaryRefreshButton = () =>
+    document.querySelector(".ft-fetch-all[data-fetch='all']");
+
+  const withTimeout = async (promise, timeoutMs, message) => {
+    let timer = null;
+    try {
+      return await Promise.race([
+        promise,
+        new Promise((_, reject) => {
+          timer = setTimeout(() => {
+            reject(new Error(message || "Request timed out"));
+          }, timeoutMs);
+        }),
+      ]);
+    } finally {
+      if (timer) clearTimeout(timer);
+    }
+  };
 
   const formatDateFull = (isoDate) => {
     if (!isoDate) return "";
@@ -335,12 +391,17 @@
       const key = th.getAttribute("data-sort");
       const icon = th.querySelector(".sort-icon");
       th.classList.remove("sorted-asc", "sorted-desc");
-      if (icon) icon.textContent = "";
+      th.setAttribute("aria-sort", "none");
+      if (icon) icon.textContent = "▲";
       if (key === state.sort.key) {
         th.classList.add(
           state.sort.dir === "asc" ? "sorted-asc" : "sorted-desc",
         );
-        if (icon) icon.textContent = "";
+        th.setAttribute(
+          "aria-sort",
+          state.sort.dir === "asc" ? "ascending" : "descending",
+        );
+        if (icon) icon.textContent = state.sort.dir === "asc" ? "▲" : "▼";
       }
     });
   };
@@ -466,6 +527,196 @@
     return (info && info.fullName) || teamName;
   };
 
+  const parseMatchupTeams = (matchupText) => {
+    const text = safeText(matchupText).trim();
+    if (!text) return { awayTeam: "", homeTeam: "" };
+
+    const separators = [" @ ", " at ", " vs ", " vs. ", " v ", " - "];
+    for (const sep of separators) {
+      const parts = text.split(sep);
+      if (parts.length === 2) {
+        return {
+          awayTeam: safeText(parts[0]).trim(),
+          homeTeam: safeText(parts[1]).trim(),
+        };
+      }
+    }
+
+    return { awayTeam: "", homeTeam: "" };
+  };
+
+  const normalizeRecordValue = (recordValue) => {
+    if (recordValue === undefined || recordValue === null) return "";
+
+    if (typeof recordValue === "string") {
+      const trimmed = recordValue.trim();
+      return trimmed;
+    }
+
+    if (typeof recordValue === "number") {
+      return Number.isFinite(recordValue) ? String(recordValue) : "";
+    }
+
+    if (typeof recordValue === "object") {
+      const wins = recordValue.wins ?? recordValue.win ?? recordValue.W;
+      const losses = recordValue.losses ?? recordValue.loss ?? recordValue.L;
+      const ties = recordValue.ties ?? recordValue.tie ?? recordValue.T;
+
+      if (wins !== undefined && losses !== undefined) {
+        if (ties !== undefined && ties !== null && String(ties) !== "0") {
+          return `${wins}-${losses}-${ties}`;
+        }
+        return `${wins}-${losses}`;
+      }
+
+      const nested =
+        recordValue.overall || recordValue.record || recordValue.summary;
+      if (nested && nested !== recordValue) {
+        return normalizeRecordValue(nested);
+      }
+    }
+
+    return "";
+  };
+
+  const lookupFallbackRecord = (teamName, sport) => {
+    const team = safeText(teamName).trim();
+    if (!team) return "";
+    const canonicalTeam = resolveFullName(team, sport);
+
+    const directRecord = window.AutoGameFetcher?.getTeamRecord?.(team);
+    if (directRecord) return safeText(directRecord).trim();
+    const canonicalDirectRecord =
+      window.AutoGameFetcher?.getTeamRecord?.(canonicalTeam);
+    if (canonicalDirectRecord) return safeText(canonicalDirectRecord).trim();
+
+    const cache = window.AutoGameFetcher?.getRecordsCache?.();
+    if (cache && typeof cache === "object") {
+      const lower = team.toLowerCase();
+      if (cache[lower]) return safeText(cache[lower]).trim();
+      const canonicalLower = safeText(canonicalTeam).toLowerCase();
+      if (canonicalLower && cache[canonicalLower]) {
+        return safeText(cache[canonicalLower]).trim();
+      }
+    }
+
+    const info =
+      window.TeamData?.getTeamInfo?.(team, sport?.toLowerCase()) ||
+      window.TeamData?.getTeamInfo?.(canonicalTeam, sport?.toLowerCase());
+    return normalizeRecordValue(info?.record || info?.overallRecord || "");
+  };
+
+  const normalizeIncomingPick = (pick) => {
+    const raw = pick || {};
+    const sport = normalizeSport(
+      raw.sport || raw.league || raw.modelSport || raw.model_sport,
+    );
+
+    const parsedMatchup = parseMatchupTeams(
+      raw.matchup || raw.game || raw.event,
+    );
+    const awayTeam = safeText(
+      raw.awayTeam ||
+        raw.away_team ||
+        raw.away ||
+        raw.away_name ||
+        raw.awayTeamName ||
+        parsedMatchup.awayTeam,
+    ).trim();
+    const homeTeam = safeText(
+      raw.homeTeam ||
+        raw.home_team ||
+        raw.home ||
+        raw.home_name ||
+        raw.homeTeamName ||
+        parsedMatchup.homeTeam,
+    ).trim();
+
+    const normalizedPickType = normalizePickType(
+      raw.pickType || raw.pick_type || raw.market || raw.marketType,
+    );
+
+    let pickDirection = safeText(
+      raw.pickDirection || raw.pick_direction,
+    ).trim();
+    const pickTeam = safeText(
+      raw.pickTeam ||
+        raw.pick_team ||
+        raw.pick ||
+        raw.pickLabel ||
+        raw.selection ||
+        raw.predictedWinner,
+    ).trim();
+
+    if (!pickDirection) {
+      const upperPickTeam = pickTeam.toUpperCase();
+      if (upperPickTeam === "OVER" || upperPickTeam === "UNDER") {
+        pickDirection = upperPickTeam;
+      }
+    }
+
+    const awayModelRecord = normalizeRecordValue(
+      raw.awayRecord ||
+        raw.away_record ||
+        raw.awayTeamRecord ||
+        raw.away_team_record ||
+        raw.awayRecordSummary,
+    );
+    const homeModelRecord = normalizeRecordValue(
+      raw.homeRecord ||
+        raw.home_record ||
+        raw.homeTeamRecord ||
+        raw.home_team_record ||
+        raw.homeRecordSummary,
+    );
+    const awayFallbackRecord = awayModelRecord
+      ? ""
+      : lookupFallbackRecord(awayTeam, sport);
+    const homeFallbackRecord = homeModelRecord
+      ? ""
+      : lookupFallbackRecord(homeTeam, sport);
+    const awayRecord = awayModelRecord || awayFallbackRecord;
+    const homeRecord = homeModelRecord || homeFallbackRecord;
+
+    return {
+      ...raw,
+      sport,
+      league: sport,
+      awayTeam,
+      homeTeam,
+      awayRecord,
+      homeRecord,
+      pickType: normalizedPickType,
+      pickTeam,
+      pickDirection,
+      segment: raw.segment || raw.period || raw.gameSegment || "FG",
+      line:
+        raw.line ||
+        raw.marketLine ||
+        raw.market_line ||
+        raw.pick_line ||
+        raw.spread ||
+        raw.total ||
+        "",
+      odds:
+        raw.odds ??
+        raw.oddsAmerican ??
+        raw.odds_american ??
+        raw.pick_odds ??
+        raw.price ??
+        "-110",
+      gameDate:
+        raw.gameDate || raw.game_date || raw.date || new Date().toISOString(),
+      gameTime: raw.gameTime || raw.time || raw.timeCst || raw.time_cst || "",
+      _normalizeMeta: {
+        awayRecordSource: awayModelRecord ? "model" : awayFallbackRecord ? "fallback" : "none",
+        homeRecordSource: homeModelRecord ? "model" : homeFallbackRecord ? "fallback" : "none",
+        awayTeamSource: parsedMatchup.awayTeam && !raw.awayTeam ? "matchup" : "model",
+        homeTeamSource: parsedMatchup.homeTeam && !raw.homeTeam ? "matchup" : "model",
+      },
+    };
+  };
+
   const fireEmoji = (fire) => {
     const n = Math.max(0, Math.min(5, parseInt(fire, 10) || 0));
     if (n <= 0) return "";
@@ -487,7 +738,10 @@
     }
 
     if (type === "moneyline" || type === "ml") {
-      return `${safeText(pick.pickTeam)} ML`.trim();
+      const team = safeText(pick.pickTeam);
+      // Avoid "Florida A&M ML ML" when model already appends ML
+      if (/\bML$/i.test(team)) return team;
+      return `${team} ML`.trim();
     }
 
     return `${safeText(pick.pickTeam)} ${line}`.trim();
@@ -851,33 +1105,91 @@
     return "today";
   };
 
-  const fetchAndRender = async (league) => {
-    if (state.isFetching) return;
+  const fetchAndRender = async (league, triggerButton) => {
+    if (state.isFetching) {
+      showToast("Refresh already in progress", "info");
+      return;
+    }
 
     if (!window.UnifiedPicksFetcher?.fetchPicks) {
       showToast("Model fetchers not loaded", "error");
       return;
     }
 
+    const normalizedLeague = safeText(league).toLowerCase() || "all";
+    const buttons = [
+      triggerButton,
+      getPrimaryRefreshButton(),
+      document.querySelector(
+        `.league-fetch-item[data-fetch='${normalizedLeague}']`,
+      ),
+    ].filter(Boolean);
+    state.activeFetchButtons = buttons;
+    setFetchButtonsLoading(buttons, true);
+
     state.isFetching = true;
 
     try {
       const date = getDateParamForFetchers();
-      const result = await window.UnifiedPicksFetcher.fetchPicks(league, date, {
-        skipCache: true,
-      });
+      const result = await withTimeout(
+        window.UnifiedPicksFetcher.fetchPicks(normalizedLeague, date, {
+          skipCache: true,
+        }),
+        FETCH_TIMEOUT_MS,
+        "Refresh timed out. Please try again.",
+      );
 
       const picks = Array.isArray(result?.picks) ? result.picks : [];
-      const enriched = picks.map((p) => {
-        const withId = { ...p };
-        withId.sport = normalizeSport(withId.sport || withId.league);
-        withId.gameDate = (withId.gameDate || withId.date || nowIso())
-          .toString()
-          .slice(0, 10);
-        withId.id = withId.id || computePickId(withId);
-        withId.locked = withId.locked === true;
-        return withId;
-      });
+      const normalized = picks.map((p) => normalizeIncomingPick(p));
+      const droppedCount = normalized.filter((p) => !(p.awayTeam && p.homeTeam)).length;
+
+      if (isNormalizationDebugEnabled()) {
+        const summary = normalized.reduce(
+          (acc, p) => {
+            const meta = p._normalizeMeta || {};
+            if (meta.awayRecordSource === "fallback") acc.awayFallback += 1;
+            if (meta.homeRecordSource === "fallback") acc.homeFallback += 1;
+            if (meta.awayRecordSource === "none") acc.awayMissing += 1;
+            if (meta.homeRecordSource === "none") acc.homeMissing += 1;
+            if (meta.awayTeamSource === "matchup") acc.awayFromMatchup += 1;
+            if (meta.homeTeamSource === "matchup") acc.homeFromMatchup += 1;
+            return acc;
+          },
+          {
+            total: normalized.length,
+            dropped: droppedCount,
+            awayFallback: 0,
+            homeFallback: 0,
+            awayMissing: 0,
+            homeMissing: 0,
+            awayFromMatchup: 0,
+            homeFromMatchup: 0,
+          },
+        );
+        debugNormalization("Normalization summary", summary);
+        debugNormalization(
+          "Normalization samples",
+          normalized.slice(0, 5).map((p) => ({
+            sport: p.sport,
+            awayTeam: p.awayTeam,
+            homeTeam: p.homeTeam,
+            awayRecord: p.awayRecord,
+            homeRecord: p.homeRecord,
+            meta: p._normalizeMeta,
+          })),
+        );
+      }
+
+      const enriched = normalized
+        .filter((p) => p.awayTeam && p.homeTeam)
+        .map((p) => {
+          const withId = { ...p };
+          delete withId._normalizeMeta;
+          withId.gameDate = safeText(withId.gameDate).slice(0, 10);
+          withId.id = withId.id || computePickId(withId);
+          withId.locked = withId.locked === true;
+          return withId;
+        });
 
       state.activePicks = enriched;
       state.lastFetchedAt = nowIso();
@@ -897,6 +1209,8 @@
       renderEmptyState("Unable to fetch picks. Please try again.");
     } finally {
       state.isFetching = false;
+      setFetchButtonsLoading(state.activeFetchButtons, false);
+      state.activeFetchButtons = [];
     }
   };
 
@@ -1010,16 +1324,16 @@
       if (!code) return;
 
       if (code === "all") {
-        fetchAndRender("all");
+        fetchAndRender("all", btn);
         return;
       }
 
       if (code === "ncaab" || code === "ncaam") {
-        fetchAndRender("ncaam");
+        fetchAndRender("ncaam", btn);
         return;
       }
 
-      fetchAndRender(code);
+      fetchAndRender(code, btn);
     });
 
     document.addEventListener("click", (evt) => {
