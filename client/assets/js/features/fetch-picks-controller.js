@@ -101,7 +101,8 @@
     if (s === "NCAAB") return { src: "assets/ncaam-logo.png", alt: "NCAAM" };
     if (s === "NFL") return { src: "assets/nfl-logo.png", alt: "NFL" };
     if (s === "NCAAF") return { src: "assets/ncaaf-logo.png", alt: "NCAAF" };
-    if (s === "NHL") return { src: "assets/icons/league-nhl-official.svg", alt: "NHL" };
+    if (s === "NHL")
+      return { src: "assets/icons/league-nhl-official.svg", alt: "NHL" };
     return { src: "", alt: s };
   };
 
@@ -185,7 +186,7 @@
 
     if (!Array.isArray(picks) || picks.length === 0) {
       renderEmptyState(
-        "No picks fetched yet. Tap a league or Fetch All to load model predictions.",
+        "No picks fetched yet. Tap a league to load model predictions.",
       );
       return;
     }
@@ -440,47 +441,6 @@
           fetchAndRender("all", btn);
         } else {
           fetchAndRender(code, btn);
-        }
-      });
-    }
-
-    // Mobile FAB
-    const fab = document.getElementById("mobile-fetch-fab");
-    const fabMenu = document.getElementById("mobile-fetch-menu");
-    if (fab && fabMenu) {
-      fab.addEventListener("click", (evt) => {
-        evt.preventDefault();
-        const isOpen = !fabMenu.hidden;
-        fabMenu.hidden = isOpen;
-        fab.setAttribute("aria-expanded", String(!isOpen));
-      });
-
-      fabMenu.addEventListener("click", (evt) => {
-        const btn = evt.target.closest("button[data-fetch]");
-        if (!btn) return;
-        evt.preventDefault();
-        fabMenu.hidden = true;
-        fab.setAttribute("aria-expanded", "false");
-        const code = safeText(btn.getAttribute("data-fetch")).toLowerCase();
-        if (!code) return;
-        if (code === "ncaab" || code === "ncaam") {
-          fetchAndRender("ncaam", null);
-        } else if (code === "all") {
-          fetchAndRender("all", null);
-        } else {
-          fetchAndRender(code, null);
-        }
-      });
-
-      // Close menu on outside tap
-      document.addEventListener("click", (evt) => {
-        if (
-          !fabMenu.hidden &&
-          !fabMenu.contains(evt.target) &&
-          evt.target !== fab
-        ) {
-          fabMenu.hidden = true;
-          fab.setAttribute("aria-expanded", "false");
         }
       });
     }

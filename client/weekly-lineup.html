@@ -503,7 +503,7 @@
               <!-- Segment dropdown -->
               <div class="ft-dropdown">
                 <button class="ft-dropdown-btn" id="segment-dropdown-btn">
-                  Segment ▾
+                  Segment
                 </button>
                 <div class="ft-dropdown-menu" id="segment-dropdown-menu">
                   <button
@@ -524,7 +524,7 @@
               <!-- Pick Type dropdown -->
               <div class="ft-dropdown">
                 <button class="ft-dropdown-btn" id="picktype-dropdown-btn">
-                  Pick Type ▾
+                  Pick Type
                 </button>
                 <div class="ft-dropdown-menu" id="picktype-dropdown-menu">
                   <button
@@ -598,7 +598,6 @@
                       type="button"
                     >
                       <span>Leagues</span>
-                      <span aria-hidden="true">▾</span>
                     </button>
                     <div
                       class="ft-dropdown-menu ft-fetch-menu"
@@ -834,7 +833,7 @@
                   <div class="empty-state">
                     <span class="empty-icon">📊</span>
                     <span class="empty-message"
-                      >No picks fetched yet. Click Fetch to load picks.</span
+                      >No picks fetched yet. Open Leagues to load picks.</span
                     >
                   </div>
                 </td>
@@ -844,43 +843,6 @@
         </div>
       </div>
     </main>
-
-    <!-- Bet Slip Panel (slides in from right) -->
-    <aside class="bet-slip" id="bet-slip" aria-label="Bet Slip">
-      <div class="bet-slip-header">
-        <h2 class="bet-slip-title">Bet Slip</h2>
-        <span class="bet-slip-count" id="slip-count">0</span>
-        <button
-          class="bet-slip-toggle"
-          id="slip-toggle"
-          aria-label="Toggle bet slip"
-        >
-          <span class="toggle-icon">◀</span>
-        </button>
-      </div>
-      <div class="bet-slip-body" id="slip-body">
-        <div class="bet-slip-empty" id="slip-empty">
-          <span class="slip-empty-icon">🎯</span>
-          <span class="slip-empty-text">Click any pick row to add to slip</span>
-        </div>
-        <div class="bet-slip-picks" id="slip-picks">
-          <!-- Selections rendered by JS -->
-        </div>
-      </div>
-      <div class="bet-slip-footer" id="slip-footer" hidden>
-        <div class="slip-summary">
-          <div class="slip-row">
-            <span class="slip-label">Total Risk</span>
-            <span class="slip-value" id="slip-risk">$0</span>
-          </div>
-          <div class="slip-row">
-            <span class="slip-label">To Win</span>
-            <span class="slip-value slip-win" id="slip-win">$0</span>
-          </div>
-        </div>
-        <button class="slip-clear-btn" id="slip-clear">Clear All</button>
-      </div>
-    </aside>
 
     <!-- SignalR CDN (external — not bundled) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.min.js"></script>
