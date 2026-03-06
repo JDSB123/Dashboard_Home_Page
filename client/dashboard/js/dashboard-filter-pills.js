@@ -224,6 +224,7 @@
                 const labels = {
                     'all': 'Status',
                     'pending': 'Pending',
+                    'live': 'Live',
                     'win': 'Won',
                     'loss': 'Lost',
                     'push': 'Push'
@@ -248,6 +249,48 @@
             clearBtn.addEventListener('click', function(e) {
                 e.stopPropagation();
                 clearAllFilters();
+            });
+        }
+
+        // Status badge click-to-filter (event delegation on table body)
+        const picksTbody = document.querySelector('#picks-table tbody');
+        if (picksTbody) {
+            picksTbody.addEventListener('click', function(e) {
+                const badge = e.target.closest('.status-badge');
+                if (!badge) return;
+
+                const rawStatus = (badge.getAttribute('data-status') || '').toLowerCase().trim();
+                // Map row statuses to filter values
+                let filterValue = rawStatus;
+                if (rawStatus === 'on-track' || rawStatus === 'at-risk') {
+                    filterValue = 'live';
+                } else if (rawStatus === 'won') {
+                    filterValue = 'win';
+                } else if (rawStatus === 'lost') {
+                    filterValue = 'loss';
+                }
+
+                // Update dropdown UI
+                const btn = document.getElementById('status-dropdown-btn');
+                const labels = {
+                    'pending': 'Pending',
+                    'live': 'Live',
+                    'win': 'Won',
+                    'loss': 'Lost',
+                    'push': 'Push'
+                };
+                if (btn) {
+                    btn.textContent = `${labels[filterValue] || 'Status'} ▾`;
+                    btn.classList.add('cemented');
+                }
+
+                // Highlight matching dropdown item
+                toolbar.querySelectorAll('#status-dropdown-menu .ft-dropdown-item').forEach(item => {
+                    item.classList.toggle('active', item.getAttribute('data-v') === filterValue);
+                });
+
+                activeFilters.status = filterValue;
+                applyFilters();
             });
         }
 
@@ -409,7 +452,9 @@
                     statusMatches = true;
                 } else if (filterStatus === 'loss' && (rowStatus === 'lost' || rowStatus === 'loss')) {
                     statusMatches = true;
-                } else if (filterStatus === 'pending' && (rowStatus === 'pending' || rowStatus === 'live' || rowStatus === 'on-track' || rowStatus === 'at-risk')) {
+                } else if (filterStatus === 'live' && (rowStatus === 'live' || rowStatus === 'on-track' || rowStatus === 'at-risk')) {
+                    statusMatches = true;
+                } else if (filterStatus === 'pending' && rowStatus === 'pending') {
                     statusMatches = true;
                 }
                 if (!statusMatches) {
@@ -427,8 +472,10 @@
             }
         });
 
-        // Update KPIs if function exists
-        if (typeof window.updateKPIValues === 'function') {
+        // Sync KPI tiles with filtered table data
+        if (window.dashboardStatusLogic && typeof window.dashboardStatusLogic.syncKPIsWithTable === 'function') {
+            window.dashboardStatusLogic.syncKPIsWithTable();
+        } else if (typeof window.updateKPIValues === 'function') {
             window.updateKPIValues();
         } else if (typeof window.recalculateKPIs === 'function') {
             window.recalculateKPIs();

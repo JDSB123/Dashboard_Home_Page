@@ -306,10 +306,14 @@
 
         const stats = {
             totalActivePicks: 0,
-            toWin: 0,
-            riskAmount: 0,
+            activeRisk: 0,
+            activeToWin: 0,
+            totalRisk: 0,
+            totalWon: 0,
+            totalLost: 0,
             winCount: 0,
             lossCount: 0,
+            pushCount: 0,
             pendingCount: 0,
             onTrackCount: 0,
             atRiskCount: 0
@@ -320,40 +324,60 @@
             const risk = parseFloat(row.getAttribute('data-risk')) || 0;
             const win = parseFloat(row.getAttribute('data-win')) || 0;
 
-            stats.riskAmount += risk;
+            stats.totalRisk += risk;
 
-            if (status === 'win') {
+            if (status === 'win' || status === 'won') {
                 stats.winCount++;
-                stats.toWin += win;
-            } else if (status === 'loss') {
+                stats.totalWon += win;
+            } else if (status === 'loss' || status === 'lost') {
                 stats.lossCount++;
+                stats.totalLost += risk;
+            } else if (status === 'push') {
+                stats.pushCount++;
             } else if (status === 'pending') {
                 stats.pendingCount++;
                 stats.totalActivePicks++;
-                stats.toWin += win;
+                stats.activeRisk += risk;
+                stats.activeToWin += win;
             } else if (status === 'on-track') {
                 stats.onTrackCount++;
                 stats.totalActivePicks++;
-                stats.toWin += win;
+                stats.activeRisk += risk;
+                stats.activeToWin += win;
             } else if (status === 'at-risk') {
                 stats.atRiskCount++;
                 stats.totalActivePicks++;
-                stats.toWin += win;
+                stats.activeRisk += risk;
+                stats.activeToWin += win;
+            } else if (status === 'live') {
+                stats.totalActivePicks++;
+                stats.activeRisk += risk;
+                stats.activeToWin += win;
             }
         });
 
-        // Update KPI tiles
-        updateKPITile('active-picks', stats.totalActivePicks);
-        updateKPITile('to-win', `$${stats.toWin.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`);
+        // Derived KPIs
+        const netProfit = stats.totalWon - stats.totalLost;
+        const projected = stats.activeToWin - stats.activeRisk;
+        const totalDecided = stats.winCount + stats.lossCount;
+        const winPct = totalDecided > 0 ? ((stats.winCount / totalDecided) * 100).toFixed(1) : '0.0';
+        const roe = stats.totalRisk > 0 ? ((netProfit / stats.totalRisk) * 100).toFixed(1) : '0.0';
 
-        // Calculate ROE%
-        const roi = stats.riskAmount > 0 ? ((stats.toWin - stats.riskAmount) / stats.riskAmount * 100) : 0;
-        updateKPITile('roe', `${roi >= 0 ? '+' : ''}${roi.toFixed(1)}%`);
-
-        // Calculate streak
-        const recentResults = getRecentResults(visibleRows, 10);
-        const streak = calculateStreak(recentResults);
-        updateKPITile('streak', streak);
+        // Update all KPI tiles via updateKPITiles
+        if (typeof window.updateKPITiles === 'function') {
+            window.updateKPITiles({
+                projected: projected,
+                netProfit: netProfit,
+                winPercentage: winPct,
+                wins: stats.winCount,
+                losses: stats.lossCount,
+                pushes: stats.pushCount,
+                roePercentage: roe,
+                activeRisk: stats.activeRisk,
+                toWin: stats.activeToWin,
+                activePicks: stats.totalActivePicks
+            });
+        }
     }
 
     /**

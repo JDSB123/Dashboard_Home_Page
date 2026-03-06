@@ -248,7 +248,8 @@
             container.innerHTML = '<div class="loading-odds" style="text-align:center;padding:2rem;color:var(--text-secondary,#aaa);">Loading live odds...</div>';
         }
 
-        const API_BASE = window.APP_CONFIG?.API_BASE_URL || window.APP_CONFIG?.API_BASE_FALLBACK || (window.location.origin + '/api');
+        // Odds API is served by SWA managed functions — bypass Front Door /api/* route
+        const API_BASE = 'https://proud-cliff-008e2e20f.2.azurestaticapps.net/api';
         const allGames = [];
 
         // Fetch all sports in parallel — failures are isolated per sport

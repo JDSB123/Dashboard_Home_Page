@@ -690,6 +690,42 @@ function generatePickDisplay(
     `;
 }
 
+/**
+ * Get league-specific box score column config
+ */
+function getBoxScoreLayout(league) {
+  switch (league) {
+    case "nhl":
+      return {
+        headers: ["P1", "P2", "P3"],
+        cssClass: "boxscore-periods",
+        periodKeys: ["q1", "q2", "q3"],
+      };
+    case "mlb":
+      return {
+        headers: ["1", "2", "3", "4", "5", "6", "7", "8", "9"],
+        cssClass: "boxscore-innings",
+        periodKeys: ["i1", "i2", "i3", "i4", "i5", "i6", "i7", "i8", "i9"],
+      };
+    case "ncaab":
+    case "ncaam":
+      return {
+        headers: ["1H", "2H"],
+        cssClass: "boxscore-halves",
+        periodKeys: ["q1", "q2"],
+      };
+    case "nba":
+    case "nfl":
+    case "ncaaf":
+    default:
+      return {
+        headers: ["Q1", "Q2", "Q3", "Q4"],
+        cssClass: "boxscore-quarters",
+        periodKeys: ["q1", "q2", "q3", "q4"],
+      };
+  }
+}
+
 function createBoxScoreRows(
   pick,
   awayLogo,
@@ -697,6 +733,7 @@ function createBoxScoreRows(
   homeLogo,
   homeAbbr,
   statusClass,
+  league,
 ) {
   /**
    * Create box score rows with actual scores if available
@@ -707,28 +744,17 @@ function createBoxScoreRows(
   let awayRowClass = "";
   let homeRowClass = "";
 
-  // Quarter scores
-  let q1_away = "—",
-    q2_away = "—",
-    q3_away = "—",
-    q4_away = "—";
-  let q1_home = "—",
-    q2_home = "—",
-    q3_home = "—",
-    q4_home = "—";
+  const layout = getBoxScoreLayout(league);
 
-  // Parse quarter-by-quarter scores if available
-  if (pick.quarters) {
-    q1_away = pick.quarters.q1_away !== undefined ? pick.quarters.q1_away : "—";
-    q2_away = pick.quarters.q2_away !== undefined ? pick.quarters.q2_away : "—";
-    q3_away = pick.quarters.q3_away !== undefined ? pick.quarters.q3_away : "—";
-    q4_away = pick.quarters.q4_away !== undefined ? pick.quarters.q4_away : "—";
-
-    q1_home = pick.quarters.q1_home !== undefined ? pick.quarters.q1_home : "—";
-    q2_home = pick.quarters.q2_home !== undefined ? pick.quarters.q2_home : "—";
-    q3_home = pick.quarters.q3_home !== undefined ? pick.quarters.q3_home : "—";
-    q4_home = pick.quarters.q4_home !== undefined ? pick.quarters.q4_home : "—";
-  }
+  // Build period scores from pick.quarters using layout keys
+  const awayPeriods = layout.periodKeys.map((key) => {
+    const val = pick.quarters && pick.quarters[key + "_away"];
+    return val !== undefined ? val : "—";
+  });
+  const homePeriods = layout.periodKeys.map((key) => {
+    const val = pick.quarters && pick.quarters[key + "_home"];
+    return val !== undefined ? val : "—";
+  });
 
   // Parse final scores from result string
   if (pick.result) {
@@ -752,6 +778,9 @@ function createBoxScoreRows(
     }
   }
 
+  const awayCells = awayPeriods.map((s) => `<div class="boxscore-cell">${s}</div>`).join("");
+  const homeCells = homePeriods.map((s) => `<div class="boxscore-cell">${s}</div>`).join("");
+
   return `
         <div class="boxscore-row ${awayRowClass}">
             <div class="boxscore-cell team-cell">
@@ -761,10 +790,7 @@ function createBoxScoreRows(
                     <span class="boxscore-team-record" data-team="${awayAbbr}"></span>
                 </div>
             </div>
-            <div class="boxscore-cell">${q1_away}</div>
-            <div class="boxscore-cell">${q2_away}</div>
-            <div class="boxscore-cell">${q3_away}</div>
-            <div class="boxscore-cell">${q4_away}</div>
+            ${awayCells}
             <div class="boxscore-cell total">${awayScore}</div>
         </div>
         <div class="boxscore-row ${homeRowClass}">
@@ -775,10 +801,7 @@ function createBoxScoreRows(
                     <span class="boxscore-team-record" data-team="${homeAbbr}"></span>
                 </div>
             </div>
-            <div class="boxscore-cell">${q1_home}</div>
-            <div class="boxscore-cell">${q2_home}</div>
-            <div class="boxscore-cell">${q3_home}</div>
-            <div class="boxscore-cell">${q4_home}</div>
+            ${homeCells}
             <div class="boxscore-cell total">${homeScore}</div>
         </div>
     `;
@@ -1269,10 +1292,11 @@ function formatLineValue(value) {
 function normalizePeriodLabel(value) {
   if (!value) return "";
   const upper = value.toString().toUpperCase();
-  if (upper === "1ST") return "Q1";
-  if (upper === "2ND") return "Q2";
-  if (upper === "3RD") return "Q3";
-  if (upper === "4TH") return "Q4";
+  // Keep ordinals readable without forcing quarter labels
+  if (upper === "1ST") return "1st";
+  if (upper === "2ND") return "2nd";
+  if (upper === "3RD") return "3rd";
+  if (upper === "4TH") return "4th";
   return upper;
 }
 
@@ -2318,16 +2342,13 @@ function buildPickRow(pick, index) {
         </td>
         <td class="center">
             <div class="compact-boxscore">
-                <div class="boxscore-grid">
+                <div class="boxscore-grid ${getBoxScoreLayout(league).cssClass}">
                     <div class="boxscore-row header">
                         <div class="boxscore-cell header-cell game-time-cell">
                             ${formatGameTimeStatus(statusClass, statusMeta.liveInfo, pick.result, pick.status, pick.countdown, pick.scheduled || pick.start)}
                             ${parsedPick.segment !== "Full Game" ? `<div style="font-size: 9px; color: rgba(170, 188, 204, 0.9); margin-top: 2px;">${parsedPick.segment}</div>` : ""}
                         </div>
-                        <div class="boxscore-cell header-cell">Q1</div>
-                        <div class="boxscore-cell header-cell">Q2</div>
-                        <div class="boxscore-cell header-cell">Q3</div>
-                        <div class="boxscore-cell header-cell">Q4</div>
+                        ${getBoxScoreLayout(league).headers.map((h) => `<div class="boxscore-cell header-cell">${h}</div>`).join("")}
                         <div class="boxscore-cell header-cell">T</div>
                     </div>
                     ${createBoxScoreRows(
@@ -2337,6 +2358,7 @@ function buildPickRow(pick, index) {
                       homeLogo || awayLogo,
                       homeAbbr || awayAbbr,
                       statusClass,
+                      league,
                     )}
                 </div>
             </div>

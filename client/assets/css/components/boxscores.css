@@ -36,11 +36,35 @@
     margin: 0 auto;
 }
 
-/* Quarters layout (NBA/NFL): Team | Q1 | Q2 | Q3 | Q4 | T */
+/* Quarters layout (NBA/NFL/NCAAF): Team | Q1 | Q2 | Q3 | Q4 | T */
 .boxscore-grid.boxscore-quarters {
     grid-template-columns: minmax(75px, 1fr) 28px 28px 28px 28px 36px;
     min-width: 260px;
     max-width: 260px;
+}
+
+/* Periods layout (NHL): Team | P1 | P2 | P3 | T */
+.boxscore-grid.boxscore-periods {
+    grid-template-columns: minmax(80px, 1fr) 30px 30px 30px 38px;
+    min-width: 230px;
+    max-width: 230px;
+}
+
+/* Innings layout (MLB): Team | 1-9 | T */
+.boxscore-grid.boxscore-innings {
+    grid-template-columns: minmax(65px, 1fr) repeat(9, 22px) 32px;
+    min-width: 300px;
+    max-width: 300px;
+}
+
+.boxscore-grid.boxscore-innings .boxscore-cell {
+    font-size: 10px;
+    padding: 4px 1px;
+}
+
+.boxscore-grid.boxscore-innings .boxscore-cell.header-cell {
+    font-size: 8px;
+    padding: 3px 1px;
 }
 
 /* Rows use display: contents so cells participate in parent grid */
@@ -396,6 +420,18 @@ tr[data-status="live"] .game-time-status {
     /* Quarters layout (NBA/NFL) - 6 columns */
     .boxscore-grid.boxscore-quarters {
         grid-template-columns: minmax(80px, 1fr) repeat(4, 30px) 38px;
+    }
+
+    /* Periods layout (NHL) - 5 columns */
+    .boxscore-grid.boxscore-periods {
+        grid-template-columns: minmax(80px, 1fr) repeat(3, 32px) 38px;
+        max-width: 100%;
+    }
+
+    /* Innings layout (MLB) - 11 columns */
+    .boxscore-grid.boxscore-innings {
+        grid-template-columns: minmax(55px, 1fr) repeat(9, 20px) 30px;
+        max-width: 100%;
     }
 
     .boxscore-cell,
