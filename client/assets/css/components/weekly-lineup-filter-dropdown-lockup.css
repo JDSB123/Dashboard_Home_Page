@@ -1,0 +1,378 @@
+/* Weekly lineup dropdown lockup rules.
+   Keep this file late in WEEKLY_LINEUP_CSS so it wins over legacy blocks. */
+
+/* ==========================================================================
+   WEEKLY LINEUP (ONLY): FILTER DROPDOWN CARDS (when moved to <body>)
+   --------------------------------------------------------------------------
+   weekly-lineup.js appends dropdown panels to document.body on open to escape
+   table stacking contexts. That breaks `.page-weekly-lineup ...` scoped styling.
+   These selectors use an explicit class added by JS so styling remains intact.
+   ========================================================================== */
+
+/* ==========================================================================
+   COMPACT FILTER DROPDOWN - High Contrast, Efficient Layout
+   ========================================================================== */
+
+body.page-weekly-lineup .th-filter-dropdown.weekly-lineup-filter-dropdown {
+  display: none;
+  position: fixed;
+  z-index: 2147483647;
+  min-width: 180px !important;
+  max-width: 240px !important;
+  background: rgba(8, 12, 20, 0.98) !important;
+  border: 1px solid rgba(0, 214, 137, 0.35) !important;
+  border-radius: 8px !important;
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.65),
+    0 0 0 1px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  overflow: hidden !important;
+  isolation: isolate;
+}
+
+body.page-weekly-lineup
+  .th-filter-dropdown.weekly-lineup-filter-dropdown::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 214, 137, 0.6) 0%,
+    rgba(0, 214, 137, 0.9) 50%,
+    rgba(0, 214, 137, 0.6) 100%
+  );
+  z-index: 3;
+}
+
+body.page-weekly-lineup .th-filter-dropdown.weekly-lineup-filter-dropdown.open {
+  display: flex !important;
+  flex-direction: column !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  position: fixed !important;
+  bottom: auto !important;
+  right: auto !important;
+  animation: wlFilterDropIn 120ms ease-out forwards !important;
+}
+
+@keyframes wlFilterDropIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+body.page-weekly-lineup
+  .th-filter-dropdown.weekly-lineup-filter-dropdown
+  .wl-filter-header {
+  display: block;
+  padding: 0;
+  background: transparent;
+  border-bottom: none;
+  min-height: 0;
+  position: relative;
+}
+
+body.page-weekly-lineup
+  .th-filter-dropdown.weekly-lineup-filter-dropdown
+  .wl-filter-title {
+  display: none;
+}
+
+body.page-weekly-lineup
+  .th-filter-dropdown.weekly-lineup-filter-dropdown
+  .wl-filter-close {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+  color: #c8d7e6;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 100ms ease;
+  position: absolute;
+  top: 6px;
+  right: 6px;
+}
+
+body.page-weekly-lineup
+  .th-filter-dropdown.weekly-lineup-filter-dropdown
+  .wl-filter-close:hover {
+  background: rgba(255, 100, 100, 0.2);
+  border-color: rgba(255, 100, 100, 0.4);
+  color: #ff8888;
+}
+
+body.page-weekly-lineup
+  .th-filter-dropdown.weekly-lineup-filter-dropdown
+  .wl-filter-close:active {
+  transform: scale(0.95);
+}
+
+body.page-weekly-lineup
+  .th-filter-dropdown.weekly-lineup-filter-dropdown
+  .wl-filter-close:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 214, 137, 0.3);
+}
+
+body.page-weekly-lineup
+  .th-filter-dropdown.weekly-lineup-filter-dropdown
+  .filter-section-compact {
+  padding: 8px 10px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+body.page-weekly-lineup
+  .th-filter-dropdown.weekly-lineup-filter-dropdown
+  .filter-section-compact:last-child {
+  border-bottom: none !important;
+}
+
+body.page-weekly-lineup
+  .th-filter-dropdown.weekly-lineup-filter-dropdown
+  .filter-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 4px !important;
+}
+
+body.page-weekly-lineup
+  .th-filter-dropdown.weekly-lineup-filter-dropdown
+  .league-grid-compact {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 4px !important;
+}
+
+body.page-weekly-lineup
+  .th-filter-dropdown.weekly-lineup-filter-dropdown
+  .filter-grid.fire-grid {
+  grid-template-columns: repeat(4, 1fr) !important;
+}
+
+body.page-weekly-lineup
+  #filter-date.th-filter-dropdown.weekly-lineup-filter-dropdown
+  .filter-grid {
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 4px !important;
+}
+
+body.page-weekly-lineup
+  .th-filter-dropdown.weekly-lineup-filter-dropdown
+  .filter-opt[data-segment="all"],
+body.page-weekly-lineup
+  .th-filter-dropdown.weekly-lineup-filter-dropdown
+  .filter-opt[data-market="all"],
+body.page-weekly-lineup
+  .th-filter-dropdown.weekly-lineup-filter-dropdown
+  .filter-opt[data-model="all"],
+body.page-weekly-lineup
+  .th-filter-dropdown.weekly-lineup-filter-dropdown
+  .filter-opt[data-odds="all"],
+body.page-weekly-lineup
+  .th-filter-dropdown.weekly-lineup-filter-dropdown
+  .filter-opt[data-edge="all"],
+body.page-weekly-lineup
+  .th-filter-dropdown.weekly-lineup-filter-dropdown
+  .filter-opt[data-fire="all"] {
+  grid-column: 1 / -1;
+}
+
+body.page-weekly-lineup
+  .th-filter-dropdown.weekly-lineup-filter-dropdown
+  .league-chip[data-league="all"] {
+  grid-column: 1 / -1;
+}
+
+body.page-weekly-lineup
+  .th-filter-dropdown.weekly-lineup-filter-dropdown
+  .filter-opt,
+body.page-weekly-lineup
+  .th-filter-dropdown.weekly-lineup-filter-dropdown
+  .league-chip {
+  -webkit-appearance: none;
+  appearance: none;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  background: rgba(30, 35, 45, 0.95) !important;
+  color: #c8d7e6 !important;
+  border-radius: 5px !important;
+  padding: 6px 8px !important;
+  min-height: 28px;
+  font-family: var(--font-body, "Inter", sans-serif);
+  font-size: 0.8rem !important;
+  font-weight: 650 !important;
+  letter-spacing: 0.03em !important;
+  text-transform: uppercase !important;
+  cursor: pointer !important;
+  transition:
+    transform 140ms ease,
+    background 140ms ease,
+    border-color 140ms ease,
+    color 140ms ease,
+    box-shadow 140ms ease;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+body.page-weekly-lineup
+  #filter-market.th-filter-dropdown.weekly-lineup-filter-dropdown
+  .filter-grid {
+  grid-template-columns: 1fr !important;
+  gap: 10px !important;
+}
+
+body.page-weekly-lineup
+  #filter-market.th-filter-dropdown.weekly-lineup-filter-dropdown
+  .filter-opt {
+  text-transform: none !important;
+  letter-spacing: 0.02em !important;
+  font-family: var(--font-ui, var(--font-body, "Inter", sans-serif));
+  font-weight: 650 !important;
+}
+
+body.page-weekly-lineup
+  #filter-market.th-filter-dropdown.weekly-lineup-filter-dropdown
+  .filter-opt[data-odds="fav"],
+body.page-weekly-lineup
+  #filter-market.th-filter-dropdown.weekly-lineup-filter-dropdown
+  .filter-opt[data-odds="even"],
+body.page-weekly-lineup
+  #filter-market.th-filter-dropdown.weekly-lineup-filter-dropdown
+  .filter-opt[data-odds="dog"] {
+  font-variant-numeric: tabular-nums;
+}
+
+body.page-weekly-lineup
+  .th-filter-dropdown.weekly-lineup-filter-dropdown
+  .filter-opt:hover,
+body.page-weekly-lineup
+  .th-filter-dropdown.weekly-lineup-filter-dropdown
+  .league-chip:hover {
+  background: rgba(0, 214, 137, 0.18) !important;
+  border-color: #00d689 !important;
+  color: #fff !important;
+}
+
+body.page-weekly-lineup
+  .th-filter-dropdown.weekly-lineup-filter-dropdown
+  .filter-opt:active,
+body.page-weekly-lineup
+  .th-filter-dropdown.weekly-lineup-filter-dropdown
+  .league-chip:active {
+  transform: scale(0.98);
+}
+
+body.page-weekly-lineup
+  .th-filter-dropdown.weekly-lineup-filter-dropdown
+  .filter-opt.active,
+body.page-weekly-lineup
+  .th-filter-dropdown.weekly-lineup-filter-dropdown
+  .league-chip.active {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 214, 137, 0.3) 0%,
+    rgba(0, 180, 120, 0.35) 100%
+  ) !important;
+  border-color: #00d689 !important;
+  color: #00ff9d !important;
+  box-shadow: 0 0 8px rgba(0, 214, 137, 0.3);
+}
+
+body.page-weekly-lineup
+  .th-filter-dropdown.weekly-lineup-filter-dropdown
+  .filter-opt.edge-hot {
+  border-left: 3px solid rgba(255, 68, 68, 0.85) !important;
+}
+
+body.page-weekly-lineup
+  .th-filter-dropdown.weekly-lineup-filter-dropdown
+  .filter-opt.edge-good {
+  border-left: 3px solid rgba(0, 214, 137, 0.85) !important;
+}
+
+body.page-weekly-lineup
+  .th-filter-dropdown.weekly-lineup-filter-dropdown
+  .filter-opt.edge-ok {
+  border-left: 3px solid rgba(255, 184, 0, 0.85) !important;
+}
+
+body.page-weekly-lineup
+  .th-filter-dropdown.weekly-lineup-filter-dropdown
+  .filter-opt.edge-low {
+  border-left: 3px solid rgba(110, 118, 129, 0.9) !important;
+}
+
+body.page-weekly-lineup
+  .th-filter-dropdown.weekly-lineup-filter-dropdown
+  .filter-opt.fire-max,
+body.page-weekly-lineup
+  .th-filter-dropdown.weekly-lineup-filter-dropdown
+  .filter-opt.fire-5 {
+  border-left: 3px solid rgba(255, 68, 68, 0.85) !important;
+}
+
+body.page-weekly-lineup
+  .th-filter-dropdown.weekly-lineup-filter-dropdown
+  .filter-opt.fire-4 {
+  border-left: 3px solid rgba(255, 107, 53, 0.85) !important;
+}
+
+body.page-weekly-lineup
+  .th-filter-dropdown.weekly-lineup-filter-dropdown
+  .filter-opt.fire-3 {
+  border-left: 3px solid rgba(255, 184, 0, 0.85) !important;
+}
+
+body.page-weekly-lineup
+  .th-filter-dropdown.weekly-lineup-filter-dropdown
+  .filter-opt.fire-2 {
+  border-left: 3px solid rgba(110, 118, 129, 0.9) !important;
+}
+
+body.page-weekly-lineup
+  .th-filter-dropdown.weekly-lineup-filter-dropdown
+  .filter-opt.fire-1 {
+  border-left: 3px solid rgba(75, 85, 99, 0.9) !important;
+}
+
+body.page-weekly-lineup
+  .th-filter-dropdown.weekly-lineup-filter-dropdown
+  .team-search-input {
+  width: 100% !important;
+  padding: 8px 10px !important;
+  border-radius: 5px !important;
+  background: rgba(15, 20, 28, 0.95) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: #fff !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  outline: none !important;
+}
+
+body.page-weekly-lineup
+  .th-filter-dropdown.weekly-lineup-filter-dropdown
+  .team-search-input::placeholder {
+  color: rgba(180, 195, 210, 0.6) !important;
+}
+
+body.page-weekly-lineup
+  .th-filter-dropdown.weekly-lineup-filter-dropdown
+  .team-search-input:focus {
+  border-color: #00d689 !important;
+  box-shadow: 0 0 0 2px rgba(0, 214, 137, 0.2) !important;
+}

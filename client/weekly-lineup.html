@@ -565,24 +565,6 @@
               <div class="fetch-controls-wrapper">
                 <div class="ft-fetch-buttons">
                   <div class="ft-all-group">
-                    <button
-                      class="ft-fetch-league-btn ft-fetch-all"
-                      data-fetch="all"
-                      title="Refresh All"
-                    >
-                      <svg
-                        class="refresh-icon"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                      >
-                        <path
-                          d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"
-                        />
-                      </svg>
-                      <span>All</span>
-                    </button>
                     <span class="ft-last-refreshed" id="ft-last-refreshed"
                       >Last: <span class="sync-time">-</span></span
                     >
@@ -591,6 +573,7 @@
                   <button
                     class="ft-clear-slate-btn"
                     id="ft-clear-slate"
+                    data-action="clear-slate"
                     type="button"
                     title="Clear all picks from the board"
                   >

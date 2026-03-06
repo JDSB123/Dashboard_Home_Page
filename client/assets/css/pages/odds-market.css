@@ -209,6 +209,46 @@ body.page-odds-market .kpi-subtext {
   pointer-events: none;
 }
 
+/* Odds-page control chips should match dashboard/weekly control typography */
+body.page-odds-market .date-toggle-label {
+  font-family: var(--font-display, "Oswald", sans-serif);
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(214, 232, 236, 0.78);
+  text-shadow: none;
+}
+
+body.page-odds-market .date-toggle-btn {
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  padding: 5px 12px;
+  border-radius: 14px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(180, 195, 210, 0.85);
+  text-shadow: none;
+  transform: none;
+}
+
+body.page-odds-market .date-toggle-btn:hover {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.05);
+  transform: none;
+}
+
+body.page-odds-market .date-toggle-btn.active {
+  color: #00e08a;
+  border-color: rgba(0, 214, 137, 0.5);
+  background: rgba(0, 214, 137, 0.14);
+  box-shadow: none;
+  text-shadow: none;
+}
+
 /* ==========================================================================
    2. ODDS BOARD
    ========================================================================== */
@@ -244,33 +284,29 @@ body.page-odds-market .kpi-subtext {
 }
 
 .market-btn {
-  padding: 7px 18px;
-  background: rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 5px;
-  font-family: var(--font-body);
-  font-size: var(--text-sm);
-  font-weight: var(--weight-semibold);
+  padding: 5px 12px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: var(--tracking-wide);
-  color: rgba(255, 255, 255, 0.65);
+  letter-spacing: 0.04em;
+  color: rgba(180, 195, 210, 0.85);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.12s ease;
 }
 .market-btn:hover {
-  background: rgba(0, 214, 137, 0.1);
-  border-color: rgba(0, 214, 137, 0.25);
-  color: rgba(255, 255, 255, 0.9);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.05);
 }
 .market-btn.active {
-  background: linear-gradient(
-    135deg,
-    rgba(0, 214, 137, 0.22) 0%,
-    rgba(0, 143, 88, 0.18) 100%
-  );
+  background: rgba(0, 214, 137, 0.14);
   border-color: rgba(0, 214, 137, 0.5);
-  color: var(--color-primary-bright);
-  box-shadow: 0 0 14px rgba(0, 214, 137, 0.2);
+  color: #00e08a;
+  box-shadow: none;
 }
 
 .market-selector-right {
@@ -293,25 +329,28 @@ body.page-odds-market .kpi-subtext {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 7px 12px;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 5px;
-  font-family: var(--font-body);
-  font-size: var(--text-sm);
-  font-weight: var(--weight-medium);
-  color: rgba(255, 255, 255, 0.6);
+  padding: 5px 12px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(180, 195, 210, 0.85);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.12s ease;
 }
 .live-label:hover {
-  border-color: rgba(74, 182, 255, 0.3);
-  color: rgba(255, 255, 255, 0.8);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.05);
 }
 .live-checkbox:checked + .live-label {
-  background: rgba(74, 182, 255, 0.12);
-  border-color: rgba(74, 182, 255, 0.45);
-  color: #4ab6ff;
+  background: rgba(0, 214, 137, 0.14);
+  border-color: rgba(0, 214, 137, 0.5);
+  color: #00e08a;
 }
 .live-dot {
   width: 7px;
