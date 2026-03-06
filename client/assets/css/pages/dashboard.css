@@ -1224,8 +1224,8 @@ body.page-active-picks .toolbar-container.toolbar-layout {
   top: 0;
   z-index: 200;
   background: transparent !important;
-  padding-top: 6px;
-  padding-bottom: 2px;
+  padding-top: 4px;
+  padding-bottom: 0;
 }
 
 .toolbar-container.toolbar-layout .filter-toolbar {
@@ -1280,14 +1280,13 @@ body.page-active-picks .toolbar-container.toolbar-layout {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 2px 0 0;
-  margin: 0 0 2px 0;
+  padding: 0;
+  margin: 0;
   position: relative;
   z-index: 10050;
   background: transparent !important;
   border: none !important;
-  border-bottom: 1px solid rgba(100, 130, 170, 0.25) !important;
-  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(100, 130, 170, 0.2) !important;
 }
 
 .ft-left,
