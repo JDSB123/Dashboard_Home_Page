@@ -70,6 +70,13 @@
                 // Update button label
                 label.textContent = optionText;
 
+                // Cemented state — lock in non-default selections
+                if (range && range !== 'active') {
+                    toggle.classList.add('cemented');
+                } else {
+                    toggle.classList.remove('cemented');
+                }
+
                 // Close dropdown
                 dropdown.hidden = true;
                 toggle.setAttribute('aria-expanded', 'false');

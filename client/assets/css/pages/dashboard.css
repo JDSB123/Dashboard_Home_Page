@@ -1523,6 +1523,20 @@ body.page-active-picks .ft-fetch-league-btn.loading span {
   border-color: rgba(255, 255, 255, 0.25);
 }
 
+/* Cemented state — selected, locked-in look for filter dropdown triggers */
+.ft-dropdown-btn.cemented {
+  color: #00ffcc;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  border: 1.5px solid rgba(0, 214, 137, 0.65);
+  background: linear-gradient(135deg, rgba(0, 50, 40, 0.88) 0%, rgba(0, 38, 32, 0.92) 100%);
+  text-shadow: 0 0 6px rgba(0, 214, 137, 0.4);
+  box-shadow:
+    0 0 8px rgba(0, 214, 137, 0.2),
+    inset 0 1px 0 rgba(0, 255, 170, 0.1),
+    0 2px 6px rgba(0, 0, 0, 0.35);
+}
+
 .ft-dropdown-menu {
   display: none;
   position: absolute;

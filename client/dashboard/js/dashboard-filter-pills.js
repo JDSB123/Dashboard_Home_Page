@@ -146,6 +146,13 @@
                 };
                 btn.textContent = `${labels[segmentValue] || 'Segment'} ▾`;
 
+                // Cemented state for non-default selections
+                if (segmentValue && segmentValue !== 'all') {
+                    btn.classList.add('cemented');
+                } else {
+                    btn.classList.remove('cemented');
+                }
+
                 activeFilters.segment = segmentValue === 'all' ? '' : segmentValue;
                 applyFilters();
             });
@@ -181,6 +188,13 @@
                 };
                 btn.textContent = `${labels[pickValue] || 'Pick Type'} ▾`;
 
+                // Cemented state for non-default selections
+                if (pickValue && pickValue !== 'all') {
+                    btn.classList.add('cemented');
+                } else {
+                    btn.classList.remove('cemented');
+                }
+
                 activeFilters.pick = pickValue === 'all' ? '' : pickValue;
                 applyFilters();
             });
@@ -215,6 +229,13 @@
                     'push': 'Push'
                 };
                 btn.textContent = `${labels[statusValue] || 'Status'} ▾`;
+
+                // Cemented state for non-default selections
+                if (statusValue && statusValue !== 'all') {
+                    btn.classList.add('cemented');
+                } else {
+                    btn.classList.remove('cemented');
+                }
 
                 activeFilters.status = statusValue === 'all' ? '' : statusValue;
                 applyFilters();
@@ -517,7 +538,9 @@
                     item.classList.add('active');
                 }
             });
-            document.getElementById('segment-dropdown-btn').textContent = 'Segment ▾';
+            const segBtn = document.getElementById('segment-dropdown-btn');
+            segBtn.textContent = 'Segment ▾';
+            segBtn.classList.remove('cemented');
 
             // Reset pick dropdown
             toolbar.querySelectorAll('#pick-dropdown-menu .ft-dropdown-item').forEach(item => {
@@ -526,7 +549,9 @@
                     item.classList.add('active');
                 }
             });
-            document.getElementById('pick-dropdown-btn').textContent = 'Pick Type ▾';
+            const pickBtn = document.getElementById('pick-dropdown-btn');
+            pickBtn.textContent = 'Pick Type ▾';
+            pickBtn.classList.remove('cemented');
 
             // Reset status dropdown
             toolbar.querySelectorAll('#status-dropdown-menu .ft-dropdown-item').forEach(item => {
@@ -535,7 +560,9 @@
                     item.classList.add('active');
                 }
             });
-            document.getElementById('status-dropdown-btn').textContent = 'Status ▾';
+            const statusBtn = document.getElementById('status-dropdown-btn');
+            statusBtn.textContent = 'Status ▾';
+            statusBtn.classList.remove('cemented');
         }
 
         applyFilters();
