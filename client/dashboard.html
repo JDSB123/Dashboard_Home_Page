@@ -890,6 +890,30 @@
               </div>
               <button class="ft-clear" id="ft-clear">✕ Clear</button>
             </div>
+            <div class="ft-right">
+              <div class="fetch-controls-wrapper">
+                <div class="ft-fetch-buttons">
+                  <div class="ft-all-group">
+                    <button class="ft-fetch-league-btn ft-fetch-all" data-fetch="all" title="Refresh All">
+                      <svg class="refresh-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                      </svg>
+                      <span>All</span>
+                    </button>
+                    <span class="ft-last-refreshed" id="ft-last-refreshed">Last: <span class="sync-time">-</span></span>
+                  </div>
+                  <div class="fetch-separator"></div>
+                  <button class="ft-fetch-league-btn" data-fetch="nba" title="Fetch NBA">
+                    <img src="assets/nba-logo.png" class="league-logo-sm" alt="NBA">
+                    <span class="league-label">NBA</span>
+                  </button>
+                  <button class="ft-fetch-league-btn" data-fetch="ncaab" title="Fetch NCAAM">
+                    <img src="assets/ncaam-logo.png" class="league-logo-sm" alt="NCAAM">
+                    <span class="league-label">NCAAM</span>
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -1037,79 +1061,38 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.min.js"></script>
 
     <!-- Bundled JS (replaces ~40 individual scripts) -->
-    <script src="dist/core.min.js?v=36.01.1" defer></script>
-    <script src="dist/dashboard.min.js?v=36.01.1" defer></script>
+    <script src="dist/core.min.js?v=36.01.4" defer></script>
+    <script src="dist/dashboard.min.js?v=36.01.4" defer></script>
     <script>
-      // Modular date range filter logic
+      // Date-range dropdown — UI label + reload trigger only.
+      // Initial pick rendering is handled exclusively by smart-load-picks.js
+      // (initializePicksAndRecords → loadAndAppendPicks → buildPickRow) and
+      // LocalPicksManager.refreshPicksTable(). This script must NOT write to
+      // picks-tbody on page load because doing so races with those renderers
+      // and overwrites properly-formatted rows with stale/empty simplified ones.
       document.addEventListener("DOMContentLoaded", function () {
-        const rangeDropdown = document.getElementById("date-range-dropdown");
-        const rangeLabel = document.getElementById("date-range-label");
-        const picksTbody = document.getElementById("picks-tbody");
-        function fetchAndRenderPicks(range) {
-          let fetchPromise;
-          switch (range) {
-            case "active":
-              fetchPromise = window.PicksService.getActive();
-              break;
-            case "today":
-              fetchPromise = window.PicksService.getToday();
-              break;
-            case "settled":
-              fetchPromise = window.PicksService.getSettled();
-              break;
-            case "week": {
-              const now = new Date();
-              const start = new Date(now.setDate(now.getDate() - now.getDay()));
-              const end = new Date(now.setDate(start.getDate() + 6));
-              fetchPromise = window.PicksService.getByDateRange(
-                start.toISOString().split("T")[0],
-                end.toISOString().split("T")[0],
-              );
-              break;
-            }
-            // Add more cases as needed
-            default:
-              fetchPromise = window.PicksService.getAll();
-          }
-          fetchPromise.then((picks) => {
-            picksTbody.innerHTML = "";
-            picks.forEach((pick) => {
-              // Skip incomplete picks that have no matchup or pick selection
-              const hasMatchup =
-                pick.matchup || pick.game || (pick.awayTeam && pick.homeTeam);
-              const hasPick = pick.pick || pick.selection || pick.pickTeam;
-              if (!hasMatchup || !hasPick) return;
+        var rangeDropdown = document.getElementById("date-range-dropdown");
+        var rangeLabel = document.getElementById("date-range-label");
+        if (!rangeDropdown || !rangeLabel) return;
 
-              // Modular row rendering (simplified)
-              const tr = document.createElement("tr");
-              tr.setAttribute("data-league", pick.league || "");
-              tr.setAttribute("data-segment", pick.segment || "");
-              tr.setAttribute("data-pick-type", pick.pickType || "");
-              tr.setAttribute("data-status", pick.status || "");
-              tr.innerHTML = `
-                            <td>${pick.date || ""}</td>
-                            <td>${pick.league || ""}</td>
-                            <td>${pick.matchup || ""}</td>
-                            <td>${pick.segment || ""}</td>
-                            <td>${pick.pick || ""}</td>
-                            <td>${pick.risk || ""}</td>
-                            <td>${pick.score || ""}</td>
-                            <td>${pick.status || ""}</td>
-                            <td>${pick.pnl || ""}</td>
-                        `;
-              picksTbody.appendChild(tr);
-            });
-          });
-        }
         rangeDropdown.addEventListener("click", function (e) {
           if (e.target.classList.contains("date-range-option")) {
-            const range = e.target.getAttribute("data-range");
+            var range = e.target.getAttribute("data-range");
             rangeLabel.textContent = e.target.textContent;
-            fetchAndRenderPicks(range);
+            // Reload picks through the proper pipeline (buildPickRow with full
+            // validation) and let client-side filters handle range narrowing.
+            if (typeof window.loadLivePicks === "function") {
+              window.loadLivePicks();
+            } else if (
+              window.LocalPicksManager &&
+              typeof window.LocalPicksManager.refresh === "function"
+            ) {
+              window.LocalPicksManager.refresh();
+            }
           }
         });
-        // Initial load
-        fetchAndRenderPicks("active");
+        // NOTE: No fetchAndRenderPicks("active") here — initial table population
+        // is owned by smart-load-picks.js and LocalPicksManager alone.
       });
     </script>
     <!-- Service worker registration and idle prefetch -->

@@ -2734,48 +2734,22 @@ function initializePicksAndRecords() {
   // Historical picks are kept for PnL tracking and analytics
   // Use LocalPicksManager.archiveOldPicks() manually to move old settled picks to archive
 
-  // Try to load from database first, then fall back to API/localStorage picks
-  // Note: In local development, database/get-picks endpoints may not exist
-  // In that case, LocalPicksManager will handle loading from localStorage
-  const databasePromise = loadPicksFromDatabase();
-  databasePromise
-    .then((dbPicks) => {
-      if (dbPicks && dbPicks.length > 0) {
-        // Use database picks
-        console.log("[DASHBOARD] ✅ Using picks from database");
-        // Picks are already loaded and displayed by loadPicksFromDatabase
-      } else {
-        // Fall back to API or localStorage
-        console.log(
-          "[DASHBOARD] No database picks available, falling back to localStorage (LocalPicksManager)",
-        );
-        const picksPromise = loadAndAppendPicks();
-        if (picksPromise && typeof picksPromise.catch === "function") {
-          picksPromise.catch((error) =>
-            console.warn(
-              "[PICKS LOADER] Initial load encountered an error:",
-              error,
-            ),
-          );
-        }
-      }
-    })
-    .catch((error) => {
-      // Fall back to API/localStorage on error
-      console.warn(
-        "[DASHBOARD] Database load failed, trying API/localStorage:",
-        error.message,
-      );
-      const picksPromise = loadAndAppendPicks();
-      if (picksPromise && typeof picksPromise.catch === "function") {
-        picksPromise.catch((error) =>
-          console.warn(
-            "[PICKS LOADER] Initial load encountered an error:",
-            error,
-          ),
-        );
-      }
-    });
+  // Run the migration check via loadPicksFromDatabase (non-blocking), then
+  // always render through loadAndAppendPicks → buildPickRow so every row goes
+  // through the strict hasValidMatchup / hasValidPick guard.
+  // Previously, when loadPicksFromDatabase returned results the code just
+  // logged "Using picks from database" and never called loadAndAppendPicks,
+  // so the table was left empty (or holding stale LocalPicksManager rows).
+  loadPicksFromDatabase().catch(() => {
+    // Migration/DB check failed — non-fatal, loadAndAppendPicks handles fallback
+  });
+
+  const picksPromise = loadAndAppendPicks();
+  if (picksPromise && typeof picksPromise.catch === "function") {
+    picksPromise.catch((error) =>
+      console.warn("[PICKS LOADER] Initial load encountered an error:", error),
+    );
+  }
 }
 
 /**
