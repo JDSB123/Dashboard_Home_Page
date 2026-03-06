@@ -1,0 +1,6 @@
+GradePicks
+SignalRInfo
+__tests__
+*.test.js
+local.settings.json
+.vscode
