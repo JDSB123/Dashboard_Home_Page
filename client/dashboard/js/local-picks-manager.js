@@ -1283,9 +1283,7 @@
     // Matchup must come from explicit game/matchup string or both team names.
     // Description alone is not sufficient — stale DB records have descriptions but no real game data.
     const hasValidMatchup =
-      pick.game ||
-      pick.matchup ||
-      (pick.awayTeam && pick.homeTeam);
+      pick.game || pick.matchup || (pick.awayTeam && pick.homeTeam);
 
     const hasValidPick =
       pick.pick ||

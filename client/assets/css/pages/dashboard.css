@@ -1241,6 +1241,156 @@ body.page-active-picks .toolbar-container.toolbar-layout {
   gap: 8px;
 }
 
+/* ==========================================================================
+   FETCH CONTROLS — Dashboard version (mirrors weekly-lineup / fetch-picks)
+   ========================================================================== */
+body.page-active-picks .fetch-controls-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+body.page-active-picks .ft-fetch-buttons {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  background: rgba(15, 25, 40, 0.6);
+  border: 1px solid rgba(60, 80, 110, 0.4);
+  border-radius: 6px;
+  padding: 3px;
+  gap: 2px;
+  white-space: nowrap;
+}
+
+body.page-active-picks .fetch-separator {
+  width: 1px;
+  height: 18px;
+  background: rgba(80, 100, 130, 0.3);
+  margin: 0 4px;
+}
+
+body.page-active-picks .ft-all-group {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 6px;
+}
+
+body.page-active-picks .ft-last-refreshed {
+  font-size: 0.65rem;
+  color: rgba(200, 215, 225, 0.6);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+body.page-active-picks .ft-last-refreshed .sync-time {
+  color: rgba(200, 215, 225, 0.75);
+  font-weight: 600;
+}
+
+body.page-active-picks .ft-fetch-league-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 4px 10px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: rgba(180, 200, 220, 0.8);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  height: 26px;
+}
+
+body.page-active-picks .ft-fetch-league-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+body.page-active-picks .ft-fetch-league-btn:active {
+  transform: translateY(1px);
+}
+
+body.page-active-picks .ft-fetch-league-btn.ft-fetch-all {
+  color: #00d689;
+  background: rgba(0, 214, 137, 0.08);
+  border: 1px solid rgba(0, 214, 137, 0.15);
+}
+
+body.page-active-picks .ft-fetch-league-btn.ft-fetch-all:hover {
+  background: rgba(0, 214, 137, 0.15);
+  border-color: rgba(0, 214, 137, 0.3);
+  box-shadow: 0 0 8px rgba(0, 214, 137, 0.1);
+}
+
+body.page-active-picks .ft-fetch-league-btn .league-logo-sm {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+  opacity: 0.8;
+}
+
+body.page-active-picks .ft-fetch-league-btn:hover .league-logo-sm {
+  opacity: 1;
+}
+
+body.page-active-picks .ft-fetch-league-btn .league-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+body.page-active-picks .ft-fetch-league-btn .refresh-icon {
+  width: 12px;
+  height: 12px;
+  stroke: currentColor;
+}
+
+body.page-active-picks .ft-fetch-league-btn.loading {
+  pointer-events: none;
+  background: rgba(0, 214, 137, 0.08);
+  border-color: rgba(0, 214, 137, 0.2);
+}
+
+body.page-active-picks .ft-fetch-league-btn.loading .refresh-icon,
+body.page-active-picks .ft-fetch-league-btn.loading .league-logo-sm {
+  display: none;
+}
+
+body.page-active-picks .ft-fetch-league-btn.loading::before {
+  content: "";
+  width: 14px;
+  height: 14px;
+  border: 2px solid transparent;
+  border-top-color: #00d689;
+  border-right-color: rgba(0, 214, 137, 0.3);
+  border-radius: 50%;
+  animation: elegant-spin 0.7s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  margin-right: 5px;
+  flex-shrink: 0;
+}
+
+body.page-active-picks .ft-fetch-league-btn.loading .league-label,
+body.page-active-picks .ft-fetch-league-btn.loading span {
+  color: #00d689;
+  font-weight: 600;
+}
+
+@keyframes elegant-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 @media (max-width: 900px) {
   /* Keep toolbar aligned with `.main-container` on smaller viewports too */
   body.page-active-picks .toolbar-container.toolbar-layout {

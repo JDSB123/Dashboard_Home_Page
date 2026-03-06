@@ -2001,9 +2001,7 @@ function buildPickRow(pick, index) {
   // STRICT VALIDATION: Require both a valid matchup AND pick selection
   // This filters out stale placeholder data (partial DB records with only league/segment/status)
   const hasValidMatchup =
-    pick.game ||
-    pick.matchup ||
-    (pick.awayTeam && pick.homeTeam);
+    pick.game || pick.matchup || (pick.awayTeam && pick.homeTeam);
 
   const hasValidPick =
     pick.pick ||
