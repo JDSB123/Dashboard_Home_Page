@@ -1202,6 +1202,43 @@
     });
   }
 
+  const SPORTSBOOK_OPTIONS = [
+    { value: "", label: "No Book" },
+    { value: "hulkwager", label: "Hulk Wager" },
+    { value: "bombay711", label: "Bombay 711" },
+    { value: "kingofsports", label: "King of Sports" },
+    { value: "primetimeaction", label: "Prime Time Action" },
+    { value: "other", label: "Other" },
+  ];
+
+  function getSportsbookLabel(value) {
+    const normalized = (value || "").toLowerCase();
+    const match = SPORTSBOOK_OPTIONS.find(
+      (option) => option.value === normalized,
+    );
+    return match ? match.label : value || "No Book";
+  }
+
+  function buildSportsbookSelectHtml(pickId, sportsbookValue) {
+    const normalized = (sportsbookValue || "").toLowerCase();
+    const optionsHtml = SPORTSBOOK_OPTIONS.map((option) => {
+      const selected = option.value === normalized ? "selected" : "";
+      return `<option value="${option.value}" ${selected}>${option.label}</option>`;
+    }).join("");
+
+    return `
+      <select class="sportsbook-dropdown" data-pick-id="${pickId}" aria-label="Change sportsbook for this pick">
+        ${optionsHtml}
+      </select>
+    `;
+  }
+
+  function buildSportsbookBadgeHtml(sportsbookValue) {
+    const label = getSportsbookLabel(sportsbookValue);
+    const normalized = (sportsbookValue || "").toLowerCase();
+    return `<span class="sportsbook-value" data-book="${normalized}">${label}</span>`;
+  }
+
   function handleSportsbookChange(event) {
     const pickId = event.target.getAttribute("data-pick-id");
     const newSportsbook = event.target.value;
@@ -1219,6 +1256,20 @@
         `✅ Updated pick ${pickId} sportsbook to: ${newSportsbook || "None"}`,
       );
     }
+
+    if (!newSportsbook) return;
+
+    const dropdown = event.target;
+    const row = dropdown.closest("tr");
+    if (row) {
+      row.setAttribute("data-book", newSportsbook.toLowerCase());
+    }
+
+    const badge = document.createElement("span");
+    badge.className = "sportsbook-value";
+    badge.textContent = getSportsbookLabel(newSportsbook);
+    badge.setAttribute("data-book", newSportsbook.toLowerCase());
+    dropdown.replaceWith(badge);
   }
 
   // ========== RISK/WIN AMOUNT EDIT HANDLERS ==========
@@ -1390,7 +1441,7 @@
     row.setAttribute("data-league", sport);
     row.setAttribute("data-sport", sport); // For LiveScoreUpdater
     row.setAttribute("data-epoch", epochTime);
-    row.setAttribute("data-book", sportsbook.toLowerCase());
+    row.setAttribute("data-book", (sportsbook || "").toLowerCase());
     row.setAttribute("data-away", awayTeam.toLowerCase());
     row.setAttribute("data-home", homeTeam.toLowerCase());
     row.setAttribute("data-away-team", awayTeam); // For LiveScoreUpdater
@@ -1583,16 +1634,9 @@
 
     row.innerHTML = `
             <td data-label="Date & Time">
-                <div class="cell-date">${formatDateValue(pick.gameDate)}</div>
-                <div class="cell-time">${pick.gameTime || "TBD"}</div>
-                <select class="sportsbook-dropdown" data-pick-id="${pick.id}" aria-label="Change sportsbook for this pick">
-                    <option value="">No Book</option>
-                    <option value="hulkwager" ${sportsbook === "hulkwager" ? "selected" : ""}>Hulk Wager</option>
-                    <option value="bombay711" ${sportsbook === "bombay711" ? "selected" : ""}>Bombay 711</option>
-                    <option value="kingofsports" ${sportsbook === "kingofsports" ? "selected" : ""}>King of Sports</option>
-                    <option value="primetimeaction" ${sportsbook === "primetimeaction" ? "selected" : ""}>Prime Time Action</option>
-                    <option value="other" ${sportsbook === "other" ? "selected" : ""}>Other</option>
-                </select>
+              <div class="cell-date">${formatDateValue(pick.gameDate)}</div>
+              <div class="cell-time">${pick.gameTime || "TBD"}</div>
+              ${sportsbook ? buildSportsbookBadgeHtml(sportsbook) : buildSportsbookSelectHtml(pick.id, sportsbook)}
             </td>
             <td class="center" data-label="League">
                 ${renderLeagueCell(sport)}

@@ -133,7 +133,7 @@
         "1h": "Segment: 1H",
         "2h": "Segment: 2H",
       };
-      btn.textContent = `${labelMap[state.filters.segment] || "Segment"} ▾`;
+      btn.textContent = labelMap[state.filters.segment] || "Segment";
       return;
     }
 
@@ -145,7 +145,7 @@
         total: "Pick Type: O/U",
         "team-total": "Pick Type: Team Total",
       };
-      btn.textContent = `${labelMap[state.filters.pickType] || "Pick Type"} ▾`;
+      btn.textContent = labelMap[state.filters.pickType] || "Pick Type";
     }
   };
 
@@ -335,12 +335,12 @@
       const key = th.getAttribute("data-sort");
       const icon = th.querySelector(".sort-icon");
       th.classList.remove("sorted-asc", "sorted-desc");
-      if (icon) icon.textContent = "▲";
+      if (icon) icon.textContent = "";
       if (key === state.sort.key) {
         th.classList.add(
           state.sort.dir === "asc" ? "sorted-asc" : "sorted-desc",
         );
-        if (icon) icon.textContent = state.sort.dir === "asc" ? "▲" : "▼";
+        if (icon) icon.textContent = "";
       }
     });
   };

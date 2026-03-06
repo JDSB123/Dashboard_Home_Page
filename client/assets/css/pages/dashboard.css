@@ -109,6 +109,16 @@ body.page-active-picks .refresh-btn:hover {
     0 0 18px rgba(0, 214, 137, 0.12);
 }
 
+body.page-active-picks .refresh-btn .refresh-icon {
+  width: 12px;
+  height: 12px;
+  stroke: currentColor;
+}
+
+body.page-active-picks .refresh-btn.spinning .refresh-icon {
+  animation: elegant-spin 0.7s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
 body.page-active-picks .user-avatar {
   width: 30px;
   height: 30px;
@@ -609,26 +619,39 @@ body.page-active-picks .sportsbook-dropdown option:checked {
   color: #030b16;
 }
 
+/* Cemented dropdown — hide dropdown affordance while swap happens */
+body.page-active-picks .sportsbook-dropdown.is-cemented {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 170, 136, 0.18) 0%,
+    rgba(0, 214, 137, 0.12) 100%
+  );
+  border: 1px solid rgba(0, 214, 137, 0.45);
+  color: #3cffc0;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
 /* ===== CEMENTED SPORTSBOOK BADGE ===== */
 body.page-active-picks .sportsbook-value {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  background: linear-gradient(135deg, rgba(0, 170, 136, 0.18) 0%, rgba(0, 214, 137, 0.12) 100%);
-  border: 1px solid rgba(0, 214, 137, 0.45);
-  border-radius: 4px;
-  padding: 2px 8px;
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: #3cffc0;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25);
-}
-
-body.page-active-picks .sportsbook-value::before {
-  content: "\1F512";
-  font-size: 0.55rem;
+  gap: 0;
+  padding: 0;
+  font-family: var(--font-display, "Oswald", sans-serif);
+  font-weight: 500;
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: rgba(190, 205, 220, 0.75);
+  background: transparent;
+  border: none;
+  box-shadow: none;
 }
 
 /* Matchup/Pick cell layout & typography are handled by the shared table component
@@ -1556,7 +1579,11 @@ body.page-active-picks .ft-fetch-league-btn.loading span {
   font-weight: 700;
   letter-spacing: 0.04em;
   border: 1.5px solid rgba(0, 214, 137, 0.65);
-  background: linear-gradient(135deg, rgba(0, 50, 40, 0.88) 0%, rgba(0, 38, 32, 0.92) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(0, 50, 40, 0.88) 0%,
+    rgba(0, 38, 32, 0.92) 100%
+  );
   text-shadow: 0 0 6px rgba(0, 214, 137, 0.4);
   box-shadow:
     0 0 8px rgba(0, 214, 137, 0.2),
@@ -2207,7 +2234,7 @@ body.page-active-picks .ft-fetch-league-btn.loading span {
 
 /* Make delete button glow on row hover for discoverability */
 body.page-active-picks .picks-table tbody tr:hover .delete-pick-btn {
-  background: rgba(255, 71, 87, 0.30);
+  background: rgba(255, 71, 87, 0.3);
   border-color: rgba(255, 71, 87, 0.65);
   box-shadow: 0 0 8px rgba(255, 71, 87, 0.25);
 }
@@ -2294,7 +2321,10 @@ body.page-active-picks .picks-table tbody tr:hover .delete-pick-btn {
 .dashboard-confirm-title {
   margin: 0;
   color: #ffd4d4;
-  font: 700 1.02rem/1.25 "Oswald", "Arial Narrow", sans-serif;
+  font:
+    700 1.02rem/1.25 "Oswald",
+    "Arial Narrow",
+    sans-serif;
   letter-spacing: 0.03em;
   text-transform: uppercase;
 }

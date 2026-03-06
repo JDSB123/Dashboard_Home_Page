@@ -246,12 +246,17 @@
       return teamLookup[key];
     }
 
-    // Try partial matches
+    // Try partial matches — prefer same-league matches to avoid cross-league collisions
+    const normalizedLeague = league ? league.toLowerCase() : '';
+    let bestPartial = null;
     for (const [lookupKey, team] of Object.entries(teamLookup)) {
       if (lookupKey.includes(key) || key.includes(lookupKey)) {
-        return team;
+        const teamLeague = (team.league || '').toLowerCase();
+        if (normalizedLeague && teamLeague === normalizedLeague) return team;
+        if (!bestPartial) bestPartial = team;
       }
     }
+    if (bestPartial) return bestPartial;
 
     // Fallback - generate basic info
     return {

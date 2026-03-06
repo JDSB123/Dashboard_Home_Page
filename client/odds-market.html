@@ -430,7 +430,9 @@
                       Paste Text
                     </button>
                   </div>
-                  <div class="import-mode-desc">PDFs, images, HTML, text files — or paste picks directly</div>
+                  <div class="import-mode-desc">
+                    PDFs, images, HTML, text files — or paste picks directly
+                  </div>
                   <div id="file-list"></div>
                   <div id="manual-entry-area" class="manual-entry-area hidden">
                     <textarea
@@ -481,9 +483,9 @@
             <div class="kpi-tile" data-tile-id="3" role="button" tabindex="0">
               <div class="kpi-tile-content">
                 <div class="kpi-tile-layer kpi-tile-front active">
-                  <div class="kpi-label">Bet Slip</div>
-                  <div class="kpi-value" id="kpi-slip">0</div>
-                  <div class="kpi-subtext">Selections</div>
+                  <div class="kpi-label">Live</div>
+                  <div class="kpi-value" id="kpi-live">0</div>
+                  <div class="kpi-subtext">In Progress</div>
                 </div>
               </div>
             </div>
@@ -498,8 +500,24 @@
               </button>
               <button class="date-toggle-btn" data-sport="nba">NBA</button>
               <button class="date-toggle-btn" data-sport="ncaab">NCAAB</button>
-              <button class="date-toggle-btn is-disabled" data-sport="nfl" disabled aria-disabled="true" title="NFL off-season">NFL</button>
-              <button class="date-toggle-btn is-disabled" data-sport="ncaaf" disabled aria-disabled="true" title="NCAAF off-season">NCAAF</button>
+              <button
+                class="date-toggle-btn is-disabled"
+                data-sport="nfl"
+                disabled
+                aria-disabled="true"
+                title="NFL off-season"
+              >
+                NFL
+              </button>
+              <button
+                class="date-toggle-btn is-disabled"
+                data-sport="ncaaf"
+                disabled
+                aria-disabled="true"
+                title="NCAAF off-season"
+              >
+                NCAAF
+              </button>
               <button class="date-toggle-btn" data-sport="nhl">NHL</button>
               <button class="date-toggle-btn" data-sport="mlb">MLB</button>
             </div>
@@ -525,9 +543,32 @@
                   Live Only
                 </label>
               </div>
-              <button class="refresh-btn" id="refresh-btn" type="button">
-                <span class="refresh-icon">↻</span>
-                <span class="refresh-time" id="refresh-time">--:--</span>
+              <span class="last-refresh"
+                >Last: <span id="refresh-time">--:--</span></span
+              >
+              <button
+                class="refresh-btn"
+                id="refresh-btn"
+                type="button"
+                title="Refresh odds"
+                aria-label="Refresh odds"
+              >
+                <svg
+                  class="refresh-icon"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M1 1v5h5" />
+                  <path d="M1 6a7 7 0 0 1 12.9-3.5" />
+                  <path d="M15 15v-5h-5" />
+                  <path d="M15 10a7 7 0 0 1-12.9 3.5" />
+                </svg>
               </button>
             </div>
           </div>
@@ -553,43 +594,6 @@
         </div>
       </div>
     </main>
-
-    <!-- Bet Slip Panel (slides in from right) -->
-    <aside class="bet-slip" id="bet-slip" aria-label="Bet Slip">
-      <div class="bet-slip-header">
-        <h2 class="bet-slip-title">Bet Slip</h2>
-        <span class="bet-slip-count" id="slip-count">0</span>
-        <button
-          class="bet-slip-toggle"
-          id="slip-toggle"
-          aria-label="Toggle bet slip"
-        >
-          <span class="toggle-icon">◀</span>
-        </button>
-      </div>
-      <div class="bet-slip-body" id="slip-body">
-        <div class="bet-slip-empty" id="slip-empty">
-          <span class="slip-empty-icon">🎯</span>
-          <span class="slip-empty-text">Click any odds to add to slip</span>
-        </div>
-        <div class="bet-slip-picks" id="slip-picks">
-          <!-- Selections rendered by JS -->
-        </div>
-      </div>
-      <div class="bet-slip-footer" id="slip-footer" hidden>
-        <div class="slip-summary">
-          <div class="slip-row">
-            <span class="slip-label">Total Risk</span>
-            <span class="slip-value" id="slip-risk">$0</span>
-          </div>
-          <div class="slip-row">
-            <span class="slip-label">To Win</span>
-            <span class="slip-value slip-win" id="slip-win">$0</span>
-          </div>
-        </div>
-        <button class="slip-clear-btn" id="slip-clear">Clear All</button>
-      </div>
-    </aside>
 
     <!-- Bundled JS (shared core) -->
     <script src="dist/core.min.js?v=35.00.0" defer></script>

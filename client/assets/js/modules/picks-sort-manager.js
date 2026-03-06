@@ -304,9 +304,9 @@
          * ▼ = descending (down triangle)
          */
         SORT_ICONS: {
-            unsorted: '▲',
-            asc: '▲',
-            desc: '▼'
+            unsorted: '',
+            asc: '',
+            desc: ''
         },
 
         updateSortIndicators() {

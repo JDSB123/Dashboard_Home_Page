@@ -22,6 +22,15 @@
     return MEANINGFUL_TEXT.test((value || "").trim());
   }
 
+  // Map book keys to display names
+  var BOOK_LABELS = {
+    hulkwager: "Hulk Wager",
+    bombay711: "Bombay 711",
+    kingofsports: "King of Sports",
+    primetimeaction: "Prime Time Action",
+    other: "Other",
+  };
+
   function evaluateDateTimeCell(cell) {
     const dateText = readText(cell, [".date-value", ".cell-date", ".date"]);
     const timeText = readText(cell, [".time-value", ".cell-time", ".time"]);
@@ -31,7 +40,10 @@
       ".sportsbook-name",
     ]);
 
-    const sportsbookSelect = cell.querySelector(".sportsbook-select");
+    // Support both class names used across the codebase
+    const sportsbookSelect =
+      cell.querySelector(".sportsbook-select") ||
+      cell.querySelector(".sportsbook-dropdown");
     const selectedBook = sportsbookSelect ? (sportsbookSelect.value || "").trim() : "";
 
     const hasDate = hasMeaningfulValue(dateText);
@@ -43,6 +55,18 @@
 
     if (sportsbookSelect) {
       sportsbookSelect.classList.toggle("is-cemented", isCemented);
+    }
+
+    // When cemented and a dropdown is present, swap it for a static badge
+    if (isCemented && sportsbookSelect && selectedBook) {
+      var label = BOOK_LABELS[selectedBook] || selectedBook;
+      var pickId = sportsbookSelect.getAttribute("data-pick-id") || "";
+      var badge = document.createElement("span");
+      badge.className = "sportsbook-value is-cemented";
+      badge.setAttribute("data-pick-id", pickId);
+      badge.setAttribute("data-book-key", selectedBook);
+      badge.textContent = label;
+      sportsbookSelect.replaceWith(badge);
     }
   }
 
@@ -69,7 +93,7 @@
       const target = event.target;
       if (!(target instanceof Element)) return;
 
-      if (target.matches(".sportsbook-select")) {
+      if (target.matches(".sportsbook-select, .sportsbook-dropdown")) {
         const cell = target.closest(".datetime-cell");
         if (cell) evaluateDateTimeCell(cell);
       }

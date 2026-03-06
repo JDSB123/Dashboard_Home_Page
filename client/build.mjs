@@ -230,6 +230,7 @@ const WEEKLY_LINEUP_CSS = [
   "assets/css/components/status-badges.css",
   "assets/css/components/table-columns.css",
   "assets/css/pages/weekly-lineup-critical.css",
+  "assets/css/components/weekly-lineup-toolbar-lockup.css",
 ];
 // Fetch-picks-specific JS
 const FETCH_PICKS_JS = ["assets/js/features/fetch-picks-controller.js"];

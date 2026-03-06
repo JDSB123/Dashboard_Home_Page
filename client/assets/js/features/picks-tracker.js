@@ -1163,13 +1163,9 @@
     } catch (_) {}
     updateTableCounts();
     renderAll();
-    // Clear model picks cards
-    const container = document.getElementById("model-picks-cards");
-    if (container) {
-      container.innerHTML =
-        '<div class="mp-empty-state"><span class="mp-empty-icon">📊</span>' +
-        "<span>Tap a button above to load today's model picks</span></div>";
-    }
+    // Show empty state in feed
+    const empty = document.getElementById("feed-empty");
+    if (empty) empty.style.display = "";
   }
 
   document.addEventListener("click", (e) => {

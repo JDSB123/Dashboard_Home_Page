@@ -63,22 +63,34 @@
         /**
          * Handle Dashboard Refresh
          */
-        handleRefresh(btn) {
+        async handleRefresh(btn) {
             // Add spinning animation
             btn.classList.add('spinning');
+            btn.disabled = true;
             
-            // Call data refresh if available
-            if (window.ActivePicks && typeof window.ActivePicks.refreshData === 'function') {
-                window.ActivePicks.refreshData();
-            } else {
-                // Fallback reload
-                window.location.reload();
+            try {
+                // Refresh current table state first.
+                if (window.LocalPicksManager && typeof window.LocalPicksManager.refresh === 'function') {
+                    window.LocalPicksManager.refresh();
+                }
+
+                // Re-enrich picks with latest game data (scores/status/box score details).
+                if (window.LocalPicksManager && typeof window.LocalPicksManager.reEnrich === 'function') {
+                    await window.LocalPicksManager.reEnrich();
+                } else if (typeof window.loadLivePicks === 'function') {
+                    await window.loadLivePicks();
+                } else if (window.ActivePicks && typeof window.ActivePicks.refreshData === 'function') {
+                    window.ActivePicks.refreshData();
+                }
+            } catch (error) {
+                console.error('Dashboard refresh failed:', error);
             }
 
-            // Remove class after timeout (if page doesn't reload)
+            // Remove class after timeout to preserve visual feedback.
             setTimeout(() => {
                 btn.classList.remove('spinning');
-            }, 1000);
+                btn.disabled = false;
+            }, 700);
         },
 
         /**

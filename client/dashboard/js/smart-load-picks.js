@@ -2909,9 +2909,9 @@ function initializeDeleteButtons() {
       row.querySelector("td:nth-child(3)")?.textContent?.trim() || "this pick";
 
     const confirmed = await showDashboardConfirmDialog({
-      title: "Remove Pick?",
-      message: `This will remove ${matchupText} from the dashboard view.`,
-      confirmText: "Remove Pick",
+      title: "Remove This Pick?",
+      message: `Remove ${matchupText} from your active dashboard card set?`,
+      confirmText: "Yes, Remove It",
       cancelText: "Keep Pick",
     });
 
@@ -3074,8 +3074,8 @@ function initializeClearAllButton() {
     }
 
     const confirmed = await showDashboardConfirmDialog({
-      title: "Clear Dashboard Slate?",
-      message: `This will remove ${rowCount} active pick${rowCount === 1 ? "" : "s"} from this dashboard view.`,
+      title: "Clear The Dashboard Slate?",
+      message: `You are about to remove ${rowCount} active pick${rowCount === 1 ? "" : "s"} from this view.`,
       confirmText: "Yes, Clear Slate",
       cancelText: "Keep Picks",
     });

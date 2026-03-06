@@ -168,16 +168,21 @@
       ),
     );
 
+  const showFeedStatus = (msg, isError) => {
+    const feed = document.getElementById("straights-feed");
+    const empty = document.getElementById("feed-empty");
+    if (empty) empty.style.display = "none";
+    if (feed) {
+      const cls = isError ? "mp-empty-state mp-err-state" : "mp-empty-state";
+      feed.innerHTML = `<div class="${cls}"><span>${msg}</span></div>`;
+    }
+  };
+
   const fetchAndRender = async (sport, btn) => {
     if (activeFetch) return;
 
-    const container = document.getElementById("model-picks-cards");
-    if (!container) return;
-
     if (!window.UnifiedPicksFetcher?.fetchPicks) {
-      container.innerHTML =
-        '<div class="mp-empty-state mp-err-state">' +
-        "<span>Picks service not ready — please refresh the page.</span></div>";
+      showFeedStatus("Picks service not ready — please refresh the page.", true);
       return;
     }
 
@@ -186,50 +191,49 @@
       b.disabled = true;
     });
     setButtonState(btn, "loading");
-    renderSkeletons(container);
+    showFeedStatus("Fetching picks...", false);
 
     try {
       let allPicks = [];
+      const leagues = sport === "all" ? ["nba", "ncaab", "nhl", "mlb"] : [sport];
 
-      if (sport === "all") {
-        const [nba, ncaam] = await Promise.allSettled([
-          window.UnifiedPicksFetcher.fetchPicks("nba", "today", {
+      const results = await Promise.allSettled(
+        leagues.map((lg) =>
+          window.UnifiedPicksFetcher.fetchPicks(lg, "today", {
             skipCache: true,
           }),
-          window.UnifiedPicksFetcher.fetchPicks("ncaab", "today", {
-            skipCache: true,
-          }),
-        ]);
-        for (const r of [nba, ncaam]) {
-          if (r.status === "fulfilled" && Array.isArray(r.value?.picks)) {
-            allPicks.push(...r.value.picks);
-          }
+        ),
+      );
+      for (const r of results) {
+        if (r.status === "fulfilled" && Array.isArray(r.value?.picks)) {
+          allPicks.push(...r.value.picks);
         }
-      } else {
-        const result = await window.UnifiedPicksFetcher.fetchPicks(
-          sport,
-          "today",
-          { skipCache: true },
-        );
-        if (Array.isArray(result?.picks)) allPicks = result.picks;
       }
 
       allPicks.sort((a, b) => getEdge(b) - getEdge(a));
 
-      renderCards(container, allPicks);
-
-      // Auto-add fetched picks to tracker as straight bets
+      // Add fetched picks directly to the tracker feed
+      let added = 0;
       if (window.PicksTracker?.addFetchedPicks) {
-        window.PicksTracker.addFetchedPicks(allPicks);
+        added = window.PicksTracker.addFetchedPicks(allPicks);
+      }
+
+      // If nothing was added and feed is empty, show message
+      if (added === 0 && allPicks.length === 0) {
+        showFeedStatus("No picks available for today", false);
+      } else if (added === 0) {
+        // All picks already tracked — feed already rendered by addFetchedPicks
+        const feed = document.getElementById("straights-feed");
+        if (feed && feed.children.length === 0) {
+          showFeedStatus("All picks already tracked", false);
+        }
       }
 
       setLastRefreshed(nowIso());
       setButtonState(btn, allPicks.length ? "ok" : null);
       setTimeout(() => setButtonState(btn, null), 2000);
     } catch (_err) {
-      container.innerHTML =
-        '<div class="mp-empty-state mp-err-state">' +
-        "<span>Failed to load picks. Open Leagues to retry.</span></div>";
+      showFeedStatus("Failed to load picks. Open Leagues to retry.", true);
       setButtonState(btn, "err");
       setTimeout(() => setButtonState(btn, null), 3000);
     } finally {
