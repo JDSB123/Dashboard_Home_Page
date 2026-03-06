@@ -470,6 +470,20 @@ function getTeamAbbr(teamName) {
     return teamLookup[key];
   }
 
+  // Delegate to SharedUtils which has comprehensive team lookups for all leagues
+  if (window.SharedUtils && typeof window.SharedUtils.getTeamAbbr === "function") {
+    const sharedAbbr = window.SharedUtils.getTeamAbbr(teamName);
+    // SharedUtils returns last-word fallback for unknowns — only trust it when
+    // the result differs from a naive last-word extraction (i.e. it hit a real mapping)
+    if (sharedAbbr) {
+      const lastWord = (teamName || "").trim().split(/\s+/).pop() || "";
+      const lastWordAbbr = lastWord.substring(0, 3).toUpperCase();
+      if (sharedAbbr !== lastWordAbbr) {
+        return sharedAbbr;
+      }
+    }
+  }
+
   const parts = (teamName || "").match(/[A-Za-z0-9]+/g);
   if (parts && parts.length > 1) {
     const acronym = parts
@@ -2728,26 +2742,15 @@ async function loadPicksFromDatabase() {
 }
 
 function initializePicksAndRecords() {
-  // Note: We no longer auto-delete old picks - filtering is done at display time
-  // Historical picks are kept for PnL tracking and analytics
-  // Use LocalPicksManager.archiveOldPicks() manually to move old settled picks to archive
+  // Dashboard picks are managed by LocalPicksManager (reads from gbsv_picks localStorage).
+  // loadAndAppendPicks() fetches /api/picks which returns ALL Cosmos DB picks regardless
+  // of source — including Weekly Lineup model picks — so it must NOT auto-run here.
+  // Use window.loadLivePicks() to manually trigger an API refresh if needed.
 
-  // Run the migration check via loadPicksFromDatabase (non-blocking), then
-  // always render through loadAndAppendPicks → buildPickRow so every row goes
-  // through the strict hasValidMatchup / hasValidPick guard.
-  // Previously, when loadPicksFromDatabase returned results the code just
-  // logged "Using picks from database" and never called loadAndAppendPicks,
-  // so the table was left empty (or holding stale LocalPicksManager rows).
+  // Migration/DB check only (non-blocking, non-rendering)
   loadPicksFromDatabase().catch(() => {
-    // Migration/DB check failed — non-fatal, loadAndAppendPicks handles fallback
+    // Non-fatal — LocalPicksManager handles rendering
   });
-
-  const picksPromise = loadAndAppendPicks();
-  if (picksPromise && typeof picksPromise.catch === "function") {
-    picksPromise.catch((error) =>
-      console.warn("[PICKS LOADER] Initial load encountered an error:", error),
-    );
-  }
 }
 
 /**
