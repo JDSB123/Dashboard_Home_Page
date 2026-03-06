@@ -2500,7 +2500,7 @@ body.page-active-picks .filter-toolbar {
   justify-content: space-between;
   align-items: center;
   padding: 2px 0 0;
-  margin: 0 0 12px 0;
+  margin: 0;
   position: relative;
   z-index: 10050;
   background: transparent !important;
