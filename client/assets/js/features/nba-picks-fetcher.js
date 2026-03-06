@@ -12,7 +12,7 @@
 (function () {
   "use strict";
 
-  const { normalizeFireRating, getFunctionsBase, getContainerEndpoint, resolveTeam } =
+  const { normalizeFireRating, getFunctionsBase, getContainerEndpoint } =
     window.BaseSportFetcher?.utils || {};
 
   const fetcher = new window.BaseSportFetcher({
@@ -38,12 +38,15 @@
 
       const rawHome = play.home_team || play.home || "Unknown";
       const rawAway = play.away_team || play.away || "Unknown";
-      const home = resolveTeam(rawHome, "nba").fullName;
-      const away = resolveTeam(rawAway, "nba").fullName;
+      // Preserve model-provided team text verbatim to avoid alias remap drift.
+      const home = String(rawHome || "Unknown").trim();
+      const away = String(rawAway || "Unknown").trim();
       const matchup = play.matchup || `${away} @ ${home}`;
 
       // Determine pick display text
       let pickText =
+        play.pick_display ||
+        play.pickLabel ||
         play.pick ||
         play.selection ||
         play.feature_name ||
@@ -122,8 +125,9 @@
         edge: edge,
         fire: fireNum,
         fireLabel: fireNum === 5 ? "MAX" : "",
-        rationale: play.rationale || play.explanation || "",
+        rationale: play.rationale || play.reason || play.explanation || "",
         modelStamp: play.model_version || play.modelVersion || "",
+        rawPickLabel: play.pickLabel || play.pick_display || "",
         raw: play,
       };
     },

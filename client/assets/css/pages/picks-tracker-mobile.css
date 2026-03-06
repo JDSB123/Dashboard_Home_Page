@@ -1,23 +1,24 @@
 /* ==========================================================================
-   Picks Tracker — Mobile Responsive Overrides
-   Dedicated mobile styles for the picks tracker page
+   Mobile Picks — Mobile Responsive Overrides
+   Mobile-first layout for fetching and tracking picks on iPhone/Android
    ========================================================================== */
 
-/* ===== BACKGROUND (moved from inline style) ===== */
+/* ===== BACKGROUND ===== */
 .tracker-bg {
   position: fixed;
   inset: 0;
   z-index: -1;
   background: url("../../JB_Bearish_Market_FULL_page.png") center/cover
     no-repeat;
-  opacity: 0.25;
+  opacity: 0.2;
 }
 
-/* ===== MOBILE: ≤ 767px ===== */
+/* ===== MOBILE: <= 767px ===== */
 @media (max-width: 767px) {
-  /* Page padding: leave room for bottom nav */
+  /* Page body */
   body.page-picks-tracker {
-    padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+    padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+    background: #050e1a;
   }
 
   /* Hide desktop nav links — hamburger takes over */
@@ -32,59 +33,237 @@
     left: 0;
     right: 0;
     z-index: 9998;
-    height: 48px;
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
-    background: rgba(3, 11, 22, 0.92);
-    border-bottom: 1px solid rgba(0, 214, 137, 0.12);
+    height: 44px;
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    background: rgba(5, 14, 26, 0.94);
+    border-bottom: 1px solid rgba(0, 214, 137, 0.1);
   }
 
   /* Push content below fixed nav */
   .tracker-page {
-    padding-top: 56px;
-    padding-left: 12px;
-    padding-right: 12px;
+    padding-top: 52px;
+    padding-left: 14px;
+    padding-right: 14px;
+    padding-bottom: 32px;
   }
 
   /* ===== HEADER ===== */
   .tracker-header {
-    flex-direction: column;
-    align-items: flex-start;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     gap: 8px;
-    padding: 12px 0 10px;
+    padding: 10px 0 8px;
+    border-bottom: none;
+    margin-bottom: 0;
   }
 
   .tracker-header h1 {
-    font-size: 1.1rem;
+    font-size: 1.15rem;
+    color: rgba(0, 214, 137, 0.95);
+    margin: 0;
   }
 
-  /* ===== KPI STRIP ===== */
-  .tracker-kpis {
-    grid-template-columns: repeat(3, 1fr);
+  .tracker-header .date-label {
+    font-size: 12px;
+    color: rgba(180, 195, 210, 0.6);
+    display: block;
+    margin-top: 1px;
+  }
+
+  .tracker-header-actions {
+    display: flex;
+    align-items: center;
     gap: 8px;
   }
 
+  .update-time {
+    font-size: 10px;
+    color: rgba(160, 175, 190, 0.5);
+  }
+
+  #refresh-btn {
+    width: 34px;
+    height: 34px;
+    font-size: 16px;
+    min-height: 34px;
+    padding: 0;
+  }
+
+  /* ===== FETCH SECTION — prominent CTA ===== */
+  .mp-fetch-section {
+    padding: 10px 0 12px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid rgba(0, 214, 137, 0.08);
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+  }
+
+  .mp-fetch-bar {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    flex-wrap: nowrap;
+    padding-bottom: 2px;
+  }
+
+  .mp-fetch-bar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .mp-fetch-btn {
+    min-height: 44px;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    flex-shrink: 0;
+    border-radius: 22px;
+    gap: 6px;
+  }
+
+  .mp-fetch-all {
+    background: rgba(0, 214, 137, 0.12);
+    border-color: rgba(0, 214, 137, 0.4);
+    color: #00d689;
+  }
+
+  .mp-btn-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .mp-last-sync {
+    font-size: 10px;
+    color: rgba(160, 175, 190, 0.45);
+    text-align: right;
+  }
+
+  /* ===== MODEL PICKS CARDS ===== */
+  .mp-cards-container {
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .mp-card {
+    border-radius: 12px;
+    border-color: rgba(0, 214, 137, 0.12);
+  }
+
+  .mp-card-header {
+    padding: 10px 12px 8px;
+    gap: 8px;
+  }
+
+  .mp-league-icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .mp-matchup {
+    font-size: 13px;
+    font-weight: 600;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+    line-height: 1.3;
+  }
+
+  .mp-card-body {
+    padding: 8px 12px 6px;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .mp-pick-label {
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .mp-odds-label {
+    font-size: 13px;
+  }
+
+  .mp-card-footer {
+    padding: 6px 12px 10px;
+    gap: 6px;
+  }
+
+  .mp-edge-badge {
+    font-size: 12px;
+    padding: 2px 8px;
+  }
+
+  .mp-fire {
+    font-size: 15px;
+  }
+
+  .mp-segment-pill {
+    font-size: 10px;
+    padding: 2px 7px;
+  }
+
+  .mp-empty-state {
+    padding: 28px 16px;
+    font-size: 13px;
+  }
+
+  .mp-empty-icon {
+    font-size: 28px;
+  }
+
+  .mp-card-skeleton {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  /* ===== KPI STRIP — compact 3-column grid ===== */
+  .tracker-kpis {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+
   .kpi-card {
-    padding: 10px 6px;
+    padding: 8px 6px;
+    border-radius: 6px;
+  }
+
+  .kpi-label {
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    margin-bottom: 2px;
   }
 
   .kpi-value {
     font-size: 1rem;
   }
 
-  .kpi-label {
-    font-size: 14px;
+  /* ===== SECTION TITLES ===== */
+  .section-title {
+    font-size: 0.85rem;
+    margin: 14px 0 8px;
+    padding-bottom: 4px;
   }
 
   /* ===== GAME CARDS ===== */
   #game-cards {
     grid-template-columns: 1fr;
-    gap: 10px;
+    gap: 8px;
+    margin-bottom: 12px;
   }
 
-  /* ===== TABLE → CARD TRANSFORMATION ===== */
+  .game-card {
+    border-radius: 8px;
+  }
+
+  /* ===== TABLE -> CARD TRANSFORMATION ===== */
   .tracker-table-wrap {
     overflow-x: visible;
+    margin-bottom: 4px;
   }
 
   .tracker-table {
@@ -106,60 +285,97 @@
     flex-wrap: wrap;
     padding: 10px 12px;
     border: 1px solid rgba(0, 214, 137, 0.1);
-    border-radius: 8px;
+    border-radius: 10px;
     background: linear-gradient(
-      180deg,
-      rgba(8, 18, 32, 0.95),
+      170deg,
+      rgba(8, 20, 36, 0.95),
       rgba(4, 12, 24, 0.98)
     );
-    gap: 4px;
+    gap: 4px 8px;
+    align-items: center;
   }
 
-  /* Straight bets card layout */
+  /* ===== STRAIGHT BETS CARD LAYOUT ===== */
   #straights-tbody tr td {
     border: none;
     padding: 2px 0;
   }
 
-  /* Pick name — full width, top of card */
+  /* Pick name — full width, bold header */
   #straights-tbody tr td:nth-child(1) {
     flex: 0 0 100%;
-    font-weight: 600;
+    font-weight: 700;
     font-size: 14px;
     color: #fff;
-    padding-bottom: 4px;
+    padding-bottom: 6px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    margin-bottom: 2px;
+    margin-bottom: 4px;
   }
 
-  /* Score */
+  /* Score + Status on same row */
   #straights-tbody tr td:nth-child(2) {
     flex: 0 0 auto;
-    margin-right: auto;
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(220, 230, 240, 0.9);
   }
 
-  /* Status badge */
   #straights-tbody tr td:nth-child(3) {
     flex: 0 0 auto;
+    margin-left: auto;
   }
 
-  /* Detail — full width */
+  /* Detail — full width, muted */
   #straights-tbody tr td:nth-child(4) {
     flex: 0 0 100%;
-    font-size: 14px;
-    color: rgba(160, 175, 190, 0.7);
+    font-size: 12px;
+    color: rgba(160, 175, 190, 0.6);
+    padding: 2px 0;
   }
 
-  /* Money row */
+  /* Money row — 3 equal columns */
   #straights-tbody tr td:nth-child(5),
   #straights-tbody tr td:nth-child(6),
   #straights-tbody tr td:nth-child(7) {
     flex: 1;
     text-align: center;
-    font-size: 14px;
+    font-size: 13px;
+    padding-top: 6px;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
   }
 
-  /* Round robin card layout */
+  /* Add data labels on mobile for money cells */
+  #straights-tbody tr td:nth-child(5)::before {
+    content: "Risk ";
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(160, 175, 190, 0.5);
+    display: block;
+    margin-bottom: 1px;
+  }
+
+  #straights-tbody tr td:nth-child(6)::before {
+    content: "Win ";
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(160, 175, 190, 0.5);
+    display: block;
+    margin-bottom: 1px;
+  }
+
+  #straights-tbody tr td:nth-child(7)::before {
+    content: "P&L ";
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(160, 175, 190, 0.5);
+    display: block;
+    margin-bottom: 1px;
+  }
+
+  /* ===== ROUND ROBIN CARD LAYOUT ===== */
   #rr-tbody tr td {
     border: none;
     padding: 2px 0;
@@ -167,14 +383,17 @@
 
   #rr-tbody tr td:nth-child(1) {
     flex: 0 0 100%;
-    font-weight: 600;
-    padding-bottom: 4px;
+    font-weight: 700;
+    font-size: 14px;
+    color: #fff;
+    padding-bottom: 6px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    margin-bottom: 2px;
+    margin-bottom: 4px;
   }
 
   #rr-tbody tr td:nth-child(2) {
     flex: 0 0 100%;
+    padding: 2px 0 4px;
   }
 
   #rr-tbody tr td:nth-child(3) {
@@ -187,162 +406,96 @@
   #rr-tbody tr td:nth-child(6) {
     flex: 1;
     text-align: center;
-    font-size: 14px;
-  }
-
-  /* Section titles */
-  .section-title {
-    font-size: 1rem;
-    margin: 20px 0 10px;
-  }
-
-  /* Touch targets */
-  #refresh-btn {
-    min-height: 44px;
-    min-width: 44px;
-    padding: 10px 18px;
-    font-size: 14px;
-  }
-
-  /* ===== MODEL PICKS — iPhone-optimised overrides ===== */
-
-  .mp-section {
-    margin: 0 0 20px;
-  }
-
-  /* Stack title above fetch bar on narrow screens */
-  .mp-section-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-    margin-bottom: 10px;
-  }
-
-  .mp-title {
-    font-size: 0.95rem;
-    margin: 0;
-  }
-
-  /* Fetch bar: scrollable row, no wrap, so it never breaks to two lines */
-  .mp-fetch-bar {
-    width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    flex-wrap: nowrap;
-    gap: 8px;
-    padding-bottom: 2px;
-  }
-
-  .mp-fetch-bar::-webkit-scrollbar {
-    display: none;
-  }
-
-  /* Bigger tap targets on iPhone */
-  .mp-fetch-btn {
-    min-height: 44px;
-    padding: 8px 16px;
-    font-size: 14px;
-    flex-shrink: 0;
-    border-radius: 22px;
-  }
-
-  .mp-btn-icon {
-    width: 18px;
-    height: 18px;
-  }
-
-  /* Full-width cards, generous padding */
-  .mp-cards-container {
-    gap: 10px;
-  }
-
-  .mp-card {
-    border-radius: 14px;
-  }
-
-  .mp-card-header {
-    padding: 11px 14px 9px;
-    gap: 9px;
-  }
-
-  .mp-league-icon {
-    width: 24px;
-    height: 24px;
-  }
-
-  /* Matchup text: allow wrapping on very small screens */
-  .mp-matchup {
-    font-size: 14px;
-    white-space: normal;
-    overflow: visible;
-    text-overflow: unset;
-    line-height: 1.35;
-  }
-
-  /* Large pick label — the most important info, easy to read */
-  .mp-card-body {
-    padding: 11px 14px 9px;
-    gap: 6px;
-    flex-wrap: wrap;
-  }
-
-  .mp-pick-label {
-    font-size: 20px;
-    font-weight: 800;
-    letter-spacing: 0;
-    line-height: 1.15;
-  }
-
-  .mp-odds-label {
-    font-size: 14px;
-    align-self: flex-end;
-    padding-bottom: 1px;
-  }
-
-  .mp-card-footer {
-    padding: 8px 14px 12px;
-    gap: 7px;
-  }
-
-  .mp-edge-badge {
     font-size: 13px;
-    padding: 3px 10px;
+    padding-top: 6px;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
   }
 
-  .mp-fire {
-    font-size: 16px;
+  #rr-tbody tr td:nth-child(4)::before {
+    content: "Risk ";
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(160, 175, 190, 0.5);
+    display: block;
+    margin-bottom: 1px;
   }
 
-  .mp-segment-pill {
+  #rr-tbody tr td:nth-child(5)::before {
+    content: "Win ";
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(160, 175, 190, 0.5);
+    display: block;
+    margin-bottom: 1px;
+  }
+
+  #rr-tbody tr td:nth-child(6)::before {
+    content: "P&L ";
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(160, 175, 190, 0.5);
+    display: block;
+    margin-bottom: 1px;
+  }
+
+  /* ===== STATUS BADGES — compact on mobile ===== */
+  .status-badge {
+    padding: 4px 10px;
     font-size: 11px;
-    padding: 3px 9px;
   }
 
-  .mp-pick-type-tag {
-    font-size: 11px;
+  .status-badge--mini {
+    padding: 2px 6px;
+    font-size: 10px;
   }
 
-  /* Empty state */
-  .mp-empty-state {
-    padding: 32px 16px;
-    font-size: 14px;
+  /* ===== WIN/LOSS ROW HIGHLIGHTS ===== */
+  .tracker-table tbody tr[data-status="win"] {
+    border-color: rgba(0, 255, 170, 0.2);
   }
 
-  .mp-empty-icon {
-    font-size: 30px;
+  .tracker-table tbody tr[data-status="loss"] {
+    border-color: rgba(229, 57, 53, 0.2);
   }
 
-  /* Skeleton cards */
-  .mp-card-skeleton {
-    padding: 14px;
-    gap: 11px;
+  .tracker-table tbody tr[data-status="on-track"] {
+    border-color: rgba(0, 191, 255, 0.2);
+  }
+
+  .tracker-table tbody tr[data-status="at-risk"] {
+    border-color: rgba(251, 140, 0, 0.2);
   }
 }
 
-/* ===== SMALL PHONES: ≤ 480px ===== */
+/* ===== SMALL PHONES: <= 480px ===== */
 @media (max-width: 480px) {
   .tracker-kpis {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+  }
+
+  .kpi-value {
+    font-size: 0.9rem;
+  }
+
+  .tracker-header h1 {
+    font-size: 1rem;
+  }
+
+  .mp-fetch-btn {
+    padding: 8px 14px;
+    font-size: 13px;
+    min-height: 40px;
+  }
+
+  .mp-pick-label {
+    font-size: 16px;
+  }
+
+  #straights-tbody tr td:nth-child(1) {
+    font-size: 13px;
   }
 }

@@ -377,6 +377,27 @@
     picksCache.date = date;
     picksCache.league = league;
 
+    // Share fetched picks across pages for Mobile Picks tracker
+    if (allPicks.length > 0) {
+      try {
+        const existing = JSON.parse(
+          localStorage.getItem("gbsv_shared_fetched_picks") || "[]",
+        );
+        const seenIds = new Set(existing.map((p) => p.id));
+        const merged = [...existing];
+        for (const p of allPicks) {
+          if (p.id && !seenIds.has(p.id)) {
+            merged.push(p);
+            seenIds.add(p.id);
+          }
+        }
+        localStorage.setItem(
+          "gbsv_shared_fetched_picks",
+          JSON.stringify(merged),
+        );
+      } catch (_) {}
+    }
+
     return response;
   };
 

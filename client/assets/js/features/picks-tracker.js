@@ -1,5 +1,5 @@
 /**
- * Picks Tracker v1.1
+ * Mobile Picks v1.1
  * Live tracking for today's picks with real-time ESPN scores
  */
 (function () {
@@ -1360,7 +1360,7 @@
 
     var shortOpts = { month: "short", day: "numeric", year: "numeric" };
     var shortDate = now.toLocaleDateString("en-US", shortOpts);
-    document.title = "Picks Tracker \u2014 " + shortDate + " | GBSV";
+    document.title = "Mobile Picks \u2014 " + shortDate + " | GBSV";
   }
 
   function updateTableCounts() {
@@ -1368,10 +1368,94 @@
     setText("rr-count", ROUND_ROBINS.length.toString());
   }
 
+  // ═══════════════════════════════════════════════════════════════════
+  // LOCAL STORAGE PERSISTENCE
+  // ═══════════════════════════════════════════════════════════════════
+  const STORAGE_KEY = "gbsv_tracker_picks";
+
+  function persistPicksToStorage() {
+    try {
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({
+          legs: LEGS,
+          straights: STRAIGHTS,
+          savedAt: new Date().toISOString(),
+        }),
+      );
+    } catch (_) {}
+  }
+
+  function loadPicksFromStorage() {
+    try {
+      const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+      if (!Array.isArray(data?.legs) || data.legs.length === 0) return false;
+      LEGS.splice(0, LEGS.length, ...data.legs);
+      STRAIGHTS.splice(0, STRAIGHTS.length, ...(data.straights || []));
+      ROUND_ROBINS.splice(0, ROUND_ROBINS.length);
+      rebuildGameMaps();
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  // ═══════════════════════════════════════════════════════════════════
+  // AUTO-ADD FETCHED PICKS AS TRACKABLE STRAIGHTS
+  // ═══════════════════════════════════════════════════════════════════
+  function addFetchedPicks(picks) {
+    if (!Array.isArray(picks) || picks.length === 0) return 0;
+
+    const BASE = 500;
+    const existingIds = new Set(LEGS.map((l) => l.id));
+    let added = 0;
+
+    picks.forEach((pick, idx) => {
+      const leg = mapPickToLeg(pick, LEGS.length + idx);
+      if (!leg) return;
+      if (existingIds.has(leg.id)) return;
+
+      const odds = leg.odds;
+      let risk, toWin;
+      if (odds < 0) {
+        // Negative odds: to win $500, risk = 500 * (|odds| / 100)
+        risk = Math.round(BASE * (Math.abs(odds) / 100));
+        toWin = BASE;
+      } else {
+        // Positive odds: risk $500, to win = 500 * (odds / 100)
+        risk = BASE;
+        toWin = Math.round(BASE * (odds / 100));
+      }
+
+      LEGS.push(leg);
+      STRAIGHTS.push({ legId: leg.id, risk, toWin });
+      existingIds.add(leg.id);
+      added++;
+    });
+
+    if (added > 0) {
+      rebuildGameMaps();
+      updateTableCounts();
+      renderAll();
+      fetchScores();
+      persistPicksToStorage();
+    }
+    return added;
+  }
+
   async function init() {
     setDynamicDate();
 
-    await loadLockedPicksFromService();
+    const loaded = await loadLockedPicksFromService();
+    if (!loaded) loadPicksFromStorage();
+
+    // Pick up any picks fetched on other pages (Weekly Lineup, Dashboard, etc.)
+    try {
+      const shared = JSON.parse(
+        localStorage.getItem("gbsv_shared_fetched_picks") || "[]",
+      );
+      if (shared.length > 0) addFetchedPicks(shared);
+    } catch (_) {}
 
     updateTableCounts();
     fetchScores();
@@ -1414,5 +1498,6 @@
     GAMES,
     fetchScores,
     renderAll,
+    addFetchedPicks,
   };
 })();

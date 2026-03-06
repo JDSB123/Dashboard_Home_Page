@@ -15,6 +15,7 @@
     activePicks: [],
     lastFetchedAt: null,
     isFetching: false,
+    betSlip: [],
     filters: {
       league: "all",
       segment: "all",
@@ -346,6 +347,7 @@
     syncSortUi();
     renderFilterChips();
     updateClearButtonCount();
+    if (state.betSlip.length > 0) syncSlipSelectedRows();
   };
 
 
@@ -416,7 +418,7 @@
     if (s === "NCAAB") return { src: "assets/ncaam-logo.png", alt: "NCAAM" };
     if (s === "NFL") return { src: "assets/nfl-logo.png", alt: "NFL" };
     if (s === "NCAAF") return { src: "assets/ncaaf-logo.png", alt: "NCAAF" };
-    if (s === "NHL") return { src: "assets/nhl-logo.png", alt: "NHL" };
+    if (s === "NHL") return { src: "assets/icons/league-nhl-official.svg", alt: "NHL" };
     if (s === "MLB") return { src: "assets/mlb-logo.png", alt: "MLB" };
     return { src: "", alt: s };
   };
@@ -1150,18 +1152,202 @@
     },
   };
 
+  // ===== BET SLIP =====
+
+  const formatOddsDisplay = (odds) => {
+    if (!odds || odds === "-") return "N/A";
+    const n = parseInt(odds, 10);
+    if (isNaN(n)) return String(odds);
+    return n > 0 ? "+" + n : String(n);
+  };
+
+  const calculatePayout = (risk, odds) => {
+    if (!risk || !odds) return 0;
+    const n = parseInt(odds, 10);
+    if (isNaN(n)) return 0;
+    return n > 0 ? risk * (n / 100) : risk * (100 / Math.abs(n));
+  };
+
+  const handlePickRowClick = (evt) => {
+    if (evt.target.closest("button")) return;
+    if (evt.target.closest("input")) return;
+
+    const row = evt.target.closest(".pick-row");
+    if (!row) return;
+
+    const pickId = row.getAttribute("data-pick-id");
+    if (!pickId) return;
+
+    const pick = state.activePicks.find((p) => p.id === pickId);
+    if (!pick) return;
+
+    const existingIdx = state.betSlip.findIndex((s) => s.pickId === pickId);
+    if (existingIdx >= 0) {
+      state.betSlip.splice(existingIdx, 1);
+      row.classList.remove("slip-selected");
+    } else {
+      state.betSlip.push({
+        pickId: pick.id,
+        away: safeText(pick.awayTeam),
+        home: safeText(pick.homeTeam),
+        pick: formatPickLabel(pick),
+        odds: safeText(pick.odds || "-110"),
+        segment: normalizeSegment(pick.segment),
+        sport: normalizeSport(pick.sport || pick.league),
+        risk: 100,
+      });
+      row.classList.add("slip-selected");
+
+      if (state.betSlip.length === 1) {
+        document.body.classList.add("slip-open");
+      }
+    }
+
+    renderBetSlip();
+  };
+
+  const renderBetSlip = () => {
+    const picksContainer = document.getElementById("slip-picks");
+    const emptyState = document.getElementById("slip-empty");
+    const footer = document.getElementById("slip-footer");
+    const countEl = document.getElementById("slip-count");
+
+    if (!picksContainer) return;
+
+    if (countEl) countEl.textContent = state.betSlip.length;
+
+    if (state.betSlip.length === 0) {
+      picksContainer.innerHTML = "";
+      if (emptyState) emptyState.style.display = "";
+      if (footer) footer.hidden = true;
+      return;
+    }
+
+    if (emptyState) emptyState.style.display = "none";
+    if (footer) footer.hidden = false;
+
+    const html = state.betSlip
+      .map((pick, idx) => {
+        const oddsDisplay = formatOddsDisplay(pick.odds);
+        const payout = calculatePayout(pick.risk, pick.odds);
+
+        return `
+        <div class="slip-pick" data-idx="${idx}">
+          <div class="slip-pick-header">
+            <span class="slip-pick-game">${pick.away} @ ${pick.home}</span>
+            <button class="slip-pick-remove" data-idx="${idx}">\u00d7</button>
+          </div>
+          <div class="slip-pick-selection">${pick.pick}</div>
+          <div class="slip-pick-details">
+            <span class="slip-pick-book">${pick.sport} \u00b7 ${pick.segment}</span>
+            <span class="slip-pick-odds">${oddsDisplay}</span>
+          </div>
+          <div class="slip-pick-input">
+            <span class="slip-input-label">Risk $</span>
+            <input type="number" class="slip-input" id="slip-input-${idx}" name="slip-input-${idx}" value="${pick.risk}" data-idx="${idx}" min="0">
+          </div>
+          <div class="slip-pick-payout">
+            <span class="slip-payout-label">To Win</span>
+            <span class="slip-payout-value">$${payout.toFixed(2)}</span>
+          </div>
+        </div>
+      `;
+      })
+      .join("");
+
+    picksContainer.innerHTML = html;
+
+    picksContainer.querySelectorAll(".slip-pick-remove").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const idx = parseInt(btn.dataset.idx, 10);
+        removeBetSlipItem(idx);
+      });
+    });
+
+    picksContainer.querySelectorAll(".slip-input").forEach((input) => {
+      input.addEventListener("input", (e) => {
+        const idx = parseInt(e.target.dataset.idx, 10);
+        state.betSlip[idx].risk = parseFloat(e.target.value) || 0;
+        updateSlipTotals();
+      });
+    });
+
+    updateSlipTotals();
+  };
+
+  const removeBetSlipItem = (idx) => {
+    const removed = state.betSlip.splice(idx, 1)[0];
+    if (removed) {
+      const row = document.querySelector(
+        `.pick-row[data-pick-id="${removed.pickId}"]`,
+      );
+      if (row) row.classList.remove("slip-selected");
+    }
+    renderBetSlip();
+  };
+
+  const clearBetSlip = () => {
+    state.betSlip = [];
+    document
+      .querySelectorAll(".pick-row.slip-selected")
+      .forEach((r) => r.classList.remove("slip-selected"));
+    renderBetSlip();
+  };
+
+  const updateSlipTotals = () => {
+    const riskEl = document.getElementById("slip-risk");
+    const winEl = document.getElementById("slip-win");
+    let totalRisk = 0;
+    let totalWin = 0;
+    state.betSlip.forEach((pick) => {
+      totalRisk += pick.risk || 0;
+      totalWin += calculatePayout(pick.risk, pick.odds);
+    });
+    if (riskEl) riskEl.textContent = "$" + totalRisk.toFixed(0);
+    if (winEl) winEl.textContent = "$" + totalWin.toFixed(2);
+  };
+
+  const toggleBetSlip = () => {
+    document.body.classList.toggle("slip-open");
+  };
+
+  const attachBetSlipHandlers = () => {
+    const tbody = el.tbody();
+    if (tbody) {
+      tbody.addEventListener("click", handlePickRowClick);
+    }
+
+    const slipToggle = document.getElementById("slip-toggle");
+    if (slipToggle) {
+      slipToggle.addEventListener("click", toggleBetSlip);
+    }
+
+    const slipClear = document.getElementById("slip-clear");
+    if (slipClear) {
+      slipClear.addEventListener("click", clearBetSlip);
+    }
+  };
+
+  const syncSlipSelectedRows = () => {
+    const selectedIds = new Set(state.betSlip.map((s) => s.pickId));
+    document.querySelectorAll(".pick-row[data-pick-id]").forEach((row) => {
+      const id = row.getAttribute("data-pick-id");
+      row.classList.toggle("slip-selected", selectedIds.has(id));
+    });
+  };
+
   const init = () => {
     bootstrapFromCache();
     attachFetchHandlers();
     attachTrackHandlers();
     attachSortHandlers();
+    attachBetSlipHandlers();
     syncFilterUi();
     syncSortUi();
     renderFilterChips();
     updateToolbarDropdownLabel("segment");
     updateToolbarDropdownLabel("pickType");
 
-    // Initialize last refreshed label
     if (state.lastFetchedAt) {
       setLastRefreshed(state.lastFetchedAt);
     }

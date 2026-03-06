@@ -12,7 +12,7 @@
 (function () {
   "use strict";
 
-  const { normalizeFireRating, getContainerEndpoint, resolveTeam } =
+  const { normalizeFireRating, getContainerEndpoint } =
     window.BaseSportFetcher?.utils || {};
 
   /**
@@ -64,8 +64,16 @@
 
       const rawAway = pick.away_team || pick.awayTeam || "";
       const rawHome = pick.home_team || pick.homeTeam || "";
-      const awayTeam = resolveTeam(rawAway, "ncaaf").fullName || rawAway;
-      const homeTeam = resolveTeam(rawHome, "ncaaf").fullName || rawHome;
+      // Preserve model-provided team labels as-is.
+      const awayTeam = String(rawAway || "").trim();
+      const homeTeam = String(rawHome || "").trim();
+
+      const pickDisplay =
+        pick.pick_display ||
+        pick.pick ||
+        pick.recommendation ||
+        pick.bet_recommendation ||
+        "";
 
       return {
         sport: "NCAAF",
@@ -74,11 +82,8 @@
         awayRecord: pick.away_record || pick.awayRecord || "",
         homeRecord: pick.home_record || pick.homeRecord || "",
         game: `${awayTeam} @ ${homeTeam}`,
-        pick:
-          pick.pick_display ||
-          pick.pick ||
-          pick.recommendation ||
-          pick.bet_recommendation,
+        pick: pickDisplay,
+        pickTeam: pickDisplay,
         odds: pick.odds || pick.market_odds || "",
         edge: pick.edge
           ? `${(pick.edge * 100).toFixed(1)}%`
@@ -104,6 +109,7 @@
           pick.model_tag ||
           pick.modelTag ||
           "",
+        rawPickDisplay: pick.pick_display || "",
       };
     },
   });

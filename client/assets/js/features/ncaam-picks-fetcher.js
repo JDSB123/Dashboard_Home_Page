@@ -19,7 +19,7 @@
 (function () {
   "use strict";
 
-  const { normalizeFireRating, getFunctionsBase, getContainerEndpoint, resolveTeam } =
+  const { normalizeFireRating, getFunctionsBase, getContainerEndpoint } =
     window.BaseSportFetcher?.utils || {};
 
   // NCAAM-specific: trigger picks generation via proxy
@@ -118,12 +118,13 @@
         pick.home_team ||
         (pick.matchup ? pick.matchup.split(" @ ")[1] : "") ||
         "";
-      const awayTeam = resolveTeam(rawAway, "ncaab").fullName || rawAway;
-      const homeTeam = resolveTeam(rawHome, "ncaab").fullName || rawHome;
+      // Preserve ACA model output verbatim for NCAAM to avoid alias crosswalk distortions.
+      const awayTeam = String(rawAway || "").trim();
+      const homeTeam = String(rawHome || "").trim();
 
-      // v2: pickLabel = "Howard ML"; fall back to selection-derived label or raw pick field
+      // Preserve ACA label formatting first (pickLabel often contains the intended display text).
       const pickTeam =
-        pick.predictedWinner || pick.pick || pick.pickLabel || "";
+        pick.pickLabel || pick.pick || pick.predictedWinner || "";
       let pickDirection = "";
       const upperPick = pickTeam.toUpperCase();
       if (upperPick === "OVER" || upperPick === "UNDER") {
@@ -168,11 +169,24 @@
         fireLabel: fireNum === 5 ? "MAX" : "",
         market: marketType,
         segment: pick.period || pick.segment || "FG",
-        line: pick.marketSpread || pick.market_line || pick.marketLine || "",
+        line:
+          pick.marketSpread ||
+          pick.market_line ||
+          pick.marketLine ||
+          pick.line ||
+          "",
         modelPrice:
-          pick.predictedMargin || pick.model_line || pick.modelLine || "",
+          pick.predictedMargin ||
+          pick.model_line ||
+          pick.modelLine ||
+          pick.modelPrice ||
+          "",
         modelSpread:
-          pick.predictedMargin || pick.model_line || pick.modelLine || "",
+          pick.predictedMargin ||
+          pick.model_line ||
+          pick.modelLine ||
+          pick.modelSpread ||
+          "",
         fire_rating: pick.fire_rating || pick.fireRating || "",
         rationale:
           pick.rationale ||
@@ -193,6 +207,8 @@
           pick.model_tag ||
           pick.modelTag ||
           "",
+        rawPickLabel: pick.pickLabel || "",
+        rawPredictedWinner: pick.predictedWinner || "",
       };
     },
   });

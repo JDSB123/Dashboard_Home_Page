@@ -53,7 +53,7 @@
     if (s === "NCAAB") return { src: "assets/ncaam-logo.png", alt: "NCAAM" };
     if (s === "NFL") return { src: "assets/nfl-logo.png", alt: "NFL" };
     if (s === "NCAAF") return { src: "assets/ncaaf-logo.png", alt: "NCAAF" };
-    if (s === "NHL") return { src: "assets/icons/league-nhl.svg", alt: "NHL" };
+    if (s === "NHL") return { src: "assets/icons/league-nhl-official.svg", alt: "NHL" };
     return { src: "", alt: s };
   };
 
@@ -212,6 +212,12 @@
       allPicks.sort((a, b) => getEdge(b) - getEdge(a));
 
       renderCards(container, allPicks);
+
+      // Auto-add fetched picks to tracker as straight bets
+      if (window.PicksTracker?.addFetchedPicks) {
+        window.PicksTracker.addFetchedPicks(allPicks);
+      }
+
       setLastRefreshed(nowIso());
       setButtonState(btn, allPicks.length ? "ok" : null);
       setTimeout(() => setButtonState(btn, null), 2000);

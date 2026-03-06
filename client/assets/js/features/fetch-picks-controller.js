@@ -101,7 +101,7 @@
     if (s === "NCAAB") return { src: "assets/ncaam-logo.png", alt: "NCAAM" };
     if (s === "NFL") return { src: "assets/nfl-logo.png", alt: "NFL" };
     if (s === "NCAAF") return { src: "assets/ncaaf-logo.png", alt: "NCAAF" };
-    if (s === "NHL") return { src: "assets/icons/league-nhl.svg", alt: "NHL" };
+    if (s === "NHL") return { src: "assets/icons/league-nhl-official.svg", alt: "NHL" };
     return { src: "", alt: s };
   };
 
@@ -423,6 +423,15 @@
         const btn = evt.target.closest("button[data-fetch]");
         if (!btn || btn.disabled) return;
         evt.preventDefault();
+        const menu = btn.closest(".ft-dropdown-menu");
+        if (menu) {
+          menu.classList.remove("open");
+          const trigger = menu.previousElementSibling;
+          if (trigger?.classList.contains("ft-dropdown-btn")) {
+            trigger.classList.remove("open");
+            trigger.setAttribute("aria-expanded", "false");
+          }
+        }
         const code = safeText(btn.getAttribute("data-fetch")).toLowerCase();
         if (!code) return;
         if (code === "ncaab" || code === "ncaam") {
@@ -486,19 +495,33 @@
         if (!menu) return;
         const isOpen = menu.classList.contains("open");
         // Close all others
-        document
-          .querySelectorAll(".ft-dropdown-menu.open")
-          .forEach((m) => m.classList.remove("open"));
-        if (!isOpen) menu.classList.add("open");
+        document.querySelectorAll(".ft-dropdown-menu.open").forEach((m) => {
+          m.classList.remove("open");
+          const trigger = m.previousElementSibling;
+          if (trigger?.classList.contains("ft-dropdown-btn")) {
+            trigger.classList.remove("open");
+            trigger.setAttribute("aria-expanded", "false");
+          }
+        });
+        if (!isOpen) {
+          menu.classList.add("open");
+          btn.classList.add("open");
+          btn.setAttribute("aria-expanded", "true");
+        }
       });
     });
 
     // Close dropdowns on outside click
     document.addEventListener("click", (evt) => {
       if (!evt.target.closest(".ft-dropdown")) {
-        document
-          .querySelectorAll(".ft-dropdown-menu.open")
-          .forEach((m) => m.classList.remove("open"));
+        document.querySelectorAll(".ft-dropdown-menu.open").forEach((m) => {
+          m.classList.remove("open");
+          const trigger = m.previousElementSibling;
+          if (trigger?.classList.contains("ft-dropdown-btn")) {
+            trigger.classList.remove("open");
+            trigger.setAttribute("aria-expanded", "false");
+          }
+        });
       }
     });
   };

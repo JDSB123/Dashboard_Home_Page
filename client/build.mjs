@@ -128,7 +128,6 @@ const SHARED_JS = [
   "assets/js/mobile/mobile-unified.js",
   "assets/js/core/signalr-client.js",
   "assets/js/core/auth-client.js",
-  "assets/js/features/nav-fetch-picks.js",
 ];
 
 // Sport fetchers — shared across dashboard and weekly-lineup
@@ -231,8 +230,7 @@ const WEEKLY_LINEUP_CSS = [
   "assets/css/components/table-columns.css",
   "assets/css/pages/weekly-lineup-critical.css",
 ];
-
-// Fetch-picks-specific JS (display-only model viewer)
+// Fetch-picks-specific JS
 const FETCH_PICKS_JS = ["assets/js/features/fetch-picks-controller.js"];
 
 // Fetch-picks-specific CSS
@@ -243,6 +241,7 @@ const FETCH_PICKS_CSS = [
   "assets/css/components/table-columns.css",
   "assets/css/pages/fetch-picks-critical.css",
 ];
+
 
 // ── Build logic ───────────────────────────────────────────────────────────
 

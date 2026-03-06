@@ -35,7 +35,7 @@
   font-family: var(--font-heading);
   font-weight: var(--weight-bold);
   font-size: 1.4rem;
-  color: #fff;
+  color: rgba(0, 214, 137, 0.95);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   margin: 0;
@@ -49,17 +49,19 @@
 }
 
 #refresh-btn {
-  background: rgba(0, 214, 137, 0.12);
-  border: 1px solid rgba(0, 214, 137, 0.3);
-  color: var(--color-primary-bright);
-  padding: 6px 16px;
-  border-radius: 6px;
+  background: rgba(0, 214, 137, 0.1);
+  border: 1px solid rgba(0, 214, 137, 0.25);
+  color: rgba(0, 214, 137, 0.85);
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-radius: 50%;
   cursor: pointer;
-  font-family: var(--font-body);
-  font-size: var(--text-sm);
-  font-weight: var(--weight-semibold);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  font-size: 18px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   transition:
     background 0.2s,
     border-color 0.2s;
@@ -68,6 +70,18 @@
 #refresh-btn:hover {
   background: rgba(0, 214, 137, 0.22);
   border-color: rgba(0, 214, 137, 0.5);
+}
+
+/* ===== FETCH SECTION ===== */
+.mp-fetch-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 0;
+  margin-bottom: 8px;
+  border-bottom: 1px solid rgba(0, 214, 137, 0.08);
 }
 
 .update-time {
@@ -475,7 +489,7 @@
   margin: 4px 0 24px;
 }
 
-/* Toolbar row above a table: title left, fetch buttons right */
+/* Legacy toolbar (kept for compat) */
 .mp-table-toolbar {
   display: flex;
   align-items: center;
@@ -868,10 +882,10 @@
   background: rgba(229, 57, 53, 0.03);
 }
 
-/* ===== MOBILE ===== */
-@media (max-width: 768px) {
+/* ===== TABLET ===== */
+@media (max-width: 1024px) {
   .tracker-page {
-    padding: 0 12px 40px;
+    padding: 0 16px 40px;
   }
 
   #game-cards {
@@ -907,8 +921,4 @@
   }
 }
 
-@media (max-width: 480px) {
-  .tracker-kpis {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
+/* Mobile overrides handled by picks-tracker-mobile.css */

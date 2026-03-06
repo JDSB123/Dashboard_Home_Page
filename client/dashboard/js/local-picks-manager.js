@@ -1054,7 +1054,7 @@
       NCAAM: "assets/ncaam-logo.png",
       NCAAF: "assets/ncaaf-logo.png",
       MLB: "assets/icons/league-mlb.svg",
-      NHL: "assets/icons/league-nhl.svg",
+      NHL: "assets/icons/league-nhl-official.svg",
     };
     return LEAGUE_LOGOS_FALLBACK[leagueUpper] || "";
   }

@@ -733,6 +733,29 @@ body.page-fetch-picks .ft-fetch-league-btn.ft-fetch-all:hover {
   box-shadow: 0 0 12px rgba(0, 214, 137, 0.3);
 }
 
+body.page-fetch-picks .ft-fetch-dropdown-trigger {
+  min-width: 96px;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+body.page-fetch-picks .ft-fetch-menu {
+  right: 0;
+  left: auto;
+  min-width: 190px;
+}
+
+body.page-fetch-picks .league-fetch-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-transform: none;
+}
+
+body.page-fetch-picks .league-fetch-item span {
+  letter-spacing: 0.02em;
+}
+
 body.page-fetch-picks .league-logo-sm {
   width: 16px;
   height: 16px;

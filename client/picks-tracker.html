@@ -14,7 +14,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
-    <title>Picks Tracker | GBSV</title>
+    <title>Mobile Picks | GBSV</title>
 
     <link rel="icon" type="image/png" href="assets/Logo%208.5.png?v=20251216" />
 
@@ -86,7 +86,7 @@
         </li>
         <li>
           <a href="picks-tracker.html" class="nav-link" aria-current="page"
-            >Picks Tracker</a
+            >Mobile Picks</a
           >
         </li>
 
@@ -479,30 +479,69 @@
     <main class="tracker-page">
       <!-- Header -->
       <div class="tracker-header">
-        <div>
-          <h1>Picks Tracker</h1>
+        <div class="tracker-header-left">
+          <h1>Mobile Picks</h1>
           <span class="date-label" id="tracker-date-label">--</span>
         </div>
         <div class="tracker-header-actions">
           <span class="update-time"
-            >Last update: <span id="last-updated">--</span></span
+            >Last: <span id="last-updated">--</span></span
           >
-          <button id="refresh-btn" type="button">Refresh</button>
+          <button id="refresh-btn" type="button" aria-label="Refresh scores">↻</button>
         </div>
       </div>
 
-      <!-- KPIs -->
+      <!-- Fetch Toolbar — primary action, top of page -->
+      <div class="mp-fetch-section">
+        <div class="mp-fetch-bar">
+          <button
+            class="mp-fetch-btn mp-fetch-all"
+            data-mp-fetch="all"
+            aria-label="Fetch all model picks"
+            type="button"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+              <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+            </svg>
+            Fetch All
+          </button>
+          <button class="mp-fetch-btn" data-mp-fetch="nba" aria-label="Fetch NBA picks" type="button">
+            <img src="assets/nba-logo.png" class="mp-btn-icon" alt="" aria-hidden="true" />
+            NBA
+          </button>
+          <button class="mp-fetch-btn" data-mp-fetch="ncaab" aria-label="Fetch NCAAM picks" type="button">
+            <img src="assets/ncaam-logo.png" class="mp-btn-icon" alt="" aria-hidden="true" />
+            NCAAM
+          </button>
+        </div>
+        <span class="mp-last-sync" id="mp-last-refreshed" aria-live="polite"></span>
+      </div>
+
+      <!-- Model Picks cards -->
+      <div
+        class="mp-cards-container"
+        id="model-picks-cards"
+        aria-live="polite"
+        aria-atomic="false"
+      >
+        <div class="mp-empty-state">
+          <span class="mp-empty-icon">📊</span>
+          <span>Tap a button above to load today's model picks</span>
+        </div>
+      </div>
+
+      <!-- KPI strip -->
       <div class="tracker-kpis">
         <div class="kpi-card">
-          <div class="kpi-label">Total Risk</div>
+          <div class="kpi-label">Risk</div>
           <div class="kpi-value" id="kpi-risk">--</div>
         </div>
         <div class="kpi-card">
-          <div class="kpi-label">Max To Win</div>
+          <div class="kpi-label">To Win</div>
           <div class="kpi-value" id="kpi-to-win">--</div>
         </div>
         <div class="kpi-card">
-          <div class="kpi-label">Settled P&amp;L</div>
+          <div class="kpi-label">P&amp;L</div>
           <div class="kpi-value" id="kpi-pnl">--</div>
         </div>
         <div class="kpi-card">
@@ -514,54 +553,12 @@
           <div class="kpi-value" id="kpi-pending">--</div>
         </div>
         <div class="kpi-card">
-          <div class="kpi-label">Straights W-L</div>
+          <div class="kpi-label">W-L</div>
           <div class="kpi-value" id="kpi-record">--</div>
         </div>
       </div>
 
-      <!-- Live Game Cards -->
-      <h2 class="section-title">Live Scoreboard</h2>
-      <div id="game-cards"></div>
-
-      <!-- ===== Model Picks toolbar — above Straight Bets ===== -->
-      <div class="mp-table-toolbar">
-        <h2 class="section-title mp-title">Model Picks</h2>
-        <div class="mp-fetch-bar">
-          <button
-            class="mp-fetch-btn mp-fetch-all"
-            data-mp-fetch="all"
-            aria-label="Fetch all model picks"
-            type="button"
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
-              <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
-            </svg>
-            All
-          </button>
-          <button class="mp-fetch-btn" data-mp-fetch="nba" aria-label="Fetch NBA picks" type="button">
-            <img src="assets/nba-logo.png" class="mp-btn-icon" alt="" aria-hidden="true" />
-            NBA
-          </button>
-          <button class="mp-fetch-btn" data-mp-fetch="ncaab" aria-label="Fetch NCAAM picks" type="button">
-            <img src="assets/ncaam-logo.png" class="mp-btn-icon" alt="" aria-hidden="true" />
-            NCAAM
-          </button>
-          <span class="mp-last-sync" id="mp-last-refreshed" aria-live="polite"></span>
-        </div>
-      </div>
-      <div
-        class="mp-cards-container"
-        id="model-picks-cards"
-        aria-live="polite"
-        aria-atomic="false"
-      >
-        <div class="mp-empty-state">
-          <span class="mp-empty-icon">📊</span>
-          <span>Tap All, NBA, or NCAAM to load today's model predictions</span>
-        </div>
-      </div>
-
-      <!-- Straight Bets Table -->
+      <!-- Straight Bets -->
       <h2 class="section-title">
         Straight Bets (<span id="straights-count">0</span>)
       </h2>
@@ -582,7 +579,11 @@
         </table>
       </div>
 
-      <!-- Round Robin Bets Table -->
+      <!-- Live Scoreboard -->
+      <h2 class="section-title">Live Scoreboard</h2>
+      <div id="game-cards"></div>
+
+      <!-- Round Robins -->
       <h2 class="section-title">Round Robins (<span id="rr-count">0</span>)</h2>
       <div class="tracker-table-wrap">
         <table class="tracker-table">

@@ -12,7 +12,7 @@
 (function () {
   "use strict";
 
-  const { normalizeFireRating, getFunctionsBase, getContainerEndpoint, resolveTeam } =
+  const { normalizeFireRating, getFunctionsBase, getContainerEndpoint } =
     window.BaseSportFetcher?.utils || {};
 
   const fetcher = new window.BaseSportFetcher({
@@ -40,11 +40,12 @@
 
       const rawAway = pick.away_team || pick.awayTeam || pick.away || "";
       const rawHome = pick.home_team || pick.homeTeam || pick.home || "";
-      const awayTeam = resolveTeam(rawAway, "nhl").fullName || rawAway;
-      const homeTeam = resolveTeam(rawHome, "nhl").fullName || rawHome;
+      // Preserve model team labels exactly to avoid resolver side-effects.
+      const awayTeam = String(rawAway || "").trim();
+      const homeTeam = String(rawHome || "").trim();
       const marketType = (pick.market || pick.market_type || "puckline").toLowerCase();
 
-      let pickTeam = pick.pick || "";
+      let pickTeam = pick.pick_display || pick.pickLabel || pick.pick || "";
       let pickDirection = "";
       const upperPick = pickTeam.toUpperCase();
       if (upperPick === "OVER" || upperPick === "UNDER") {
@@ -81,9 +82,16 @@
         line: pick.market_line || pick.line || "",
         modelPrice: pick.model_line || "",
         modelSpread: pick.model_line || "",
-        rationale: pick.rationale || pick.reason || pick.analysis || "",
+        rationale:
+          pick.rationale ||
+          pick.reason ||
+          pick.analysis ||
+          pick.notes ||
+          pick.executive_summary ||
+          "",
         modelStamp: pick.model_version || pick.modelVersion || pick.model_tag || "",
         modelVersion: pick.model_version || pick.modelVersion || pick.model_tag || "",
+        rawPickLabel: pick.pickLabel || pick.pick_display || "",
       };
     },
   });

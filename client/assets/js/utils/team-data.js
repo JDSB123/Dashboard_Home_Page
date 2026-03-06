@@ -16,7 +16,7 @@
   const LEAGUE_LOGOS = {
     NBA: "/assets/nba-logo.png",
     NFL: "/assets/nfl-logo.png",
-    NHL: "/assets/icons/league-nhl.svg",
+    NHL: "/assets/icons/league-nhl-official.svg",
     MLB: "/assets/icons/league-mlb.svg",
     NCAAB: "/assets/icons/league-ncaam.svg",
     NCAAM: "/assets/icons/league-ncaam.svg",
@@ -66,13 +66,10 @@
     car: "car",
     cin: "cin",
     gb: "gb",
-    hou: "hou",
     jax: "jax",
     kc: "kc",
     lv: "lv",
     lar: "lar",
-    mia: "mia",
-    min: "min",
     ne: "ne",
     no: "no",
     nyg: "nyg",
@@ -82,7 +79,6 @@
     sf: "sf",
     tb: "tb",
     ten: "ten",
-    was: "wsh",
 
     // NCAA Basketball - numeric IDs
     duke: "150",

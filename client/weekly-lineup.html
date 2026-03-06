@@ -68,7 +68,7 @@
           >
         </li>
         <li><a href="odds-market.html" class="nav-link">Odds Market</a></li>
-        <li><a href="picks-tracker.html" class="nav-link">Picks Tracker</a></li>
+        <li><a href="picks-tracker.html" class="nav-link">Mobile Picks</a></li>
         <li class="nav-dropdown">
           <button
             class="nav-link nav-dropdown-trigger"
@@ -557,83 +557,79 @@
                   </button>
                 </div>
               </div>
-              <button class="ft-clear" id="ft-clear" type="button" hidden>Clear</button>
+              <button class="ft-clear" id="ft-clear" type="button" hidden>
+                Clear
+              </button>
             </div>
             <div class="ft-right">
               <div class="fetch-controls-wrapper">
                 <div class="ft-fetch-buttons">
-                  <div class="ft-all-group">
+                  <div class="ft-dropdown ft-fetch-dropdown">
                     <button
-                      class="ft-fetch-league-btn ft-fetch-all"
-                      data-fetch="all"
-                      title="Refresh All"
+                      class="ft-dropdown-btn ft-fetch-league-btn ft-fetch-dropdown-trigger"
+                      id="fetch-leagues-trigger"
+                      aria-expanded="false"
+                      aria-haspopup="true"
+                      title="Fetch by league"
+                      type="button"
                     >
-                      <svg
-                        class="refresh-icon"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                      >
-                        <path
-                          d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"
-                        />
-                      </svg>
-                      <span>All</span>
+                      <span>Leagues</span>
+                      <span aria-hidden="true">▾</span>
                     </button>
-                    <span class="ft-last-refreshed" id="ft-last-refreshed"
-                      >Last: <span class="sync-time">-</span></span
+                    <div
+                      class="ft-dropdown-menu ft-fetch-menu"
+                      id="fetch-leagues-menu"
                     >
+                      <button
+                        class="ft-dropdown-item league-fetch-item"
+                        data-fetch="nba"
+                        type="button"
+                      >
+                        <img
+                          src="assets/nba-logo.png"
+                          class="league-logo-sm"
+                          alt="NBA"
+                        />
+                        <span>NBA Picks</span>
+                      </button>
+                      <button
+                        class="ft-dropdown-item league-fetch-item"
+                        data-fetch="ncaab"
+                        type="button"
+                      >
+                        <img
+                          src="assets/ncaam-logo.png"
+                          class="league-logo-sm"
+                          alt="NCAAM"
+                        />
+                        <span>NCAAM Picks</span>
+                      </button>
+                      <button
+                        class="ft-dropdown-item league-fetch-item"
+                        data-fetch="mlb"
+                        type="button"
+                      >
+                        <img
+                          src="assets/mlb-logo.png"
+                          class="league-logo-sm"
+                          alt="MLB"
+                        />
+                        <span>MLB Picks</span>
+                      </button>
+                      <button
+                        class="ft-dropdown-item league-fetch-item"
+                        data-fetch="nhl"
+                        type="button"
+                      >
+                        <img
+                          src="assets/icons/league-nhl-official.svg"
+                          class="league-logo-sm"
+                          alt="NHL"
+                        />
+                        <span>NHL Picks</span>
+                      </button>
+                    </div>
                   </div>
-                  <div class="fetch-separator"></div>
-                  <button
-                    class="ft-fetch-league-btn"
-                    data-fetch="nba"
-                    title="Fetch NBA"
-                  >
-                    <img
-                      src="assets/nba-logo.png"
-                      class="league-logo-sm"
-                      alt="NBA"
-                    />
-                    <span class="league-label">NBA</span>
-                  </button>
-                  <button
-                    class="ft-fetch-league-btn"
-                    data-fetch="ncaab"
-                    title="Fetch NCAAM"
-                  >
-                    <img
-                      src="assets/ncaam-logo.png"
-                      class="league-logo-sm"
-                      alt="NCAAM"
-                    />
-                    <span class="league-label">NCAAM</span>
-                  </button>
-                  <button
-                    class="ft-fetch-league-btn"
-                    data-fetch="mlb"
-                    title="Fetch MLB"
-                  >
-                    <img
-                      src="assets/mlb-logo.png"
-                      class="league-logo-sm"
-                      alt="MLB"
-                    />
-                    <span class="league-label">MLB</span>
-                  </button>
-                  <button
-                    class="ft-fetch-league-btn"
-                    data-fetch="nhl"
-                    title="Fetch NHL"
-                  >
-                    <img
-                      src="assets/nhl-logo.png"
-                      class="league-logo-sm"
-                      alt="NHL"
-                    />
-                    <span class="league-label">NHL</span>
-                  </button>
                   <div class="fetch-separator"></div>
                   <button
                     class="ft-clear-slate-btn"
@@ -825,11 +821,47 @@
       </div>
     </main>
 
+    <!-- Bet Slip Panel (slides in from right) -->
+    <aside class="bet-slip" id="bet-slip" aria-label="Bet Slip">
+      <div class="bet-slip-header">
+        <h2 class="bet-slip-title">Bet Slip</h2>
+        <span class="bet-slip-count" id="slip-count">0</span>
+        <button
+          class="bet-slip-toggle"
+          id="slip-toggle"
+          aria-label="Toggle bet slip"
+        >
+          <span class="toggle-icon">◀</span>
+        </button>
+      </div>
+      <div class="bet-slip-body" id="slip-body">
+        <div class="bet-slip-empty" id="slip-empty">
+          <span class="slip-empty-icon">🎯</span>
+          <span class="slip-empty-text">Click any pick row to add to slip</span>
+        </div>
+        <div class="bet-slip-picks" id="slip-picks">
+          <!-- Selections rendered by JS -->
+        </div>
+      </div>
+      <div class="bet-slip-footer" id="slip-footer" hidden>
+        <div class="slip-summary">
+          <div class="slip-row">
+            <span class="slip-label">Total Risk</span>
+            <span class="slip-value" id="slip-risk">$0</span>
+          </div>
+          <div class="slip-row">
+            <span class="slip-label">To Win</span>
+            <span class="slip-value slip-win" id="slip-win">$0</span>
+          </div>
+        </div>
+        <button class="slip-clear-btn" id="slip-clear">Clear All</button>
+      </div>
+    </aside>
+
     <!-- Mobile Fetch FAB (phones only) -->
     <div class="mobile-fab-menu" id="mobile-fetch-menu" hidden>
       <h4>Fetch Picks</h4>
       <div class="fab-list">
-        <button class="fab-item" data-fetch="all">All</button>
         <button class="fab-item" data-fetch="nba">NBA</button>
         <button class="fab-item" data-fetch="ncaab">NCAAM</button>
         <button class="fab-item" data-fetch="mlb">MLB</button>
