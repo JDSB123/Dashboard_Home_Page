@@ -83,6 +83,9 @@ jobs:
         working-directory: azure-functions
         run: npm ci --production
 
+      - name: Remove non-HTTP functions (SWA only supports httpTrigger)
+        run: rm -rf azure-functions/GradePicks azure-functions/SignalRInfo azure-functions/__tests__
+
       - name: Build and Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
