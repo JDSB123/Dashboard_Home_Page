@@ -1286,7 +1286,8 @@ body.page-active-picks .toolbar-container.toolbar-layout {
   z-index: 10050;
   background: transparent !important;
   border: none !important;
-  border-bottom: none !important;
+  border-bottom: 1px solid rgba(100, 130, 170, 0.25) !important;
+  padding-bottom: 10px;
 }
 
 .ft-left,
