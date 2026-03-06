@@ -516,6 +516,56 @@
         </div>
       </div>
 
+      <!-- ===== Model Picks — Inline Fetch Section ===== -->
+      <section class="mp-section" aria-label="Model Picks">
+        <div class="mp-section-header">
+          <h2 class="section-title mp-title">Today's Model Picks</h2>
+          <div class="mp-fetch-bar">
+            <button
+              class="mp-fetch-btn mp-fetch-all"
+              data-mp-fetch="all"
+              aria-label="Fetch all model picks"
+              type="button"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+                <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+              </svg>
+              All
+            </button>
+            <button
+              class="mp-fetch-btn"
+              data-mp-fetch="nba"
+              aria-label="Fetch NBA picks"
+              type="button"
+            >
+              <img src="assets/nba-logo.png" class="mp-btn-icon" alt="" aria-hidden="true" />
+              NBA
+            </button>
+            <button
+              class="mp-fetch-btn"
+              data-mp-fetch="ncaab"
+              aria-label="Fetch NCAAM picks"
+              type="button"
+            >
+              <img src="assets/ncaam-logo.png" class="mp-btn-icon" alt="" aria-hidden="true" />
+              NCAAM
+            </button>
+            <span class="mp-last-sync" id="mp-last-refreshed" aria-live="polite"></span>
+          </div>
+        </div>
+        <div
+          class="mp-cards-container"
+          id="model-picks-cards"
+          aria-live="polite"
+          aria-atomic="false"
+        >
+          <div class="mp-empty-state">
+            <span class="mp-empty-icon">📊</span>
+            <span>Tap All, NBA, or NCAAM to load today's model predictions</span>
+          </div>
+        </div>
+      </section>
+
       <!-- Live Game Cards -->
       <h2 class="section-title">Live Scoreboard</h2>
       <div id="game-cards"></div>
@@ -564,6 +614,8 @@
     <script src="dist/core.min.js?v=36.01.0" defer></script>
     <!-- Page-specific script -->
     <script src="assets/js/features/picks-tracker.js?v=36.01.0" defer></script>
+    <!-- Inline model picks fetcher (iPhone-optimized card output) -->
+    <script src="assets/js/features/picks-tracker-fetch.js?v=36.01.0" defer></script>
     <script>
       (function () {
         try {

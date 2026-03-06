@@ -466,6 +466,361 @@
   flex-shrink: 0;
 }
 
+/* ==========================================================================
+   MODEL PICKS — iPhone-first card output
+   ========================================================================== */
+
+/* Section wrapper */
+.mp-section {
+  margin: 4px 0 24px;
+}
+
+/* Section header row: title + fetch buttons on same line */
+.mp-section-header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  margin-bottom: 12px;
+}
+
+.mp-title {
+  margin: 0;
+  white-space: nowrap;
+}
+
+/* Fetch bar */
+.mp-fetch-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.mp-fetch-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 13px;
+  min-height: 38px;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 214, 137, 0.25);
+  background: rgba(0, 214, 137, 0.06);
+  color: rgba(200, 220, 210, 0.9);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, opacity 0.1s;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  user-select: none;
+}
+
+.mp-fetch-btn:hover:not(:disabled),
+.mp-fetch-btn:active:not(:disabled) {
+  background: rgba(0, 214, 137, 0.14);
+  border-color: rgba(0, 214, 137, 0.45);
+  color: #fff;
+}
+
+.mp-fetch-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.mp-fetch-btn svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.mp-btn-icon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+/* Loading animation */
+.mp-fetch-btn.mp-loading svg,
+.mp-fetch-btn.mp-loading .mp-btn-icon {
+  animation: mp-spin 0.8s linear infinite;
+}
+
+@keyframes mp-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* State colors */
+.mp-fetch-btn.mp-ok {
+  border-color: rgba(0, 214, 137, 0.6);
+  background: rgba(0, 214, 137, 0.12);
+  color: #00d689;
+}
+
+.mp-fetch-btn.mp-err {
+  border-color: rgba(255, 80, 80, 0.4);
+  background: rgba(255, 80, 80, 0.07);
+  color: rgba(255, 120, 120, 0.9);
+}
+
+.mp-fetch-all {
+  border-color: rgba(0, 214, 137, 0.35);
+  background: rgba(0, 214, 137, 0.09);
+}
+
+/* Last-refreshed timestamp */
+.mp-last-sync {
+  font-size: 11px;
+  color: rgba(160, 175, 190, 0.55);
+  white-space: nowrap;
+}
+
+/* Cards container: vertical stack, full width */
+.mp-cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Empty / error state */
+.mp-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 28px 16px;
+  color: rgba(160, 175, 190, 0.55);
+  font-size: 13px;
+  text-align: center;
+}
+
+.mp-empty-icon {
+  font-size: 26px;
+  line-height: 1;
+}
+
+.mp-err-state {
+  color: rgba(255, 120, 120, 0.75);
+}
+
+/* ── Individual pick card ─────────────────────────────────────────────── */
+
+.mp-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 214, 137, 0.1);
+  background: linear-gradient(
+    160deg,
+    rgba(8, 20, 36, 0.96) 0%,
+    rgba(4, 12, 24, 0.99) 100%
+  );
+  overflow: hidden;
+  transition: border-color 0.15s;
+}
+
+.mp-card:hover {
+  border-color: rgba(0, 214, 137, 0.22);
+}
+
+/* Card header: league icon + matchup + date */
+.mp-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.mp-league-icon {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  flex-shrink: 0;
+  border-radius: 3px;
+}
+
+.mp-league-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(60, 255, 181, 0.1);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: rgba(0, 214, 137, 0.85);
+  flex-shrink: 0;
+}
+
+.mp-matchup {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 600;
+  color: #e8f0f4;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mp-at {
+  color: rgba(160, 175, 190, 0.5);
+  font-weight: 400;
+  font-size: 12px;
+}
+
+.mp-date {
+  font-size: 11px;
+  color: rgba(160, 175, 190, 0.5);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Card body: pick label + odds */
+.mp-card-body {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 10px 14px 8px;
+}
+
+.mp-pick-label {
+  font-size: 17px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+}
+
+.mp-odds-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(180, 195, 210, 0.65);
+  white-space: nowrap;
+}
+
+/* Card footer: edge + fire + segment pill + pick type */
+.mp-card-footer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 7px 14px 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.mp-edge-badge {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+  letter-spacing: 0.02em;
+}
+
+.mp-edge-high {
+  background: rgba(0, 214, 137, 0.15);
+  color: #00d689;
+  border: 1px solid rgba(0, 214, 137, 0.3);
+}
+
+.mp-edge-mid {
+  background: rgba(255, 185, 50, 0.12);
+  color: rgba(255, 200, 80, 0.9);
+  border: 1px solid rgba(255, 185, 50, 0.25);
+}
+
+.mp-edge-low {
+  background: rgba(160, 175, 190, 0.08);
+  color: rgba(160, 175, 190, 0.6);
+  border: 1px solid rgba(160, 175, 190, 0.15);
+}
+
+.mp-fire {
+  font-size: 14px;
+  line-height: 1;
+  margin-right: 2px;
+}
+
+.mp-segment-pill {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 2px 8px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(180, 195, 210, 0.7);
+}
+
+/* Segment colour variants (mirrors existing segment-colors.css tokens) */
+.mp-segment-pill[data-segment*="fg"],
+.mp-segment-pill[data-segment*="full"] {
+  background: rgba(80, 160, 255, 0.1);
+  color: rgba(120, 185, 255, 0.85);
+}
+
+.mp-segment-pill[data-segment*="1h"] {
+  background: rgba(255, 185, 50, 0.1);
+  color: rgba(255, 200, 80, 0.85);
+}
+
+.mp-segment-pill[data-segment*="2h"] {
+  background: rgba(180, 100, 255, 0.1);
+  color: rgba(200, 140, 255, 0.85);
+}
+
+.mp-pick-type-tag {
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(160, 175, 190, 0.5);
+  margin-left: auto;
+}
+
+/* ── Skeleton loading cards ──────────────────────────────────────────── */
+
+.mp-card-skeleton {
+  padding: 12px 14px;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.mp-skel-row {
+  height: 14px;
+  border-radius: 6px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.05) 25%,
+    rgba(255, 255, 255, 0.09) 50%,
+    rgba(255, 255, 255, 0.05) 75%
+  );
+  background-size: 200% 100%;
+  animation: mp-shimmer 1.4s ease-in-out infinite;
+  width: 80%;
+}
+
+.mp-skel-body {
+  height: 22px;
+  width: 60%;
+  animation-delay: 0.1s;
+}
+
+.mp-skel-footer {
+  height: 12px;
+  width: 45%;
+  animation-delay: 0.2s;
+}
+
+@keyframes mp-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
 .status-dot[data-status="pending"] {
   background: rgba(136, 140, 149, 0.6);
 }
