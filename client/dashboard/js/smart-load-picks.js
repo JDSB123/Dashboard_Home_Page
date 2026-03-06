@@ -471,7 +471,10 @@ function getTeamAbbr(teamName) {
   }
 
   // Delegate to SharedUtils which has comprehensive team lookups for all leagues
-  if (window.SharedUtils && typeof window.SharedUtils.getTeamAbbr === "function") {
+  if (
+    window.SharedUtils &&
+    typeof window.SharedUtils.getTeamAbbr === "function"
+  ) {
     const sharedAbbr = window.SharedUtils.getTeamAbbr(teamName);
     // SharedUtils returns last-word fallback for unknowns — only trust it when
     // the result differs from a naive last-word extraction (i.e. it hit a real mapping)
@@ -2741,6 +2744,76 @@ async function loadPicksFromDatabase() {
   }
 }
 
+/**
+ * Fetch tracked (locked) picks from Weekly Lineup via Cosmos DB,
+ * merge them into LocalPicksManager (deduplicating by pick id),
+ * and refresh the dashboard table so they appear automatically.
+ */
+async function loadTrackedWeeklyPicks() {
+  try {
+    if (!window.PicksService) return;
+
+    // DB sync must be enabled
+    if (
+      window.APP_CONFIG?.ENABLE_DB_SYNC === false &&
+      !window.DEV_OVERRIDE_CONFIG?.ENABLE_DB_SYNC
+    ) {
+      return;
+    }
+
+    console.log(
+      "[WEEKLY→DASH] Fetching tracked (locked) picks from Cosmos DB...",
+    );
+
+    const lockedPicks = await window.PicksService.getAll({
+      locked: true,
+      limit: 200,
+    });
+
+    if (!lockedPicks || lockedPicks.length === 0) {
+      console.log("[WEEKLY→DASH] No tracked weekly picks found");
+      return;
+    }
+
+    console.log(
+      `[WEEKLY→DASH] Received ${lockedPicks.length} tracked picks from Cosmos DB`,
+    );
+
+    // Deduplicate against existing localStorage picks
+    const existing = window.LocalPicksManager
+      ? window.LocalPicksManager.getAll()
+      : [];
+    const existingIds = new Set(existing.map((p) => p.id));
+
+    const newPicks = lockedPicks.filter((p) => !existingIds.has(p.id));
+
+    if (newPicks.length === 0) {
+      console.log(
+        "[WEEKLY→DASH] All tracked picks already in dashboard — no merge needed",
+      );
+      return;
+    }
+
+    // Tag picks with source, add logos
+    const enriched = newPicks.map((pick) => ({
+      ...pick,
+      source: pick.source || "weekly-lineup",
+      awayLogo: pick.awayLogo || getTeamLogo(pick.awayTeam, pick.sport),
+      homeLogo: pick.homeLogo || getTeamLogo(pick.homeTeam, pick.sport),
+    }));
+
+    // Merge into LocalPicksManager (which saves to localStorage)
+    if (window.LocalPicksManager) {
+      window.LocalPicksManager.add(enriched);
+      console.log(
+        `[WEEKLY→DASH] ✅ Merged ${enriched.length} new tracked picks into dashboard`,
+      );
+    }
+  } catch (error) {
+    console.warn("[WEEKLY→DASH] Failed to load tracked weekly picks:", error);
+  }
+}
+
 function initializePicksAndRecords() {
   // Dashboard picks are managed by LocalPicksManager (reads from gbsv_picks localStorage).
   // loadAndAppendPicks() fetches /api/picks which returns ALL Cosmos DB picks regardless
@@ -2750,6 +2823,11 @@ function initializePicksAndRecords() {
   // Migration/DB check only (non-blocking, non-rendering)
   loadPicksFromDatabase().catch(() => {
     // Non-fatal — LocalPicksManager handles rendering
+  });
+
+  // Merge tracked weekly-lineup picks into dashboard (non-blocking)
+  loadTrackedWeeklyPicks().catch(() => {
+    // Non-fatal — dashboard still works with existing localStorage picks
   });
 }
 
