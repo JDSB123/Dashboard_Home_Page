@@ -5,7 +5,7 @@
  * Primary Route: /api/model/nba/predictions/latest  (same-origin proxy)
  * Fallback Route: {NBA_API_URL}/predictions/latest  (direct ACA)
  *
- * ACA: nbagbsvv5-aca (nba_gbsv_v5_az resource group)
+ * ACA: nbagbsvv5-api (nba_gbsv_v5_az resource group)
  * Built on BaseSportFetcher shared infrastructure.
  */
 

@@ -39,41 +39,9 @@ class NavigationManager {
     this.setupResponsiveBehavior();
     this.setupAccessibility();
     this.setupNavState();
-    this.setupScrollNav();
     this.setupTableScrollIndicators();
 
     this.isInitialized = true;
-  }
-
-  setupScrollNav() {
-    // Pin the nav with a frosted background once the user scrolls past it.
-    // At scroll=0 the nav stays transparent (absolute over the hero).
-    // Once scrolled past its own height the nav snaps fixed with a dark bg.
-    const nav = document.querySelector(".brand-nav");
-    if (!nav) return;
-
-    let pinH = nav.offsetHeight || 48;
-
-    const tick = () => {
-      if (window.innerWidth < 1025) {
-        // Mobile already has its own fixed positioning — don't interfere
-        nav.classList.remove("nav-pinned");
-        return;
-      }
-      nav.classList.toggle("nav-pinned", window.scrollY > pinH);
-    };
-
-    window.addEventListener("scroll", tick, { passive: true });
-    window.addEventListener(
-      "resize",
-      () => {
-        pinH = nav.offsetHeight || 48;
-        tick();
-      },
-      { passive: true },
-    );
-
-    tick(); // run once on load
   }
 
   setupMobileMenu() {
@@ -484,8 +452,6 @@ class NavigationManager {
     try {
       const links = document.querySelectorAll(".nav-link");
       const path = (location.pathname.split("/").pop() || "").toLowerCase();
-      // Strip query string from path (e.g. fetch-picks.html?sport=nba → fetch-picks.html)
-      const cleanPath = path.split("?")[0];
 
       links.forEach((link) => {
         const href = (link.getAttribute("href") || "").toLowerCase();
@@ -498,26 +464,10 @@ class NavigationManager {
           return;
         }
 
-        // Special case: Fetch Picks trigger button has no href but should
-        // be active whenever the current page is fetch-picks.html
-        if (link.id === "fetch-picks-trigger") {
-          const isActive = cleanPath === "fetch-picks.html";
-          link.classList.toggle("active", isActive);
-          if (isActive) {
-            link.setAttribute("aria-current", "page");
-          } else {
-            link.removeAttribute("aria-current");
-          }
-          return;
-        }
-
-        // Strip query string from href for comparison
-        const cleanHref = href.split("?")[0];
-
         const isActive =
-          !!cleanHref &&
-          (cleanHref === cleanPath || // Exact file match
-            (cleanPath === "" && cleanHref === "dashboard.html")); // Root route matches dashboard.html only
+          !!href &&
+          (href === path || // Exact file match
+            (path === "" && href === "dashboard.html")); // Root route matches dashboard.html only
 
         link.classList.toggle("active", isActive);
         if (isActive) {

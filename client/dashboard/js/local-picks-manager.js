@@ -1280,11 +1280,12 @@
 
   function createPickRow(pick, idx) {
     // STRICT VALIDATION: Skip incomplete picks that would show empty rows
+    // Matchup must come from explicit game/matchup string or both team names.
+    // Description alone is not sufficient — stale DB records have descriptions but no real game data.
     const hasValidMatchup =
       pick.game ||
       pick.matchup ||
-      (pick.awayTeam && pick.homeTeam) ||
-      (pick.description && !pick.description.toLowerCase().includes("tbd"));
+      (pick.awayTeam && pick.homeTeam);
 
     const hasValidPick =
       pick.pick ||

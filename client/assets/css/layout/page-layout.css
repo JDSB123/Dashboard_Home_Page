@@ -18,12 +18,7 @@ body.page-glow {
 body.page-glow::after {
   content: "";
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100vw;
-  height: 100vh;
+  inset: 0;
   pointer-events: none;
   z-index: -3;
   background:
@@ -139,12 +134,7 @@ body.page-active-picks {
 body.page-active-picks::before {
   content: "";
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100vw;
-  height: 100vh;
+  inset: 0;
   /* Metallic Forest Green Overlay with In-Place Shimmer */
   background-image:
         /* Metallic forest green accent spots - these will pulse in place */
@@ -240,12 +230,7 @@ body.page-active-picks .picks-table thead th {
 .main-container::before {
   content: "";
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100vw;
-  height: 100vh;
+  inset: 0;
   pointer-events: none;
   z-index: -1;
   /* Rippling metallic forest green gradient overlay */

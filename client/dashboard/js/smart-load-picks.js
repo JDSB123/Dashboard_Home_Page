@@ -1999,12 +1999,11 @@ function buildPickRow(pick, index) {
    * Create a properly formatted table row matching the EXACT template structure
    */
   // STRICT VALIDATION: Require both a valid matchup AND pick selection
-  // This filters out stale placeholder data
+  // This filters out stale placeholder data (partial DB records with only league/segment/status)
   const hasValidMatchup =
     pick.game ||
     pick.matchup ||
-    (pick.awayTeam && pick.homeTeam) ||
-    (pick.description && !pick.description.toLowerCase().includes("tbd"));
+    (pick.awayTeam && pick.homeTeam);
 
   const hasValidPick =
     pick.pick ||

@@ -203,21 +203,19 @@ body.page-weekly-lineup .kpi-subtext {
 body.page-weekly-lineup .table-container,
 .page-weekly-lineup .weekly-lineup-table-wrapper {
   margin-top: 0;
-  margin-left: 0.5in;
-  margin-right: 0.5in;
-  width: calc(100% - 1in);
+  margin-left: 0.75in;
+  margin-right: 0.75in;
+  width: calc(100% - 1.5in);
   box-sizing: border-box;
   /* Don't create a stacking context that traps dropdowns */
   position: relative;
   z-index: 1;
   overflow: visible !important; /* Allow dropdowns to overflow */
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  border-radius: 0 !important;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
   padding: 0;
-  position: relative;
-  overflow: visible; /* allow page scroll so sticky header anchors to viewport */
   contain: none !important; /* CRITICAL: don't trap dropdown cards in a containment context */
 }
 
@@ -2331,8 +2329,8 @@ body.page-weekly-lineup .filter-title,
   position: relative;
   /* When no chips are shown, keep the table tighter to the toolbar */
   margin-bottom: 8px;
-  margin-left: 24px;
-  margin-right: 24px;
+  margin-left: 0;
+  margin-right: 0;
   z-index: 101; /* Above table z-index (100) */
   min-height: 0;
   transition: min-height 0.3s ease;
@@ -6391,7 +6389,7 @@ body.page-weekly-lineup .weekly-lineup-table-wrapper {
   border: none;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
   border-radius: 8px;
-  margin-top: 8px;
+  margin-top: 0;
   margin-left: 0.75in;
   margin-right: 0.75in;
   width: calc(100% - 1.5in);
@@ -6547,7 +6545,7 @@ body.page-weekly-lineup .filter-toolbar .ft-right .fetch-separator {
 /* Ensure toolbar container is transparent */
 body.page-weekly-lineup .toolbar-container {
   background: transparent;
-  margin-bottom: 12px;
+  margin-bottom: 0;
 }
 
 body.page-weekly-lineup .main-container {
