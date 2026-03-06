@@ -1,27 +1,51 @@
 'use strict';
 
 /**
- * ODDS MARKET v33.00.0 - Vegas Elite Odds Comparison
- * Production release - Real API data only
+ * ODDS MARKET v34.00.0 - Vegas Elite Odds Comparison
+ * Production release - Live data from The Odds API v4
  *
- * Data Sources:
- * - NCAAF, NFL: SportsDataIO API (via Azure Functions)
- * - NBA, NCAAB, NHL: The Odds API (via Azure Functions)
+ * Data Source: The Odds API via /api/odds/{sport}/odds Azure Function proxy
+ * Sports: NBA, NCAAB, NFL, NCAAF, NHL, MLB (fetched in parallel)
  *
  * Shows odds from major market sportsbooks for comparison.
  * Your connected books (Hulk Wager, etc.) are for PLACING bets.
  */
 (function() {
     // ===== MARKET SPORTSBOOKS (where odds come from) =====
-    // These are the major books that SportsDataIO and The Odds API provide odds from
+    // These are the major books that The Odds API provides odds from
     const SPORTSBOOKS = [
         { key: 'draftkings', name: 'DraftKings', shortName: 'DK' },
         { key: 'fanduel', name: 'FanDuel', shortName: 'FD' },
         { key: 'betmgm', name: 'BetMGM', shortName: 'MGM' },
-        { key: 'caesars', name: 'Caesars', shortName: 'CZR' },
-        { key: 'pointsbet', name: 'PointsBet', shortName: 'PB' },
+        { key: 'williamhill_us', name: 'Caesars', shortName: 'CZR' },
+        { key: 'pointsbetus', name: 'PointsBet', shortName: 'PB' },
         { key: 'bovada', name: 'Bovada', shortName: 'BOV' }
     ];
+
+    // Map Odds API bookmaker keys to our SPORTSBOOKS keys (handles aliases)
+    const BOOKMAKER_KEY_MAP = {
+        draftkings: 'draftkings',
+        fanduel: 'fanduel',
+        betmgm: 'betmgm',
+        williamhill_us: 'williamhill_us',
+        caesars: 'williamhill_us',
+        pointsbetus: 'pointsbetus',
+        bovada: 'bovada',
+        betonlineag: 'bovada', // fallback alias
+    };
+
+    // Sports to fetch from the OddsAPI proxy
+    const SPORT_CONFIGS = [
+        { key: 'nba',   label: 'NBA',   apiSport: 'nba' },
+        { key: 'ncaab', label: 'NCAAB', apiSport: 'ncaab' },
+        { key: 'nfl',   label: 'NFL',   apiSport: 'nfl' },
+        { key: 'ncaaf', label: 'NCAAF', apiSport: 'ncaaf' },
+        { key: 'nhl',   label: 'NHL',   apiSport: 'nhl' },
+        { key: 'mlb',   label: 'MLB',   apiSport: 'mlb' },
+    ];
+
+    // ===== AUTO-REFRESH CONFIG =====
+    const REFRESH_INTERVAL_MS = 120000; // 2 min — matches server cache TTL
 
     // ===== STATE =====
     const state = {
@@ -30,18 +54,21 @@
         sport: 'all',
         liveOnly: false,
         betSlip: [],
-        lastRefresh: null
+        lastRefresh: null,
+        refreshTimerId: null,
+        countdownId: null,
+        nextRefreshAt: null,
+        autoRefreshPaused: false
     };
 
     // ===== INITIALIZATION =====
     document.addEventListener('DOMContentLoaded', init);
 
     function init() {
-        console.log('📊 Odds Market v33.00.0 initializing...');
-        console.log('📡 Data sources: SportsDataIO (NFL, NCAAF) | The Odds API (NBA, NCAAB, NHL)');
+        console.log('[OddsMarket] v34.00.0 initializing — The Odds API v4');
         renderBookHeaders();
         bindEvents();
-        loadLiveOdds(); // v33.00.0: Load from real APIs
+        loadLiveOdds();
         render();
         updateKPIs();
     }
@@ -77,11 +104,11 @@
             });
         }
 
-        // Refresh button
+        // Refresh button — re-fetch live data from APIs
         const refreshBtn = document.getElementById('refresh-btn');
         if (refreshBtn) {
             refreshBtn.addEventListener('click', () => {
-                simulateRefresh();
+                loadLiveOdds();
             });
         }
 
@@ -99,6 +126,21 @@
 
         // Click on KPI slip tile to toggle bet slip
         document.querySelector('[data-tile-id="3"]')?.addEventListener('click', toggleBetSlip);
+
+        // Pause auto-refresh when tab is hidden, resume when visible
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                stopAutoRefresh();
+            } else {
+                // Tab became visible — refresh immediately if stale (>2min since last)
+                const stale = !state.lastRefresh || (Date.now() - state.lastRefresh.getTime() > REFRESH_INTERVAL_MS);
+                if (stale) {
+                    loadLiveOdds();
+                } else {
+                    scheduleAutoRefresh();
+                }
+            }
+        });
     }
 
     // ===== RENDER BOOK HEADERS =====
@@ -116,178 +158,171 @@
         container.innerHTML = html;
     }
 
-    // ===== LOAD LIVE ODDS FROM APIs =====
-    // v33.00.0: Fetch real odds data, show loading state
-    async function loadLiveOdds() {
-        state.games = [];
-        state.lastRefresh = new Date();
-
-        // Show loading state
-        const container = document.getElementById('odds-grid');
-        if (container) {
-            container.innerHTML = '<div class="loading-odds">Loading live odds from market APIs...</div>';
-        }
-
-        try {
-            const API_BASE = window.APP_CONFIG?.API_BASE_URL || window.APP_CONFIG?.API_BASE_FALLBACK || `${window.location.origin}/api`;
-
-            // Fetch odds from Azure Functions proxy
-            const response = await fetch(`${API_BASE}/odds/all`);
-
-            if (!response.ok) {
-                throw new Error(`API returned ${response.status}`);
-            }
-
-            const data = await response.json();
-
-            if (data.games && data.games.length > 0) {
-                state.games = data.games;
-                console.log(`✅ Loaded ${state.games.length} games with live odds`);
-            } else {
-                console.log('⚠️ No games with odds available');
-                showNoOddsMessage();
-            }
-        } catch (error) {
-            console.error('❌ Error fetching odds:', error);
-            showNoOddsMessage('Unable to load odds. API may be unavailable.');
-        }
-
-        updateRefreshTime();
-        render();
-    }
-
-    function showNoOddsMessage(message = 'No odds available at this time.') {
-        const container = document.getElementById('odds-grid');
-        if (container) {
-            container.innerHTML = `<div class="no-odds-message">${message}</div>`;
-        }
-    }
-
+    // ===== TRANSFORM ODDS API EVENT → UI GAME =====
     /**
-     * Create a game with realistic odds across sportsbooks
-     * Lines vary by 0.5 points between books (realistic market variance)
+     * Convert a raw Odds API v4 event into the shape our renderer expects.
+     * Input: { id, sport_key, home_team, away_team, commence_time, bookmakers: [...] }
+     * Output: { id, sport, away, home, time, isLive, liveData, books: { [bookKey]: { spread, moneyline, total } } }
      */
-    function createGame(sport, awayName, awayAbbr, awayRecord, homeName, homeAbbr, homeRecord, baseOdds, time, isLive, liveData = null) {
-        const id = `${sport}-${awayAbbr}-${homeAbbr}`.toLowerCase();
-        const { spread: baseSpread, total: baseTotal } = baseOdds;
-
-        // Generate odds for each book with realistic half-point variations
+    function transformEvent(event, sportLabel) {
         const books = {};
-        SPORTSBOOKS.forEach((book, idx) => {
-            // 5% chance a book doesn't have odds (N/A)
-            if (Math.random() < 0.05) {
-                books[book.key] = null;
-                return;
+
+        // Build a set of our tracked bookmaker keys for fast lookup
+        const trackedKeys = new Set(SPORTSBOOKS.map(b => b.key));
+
+        for (const bookie of (event.bookmakers || [])) {
+            const mappedKey = BOOKMAKER_KEY_MAP[bookie.key];
+            if (!mappedKey || !trackedKeys.has(mappedKey)) continue;
+
+            // Initialize book entry (first writer wins — skip if alias already filled)
+            if (books[mappedKey]) continue;
+
+            const entry = {
+                spread:    { away: { line: null, odds: null, movement: null }, home: { line: null, odds: null, movement: null } },
+                moneyline: { away: { odds: null, movement: null }, home: { odds: null, movement: null } },
+                total:     { over: { line: null, odds: null, movement: null }, under: { line: null, odds: null, movement: null } }
+            };
+
+            for (const market of (bookie.markets || [])) {
+                const outcomes = market.outcomes || [];
+
+                if (market.key === 'spreads') {
+                    for (const o of outcomes) {
+                        if (o.name === event.home_team) {
+                            entry.spread.home = { line: o.point, odds: o.price, movement: null };
+                        } else {
+                            entry.spread.away = { line: o.point, odds: o.price, movement: null };
+                        }
+                    }
+                } else if (market.key === 'h2h') {
+                    for (const o of outcomes) {
+                        if (o.name === event.home_team) {
+                            entry.moneyline.home = { odds: o.price, movement: null };
+                        } else {
+                            entry.moneyline.away = { odds: o.price, movement: null };
+                        }
+                    }
+                } else if (market.key === 'totals') {
+                    for (const o of outcomes) {
+                        if (o.name === 'Over') {
+                            entry.total.over = { line: o.point, odds: o.price, movement: null };
+                        } else if (o.name === 'Under') {
+                            entry.total.under = { line: o.point, odds: o.price, movement: null };
+                        }
+                    }
+                }
             }
 
-            // Books vary by 0 or 0.5 points - realistic market differences
-            const spreadVar = [0, 0, 0, 0.5, -0.5][Math.floor(Math.random() * 5)];
-            const totalVar = [0, 0, 0.5, -0.5][Math.floor(Math.random() * 4)];
+            books[mappedKey] = entry;
+        }
 
-            // Juice varies between -105 and -115
-            const juice = () => -110 + (Math.floor(Math.random() * 3) - 1) * 5; // -115, -110, or -105
+        // Derive abbreviation from team name (last word, uppercase)
+        const abbr = (name) => {
+            const parts = (name || '').trim().split(/\s+/);
+            return (parts[parts.length - 1] || '???').toUpperCase().slice(0, 4);
+        };
 
-            // Calculate moneylines from spread (rough approximation)
-            const awayML = calculateMoneyline(baseSpread + spreadVar);
-            const homeML = calculateMoneyline(-(baseSpread + spreadVar));
-
-            books[book.key] = {
-                spread: {
-                    away: { line: baseSpread + spreadVar, odds: juice(), movement: randomMovement() },
-                    home: { line: -(baseSpread + spreadVar), odds: juice(), movement: randomMovement() }
-                },
-                moneyline: {
-                    away: { odds: awayML, movement: randomMovement() },
-                    home: { odds: homeML, movement: randomMovement() }
-                },
-                total: {
-                    over: { line: baseTotal + totalVar, odds: juice(), movement: randomMovement() },
-                    under: { line: baseTotal + totalVar, odds: juice(), movement: randomMovement() }
-                }
-            };
-        });
+        const commenceTime = new Date(event.commence_time);
+        const now = new Date();
+        const isLive = event.completed === false && commenceTime <= now;
 
         return {
-            id,
-            sport,
-            away: { name: awayName, abbr: awayAbbr, record: awayRecord },
-            home: { name: homeName, abbr: homeAbbr, record: homeRecord },
-            time: new Date(time),
+            id: event.id,
+            sport: sportLabel,
+            away: { name: event.away_team, abbr: abbr(event.away_team), record: '' },
+            home: { name: event.home_team, abbr: abbr(event.home_team), record: '' },
+            time: commenceTime,
             isLive,
-            liveData,
+            liveData: isLive ? (event.scores ? { period: '', clock: 'LIVE', away: event.scores?.[0]?.score || '', home: event.scores?.[1]?.score || '' } : null) : null,
             books
         };
     }
 
-    /**
-     * Convert spread to approximate moneyline
-     * This is a rough approximation used for mock data only
-     */
-    function calculateMoneyline(spread) {
-        // Favorite (negative spread)
-        if (spread < 0) {
-            const absSpread = Math.abs(spread);
-            if (absSpread <= 1) return -120;
-            if (absSpread <= 2.5) return -135;
-            if (absSpread <= 3.5) return -160;
-            if (absSpread <= 5) return -200;
-            if (absSpread <= 7) return -280;
-            if (absSpread <= 10) return -400;
-            return -500;
-        }
-        // Underdog (positive spread)
-        if (spread > 0) {
-            if (spread <= 1) return 100;
-            if (spread <= 2.5) return 115;
-            if (spread <= 3.5) return 140;
-            if (spread <= 5) return 175;
-            if (spread <= 7) return 240;
-            if (spread <= 10) return 350;
-            return 450;
-        }
-        return -110; // Pick'em
-    }
-
-    function randomMovement() {
-        const r = Math.random();
-        if (r < 0.2) return 'up';
-        if (r < 0.4) return 'down';
-        return null;
-    }
-
-    // ===== REFRESH =====
-    function simulateRefresh() {
-        state.games.forEach(game => {
-            SPORTSBOOKS.forEach(book => {
-                const bookData = game.books[book.key];
-                if (!bookData) return; // Skip N/A books
-
-                // Spread
-                const spreadDelta = (Math.random() * 0.5 - 0.25);
-                bookData.spread.away.line = +(bookData.spread.away.line + spreadDelta).toFixed(1);
-                bookData.spread.home.line = +(bookData.spread.home.line - spreadDelta).toFixed(1);
-                bookData.spread.away.movement = spreadDelta > 0.1 ? 'up' : spreadDelta < -0.1 ? 'down' : null;
-                bookData.spread.home.movement = spreadDelta < -0.1 ? 'up' : spreadDelta > 0.1 ? 'down' : null;
-
-                // Total
-                const totalDelta = (Math.random() * 0.5 - 0.25);
-                bookData.total.over.line = +(bookData.total.over.line + totalDelta).toFixed(1);
-                bookData.total.under.line = bookData.total.over.line;
-                bookData.total.over.movement = totalDelta > 0.1 ? 'up' : totalDelta < -0.1 ? 'down' : null;
-                bookData.total.under.movement = totalDelta < -0.1 ? 'up' : totalDelta > 0.1 ? 'down' : null;
-            });
-        });
-
+    // ===== LOAD LIVE ODDS FROM APIs =====
+    async function loadLiveOdds() {
+        state.games = [];
         state.lastRefresh = new Date();
-        updateRefreshTime();
+
+        const container = document.getElementById('games-list');
+        if (container) {
+            container.innerHTML = '<div class="loading-odds" style="text-align:center;padding:2rem;color:var(--text-secondary,#aaa);">Loading live odds...</div>';
+        }
+
+        const API_BASE = window.APP_CONFIG?.API_BASE_URL || window.APP_CONFIG?.API_BASE_FALLBACK || (window.location.origin + '/api');
+        const allGames = [];
+
+        // Fetch all sports in parallel — failures are isolated per sport
+        const results = await Promise.allSettled(
+            SPORT_CONFIGS.map(async (cfg) => {
+                const url = API_BASE + '/odds/' + cfg.apiSport + '/odds?markets=h2h,spreads,totals';
+                const resp = await fetch(url);
+                if (!resp.ok) throw new Error(cfg.key + ' HTTP ' + resp.status);
+                const events = await resp.json();
+                return { cfg, events };
+            })
+        );
+
+        for (const result of results) {
+            if (result.status === 'fulfilled') {
+                const { cfg, events } = result.value;
+                if (!Array.isArray(events)) continue;
+                for (const ev of events) {
+                    // Skip events with no bookmakers (no odds available)
+                    if (!ev.bookmakers || ev.bookmakers.length === 0) continue;
+                    allGames.push(transformEvent(ev, cfg.label));
+                }
+                console.log('[OddsMarket] ' + cfg.label + ': ' + events.length + ' events');
+            } else {
+                console.warn('[OddsMarket] Failed to load sport:', result.reason?.message || result.reason);
+            }
+        }
+
+        state.games = allGames;
+        console.log('[OddsMarket] Total games loaded: ' + allGames.length);
+
+        scheduleAutoRefresh();
         render();
     }
 
-    function updateRefreshTime() {
+    // ===== AUTO-REFRESH & COUNTDOWN =====
+    function scheduleAutoRefresh() {
+        clearTimeout(state.refreshTimerId);
+        clearInterval(state.countdownId);
+
+        state.nextRefreshAt = Date.now() + REFRESH_INTERVAL_MS;
+
+        // Tick the countdown display every second
+        state.countdownId = setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Schedule the actual refresh
+        state.refreshTimerId = setTimeout(async () => {
+            if (!state.autoRefreshPaused && !document.hidden) {
+                await loadLiveOdds();
+            } else {
+                // If paused or tab hidden, just reschedule
+                scheduleAutoRefresh();
+            }
+        }, REFRESH_INTERVAL_MS);
+    }
+
+    function updateCountdown() {
         const el = document.getElementById('refresh-time');
-        if (el && state.lastRefresh) {
-            el.textContent = state.lastRefresh.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
-        }
+        if (!el || !state.nextRefreshAt) return;
+
+        const remaining = Math.max(0, state.nextRefreshAt - Date.now());
+        const secs = Math.ceil(remaining / 1000);
+        const m = Math.floor(secs / 60);
+        const s = secs % 60;
+        el.textContent = m + ':' + String(s).padStart(2, '0');
+    }
+
+    function stopAutoRefresh() {
+        clearTimeout(state.refreshTimerId);
+        clearInterval(state.countdownId);
+        state.refreshTimerId = null;
+        state.countdownId = null;
+        state.nextRefreshAt = null;
     }
 
     // ===== MAIN RENDER =====
@@ -348,36 +383,36 @@
                 if (!data) return; // Skip N/A books
 
                 // Spread - best is highest line (more points for dog)
-                if (data.spread.away.line !== undefined) {
+                if (data.spread.away.line != null) {
                     if (!best[game.id].spread.away || data.spread.away.line > best[game.id].spread.away.line) {
                         best[game.id].spread.away = { book: book.key, line: data.spread.away.line };
                     }
                 }
-                if (data.spread.home.line !== undefined) {
+                if (data.spread.home.line != null) {
                     if (!best[game.id].spread.home || data.spread.home.line > best[game.id].spread.home.line) {
                         best[game.id].spread.home = { book: book.key, line: data.spread.home.line };
                     }
                 }
 
                 // Moneyline - best is highest odds (more payout)
-                if (data.moneyline.away.odds !== undefined) {
+                if (data.moneyline.away.odds != null) {
                     if (!best[game.id].moneyline.away || data.moneyline.away.odds > best[game.id].moneyline.away.odds) {
                         best[game.id].moneyline.away = { book: book.key, odds: data.moneyline.away.odds };
                     }
                 }
-                if (data.moneyline.home.odds !== undefined) {
+                if (data.moneyline.home.odds != null) {
                     if (!best[game.id].moneyline.home || data.moneyline.home.odds > best[game.id].moneyline.home.odds) {
                         best[game.id].moneyline.home = { book: book.key, odds: data.moneyline.home.odds };
                     }
                 }
 
                 // Total - over: lowest line, under: highest line
-                if (data.total.over.line !== undefined) {
+                if (data.total.over.line != null) {
                     if (!best[game.id].total.over || data.total.over.line < best[game.id].total.over.line) {
                         best[game.id].total.over = { book: book.key, line: data.total.over.line };
                     }
                 }
-                if (data.total.under.line !== undefined) {
+                if (data.total.under.line != null) {
                     if (!best[game.id].total.under || data.total.under.line > best[game.id].total.under.line) {
                         best[game.id].total.under = { book: book.key, line: data.total.under.line };
                     }
@@ -392,9 +427,6 @@
     function renderGameRow(game, bestOdds) {
         const timeStr = game.time.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
         const dayStr = game.time.toLocaleDateString([], { weekday: 'short' });
-
-        // Data source indicator
-        const dataSource = (game.sport === 'NFL' || game.sport === 'NCAAF') ? 'SportsDataIO' : 'The Odds API';
 
         const liveInfo = game.isLive && game.liveData ? `
             <div class="game-live-badge">

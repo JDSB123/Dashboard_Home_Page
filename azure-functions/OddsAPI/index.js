@@ -37,6 +37,8 @@ const SPORT_KEY_MAP = {
   ncaam: "basketball_ncaab",
   ncaab: "basketball_ncaab",
   cbb: "basketball_ncaab",
+  nhl: "icehockey_nhl",
+  mlb: "baseball_mlb",
 };
 
 module.exports = async function (context, req) {

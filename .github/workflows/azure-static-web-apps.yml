@@ -7,6 +7,7 @@ on:
       - main
     paths:
       - 'client/**'
+      - 'azure-functions/**'
       - '.github/workflows/azure-static-web-apps.yml'
   pull_request:
     types: [opened, synchronize, reopened, closed]
@@ -14,6 +15,7 @@ on:
       - main
     paths:
       - 'client/**'
+      - 'azure-functions/**'
       - '.github/workflows/azure-static-web-apps.yml'
 
 concurrency:
@@ -77,6 +79,10 @@ jobs:
         working-directory: client
         run: npm run build
 
+      - name: Install API dependencies
+        working-directory: azure-functions
+        run: npm ci --production
+
       - name: Build and Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
@@ -85,9 +91,10 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
           app_location: "/client"
-          api_location: ""
+          api_location: "/azure-functions"
           output_location: ""
           skip_app_build: true
+          skip_api_build: true
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
@@ -100,5 +107,5 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           action: "close"
           app_location: "/client"
-          api_location: ""
+          api_location: "/azure-functions"
           output_location: ""
