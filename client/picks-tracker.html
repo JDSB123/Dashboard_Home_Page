@@ -487,7 +487,9 @@
           <span class="update-time"
             >Last: <span id="last-updated">--</span></span
           >
-          <button id="refresh-btn" type="button" aria-label="Refresh scores">↻</button>
+          <button id="refresh-btn" type="button" aria-label="Refresh scores">
+            ↻
+          </button>
         </div>
       </div>
 
@@ -511,47 +513,99 @@
                 <span>All Leagues</span>
               </button>
               <button class="mp-fetch-item" data-mp-fetch="nba" type="button">
-                <img src="assets/nba-logo.png" class="mp-btn-icon" alt="" aria-hidden="true" />
+                <img
+                  src="assets/nba-logo.png"
+                  class="mp-btn-icon"
+                  alt=""
+                  aria-hidden="true"
+                />
                 <span>NBA</span>
               </button>
               <button class="mp-fetch-item" data-mp-fetch="ncaab" type="button">
-                <img src="assets/ncaam-logo.png" class="mp-btn-icon" alt="" aria-hidden="true" />
+                <img
+                  src="assets/ncaam-logo.png"
+                  class="mp-btn-icon"
+                  alt=""
+                  aria-hidden="true"
+                />
                 <span>NCAAM</span>
               </button>
               <button class="mp-fetch-item" data-mp-fetch="nhl" type="button">
-                <img src="assets/icons/league-nhl-official.svg" class="mp-btn-icon" alt="" aria-hidden="true" />
+                <img
+                  src="assets/icons/league-nhl-official.svg"
+                  class="mp-btn-icon"
+                  alt=""
+                  aria-hidden="true"
+                />
                 <span>NHL</span>
               </button>
               <button class="mp-fetch-item" data-mp-fetch="mlb" type="button">
-                <img src="assets/mlb-logo.png" class="mp-btn-icon" alt="" aria-hidden="true" />
+                <img
+                  src="assets/mlb-logo.png"
+                  class="mp-btn-icon"
+                  alt=""
+                  aria-hidden="true"
+                />
                 <span>MLB</span>
               </button>
             </div>
           </div>
-          <button class="mp-clear-btn" id="mp-clear-picks" type="button" aria-label="Clear all tracked picks">
+          <button
+            class="mp-clear-btn"
+            id="mp-clear-picks"
+            type="button"
+            aria-label="Clear all tracked picks"
+          >
             Clear
           </button>
         </div>
-        <span class="mp-last-sync" id="mp-last-refreshed" aria-live="polite"></span>
+        <span
+          class="mp-last-sync"
+          id="mp-last-refreshed"
+          aria-live="polite"
+        ></span>
       </div>
 
       <!-- KPI inline bar -->
       <div class="kpi-bar">
-        <span class="kpi-item"><span class="kpi-k">Risk</span> <span class="kpi-v" id="kpi-risk">--</span></span>
+        <span class="kpi-item"
+          ><span class="kpi-k">Risk</span>
+          <span class="kpi-v" id="kpi-risk">--</span></span
+        >
         <span class="kpi-sep"></span>
-        <span class="kpi-item"><span class="kpi-k">Win</span> <span class="kpi-v" id="kpi-to-win">--</span></span>
+        <span class="kpi-item"
+          ><span class="kpi-k">Win</span>
+          <span class="kpi-v" id="kpi-to-win">--</span></span
+        >
         <span class="kpi-sep"></span>
-        <span class="kpi-item"><span class="kpi-k">P&amp;L</span> <span class="kpi-v" id="kpi-pnl">--</span></span>
+        <span class="kpi-item"
+          ><span class="kpi-k">P&amp;L</span>
+          <span class="kpi-v" id="kpi-pnl">--</span></span
+        >
         <span class="kpi-sep"></span>
-        <span class="kpi-item"><span class="kpi-k">W-L</span> <span class="kpi-v" id="kpi-record">--</span></span>
+        <span class="kpi-item"
+          ><span class="kpi-k">W-L</span>
+          <span class="kpi-v" id="kpi-record">--</span></span
+        >
         <span class="kpi-sep"></span>
-        <span class="kpi-item"><span class="kpi-k">Live</span> <span class="kpi-v" id="kpi-live">--</span></span>
+        <span class="kpi-item"
+          ><span class="kpi-k">Live</span>
+          <span class="kpi-v" id="kpi-live">--</span></span
+        >
         <span class="kpi-sep"></span>
-        <span class="kpi-item"><span class="kpi-k">Pend</span> <span class="kpi-v" id="kpi-pending">--</span></span>
+        <span class="kpi-item"
+          ><span class="kpi-k">Pend</span>
+          <span class="kpi-v" id="kpi-pending">--</span></span
+        >
       </div>
 
       <!-- Unified pick cards feed -->
-      <div class="mp-cards-container mp-hidden" id="model-picks-cards" aria-live="polite" aria-atomic="false"></div>
+      <div
+        class="mp-cards-container mp-hidden"
+        id="model-picks-cards"
+        aria-live="polite"
+        aria-atomic="false"
+      ></div>
       <div class="pick-feed" id="straights-feed" aria-live="polite"></div>
       <div class="pick-feed-empty" id="feed-empty">
         Open Leagues to fetch today's picks
@@ -562,14 +616,20 @@
 
       <!-- Round Robins (shown by JS when populated) -->
       <div id="rr-section" class="rr-section-hidden">
-        <div class="section-label">Round Robins <span id="rr-count">0</span></div>
+        <div class="section-label">
+          Round Robins <span id="rr-count">0</span>
+        </div>
         <div id="rr-feed"></div>
       </div>
 
       <!-- Legacy table containers (kept for JS compat) -->
       <span id="straights-count" class="mp-hidden">0</span>
-      <table class="mp-hidden"><tbody id="straights-tbody"></tbody></table>
-      <table class="mp-hidden"><tbody id="rr-tbody"></tbody></table>
+      <table class="mp-hidden">
+        <tbody id="straights-tbody"></tbody>
+      </table>
+      <table class="mp-hidden">
+        <tbody id="rr-tbody"></tbody>
+      </table>
     </main>
 
     <!-- Bundled JS (shared core) -->

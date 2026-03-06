@@ -126,6 +126,7 @@ const SHARED_JS = [
   "assets/js/core/navigation.js",
   "assets/js/init/disable-form-submit.js",
   "assets/js/mobile/mobile-unified.js",
+  "assets/js/features/datetime-cemented-state.js",
   "assets/js/core/signalr-client.js",
   "assets/js/core/auth-client.js",
 ];
@@ -145,7 +146,7 @@ const DASHBOARD_JS = [
   "assets/js/utils/team-data-loader.js",
   "assets/js/utils/filter-state-persistence.js",
   "assets/js/features/manual-upload.js",
-  "assets/js/features/sportsbook-selection-handler.js",
+  "assets/js/features/datetime-cemented-state.js",
   "assets/js/modules/zebra-stripes.js",
   "assets/js/modules/picks-dom-utils.js",
   "assets/js/modules/picks-state-manager.js",

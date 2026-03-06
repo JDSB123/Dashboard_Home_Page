@@ -2872,6 +2872,7 @@ if (document.readyState === "loading") {
 
     // Initialize delete buttons
     initializeDeleteButtons();
+    initializeClearAllButton();
   });
 } else {
   // Load team records (non-blocking)
@@ -2887,6 +2888,7 @@ if (document.readyState === "loading") {
 
   // Initialize delete buttons
   initializeDeleteButtons();
+  initializeClearAllButton();
 }
 
 // Initialize delete button handlers using event delegation
@@ -2903,57 +2905,218 @@ function initializeDeleteButtons() {
     const row = deleteBtn.closest("tr");
     if (!row) return;
 
-    // Confirm deletion
-    if (confirm("Remove this pick from the dashboard?")) {
-      const pickIndex = deleteBtn.dataset.pickIndex;
-      const pickId = row.dataset.pickId || deleteBtn.dataset.pickId;
+    const matchupText =
+      row.querySelector("td:nth-child(3)")?.textContent?.trim() || "this pick";
 
-      // Try PicksService first (Azure Cosmos DB)
-      if (window.PicksService && pickId) {
-        try {
-          // Removing from Dashboard == unlock (do not delete history)
-          await window.PicksService.update(pickId, {
-            locked: false,
-            lockedAt: null,
-          });
-          console.log("[PICKS] Unlocked pick in Azure:", pickId);
-        } catch (error) {
-          console.warn(
-            "[PICKS] Failed to unlock in Azure, trying delete/localStorage fallback:",
-            error,
-          );
-          // Fall back to LocalPicksManager
-          if (window.LocalPicksManager && pickIndex !== undefined) {
-            const picks = window.LocalPicksManager.getAll
-              ? window.LocalPicksManager.getAll()
-              : [];
-            if (picks[pickIndex] && picks[pickIndex].id) {
-              window.LocalPicksManager.delete(picks[pickIndex].id);
-            }
+    const confirmed = await showDashboardConfirmDialog({
+      title: "Remove Pick?",
+      message: `This will remove ${matchupText} from the dashboard view.`,
+      confirmText: "Remove Pick",
+      cancelText: "Keep Pick",
+    });
+
+    if (!confirmed) return;
+
+    const pickIndex = deleteBtn.dataset.pickIndex;
+    const pickId = row.dataset.pickId || deleteBtn.dataset.pickId;
+
+    // Try PicksService first (Azure Cosmos DB)
+    if (window.PicksService && pickId) {
+      try {
+        // Removing from Dashboard == unlock (do not delete history)
+        await window.PicksService.update(pickId, {
+          locked: false,
+          lockedAt: null,
+        });
+        console.log("[PICKS] Unlocked pick in Azure:", pickId);
+      } catch (error) {
+        console.warn(
+          "[PICKS] Failed to unlock in Azure, trying delete/localStorage fallback:",
+          error,
+        );
+        // Fall back to LocalPicksManager
+        if (window.LocalPicksManager && pickIndex !== undefined) {
+          const picks = window.LocalPicksManager.getAll
+            ? window.LocalPicksManager.getAll()
+            : [];
+          if (picks[pickIndex] && picks[pickIndex].id) {
+            window.LocalPicksManager.delete(picks[pickIndex].id);
           }
         }
-      } else if (window.LocalPicksManager && pickIndex !== undefined) {
-        // Fallback to LocalPicksManager
-        const picks = window.LocalPicksManager.getAll
-          ? window.LocalPicksManager.getAll()
-          : [];
-        if (picks[pickIndex] && picks[pickIndex].id) {
-          window.LocalPicksManager.delete(picks[pickIndex].id);
-        }
       }
-
-      // Remove row from DOM
-      row.remove();
-      console.log("[PICKS] Removed pick from UI:", pickId || pickIndex);
-
-      // Update KPI tiles if available
-      if (window.KPICalculator && window.KPICalculator.recalculateLiveKPI) {
-        window.KPICalculator.recalculateLiveKPI();
+    } else if (window.LocalPicksManager && pickIndex !== undefined) {
+      // Fallback to LocalPicksManager
+      const picks = window.LocalPicksManager.getAll
+        ? window.LocalPicksManager.getAll()
+        : [];
+      if (picks[pickIndex] && picks[pickIndex].id) {
+        window.LocalPicksManager.delete(picks[pickIndex].id);
       }
+    }
+
+    // Remove row from DOM
+    row.remove();
+    console.log("[PICKS] Removed pick from UI:", pickId || pickIndex);
+
+    // Update KPI tiles if available
+    if (window.KPICalculator && window.KPICalculator.recalculateLiveKPI) {
+      window.KPICalculator.recalculateLiveKPI();
     }
   });
 
   console.log("[PICKS] Delete button handlers initialized");
+}
+
+function showDashboardConfirmDialog({
+  title,
+  message,
+  confirmText = "Confirm",
+  cancelText = "Cancel",
+}) {
+  return new Promise((resolve) => {
+    const overlay = document.createElement("div");
+    overlay.className = "dashboard-confirm-overlay";
+
+    overlay.innerHTML = `
+      <div class="dashboard-confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="dashboard-confirm-title">
+        <h3 class="dashboard-confirm-title" id="dashboard-confirm-title">${title}</h3>
+        <p class="dashboard-confirm-message">${message}</p>
+        <div class="dashboard-confirm-actions">
+          <button type="button" class="dashboard-confirm-cancel">${cancelText}</button>
+          <button type="button" class="dashboard-confirm-accept">${confirmText}</button>
+        </div>
+      </div>
+    `;
+
+    const cancelBtn = overlay.querySelector(".dashboard-confirm-cancel");
+    const acceptBtn = overlay.querySelector(".dashboard-confirm-accept");
+    const dialog = overlay.querySelector(".dashboard-confirm-dialog");
+
+    let closed = false;
+    let previousFocus = document.activeElement;
+
+    const close = (accepted) => {
+      if (closed) return;
+      closed = true;
+      document.removeEventListener("keydown", onKeyDown);
+      overlay.classList.remove("is-visible");
+
+      setTimeout(() => {
+        overlay.remove();
+        if (previousFocus && typeof previousFocus.focus === "function") {
+          previousFocus.focus();
+        }
+        resolve(Boolean(accepted));
+      }, 140);
+    };
+
+    const onKeyDown = (event) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        close(false);
+        return;
+      }
+
+      if (event.key === "Tab" && dialog) {
+        const focusable = dialog.querySelectorAll("button");
+        if (!focusable.length) return;
+
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      }
+    };
+
+    overlay.addEventListener("click", (event) => {
+      if (event.target === overlay) {
+        close(false);
+      }
+    });
+
+    cancelBtn?.addEventListener("click", () => close(false));
+    acceptBtn?.addEventListener("click", () => close(true));
+    document.addEventListener("keydown", onKeyDown);
+
+    document.body.appendChild(overlay);
+    requestAnimationFrame(() => {
+      overlay.classList.add("is-visible");
+      acceptBtn?.focus();
+    });
+  });
+}
+
+// Initialize Clear Slate (clear all picks) button
+function initializeClearAllButton() {
+  const btn = document.querySelector('[data-action="clear-slate"]');
+  if (!btn) return;
+
+  btn.addEventListener("click", async () => {
+    const tbody = document.getElementById("picks-tbody");
+    const rowCount = tbody ? tbody.querySelectorAll("tr").length : 0;
+
+    if (!rowCount) {
+      const label = btn.querySelector(".clear-label");
+      const origText = label ? label.textContent : "";
+      if (label) label.textContent = "No Picks";
+      btn.classList.add("is-cleared");
+      setTimeout(() => {
+        btn.classList.remove("is-cleared");
+        if (label) label.textContent = origText;
+      }, 900);
+      return;
+    }
+
+    const confirmed = await showDashboardConfirmDialog({
+      title: "Clear Dashboard Slate?",
+      message: `This will remove ${rowCount} active pick${rowCount === 1 ? "" : "s"} from this dashboard view.`,
+      confirmText: "Yes, Clear Slate",
+      cancelText: "Keep Picks",
+    });
+
+    if (!confirmed) return;
+
+    try {
+      if (window.PicksService && window.PicksService.clearAll) {
+        await window.PicksService.clearAll(true);
+        console.log("[PICKS] Cleared all picks via PicksService");
+      } else if (window.LocalPicksManager && window.LocalPicksManager.clearPicks) {
+        window.LocalPicksManager.clearPicks();
+        console.log("[PICKS] Cleared all picks via LocalPicksManager");
+      }
+    } catch (error) {
+      console.warn("[PICKS] clearAll failed, clearing DOM only:", error);
+    }
+
+    // Clear table rows
+    if (tbody) tbody.innerHTML = "";
+
+    // Update KPI tiles
+    if (window.KPICalculator && window.KPICalculator.recalculateLiveKPI) {
+      window.KPICalculator.recalculateLiveKPI();
+    }
+
+    // Visual feedback on button
+    const label = btn.querySelector(".clear-label");
+    const origText = label ? label.textContent : "";
+    btn.classList.add("is-cleared");
+    if (label) label.textContent = "Cleared";
+    btn.disabled = true;
+
+    setTimeout(() => {
+      btn.classList.remove("is-cleared");
+      if (label) label.textContent = origText;
+      btn.disabled = false;
+    }, 1200);
+  });
+
+  console.log("[PICKS] Clear Slate button initialized");
 }
 
 if (globalScope) {

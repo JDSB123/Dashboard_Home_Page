@@ -609,6 +609,28 @@ body.page-active-picks .sportsbook-dropdown option:checked {
   color: #030b16;
 }
 
+/* ===== CEMENTED SPORTSBOOK BADGE ===== */
+body.page-active-picks .sportsbook-value {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: linear-gradient(135deg, rgba(0, 170, 136, 0.18) 0%, rgba(0, 214, 137, 0.12) 100%);
+  border: 1px solid rgba(0, 214, 137, 0.45);
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #3cffc0;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+
+body.page-active-picks .sportsbook-value::before {
+  content: "\1F512";
+  font-size: 0.55rem;
+}
+
 /* Matchup/Pick cell layout & typography are handled by the shared table component
    (`assets/css/components/picks-table.css`). Avoid overriding here so the stacked
    layout (Away / vs / Home) and the pick stacking stay consistent. */
@@ -2181,6 +2203,164 @@ body.page-active-picks .ft-fetch-league-btn.loading span {
 
 .delete-pick-btn:active {
   transform: scale(0.95);
+}
+
+/* Make delete button glow on row hover for discoverability */
+body.page-active-picks .picks-table tbody tr:hover .delete-pick-btn {
+  background: rgba(255, 71, 87, 0.30);
+  border-color: rgba(255, 71, 87, 0.65);
+  box-shadow: 0 0 8px rgba(255, 71, 87, 0.25);
+}
+
+/* ===== Clear Slate Button ===== */
+.ft-clear-slate-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: rgba(255, 71, 87, 0.12);
+  border: 1px solid rgba(255, 71, 87, 0.4);
+  border-radius: 6px;
+  color: #ff6b6b;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ft-clear-slate-btn:hover {
+  background: rgba(255, 71, 87, 0.25);
+  border-color: #ff6b6b;
+  box-shadow: 0 0 10px rgba(255, 71, 87, 0.3);
+}
+
+.ft-clear-slate-btn:active {
+  transform: scale(0.96);
+}
+
+.ft-clear-slate-btn.is-cleared {
+  background: rgba(16, 185, 129, 0.14);
+  border-color: rgba(16, 185, 129, 0.5);
+  color: #10b981;
+  pointer-events: none;
+}
+
+.ft-clear-slate-btn .clear-icon {
+  flex-shrink: 0;
+}
+
+/* Clear Slate confirmation dialog */
+.dashboard-confirm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 13, 24, 0.66);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1300;
+  opacity: 0;
+  transition: opacity 0.14s ease;
+  padding: 20px;
+}
+
+.dashboard-confirm-overlay.is-visible {
+  opacity: 1;
+}
+
+.dashboard-confirm-dialog {
+  width: min(420px, 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(18, 28, 43, 0.98) 0%,
+    rgba(13, 20, 31, 0.98) 100%
+  );
+  border: 1px solid rgba(255, 107, 107, 0.4);
+  border-radius: 14px;
+  box-shadow:
+    0 22px 42px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(255, 107, 107, 0.18) inset;
+  padding: 18px 18px 16px;
+  transform: translateY(8px) scale(0.985);
+  transition: transform 0.14s ease;
+}
+
+.dashboard-confirm-overlay.is-visible .dashboard-confirm-dialog {
+  transform: translateY(0) scale(1);
+}
+
+.dashboard-confirm-title {
+  margin: 0;
+  color: #ffd4d4;
+  font: 700 1.02rem/1.25 "Oswald", "Arial Narrow", sans-serif;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.dashboard-confirm-message {
+  margin: 10px 0 0;
+  color: rgba(232, 240, 246, 0.9);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.dashboard-confirm-actions {
+  margin-top: 14px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.dashboard-confirm-actions button {
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 7px 12px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: all 0.16s ease;
+}
+
+.dashboard-confirm-cancel {
+  background: rgba(148, 163, 184, 0.16);
+  border-color: rgba(148, 163, 184, 0.32);
+  color: #e6edf3;
+}
+
+.dashboard-confirm-cancel:hover {
+  background: rgba(148, 163, 184, 0.28);
+  border-color: rgba(148, 163, 184, 0.5);
+}
+
+.dashboard-confirm-accept {
+  background: rgba(255, 71, 87, 0.2);
+  border-color: rgba(255, 107, 107, 0.52);
+  color: #ffd8d8;
+}
+
+.dashboard-confirm-accept:hover {
+  background: rgba(255, 71, 87, 0.34);
+  border-color: #ff6b6b;
+  box-shadow: 0 0 12px rgba(255, 107, 107, 0.34);
+}
+
+.dashboard-confirm-actions button:focus-visible {
+  outline: 2px solid rgba(255, 180, 180, 0.9);
+  outline-offset: 2px;
+}
+
+@media (max-width: 560px) {
+  .dashboard-confirm-actions {
+    flex-direction: column-reverse;
+    gap: 8px;
+  }
+
+  .dashboard-confirm-actions button {
+    width: 100%;
+  }
 }
 
 /* ==========================================================================

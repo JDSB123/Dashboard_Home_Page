@@ -219,7 +219,7 @@ body.page-odds-market .kpi-subtext { color: var(--market-accent-secondary); opac
 }
 
 .books-header-game {
-  flex: 0 0 200px; padding: 8px 12px;
+  flex: 0 0 260px; padding: 8px 12px;
   border-right: 1px solid rgba(255, 255, 255, 0.08);
   font-family: var(--font-body); font-size: var(--text-sm);
   font-weight: var(--weight-bold); text-transform: uppercase;
@@ -240,12 +240,12 @@ body.page-odds-market .kpi-subtext { color: var(--market-accent-secondary); opac
   background: rgba(0, 214, 137, 0.04);
 }
 .consensus-header-col .book-short-name {
-  font-family: var(--font-body); font-size: 0.72rem;
+  font-family: var(--font-body); font-size: 0.78rem;
   font-weight: var(--weight-bold); text-transform: uppercase;
   letter-spacing: 0.06em; color: var(--color-primary-bright);
 }
 .consensus-header-col .book-full-name {
-  font-family: var(--font-body); font-size: 0.62rem;
+  font-family: var(--font-body); font-size: 0.66rem;
   font-weight: var(--weight-regular); color: rgba(255, 255, 255, 0.45);
 }
 
@@ -290,7 +290,7 @@ body.page-odds-market .kpi-subtext { color: var(--market-accent-secondary); opac
 .book-header-col:last-child { border-right: none; }
 
 .book-short-name {
-  font-family: var(--font-body); font-size: 0.72rem;
+  font-family: var(--font-body); font-size: 0.78rem;
   font-weight: var(--weight-bold); text-transform: uppercase;
   letter-spacing: 0.05em; color: rgba(255, 255, 255, 0.85);
 }
@@ -298,7 +298,7 @@ body.page-odds-market .kpi-subtext { color: var(--market-accent-secondary); opac
 .square-book .book-short-name { color: rgba(255, 200, 100, 0.85); }
 
 .book-full-name {
-  font-family: var(--font-body); font-size: 0.58rem;
+  font-family: var(--font-body); font-size: 0.64rem;
   font-weight: var(--weight-regular); color: rgba(255, 255, 255, 0.4);
 }
 
@@ -331,19 +331,28 @@ body.page-odds-market .kpi-subtext { color: var(--market-accent-secondary); opac
 .game-row:hover { background: var(--zebra-hover); }
 .game-row.is-live { border-left: 3px solid #4ab6ff; box-shadow: inset 4px 0 16px rgba(74, 182, 255, 0.1); }
 
-/* Game info cell — compact */
+/* Game info cell */
 .game-info {
-  flex: 0 0 200px; padding: 8px 10px;
-  border-right: 1px solid rgba(255, 255, 255, 0.05);
-  display: flex; flex-direction: column; gap: 3px; justify-content: center;
+  flex: 0 0 260px; padding: 6px 12px 8px;
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex; flex-direction: column; gap: 0; justify-content: center;
 }
 
-.game-status-bar {
+/* League bar — visually separated from matchup */
+.game-league-bar {
   display: flex; align-items: center; gap: 6px;
+  padding-bottom: 4px; margin-bottom: 5px;
+  border-bottom: 1px solid rgba(0, 214, 137, 0.10);
+}
+
+.league-logo-sm {
+  width: 18px; height: 18px; object-fit: contain; flex-shrink: 0;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4));
+  opacity: 0.9;
 }
 
 .game-league {
-  font-family: var(--font-body); font-size: 0.62rem;
+  font-family: var(--font-body); font-size: 0.68rem;
   font-weight: var(--weight-bold); letter-spacing: var(--tracking-wider);
   text-transform: uppercase; color: var(--color-primary-bright);
 }
@@ -352,45 +361,46 @@ body.page-odds-market .kpi-subtext { color: var(--market-accent-secondary); opac
   padding: 1px 6px; border-radius: 3px;
   background: rgba(74, 182, 255, 0.15);
   border: 1px solid rgba(74, 182, 255, 0.4);
-  font-family: var(--font-mono); font-size: 0.58rem;
+  font-family: var(--font-mono); font-size: 0.62rem;
   font-weight: var(--weight-bold); color: #4ab6ff;
   letter-spacing: 0.08em;
   animation: pulse-live 1.5s infinite;
 }
 
 .game-time {
-  font-family: var(--font-mono); font-size: 0.62rem;
-  font-weight: var(--weight-regular); color: rgba(255, 255, 255, 0.45);
+  margin-left: auto;
+  font-family: var(--font-mono); font-size: 0.66rem;
+  font-weight: var(--weight-regular); color: rgba(255, 255, 255, 0.50);
 }
 
-.game-teams { display: flex; flex-direction: column; gap: 2px; }
+.game-teams { display: flex; flex-direction: column; gap: 4px; }
 
 .team-line {
-  display: flex; align-items: center; gap: 6px;
+  display: flex; align-items: center; gap: 7px;
 }
 
 .team-logo {
-  width: 20px; height: 20px; object-fit: contain;
+  width: 24px; height: 24px; object-fit: contain;
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
   flex-shrink: 0;
 }
 
 .team-name {
-  font-family: var(--font-body); font-size: 0.82rem;
+  font-family: var(--font-body); font-size: 0.88rem;
   font-weight: var(--weight-semibold); color: rgba(245, 250, 255, 0.95);
-  letter-spacing: 0.02em; white-space: nowrap;
+  letter-spacing: 0.01em; white-space: nowrap;
   overflow: hidden; text-overflow: ellipsis;
 }
 
 .team-record {
-  font-family: var(--font-mono); font-size: 0.62rem;
-  font-weight: var(--weight-regular); color: rgba(160, 180, 200, 0.5);
-  margin-left: 2px;
+  font-family: var(--font-mono); font-size: 0.66rem;
+  font-weight: var(--weight-regular); color: rgba(160, 180, 200, 0.55);
+  margin-left: 2px; flex-shrink: 0;
 }
 
 .team-score {
   margin-left: auto;
-  font-family: var(--font-mono); font-size: 0.82rem;
+  font-family: var(--font-mono); font-size: 0.88rem;
   font-weight: var(--weight-bold); color: #ffffff;
 }
 
@@ -415,12 +425,12 @@ body.page-odds-market .kpi-subtext { color: var(--market-accent-secondary); opac
 .consensus-cell:last-of-type { border-bottom: none; }
 
 .consensus-cell .odds-line {
-  font-family: var(--font-mono); font-size: 0.74rem;
+  font-family: var(--font-mono); font-size: 0.82rem;
   font-weight: var(--weight-bold); color: var(--color-primary-bright);
   letter-spacing: -0.02em;
 }
 .consensus-cell .odds-price {
-  font-family: var(--font-mono); font-size: 0.58rem;
+  font-family: var(--font-mono); font-size: 0.66rem;
   font-weight: var(--weight-medium); color: rgba(0, 214, 137, 0.7);
 }
 
@@ -431,7 +441,7 @@ body.page-odds-market .kpi-subtext { color: var(--market-accent-secondary); opac
 }
 
 .vig-display {
-  font-family: var(--font-mono); font-size: 0.56rem;
+  font-family: var(--font-mono); font-size: 0.62rem;
   font-weight: var(--weight-medium); color: rgba(255, 200, 100, 0.65);
   letter-spacing: -0.01em;
 }
@@ -465,11 +475,11 @@ body.page-odds-market .kpi-subtext { color: var(--market-accent-secondary); opac
    ========================================================================== */
 
 .odds-cell {
-  flex: 1; padding: 4px 4px;
+  flex: 1; padding: 5px 6px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.02);
   position: relative;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
-  min-height: 32px; cursor: pointer; transition: all 0.15s ease;
+  min-height: 36px; cursor: pointer; transition: all 0.15s ease;
 }
 .odds-cell:last-child { border-bottom: none; }
 .odds-cell:hover { background: rgba(0, 214, 137, 0.08); }
@@ -486,19 +496,19 @@ body.page-odds-market .kpi-subtext { color: var(--market-accent-secondary); opac
 
 .odds-line {
   display: flex; align-items: center; justify-content: center; gap: 2px;
-  font-family: var(--font-mono); font-size: 0.72rem;
+  font-family: var(--font-mono); font-size: 0.82rem;
   font-weight: var(--weight-bold); color: #ffffff; letter-spacing: -0.02em;
 }
 .odds-cell.best-odds .odds-line { color: var(--color-primary-bright); }
 
 .odds-price {
-  font-family: var(--font-mono); font-size: 0.58rem;
-  font-weight: var(--weight-medium); color: rgba(180, 200, 220, 0.6);
+  font-family: var(--font-mono); font-size: 0.66rem;
+  font-weight: var(--weight-medium); color: rgba(180, 200, 220, 0.65);
 }
 .odds-cell.best-odds .odds-price { color: rgba(0, 214, 137, 0.8); }
 
 .odds-na {
-  font-family: var(--font-mono); font-size: 0.62rem;
+  font-family: var(--font-mono); font-size: 0.68rem;
   font-weight: var(--weight-regular); color: rgba(255, 255, 255, 0.2);
 }
 
@@ -619,7 +629,7 @@ body.page-odds-market.slip-open .bet-slip-toggle .toggle-icon { transform: rotat
    ========================================================================== */
 
 @media (max-width: 1400px) {
-  .books-header-game, .game-info { flex: 0 0 180px; }
+  .books-header-game, .game-info { flex: 0 0 230px; }
   .book-odds-col, .book-header-col { min-width: 64px; }
   .consensus-col, .consensus-header-col { flex: 0 0 70px; }
 }
@@ -628,7 +638,7 @@ body.page-odds-market.slip-open .bet-slip-toggle .toggle-icon { transform: rotat
   body.page-odds-market .main-container,
   body.page-odds-market.slip-open .main-container { padding-right: 16px; padding-left: 12px; }
   .bet-slip { width: 100%; max-width: 400px; transform: translateX(100%); }
-  .books-header-game, .game-info { flex: 0 0 160px; }
+  .books-header-game, .game-info { flex: 0 0 200px; }
   .book-full-name { display: none; }
   body.page-odds-market .brand-line-1 { font-size: calc(var(--dashboard-topline-height) * 0.52) !important; }
   body.page-odds-market .brand-line-2 { font-size: calc(var(--dashboard-topline-height) * 0.28) !important; letter-spacing: 0.4em !important; }
@@ -637,7 +647,7 @@ body.page-odds-market.slip-open .bet-slip-toggle .toggle-icon { transform: rotat
 @media (max-width: 992px) {
   .market-selector { flex-wrap: wrap; gap: 8px; }
   .market-selector-right { width: 100%; margin-left: 0; justify-content: flex-end; }
-  .books-header-game, .game-info { flex: 0 0 150px; }
+  .books-header-game, .game-info { flex: 0 0 180px; }
   .book-odds-col, .book-header-col { min-width: 56px; }
   .consensus-col, .consensus-header-col { flex: 0 0 62px; }
   .book-group-label { font-size: 0.5rem; }

@@ -228,33 +228,100 @@
     gap: 10px;
   }
 
-  /* ===== KPI STRIP — compact 3-column grid ===== */
-  .tracker-kpis {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 6px;
-    margin-bottom: 16px;
+  /* ===== KPI INLINE BAR ===== */
+  .kpi-bar {
+    padding: 8px 10px;
+    margin-bottom: 12px;
+    border-radius: 8px;
+    gap: 0;
   }
 
-  .kpi-card {
-    padding: 8px 6px;
-    border-radius: 6px;
+  .kpi-item {
+    padding: 0 8px;
+    gap: 4px;
   }
 
-  .kpi-label {
+  .kpi-k {
     font-size: 9px;
-    letter-spacing: 0.1em;
-    margin-bottom: 2px;
   }
 
-  .kpi-value {
-    font-size: 1rem;
+  .kpi-v {
+    font-size: 13px;
   }
 
-  /* ===== SECTION TITLES ===== */
-  .section-title {
-    font-size: 0.85rem;
-    margin: 14px 0 8px;
-    padding-bottom: 4px;
+  .kpi-sep {
+    height: 14px;
+  }
+
+  /* ===== SECTION LABEL ===== */
+  .section-label {
+    font-size: 11px;
+    padding: 10px 0 6px;
+    margin-bottom: 8px;
+  }
+
+  /* ===== PICK FEED CARDS ===== */
+  .pick-feed {
+    gap: 8px;
+  }
+
+  .pick-feed-empty {
+    padding: 32px 16px;
+    font-size: 13px;
+  }
+
+  .pf-card {
+    border-radius: 10px;
+  }
+
+  .pf-top {
+    padding: 7px 10px 0;
+  }
+
+  .pf-sport {
+    font-size: 9px;
+  }
+
+  .pf-status {
+    font-size: 9px;
+    padding: 2px 6px;
+  }
+
+  .pf-pick {
+    padding: 3px 10px 2px;
+    font-size: 15px;
+  }
+
+  .pf-matchup {
+    padding: 0 10px;
+    font-size: 11px;
+  }
+
+  .pf-detail {
+    padding: 2px 10px;
+    font-size: 10px;
+  }
+
+  .pf-money {
+    padding: 6px 10px 8px;
+  }
+
+  .pf-m {
+    font-size: 13px;
+  }
+
+  .pf-ml {
+    font-size: 8px;
+  }
+
+  /* ===== ROUND ROBIN FEED ===== */
+  .pf-rr-legs {
+    padding: 3px 10px 5px;
+    gap: 3px 6px;
+  }
+
+  .pf-rr-leg {
+    font-size: 10px;
   }
 
   /* ===== GAME CARDS ===== */
@@ -268,185 +335,14 @@
     border-radius: 8px;
   }
 
-  /* ===== TABLE -> CARD TRANSFORMATION ===== */
-  .tracker-table-wrap {
-    overflow-x: visible;
-    margin-bottom: 4px;
+  /* ===== DROPDOWN MOBILE TWEAKS ===== */
+  .mp-dropdown-menu {
+    min-width: 170px;
   }
 
-  .tracker-table {
-    display: block;
-  }
-
-  .tracker-table thead {
-    display: none;
-  }
-
-  .tracker-table tbody {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .tracker-table tbody tr {
-    display: flex;
-    flex-wrap: wrap;
-    padding: 10px 12px;
-    border: 1px solid rgba(0, 214, 137, 0.1);
-    border-radius: 10px;
-    background: linear-gradient(
-      170deg,
-      rgba(8, 20, 36, 0.95),
-      rgba(4, 12, 24, 0.98)
-    );
-    gap: 4px 8px;
-    align-items: center;
-  }
-
-  /* ===== STRAIGHT BETS CARD LAYOUT ===== */
-  #straights-tbody tr td {
-    border: none;
-    padding: 2px 0;
-  }
-
-  /* Pick name — full width, bold header */
-  #straights-tbody tr td:nth-child(1) {
-    flex: 0 0 100%;
-    font-weight: 700;
+  .mp-fetch-item {
+    padding: 10px 10px;
     font-size: 14px;
-    color: #fff;
-    padding-bottom: 6px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    margin-bottom: 4px;
-  }
-
-  /* Score + Status on same row */
-  #straights-tbody tr td:nth-child(2) {
-    flex: 0 0 auto;
-    font-size: 13px;
-    font-weight: 600;
-    color: rgba(220, 230, 240, 0.9);
-  }
-
-  #straights-tbody tr td:nth-child(3) {
-    flex: 0 0 auto;
-    margin-left: auto;
-  }
-
-  /* Detail — full width, muted */
-  #straights-tbody tr td:nth-child(4) {
-    flex: 0 0 100%;
-    font-size: 12px;
-    color: rgba(160, 175, 190, 0.6);
-    padding: 2px 0;
-  }
-
-  /* Money row — 3 equal columns */
-  #straights-tbody tr td:nth-child(5),
-  #straights-tbody tr td:nth-child(6),
-  #straights-tbody tr td:nth-child(7) {
-    flex: 1;
-    text-align: center;
-    font-size: 13px;
-    padding-top: 6px;
-    border-top: 1px solid rgba(255, 255, 255, 0.04);
-  }
-
-  /* Add data labels on mobile for money cells */
-  #straights-tbody tr td:nth-child(5)::before {
-    content: "Risk ";
-    font-size: 9px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: rgba(160, 175, 190, 0.5);
-    display: block;
-    margin-bottom: 1px;
-  }
-
-  #straights-tbody tr td:nth-child(6)::before {
-    content: "Win ";
-    font-size: 9px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: rgba(160, 175, 190, 0.5);
-    display: block;
-    margin-bottom: 1px;
-  }
-
-  #straights-tbody tr td:nth-child(7)::before {
-    content: "P&L ";
-    font-size: 9px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: rgba(160, 175, 190, 0.5);
-    display: block;
-    margin-bottom: 1px;
-  }
-
-  /* ===== ROUND ROBIN CARD LAYOUT ===== */
-  #rr-tbody tr td {
-    border: none;
-    padding: 2px 0;
-  }
-
-  #rr-tbody tr td:nth-child(1) {
-    flex: 0 0 100%;
-    font-weight: 700;
-    font-size: 14px;
-    color: #fff;
-    padding-bottom: 6px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    margin-bottom: 4px;
-  }
-
-  #rr-tbody tr td:nth-child(2) {
-    flex: 0 0 100%;
-    padding: 2px 0 4px;
-  }
-
-  #rr-tbody tr td:nth-child(3) {
-    flex: 0 0 auto;
-    margin-right: auto;
-  }
-
-  #rr-tbody tr td:nth-child(4),
-  #rr-tbody tr td:nth-child(5),
-  #rr-tbody tr td:nth-child(6) {
-    flex: 1;
-    text-align: center;
-    font-size: 13px;
-    padding-top: 6px;
-    border-top: 1px solid rgba(255, 255, 255, 0.04);
-  }
-
-  #rr-tbody tr td:nth-child(4)::before {
-    content: "Risk ";
-    font-size: 9px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: rgba(160, 175, 190, 0.5);
-    display: block;
-    margin-bottom: 1px;
-  }
-
-  #rr-tbody tr td:nth-child(5)::before {
-    content: "Win ";
-    font-size: 9px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: rgba(160, 175, 190, 0.5);
-    display: block;
-    margin-bottom: 1px;
-  }
-
-  #rr-tbody tr td:nth-child(6)::before {
-    content: "P&L ";
-    font-size: 9px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: rgba(160, 175, 190, 0.5);
-    display: block;
-    margin-bottom: 1px;
   }
 
   /* ===== STATUS BADGES — compact on mobile ===== */
@@ -459,36 +355,10 @@
     padding: 2px 6px;
     font-size: 10px;
   }
-
-  /* ===== WIN/LOSS ROW HIGHLIGHTS ===== */
-  .tracker-table tbody tr[data-status="win"] {
-    border-color: rgba(0, 255, 170, 0.2);
-  }
-
-  .tracker-table tbody tr[data-status="loss"] {
-    border-color: rgba(229, 57, 53, 0.2);
-  }
-
-  .tracker-table tbody tr[data-status="on-track"] {
-    border-color: rgba(0, 191, 255, 0.2);
-  }
-
-  .tracker-table tbody tr[data-status="at-risk"] {
-    border-color: rgba(251, 140, 0, 0.2);
-  }
 }
 
 /* ===== SMALL PHONES: <= 480px ===== */
 @media (max-width: 480px) {
-  .tracker-kpis {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 5px;
-  }
-
-  .kpi-value {
-    font-size: 0.9rem;
-  }
-
   .tracker-header h1 {
     font-size: 1rem;
   }
@@ -499,11 +369,23 @@
     min-height: 40px;
   }
 
-  .mp-pick-label {
-    font-size: 16px;
+  .kpi-item {
+    padding: 0 6px;
   }
 
-  #straights-tbody tr td:nth-child(1) {
-    font-size: 13px;
+  .kpi-k {
+    font-size: 8px;
+  }
+
+  .kpi-v {
+    font-size: 12px;
+  }
+
+  .pf-pick {
+    font-size: 14px;
+  }
+
+  .pf-m {
+    font-size: 12px;
   }
 }

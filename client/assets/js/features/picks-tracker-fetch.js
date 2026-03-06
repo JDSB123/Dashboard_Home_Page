@@ -53,7 +53,8 @@
     if (s === "NCAAB") return { src: "assets/ncaam-logo.png", alt: "NCAAM" };
     if (s === "NFL") return { src: "assets/nfl-logo.png", alt: "NFL" };
     if (s === "NCAAF") return { src: "assets/ncaaf-logo.png", alt: "NCAAF" };
-    if (s === "NHL") return { src: "assets/icons/league-nhl-official.svg", alt: "NHL" };
+    if (s === "NHL")
+      return { src: "assets/icons/league-nhl-official.svg", alt: "NHL" };
     return { src: "", alt: s };
   };
 
@@ -162,7 +163,9 @@
 
   const allButtons = () =>
     Array.from(
-      document.querySelectorAll("#mp-fetch-trigger, .mp-fetch-item[data-mp-fetch]"),
+      document.querySelectorAll(
+        "#mp-fetch-trigger, .mp-fetch-item[data-mp-fetch]",
+      ),
     );
 
   const fetchAndRender = async (sport, btn) => {

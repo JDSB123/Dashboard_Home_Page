@@ -102,8 +102,12 @@
     // ===== INITIALIZATION =====
     document.addEventListener('DOMContentLoaded', init);
 
-    function init() {
+    async function init() {
         console.log('[OddsMarket] v35.00.0 — sharp/square layout');
+        // Ensure TeamData config is loaded before first render
+        if (window.TeamData && window.TeamData.load) {
+            await window.TeamData.load();
+        }
         renderBookHeaders();
         bindEvents();
         loadLiveOdds();
@@ -199,9 +203,12 @@
     // ===== TEAM INFO (logo + record) =====
     // Uses TeamData for robust variant matching, falls back to TEAM_ABBR_MAP
     function getTeamInfo(teamName, league) {
+        // Normalize league for TeamData lookup (TeamData indexes ncaab, not ncaam)
+        const tdLeague = (league === 'ncaam') ? 'ncaab' : league;
+
         // Try TeamData first (loaded from team-data.js)
         if (window.TeamData) {
-            const info = window.TeamData.getTeamInfo(teamName, league);
+            const info = window.TeamData.getTeamInfo(teamName, tdLeague);
             if (info && info.logo) return info;
         }
         // Fallback to static map + LogoLoader
@@ -211,6 +218,58 @@
             try { logo = window.LogoLoader.getLogoUrl(league, abbr); } catch {}
         }
         return { abbr: abbr || '', name: teamName, fullName: teamName, logo, league };
+    }
+
+    // ===== TEAM DISPLAY NAME =====
+    // Known multi-word team nicknames
+    const MULTI_WORD_NAMES = new Set([
+        'trail blazers', 'blue jackets', 'red wings', 'golden knights',
+        'maple leafs', 'white sox', 'red sox', 'blue jays', 'hockey club',
+        'tar heels', 'blue devils', 'fighting irish', 'yellow jackets',
+        'red storm', 'blue demons', 'crimson tide', 'golden gophers',
+        'golden bears', 'orange', 'mean green', 'ragin cajuns',
+        'running rebels', 'nittany lions'
+    ]);
+
+    function getTeamDisplayName(teamName, league) {
+        const info = getTeamInfo(teamName, league);
+        // TeamData stores proper nicknames (e.g., "Trail Blazers", "Blue Jackets")
+        if (info.name && info.name !== teamName && info.name !== info.fullName) {
+            return info.name;
+        }
+        // Fallback: smart nickname extraction
+        return extractNickname(teamName);
+    }
+
+    function extractNickname(fullName) {
+        if (!fullName) return '';
+        const parts = fullName.trim().split(/\s+/);
+        if (parts.length <= 1) return fullName;
+        // Try last 2 words as known multi-word nickname
+        if (parts.length >= 3) {
+            const lastTwo = parts.slice(-2).join(' ').toLowerCase();
+            if (MULTI_WORD_NAMES.has(lastTwo)) {
+                return parts.slice(-2).join(' ');
+            }
+        }
+        // Default: last word
+        return parts[parts.length - 1];
+    }
+
+    // ===== LEAGUE LOGO URL =====
+    // Local assets are guaranteed to exist; blob storage may 404 for non-NBA
+    const LOCAL_LEAGUE_LOGOS = {
+        nba:   '/assets/nba-logo.png',
+        nfl:   '/assets/nfl-logo.png',
+        nhl:   '/assets/icons/league-nhl-official.svg',
+        mlb:   '/assets/mlb-logo.png',
+        ncaam: '/assets/ncaam-logo.png',
+        ncaab: '/assets/ncaam-logo.png',
+        ncaaf: '/assets/ncaaf-logo.png',
+    };
+
+    function getLeagueLogoUrl(league) {
+        return LOCAL_LEAGUE_LOGOS[(league || '').toLowerCase()] || '';
     }
 
     // ===== TRANSFORM EVENT =====
@@ -561,11 +620,11 @@
             vigHtml = vig != null ? `<span class="vig-display">${vig.toFixed(1)}%</span>` : '';
         }
 
-        // Short team name (last word)
-        const shortName = (name) => {
-            const parts = (name || '').split(/\s+/);
-            return parts[parts.length - 1] || name;
-        };
+        // League logo
+        const leagueLogoUrl = getLeagueLogoUrl(game.league);
+        const leagueLogoHtml = leagueLogoUrl
+            ? `<img class="league-logo-sm" src="${leagueLogoUrl}" alt="${game.sport}" loading="lazy" onerror="this.style.display='none'">`
+            : '';
 
         // Sharp books columns
         const sharpHtml = SHARP_BOOKS.map(book => renderBookCol(game, book, bestOdds, 'sharp')).join('');
@@ -575,7 +634,8 @@
         return `
             <div class="game-row ${game.isLive ? 'is-live' : ''}" data-game-id="${game.id}">
                 <div class="game-info">
-                    <div class="game-status-bar">
+                    <div class="game-league-bar">
+                        ${leagueLogoHtml}
                         <span class="game-league">${game.sport}</span>
                         ${liveHtml}
                         <span class="game-time">${dayStr} ${timeStr}</span>
@@ -583,13 +643,13 @@
                     <div class="game-teams">
                         <div class="team-line team-away">
                             ${awayLogoHtml}
-                            <span class="team-name">${shortName(game.away.name)}</span>
+                            <span class="team-name">${game.away.name}</span>
                             ${awayRecordHtml}
                             ${awayScore}
                         </div>
                         <div class="team-line team-home">
                             ${homeLogoHtml}
-                            <span class="team-name">${shortName(game.home.name)}</span>
+                            <span class="team-name">${game.home.name}</span>
                             ${homeRecordHtml}
                             ${homeScore}
                         </div>

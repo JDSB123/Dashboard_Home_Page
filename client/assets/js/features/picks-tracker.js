@@ -8,488 +8,17 @@
   // ═══════════════════════════════════════════════════════════════════
   // UNIQUE GAME LEGS — the individual bets that appear across tickets
   // ═══════════════════════════════════════════════════════════════════
-  const LEGS = [
-    {
-      id: "cle-okc-o228",
-      sport: "nba",
-      type: "total",
-      side: "over",
-      line: 228,
-      odds: -120,
-      away: "Cleveland Cavaliers",
-      home: "Oklahoma City Thunder",
-      label: "CLE/OKC O 228",
-    },
-    {
-      id: "nku-ysu-o152",
-      sport: "ncaam",
-      type: "total",
-      side: "over",
-      line: 152,
-      odds: -120,
-      away: "Northern Kentucky",
-      home: "Youngstown State",
-      label: "N Kentucky/Youngstown O 152",
-    },
-    {
-      id: "siena-ml",
-      sport: "ncaam",
-      type: "ml",
-      side: "home",
-      line: null,
-      odds: -260,
-      away: "Saint Peter's",
-      home: "Siena",
-      label: "Siena ML -260",
-    },
-    {
-      id: "spu-sie-o136",
-      sport: "ncaam",
-      type: "total",
-      side: "over",
-      line: 136,
-      odds: -120,
-      away: "Saint Peter's",
-      home: "Siena",
-      label: "St Peters/Siena O 136",
-    },
-    {
-      id: "rmu-wsu-o146",
-      sport: "ncaam",
-      type: "total",
-      side: "over",
-      line: 146.5,
-      odds: -110,
-      away: "Robert Morris",
-      home: "Wright State",
-      label: "Rob Morris/Wright St O 146½",
-    },
-    {
-      id: "ipfw-csu-u162",
-      sport: "ncaam",
-      type: "total",
-      side: "under",
-      line: 162.5,
-      odds: -110,
-      away: "Purdue Fort Wayne",
-      home: "Cleveland State",
-      label: "IPFW/Cleveland St U 162½",
-    },
-    {
-      id: "csu-spread",
-      sport: "ncaam",
-      type: "spread",
-      side: "home",
-      line: 3.5,
-      odds: -110,
-      away: "Purdue Fort Wayne",
-      home: "Cleveland State",
-      label: "Cleveland St +3½",
-      pickTeam: "Cleveland State",
-    },
-    {
-      id: "osu-msu-o146",
-      sport: "ncaam",
-      type: "total",
-      side: "over",
-      line: 146,
-      odds: -110,
-      away: "Ohio State",
-      home: "Michigan State",
-      label: "Ohio St/Michigan St O 146",
-    },
-    {
-      id: "iona-mer-o137",
-      sport: "ncaam",
-      type: "total",
-      side: "over",
-      line: 137,
-      odds: -110,
-      away: "Iona",
-      home: "Merrimack",
-      label: "Iona/Merrimack O 137",
-    },
-    {
-      id: "gb-det-o147",
-      sport: "ncaam",
-      type: "total",
-      side: "over",
-      line: 147,
-      odds: -120,
-      away: "Green Bay",
-      home: "Detroit Mercy",
-      label: "Wisc Green Bay/Detroit O 147",
-    },
-    {
-      id: "rice-spread",
-      sport: "ncaam",
-      type: "spread",
-      side: "away",
-      line: 5,
-      odds: -110,
-      away: "Rice",
-      home: "UTSA",
-      label: "Rice +5",
-      pickTeam: "Rice",
-    },
-    {
-      id: "osu-spread",
-      sport: "ncaam",
-      type: "spread",
-      side: "away",
-      line: 10,
-      odds: -110,
-      away: "Ohio State",
-      home: "Michigan State",
-      label: "Ohio St +10",
-      pickTeam: "Ohio State",
-    },
-    {
-      id: "uwm-spread",
-      sport: "ncaam",
-      type: "spread",
-      side: "away",
-      line: 7,
-      odds: -110,
-      away: "Milwaukee",
-      home: "Oakland",
-      label: "Wisc Milwaukee +7",
-      pickTeam: "Milwaukee",
-    },
-    {
-      id: "rmu-spread",
-      sport: "ncaam",
-      type: "spread",
-      side: "away",
-      line: 4.5,
-      odds: -110,
-      away: "Robert Morris",
-      home: "Wright State",
-      label: "Robert Morris +4½",
-      pickTeam: "Robert Morris",
-    },
-    {
-      id: "iona-1h-spread",
-      sport: "ncaam",
-      type: "spread",
-      side: "away",
-      line: 4,
-      odds: -110,
-      away: "Iona",
-      home: "Merrimack",
-      label: "Iona +4 1H",
-      pickTeam: "Iona",
-      segment: "1H",
-    },
-    {
-      id: "uab-ml",
-      sport: "ncaam",
-      type: "ml",
-      side: "away",
-      line: null,
-      odds: 210,
-      away: "UAB",
-      home: "Louisiana Tech",
-      label: "UAB ML +210",
-      pickTeam: "UAB",
-    },
-    {
-      id: "uab-spread",
-      sport: "ncaam",
-      type: "spread",
-      side: "away",
-      line: 6.5,
-      odds: -110,
-      away: "UAB",
-      home: "Louisiana Tech",
-      label: "UAB +6½",
-      pickTeam: "UAB",
-    },
-  ];
+  const LEGS = [];
 
   // ═══════════════════════════════════════════════════════════════════
   // STRAIGHT BETS
   // ═══════════════════════════════════════════════════════════════════
-  const STRAIGHTS = [
-    { legId: "cle-okc-o228", risk: 6000, toWin: 5000 },
-    { legId: "uwm-spread", risk: 4400, toWin: 4000 },
-    { legId: "ipfw-csu-u162", risk: 5500, toWin: 5000 },
-    { legId: "csu-spread", risk: 5500, toWin: 5000 },
-    { legId: "rmu-wsu-o146", risk: 5500, toWin: 5000 },
-    { legId: "rmu-spread", risk: 5500, toWin: 5000 },
-    { legId: "rice-spread", risk: 5500, toWin: 5000 },
-    { legId: "iona-mer-o137", risk: 4400, toWin: 4000 },
-    { legId: "iona-1h-spread", risk: 2200, toWin: 2000 },
-    { legId: "osu-msu-o146", risk: 5500, toWin: 5000 },
-    { legId: "osu-spread", risk: 5500, toWin: 5000 },
-    { legId: "uab-ml", risk: 5000, toWin: 10500 },
-    { legId: "uab-spread", risk: 5500, toWin: 5000 },
-  ];
+  const STRAIGHTS = [];
 
   // ═══════════════════════════════════════════════════════════════════
   // ROUND ROBIN TICKETS
   // ═══════════════════════════════════════════════════════════════════
-  const ROUND_ROBINS = [
-    // --- 5-leg group (Ohio St block): 4-team RRs ---
-    {
-      legs: ["osu-msu-o146", "iona-mer-o137", "gb-det-o147", "rice-spread"],
-      teams: 4,
-      risk: 1000,
-      toWin: 11756,
-    },
-    {
-      legs: ["osu-spread", "iona-mer-o137", "gb-det-o147", "rice-spread"],
-      teams: 4,
-      risk: 1000,
-      toWin: 11756,
-    },
-    {
-      legs: ["osu-spread", "osu-msu-o146", "gb-det-o147", "rice-spread"],
-      teams: 4,
-      risk: 1000,
-      toWin: 11756,
-    },
-    {
-      legs: ["osu-spread", "osu-msu-o146", "iona-mer-o137", "rice-spread"],
-      teams: 4,
-      risk: 1000,
-      toWin: 12283,
-    },
-    {
-      legs: ["osu-spread", "osu-msu-o146", "iona-mer-o137", "gb-det-o147"],
-      teams: 4,
-      risk: 1000,
-      toWin: 11756,
-    },
-    // --- 5-leg group: 3-team RRs ---
-    {
-      legs: ["iona-mer-o137", "gb-det-o147", "rice-spread"],
-      teams: 3,
-      risk: 1000,
-      toWin: 5681,
-    },
-    {
-      legs: ["osu-msu-o146", "gb-det-o147", "rice-spread"],
-      teams: 3,
-      risk: 1000,
-      toWin: 5681,
-    },
-    {
-      legs: ["osu-msu-o146", "iona-mer-o137", "rice-spread"],
-      teams: 3,
-      risk: 1000,
-      toWin: 5957,
-    },
-    {
-      legs: ["osu-msu-o146", "iona-mer-o137", "gb-det-o147"],
-      teams: 3,
-      risk: 1000,
-      toWin: 5681,
-    },
-    {
-      legs: ["osu-spread", "gb-det-o147", "rice-spread"],
-      teams: 3,
-      risk: 1000,
-      toWin: 5681,
-    },
-    {
-      legs: ["osu-spread", "iona-mer-o137", "rice-spread"],
-      teams: 3,
-      risk: 1000,
-      toWin: 5957,
-    },
-    {
-      legs: ["osu-spread", "iona-mer-o137", "gb-det-o147"],
-      teams: 3,
-      risk: 1000,
-      toWin: 5681,
-    },
-    {
-      legs: ["osu-spread", "osu-msu-o146", "rice-spread"],
-      teams: 3,
-      risk: 1000,
-      toWin: 5957,
-    },
-    {
-      legs: ["osu-spread", "osu-msu-o146", "gb-det-o147"],
-      teams: 3,
-      risk: 1000,
-      toWin: 5681,
-    },
-    {
-      legs: ["osu-spread", "osu-msu-o146", "iona-mer-o137"],
-      teams: 3,
-      risk: 1000,
-      toWin: 5957,
-    },
-    // --- 6-leg group (Cleveland St block): 2-team RRs ---
-    { legs: ["siena-ml", "spu-sie-o136"], teams: 2, risk: 777, toWin: 1195 },
-    {
-      legs: ["nku-ysu-o152", "spu-sie-o136"],
-      teams: 2,
-      risk: 777,
-      toWin: 1834,
-    },
-    { legs: ["nku-ysu-o152", "siena-ml"], teams: 2, risk: 777, toWin: 1195 },
-    {
-      legs: ["rmu-wsu-o146", "spu-sie-o136"],
-      teams: 2,
-      risk: 777,
-      toWin: 1942,
-    },
-    { legs: ["rmu-wsu-o146", "siena-ml"], teams: 2, risk: 777, toWin: 1276 },
-    {
-      legs: ["rmu-wsu-o146", "nku-ysu-o152"],
-      teams: 2,
-      risk: 777,
-      toWin: 1942,
-    },
-    {
-      legs: ["ipfw-csu-u162", "spu-sie-o136"],
-      teams: 2,
-      risk: 777,
-      toWin: 1942,
-    },
-    { legs: ["ipfw-csu-u162", "siena-ml"], teams: 2, risk: 777, toWin: 1276 },
-    {
-      legs: ["ipfw-csu-u162", "nku-ysu-o152"],
-      teams: 2,
-      risk: 777,
-      toWin: 1942,
-    },
-    {
-      legs: ["ipfw-csu-u162", "rmu-wsu-o146"],
-      teams: 2,
-      risk: 777,
-      toWin: 2054,
-    },
-    { legs: ["csu-spread", "spu-sie-o136"], teams: 2, risk: 777, toWin: 1942 },
-    { legs: ["csu-spread", "siena-ml"], teams: 2, risk: 777, toWin: 1276 },
-    { legs: ["csu-spread", "nku-ysu-o152"], teams: 2, risk: 777, toWin: 1942 },
-    { legs: ["csu-spread", "rmu-wsu-o146"], teams: 2, risk: 777, toWin: 2054 },
-    { legs: ["csu-spread", "ipfw-csu-u162"], teams: 2, risk: 777, toWin: 2054 },
-    // --- 6-leg group: 3-team RRs ---
-    {
-      legs: ["nku-ysu-o152", "siena-ml", "spu-sie-o136"],
-      teams: 3,
-      risk: 700,
-      toWin: 2557,
-    },
-    {
-      legs: ["rmu-wsu-o146", "siena-ml", "spu-sie-o136"],
-      teams: 3,
-      risk: 700,
-      toWin: 2692,
-    },
-    {
-      legs: ["rmu-wsu-o146", "nku-ysu-o152", "spu-sie-o136"],
-      teams: 3,
-      risk: 700,
-      toWin: 3791,
-    },
-    {
-      legs: ["rmu-wsu-o146", "nku-ysu-o152", "siena-ml"],
-      teams: 3,
-      risk: 700,
-      toWin: 2692,
-    },
-    {
-      legs: ["ipfw-csu-u162", "siena-ml", "spu-sie-o136"],
-      teams: 3,
-      risk: 700,
-      toWin: 2692,
-    },
-    {
-      legs: ["ipfw-csu-u162", "nku-ysu-o152", "spu-sie-o136"],
-      teams: 3,
-      risk: 700,
-      toWin: 3791,
-    },
-    {
-      legs: ["ipfw-csu-u162", "nku-ysu-o152", "siena-ml"],
-      teams: 3,
-      risk: 700,
-      toWin: 2692,
-    },
-    {
-      legs: ["ipfw-csu-u162", "rmu-wsu-o146", "spu-sie-o136"],
-      teams: 3,
-      risk: 700,
-      toWin: 3977,
-    },
-    {
-      legs: ["ipfw-csu-u162", "rmu-wsu-o146", "siena-ml"],
-      teams: 3,
-      risk: 700,
-      toWin: 2832,
-    },
-    {
-      legs: ["ipfw-csu-u162", "rmu-wsu-o146", "nku-ysu-o152"],
-      teams: 3,
-      risk: 700,
-      toWin: 3977,
-    },
-    {
-      legs: ["csu-spread", "siena-ml", "spu-sie-o136"],
-      teams: 3,
-      risk: 700,
-      toWin: 2692,
-    },
-    {
-      legs: ["csu-spread", "nku-ysu-o152", "spu-sie-o136"],
-      teams: 3,
-      risk: 700,
-      toWin: 3791,
-    },
-    {
-      legs: ["csu-spread", "nku-ysu-o152", "siena-ml"],
-      teams: 3,
-      risk: 700,
-      toWin: 2692,
-    },
-    {
-      legs: ["csu-spread", "rmu-wsu-o146", "spu-sie-o136"],
-      teams: 3,
-      risk: 700,
-      toWin: 3977,
-    },
-    {
-      legs: ["csu-spread", "rmu-wsu-o146", "siena-ml"],
-      teams: 3,
-      risk: 700,
-      toWin: 2832,
-    },
-    {
-      legs: ["csu-spread", "rmu-wsu-o146", "nku-ysu-o152"],
-      teams: 3,
-      risk: 700,
-      toWin: 3977,
-    },
-    {
-      legs: ["csu-spread", "ipfw-csu-u162", "spu-sie-o136"],
-      teams: 3,
-      risk: 700,
-      toWin: 3977,
-    },
-    {
-      legs: ["csu-spread", "ipfw-csu-u162", "siena-ml"],
-      teams: 3,
-      risk: 700,
-      toWin: 2832,
-    },
-    {
-      legs: ["csu-spread", "ipfw-csu-u162", "nku-ysu-o152"],
-      teams: 3,
-      risk: 700,
-      toWin: 3977,
-    },
-    {
-      legs: ["csu-spread", "ipfw-csu-u162", "rmu-wsu-o146"],
-      teams: 3,
-      risk: 700,
-      toWin: 4170,
-    },
-  ];
+  const ROUND_ROBINS = [];
 
   // ═══════════════════════════════════════════════════════════════════
   // UNIQUE GAMES — deduplicated from legs (for score fetching)
@@ -1070,8 +599,140 @@
   function renderAll() {
     renderGameCards();
     renderStraights();
+    renderPickFeed();
     renderRoundRobins();
+    renderRRFeed();
     renderKPIs();
+  }
+
+  // ── Unified Pick Feed (mobile card layout) ──
+  function renderPickFeed() {
+    const feed = document.getElementById("straights-feed");
+    const empty = document.getElementById("feed-empty");
+    if (!feed) return;
+
+    feed.innerHTML = "";
+
+    if (STRAIGHTS.length === 0) {
+      if (empty) empty.style.display = "";
+      return;
+    }
+    if (empty) empty.style.display = "none";
+
+    const TD = window.TeamData || {};
+    const getLogo = TD.getTeamLogo || (() => "");
+    const getLeagueLogo = TD.getLeagueLogo || (() => "");
+
+    STRAIGHTS.forEach((bet) => {
+      const leg = LEGS.find((l) => l.id === bet.legId);
+      if (!leg) return;
+      const result = evaluateLeg(leg);
+      const gameKey = LEG_TO_GAME[leg.id];
+      const game = GAMES[gameKey];
+      const score =
+        game && game.status !== "pre"
+          ? `${game.awayScore}-${game.homeScore}`
+          : "";
+      const sportUp = (leg.sport || "").toUpperCase();
+      const pnl = pnlValue(result.status, bet);
+      const pnlCls = pnlClass(result.status, bet);
+
+      // Team logos
+      const league = leg.sport || "";
+      const awayLogo = leg.away ? getLogo(leg.away, league) : "";
+      const homeLogo = leg.home ? getLogo(leg.home, league) : "";
+      const leagueLogo = getLeagueLogo(league);
+
+      // Build matchup with logos
+      let matchupHTML = "";
+      if (leg.away && leg.home) {
+        const awayImg = awayLogo ? `<img class="pf-team-logo" src="${awayLogo}" alt="" />` : "";
+        const homeImg = homeLogo ? `<img class="pf-team-logo" src="${homeLogo}" alt="" />` : "";
+        matchupHTML = `<div class="pf-matchup">${awayImg}<span>${leg.away}</span> <span class="pf-at">@</span> ${homeImg}<span>${leg.home}</span>${score ? ` <span class="pf-score">&middot; ${score}</span>` : ""}</div>`;
+      }
+
+      // League icon for sport tag
+      const leagueImg = leagueLogo ? `<img class="pf-league-icon" src="${leagueLogo}" alt="" />` : "";
+
+      const card = document.createElement("div");
+      card.className = "pf-card";
+      card.setAttribute("data-status", result.status);
+
+      card.innerHTML = `
+        <div class="pf-top">
+          <span class="pf-sport">${leagueImg}${sportUp}</span>
+          <span class="pf-status" data-status="${result.status}">${statusLabel(result.status)}</span>
+        </div>
+        <div class="pf-pick">${leg.label}</div>
+        ${matchupHTML}
+        ${result.detail ? `<div class="pf-detail">${result.detail}</div>` : ""}
+        <div class="pf-money">
+          <span class="pf-m"><span class="pf-ml">Risk</span>$${bet.risk.toLocaleString()}</span>
+          <span class="pf-m"><span class="pf-ml">Win</span>$${bet.toWin.toLocaleString()}</span>
+          <span class="pf-m pf-pnl ${pnlCls}"><span class="pf-ml">P&L</span>${pnl}</span>
+        </div>
+      `;
+      feed.appendChild(card);
+    });
+  }
+
+  function renderRRFeed() {
+    const rrSection = document.getElementById("rr-section");
+    const rrFeed = document.getElementById("rr-feed");
+    if (!rrSection || !rrFeed) return;
+
+    if (ROUND_ROBINS.length === 0) {
+      rrSection.classList.add("rr-section-hidden");
+      return;
+    }
+    rrSection.classList.remove("rr-section-hidden");
+    rrFeed.innerHTML = "";
+
+    ROUND_ROBINS.forEach((rr) => {
+      const legs = rr.legs
+        .map((id) => LEGS.find((l) => l.id === id))
+        .filter(Boolean);
+      const results = legs.map((l) => evaluateLeg(l));
+      const allWin = results.every((r) => r.status === "win");
+      const anyLoss = results.some((r) => r.status === "loss");
+      const allSettled = results.every((r) =>
+        ["win", "loss", "push"].includes(r.status),
+      );
+
+      let rrStatus = "pending";
+      if (allWin) rrStatus = "win";
+      else if (anyLoss && allSettled) rrStatus = "loss";
+      else if (anyLoss) rrStatus = "at-risk";
+      else if (results.some((r) => r.status === "on-track" || r.status === "at-risk"))
+        rrStatus = results.some((r) => r.status === "at-risk") ? "at-risk" : "on-track";
+
+      const legsHTML = legs
+        .map((l, i) => {
+          const r = results[i];
+          return `<span class="pf-rr-leg"><span class="status-dot" data-status="${r.status}"></span>${l.label}</span>`;
+        })
+        .join("");
+
+      const pnl = pnlValue(rrStatus, rr);
+      const pnlCls = pnlClass(rrStatus, rr);
+
+      const card = document.createElement("div");
+      card.className = "pf-card";
+      card.setAttribute("data-status", rrStatus);
+      card.innerHTML = `
+        <div class="pf-top">
+          <span class="pf-sport">${rr.teams}-TEAM RR</span>
+          <span class="pf-status" data-status="${rrStatus}">${statusLabel(rrStatus)}</span>
+        </div>
+        <div class="pf-rr-legs">${legsHTML}</div>
+        <div class="pf-money">
+          <span class="pf-m"><span class="pf-ml">Risk</span>$${rr.risk.toLocaleString()}</span>
+          <span class="pf-m"><span class="pf-ml">Win</span>$${rr.toWin.toLocaleString()}</span>
+          <span class="pf-m pf-pnl ${pnlCls}"><span class="pf-ml">P&L</span>${pnl}</span>
+        </div>
+      `;
+      rrFeed.appendChild(card);
+    });
   }
 
   function renderGameCards() {
