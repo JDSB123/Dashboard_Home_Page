@@ -1,9 +1,9 @@
 /**
- * NBA Picks Fetcher v4.0
+ * NBA Picks Fetcher v4.1
  * Fetches NBA model picks from nba_gbsv_v5_az Container App
  *
- * Primary Route: /api/model/nba/predictions/latest  (same-origin proxy)
- * Fallback Route: {NBA_API_URL}/predictions/latest  (direct ACA)
+ * Primary Route: /api/model/nba/api/predictions/latest  (same-origin proxy)
+ * Fallback Route: {NBA_API_URL}/api/predictions/latest  (direct ACA)
  *
  * ACA: nbagbsvv5-api (nba_gbsv_v5_az resource group)
  * Built on BaseSportFetcher shared infrastructure.
@@ -23,14 +23,14 @@
     buildPrimaryUrl(date) {
       const base = getFunctionsBase();
       const dateParam = date && date !== "today" ? `?date=${date}` : "";
-      return `${base}/api/model/nba/predictions/latest${dateParam}`;
+      return `${base}/api/model/nba/api/predictions/latest${dateParam}`;
     },
 
     buildFallbackUrl(date) {
       const endpoint = getContainerEndpoint("nba");
       if (!endpoint) return "";
       const dateParam = date && date !== "today" ? `?date=${date}` : "";
-      return `${endpoint}/predictions/latest${dateParam}`;
+      return `${endpoint}/api/predictions/latest${dateParam}`;
     },
 
     formatPickForTable(play) {
