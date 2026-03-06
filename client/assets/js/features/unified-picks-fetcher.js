@@ -175,7 +175,8 @@
     const fetchLeaguePicks = async (leagueName, date, fetcher) => {
         try {
             const result = await fetcher.fetchPicks(date);
-            const apiData = result.success ? result.data : result;
+            // Support both { data: { picks } } and { success, picks } (v2 top-level) shapes
+            const apiData = result?.data || result;
             const modelStamp = extractModelStampFromResponse(apiData);
             const picks = apiData?.picks || apiData?.plays || apiData?.predictions || apiData?.recommendations || [];
 

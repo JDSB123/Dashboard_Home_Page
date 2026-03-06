@@ -1,9 +1,14 @@
 /**
- * NCAAM Picks Fetcher v4.0
+ * NCAAM Picks Fetcher v5.0
  * Fetches NCAAM model picks from ncaam_gbsv_v2.0 Container App
  *
- * Primary Route: /api/model/ncaam/api/picks/{date}  (same-origin proxy)
- * Fallback Route: {NCAAM_API_URL}/api/picks/{date}  (direct ACA)
+ * Primary Route: /api/model/ncaam/api/picks/active          (no date)
+ *               /api/model/ncaam/api/picks/{YYYY-MM-DD}    (with date)
+ * Fallback Route: {NCAAM_API_URL}/api/picks/active          (direct ACA)
+ *                 {NCAAM_API_URL}/api/picks/{YYYY-MM-DD}   (direct ACA, with date)
+ *
+ * ACA response shape: { success: true, count: N, picks: [...] }
+ * Each pick uses camelCase fields: timeCst, fireRating, oddsAmerican, segment, modelLine, marketLine
  *
  * ACA: ca-ncaamgbsvv20 (ncaam_gbsv_v2.0 resource group)
  * Built on BaseSportFetcher shared infrastructure.
@@ -48,15 +53,20 @@
 
     buildPrimaryUrl(date) {
       const base = getFunctionsBase();
-      // The NCAAM v2 backend uses /api/slate for the daily picks
-      return `${base}/api/model/ncaam/api/slate${date ? `?date=${date}` : ""}`;
+      const d = date && date !== "today" ? date : null;
+      // v2 ACA: /api/picks/{date} for a specific date, /api/picks/active for current
+      return d
+        ? `${base}/api/model/ncaam/api/picks/${d}`
+        : `${base}/api/model/ncaam/api/picks/active`;
     },
 
     buildFallbackUrl(date) {
       const endpoint = getContainerEndpoint("ncaam");
       if (!endpoint) return "";
-      // The NCAAM v2 backend uses /api/slate for the daily picks
-      return `${endpoint}/api/slate${date ? `?date=${date}` : ""}`;
+      const d = date && date !== "today" ? date : null;
+      return d
+        ? `${endpoint}/api/picks/${d}`
+        : `${endpoint}/api/picks/active`;
     },
 
     // NCAAM-specific retry: trigger picks generation on 503
@@ -66,8 +76,10 @@
         if (triggered) {
           await new Promise((resolve) => setTimeout(resolve, 2000));
           const proxyBase = `${getFunctionsBase()}/api/model/ncaam`;
+          const d = date && date !== "today" ? date : null;
+          const picksPath = d ? `/api/picks/${d}` : "/api/picks/active";
           const retryResponse = await fetch(
-            `${proxyBase}/api/slate${date ? `?date=${date}` : ""}`,
+            `${proxyBase}${picksPath}`,
             { signal: AbortSignal.timeout(60000) },
           );
           return retryResponse;
@@ -77,19 +89,22 @@
     },
 
     formatPickForTable(pick) {
-      const fireNum = normalizeFireRating
-        ? normalizeFireRating(
-            pick.fire_rating ?? pick.confidence,
-            parseFloat(pick.edge) || 0,
-          )
-        : 3;
+      // v2 fireRating may be emoji string ("🔥🔥🔥") — count emojis for numeric value
+      const rawFire = pick.fire_rating || pick.fireRating || pick.confidence;
+      const emojiCount = (String(rawFire || "").match(/🔥/g) || []).length;
+      const fireNum = emojiCount > 0
+        ? Math.min(5, emojiCount)
+        : (normalizeFireRating
+            ? normalizeFireRating(rawFire, parseFloat(pick.edge) || 0)
+            : 3);
 
       const marketType = (pick.market || "spread").toLowerCase();
 
-      // Parse time from "12/25 11:10 AM" format
-      let timeStr = pick.time_cst || "";
+      // Parse time from "12/25 11:10 AM" or direct "6:00 PM" format (v2 camelCase timeCst)
+      let timeStr = pick.time_cst || pick.timeCst || "";
       let dateStr = "";
-      if (timeStr.includes(" ")) {
+      if (timeStr.includes(" ") && timeStr.match(/^\d/)) {
+        // "12/25 11:10 AM" → split date from time
         const timeParts = timeStr.split(" ");
         dateStr = timeParts[0];
         timeStr = timeParts.slice(1).join(" ");
@@ -106,7 +121,8 @@
         (pick.matchup ? pick.matchup.split(" @ ")[1] : "") ||
         "";
 
-      const pickTeam = pick.predictedWinner || pick.pick || "";
+      // v2: pickLabel = "Howard ML"; fall back to selection-derived label or raw pick field
+      const pickTeam = pick.predictedWinner || pick.pick || pick.pickLabel || "";
       let pickDirection = "";
       const upperPick = pickTeam.toUpperCase();
       if (upperPick === "OVER" || upperPick === "UNDER") {
@@ -136,17 +152,19 @@
         pickTeam,
         pickDirection,
         pickType: marketType,
-        odds: pick.pick_odds || "-110",
+        // v2 fields: oddsAmerican (number), segment, modelLine, marketLine
+        odds: pick.pick_odds != null ? String(pick.pick_odds)
+            : (pick.oddsAmerican != null ? String(pick.oddsAmerican) : "-110"),
         edge: edgeValue,
         confidence: fireNum,
         fire: fireNum,
         fireLabel: fireNum === 5 ? "MAX" : "",
         market: marketType,
-        segment: pick.period || "FG",
-        line: pick.marketSpread || pick.market_line || "",
-        modelPrice: pick.predictedMargin || pick.model_line || "",
-        modelSpread: pick.predictedMargin || pick.model_line || "",
-        fire_rating: pick.fire_rating || "",
+        segment: pick.period || pick.segment || "FG",
+        line: pick.marketSpread || pick.market_line || pick.marketLine || "",
+        modelPrice: pick.predictedMargin || pick.model_line || pick.modelLine || "",
+        modelSpread: pick.predictedMargin || pick.model_line || pick.modelLine || "",
+        fire_rating: pick.fire_rating || pick.fireRating || "",
         rationale:
           pick.rationale ||
           pick.reason ||
