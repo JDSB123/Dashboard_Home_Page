@@ -131,6 +131,14 @@
     color: #00d689;
   }
 
+  .mp-clear-btn {
+    min-height: 44px;
+    padding: 10px 14px;
+    font-size: 13px;
+    flex-shrink: 0;
+    border-radius: 22px;
+  }
+
   .mp-btn-icon {
     width: 20px;
     height: 20px;

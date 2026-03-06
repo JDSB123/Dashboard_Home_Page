@@ -59,7 +59,10 @@
 
     formatPickForTable(pick) {
       const fireNum = normalizeFireRating
-        ? normalizeFireRating(pick.fire_rating ?? pick.confidence, parseFloat(pick.edge) || 0)
+        ? normalizeFireRating(
+            pick.fire_rating ?? pick.confidence,
+            parseFloat(pick.edge) || 0,
+          )
         : 3;
 
       const rawAway = pick.away_team || pick.awayTeam || "";

@@ -498,8 +498,8 @@
               </button>
               <button class="date-toggle-btn" data-sport="nba">NBA</button>
               <button class="date-toggle-btn" data-sport="ncaab">NCAAB</button>
-              <button class="date-toggle-btn" data-sport="nfl">NFL</button>
-              <button class="date-toggle-btn" data-sport="ncaaf">NCAAF</button>
+              <button class="date-toggle-btn is-disabled" data-sport="nfl" disabled aria-disabled="true" title="NFL off-season">NFL</button>
+              <button class="date-toggle-btn is-disabled" data-sport="ncaaf" disabled aria-disabled="true" title="NCAAF off-season">NCAAF</button>
               <button class="date-toggle-btn" data-sport="nhl">NHL</button>
               <button class="date-toggle-btn" data-sport="mlb">MLB</button>
             </div>
@@ -593,6 +593,8 @@
 
     <!-- Bundled JS (shared core) -->
     <script src="dist/core.min.js?v=35.00.0" defer></script>
+    <!-- Team data for logos and records -->
+    <script src="assets/js/utils/team-data.js?v=35.00.0" defer></script>
     <!-- Page-specific scripts -->
     <script src="assets/js/features/import-options.js?v=35.00.0" defer></script>
     <script src="assets/js/features/odds-market.js?v=35.00.0" defer></script>

@@ -752,6 +752,25 @@
     } catch (e) {
       showToast(`Failed to save picks: ${e.message || e}`, "error");
     }
+
+    // Share with Mobile Picks tracker via localStorage
+    try {
+      const existing = JSON.parse(
+        localStorage.getItem("gbsv_shared_fetched_picks") || "[]",
+      );
+      const seenIds = new Set(existing.map((p) => p.id));
+      const merged = [...existing];
+      for (const p of picks) {
+        if (p.id && !seenIds.has(p.id)) {
+          merged.push(p);
+          seenIds.add(p.id);
+        }
+      }
+      localStorage.setItem(
+        "gbsv_shared_fetched_picks",
+        JSON.stringify(merged),
+      );
+    } catch (_) {}
   };
 
   const toggleLock = async (pickId, locked) => {

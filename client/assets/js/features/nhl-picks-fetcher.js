@@ -35,7 +35,10 @@
 
     formatPickForTable(pick) {
       const fireNum = normalizeFireRating
-        ? normalizeFireRating(pick.fire_rating ?? pick.confidence, parseFloat(pick.edge) || 0)
+        ? normalizeFireRating(
+            pick.fire_rating ?? pick.confidence,
+            parseFloat(pick.edge) || 0,
+          )
         : 3;
 
       const rawAway = pick.away_team || pick.awayTeam || pick.away || "";
@@ -43,7 +46,11 @@
       // Preserve model team labels exactly to avoid resolver side-effects.
       const awayTeam = String(rawAway || "").trim();
       const homeTeam = String(rawHome || "").trim();
-      const marketType = (pick.market || pick.market_type || "puckline").toLowerCase();
+      const marketType = (
+        pick.market ||
+        pick.market_type ||
+        "puckline"
+      ).toLowerCase();
 
       let pickTeam = pick.pick_display || pick.pickLabel || pick.pick || "";
       let pickDirection = "";
@@ -89,8 +96,10 @@
           pick.notes ||
           pick.executive_summary ||
           "",
-        modelStamp: pick.model_version || pick.modelVersion || pick.model_tag || "",
-        modelVersion: pick.model_version || pick.modelVersion || pick.model_tag || "",
+        modelStamp:
+          pick.model_version || pick.modelVersion || pick.model_tag || "",
+        modelVersion:
+          pick.model_version || pick.modelVersion || pick.model_tag || "",
         rawPickLabel: pick.pickLabel || pick.pick_display || "",
       };
     },

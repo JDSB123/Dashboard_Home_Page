@@ -125,6 +125,14 @@ body.page-odds-market .kpi-label { color: rgba(214, 232, 236, 0.8); letter-spaci
 body.page-odds-market .kpi-value { font-size: 1.32rem; letter-spacing: 0.01em; }
 body.page-odds-market .kpi-subtext { color: var(--market-accent-secondary); opacity: 0.95; }
 
+/* Disabled sport tabs */
+.date-toggle-btn.is-disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  filter: grayscale(100%);
+  pointer-events: none;
+}
+
 /* ==========================================================================
    2. ODDS BOARD
    ========================================================================== */

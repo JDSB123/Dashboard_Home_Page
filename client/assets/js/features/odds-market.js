@@ -196,13 +196,21 @@
         `;
     }
 
-    // ===== TEAM LOGO URL =====
-    function getTeamLogoUrl(teamName, league) {
+    // ===== TEAM INFO (logo + record) =====
+    // Uses TeamData for robust variant matching, falls back to TEAM_ABBR_MAP
+    function getTeamInfo(teamName, league) {
+        // Try TeamData first (loaded from team-data.js)
+        if (window.TeamData) {
+            const info = window.TeamData.getTeamInfo(teamName, league);
+            if (info && info.logo) return info;
+        }
+        // Fallback to static map + LogoLoader
         const abbr = TEAM_ABBR_MAP[teamName];
-        if (!abbr || !window.LogoLoader) return '';
-        try {
-            return window.LogoLoader.getLogoUrl(league, abbr);
-        } catch { return ''; }
+        let logo = '';
+        if (abbr && window.LogoLoader) {
+            try { logo = window.LogoLoader.getLogoUrl(league, abbr); } catch {}
+        }
+        return { abbr: abbr || '', name: teamName, fullName: teamName, logo, league };
     }
 
     // ===== TRANSFORM EVENT =====
@@ -379,6 +387,52 @@
         console.log('[OddsMarket] Total games: ' + allGames.length);
         render();
         updateKPIs();
+
+        // Enrich with team records (non-blocking)
+        enrichWithRecords();
+    }
+
+    // ===== ENRICH WITH TEAM RECORDS =====
+    // Fetches standings from basketball API and injects W-L records
+    async function enrichWithRecords() {
+        if (!window.APP_CONFIG?.FUNCTIONS_BASE_URL) return;
+        const base = window.APP_CONFIG.FUNCTIONS_BASE_URL;
+
+        const leagues = ['nba', 'ncaam'];
+        const recordMap = {}; // teamName → "W-L"
+
+        await Promise.allSettled(leagues.map(async (league) => {
+            try {
+                const resp = await fetch(`${base}/api/basketball-api/${league}/standings?season=2025`);
+                if (!resp.ok) return;
+                const data = await resp.json();
+                const teams = Array.isArray(data) ? data : (data.standings || data.teams || []);
+                for (const team of teams) {
+                    const name = team.name || team.teamName || team.team || '';
+                    const w = team.wins ?? team.w ?? '';
+                    const l = team.losses ?? team.l ?? '';
+                    if (name && w !== '' && l !== '') {
+                        recordMap[name.toLowerCase()] = `${w}-${l}`;
+                    }
+                }
+            } catch {}
+        }));
+
+        if (Object.keys(recordMap).length === 0) return;
+
+        let updated = false;
+        for (const game of state.games) {
+            if (game.league !== 'nba' && game.league !== 'ncaam') continue;
+            const awayRec = recordMap[game.away.name.toLowerCase()];
+            const homeRec = recordMap[game.home.name.toLowerCase()];
+            if (awayRec && !game.away.record) { game.away.record = awayRec; updated = true; }
+            if (homeRec && !game.home.record) { game.home.record = homeRec; updated = true; }
+        }
+
+        if (updated) {
+            console.log('[OddsMarket] Enriched games with team records');
+            render();
+        }
     }
 
     // ===== MAIN RENDER =====
@@ -473,11 +527,17 @@
         const timeStr = game.time.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
         const dayStr = game.time.toLocaleDateString([], { weekday: 'short' });
 
-        const awayLogo = getTeamLogoUrl(game.away.name, game.league);
-        const homeLogo = getTeamLogoUrl(game.home.name, game.league);
+        const awayInfo = getTeamInfo(game.away.name, game.league);
+        const homeInfo = getTeamInfo(game.home.name, game.league);
 
-        const awayLogoHtml = awayLogo ? `<img class="team-logo" src="${awayLogo}" alt="" loading="lazy">` : '';
-        const homeLogoHtml = homeLogo ? `<img class="team-logo" src="${homeLogo}" alt="" loading="lazy">` : '';
+        const awayLogoHtml = awayInfo.logo ? `<img class="team-logo" src="${awayInfo.logo}" alt="" loading="lazy" onerror="this.style.display='none'">` : '';
+        const homeLogoHtml = homeInfo.logo ? `<img class="team-logo" src="${homeInfo.logo}" alt="" loading="lazy" onerror="this.style.display='none'">` : '';
+
+        // Records from game data (populated by enrichment) or TeamData
+        const awayRecord = game.away.record || '';
+        const homeRecord = game.home.record || '';
+        const awayRecordHtml = awayRecord ? `<span class="team-record">(${awayRecord})</span>` : '';
+        const homeRecordHtml = homeRecord ? `<span class="team-record">(${homeRecord})</span>` : '';
 
         const liveHtml = game.isLive ? `<span class="live-badge">LIVE</span>` : '';
 
@@ -524,11 +584,13 @@
                         <div class="team-line team-away">
                             ${awayLogoHtml}
                             <span class="team-name">${shortName(game.away.name)}</span>
+                            ${awayRecordHtml}
                             ${awayScore}
                         </div>
                         <div class="team-line team-home">
                             ${homeLogoHtml}
                             <span class="team-name">${shortName(game.home.name)}</span>
+                            ${homeRecordHtml}
                             ${homeScore}
                         </div>
                     </div>

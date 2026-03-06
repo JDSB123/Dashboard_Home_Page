@@ -968,21 +968,25 @@ input[type="date"]:focus::-webkit-calendar-picker-indicator {
   border-color: rgba(255, 255, 255, 0.25);
 }
 
-/* Cemented state — selected, locked-in look */
+/* Cemented state — selected, locked-in look (matches ft-dropdown-btn.cemented) */
 .date-range-toggle.cemented {
-  background: linear-gradient(135deg, rgba(0, 50, 40, 0.95) 0%, rgba(0, 38, 32, 0.98) 100%);
-  border: 1.5px solid rgba(0, 214, 137, 0.75);
+  background: linear-gradient(135deg, rgba(0, 50, 40, 0.88) 0%, rgba(0, 38, 32, 0.92) 100%);
+  border: 1.5px solid rgba(0, 214, 137, 0.65);
   box-shadow:
-    0 0 8px rgba(0, 214, 137, 0.25),
-    inset 0 1px 0 rgba(0, 255, 170, 0.12),
-    0 2px 6px rgba(0, 0, 0, 0.4);
+    0 0 8px rgba(0, 214, 137, 0.2),
+    inset 0 1px 0 rgba(0, 255, 170, 0.1),
+    0 2px 6px rgba(0, 0, 0, 0.35);
 }
 
 .date-range-toggle.cemented .date-range-label {
   color: #00ffcc;
   font-weight: 700;
-  letter-spacing: 0.1em;
-  text-shadow: 0 0 6px rgba(0, 214, 137, 0.5);
+  letter-spacing: 0.04em;
+  text-shadow: 0 0 6px rgba(0, 214, 137, 0.4);
+}
+
+.date-range-toggle.cemented .date-range-arrow {
+  color: rgba(0, 214, 137, 0.8);
 }
 
 .date-range-label {
@@ -994,8 +998,8 @@ input[type="date"]:focus::-webkit-calendar-picker-indicator {
 }
 
 .date-range-arrow {
-  font-size: 0.55rem;
-  color: rgba(0, 214, 137, 0.7);
+  font-size: 0.5rem;
+  color: rgba(180, 195, 210, 0.6);
   transition: transform 0.15s ease;
 }
 

@@ -1490,6 +1490,33 @@
     }
   });
 
+  // Clear all picks
+  function clearAllPicks() {
+    LEGS.splice(0, LEGS.length);
+    STRAIGHTS.splice(0, STRAIGHTS.length);
+    ROUND_ROBINS.splice(0, ROUND_ROBINS.length);
+    Object.keys(GAMES).forEach((k) => delete GAMES[k]);
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem("gbsv_shared_fetched_picks");
+    } catch (_) {}
+    updateTableCounts();
+    renderAll();
+    // Clear model picks cards
+    const container = document.getElementById("model-picks-cards");
+    if (container) {
+      container.innerHTML =
+        '<div class="mp-empty-state"><span class="mp-empty-icon">📊</span>' +
+        "<span>Tap a button above to load today's model picks</span></div>";
+    }
+  }
+
+  document.addEventListener("click", (e) => {
+    if (e.target.closest("#mp-clear-picks")) {
+      clearAllPicks();
+    }
+  });
+
   // Expose for debugging
   window.PicksTracker = {
     LEGS,
@@ -1499,5 +1526,6 @@
     fetchScores,
     renderAll,
     addFetchedPicks,
+    clearAllPicks,
   };
 })();

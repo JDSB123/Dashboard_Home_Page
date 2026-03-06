@@ -69,7 +69,10 @@
 
     formatPickForTable(pick) {
       const fireNum = normalizeFireRating
-        ? normalizeFireRating(pick.fire_rating ?? pick.confidence, parseFloat(pick.edge) || 0)
+        ? normalizeFireRating(
+            pick.fire_rating ?? pick.confidence,
+            parseFloat(pick.edge) || 0,
+          )
         : 3;
 
       const rawAway = pick.away_team || pick.awayTeam || "";
@@ -80,11 +83,7 @@
 
       const pickDisplay =
         pick.pick_display || pick.pick || pick.recommendation || "";
-      const marketType = (
-        pick.market_type ||
-        pick.market ||
-        ""
-      ).toLowerCase();
+      const marketType = (pick.market_type || pick.market || "").toLowerCase();
 
       // Determine pick type and extract components
       let pickType = "spread";

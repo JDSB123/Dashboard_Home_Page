@@ -305,7 +305,7 @@ body.page-active-picks .picks-table thead th {
   width: 100%;
   margin-bottom: 28px; /* Increased spacing before table */
   position: relative;
-  z-index: 200;
+  z-index: 300; /* Higher than toolbar (200) so date-range dropdown isn't covered */
 }
 
 /* Ensure brand header is visible and properly sized */

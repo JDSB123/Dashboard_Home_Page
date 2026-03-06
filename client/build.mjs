@@ -242,7 +242,6 @@ const FETCH_PICKS_CSS = [
   "assets/css/pages/fetch-picks-critical.css",
 ];
 
-
 // ── Build logic ───────────────────────────────────────────────────────────
 
 function concatenateFiles(files, label) {
