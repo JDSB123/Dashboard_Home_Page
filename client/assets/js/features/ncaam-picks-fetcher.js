@@ -101,8 +101,8 @@
       // Parse time from "12/25 11:10 AM" or direct "6:00 PM" format (v2 camelCase timeCst)
       let timeStr = pick.time_cst || pick.timeCst || "";
       let dateStr = "";
-      if (timeStr.includes(" ") && timeStr.match(/^\d/)) {
-        // "12/25 11:10 AM" → split date from time
+      if (timeStr.includes(" ") && timeStr.match(/^\d+[/-]/)) {
+        // "12/25 11:10 AM" or "3/6 6:30 PM" → split date from time
         const timeParts = timeStr.split(" ");
         dateStr = timeParts[0];
         timeStr = timeParts.slice(1).join(" ");
@@ -124,11 +124,27 @@
 
       // Preserve ACA label formatting first (pickLabel often contains the intended display text).
       const pickTeam =
-        pick.pickLabel || pick.pick || pick.predictedWinner || "";
-      let pickDirection = "";
+        pick.pickLabel ||
+        pick.pick ||
+        pick.predictedWinner ||
+        pick.pick_team ||
+        pick.selection ||
+        pick.side ||
+        "";
+      let pickDirection =
+        pick.pick_direction ||
+        pick.direction ||
+        pick.over_under ||
+        pick.ou ||
+        "";
       const upperPick = pickTeam.toUpperCase();
-      if (upperPick === "OVER" || upperPick === "UNDER") {
+      if (!pickDirection && (upperPick === "OVER" || upperPick === "UNDER")) {
         pickDirection = upperPick;
+      }
+      // Also check if pickTeam contains direction hint (e.g., "Over 133.5")
+      if (!pickDirection) {
+        if (/\bOVER\b/i.test(pickTeam)) pickDirection = "OVER";
+        else if (/\bUNDER\b/i.test(pickTeam)) pickDirection = "UNDER";
       }
 
       let edgeValue = 0;
@@ -146,6 +162,7 @@
           new Date().toLocaleDateString("en-US", {
             month: "short",
             day: "numeric",
+            year: "numeric",
           }),
         time: timeStr,
         awayTeam,

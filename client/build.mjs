@@ -183,6 +183,7 @@ const WEEKLY_LINEUP_JS = [
   "assets/js/features/live-scores.js",
   "assets/js/features/auto-game-fetcher.js",
   "assets/js/features/pick-standardizer.js",
+  "assets/js/features/weekly-lineup-import.js",
   "assets/js/features/weekly-lineup-controller.js",
   "assets/js/features/blob-storage-archiver.js",
   "assets/js/features/history-manager.js",
@@ -230,12 +231,8 @@ const WEEKLY_LINEUP_CSS = [
   "assets/css/components/status-badges.css",
   "assets/css/components/table-columns.css",
   "assets/css/pages/weekly-lineup-critical.css",
-  "assets/css/components/weekly-lineup-legacy-dropdown-fallback-lockup.css",
-  "assets/css/components/weekly-lineup-filter-dropdown-lockup.css",
   "assets/css/components/weekly-lineup-active-filter-chips-base.css",
   "assets/css/components/weekly-lineup-active-filter-chips-lockup.css",
-  "assets/css/components/weekly-lineup-filter-trigger-lockup.css",
-  "assets/css/components/weekly-lineup-micro-filter-lockup.css",
   "assets/css/components/weekly-lineup-toolbar-lockup.css",
 ];
 // Fetch-picks-specific JS

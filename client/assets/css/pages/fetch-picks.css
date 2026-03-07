@@ -746,7 +746,8 @@ body.page-fetch-picks .ft-fetch-menu {
 }
 
 body.page-fetch-picks .league-fetch-item {
-  display: flex;
+  display: grid;
+  grid-template-columns: 20px 1fr;
   align-items: center;
   gap: 8px;
   text-transform: none;
@@ -759,7 +760,12 @@ body.page-fetch-picks .league-fetch-item span {
 body.page-fetch-picks .league-logo-sm {
   width: 16px;
   height: 16px;
+  min-width: 16px;
+  min-height: 16px;
+  display: block;
+  margin: 0 auto;
   object-fit: contain;
+  object-position: center;
 }
 
 body.page-fetch-picks .ft-last-refreshed {

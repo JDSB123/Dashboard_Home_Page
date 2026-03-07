@@ -31,7 +31,29 @@ window.LogoLoader = (() => {
     pennsylvania: "penn",
     "seattle u": "seattle university",
     "unc asheville": "north carolina asheville",
+    // Feed shorthands observed in weekly-lineup payloads.
+    bet: "bethune-cookman",
+    mic: "michigan state",
+    flo: "florida a&m",
+    vir: "virginia",
+    bro: "brown",
+    pen: "pennsylvania",
+    pre: "presbyterian",
+    rad: "radford",
+    lon: "longwood",
+    gre: "green bay",
+    how: "howard",
+    val: "valparaiso",
+    mar: "marist",
+    bra: "bradley",
+    mis: "missouri state",
+    iow: "iowa state",
+    "a&m": "florida a&m",
   };
+
+  // Collision-safe 3-letter prefix lookups for truncated team keys.
+  const ncaamPrefixToEspnId = new Map();
+  const ncaamAmbiguousPrefixes = new Set();
 
   // Ignore ultra-generic keys that would create accidental cross-team collisions.
   const ambiguousNcaamKeys = new Set([
@@ -92,6 +114,27 @@ window.LogoLoader = (() => {
     return [...candidates];
   }
 
+  function registerNcaamPrefix(key, espnId) {
+    const compact = String(key || "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]/g, "");
+    if (compact.length < 3) return;
+    const prefix = compact.slice(0, 3);
+    if (!prefix || ambiguousNcaamKeys.has(prefix)) return;
+    if (ncaamAmbiguousPrefixes.has(prefix)) return;
+
+    const existing = ncaamPrefixToEspnId.get(prefix);
+    if (!existing) {
+      ncaamPrefixToEspnId.set(prefix, espnId);
+      return;
+    }
+
+    if (existing !== espnId) {
+      ncaamPrefixToEspnId.delete(prefix);
+      ncaamAmbiguousPrefixes.add(prefix);
+    }
+  }
+
   async function loadMappings() {
     try {
       const response = await fetch("/assets/data/logo-mappings.json", {
@@ -137,6 +180,8 @@ window.LogoLoader = (() => {
         if (team.location) setId(team.location.toLowerCase(), id);
         if (team.nickname) setId(team.nickname.toLowerCase(), id);
         if (team.name) setId(team.name.toLowerCase(), id);
+        if (team.location) registerNcaamPrefix(team.location, id);
+        if (team.name) registerNcaamPrefix(team.name, id);
         // Allow direct numeric ESPN ID lookup (e.g. "150" -> "150")
         setId(id, id);
       }
@@ -246,6 +291,20 @@ window.LogoLoader = (() => {
         const url = `${baseUrl}/ncaa-500-${espnId}.png`;
         logoCache.set(cacheKey, url);
         return url;
+      }
+
+      // Last-pass lookup for truncated keys (e.g. "bet" -> Bethune-Cookman)
+      // only when the prefix maps uniquely to one NCAA team.
+      const compactKey = normalizedTeamId.replace(/[^a-z0-9]/g, "");
+      if (compactKey.length >= 3) {
+        const prefix = compactKey.slice(0, 3);
+        const prefixedEspnId = ncaamPrefixToEspnId.get(prefix);
+        if (prefixedEspnId && !ncaamAmbiguousPrefixes.has(prefix)) {
+          resolvedNcaamEspnId = prefixedEspnId;
+          const url = `${baseUrl}/ncaa-500-${prefixedEspnId}.png`;
+          logoCache.set(cacheKey, url);
+          return url;
+        }
       }
     }
 

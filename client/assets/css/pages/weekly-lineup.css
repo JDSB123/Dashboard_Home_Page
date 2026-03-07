@@ -292,6 +292,11 @@ body.page-weekly-lineup .table-container,
   min-width: 145px !important;
   max-width: 15% !important;
 } /* Date & Time (CST) */
+.weekly-lineup-table tbody td.col-datetime {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+}
 .weekly-lineup-table thead th:nth-child(2),
 .weekly-lineup-table tbody td:nth-child(2) {
   width: 6% !important;
@@ -2480,6 +2485,29 @@ body.page-weekly-lineup .filter-title,
   display: none;
 }
 
+.page-weekly-lineup #file-list .file-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 214, 137, 0.22);
+  background: rgba(0, 214, 137, 0.08);
+  color: var(--neutral-100, #e5eef6);
+  font-size: 0.72rem;
+  line-height: 1.2;
+}
+
+.page-weekly-lineup #file-list .file-list-item + .file-list-item {
+  margin-top: 0.35rem;
+}
+
+.page-weekly-lineup #drop-zone.dragover {
+  border-color: var(--emerald-400, #34d399);
+  background: rgba(0, 214, 137, 0.12);
+}
+
 .page-weekly-lineup #upload-files-btn {
   width: 100%;
   margin-bottom: 1rem;
@@ -3207,7 +3235,7 @@ body.page-weekly-lineup .filter-title,
   gap: 0.2rem;
   align-items: center;
   justify-content: center;
-  min-width: 80px;
+  min-width: 130px;
 }
 
 .weekly-lineup-table .datetime-cell-inline {
@@ -4508,7 +4536,10 @@ body.page-weekly-lineup .ft-right {
   max-width: 22px;
   min-height: 22px;
   max-height: 22px;
+  display: block;
+  margin: 0 auto;
   object-fit: contain;
+  object-position: center;
   filter: drop-shadow(0 0 6px rgba(0, 214, 137, 0.2));
   flex-shrink: 0;
 }
@@ -4533,9 +4564,17 @@ body.page-weekly-lineup .ft-right {
 }
 
 .league-fetch-item {
-  display: flex;
+  display: grid;
+  grid-template-columns: 24px 1fr;
   align-items: center;
   gap: 8px;
+}
+
+.ft-fetch-menu .league-fetch-item .league-logo-sm {
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  min-height: 20px;
 }
 
 .fetch-all-item {
@@ -5055,6 +5094,7 @@ body.page-weekly-lineup
   .datetime-piece {
   display: block !important;
   line-height: var(--leading-tight, 1.25) !important;
+  white-space: nowrap !important;
 }
 
 /* Left side: pills & dropdowns in a single row, don't shrink */

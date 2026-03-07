@@ -38,6 +38,11 @@ function isFileAllowed(file) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Weekly Lineup uses its own page-specific importer.
+    if (document.body?.classList?.contains('page-weekly-lineup')) {
+        return;
+    }
+
     const actionButtons = document.getElementById('action-buttons');
     const importOptions = document.getElementById('import-options');
     const importBtn = document.querySelector('.import-picks-btn');

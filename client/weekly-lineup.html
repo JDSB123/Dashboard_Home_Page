@@ -30,7 +30,8 @@
         var isLocal =
           location.hostname === "localhost" ||
           location.hostname === "127.0.0.1";
-        if (isLocal) {
+        var showDevHint = new URLSearchParams(location.search).has("devHint");
+        if (isLocal && showDevHint) {
           console.log(
             "[DEV] Local environment detected — using production APIs by default. Add ?localApi=1 for local Functions.",
           );
@@ -371,7 +372,7 @@
                     Upload Picks
                   </button>
                 </div>
-                <div class="import-options-popup" id="import-options">
+                <div class="import-options-popup" id="import-options" hidden>
                   <div class="import-header">
                     <span class="import-title">Add Picks</span>
                     <button
@@ -410,6 +411,11 @@
                     PDFs, images, HTML, text files — or paste picks directly
                   </div>
                   <div id="file-list"></div>
+                  <div
+                    id="upload-status"
+                    class="upload-status"
+                    aria-live="polite"
+                  ></div>
                   <div id="manual-entry-area" class="manual-entry-area hidden">
                     <textarea
                       id="manual-picks-input"
@@ -698,6 +704,15 @@
               </div>
             </div>
           </div>
+        </div>
+
+        <div class="table-filter-chips-wrapper">
+          <div
+            class="table-filter-chips"
+            id="table-filter-chips"
+            data-has-chips="false"
+            aria-live="polite"
+          ></div>
         </div>
 
         <div class="table-container weekly-lineup-table-wrapper">

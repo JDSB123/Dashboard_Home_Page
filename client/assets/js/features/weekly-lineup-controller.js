@@ -102,7 +102,11 @@
   const formatDateFull = (isoDate) => {
     const text = safeText(isoDate).trim();
     if (!text) return "";
-    const d = new Date(text);
+    let d = new Date(text);
+    // Short dates like "3/6" or "Mar 6" may parse with wrong year
+    if (!Number.isNaN(d.getTime()) && d.getFullYear() < 2020) {
+      d = new Date(text + ", " + new Date().getFullYear());
+    }
     if (Number.isNaN(d.getTime())) return String(isoDate);
     return d.toLocaleDateString("en-US", {
       month: "long",
@@ -172,8 +176,18 @@
     if (!value) return "FG";
     if (value === "FULL" || value === "FULL GAME") return "FG";
     if (value === "FG") return "FG";
+    if (value === "1ST HALF" || value === "FIRST HALF") return "1H";
     if (value === "1H") return "1H";
+    if (value === "2ND HALF" || value === "SECOND HALF") return "2H";
     if (value === "2H") return "2H";
+    if (value === "1Q" || value === "1ST QUARTER" || value === "FIRST QUARTER")
+      return "1Q";
+    if (value === "2Q" || value === "2ND QUARTER" || value === "SECOND QUARTER")
+      return "2Q";
+    if (value === "3Q" || value === "3RD QUARTER" || value === "THIRD QUARTER")
+      return "3Q";
+    if (value === "4Q" || value === "4TH QUARTER" || value === "FOURTH QUARTER")
+      return "4Q";
     return value;
   };
 
@@ -386,7 +400,17 @@
       chips.push({ key: "segment", label: `Segment: ${label}` });
     }
     if (state.filters.pickType !== "all") {
-      chips.push({ key: "pickType", label: `Pick: ${state.filters.pickType}` });
+      const pickTypeLabelMap = {
+        spread: "Spread",
+        moneyline: "ML",
+        total: "O/U",
+        "team-total": "Team Total",
+      };
+      chips.push({
+        key: "pickType",
+        label:
+          `Pick: ${pickTypeLabelMap[state.filters.pickType] || state.filters.pickType}`,
+      });
     }
     if (state.filters.teamSearch) {
       chips.push({
@@ -401,11 +425,28 @@
     chips.forEach((chip) => {
       const button = document.createElement("button");
       button.type = "button";
-      button.className = "filter-chip-btn";
-      button.textContent = chip.label;
+      button.className = "filter-chip";
       button.setAttribute("data-clear-filter", chip.key);
+      const label = document.createElement("span");
+      label.className = "chip-label";
+      label.textContent = chip.label;
+      const remove = document.createElement("span");
+      remove.className = "chip-remove";
+      remove.setAttribute("aria-hidden", "true");
+      remove.textContent = "x";
+      button.appendChild(label);
+      button.appendChild(remove);
       host.appendChild(button);
     });
+
+    if (chips.length > 1) {
+      const clearAllBtn = document.createElement("button");
+      clearAllBtn.type = "button";
+      clearAllBtn.className = "clear-all-filters";
+      clearAllBtn.setAttribute("data-clear-filter", "all");
+      clearAllBtn.textContent = "Clear All";
+      host.appendChild(clearAllBtn);
+    }
   };
 
   const getActiveFilterCount = () => {
@@ -533,20 +574,57 @@
     const leagueKey =
       normalizedSport === "NCAAB" ? "ncaam" : normalizedSport.toLowerCase();
 
+    const compact = (value) =>
+      safeText(value)
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, "");
+
+    const nbaIdMap = {
+      gsw: "gs",
+      nyk: "ny",
+      nop: "no",
+      sas: "sa",
+      uta: "utah",
+      was: "wsh",
+    };
+
+    const normalizeTeamId = (id) => {
+      const clean = compact(id);
+      if (!clean) return "";
+      if (leagueKey === "nba") return nbaIdMap[clean] || clean;
+      if (leagueKey === "ncaam" || leagueKey === "ncaab") {
+        return /^\d+$/.test(clean) ? clean : "";
+      }
+      return clean;
+    };
+
+    const infoAbbr = window.TeamData?.getTeamInfo?.(teamName, leagueKey)?.abbr;
+    const sharedAbbr = window.SharedUtils?.getTeamAbbr?.(teamName);
+    const rawNameId = /\s/.test(teamName) ? "" : safeText(teamName);
+    const teamId =
+      normalizeTeamId(infoAbbr) ||
+      normalizeTeamId(sharedAbbr) ||
+      normalizeTeamId(rawNameId);
+
     // Use TeamData for logo if available (most reliable)
     const teamLogo = window.TeamData?.getTeamLogo?.(teamName, leagueKey);
     if (teamLogo) return teamLogo;
 
-    // Fallback: pass full team name to LogoLoader (has NCAAM variant data)
+    // Prefer ID-based lookup to avoid bad "nba-500-full team name.png" URLs
+    // during mapping-load races; NCAA can also use full-name variant resolution.
     if (window.LogoLoader?.getLogoUrl) {
-      return window.LogoLoader.getLogoUrl(leagueKey, teamName.toLowerCase());
+      let loaderLogo = "";
+      if (teamId) {
+        loaderLogo = window.LogoLoader.getLogoUrl(leagueKey, teamId);
+      }
+      if (!loaderLogo && (leagueKey === "ncaam" || leagueKey === "ncaab")) {
+        loaderLogo = window.LogoLoader.getLogoUrl(
+          leagueKey,
+          teamName.toLowerCase(),
+        );
+      }
+      if (loaderLogo) return loaderLogo;
     }
-
-    const teamAbbr =
-      window.SharedUtils?.getTeamAbbr?.(teamName) ||
-      safeText(teamName).split(" ").pop() ||
-      "";
-    const teamId = safeText(teamAbbr).toLowerCase();
 
     if (!teamId) return "";
 
@@ -555,8 +633,14 @@
       window.APP_CONFIG?.LOGO_FALLBACK_URL ||
       "https://gbsvorchestratorstorage.blob.core.windows.net/team-logos"
     ).replace(/\/+$/, "");
-    const folder =
-      leagueKey === "ncaam" || leagueKey === "ncaaf" ? "ncaa" : leagueKey;
+    // NCAA team logos require numeric ESPN IDs; do not synthesize invalid IDs
+    // from abbreviations (e.g. "bet", "mic"), which only create noisy 404s.
+    if (leagueKey === "ncaam" || leagueKey === "ncaab") {
+      if (!/^\d+$/.test(teamId)) return "";
+      return `${logoBase}/ncaa-500-${teamId}.png`;
+    }
+
+    const folder = leagueKey === "ncaaf" ? "ncaa" : leagueKey;
     return `${logoBase}/${folder}-500-${teamId}.png`;
   };
 
@@ -876,11 +960,13 @@
    * Format pick cell as a single clean line:
    *   Moneyline: Florida A&M (-110)
    *   Spread: Florida A&M -7.5 (-110)
-   *   Total Over 175.5 (-110)
+   *   Total: Full Game Over 175.5 (-110)
    */
-  const formatPickCellLine = (pick, pickLabel, odds) => {
+  const formatPickCellLine = (pick, pickLabel, odds, segmentLabel) => {
     const type = safeText(pick.pickType || "spread").toLowerCase();
-    const oddsStr = safeText(odds).trim();
+    let oddsStr = safeText(odds).trim();
+    // Add "+" prefix for positive American odds
+    if (oddsStr && /^\d/.test(oddsStr)) oddsStr = "+" + oddsStr;
     const oddsPart = oddsStr ? ` (${oddsStr})` : "";
 
     if (type === "moneyline" || type === "ml") {
@@ -893,14 +979,18 @@
     if (type === "total" || type === "team-total") {
       const dir = resolveOverUnder(pick);
       const line = safeText(pick.line).trim();
-      if (dir && line) return `${dir} ${line}${oddsPart}`;
-      if (dir) return `${dir}${oddsPart}`;
-      if (line) return `${line}${oddsPart}`;
-      return `Total${oddsPart}`;
+      const seg = segmentLabel || "Full Game";
+      if (dir && line) return `${seg} ${dir} ${line}${oddsPart}`;
+      if (dir) return `${seg} ${dir}${oddsPart}`;
+      if (line) return `${seg} ${line}${oddsPart}`;
+      return `${seg} Total${oddsPart}`;
     }
 
-    // Spread
-    const team = safeText(pick.pickTeam).trim();
+    // Spread — fallback to predictedWinner or infer from line sign
+    let team = safeText(pick.pickTeam).trim();
+    if (!team) {
+      team = safeText(pick.predictedWinner || "").trim();
+    }
     const line = safeText(pick.line).trim();
     if (team && line) return `${team} ${line}${oddsPart}`;
     if (team) return `${team}${oddsPart}`;
@@ -1078,7 +1168,12 @@
           ? (edge * 2.5).toFixed(1)
           : ""; // estimate % if not provided
 
-      const formattedPickLine = formatPickCellLine(pick, pickLabel, odds);
+      const formattedPickLine = formatPickCellLine(
+        pick,
+        pickLabel,
+        odds,
+        segmentLabel,
+      );
       const pickBadge = pickTypeBadge(pick);
       const awayShort = getTeamShortCode(awayFull || pick.awayTeam);
       const homeShort = getTeamShortCode(homeFull || pick.homeTeam);
@@ -1088,21 +1183,21 @@
           <div class="datetime-cell datetime-cell-inline">
             <span class="datetime-formatted">
               <span class="datetime-piece datetime-date">${safeText(dateText)}</span>
-              ${timeCst ? `<span class="datetime-piece datetime-time">${safeText(timeCst)}</span>` : ""}
-              ${modelLabel ? `<span class="datetime-piece datetime-model">${safeText(modelLabel)}</span>` : ""}
+              <span class="datetime-piece datetime-time">${safeText(timeCst) || "TBD"}</span>
+              <span class="datetime-piece datetime-model">${safeText(modelLabel)}</span>
             </span>
           </div>
         </td>
         <td class="center col-league">
           <div class="league-cell">
-            ${leagueLogo.src ? `<img src="${leagueLogo.src}" class="league-logo" alt="${leagueLogo.alt}" loading="lazy" />` : safeText(leagueLogo.alt)}
+            ${leagueLogo.src ? `<img src="${leagueLogo.src}" class="league-logo" alt="${leagueLogo.alt}" />` : safeText(leagueLogo.alt)}
           </div>
         </td>
         <td class="col-matchup">
           <div class="matchup-cell matchup-inline">
             <span class="team-line">
               <span class="team-logo-wrap${awayLogo ? "" : " logo-fallback-only"}">
-                ${awayLogo ? `<img src="${awayLogo}" class="team-logo" alt="${safeText(awayFull)}" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('logo-fallback-visible');" />` : ""}
+                ${awayLogo ? `<img src="${awayLogo}" class="team-logo" alt="${safeText(awayFull)}" onerror="this.style.display='none';this.parentElement.classList.add('logo-fallback-visible');" />` : ""}
                 <span class="team-logo-fallback">${safeText(awayShort)}</span>
               </span>
               <span class="team-name-full">${safeText(awayFull)}</span>
@@ -1111,7 +1206,7 @@
             <span class="vs-divider">at</span>
             <span class="team-line">
               <span class="team-logo-wrap${homeLogo ? "" : " logo-fallback-only"}">
-                ${homeLogo ? `<img src="${homeLogo}" class="team-logo" alt="${safeText(homeFull)}" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('logo-fallback-visible');" />` : ""}
+                ${homeLogo ? `<img src="${homeLogo}" class="team-logo" alt="${safeText(homeFull)}" onerror="this.style.display='none';this.parentElement.classList.add('logo-fallback-visible');" />` : ""}
                 <span class="team-logo-fallback">${safeText(homeShort)}</span>
               </span>
               <span class="team-name-full">${safeText(homeFull)}</span>
@@ -1248,6 +1343,263 @@
       }
       localStorage.setItem("gbsv_shared_fetched_picks", JSON.stringify(merged));
     } catch (_) {}
+  };
+
+  const parseLineNumber = (value) => {
+    const cleaned = safeText(value).replace(/[^0-9+.-]/g, "").trim();
+    if (!cleaned) return null;
+    const numeric = parseFloat(cleaned);
+    return Number.isFinite(numeric) ? numeric : null;
+  };
+
+  const teamKey = (teamName, sport) =>
+    slug(resolveFullName(safeText(teamName).trim(), sport) || teamName);
+
+  const findSlateMatchForImportedPick = (pick) => {
+    const currentSlate = Array.isArray(state.activePicks) ? state.activePicks : [];
+    if (!currentSlate.length) return null;
+
+    const targetSport = normalizeSport(pick.sport || pick.league);
+    const targetPickType = normalizePickType(pick.pickType || "");
+    const targetSegment = normalizeSegment(pick.segment || "FG");
+    const targetPickTeamKey = teamKey(pick.pickTeam, targetSport);
+    const targetLine = parseLineNumber(pick.line);
+    const targetDirection = safeText(pick.pickDirection).trim().toLowerCase();
+
+    const scored = [];
+
+    for (const slatePick of currentSlate) {
+      const slateSport = normalizeSport(slatePick.sport || slatePick.league);
+      if (slateSport !== targetSport) continue;
+
+      let score = 0;
+
+      if (normalizePickType(slatePick.pickType) === targetPickType) {
+        score += 4;
+      }
+
+      if (normalizeSegment(slatePick.segment || "FG") === targetSegment) {
+        score += 3;
+      }
+
+      const slatePickTeamKey = teamKey(slatePick.pickTeam, slateSport);
+      const slateAwayKey = teamKey(slatePick.awayTeam, slateSport);
+      const slateHomeKey = teamKey(slatePick.homeTeam, slateSport);
+
+      if (targetPickTeamKey) {
+        if (targetPickTeamKey === slatePickTeamKey) score += 6;
+        if (targetPickTeamKey === slateAwayKey || targetPickTeamKey === slateHomeKey) {
+          score += 5;
+        }
+
+        if (
+          targetPickTeamKey !== slatePickTeamKey &&
+          targetPickTeamKey !== slateAwayKey &&
+          targetPickTeamKey !== slateHomeKey &&
+          ((slateAwayKey && slateAwayKey.includes(targetPickTeamKey)) ||
+            (slateHomeKey && slateHomeKey.includes(targetPickTeamKey)) ||
+            (targetPickTeamKey.includes(slateAwayKey) && slateAwayKey.length >= 4) ||
+            (targetPickTeamKey.includes(slateHomeKey) && slateHomeKey.length >= 4))
+        ) {
+          score += 2;
+        }
+      }
+
+      if (
+        (targetPickType === "total" || targetPickType === "team-total") &&
+        targetDirection &&
+        safeText(slatePick.pickDirection).trim().toLowerCase() === targetDirection
+      ) {
+        score += 2;
+      }
+
+      const slateLine = parseLineNumber(slatePick.line);
+      if (targetLine != null && slateLine != null) {
+        const diff = Math.abs(targetLine - slateLine);
+        if (diff < 0.01) score += 3;
+        else if (diff <= 0.25) score += 2;
+        else if (diff <= 0.5) score += 1;
+      }
+
+      if (score > 0) {
+        scored.push({ score, slatePick });
+      }
+    }
+
+    if (!scored.length) return null;
+
+    scored.sort((a, b) => b.score - a.score);
+    const best = scored[0];
+    const second = scored[1];
+
+    // Require a clear match to avoid assigning wrong games.
+    if (best.score < 7) return null;
+    if (second && second.score === best.score) return null;
+
+    return best.slatePick;
+  };
+
+  const buildImportedPick = (rawPick, defaults = {}) => {
+    const raw = rawPick || {};
+    const fallbackSportsbook = safeText(defaults.sportsbook).trim();
+    const fallbackSportsbookKey = safeText(defaults.sportsbookKey).trim();
+    const fallbackSource = safeText(defaults.source).trim() || "manual-import";
+
+    const normalized = normalizeIncomingPick({
+      ...raw,
+      sportsbook:
+        safeText(raw.sportsbook || raw.book).trim() ||
+        fallbackSportsbook ||
+        fallbackSportsbookKey ||
+        "Manual Upload",
+      book:
+        safeText(raw.book || raw.sportsbook).trim() ||
+        fallbackSportsbookKey ||
+        fallbackSportsbook ||
+        "manual",
+      source: safeText(raw.source).trim() || fallbackSource,
+    });
+
+    const prepared = { ...normalized };
+    delete prepared._normalizeMeta;
+
+    if (!safeText(prepared.awayTeam).trim() || !safeText(prepared.homeTeam).trim()) {
+      const slateMatch = findSlateMatchForImportedPick(prepared);
+      if (slateMatch) {
+        prepared.sport = prepared.sport || slateMatch.sport;
+        prepared.league = prepared.league || slateMatch.league;
+        prepared.awayTeam = safeText(prepared.awayTeam || slateMatch.awayTeam).trim();
+        prepared.homeTeam = safeText(prepared.homeTeam || slateMatch.homeTeam).trim();
+        prepared.gameDate = safeText(
+          prepared.gameDate || prepared.date || slateMatch.gameDate || slateMatch.date || "",
+        ).trim();
+        prepared.gameTime = safeText(
+          prepared.gameTime || prepared.time || slateMatch.gameTime || slateMatch.time || "",
+        ).trim();
+        if (!safeText(prepared.pickTeam).trim()) {
+          prepared.pickTeam = safeText(slateMatch.pickTeam).trim();
+        }
+      }
+    }
+
+    prepared.awayTeam = safeText(prepared.awayTeam).trim();
+    prepared.homeTeam = safeText(prepared.homeTeam).trim();
+    if (!prepared.awayTeam || !prepared.homeTeam) {
+      return null;
+    }
+
+    prepared.pickType = normalizePickType(prepared.pickType || "spread");
+    prepared.segment = normalizeSegment(prepared.segment || "FG");
+    prepared.status = safeText(prepared.status || "pending").toLowerCase();
+    prepared.gameDate = safeText(prepared.gameDate || prepared.date || nowIso())
+      .slice(0, 10)
+      .trim();
+    prepared.gameTime = safeText(prepared.gameTime || prepared.time || "").trim();
+    prepared.id = prepared.id || computePickId(prepared);
+    prepared.locked = prepared.locked === true;
+    prepared.lockedAt = prepared.locked
+      ? prepared.lockedAt || nowIso()
+      : null;
+    prepared.source = safeText(prepared.source || fallbackSource);
+    prepared.sportsbook = safeText(prepared.sportsbook).trim();
+    prepared.book = safeText(prepared.book).trim();
+
+    return prepared;
+  };
+
+  const mergeImportedPicks = (incomingPicks, options = {}) => {
+    const sourceList = Array.isArray(incomingPicks) ? incomingPicks : [];
+    const defaults = {
+      sportsbook: options.sportsbook,
+      sportsbookKey: options.sportsbookKey,
+      source: options.source || "manual-import",
+    };
+
+    const prepared = sourceList
+      .map((pick) => buildImportedPick(pick, defaults))
+      .filter(Boolean);
+
+    const dropped = Math.max(0, sourceList.length - prepared.length);
+    if (!prepared.length) {
+      return {
+        added: 0,
+        updated: 0,
+        dropped,
+        totalAfter: (state.activePicks || []).length,
+        merged: [],
+      };
+    }
+
+    const byId = new Map((state.activePicks || []).map((pick) => [pick.id, pick]));
+    let added = 0;
+    let updated = 0;
+    const mergedImported = [];
+
+    for (const incoming of prepared) {
+      const existing = byId.get(incoming.id);
+      if (existing) {
+        const existingStatus = safeText(existing.status || "").toLowerCase();
+        const merged = {
+          ...existing,
+          ...incoming,
+          status:
+            existingStatus && existingStatus !== "pending"
+              ? existing.status
+              : incoming.status,
+          result: existing.result ?? incoming.result,
+          pnl: existing.pnl ?? incoming.pnl,
+          locked: existing.locked === true ? true : incoming.locked === true,
+          lockedAt:
+            existing.locked === true
+              ? existing.lockedAt || nowIso()
+              : incoming.lockedAt || null,
+        };
+        byId.set(merged.id, merged);
+        mergedImported.push(merged);
+        updated += 1;
+        continue;
+      }
+
+      byId.set(incoming.id, incoming);
+      mergedImported.push(incoming);
+      added += 1;
+    }
+
+    state.activePicks = Array.from(byId.values());
+    state.lastFetchedAt = nowIso();
+    renderFilteredRows();
+    setLastRefreshed(state.lastFetchedAt);
+    persistWeeklyLineupCache(state.activePicks);
+
+    return {
+      added,
+      updated,
+      dropped,
+      totalAfter: state.activePicks.length,
+      merged: mergedImported,
+    };
+  };
+
+  const saveImportedPicksToCosmos = async (picks) => {
+    if (!window.PicksService?.create) return false;
+    if (!Array.isArray(picks) || picks.length === 0) return false;
+
+    const payload = picks.map((pick) => {
+      const normalized = toCosmosPick(pick);
+      normalized.id = normalized.id || computePickId(normalized);
+      return normalized;
+    });
+
+    try {
+      await window.PicksService.create(payload);
+      return true;
+    } catch (error) {
+      showToast(
+        `Imported picks saved locally but Cosmos sync failed: ${error.message || error}`,
+        "warning",
+      );
+      return false;
+    }
   };
 
   const toggleLock = async (pickId, locked) => {
@@ -1585,6 +1937,11 @@
       if (chipBtn) {
         evt.preventDefault();
         const key = chipBtn.getAttribute("data-clear-filter");
+        if (key === "all") {
+          clearFilters();
+          renderFilteredRows();
+          return;
+        }
         if (key === "league") state.filters.league = "all";
         if (key === "segment") state.filters.segment = "all";
         if (key === "pickType") state.filters.pickType = "all";
@@ -1752,6 +2109,22 @@
       state.activePicks = Array.isArray(picks) ? picks : [];
       renderFilteredRows();
       persistWeeklyLineupCache(state.activePicks);
+    },
+    async appendImportedPicks(picks, options = {}) {
+      const summary = mergeImportedPicks(picks, options);
+      if (summary.added + summary.updated === 0) {
+        return summary;
+      }
+
+      const shouldSave = options.saveToCosmos !== false;
+      const savedToCosmos = shouldSave
+        ? await saveImportedPicksToCosmos(summary.merged)
+        : false;
+
+      return {
+        ...summary,
+        savedToCosmos,
+      };
     },
     showNotification(message, type) {
       showToast(message, type);

@@ -248,12 +248,13 @@
 
     // Try partial matches — ONLY within the same league to avoid cross-league collisions
     // (e.g. NCAAM "Northeastern" matching NFL "ne" → New England Patriots)
-    const normalizedLeague = league ? league.toLowerCase() : '';
+    const normalizedLeague = league ? league.toLowerCase() : "";
     // Treat ncaam/ncaab/cbb as equivalent league group
     const leagueGroup = (l) => {
-      const lower = (l || '').toLowerCase();
-      if (lower === 'ncaam' || lower === 'ncaab' || lower === 'cbb') return 'ncaab';
-      if (lower === 'ncaaf' || lower === 'cfb') return 'ncaaf';
+      const lower = (l || "").toLowerCase();
+      if (lower === "ncaam" || lower === "ncaab" || lower === "cbb")
+        return "ncaab";
+      if (lower === "ncaaf" || lower === "cfb") return "ncaaf";
       return lower;
     };
     const requestedGroup = leagueGroup(normalizedLeague);
@@ -316,17 +317,39 @@
     if (info.logo) return info.logo;
 
     // Fallback: pass full team name to LogoLoader which has variant data
-    // for NCAAM/NCAAF and can resolve "Florida A&M" → ESPN ID → correct logo
-    if (league && window.LogoLoader && typeof window.LogoLoader.getLogoUrl === "function") {
-      const leagueKey = league.toLowerCase() === "ncaab" ? "ncaam" : league.toLowerCase();
-      return window.LogoLoader.getLogoUrl(leagueKey, teamName.toLowerCase());
+    // for NCAAM/NCAAF and can resolve "Florida A&M" → ESPN ID → correct logo.
+    // Some races return an empty string before mapping data is ready; keep falling through.
+    if (
+      league &&
+      window.LogoLoader &&
+      typeof window.LogoLoader.getLogoUrl === "function"
+    ) {
+      const leagueKey =
+        league.toLowerCase() === "ncaab" ? "ncaam" : league.toLowerCase();
+      const loaderLogo = window.LogoLoader.getLogoUrl(
+        leagueKey,
+        teamName.toLowerCase(),
+      );
+      if (loaderLogo) return loaderLogo;
     }
 
     // Last resort: ESPN ID table or abbreviation
     if (league) {
+      const normalizedLeague = league.toLowerCase();
+      const mappedId = ESPN_TEAM_IDS[teamName.toLowerCase()] || "";
+      const isNcaamLeague =
+        normalizedLeague === "ncaam" ||
+        normalizedLeague === "ncaab" ||
+        normalizedLeague === "cbb";
+
+      // NCAA logo blobs are keyed by numeric ESPN IDs only.
+      // If we do not have a numeric mapping, return empty and let UI initials render.
+      if (isNcaamLeague && !/^\d+$/.test(mappedId)) {
+        return "";
+      }
+
       const id =
-        ESPN_TEAM_IDS[teamName.toLowerCase()] ||
-        teamName.toLowerCase().replace(/\s+/g, "").substring(0, 3);
+        mappedId || teamName.toLowerCase().replace(/\s+/g, "").substring(0, 3);
       return getTeamLogoUrl(id, league);
     }
 

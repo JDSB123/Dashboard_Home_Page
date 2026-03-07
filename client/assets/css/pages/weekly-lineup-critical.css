@@ -2,6 +2,7 @@
 @media (max-width: 767px) {
   body.page-weekly-lineup .filter-toolbar,
   body.page-weekly-lineup .toolbar-layout,
+  body.page-weekly-lineup .table-filter-chips-wrapper,
   body.page-weekly-lineup .dashboard-topline,
   body.page-weekly-lineup .unified-filter,
   body.page-weekly-lineup .date-toggle-group,

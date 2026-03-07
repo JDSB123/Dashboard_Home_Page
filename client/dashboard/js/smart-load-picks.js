@@ -213,6 +213,7 @@ function detectLeagueFromTeams(gameStr, awayTeam, homeTeam) {
 
 let teamRecordsCache = null;
 let teamRecordsPromise = null;
+const WEEKLY_LINEUP_CACHE_KEY = "gbsv_weekly_lineup_picks";
 const globalScope = typeof window !== "undefined" ? window : globalThis;
 
 if (
@@ -2839,14 +2840,14 @@ async function loadPicksFromDatabase() {
  */
 async function loadTrackedWeeklyPicks() {
   try {
-    if (!window.PicksService) return;
+    if (!window.PicksService) return 0;
 
     // DB sync must be enabled
     if (
       window.APP_CONFIG?.ENABLE_DB_SYNC === false &&
       !window.DEV_OVERRIDE_CONFIG?.ENABLE_DB_SYNC
     ) {
-      return;
+      return 0;
     }
 
     console.log(
@@ -2860,7 +2861,7 @@ async function loadTrackedWeeklyPicks() {
 
     if (!lockedPicks || lockedPicks.length === 0) {
       console.log("[WEEKLY→DASH] No tracked weekly picks found");
-      return;
+      return 0;
     }
 
     console.log(
@@ -2879,7 +2880,7 @@ async function loadTrackedWeeklyPicks() {
       console.log(
         "[WEEKLY→DASH] All tracked picks already in dashboard — no merge needed",
       );
-      return;
+      return 0;
     }
 
     // Tag picks with source, add logos
@@ -2897,8 +2898,93 @@ async function loadTrackedWeeklyPicks() {
         `[WEEKLY→DASH] ✅ Merged ${enriched.length} new tracked picks into dashboard`,
       );
     }
+
+    return enriched.length;
   } catch (error) {
     console.warn("[WEEKLY→DASH] Failed to load tracked weekly picks:", error);
+    return 0;
+  }
+}
+
+function computeWeeklyCacheId(pick) {
+  if (pick?.id) return String(pick.id);
+
+  const sport = String(pick?.sport || pick?.league || "NBA").toUpperCase();
+  const gameDate = String(pick?.gameDate || pick?.date || "").slice(0, 10);
+  const away = String(pick?.awayTeam || "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "-");
+  const home = String(pick?.homeTeam || "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "-");
+  const pickType = String(pick?.pickType || "spread").toLowerCase();
+  const segment = String(pick?.segment || "FG").toLowerCase();
+  const direction = String(pick?.pickDirection || "")
+    .trim()
+    .toLowerCase();
+  const line = String(pick?.line || "").trim().toLowerCase();
+
+  return [sport, gameDate, away, home, pickType, segment, direction, line].join(
+    "_",
+  );
+}
+
+function getLockedWeeklyPicksFromCache() {
+  try {
+    const raw = localStorage.getItem(WEEKLY_LINEUP_CACHE_KEY);
+    if (!raw) return [];
+
+    const parsed = JSON.parse(raw);
+    const picks = Array.isArray(parsed?.picks) ? parsed.picks : [];
+
+    return picks
+      .filter((pick) => pick && pick.locked === true)
+      .map((pick) => ({
+        ...pick,
+        id: computeWeeklyCacheId(pick),
+        source: pick.source || "weekly-lineup",
+      }));
+  } catch (error) {
+    console.warn("[WEEKLY→DASH] Failed to read weekly cache:", error);
+    return [];
+  }
+}
+
+function loadTrackedWeeklyPicksFromCache() {
+  try {
+    if (!window.LocalPicksManager?.add || !window.LocalPicksManager?.getAll) {
+      return 0;
+    }
+
+    const lockedCachePicks = getLockedWeeklyPicksFromCache();
+    if (lockedCachePicks.length === 0) {
+      return 0;
+    }
+
+    const existing = window.LocalPicksManager.getAll() || [];
+    const existingIds = new Set(
+      existing.map((pick) => String(pick?.id || "")).filter(Boolean),
+    );
+
+    const newPicks = lockedCachePicks.filter(
+      (pick) => pick?.id && !existingIds.has(String(pick.id)),
+    );
+
+    if (newPicks.length === 0) {
+      return 0;
+    }
+
+    window.LocalPicksManager.add(newPicks);
+    console.log(
+      `[WEEKLY→DASH] ✅ Merged ${newPicks.length} tracked picks from weekly cache`,
+    );
+
+    return newPicks.length;
+  } catch (error) {
+    console.warn("[WEEKLY→DASH] Failed to merge weekly cache picks:", error);
+    return 0;
   }
 }
 
@@ -2914,9 +3000,11 @@ function initializePicksAndRecords() {
   });
 
   // Merge tracked weekly-lineup picks into dashboard (non-blocking)
-  loadTrackedWeeklyPicks().catch(() => {
-    // Non-fatal — dashboard still works with existing localStorage picks
-  });
+  loadTrackedWeeklyPicks()
+    .catch(() => 0)
+    .finally(() => {
+      loadTrackedWeeklyPicksFromCache();
+    });
 }
 
 /**

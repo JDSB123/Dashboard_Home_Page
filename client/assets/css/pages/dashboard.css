@@ -1416,7 +1416,12 @@ body.page-active-picks .ft-fetch-league-btn.ft-fetch-all:hover {
 body.page-active-picks .ft-fetch-league-btn .league-logo-sm {
   width: 14px;
   height: 14px;
+  min-width: 14px;
+  min-height: 14px;
+  display: block;
+  margin: 0 auto;
   object-fit: contain;
+  object-position: center;
   opacity: 0.8;
 }
 
