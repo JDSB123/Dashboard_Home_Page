@@ -5,7 +5,9 @@
   "description": "Green Bier Sport Ventures Dashboard - Client Build",
   "scripts": {
     "build": "node build.mjs",
-    "build:watch": "node --watch-path=assets --watch-path=dashboard --watch-path=build.mjs build.mjs"
+    "build:watch": "node --watch-path=assets --watch-path=dashboard --watch-path=build.mjs build.mjs",
+    "test:weekly-lineup": "node tests/weekly-lineup-regression.test.mjs",
+    "smoke:weekly-lineup": "npm run build && npm run test:weekly-lineup"
   },
   "devDependencies": {
     "esbuild": "^0.24.0"

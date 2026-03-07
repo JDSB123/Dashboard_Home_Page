@@ -1601,10 +1601,8 @@ body.page-weekly-lineup .picks-table tbody tr {
    FILTER DROPDOWN CARDS - High Contrast Readable Design
    ========================================================================== */
 
-/* Legacy dropdown fallback rules removed.
-   Weekly lineup dropdown behavior is owned by component lockup files:
-   weekly-lineup-filter-dropdown-lockup.css and
-   weekly-lineup-legacy-dropdown-fallback-lockup.css. */
+/* Legacy weekly dropdown lockup files were removed as dead code.
+   The active toolbar dropdown system is fully owned by this page + controller. */
 
 /* Dropdown header bar */
 body.page-weekly-lineup .filter-header-integrated,

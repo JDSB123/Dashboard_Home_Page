@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <link rel="stylesheet" href="assets/css/base/critical.css?v=36.01.0" />
+    <link rel="stylesheet" href="assets/css/base/critical.css?v=36.03.0" />
     <link rel="manifest" href="/manifest.json" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta
@@ -48,19 +48,19 @@
     />
 
     <!-- Bundled CSS -->
-    <link rel="stylesheet" href="dist/core.min.css?v=36.02.0" />
+    <link rel="stylesheet" href="dist/core.min.css?v=36.03.0" />
     <!-- Page-specific CSS -->
     <link
       rel="stylesheet"
-      href="assets/css/pages/picks-tracker.css?v=36.01.0"
+      href="assets/css/pages/picks-tracker.css?v=36.03.0"
     />
     <link
       rel="stylesheet"
-      href="assets/css/pages/picks-tracker-mobile.css?v=36.01.0"
+      href="assets/css/pages/picks-tracker-mobile.css?v=36.03.0"
     />
 
     <!-- Runtime config (separate — per-environment) -->
-    <script src="config.js?v=36.01.0" defer></script>
+    <script src="config.js?v=36.03.0" defer></script>
   </head>
   <body class="page-picks-tracker">
     <noscript>
@@ -708,12 +708,12 @@
     </main>
 
     <!-- Bundled JS (shared core) -->
-    <script src="dist/core.min.js?v=36.02.0" defer></script>
+    <script src="dist/core.min.js?v=36.03.0" defer></script>
     <!-- Page-specific script -->
-    <script src="assets/js/features/picks-tracker.js?v=36.01.0" defer></script>
+    <script src="assets/js/features/picks-tracker.js?v=36.03.0" defer></script>
     <!-- Inline model picks fetcher (iPhone-optimized card output) -->
     <script
-      src="assets/js/features/picks-tracker-fetch.js?v=36.01.0"
+      src="assets/js/features/picks-tracker-fetch.js?v=36.03.0"
       defer
     ></script>
     <script>
@@ -722,7 +722,7 @@
           if ("serviceWorker" in navigator) {
             window.addEventListener("load", function () {
               navigator.serviceWorker
-                .register("/sw.js?v=36.02.0", { updateViaCache: "none" })
+                .register("/sw.js?v=36.03.0", { updateViaCache: "none" })
                 .catch(function () {});
             });
           }
