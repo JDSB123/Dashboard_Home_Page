@@ -225,10 +225,10 @@ const DASHBOARD_CSS = [
 
 // Weekly-lineup-specific CSS
 const WEEKLY_LINEUP_CSS = [
-  "assets/css/pages/weekly-lineup.css",
   "assets/css/components/picks-table.css",
   "assets/css/components/status-badges.css",
   "assets/css/components/table-columns.css",
+  "assets/css/pages/weekly-lineup.css",
   "assets/css/pages/weekly-lineup-critical.css",
   "assets/css/components/weekly-lineup-legacy-dropdown-fallback-lockup.css",
   "assets/css/components/weekly-lineup-filter-dropdown-lockup.css",

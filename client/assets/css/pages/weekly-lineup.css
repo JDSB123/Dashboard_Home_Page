@@ -1596,328 +1596,10 @@ body.page-weekly-lineup .picks-table tbody tr {
    FILTER DROPDOWN CARDS - High Contrast Readable Design
    ========================================================================== */
 
-/* Global dropdown container (legacy) */
-.th-filter-dropdown.open:not(.weekly-lineup-filter-dropdown) {
-  display: flex !important;
-  flex-direction: column !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  position: fixed !important;
-  z-index: 2147483647 !important;
-  min-width: 200px !important;
-  max-width: 260px !important;
-  background: #0d1117 !important;
-  border: 1px solid rgba(48, 54, 61, 0.8) !important;
-  border-radius: 6px !important;
-  box-shadow:
-    0 8px 24px rgba(0, 0, 0, 0.4),
-    0 0 0 1px rgba(0, 0, 0, 0.3) !important;
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-  padding: 0 !important;
-  pointer-events: auto !important;
-}
-
-/* Dropdown header */
-.th-filter-dropdown .filter-header-integrated {
-  display: flex !important;
-  justify-content: space-between !important;
-  align-items: center !important;
-  padding: 10px 12px !important;
-  background: rgba(22, 27, 34, 0.95) !important;
-  border-bottom: 1px solid rgba(48, 54, 61, 0.6) !important;
-  position: sticky !important;
-  top: 0 !important;
-  z-index: 2 !important;
-}
-
-.th-filter-dropdown .filter-title {
-  font-family: var(--font-display, "Oswald", sans-serif) !important;
-  font-size: 12px !important;
-  font-weight: 600 !important;
-  color: #e6edf3 !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.06em !important;
-}
-
-/* Filter sections */
-.th-filter-dropdown .filter-section-compact,
-.th-filter-dropdown .date-range-selector {
-  padding: 10px 12px !important;
-  border-bottom: 1px solid rgba(48, 54, 61, 0.4) !important;
-}
-
-.th-filter-dropdown .filter-section-compact:last-child {
-  border-bottom: none !important;
-  padding-bottom: 12px !important;
-}
-
-.th-filter-dropdown .section-label {
-  display: block !important;
-  font-size: 10px !important;
-  font-weight: 600 !important;
-  color: #8b949e !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.05em !important;
-  margin-bottom: 8px !important;
-}
-
-/* ==========================================================================
-   UNIFIED FILTER OPTION - High contrast buttons
-   ========================================================================== */
-.th-filter-dropdown .league-filter-chip,
-.th-filter-dropdown .segment-chip,
-.th-filter-dropdown .segment-pill,
-.th-filter-dropdown .edge-filter-chip,
-.th-filter-dropdown .fire-filter-chip,
-.th-filter-dropdown .bet-type-chip,
-.th-filter-dropdown .range-filter-chip,
-.th-filter-dropdown .date-range-btn,
-.th-filter-dropdown .time-slot,
-.th-filter-dropdown .book-chip,
-.th-filter-dropdown .league-pill,
-.th-filter-dropdown .ticket-pill {
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 5px !important;
-  padding: 6px 10px !important;
-  background: rgba(33, 38, 45, 0.8) !important;
-  border: 1px solid rgba(48, 54, 61, 0.8) !important;
-  border-radius: 4px !important;
-  color: #c9d1d9 !important;
-  font-size: 11px !important;
-  font-weight: 500 !important;
-  cursor: pointer !important;
-  transition: all 0.12s ease !important;
-  white-space: nowrap !important;
-}
-
-/* Hover state - clear visual feedback */
-.th-filter-dropdown .league-filter-chip:hover,
-.th-filter-dropdown .segment-chip:hover,
-.th-filter-dropdown .segment-pill:hover,
-.th-filter-dropdown .edge-filter-chip:hover,
-.th-filter-dropdown .fire-filter-chip:hover,
-.th-filter-dropdown .bet-type-chip:hover,
-.th-filter-dropdown .range-filter-chip:hover,
-.th-filter-dropdown .date-range-btn:hover,
-.th-filter-dropdown .time-slot:hover,
-.th-filter-dropdown .book-chip:hover,
-.th-filter-dropdown .league-pill:hover,
-.th-filter-dropdown .ticket-pill:hover {
-  background: rgba(48, 54, 61, 0.9) !important;
-  border-color: rgba(139, 148, 158, 0.4) !important;
-  color: #f0f6fc !important;
-}
-
-/* Active state - clear green accent */
-.th-filter-dropdown .league-filter-chip.active,
-.th-filter-dropdown .segment-chip.active,
-.th-filter-dropdown .segment-pill.active,
-.th-filter-dropdown .edge-filter-chip.active,
-.th-filter-dropdown .fire-filter-chip.active,
-.th-filter-dropdown .bet-type-chip.active,
-.th-filter-dropdown .range-filter-chip.active,
-.th-filter-dropdown .date-range-btn.active,
-.th-filter-dropdown .time-slot.active,
-.th-filter-dropdown .book-chip.active,
-.th-filter-dropdown .league-pill.active,
-.th-filter-dropdown .ticket-pill.active {
-  background: rgba(46, 160, 67, 0.15) !important;
-  border-color: rgba(46, 160, 67, 0.5) !important;
-  color: #3fb950 !important;
-  font-weight: 600 !important;
-}
-
-/* Quick action buttons - clear and clickable */
-.th-filter-dropdown .filter-action-btn {
-  padding: 4px 8px !important;
-  background: rgba(33, 38, 45, 0.6) !important;
-  border: 1px solid rgba(48, 54, 61, 0.6) !important;
-  border-radius: 4px !important;
-  color: #8b949e !important;
-  font-size: 14px !important;
-  font-weight: 500 !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.03em !important;
-  cursor: pointer !important;
-  transition: all 0.1s ease !important;
-}
-
-.th-filter-dropdown .filter-action-btn:hover {
-  background: rgba(48, 54, 61, 0.8) !important;
-  border-color: rgba(139, 148, 158, 0.4) !important;
-  color: #c9d1d9 !important;
-}
-
-/* All grid/flex containers - readable spacing */
-.th-filter-dropdown .league-filter-grid,
-.th-filter-dropdown .fire-filter-grid,
-.th-filter-dropdown .edge-filter-grid,
-.th-filter-dropdown .bet-type-grid,
-.th-filter-dropdown .range-filter-grid,
-.th-filter-dropdown .segment-pills,
-.th-filter-dropdown .time-slots,
-.th-filter-dropdown .sportsbook-chips,
-.th-filter-dropdown .league-pills,
-.th-filter-dropdown .ticket-pills {
-  display: flex !important;
-  flex-wrap: wrap !important;
-  gap: 6px !important;
-}
-
-.th-filter-dropdown .filter-quick-actions {
-  display: flex !important;
-  gap: 6px !important;
-}
-
-/* Chip logo/icon sizing */
-.th-filter-dropdown .chip-logo {
-  width: 16px !important;
-  height: 16px !important;
-  object-fit: contain !important;
-  opacity: 0.9 !important;
-}
-
-.th-filter-dropdown .chip-indicator {
-  font-size: 6px !important;
-  color: #3fb950 !important;
-}
-
-.th-filter-dropdown .chip-text,
-.th-filter-dropdown .bet-label,
-.th-filter-dropdown .edge-chip-label,
-.th-filter-dropdown .fire-chip-label {
-  font-size: 14px !important;
-  font-weight: 500 !important;
-}
-
-/* Edge tier indicators - clear color coding */
-.th-filter-dropdown .edge-tier {
-  width: 8px !important;
-  height: 8px !important;
-  border-radius: 2px !important;
-}
-.th-filter-dropdown .edge-tier.tier-hot {
-  background: #f85149 !important;
-}
-.th-filter-dropdown .edge-tier.tier-good {
-  background: #3fb950 !important;
-}
-.th-filter-dropdown .edge-tier.tier-ok {
-  background: #d29922 !important;
-}
-.th-filter-dropdown .edge-tier.tier-low {
-  background: #6e7681 !important;
-}
-
-/* Fire bars - signal strength style */
-.th-filter-dropdown .fire-bars {
-  display: flex !important;
-  align-items: flex-end !important;
-  gap: 2px !important;
-  height: 12px !important;
-}
-.th-filter-dropdown .fire-bars i {
-  display: block !important;
-  width: 3px !important;
-  background: #484f58 !important;
-  border-radius: 1px !important;
-}
-.th-filter-dropdown .fire-bars i:nth-child(1) {
-  height: 4px !important;
-}
-.th-filter-dropdown .fire-bars i:nth-child(2) {
-  height: 6px !important;
-}
-.th-filter-dropdown .fire-bars i:nth-child(3) {
-  height: 8px !important;
-}
-.th-filter-dropdown .fire-bars i:nth-child(4) {
-  height: 10px !important;
-}
-.th-filter-dropdown .fire-bars i:nth-child(5) {
-  height: 12px !important;
-}
-
-/* Active fire - orange glow */
-.th-filter-dropdown .fire-filter-chip.active .fire-bars i {
-  background: #d29922 !important;
-}
-.th-filter-dropdown .fire-filter-chip.fire-max.active .fire-bars i {
-  background: #f85149 !important;
-}
-
-/* Book chip checkbox hidden */
-.th-filter-dropdown .book-chip input[type="checkbox"] {
-  display: none !important;
-}
-
-/* Filter dropdowns - High contrast compact style (legacy fallback) */
-body.page-weekly-lineup .th-filter-dropdown:not(.weekly-lineup-filter-dropdown),
-.page-weekly-lineup .th-filter-dropdown:not(.weekly-lineup-filter-dropdown) {
-  position: fixed !important;
-  min-width: 180px !important;
-  max-width: 240px !important;
-  max-height: 320px !important;
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-
-  /* High contrast dark background */
-  background: rgba(8, 12, 20, 0.98) !important;
-
-  /* Green accent border for visibility */
-  border: 1px solid rgba(0, 214, 137, 0.35) !important;
-  border-radius: 8px !important;
-  padding: 0 !important;
-
-  /* Clean shadow */
-  box-shadow:
-    0 8px 24px rgba(0, 0, 0, 0.65),
-    0 0 0 1px rgba(0, 0, 0, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
-
-  z-index: 2147483647 !important;
-  pointer-events: auto !important;
-
-  display: none;
-  flex-direction: column !important;
-
-  isolation: isolate !important;
-}
-
-/* Hidden state */
-body.page-weekly-lineup .th-filter-dropdown[hidden],
-.page-weekly-lineup .th-filter-dropdown[hidden] {
-  display: none !important;
-  visibility: hidden !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
-}
-
-/* Open state with animation (legacy) */
-body.page-weekly-lineup
-  .th-filter-dropdown.open:not(.weekly-lineup-filter-dropdown),
-.page-weekly-lineup
-  .th-filter-dropdown.open:not(.weekly-lineup-filter-dropdown) {
-  display: flex !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  animation: filterCardDrop 120ms ease-out !important;
-  pointer-events: auto !important;
-  z-index: 2147483647 !important;
-}
-
-@keyframes filterCardDrop {
-  from {
-    opacity: 0;
-    transform: translateY(-4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+/* Legacy dropdown fallback rules removed.
+   Weekly lineup dropdown behavior is owned by component lockup files:
+   weekly-lineup-filter-dropdown-lockup.css and
+   weekly-lineup-legacy-dropdown-fallback-lockup.css. */
 
 /* Dropdown header bar */
 body.page-weekly-lineup .filter-header-integrated,
@@ -4385,7 +4067,7 @@ body.page-weekly-lineup .filter-title,
    FILTER TOOLBAR (ft-* namespace)
    Left-aligned filters, right-aligned actions
    ========================================================================== */
-.filter-toolbar {
+body.page-weekly-lineup .filter-toolbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -4398,8 +4080,8 @@ body.page-weekly-lineup .filter-title,
   border-bottom: none !important;
 }
 
-.ft-left,
-.ft-right {
+body.page-weekly-lineup .ft-left,
+body.page-weekly-lineup .ft-right {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -5154,30 +4836,30 @@ body.page-weekly-lineup .filter-title,
 }
 
 @media (max-width: 768px) {
-  .filter-toolbar {
+  body.page-weekly-lineup .filter-toolbar {
     flex-direction: column;
     align-items: stretch;
     gap: 10px;
     margin: 0 12px;
   }
-  .ft-left {
+  body.page-weekly-lineup .ft-left {
     display: flex;
     flex-wrap: nowrap;
     overflow-x: auto;
     gap: 6px;
     padding-bottom: 4px;
   }
-  .ft-left::-webkit-scrollbar {
+  body.page-weekly-lineup .ft-left::-webkit-scrollbar {
     display: none;
   }
-  .ft-right {
+  body.page-weekly-lineup .ft-right {
     gap: 6px;
     width: 100%;
   }
-  .ft-last-refreshed {
+  body.page-weekly-lineup .ft-last-refreshed {
     font-size: 0.875rem;
   }
-  .ft-fetch-league-btn {
+  body.page-weekly-lineup .ft-fetch-league-btn {
     min-width: 32px;
     height: 26px;
     padding: 4px 8px;
@@ -5336,8 +5018,16 @@ body.page-weekly-lineup .filter-toolbar {
 }
 
 /* Final authority: keep Date/Time as 3 stacked lines in first column */
-body.page-weekly-lineup .weekly-lineup-table tbody td.col-datetime .datetime-cell,
-body.page-weekly-lineup .weekly-lineup-table tbody td.col-datetime .datetime-cell.datetime-cell-inline {
+body.page-weekly-lineup
+  .weekly-lineup-table
+  tbody
+  td.col-datetime
+  .datetime-cell,
+body.page-weekly-lineup
+  .weekly-lineup-table
+  tbody
+  td.col-datetime
+  .datetime-cell.datetime-cell-inline {
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
@@ -5346,7 +5036,11 @@ body.page-weekly-lineup .weekly-lineup-table tbody td.col-datetime .datetime-cel
   white-space: normal !important;
 }
 
-body.page-weekly-lineup .weekly-lineup-table tbody td.col-datetime .datetime-formatted {
+body.page-weekly-lineup
+  .weekly-lineup-table
+  tbody
+  td.col-datetime
+  .datetime-formatted {
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
@@ -5354,7 +5048,11 @@ body.page-weekly-lineup .weekly-lineup-table tbody td.col-datetime .datetime-for
   gap: 0.1rem !important;
 }
 
-body.page-weekly-lineup .weekly-lineup-table tbody td.col-datetime .datetime-piece {
+body.page-weekly-lineup
+  .weekly-lineup-table
+  tbody
+  td.col-datetime
+  .datetime-piece {
   display: block !important;
   line-height: var(--leading-tight, 1.25) !important;
 }
@@ -5497,10 +5195,6 @@ body.page-weekly-lineup .filter-toolbar .ft-right .fetch-separator {
 body.page-weekly-lineup .toolbar-container {
   background: transparent;
   margin-bottom: 0;
-}
-
-body.page-weekly-lineup .main-container {
-  margin-top: 12px;
 }
 
 /* Align branding logo with left edge */

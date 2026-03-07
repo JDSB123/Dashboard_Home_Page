@@ -4,7 +4,7 @@
 /* ==========================================================================
    WEEKLY LINEUP (ONLY): FILTER DROPDOWN CARDS (when moved to <body>)
    --------------------------------------------------------------------------
-   weekly-lineup.js appends dropdown panels to document.body on open to escape
+  weekly-lineup-controller.js appends dropdown panels to document.body on open to escape
    table stacking contexts. That breaks `.page-weekly-lineup ...` scoped styling.
    These selectors use an explicit class added by JS so styling remains intact.
    ========================================================================== */
