@@ -355,30 +355,6 @@
         pill.classList.toggle("active", isActive);
         pill.setAttribute("aria-pressed", isActive ? "true" : "false");
       });
-
-    document.querySelectorAll(".league-pill[data-league]").forEach((pill) => {
-      const value = safeText(pill.getAttribute("data-league")).toLowerCase();
-      const isActive =
-        (state.filters.league === "all" && value === "all") ||
-        (state.filters.league !== "all" && value === state.filters.league);
-      pill.classList.toggle("active", isActive);
-    });
-
-    document.querySelectorAll(".segment-pill[data-segment]").forEach((pill) => {
-      const value = safeText(pill.getAttribute("data-segment")).toLowerCase();
-      const isActive =
-        (state.filters.segment === "all" && value === "all") ||
-        (state.filters.segment !== "all" && value === state.filters.segment);
-      pill.classList.toggle("active", isActive);
-    });
-
-    document.querySelectorAll(".pick-pill[data-pick]").forEach((pill) => {
-      const value = safeText(pill.getAttribute("data-pick")).toLowerCase();
-      const isActive =
-        (state.filters.pickType === "all" && value === "all") ||
-        (state.filters.pickType !== "all" && value === state.filters.pickType);
-      pill.classList.toggle("active", isActive);
-    });
   };
 
   const renderFilterChips = () => {
@@ -1952,50 +1928,6 @@
         }
         updateToolbarDropdownLabel("segment");
         updateToolbarDropdownLabel("pickType");
-        renderFilteredRows();
-        return;
-      }
-
-      const leaguePill = evt.target.closest(".league-pill[data-league]");
-      if (leaguePill) {
-        evt.preventDefault();
-        const value = safeText(
-          leaguePill.getAttribute("data-league"),
-        ).toLowerCase();
-        state.filters.league = value || "all";
-        renderFilteredRows();
-        return;
-      }
-
-      const segmentPill = evt.target.closest(".segment-pill[data-segment]");
-      if (segmentPill) {
-        evt.preventDefault();
-        setSegmentFilter(segmentPill.getAttribute("data-segment"));
-        renderFilteredRows();
-        return;
-      }
-
-      const pickPill = evt.target.closest(".pick-pill[data-pick]");
-      if (pickPill) {
-        evt.preventDefault();
-        setPickTypeFilter(pickPill.getAttribute("data-pick"));
-        renderFilteredRows();
-        return;
-      }
-
-      const quickAction = evt.target.closest(".filter-action-btn[data-action]");
-      if (quickAction) {
-        evt.preventDefault();
-        const action = quickAction.getAttribute("data-action");
-        const dropdown = quickAction.closest(".th-filter-dropdown");
-        if (!dropdown) return;
-
-        if (action === "clear" || action === "select-all") {
-          if (dropdown.id === "filter-league") state.filters.league = "all";
-          if (dropdown.id === "filter-segment") state.filters.segment = "all";
-          if (dropdown.id === "filter-pick") state.filters.pickType = "all";
-        }
-
         renderFilteredRows();
         return;
       }

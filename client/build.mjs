@@ -186,7 +186,6 @@ const WEEKLY_LINEUP_JS = [
   "assets/js/features/weekly-lineup-import.js",
   "assets/js/features/weekly-lineup-controller.js",
   "assets/js/features/blob-storage-archiver.js",
-  "assets/js/features/history-manager.js",
   "assets/js/features/pdf-parser.js",
   "assets/js/features/image-ocr-parser.js",
   "assets/js/features/basketball-api-client.js",
