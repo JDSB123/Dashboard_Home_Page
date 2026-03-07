@@ -77,23 +77,30 @@ module.exports = async function (context, req) {
 
   const upstreamUrl = `${baseUrl.replace(/\/+$/, "")}${upstreamPath}`;
 
-  // Check server-side cache for GET requests
-  const cacheKey = `model-${sport}-${upstreamPath}-${JSON.stringify(req.query || {})}`;
-  const cached = cache.get(cacheKey);
-  if (cached) {
-    log.info("Cache hit", { cacheKey });
-    context.res = {
-      status: 200,
-      headers: { ...corsHeaders, "content-type": "application/json" },
-      body: cached,
-    };
-    return;
+  // Strip cache-bust param before caching/forwarding
+  const query = { ...(req.query || {}) };
+  const noCache = !!query._nocache;
+  delete query._nocache;
+
+  // Check server-side cache for GET requests (skip when _nocache was sent)
+  const cacheKey = `model-${sport}-${upstreamPath}-${JSON.stringify(query)}`;
+  if (!noCache) {
+    const cached = cache.get(cacheKey);
+    if (cached) {
+      log.info("Cache hit", { cacheKey });
+      context.res = {
+        status: 200,
+        headers: { ...corsHeaders, "content-type": "application/json" },
+        body: cached,
+      };
+      return;
+    }
   }
 
   try {
     const upstreamRes = await breaker.call(() =>
       axios.get(upstreamUrl, {
-        params: req.query || {},
+        params: query,
         timeout: 20000,
         validateStatus: () => true,
         headers: {

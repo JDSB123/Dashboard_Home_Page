@@ -64,13 +64,21 @@ window.LogoLoader = (() => {
     add(base);
     add(base.replace(/\s+/g, ""));
 
-    const noPunct = base.replace(/[^a-z0-9\s]/g, "").replace(/\s+/g, " ").trim();
+    const noPunct = base
+      .replace(/[^a-z0-9\s]/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
     add(noPunct);
     add(noPunct.replace(/\s+/g, ""));
 
     const andWord = base.replace(/&/g, " and ").replace(/\s+/g, " ").trim();
     add(andWord);
-    add(andWord.replace(/[^a-z0-9\s]/g, "").replace(/\s+/g, " ").trim());
+    add(
+      andWord
+        .replace(/[^a-z0-9\s]/g, "")
+        .replace(/\s+/g, " ")
+        .trim(),
+    );
     add(andWord.replace(/[^a-z0-9]/g, ""));
 
     const stExpanded = noPunct.replace(/\bst\b/g, "state");

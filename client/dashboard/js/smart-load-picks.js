@@ -257,6 +257,8 @@ function populateTeamRecords(root = document, options = {}) {
       const recordValue = getTeamRecordFromCache(teamKey);
       if (recordValue) {
         el.textContent = normalizeTeamRecordValue(recordValue);
+      } else if (!el.textContent || !el.textContent.trim()) {
+        el.textContent = "(--)";
       }
     });
 }
@@ -778,8 +780,12 @@ function createBoxScoreRows(
     }
   }
 
-  const awayCells = awayPeriods.map((s) => `<div class="boxscore-cell">${s}</div>`).join("");
-  const homeCells = homePeriods.map((s) => `<div class="boxscore-cell">${s}</div>`).join("");
+  const awayCells = awayPeriods
+    .map((s) => `<div class="boxscore-cell">${s}</div>`)
+    .join("");
+  const homeCells = homePeriods
+    .map((s) => `<div class="boxscore-cell">${s}</div>`)
+    .join("");
 
   return `
         <div class="boxscore-row ${awayRowClass}">
@@ -1824,21 +1830,27 @@ function normalizeBookKey(name) {
 }
 
 function normalizeDateTimeParts(pick) {
-  let date = pick.gameDate || pick.date || "";
-  let time = pick.gameTime || pick.time || "";
-  const fallback = pick.scheduled || pick.start || pick.accepted || "";
+  let date = (pick.gameDate ?? pick.date ?? "").toString().trim();
+  let time = (pick.gameTime ?? pick.time ?? "").toString().trim();
+  const fallback = (pick.scheduled ?? pick.start ?? pick.accepted ?? "")
+    .toString()
+    .trim();
 
   const maybeParseFallback = (value) => {
     const parsed = new Date(value);
     if (!Number.isNaN(parsed.getTime())) {
       return {
-        date: parsed.toLocaleDateString(undefined, {
-          month: "short",
+        date: parsed.toLocaleDateString("en-US", {
+          month: "long",
           day: "numeric",
+          year: "numeric",
+          timeZone: "America/Chicago",
         }),
-        time: parsed.toLocaleTimeString([], {
+        time: parsed.toLocaleTimeString("en-US", {
           hour: "numeric",
           minute: "2-digit",
+          hour12: true,
+          timeZone: "America/Chicago",
         }),
       };
     }
@@ -1854,9 +1866,45 @@ function normalizeDateTimeParts(pick) {
 
   if ((!date || !time) && fallback) {
     const derived = maybeParseFallback(fallback);
-    if (!date) date = derived.date;
-    if (!time) time = derived.time;
+    if (!date) date = (derived.date || "").toString().trim();
+    if (!time) time = (derived.time || "").toString().trim();
   }
+
+  const normalizeDateLabel = (value) => {
+    const text = String(value || "").trim();
+    if (!text) return "";
+    const parsed = new Date(text);
+    if (!Number.isNaN(parsed.getTime())) {
+      return parsed.toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+        timeZone: "America/Chicago",
+      });
+    }
+    return text;
+  };
+
+  const normalizeTimeLabel = (value) => {
+    const parsed = new Date(value);
+    if (!Number.isNaN(parsed.getTime())) {
+      const raw = parsed.toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+        timeZone: "America/Chicago",
+      });
+      return raw.replace(/\s*(AM|PM)/i, (_, m) => m.toLowerCase()) + " CST";
+    }
+
+    const text = String(value || "").trim();
+    if (!text) return "";
+    const compact = text.replace(/\s*(AM|PM)/i, (_, m) => m.toLowerCase());
+    return /CST/i.test(compact) ? compact : `${compact} CST`;
+  };
+
+  if (date) date = normalizeDateLabel(date);
+  if (time) time = normalizeTimeLabel(time);
 
   const buildEpoch = () => {
     if (date && time) {
@@ -2281,12 +2329,22 @@ function buildPickRow(pick, index) {
   else if (league.includes("college") || league.includes("ncaa"))
     leagueLogoUrl = "assets/icons/league-ncaaf.svg";
 
+  const modelSportLabel =
+    {
+      nba: "GBSV NBA",
+      nfl: "GBSV NFL",
+      ncaab: "GBSV NCAAM",
+      ncaaf: "GBSV NCAAF",
+      nhl: "GBSV NHL",
+      mlb: "GBSV MLB",
+    }[league] || `GBSV ${league.toUpperCase()}`;
+
   row.innerHTML = `
         <td>
             <div class="datetime-cell">
                 <span class="cell-date">${dateMeta.displayDate}</span>
                 <span class="cell-time">${dateMeta.displayTime}</span>
-                <span class="sportsbook-value">${bookName}</span>
+            <span class="cell-model">${modelSportLabel}</span>
             </div>
         </td>
         <td class="center">
@@ -2300,7 +2358,8 @@ function buildPickRow(pick, index) {
               homeTeamName
                 ? `<div class="matchup-cell">
                         <div class="team-line">
-                            <img src="${awayLogo}" class="team-logo" loading="lazy" alt="${awayAbbr}">
+                          <img src="${awayLogo}" class="team-logo" loading="lazy" alt="${awayAbbr}" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';">
+                          <span class="team-logo-fallback" style="display:none;">${awayAbbr}</span>
                             <div class="team-name-wrapper">
                                 <span class="team-name-full">${awayTeamName}</span>
                                 <span class="team-record" data-team="${awayAbbr}"></span>
@@ -2308,7 +2367,8 @@ function buildPickRow(pick, index) {
                         </div>
                         <div class="vs-divider">vs</div>
                         <div class="team-line">
-                            <img src="${homeLogo}" class="team-logo" loading="lazy" alt="${homeAbbr}">
+                          <img src="${homeLogo}" class="team-logo" loading="lazy" alt="${homeAbbr}" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';">
+                          <span class="team-logo-fallback" style="display:none;">${homeAbbr}</span>
                             <div class="team-name-wrapper">
                                 <span class="team-name-full">${homeTeamName}</span>
                                 <span class="team-record" data-team="${homeAbbr}"></span>
@@ -2317,7 +2377,8 @@ function buildPickRow(pick, index) {
                     </div>`
                 : `<div class="matchup-cell">
                         <div class="team-line">
-                            <img src="${awayLogo}" class="team-logo" loading="lazy" alt="${awayAbbr}">
+                          <img src="${awayLogo}" class="team-logo" loading="lazy" alt="${awayAbbr}" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';">
+                          <span class="team-logo-fallback" style="display:none;">${awayAbbr}</span>
                             <div class="team-name-wrapper">
                                 <span class="team-name-full">${awayTeamName}</span>
                                 <span class="team-record" data-team="${awayAbbr}"></span>
@@ -2348,7 +2409,12 @@ function buildPickRow(pick, index) {
                             ${formatGameTimeStatus(statusClass, statusMeta.liveInfo, pick.result, pick.status, pick.countdown, pick.scheduled || pick.start)}
                             ${parsedPick.segment !== "Full Game" ? `<div style="font-size: 9px; color: rgba(170, 188, 204, 0.9); margin-top: 2px;">${parsedPick.segment}</div>` : ""}
                         </div>
-                        ${getBoxScoreLayout(league).headers.map((h) => `<div class="boxscore-cell header-cell">${h}</div>`).join("")}
+                        ${getBoxScoreLayout(league)
+                          .headers.map(
+                            (h) =>
+                              `<div class="boxscore-cell header-cell">${h}</div>`,
+                          )
+                          .join("")}
                         <div class="boxscore-cell header-cell">T</div>
                     </div>
                     ${createBoxScoreRows(
@@ -3086,7 +3152,10 @@ function initializeClearAllButton() {
       if (window.PicksService && window.PicksService.clearAll) {
         await window.PicksService.clearAll(true);
         console.log("[PICKS] Cleared all picks via PicksService");
-      } else if (window.LocalPicksManager && window.LocalPicksManager.clearPicks) {
+      } else if (
+        window.LocalPicksManager &&
+        window.LocalPicksManager.clearPicks
+      ) {
         window.LocalPicksManager.clearPicks();
         console.log("[PICKS] Cleared all picks via LocalPicksManager");
       }

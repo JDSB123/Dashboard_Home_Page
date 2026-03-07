@@ -97,6 +97,7 @@
 
       return {
         sport: "NBA",
+        league: "NBA",
         date:
           play.date ||
           play.game_date ||
@@ -121,12 +122,14 @@
               ? "UNDER"
               : ""),
         line: line,
-        odds: play.odds || play.odds_available || play.price || -110,
+        odds: String(play.odds || play.odds_available || play.price || "-110"),
         edge: edge,
         fire: fireNum,
         fireLabel: fireNum === 5 ? "MAX" : "",
         rationale: play.rationale || play.reason || play.explanation || "",
         modelStamp: play.model_version || play.modelVersion || "",
+        modelSpread: "",
+        modelPrice: "",
         rawPickLabel: play.pickLabel || play.pick_display || "",
         raw: play,
       };
@@ -135,8 +138,8 @@
 
   // Export with same interface (preserve backward compat)
   window.NBAPicksFetcher = {
-    fetchNBAPicks: (date) => fetcher.fetchPicks(date),
-    fetchPicks: (date) => fetcher.fetchPicks(date),
+    fetchNBAPicks: (date, options) => fetcher.fetchPicks(date, options),
+    fetchPicks: (date, options) => fetcher.fetchPicks(date, options),
     formatPickForTable: fetcher.formatPickForTable,
     checkHealth: () => fetcher.checkHealth(),
     getCache: (date) => fetcher.getCache(date),

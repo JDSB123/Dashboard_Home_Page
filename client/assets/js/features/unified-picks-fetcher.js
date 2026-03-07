@@ -206,9 +206,9 @@
   /**
    * Fetch picks for a single league (helper for parallel fetching)
    */
-  const fetchLeaguePicks = async (leagueName, date, fetcher) => {
+  const fetchLeaguePicks = async (leagueName, date, fetcher, options) => {
     try {
-      const result = await fetcher.fetchPicks(date);
+      const result = await fetcher.fetchPicks(date, options);
       // Support both { data: { picks } } and { success, picks } (v2 top-level) shapes
       const apiData = result?.data || result;
       const modelStamp = extractModelStampFromResponse(apiData);
@@ -257,6 +257,25 @@
     if (!skipCache && isCacheValid(league, date)) {
       debugLog("[UNIFIED-FETCHER] Returning cached picks");
       return picksCache.data;
+    }
+
+    // When skipping cache, flush ALL cache layers so nothing serves stale data
+    if (skipCache) {
+      clearCache();
+      // Clear localStorage picks cache
+      if (window.DataCacheManager) {
+        window.DataCacheManager.clear();
+      }
+      // Clear each sport fetcher's in-memory cache
+      const fetchers = [
+        window.NBAPicksFetcher, window.NCAAMPicksFetcher,
+        window.NFLPicksFetcher, window.NCAAFPicksFetcher,
+        window.NHLPicksFetcher, window.MLBPicksFetcher,
+      ];
+      for (const f of fetchers) {
+        if (f?.clearCache) f.clearCache();
+      }
+      debugLog("[UNIFIED-FETCHER] All cache layers cleared for fresh fetch");
     }
 
     if (window.ModelEndpointResolver?.ensureRegistryHydrated) {
@@ -316,7 +335,7 @@
 
     for (const { name, fetcher, match } of leagueFetchers) {
       if (match && fetcher) {
-        const promise = fetchLeaguePicks(name, date, fetcher).then((result) => {
+        const promise = fetchLeaguePicks(name, date, fetcher, { skipCache }).then((result) => {
           // Progressive callback: notify when each league completes
           if (onLeagueComplete && result.picks.length > 0) {
             onLeagueComplete(result.league, result.picks);

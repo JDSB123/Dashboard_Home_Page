@@ -68,27 +68,22 @@
 
       return {
         sport: "NHL",
+        league: "NHL",
         date: pick.date || pick.game_date || "",
         time: pick.time || pick.game_time || pick.time_cst || "",
         awayTeam,
         homeTeam,
         awayRecord: pick.away_record || pick.awayRecord || "",
         homeRecord: pick.home_record || pick.homeRecord || "",
-        game: pick.matchup || `${awayTeam} @ ${homeTeam}`,
-        pick: pickTeam,
         pickTeam,
-        pickDirection,
         pickType: marketType,
+        pickDirection,
+        line: pick.market_line || pick.line || "",
         odds: pick.pick_odds || pick.odds || "-110",
+        segment: pick.period || "FG",
         edge: edgeValue,
-        confidence: fireNum,
         fire: fireNum,
         fireLabel: fireNum === 5 ? "MAX" : "",
-        market: marketType,
-        segment: pick.period || "FG",
-        line: pick.market_line || pick.line || "",
-        modelPrice: pick.model_line || "",
-        modelSpread: pick.model_line || "",
         rationale:
           pick.rationale ||
           pick.reason ||
@@ -98,16 +93,17 @@
           "",
         modelStamp:
           pick.model_version || pick.modelVersion || pick.model_tag || "",
-        modelVersion:
-          pick.model_version || pick.modelVersion || pick.model_tag || "",
+        modelSpread: pick.model_line || "",
+        modelPrice: pick.model_line || "",
         rawPickLabel: pick.pickLabel || pick.pick_display || "",
+        raw: pick,
       };
     },
   });
 
   // Export with same interface as other fetchers
   window.NHLPicksFetcher = {
-    fetchPicks: (date) => fetcher.fetchPicks(date),
+    fetchPicks: (date, options) => fetcher.fetchPicks(date, options),
     checkHealth: () => fetcher.checkHealth(),
     formatPickForTable: fetcher.formatPickForTable,
     getCache: (date) => fetcher.getCache(date),

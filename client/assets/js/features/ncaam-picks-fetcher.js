@@ -140,6 +140,7 @@
 
       return {
         sport: "NCAAM",
+        league: "NCAAM",
         date:
           dateStr ||
           new Date().toLocaleDateString("en-US", {
@@ -151,29 +152,37 @@
         homeTeam,
         awayRecord: pick.away_record || pick.awayRecord || "",
         homeRecord: pick.home_record || pick.homeRecord || "",
-        game: pick.matchup || `${awayTeam} @ ${homeTeam}`,
-        pick: pickTeam,
         pickTeam,
-        pickDirection,
         pickType: marketType,
-        // v2 fields: oddsAmerican (number), segment, modelLine, marketLine
+        pickDirection,
+        line:
+          pick.marketSpread ||
+          pick.market_line ||
+          pick.marketLine ||
+          pick.line ||
+          "",
         odds:
           pick.pick_odds != null
             ? String(pick.pick_odds)
             : pick.oddsAmerican != null
               ? String(pick.oddsAmerican)
               : "-110",
+        segment: pick.period || pick.segment || "FG",
         edge: edgeValue,
-        confidence: fireNum,
         fire: fireNum,
         fireLabel: fireNum === 5 ? "MAX" : "",
-        market: marketType,
-        segment: pick.period || pick.segment || "FG",
-        line:
-          pick.marketSpread ||
-          pick.market_line ||
-          pick.marketLine ||
-          pick.line ||
+        rationale:
+          pick.rationale ||
+          pick.reason ||
+          pick.analysis ||
+          pick.notes ||
+          pick.executive_summary ||
+          "",
+        modelStamp:
+          pick.model_version ||
+          pick.modelVersion ||
+          pick.model_tag ||
+          pick.modelTag ||
           "",
         modelPrice:
           pick.predictedMargin ||
@@ -187,35 +196,15 @@
           pick.modelLine ||
           pick.modelSpread ||
           "",
-        fire_rating: pick.fire_rating || pick.fireRating || "",
-        rationale:
-          pick.rationale ||
-          pick.reason ||
-          pick.analysis ||
-          pick.notes ||
-          pick.executive_summary ||
-          "",
-        modelVersion:
-          pick.model_version ||
-          pick.modelVersion ||
-          pick.model_tag ||
-          pick.modelTag ||
-          "",
-        modelStamp:
-          pick.model_version ||
-          pick.modelVersion ||
-          pick.model_tag ||
-          pick.modelTag ||
-          "",
         rawPickLabel: pick.pickLabel || "",
-        rawPredictedWinner: pick.predictedWinner || "",
+        raw: pick,
       };
     },
   });
 
   // Export with same interface (preserve backward compat)
   window.NCAAMPicksFetcher = {
-    fetchPicks: (date) => fetcher.fetchPicks(date),
+    fetchPicks: (date, options) => fetcher.fetchPicks(date, options),
     checkHealth: () => fetcher.checkHealth(),
     formatPickForTable: fetcher.formatPickForTable,
     triggerPicks: triggerPicksIfNeeded,

@@ -304,15 +304,15 @@ body.page-active-picks .picks-table tbody td:nth-child(1) {
 } /* Date/Time */
 body.page-active-picks .picks-table thead th:nth-child(2),
 body.page-active-picks .picks-table tbody td:nth-child(2) {
-  width: 7% !important;
+  width: 6% !important;
   min-width: 60px !important;
-  max-width: 7% !important;
+  max-width: 6% !important;
 } /* League */
 body.page-active-picks .picks-table thead th:nth-child(3),
 body.page-active-picks .picks-table tbody td:nth-child(3) {
-  width: 17% !important;
+  width: 16% !important;
   min-width: 160px !important;
-  max-width: 17% !important;
+  max-width: 16% !important;
 } /* Matchup */
 body.page-active-picks .picks-table thead th:nth-child(4),
 body.page-active-picks .picks-table tbody td:nth-child(4) {
@@ -334,9 +334,9 @@ body.page-active-picks .picks-table tbody td:nth-child(6) {
 } /* Risk/Win */
 body.page-active-picks .picks-table thead th:nth-child(7),
 body.page-active-picks .picks-table tbody td:nth-child(7) {
-  width: 19% !important;
-  min-width: 180px !important;
-  max-width: 19% !important;
+  width: 17% !important;
+  min-width: 170px !important;
+  max-width: 17% !important;
 } /* Box Score */
 body.page-active-picks .picks-table thead th:nth-child(8),
 body.page-active-picks .picks-table tbody td:nth-child(8) {
@@ -346,9 +346,9 @@ body.page-active-picks .picks-table tbody td:nth-child(8) {
 } /* Status */
 body.page-active-picks .picks-table thead th:nth-child(9),
 body.page-active-picks .picks-table tbody td:nth-child(9) {
-  width: 8% !important;
-  min-width: 70px !important;
-  max-width: 8% !important;
+  width: 12% !important;
+  min-width: 90px !important;
+  max-width: 12% !important;
 } /* $ Won/Lost */
 
 /* $ Won/Lost column - allow values to display fully */
@@ -1089,8 +1089,28 @@ body.page-active-picks .picks-table tbody td .matchup-cell {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1px;
+  gap: 0.35rem;
   text-align: center;
+}
+
+body.page-active-picks .picks-table tbody td .matchup-cell .team-line,
+body.page-active-picks .picks-table tbody td .matchup-cell .team-name-wrapper {
+  align-items: center;
+  justify-content: center;
+}
+
+body.page-active-picks .picks-table tbody td .matchup-cell .team-logo-fallback {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  background: rgba(39, 55, 78, 0.9);
+  border: 1px solid rgba(118, 154, 201, 0.6);
+  color: rgba(234, 243, 255, 0.96);
+  font-size: 0.56rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
 }
 
 /* Pick cell - horizontal layout with Garamond */
@@ -2644,6 +2664,42 @@ body.page-active-picks #picks-table tbody td .league-logo {
     background 0.15s ease,
     border-color 0.15s ease,
     color 0.15s ease;
+}
+
+/* Final authority: dashboard Date/Time must be 3 stacked lines */
+body.page-active-picks #picks-table tbody td .datetime-cell {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.1rem !important;
+  white-space: normal !important;
+}
+
+body.page-active-picks #picks-table tbody td .datetime-cell .cell-date {
+  font-family: var(--font-body, "Cormorant Garamond", Georgia, serif) !important;
+  font-size: var(--text-base, 0.8125rem) !important;
+  font-weight: var(--weight-semibold, 600) !important;
+  line-height: var(--leading-tight, 1.25) !important;
+  margin-bottom: 0 !important;
+}
+
+body.page-active-picks #picks-table tbody td .datetime-cell .cell-time {
+  font-family: var(--font-body, "Cormorant Garamond", Georgia, serif) !important;
+  font-size: var(--text-sm, 0.75rem) !important;
+  font-weight: var(--weight-medium, 500) !important;
+  line-height: var(--leading-tight, 1.25) !important;
+  color: rgba(206, 222, 238, 0.95) !important;
+}
+
+body.page-active-picks #picks-table tbody td .datetime-cell .cell-model {
+  font-family: var(--font-body, "Cormorant Garamond", Georgia, serif) !important;
+  font-size: var(--text-xs, 0.6875rem) !important;
+  font-weight: var(--weight-semibold, 600) !important;
+  line-height: var(--leading-tight, 1.25) !important;
+  letter-spacing: var(--tracking-wide, 0.08em) !important;
+  text-transform: uppercase !important;
+  color: rgba(var(--color-primary-bright-rgb), 0.95) !important;
 }
 
 .league-filter-chip:hover,

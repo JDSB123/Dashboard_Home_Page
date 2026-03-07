@@ -45,8 +45,8 @@
       rel="stylesheet"
     />
     <!-- Bundled CSS (replaces 8 individual stylesheets) -->
-    <link rel="stylesheet" href="dist/core.min.css?v=36.01.3" />
-    <link rel="stylesheet" href="dist/weekly-lineup.min.css?v=36.01.3" />
+    <link rel="stylesheet" href="dist/core.min.css?v=36.02.0" />
+    <link rel="stylesheet" href="dist/weekly-lineup.min.css?v=36.02.0" />
 
     <!-- Runtime config (separate — per-environment) -->
     <script src="config.js?v=36.01.0" defer></script>
@@ -706,19 +706,19 @@
             aria-label="Today's picks - sorted by edge"
           >
             <colgroup>
-              <col class="w-12" />
+              <col class="w-15" />
               <!-- Date/Time -->
-              <col class="w-7" />
+              <col class="w-6" />
               <!-- League -->
-              <col class="w-26" />
+              <col class="w-23" />
               <!-- Matchup -->
-              <col class="w-10" />
-              <!-- Segment -->
-              <col class="w-17" />
-              <!-- Recommended Pick -->
-              <col class="w-13" />
-              <!-- Model Prediction -->
               <col class="w-8" />
+              <!-- Segment -->
+              <col class="w-16" />
+              <!-- Recommended Pick -->
+              <col class="w-12" />
+              <!-- Model Prediction -->
+              <col class="w-7" />
               <!-- Edge -->
               <col class="w-6" />
               <!-- Fire -->
@@ -867,17 +867,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.min.js"></script>
 
     <!-- Bundled JS (replaces ~40 individual scripts) -->
-    <script src="dist/core.min.js?v=36.01.3" defer></script>
-    <script src="dist/weekly-lineup.min.js?v=36.01.3" defer></script>
+    <script src="dist/core.min.js?v=36.02.0" defer></script>
+    <script src="dist/weekly-lineup.min.js?v=36.02.0" defer></script>
 
     <script>
       // Service worker registration (versioned to bust caches)
       (function () {
         try {
           if ("serviceWorker" in navigator) {
-            var swUrl = "/sw.js?v=36.01.0";
+            var swUrl = "/sw.js?v=36.02.0";
 
-            var expectedSwVersion = "v36.01.0";
+            var expectedSwVersion = "v36.02.0";
 
             async function hardResetCachesAndReload() {
               try {

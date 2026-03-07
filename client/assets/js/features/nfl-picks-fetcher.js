@@ -149,6 +149,8 @@
       return {
         sport: "NFL",
         league: "NFL",
+        date: pick.game_date || pick.date || "",
+        time: pick.game_time || pick.time || "",
         awayTeam,
         homeTeam,
         awayRecord: pick.away_record || "",
@@ -158,14 +160,10 @@
         pickDirection,
         line,
         odds: pick.odds || pick.market_odds || "-110",
+        segment: pick.period || pick.segment || "FG",
         edge: edgeValue,
         fire: fireNum,
-        confidence: fireNum,
         fireLabel: fireNum === 5 ? "MAX" : "",
-        time: pick.game_time || pick.time || "",
-        date: pick.game_date || pick.date || "",
-        segment: pick.period || pick.segment || "FG",
-        market: marketType || "spread",
         rationale:
           pick.rationale ||
           pick.reason ||
@@ -179,20 +177,17 @@
           pick.model_tag ||
           pick.modelTag ||
           "",
-        modelVersion:
-          pick.model_version ||
-          pick.modelVersion ||
-          pick.model_tag ||
-          pick.modelTag ||
-          "",
-        rawPickDisplay: pick.pick_display || "",
+        modelSpread: "",
+        modelPrice: "",
+        rawPickLabel: pick.pick_display || "",
+        raw: pick,
       };
     },
   });
 
   // Export with same interface (preserve backward compat)
   window.NFLPicksFetcher = {
-    fetchPicks: (date) => fetcher.fetchPicks(date),
+    fetchPicks: (date, options) => fetcher.fetchPicks(date, options),
     checkHealth: () => fetcher.checkHealth(),
     formatPickForTable: fetcher.formatPickForTable,
     getCache: (date) => fetcher.getCache(date),

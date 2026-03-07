@@ -119,20 +119,29 @@
     this._lastSource = null;
   }
 
-  BaseSportFetcher.prototype.fetchPicks = async function (date) {
+  BaseSportFetcher.prototype.fetchPicks = async function (date, options) {
     date = date || "today";
+    const skipCache = options?.skipCache || false;
 
     if (window.ModelEndpointResolver?.ensureRegistryHydrated) {
       window.ModelEndpointResolver.ensureRegistryHydrated();
     }
 
-    // Cache check
-    const cached = this._cache[date];
-    if (cached && Date.now() - cached.timestamp < this.cacheDurationMs) {
-      return cached.data;
+    // Cache check (skip when forced refresh)
+    if (!skipCache) {
+      const cached = this._cache[date];
+      if (cached && Date.now() - cached.timestamp < this.cacheDurationMs) {
+        return cached.data;
+      }
     }
 
     let primaryUrl = this.buildPrimaryUrl(date);
+
+    // Append cache-bust param to bypass backend in-memory cache
+    if (skipCache) {
+      const separator = primaryUrl.includes("?") ? "&" : "?";
+      primaryUrl += `${separator}_nocache=${Date.now()}`;
+    }
 
     // [CORS-HOTFIX] Force same-origin proxy for production to avoid CORS blocks from ACA
     if (!window.APP_CONFIG.IS_LOCAL_DEV && !primaryUrl.startsWith(window.location.origin) && !primaryUrl.startsWith('/')) {

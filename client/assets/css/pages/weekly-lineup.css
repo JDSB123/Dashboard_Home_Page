@@ -359,7 +359,7 @@ body.page-weekly-lineup .picks-table thead th,
   background-color: rgba(8, 12, 22, 0.15);
   border-bottom: 1px solid rgba(0, 214, 137, 0.2);
   border-right: 1px solid rgba(0, 214, 137, 0.08); /* faint separators between headers */
-  padding: 0.75rem 0.75rem;
+  padding: 0.5rem 0.75rem;
   text-align: center;
   font-family: var(--font-display, "Oswald", sans-serif);
   font-weight: 700;
@@ -3528,6 +3528,50 @@ body.page-weekly-lineup .filter-title,
   min-width: 80px;
 }
 
+.weekly-lineup-table .datetime-cell-inline {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.weekly-lineup-table .datetime-cell .datetime-formatted {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.08rem;
+  font-family: var(--font-body, "Cormorant Garamond", Georgia, serif);
+  font-weight: var(--weight-medium, 500);
+  font-size: var(--text-base, 0.8125rem);
+  color: var(--color-text-primary, rgba(232, 240, 242, 0.95));
+  letter-spacing: var(--tracking-tight, 0.02em);
+  line-height: var(--leading-tight, 1.25);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.weekly-lineup-table .datetime-cell .datetime-piece {
+  white-space: nowrap;
+  display: block;
+}
+
+.weekly-lineup-table .datetime-cell .datetime-date {
+  font-weight: var(--weight-semibold, 600);
+  font-size: var(--text-base, 0.8125rem);
+}
+
+.weekly-lineup-table .datetime-cell .datetime-time {
+  color: rgba(206, 222, 238, 0.95);
+  font-size: var(--text-sm, 0.75rem);
+}
+
+.weekly-lineup-table .datetime-cell .datetime-model {
+  color: rgba(var(--color-primary-bright-rgb), 0.95);
+  font-weight: var(--weight-semibold, 600);
+  font-size: var(--text-xs, 0.6875rem);
+  letter-spacing: var(--tracking-wide, 0.08em);
+  text-transform: uppercase;
+}
+
 .weekly-lineup-table .datetime-cell .date-value {
   font-weight: 700;
   color: var(--neutral-50);
@@ -3553,14 +3597,13 @@ body.page-weekly-lineup .filter-title,
   border-radius: 4px;
   margin-top: 2px;
   border: 1px solid rgba(16, 185, 129, 0.2);
-  /* "Cemented" cursor */
   cursor: default;
   transition: all 0.2s ease;
 }
 
 .weekly-lineup-table .datetime-cell .sportsbook-value:hover {
   background: rgba(16, 185, 129, 0.2);
-  cursor: pointer; /* maintain editability hint */
+  cursor: pointer;
 }
 
 /* Dropdown appearance for the button */
@@ -3643,7 +3686,7 @@ body.page-weekly-lineup .filter-title,
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  justify-content: flex-start;
+  justify-content: center;
   width: 100%;
 }
 
@@ -3651,7 +3694,7 @@ body.page-weekly-lineup .filter-title,
 .weekly-lineup-table .team-name-wrapper {
   display: flex;
   flex-direction: row;
-  align-items: baseline;
+  align-items: center;
   gap: 0.35rem;
   min-width: 0;
 }
@@ -3667,9 +3710,9 @@ body.page-weekly-lineup .filter-title,
 
 .weekly-lineup-table .team-record {
   font-family: var(--font-body, "Inter", sans-serif);
-  font-size: 0.7rem;
-  font-weight: 500;
-  color: rgba(160, 180, 200, 0.85);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: rgba(210, 225, 242, 0.95);
   letter-spacing: 0.01em;
   white-space: nowrap;
 }
@@ -3678,8 +3721,9 @@ body.page-weekly-lineup .filter-title,
 .weekly-lineup-table .matchup-cell {
   display: flex;
   flex-direction: column;
-  gap: 0.125rem;
-  align-items: flex-start;
+  gap: 0.3rem;
+  align-items: center;
+  justify-content: center;
   padding: 0.15rem 0;
 }
 
@@ -3692,9 +3736,39 @@ body.page-weekly-lineup .filter-title,
   text-transform: lowercase;
   font-weight: 500;
   text-transform: lowercase;
-  padding-left: 1.75rem;
+  padding-left: 0;
   line-height: 1;
   letter-spacing: 0.02em;
+}
+
+.weekly-lineup-table .team-logo-wrap {
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  flex: 0 0 30px;
+}
+
+.weekly-lineup-table .team-logo-wrap .team-logo-fallback {
+  display: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  background: rgba(34, 52, 77, 0.85);
+  border: 1px solid rgba(102, 138, 184, 0.55);
+  color: rgba(231, 241, 255, 0.95);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.weekly-lineup-table .team-logo-wrap.logo-fallback-visible .team-logo-fallback,
+.weekly-lineup-table .team-logo-wrap.logo-fallback-only .team-logo-fallback {
+  display: inline-flex;
 }
 
 /* Segment column styling */
@@ -3938,9 +4012,19 @@ body.page-weekly-lineup .filter-title,
 }
 
 .weekly-lineup-table .league-logo {
-  width: 34px;
-  height: 34px;
+  width: 26px;
+  height: 26px;
   object-fit: contain;
+  opacity: 0.75;
+  filter: grayscale(15%);
+  transition:
+    opacity 0.2s ease,
+    filter 0.2s ease;
+}
+
+.weekly-lineup-table .pick-row:hover .league-logo {
+  opacity: 1;
+  filter: grayscale(0%);
 }
 
 .weekly-lineup-table .league-abbr {
@@ -5208,8 +5292,8 @@ body.page-weekly-lineup .filter-title,
 
 /* Ensure league logo is reasonably sized */
 .weekly-lineup-table tbody td .league-logo {
-  width: 34px;
-  height: 34px;
+  width: 26px;
+  height: 26px;
   object-fit: contain;
 }
 
@@ -5249,6 +5333,30 @@ body.page-weekly-lineup .filter-toolbar {
   border-radius: 0;
   top: auto; /* Reset the 56px offset from mobile-overhaul.css */
   position: relative;
+}
+
+/* Final authority: keep Date/Time as 3 stacked lines in first column */
+body.page-weekly-lineup .weekly-lineup-table tbody td.col-datetime .datetime-cell,
+body.page-weekly-lineup .weekly-lineup-table tbody td.col-datetime .datetime-cell.datetime-cell-inline {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.1rem !important;
+  white-space: normal !important;
+}
+
+body.page-weekly-lineup .weekly-lineup-table tbody td.col-datetime .datetime-formatted {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.1rem !important;
+}
+
+body.page-weekly-lineup .weekly-lineup-table tbody td.col-datetime .datetime-piece {
+  display: block !important;
+  line-height: var(--leading-tight, 1.25) !important;
 }
 
 /* Left side: pills & dropdowns in a single row, don't shrink */
@@ -6055,14 +6163,64 @@ body.page-weekly-lineup .brand-word {
   white-space: nowrap;
 }
 
-/* ===== PICK CELL - CLEAN STACKED LAYOUT ===== */
+/* ===== PICK CELL - CLEAN INLINE FORMAT ===== */
 .weekly-lineup-table .pick-display {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 0.15rem;
+  align-items: flex-start;
+  gap: 0.2rem;
   white-space: nowrap;
   justify-content: center;
+  padding: 0.15rem 0;
+}
+
+/* Inline formatted pick line: "Spread: Team -7.5 (-110)" */
+.weekly-lineup-table .pick-display-inline {
+  flex-direction: row;
+  align-items: center;
+}
+
+.weekly-lineup-table .pick-display .pick-line-formatted {
+  font-family: var(--font-body, "Inter", sans-serif);
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--neutral-100, #f1f5f9);
+  letter-spacing: 0.01em;
+  line-height: 1.35;
+}
+
+.weekly-lineup-table .pick-display .pick-type-badge {
+  margin-right: 0.35rem;
+}
+
+/* Legacy badge styles kept for backward compat */
+.weekly-lineup-table .pick-display .pick-type-badge {
+  display: inline-block;
+  font-family: var(--font-mono, "Roboto Mono", monospace);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 1px 6px;
+  border-radius: 3px;
+  line-height: 1.4;
+  color: rgba(200, 220, 240, 0.9);
+  background: rgba(60, 80, 120, 0.4);
+  border: 1px solid rgba(100, 130, 170, 0.3);
+}
+
+.weekly-lineup-table .pick-type-badge.pick-type-total,
+.weekly-lineup-table .pick-type-badge.pick-type-team-total {
+  color: rgba(140, 200, 255, 0.95);
+  background: rgba(30, 80, 140, 0.35);
+  border-color: rgba(80, 150, 230, 0.3);
+}
+
+.weekly-lineup-table .pick-type-badge.pick-type-moneyline,
+.weekly-lineup-table .pick-type-badge.pick-type-ml {
+  color: rgba(180, 255, 200, 0.95);
+  background: rgba(20, 80, 50, 0.35);
+  border-color: rgba(60, 180, 100, 0.3);
 }
 
 .weekly-lineup-table .pick-display .pick-label {
@@ -6083,11 +6241,14 @@ body.page-weekly-lineup .brand-word {
 
 .weekly-lineup-table .model-prediction-text {
   display: inline-block;
-  font-family: var(--font-mono, "Roboto Mono", monospace);
-  font-size: 0.78rem;
-  font-weight: 500;
-  color: var(--neutral-200, #e2e8f0);
-  line-height: 1.25;
+  font-family: var(--font-body, "Inter", sans-serif);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: rgba(226, 237, 251, 0.95);
+  line-height: 1.45;
+  letter-spacing: 0.015em;
+  white-space: normal;
+  max-width: 240px;
 }
 
 /* ===== EDGE - CLEAN INLINE, NO BORDER ===== */

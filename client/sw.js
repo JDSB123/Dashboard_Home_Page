@@ -1,5 +1,5 @@
 /* Simple service worker for asset caching */
-const VERSION = "v36.01.1";
+const VERSION = "v36.02.0";
 const CORE_CACHE = `core-${VERSION}`;
 const ASSET_CACHE = `assets-${VERSION}`;
 
@@ -175,10 +175,34 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Cache only known static asset folders (safe to cache long-term)
+  // JS bundles: network-first so code updates propagate without waiting for SW version bump
   if (
     isCacheableAssetPath(url) &&
-    /\.(css|js|png|jpg|jpeg|svg|webp)$/i.test(url.pathname)
+    /\.js$/i.test(url.pathname)
+  ) {
+    event.respondWith(
+      (async () => {
+        const cache = await caches.open(ASSET_CACHE);
+        try {
+          const response = await fetch(req);
+          if (response && response.status === 200) {
+            cache.put(req, response.clone());
+          }
+          return response;
+        } catch (err) {
+          const cached = await cache.match(req);
+          if (cached) return cached;
+          return new Response("Offline", { status: 502, statusText: "Offline" });
+        }
+      })()
+    );
+    return;
+  }
+
+  // Other static assets (CSS, images): cache-first (safe to cache long-term)
+  if (
+    isCacheableAssetPath(url) &&
+    /\.(css|png|jpg|jpeg|svg|webp)$/i.test(url.pathname)
   ) {
     event.respondWith(cacheFirst(req));
     return;

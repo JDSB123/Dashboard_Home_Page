@@ -26,6 +26,7 @@
       dir: "desc",
     },
     activeFetchButtons: [],
+    fetchGeneration: 0,
   };
 
   const FILTER_CONTROL_IDS = {
@@ -51,7 +52,9 @@
       const localValue = window.localStorage?.getItem(
         "gbsv_weekly_lineup_debug_normalization",
       );
-      return localValue === "1" || safeText(localValue).toLowerCase() === "true";
+      return (
+        localValue === "1" || safeText(localValue).toLowerCase() === "true"
+      );
     } catch (_error) {
       return false;
     }
@@ -97,8 +100,9 @@
   };
 
   const formatDateFull = (isoDate) => {
-    if (!isoDate) return "";
-    const d = new Date(isoDate);
+    const text = safeText(isoDate).trim();
+    if (!text) return "";
+    const d = new Date(text);
     if (Number.isNaN(d.getTime())) return String(isoDate);
     return d.toLocaleDateString("en-US", {
       month: "long",
@@ -110,19 +114,22 @@
 
   const formatTimeCst = (timeStr) => {
     if (!timeStr) return "";
-    // If already formatted (e.g. "7:00 PM CST"), return as-is
-    if (/CST/i.test(timeStr)) return timeStr;
+    // If already formatted (e.g. "7:00pm CST"), normalize and return
+    if (/CST/i.test(timeStr)) {
+      return timeStr.replace(/\s*(AM|PM)/i, (_, m) => m.toLowerCase());
+    }
     // Try to parse and convert to CST (UTC-6)
     const d = new Date(timeStr);
     if (!Number.isNaN(d.getTime())) {
-      return (
-        d.toLocaleTimeString("en-US", {
-          hour: "numeric",
-          minute: "2-digit",
-          hour12: true,
-          timeZone: "America/Chicago",
-        }) + " CST"
-      );
+      const raw = d.toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+        timeZone: "America/Chicago",
+      });
+      // "6:05 PM" → "6:05pm"
+      const compact = raw.replace(/\s*(AM|PM)/i, (_, m) => m.toLowerCase());
+      return compact + " CST";
     }
     // Fallback: append CST if it looks like a time
     if (/\d/.test(timeStr)) return timeStr + " CST";
@@ -130,7 +137,7 @@
   };
 
   const getModelLabel = (pick) => {
-    const sport = normalizeSport(pick.sport || pick.league);
+    const sport = normalizeSport(pick?.sport || pick?.league);
     const sportName =
       {
         NBA: "NBA",
@@ -140,7 +147,7 @@
         NHL: "NHL",
         MLB: "MLB",
       }[sport] || sport;
-    return `GBSV ${sportName} Pick`;
+    return `GBSV ${sportName}`;
   };
 
   const safeText = (value) => (value ?? "").toString();
@@ -262,8 +269,14 @@
       const q = state.filters.teamSearch;
       const away = safeText(pick.awayTeam).toLowerCase();
       const home = safeText(pick.homeTeam).toLowerCase();
-      const awayFull = resolveFullName(pick.awayTeam, pick.sport || pick.league).toLowerCase();
-      const homeFull = resolveFullName(pick.homeTeam, pick.sport || pick.league).toLowerCase();
+      const awayFull = resolveFullName(
+        pick.awayTeam,
+        pick.sport || pick.league,
+      ).toLowerCase();
+      const homeFull = resolveFullName(
+        pick.homeTeam,
+        pick.sport || pick.league,
+      ).toLowerCase();
       if (
         !away.includes(q) &&
         !home.includes(q) &&
@@ -376,7 +389,10 @@
       chips.push({ key: "pickType", label: `Pick: ${state.filters.pickType}` });
     }
     if (state.filters.teamSearch) {
-      chips.push({ key: "teamSearch", label: `Team: ${state.filters.teamSearch}` });
+      chips.push({
+        key: "teamSearch",
+        label: `Team: ${state.filters.teamSearch}`,
+      });
     }
 
     host.innerHTML = "";
@@ -544,6 +560,22 @@
     return `${logoBase}/${folder}-500-${teamId}.png`;
   };
 
+  const getTeamShortCode = (teamName) => {
+    const fromShared = window.SharedUtils?.getTeamAbbr?.(teamName);
+    if (fromShared) return safeText(fromShared).toUpperCase().slice(0, 4);
+
+    const raw = safeText(teamName).trim();
+    if (!raw) return "TEAM";
+
+    const parts = raw.split(/\s+/).filter(Boolean);
+    if (parts.length === 1) return parts[0].slice(0, 4).toUpperCase();
+    return parts
+      .map((p) => p.charAt(0))
+      .join("")
+      .slice(0, 4)
+      .toUpperCase();
+  };
+
   // Resolve abbreviated team names (e.g. "UTA Jazz") to full names ("Utah Jazz")
   const resolveFullName = (teamName, sport) => {
     if (!teamName) return "";
@@ -630,6 +662,24 @@
     return normalizeRecordValue(info?.record || info?.overallRecord || "");
   };
 
+  const inferSegmentFromText = (...fields) => {
+    for (const field of fields) {
+      const text = safeText(field).toUpperCase();
+      if (!text) continue;
+      if (/\b1H\b/.test(text) || /\b1ST\s*HALF\b/.test(text)) return "1H";
+      if (/\b2H\b/.test(text) || /\b2ND\s*HALF\b/.test(text)) return "2H";
+      if (/\b1Q\b/.test(text) || /\b1ST\s*QU?A?R?T?E?R?\b/.test(text))
+        return "1Q";
+      if (/\b2Q\b/.test(text) || /\b2ND\s*QU?A?R?T?E?R?\b/.test(text))
+        return "2Q";
+      if (/\b3Q\b/.test(text) || /\b3RD\s*QU?A?R?T?E?R?\b/.test(text))
+        return "3Q";
+      if (/\b4Q\b/.test(text) || /\b4TH\s*QU?A?R?T?E?R?\b/.test(text))
+        return "4Q";
+    }
+    return "";
+  };
+
   const normalizeIncomingPick = (pick) => {
     const raw = pick || {};
     const sport = normalizeSport(
@@ -702,6 +752,13 @@
     const awayRecord = awayModelRecord || awayFallbackRecord;
     const homeRecord = homeModelRecord || homeFallbackRecord;
 
+    const normalizedGameDate = safeText(
+      raw.gameDate || raw.game_date || raw.date || "",
+    ).trim();
+    const normalizedGameTime = safeText(
+      raw.gameTime || raw.time || raw.timeCst || raw.time_cst || "",
+    ).trim();
+
     return {
       ...raw,
       sport,
@@ -713,7 +770,20 @@
       pickType: normalizedPickType,
       pickTeam,
       pickDirection,
-      segment: raw.segment || raw.period || raw.gameSegment || "FG",
+      segment:
+        raw.segment ||
+        raw.period ||
+        raw.gameSegment ||
+        inferSegmentFromText(
+          pickTeam,
+          raw.rawPickLabel,
+          raw.pick_display,
+          raw.pickLabel,
+          raw.pick,
+          raw.marketType,
+          raw.market,
+        ) ||
+        "FG",
       line:
         raw.line ||
         raw.marketLine ||
@@ -729,14 +799,23 @@
         raw.pick_odds ??
         raw.price ??
         "-110",
-      gameDate:
-        raw.gameDate || raw.game_date || raw.date || new Date().toISOString(),
-      gameTime: raw.gameTime || raw.time || raw.timeCst || raw.time_cst || "",
+      gameDate: normalizedGameDate || new Date().toISOString(),
+      gameTime: normalizedGameTime,
       _normalizeMeta: {
-        awayRecordSource: awayModelRecord ? "model" : awayFallbackRecord ? "fallback" : "none",
-        homeRecordSource: homeModelRecord ? "model" : homeFallbackRecord ? "fallback" : "none",
-        awayTeamSource: parsedMatchup.awayTeam && !raw.awayTeam ? "matchup" : "model",
-        homeTeamSource: parsedMatchup.homeTeam && !raw.homeTeam ? "matchup" : "model",
+        awayRecordSource: awayModelRecord
+          ? "model"
+          : awayFallbackRecord
+            ? "fallback"
+            : "none",
+        homeRecordSource: homeModelRecord
+          ? "model"
+          : homeFallbackRecord
+            ? "fallback"
+            : "none",
+        awayTeamSource:
+          parsedMatchup.awayTeam && !raw.awayTeam ? "matchup" : "model",
+        homeTeamSource:
+          parsedMatchup.homeTeam && !raw.homeTeam ? "matchup" : "model",
       },
     };
   };
@@ -747,31 +826,96 @@
     return "🔥".repeat(n);
   };
 
+  const resolveOverUnder = (pick) => {
+    const dir = safeText(pick.pickDirection).toUpperCase();
+    if (dir.includes("OVER")) return "Over";
+    if (dir.includes("UNDER")) return "Under";
+    const team = safeText(pick.pickTeam).toUpperCase();
+    if (team.includes("OVER") || team === "O") return "Over";
+    if (team.includes("UNDER") || team === "U") return "Under";
+    const raw = safeText(
+      pick.rawPickLabel || pick.pick_display || pick.pick || "",
+    ).toUpperCase();
+    if (raw.includes("OVER") || /\bO\s+\d/.test(raw)) return "Over";
+    if (raw.includes("UNDER") || /\bU\s+\d/.test(raw)) return "Under";
+    return "";
+  };
+
   const formatPickLabel = (pick) => {
     const type = safeText(pick.pickType || "").toLowerCase();
     const line = safeText(pick.line);
 
-    if (type === "total") {
-      const dir = safeText(pick.pickDirection).toUpperCase();
-      const label = dir.includes("UNDER")
-        ? "Under"
-        : dir.includes("OVER")
-          ? "Over"
-          : dir;
-      return `${label} ${line}`.trim();
+    if (type === "total" || type === "team-total") {
+      const dir = resolveOverUnder(pick);
+      return dir ? `${dir} ${line}`.trim() : `Total ${line}`.trim();
     }
 
     if (type === "moneyline" || type === "ml") {
-      const team = safeText(pick.pickTeam);
-      // Strip trailing "ML" if the model already appended it — just show team name
-      // Odds display separately below the pick label
-      return team.replace(/\s+ML$/i, "").trim() || team;
+      const team = safeText(pick.pickTeam)
+        .replace(/\s+ML$/i, "")
+        .trim();
+      return team || "ML";
     }
 
-    return `${safeText(pick.pickTeam)} ${line}`.trim();
+    // Spread — ensure we show team + line
+    const team = safeText(pick.pickTeam).trim();
+    if (team && line) return `${team} ${line}`;
+    if (team) return team;
+    return line || "-";
+  };
+
+  const pickTypeBadge = (pick) => {
+    const type = safeText(pick.pickType || "").toLowerCase();
+    if (type === "total") return "O/U";
+    if (type === "team-total") return "TT";
+    if (type === "moneyline" || type === "ml") return "ML";
+    return "SPR";
+  };
+
+  /**
+   * Format pick cell as a single clean line:
+   *   Moneyline: Florida A&M (-110)
+   *   Spread: Florida A&M -7.5 (-110)
+   *   Total Over 175.5 (-110)
+   */
+  const formatPickCellLine = (pick, pickLabel, odds) => {
+    const type = safeText(pick.pickType || "spread").toLowerCase();
+    const oddsStr = safeText(odds).trim();
+    const oddsPart = oddsStr ? ` (${oddsStr})` : "";
+
+    if (type === "moneyline" || type === "ml") {
+      const team = safeText(pick.pickTeam)
+        .replace(/\s+ML$/i, "")
+        .trim();
+      return `${team || "ML"}${oddsPart}`;
+    }
+
+    if (type === "total" || type === "team-total") {
+      const dir = resolveOverUnder(pick);
+      const line = safeText(pick.line).trim();
+      if (dir && line) return `${dir} ${line}${oddsPart}`;
+      if (dir) return `${dir}${oddsPart}`;
+      if (line) return `${line}${oddsPart}`;
+      return `Total${oddsPart}`;
+    }
+
+    // Spread
+    const team = safeText(pick.pickTeam).trim();
+    const line = safeText(pick.line).trim();
+    if (team && line) return `${team} ${line}${oddsPart}`;
+    if (team) return `${team}${oddsPart}`;
+    return `${line || "-"}${oddsPart}`;
   };
 
   const formatModelPrediction = (pick) => {
+    const pickType = normalizePickType(pick.pickType);
+    const marketLine = safeText(pick.line).trim();
+    const edge =
+      typeof pick.edge === "number"
+        ? pick.edge
+        : parseFloat(String(pick.edge || "").replace("%", "")) || 0;
+
+    // 1. Explicit prediction from the model
     const explicitPrediction = safeText(
       pick.modelPrediction ||
         pick.prediction ||
@@ -780,6 +924,7 @@
     ).trim();
     if (explicitPrediction) return explicitPrediction;
 
+    // 2. Predicted scores → "Away 108 – Home 102"
     const awayScore =
       pick.predictedAwayScore ??
       pick.awayPredictedScore ??
@@ -788,15 +933,17 @@
       pick.predictedHomeScore ??
       pick.homePredictedScore ??
       pick.home_score_pred;
-    if (
-      awayScore !== undefined &&
-      awayScore !== null &&
-      homeScore !== undefined &&
-      homeScore !== null
-    ) {
-      return `${safeText(pick.awayTeam)} ${safeText(awayScore)} - ${safeText(pick.homeTeam)} ${safeText(homeScore)}`;
+    if (awayScore != null && homeScore != null) {
+      const aNum = parseFloat(awayScore);
+      const hNum = parseFloat(homeScore);
+      const label = `${safeText(pick.awayTeam)} ${safeText(awayScore)} – ${safeText(pick.homeTeam)} ${safeText(homeScore)}`;
+      if (pickType === "total" && !Number.isNaN(aNum) && !Number.isNaN(hNum)) {
+        return `${label} (proj ${(aNum + hNum).toFixed(1)})`;
+      }
+      return label;
     }
 
+    // 3. Model-generated line
     const modelLine = safeText(
       pick.modelSpread ||
         pick.modelPrice ||
@@ -805,18 +952,36 @@
         pick.projectedLine,
     ).trim();
     if (modelLine) {
-      const pickType = normalizePickType(pick.pickType);
-      if (pickType === "total") return `O/U ${modelLine}`;
+      if (pickType === "total") {
+        return marketLine
+          ? `Proj ${modelLine} · Line ${marketLine}`
+          : `Proj total ${modelLine}`;
+      }
       if (pickType === "moneyline") {
-        // modelLine is often a probability (0.563) — display as "ML 0.503" is cryptic
         const num = parseFloat(modelLine);
         if (!Number.isNaN(num) && num > 0 && num < 1) {
-          return `Win ${(num * 100).toFixed(0)}%`;
+          return `Win prob ${(num * 100).toFixed(0)}%`;
         }
-        // If it's already odds-like (e.g. -180, +150), show as ML odds
-        return `ML ${modelLine}`;
+        return `Model ${modelLine}`;
       }
-      return modelLine;
+      // Spread
+      return marketLine
+        ? `Model ${modelLine} · Line ${marketLine}`
+        : `Model ${modelLine}`;
+    }
+
+    // 4. Synthesize from edge + market line
+    if (edge && marketLine) {
+      const mNum = parseFloat(marketLine);
+      if (!Number.isNaN(mNum)) {
+        if (pickType === "total") {
+          const dir = resolveOverUnder(pick);
+          const projTotal = dir === "Under" ? mNum - edge : mNum + edge;
+          return `Proj ${projTotal.toFixed(1)} · Line ${marketLine}`;
+        }
+        // Spread: model spread = market line - edge
+        return `Model ${(mNum - edge).toFixed(1)} · Line ${marketLine}`;
+      }
     }
 
     return "-";
@@ -872,7 +1037,16 @@
       tr.setAttribute("data-away", slug(awayFull));
       tr.setAttribute("data-home", slug(homeFull));
 
-      const date = pick.gameDate || pick.date;
+      const date = [
+        pick.gameDate,
+        pick.date,
+        pick.scheduled,
+        pick.start,
+        pick.time,
+        pick.gameTime,
+      ]
+        .map((value) => safeText(value).trim())
+        .find(Boolean);
       const dateText = formatDateFull(date);
       const timeCst = formatTimeCst(pick.time || pick.gameTime || "");
       const modelLabel = getModelLabel(pick);
@@ -893,8 +1067,8 @@
       const modelPredictionLabel = formatModelPrediction(pick);
 
       // Team records (W-L or W-L-T) from model API output
-      const awayRec = safeText(pick.awayRecord || "");
-      const homeRec = safeText(pick.homeRecord || "");
+      const awayRec = safeText(pick.awayRecord || "").trim();
+      const homeRec = safeText(pick.homeRecord || "").trim();
 
       // Edge: show pts with toggleable % view
       const edgePts = edge ? edge.toFixed(1) : "";
@@ -904,12 +1078,19 @@
           ? (edge * 2.5).toFixed(1)
           : ""; // estimate % if not provided
 
+      const formattedPickLine = formatPickCellLine(pick, pickLabel, odds);
+      const pickBadge = pickTypeBadge(pick);
+      const awayShort = getTeamShortCode(awayFull || pick.awayTeam);
+      const homeShort = getTeamShortCode(homeFull || pick.homeTeam);
+
       tr.innerHTML = `
         <td class="col-datetime">
-          <div class="datetime-cell">
-            <span class="date-value">${safeText(dateText)}</span>
-            <span class="time-value">${safeText(timeCst)}</span>
-            <span class="sportsbook-value">${safeText(pick.sportsbook || pick.book || "Model")}</span>
+          <div class="datetime-cell datetime-cell-inline">
+            <span class="datetime-formatted">
+              <span class="datetime-piece datetime-date">${safeText(dateText)}</span>
+              ${timeCst ? `<span class="datetime-piece datetime-time">${safeText(timeCst)}</span>` : ""}
+              ${modelLabel ? `<span class="datetime-piece datetime-model">${safeText(modelLabel)}</span>` : ""}
+            </span>
           </div>
         </td>
         <td class="center col-league">
@@ -920,15 +1101,21 @@
         <td class="col-matchup">
           <div class="matchup-cell matchup-inline">
             <span class="team-line">
-              ${awayLogo ? `<img src="${awayLogo}" class="team-logo" alt="${safeText(awayFull)}" loading="lazy" onerror="this.style.display='none'" />` : ""}
+              <span class="team-logo-wrap${awayLogo ? "" : " logo-fallback-only"}">
+                ${awayLogo ? `<img src="${awayLogo}" class="team-logo" alt="${safeText(awayFull)}" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('logo-fallback-visible');" />` : ""}
+                <span class="team-logo-fallback">${safeText(awayShort)}</span>
+              </span>
               <span class="team-name-full">${safeText(awayFull)}</span>
-              ${awayRec ? `<span class="team-record">(${awayRec})</span>` : ""}
+              <span class="team-record">${awayRec ? `(${awayRec})` : "(--)"}</span>
             </span>
             <span class="vs-divider">at</span>
             <span class="team-line">
-              ${homeLogo ? `<img src="${homeLogo}" class="team-logo" alt="${safeText(homeFull)}" loading="lazy" onerror="this.style.display='none'" />` : ""}
+              <span class="team-logo-wrap${homeLogo ? "" : " logo-fallback-only"}">
+                ${homeLogo ? `<img src="${homeLogo}" class="team-logo" alt="${safeText(homeFull)}" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('logo-fallback-visible');" />` : ""}
+                <span class="team-logo-fallback">${safeText(homeShort)}</span>
+              </span>
               <span class="team-name-full">${safeText(homeFull)}</span>
-              ${homeRec ? `<span class="team-record">(${homeRec})</span>` : ""}
+              <span class="team-record">${homeRec ? `(${homeRec})` : "(--)"}</span>
             </span>
           </div>
         </td>
@@ -936,13 +1123,13 @@
           <span class="segment-tag" data-segment="${slug(segment)}">${safeText(segmentLabel)}</span>
         </td>
         <td class="col-pick" data-label="Recommended Pick">
-          <div class="pick-display">
-            <span class="pick-label">${safeText(pickLabel)}</span>
-            <span class="pick-odds">(${safeText(odds)})</span>
+          <div class="pick-display pick-display-inline">
+            <span class="pick-type-badge pick-type-${slug(safeText(pick.pickType || "spread"))}">${safeText(pickBadge)}</span>
+            <span class="pick-line-formatted">${safeText(formattedPickLine)}</span>
           </div>
         </td>
         <td class="col-model-prediction" data-label="Model Prediction">
-          <span class="model-prediction-text">${safeText(modelPredictionLabel)}</span>
+          <span class="model-prediction-text">${safeText(modelPredictionLabel || "-")}</span>
         </td>
         <td class="center col-edge" data-edge-pts="${edgePts}" data-edge-pct="${edgePct}">
           <button class="edge-toggle" type="button" title="Click to toggle pts / %">
@@ -1160,6 +1347,13 @@
     setFetchButtonsLoading(buttons, true);
 
     state.isFetching = true;
+    const fetchGen = state.fetchGeneration;
+
+    // Clear stale persisted picks so they don't resurface on reload
+    try {
+      localStorage.removeItem(WEEKLY_LINEUP_KEY);
+      localStorage.removeItem("gbsv_shared_fetched_picks");
+    } catch (_) {}
 
     try {
       const date = getDateParamForFetchers();
@@ -1171,9 +1365,14 @@
         "Refresh timed out. Please try again.",
       );
 
+      // If clearSlate was called while fetching, discard results
+      if (fetchGen !== state.fetchGeneration) return;
+
       const picks = Array.isArray(result?.picks) ? result.picks : [];
       const normalized = picks.map((p) => normalizeIncomingPick(p));
-      const droppedCount = normalized.filter((p) => !(p.awayTeam && p.homeTeam)).length;
+      const droppedCount = normalized.filter(
+        (p) => !(p.awayTeam && p.homeTeam),
+      ).length;
 
       if (isNormalizationDebugEnabled()) {
         const summary = normalized.reduce(
@@ -1270,11 +1469,24 @@
   };
 
   const clearSlate = (clearBtn) => {
+    // Bump generation so any in-flight fetch is discarded on completion
+    state.fetchGeneration += 1;
     state.activePicks = [];
     state.lastFetchedAt = null;
+    state.isFetching = false;
+    setFetchButtonsLoading(state.activeFetchButtons, false);
+    state.activeFetchButtons = [];
     try {
       localStorage.removeItem(WEEKLY_LINEUP_KEY);
+      localStorage.removeItem("gbsv_shared_fetched_picks");
     } catch (e) {}
+    // Flush in-memory caches so stale data can't resurface
+    if (window.UnifiedPicksFetcher?.clearCache) {
+      window.UnifiedPicksFetcher.clearCache();
+    }
+    if (window.DataCacheManager?.clear) {
+      window.DataCacheManager.clear();
+    }
     renderEmptyState("No picks loaded.");
     renderFilterChips();
     const target = el.lastRefreshed();
@@ -1475,12 +1687,23 @@
     });
   };
 
+  const BOOTSTRAP_MAX_AGE_MS = 30 * 60 * 1000; // 30 minutes
+
   const bootstrapFromCache = () => {
     try {
       const raw = localStorage.getItem(WEEKLY_LINEUP_KEY);
       if (!raw) return;
       const parsed = JSON.parse(raw);
       if (!Array.isArray(parsed?.picks)) return;
+
+      // Discard stale cached picks (older than 30 min)
+      if (parsed.fetchedAt) {
+        const age = Date.now() - new Date(parsed.fetchedAt).getTime();
+        if (age > BOOTSTRAP_MAX_AGE_MS) {
+          localStorage.removeItem(WEEKLY_LINEUP_KEY);
+          return;
+        }
+      }
 
       state.activePicks = parsed.picks;
       state.lastFetchedAt = parsed.fetchedAt || null;
