@@ -2008,7 +2008,7 @@
     // Only auto-refresh table on dashboard page (not weekly-lineup)
     if (isDashboardPage()) {
       // Load existing picks first (shows immediately)
-      refreshPicksTable();
+      // refreshPicksTable(); // DISABLED: Avoid flashing stale local picks before live DB load
 
       // Initialize table sorting
       if (

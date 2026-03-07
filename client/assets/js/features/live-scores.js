@@ -1,6 +1,7 @@
 /**
- * Live Score Updates v2.1
+ * Live Score Updates v2.2
  * Real-time score updates for active games without page refresh
+ * v2.2: NCAAM /api/pnl/live as primary source (server-side scores + covering status)
  * v2.1: SportsDataIO as primary source for NFL/NCAAF box scores
  */
 
@@ -236,7 +237,14 @@
                     console.log(`[LIVE-SCORES] SportsDataIO failed for ${sport}, falling back to ESPN`);
                 }
 
-                // NBA and NCAAM: Use AutoGameFetcher's cached ESPN data (primary)
+                // NCAAM: Use server-side /api/pnl/live as primary (scores pre-matched to picks)
+                if (sportUpper === 'NCAAM' || sportUpper === 'NCAAB') {
+                    const success = await this.fetchNCAAMLiveScores(picks);
+                    if (success) return;
+                    console.log('[LIVE-SCORES] NCAAM /api/pnl/live unavailable, falling back to ESPN');
+                }
+
+                // NBA and NCAAM fallback: Use AutoGameFetcher's cached ESPN data
                 if (window.AutoGameFetcher) {
                     const allGames = window.AutoGameFetcher.getTodaysGames() || [];
                     const sportGames = allGames.filter(g => g.sport?.toUpperCase() === sportUpper);
@@ -285,6 +293,72 @@
                 return `${functionsBase}/api/scoreboard`;
             }
             return '/api/scoreboard';
+        }
+
+        /**
+         * Fetch NCAAM live scores from server-side /api/pnl/live endpoint.
+         * Returns true if successful, false to fallback to ESPN.
+         */
+        async fetchNCAAMLiveScores(picks) {
+            if (!window.NCAAMPicksFetcher?.fetchLivePnl) return false;
+
+            try {
+                const data = await window.NCAAMPicksFetcher.fetchLivePnl();
+                if (!data?.picks || !Array.isArray(data.picks) || data.picks.length === 0) {
+                    return false;
+                }
+
+                console.log(`[LIVE-SCORES] NCAAM /api/pnl/live returned ${data.picks.length} picks with scores`);
+
+                const STATUS_MAP = {
+                    'PENDING': 'pending',
+                    'IN_PROGRESS_COVERING': 'on-track',
+                    'IN_PROGRESS_NOT_COVERING': 'at-risk',
+                    'SETTLED_WIN': 'win',
+                    'SETTLED_LOSS': 'loss',
+                    'SETTLED_PUSH': 'push',
+                };
+
+                for (const pick of picks) {
+                    // Match server pick to DOM pick by team names
+                    const serverPick = data.picks.find(sp =>
+                        this.teamMatches(pick.awayTeam, sp.awayTeam) &&
+                        this.teamMatches(pick.homeTeam, sp.homeTeam)
+                    );
+
+                    if (!serverPick?.live) continue;
+
+                    const live = serverPick.live;
+                    const scores = live.scores || {};
+                    const game = {
+                        gameId: serverPick.gameId,
+                        awayTeam: serverPick.awayTeam,
+                        homeTeam: serverPick.homeTeam,
+                        awayScore: scores.away || 0,
+                        homeScore: scores.home || 0,
+                        isLive: live.gameStatus === 'in',
+                        isFinal: live.gameStatus === 'final',
+                        gameStatus: {
+                            clock: live.timer || live.gameStatus || '',
+                            period: this.extractPeriod(live.timer)
+                        }
+                    };
+
+                    this.updatePickWithGameData(pick, game);
+
+                    // Override status with server-calculated covering status
+                    const mappedStatus = STATUS_MAP[live.liveStatus];
+                    if (mappedStatus) {
+                        const row = document.querySelector(`tr[data-row-id="${pick.rowId}"]`);
+                        if (row) this.updatePickStatus(row, mappedStatus);
+                    }
+                }
+
+                return true;
+            } catch (error) {
+                console.warn('[LIVE-SCORES] NCAAM /api/pnl/live error:', error.message);
+                return false;
+            }
         }
 
         /**
@@ -804,5 +878,5 @@
         }
     });
 
-    console.log('[LIVE-SCORES] v2.1 loaded - NFL/NCAAF: SportsDataIO (primary) | NBA/NCAAM: ESPN');
+    console.log('[LIVE-SCORES] v2.2 loaded - NFL/NCAAF: SportsDataIO | NCAAM: /api/pnl/live | NBA: ESPN');
 })();

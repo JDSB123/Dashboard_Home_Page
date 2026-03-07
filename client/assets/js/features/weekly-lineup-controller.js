@@ -384,8 +384,7 @@
       };
       chips.push({
         key: "pickType",
-        label:
-          `Pick: ${pickTypeLabelMap[state.filters.pickType] || state.filters.pickType}`,
+        label: `Pick: ${pickTypeLabelMap[state.filters.pickType] || state.filters.pickType}`,
       });
     }
     if (state.filters.teamSearch) {
@@ -1322,7 +1321,9 @@
   };
 
   const parseLineNumber = (value) => {
-    const cleaned = safeText(value).replace(/[^0-9+.-]/g, "").trim();
+    const cleaned = safeText(value)
+      .replace(/[^0-9+.-]/g, "")
+      .trim();
     if (!cleaned) return null;
     const numeric = parseFloat(cleaned);
     return Number.isFinite(numeric) ? numeric : null;
@@ -1332,7 +1333,9 @@
     slug(resolveFullName(safeText(teamName).trim(), sport) || teamName);
 
   const findSlateMatchForImportedPick = (pick) => {
-    const currentSlate = Array.isArray(state.activePicks) ? state.activePicks : [];
+    const currentSlate = Array.isArray(state.activePicks)
+      ? state.activePicks
+      : [];
     if (!currentSlate.length) return null;
 
     const targetSport = normalizeSport(pick.sport || pick.league);
@@ -1364,7 +1367,10 @@
 
       if (targetPickTeamKey) {
         if (targetPickTeamKey === slatePickTeamKey) score += 6;
-        if (targetPickTeamKey === slateAwayKey || targetPickTeamKey === slateHomeKey) {
+        if (
+          targetPickTeamKey === slateAwayKey ||
+          targetPickTeamKey === slateHomeKey
+        ) {
           score += 5;
         }
 
@@ -1374,8 +1380,10 @@
           targetPickTeamKey !== slateHomeKey &&
           ((slateAwayKey && slateAwayKey.includes(targetPickTeamKey)) ||
             (slateHomeKey && slateHomeKey.includes(targetPickTeamKey)) ||
-            (targetPickTeamKey.includes(slateAwayKey) && slateAwayKey.length >= 4) ||
-            (targetPickTeamKey.includes(slateHomeKey) && slateHomeKey.length >= 4))
+            (targetPickTeamKey.includes(slateAwayKey) &&
+              slateAwayKey.length >= 4) ||
+            (targetPickTeamKey.includes(slateHomeKey) &&
+              slateHomeKey.length >= 4))
         ) {
           score += 2;
         }
@@ -1384,7 +1392,8 @@
       if (
         (targetPickType === "total" || targetPickType === "team-total") &&
         targetDirection &&
-        safeText(slatePick.pickDirection).trim().toLowerCase() === targetDirection
+        safeText(slatePick.pickDirection).trim().toLowerCase() ===
+          targetDirection
       ) {
         score += 2;
       }
@@ -1439,18 +1448,33 @@
     const prepared = { ...normalized };
     delete prepared._normalizeMeta;
 
-    if (!safeText(prepared.awayTeam).trim() || !safeText(prepared.homeTeam).trim()) {
+    if (
+      !safeText(prepared.awayTeam).trim() ||
+      !safeText(prepared.homeTeam).trim()
+    ) {
       const slateMatch = findSlateMatchForImportedPick(prepared);
       if (slateMatch) {
         prepared.sport = prepared.sport || slateMatch.sport;
         prepared.league = prepared.league || slateMatch.league;
-        prepared.awayTeam = safeText(prepared.awayTeam || slateMatch.awayTeam).trim();
-        prepared.homeTeam = safeText(prepared.homeTeam || slateMatch.homeTeam).trim();
+        prepared.awayTeam = safeText(
+          prepared.awayTeam || slateMatch.awayTeam,
+        ).trim();
+        prepared.homeTeam = safeText(
+          prepared.homeTeam || slateMatch.homeTeam,
+        ).trim();
         prepared.gameDate = safeText(
-          prepared.gameDate || prepared.date || slateMatch.gameDate || slateMatch.date || "",
+          prepared.gameDate ||
+            prepared.date ||
+            slateMatch.gameDate ||
+            slateMatch.date ||
+            "",
         ).trim();
         prepared.gameTime = safeText(
-          prepared.gameTime || prepared.time || slateMatch.gameTime || slateMatch.time || "",
+          prepared.gameTime ||
+            prepared.time ||
+            slateMatch.gameTime ||
+            slateMatch.time ||
+            "",
         ).trim();
         if (!safeText(prepared.pickTeam).trim()) {
           prepared.pickTeam = safeText(slateMatch.pickTeam).trim();
@@ -1470,12 +1494,12 @@
     prepared.gameDate = safeText(prepared.gameDate || prepared.date || nowIso())
       .slice(0, 10)
       .trim();
-    prepared.gameTime = safeText(prepared.gameTime || prepared.time || "").trim();
+    prepared.gameTime = safeText(
+      prepared.gameTime || prepared.time || "",
+    ).trim();
     prepared.id = prepared.id || computePickId(prepared);
     prepared.locked = prepared.locked === true;
-    prepared.lockedAt = prepared.locked
-      ? prepared.lockedAt || nowIso()
-      : null;
+    prepared.lockedAt = prepared.locked ? prepared.lockedAt || nowIso() : null;
     prepared.source = safeText(prepared.source || fallbackSource);
     prepared.sportsbook = safeText(prepared.sportsbook).trim();
     prepared.book = safeText(prepared.book).trim();
@@ -1506,7 +1530,9 @@
       };
     }
 
-    const byId = new Map((state.activePicks || []).map((pick) => [pick.id, pick]));
+    const byId = new Map(
+      (state.activePicks || []).map((pick) => [pick.id, pick]),
+    );
     let added = 0;
     let updated = 0;
     const mergedImported = [];
@@ -1684,14 +1710,39 @@
     } catch (_) {}
 
     try {
-      const date = getDateParamForFetchers();
-      const result = await withTimeout(
-        window.UnifiedPicksFetcher.fetchPicks(normalizedLeague, date, {
-          skipCache: true,
-        }),
-        FETCH_TIMEOUT_MS,
-        "Refresh timed out. Please try again.",
-      );
+      // NCAAM: prefer weekly endpoint which returns the full week's picks
+      let result;
+      const isNcaam =
+        normalizedLeague === "ncaam" || normalizedLeague === "ncaab";
+      if (isNcaam && window.NCAAMPicksFetcher?.fetchWeeklyPicks) {
+        const weeklyData = await withTimeout(
+          window.NCAAMPicksFetcher.fetchWeeklyPicks({ skipCache: true }),
+          FETCH_TIMEOUT_MS,
+          "NCAAM weekly refresh timed out.",
+        );
+        if (weeklyData?.picks?.length) {
+          // Wrap in the same shape UnifiedPicksFetcher returns
+          result = {
+            picks: weeklyData.picks.map((p) => ({
+              ...p,
+              sport: "NCAAM",
+              league: "NCAAM",
+            })),
+            source: "ncaam-weekly",
+          };
+        }
+      }
+      // Fallback: use UnifiedPicksFetcher for non-NCAAM or if weekly endpoint failed
+      if (!result) {
+        const date = getDateParamForFetchers();
+        result = await withTimeout(
+          window.UnifiedPicksFetcher.fetchPicks(normalizedLeague, date, {
+            skipCache: true,
+          }),
+          FETCH_TIMEOUT_MS,
+          "Refresh timed out. Please try again.",
+        );
+      }
 
       // If clearSlate was called while fetching, discard results
       if (fetchGen !== state.fetchGeneration) return;
@@ -2067,7 +2118,9 @@
   };
 
   const init = () => {
-    bootstrapFromCache();
+    // Only load from cache initially if live load fails, to prevent stale data
+    // bootstrapFromCache();
+
     attachFetchHandlers();
     attachTrackHandlers();
     attachSortHandlers();
@@ -2079,6 +2132,14 @@
 
     if (state.lastFetchedAt) {
       setLastRefreshed(state.lastFetchedAt);
+    }
+
+    // Auto-fetch fresh live data on load (replaces stale cache)
+    const refBtn = document.querySelector("button[data-fetch='all']");
+    if (refBtn) {
+      fetchAndRender("all", refBtn).catch(() => bootstrapFromCache());
+    } else {
+      fetchAndRender("all").catch(() => bootstrapFromCache());
     }
   };
 

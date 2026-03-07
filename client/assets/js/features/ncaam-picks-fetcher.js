@@ -26,13 +26,15 @@
   const triggerInFlight = {};
 
   async function triggerPicksIfNeeded(cacheKey) {
-    const proxyBase = `${getFunctionsBase()}/api/model/ncaam`;
-    const triggerKey = `${proxyBase}|${cacheKey || "today"}`;
+    const endpoint = getContainerEndpoint("ncaam");
+    const triggerKey = `${endpoint}|${cacheKey || "today"}`;
     if (triggerInFlight[triggerKey]) return false;
     triggerInFlight[triggerKey] = true;
     try {
-      const triggerUrl = `${proxyBase}/trigger-picks`;
+      const d = cacheKey && cacheKey !== "today" ? `?date=${cacheKey}` : "";
+      const triggerUrl = `${endpoint}/api/picks/trigger${d}`;
       const response = await fetch(triggerUrl, {
+        method: "POST",
         signal: AbortSignal.timeout(60000),
       });
       if (response.ok) {
@@ -52,19 +54,14 @@
     timeoutMs: 60000, // 60s to handle cold starts
 
     buildPrimaryUrl(date) {
-      const base = getFunctionsBase();
+      const endpoint = getContainerEndpoint("ncaam");
       const d = date && date !== "today" ? date : null;
-      // v2 ACA: /api/picks/{date} for a specific date, /api/picks/active for current
-      return d
-        ? `${base}/api/model/ncaam/api/picks/${d}`
-        : `${base}/api/model/ncaam/api/picks/active`;
+      // Fetch all picks (including graded) if no specific date is provided
+      return d ? `${endpoint}/api/picks/${d}` : `${endpoint}/api/picks`;
     },
 
     buildFallbackUrl(date) {
-      const endpoint = getContainerEndpoint("ncaam");
-      if (!endpoint) return "";
-      const d = date && date !== "today" ? date : null;
-      return d ? `${endpoint}/api/picks/${d}` : `${endpoint}/api/picks/active`;
+      return "";
     },
 
     // NCAAM-specific retry: trigger picks generation on 503
@@ -73,10 +70,10 @@
         const triggered = await triggerPicksIfNeeded(date);
         if (triggered) {
           await new Promise((resolve) => setTimeout(resolve, 2000));
-          const proxyBase = `${getFunctionsBase()}/api/model/ncaam`;
+          const endpoint = getContainerEndpoint("ncaam");
           const d = date && date !== "today" ? date : null;
-          const picksPath = d ? `/api/picks/${d}` : "/api/picks/active";
-          const retryResponse = await fetch(`${proxyBase}${picksPath}`, {
+          const picksPath = d ? `/api/picks/${d}` : "/api/picks";
+          const retryResponse = await fetch(`${endpoint}${picksPath}`, {
             signal: AbortSignal.timeout(60000),
           });
           return retryResponse;
@@ -219,9 +216,66 @@
     },
   });
 
+  // --- Weekly picks endpoint ---
+  let weeklyCache = { data: null, ts: 0 };
+  const WEEKLY_CACHE_MS = 120000; // 2 min
+
+  async function fetchWeeklyPicks(options = {}) {
+    const { startDate, endDate, skipCache = false } = options;
+    if (!skipCache && weeklyCache.data && Date.now() - weeklyCache.ts < WEEKLY_CACHE_MS) {
+      return weeklyCache.data;
+    }
+    const endpoint = getContainerEndpoint("ncaam");
+    const params = new URLSearchParams();
+    if (startDate) params.set("startDate", startDate);
+    if (endDate) params.set("endDate", endDate);
+    const qs = params.toString() ? `?${params}` : "";
+    const url = `${endpoint}/api/picks/weekly${qs}`;
+    try {
+      const resp = await fetch(url, { signal: AbortSignal.timeout(30000) });
+      if (!resp.ok) return null;
+      const data = await resp.json();
+      weeklyCache = { data, ts: Date.now() };
+      return data;
+    } catch {
+      return null;
+    }
+  }
+
+  // --- Live PnL + scores endpoint ---
+  async function fetchLivePnl(date) {
+    const endpoint = getContainerEndpoint("ncaam");
+    const d = date || new Date().toISOString().slice(0, 10);
+    const url = `${endpoint}/api/pnl/live?date=${d}`;
+    try {
+      const resp = await fetch(url, { signal: AbortSignal.timeout(15000) });
+      if (!resp.ok) return null;
+      return await resp.json();
+    } catch {
+      return null;
+    }
+  }
+
+  // --- PnL summary endpoint ---
+  async function fetchPnlSummary() {
+    const endpoint = getContainerEndpoint("ncaam");
+    try {
+      const resp = await fetch(`${endpoint}/api/pnl/summary`, {
+        signal: AbortSignal.timeout(15000),
+      });
+      if (!resp.ok) return null;
+      return await resp.json();
+    } catch {
+      return null;
+    }
+  }
+
   // Export with same interface (preserve backward compat)
   window.NCAAMPicksFetcher = {
     fetchPicks: (date, options) => fetcher.fetchPicks(date, options),
+    fetchWeeklyPicks,
+    fetchLivePnl,
+    fetchPnlSummary,
     checkHealth: () => fetcher.checkHealth(),
     formatPickForTable: fetcher.formatPickForTable,
     triggerPicks: triggerPicksIfNeeded,

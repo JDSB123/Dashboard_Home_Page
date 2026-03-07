@@ -2924,7 +2924,9 @@ function computeWeeklyCacheId(pick) {
   const direction = String(pick?.pickDirection || "")
     .trim()
     .toLowerCase();
-  const line = String(pick?.line || "").trim().toLowerCase();
+  const line = String(pick?.line || "")
+    .trim()
+    .toLowerCase();
 
   return [sport, gameDate, away, home, pickType, segment, direction, line].join(
     "_",
@@ -2989,22 +2991,17 @@ function loadTrackedWeeklyPicksFromCache() {
 }
 
 function initializePicksAndRecords() {
-  // Dashboard picks are managed by LocalPicksManager (reads from gbsv_picks localStorage).
-  // loadAndAppendPicks() fetches /api/picks which returns ALL Cosmos DB picks regardless
-  // of source — including Weekly Lineup model picks — so it must NOT auto-run here.
-  // Use window.loadLivePicks() to manually trigger an API refresh if needed.
-
-  // Migration/DB check only (non-blocking, non-rendering)
-  loadPicksFromDatabase().catch(() => {
-    // Non-fatal — LocalPicksManager handles rendering
+  // We now always fetch live data on load to avoid stale localStorage picks.
+  // loadAndAppendPicks fetches all picks from the DB and renders them.
+  loadAndAppendPicks().catch((err) => {
+    console.error("[PICKS LOADER] Failed to auto-load live picks:", err);
+    // Fallback: merge tracked weekly-lineup picks if DB fetch fully fails
+    loadTrackedWeeklyPicks()
+      .catch(() => 0)
+      .finally(() => {
+        loadTrackedWeeklyPicksFromCache();
+      });
   });
-
-  // Merge tracked weekly-lineup picks into dashboard (non-blocking)
-  loadTrackedWeeklyPicks()
-    .catch(() => 0)
-    .finally(() => {
-      loadTrackedWeeklyPicksFromCache();
-    });
 }
 
 /**
