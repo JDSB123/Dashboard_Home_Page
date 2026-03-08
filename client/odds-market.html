@@ -30,19 +30,7 @@
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="assets/Logo%208.5.png?v=20251216" />
 
-    <!-- Local dev config handled by config.js -->
-    <script>
-      (function () {
-        var isLocal =
-          location.hostname === "localhost" ||
-          location.hostname === "127.0.0.1";
-        if (isLocal) {
-          console.log(
-            "[DEV] Local environment detected — using production APIs by default. Add ?localApi=1 for local Functions.",
-          );
-        }
-      })();
-    </script>
+    <script src="assets/js/core/dev-env-hint.js?v=36.03.0" defer></script>
 
     <!-- Preload critical background image -->
     <link
@@ -599,18 +587,11 @@
     <!-- Page-specific scripts -->
     <script src="assets/js/features/import-options.js?v=36.03.0" defer></script>
     <script src="assets/js/features/odds-market.js?v=36.03.0" defer></script>
-    <script>
-      (function () {
-        try {
-          if ("serviceWorker" in navigator) {
-            window.addEventListener("load", function () {
-              navigator.serviceWorker
-                .register("/sw.js?v=36.03.0", { updateViaCache: "none" })
-                .catch(function () {});
-            });
-          }
-        } catch (e) {}
-      })();
-    </script>
+    <script
+      src="assets/js/core/sw-bootstrap.js?v=36.03.0"
+      data-version="v36.03.0"
+      data-sw-url="/sw.js?v=36.03.0"
+      defer
+    ></script>
   </body>
 </html>

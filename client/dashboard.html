@@ -25,21 +25,8 @@
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="assets/Logo%208.5.png?v=20251216" />
 
-    <!-- Local dev helper: if Live Server runs from repo root, fix base href -->
-    <!-- Local dev config handled by config.js -->
-    <script>
-      (function () {
-        var isLocal =
-          location.hostname === "localhost" ||
-          location.hostname === "127.0.0.1";
-
-        if (isLocal) {
-          console.log(
-            "[DEV] Local environment detected — using production APIs by default. Add ?localApi=1 for local Functions.",
-          );
-        }
-      })();
-    </script>
+    <!-- Local dev config hint -->
+    <script src="assets/js/core/dev-env-hint.js?v=36.03.0" defer></script>
 
     <!-- Preload critical background image -->
     <link
@@ -1090,152 +1077,16 @@
     <!-- Bundled JS (replaces ~40 individual scripts) -->
     <script src="dist/core.min.js?v=36.03.0" defer></script>
     <script src="dist/dashboard.min.js?v=36.03.0" defer></script>
-    <script>
-      // Date-range dropdown — UI label + reload trigger only.
-      // Initial pick rendering is handled exclusively by smart-load-picks.js
-      // (initializePicksAndRecords → loadAndAppendPicks → buildPickRow) and
-      // LocalPicksManager.refreshPicksTable(). This script must NOT write to
-      // picks-tbody on page load because doing so races with those renderers
-      // and overwrites properly-formatted rows with stale/empty simplified ones.
-      document.addEventListener("DOMContentLoaded", function () {
-        var rangeDropdown = document.getElementById("date-range-dropdown");
-        var rangeLabel = document.getElementById("date-range-label");
-        if (!rangeDropdown || !rangeLabel) return;
-
-        rangeDropdown.addEventListener("click", function (e) {
-          if (e.target.classList.contains("date-range-option")) {
-            var range = e.target.getAttribute("data-range");
-            rangeLabel.textContent = e.target.textContent;
-            // Reload picks through the proper pipeline (buildPickRow with full
-            // validation) and let client-side filters handle range narrowing.
-            if (typeof window.loadLivePicks === "function") {
-              window.loadLivePicks();
-            } else if (
-              window.LocalPicksManager &&
-              typeof window.LocalPicksManager.refresh === "function"
-            ) {
-              window.LocalPicksManager.refresh();
-            }
-          }
-        });
-        // NOTE: No fetchAndRenderPicks("active") here — initial table population
-        // is owned by smart-load-picks.js and LocalPicksManager alone.
-      });
-    </script>
-    <!-- Service worker registration and idle prefetch -->
-    <script>
-      (function () {
-        try {
-          if ("serviceWorker" in navigator) {
-            var swUrl = "/sw.js?v=36.03.0";
-            var expectedSwVersion = "v36.03.0";
-
-            async function hardResetCachesAndReload() {
-              try {
-                var regs = await navigator.serviceWorker.getRegistrations();
-                await Promise.all(
-                  regs.map(function (r) {
-                    return r.unregister();
-                  }),
-                );
-              } catch (e) {}
-              try {
-                if (window.caches && caches.keys) {
-                  var keys = await caches.keys();
-                  await Promise.all(
-                    keys.map(function (k) {
-                      return caches.delete(k);
-                    }),
-                  );
-                }
-              } catch (e) {}
-              try {
-                // Force a truly fresh navigation
-                var url = new URL(window.location.href);
-                url.searchParams.set("r", String(Date.now()));
-                window.location.replace(url.toString());
-              } catch (e) {
-                window.location.reload();
-              }
-            }
-
-            function getSwVersion(controller) {
-              return new Promise(function (resolve) {
-                try {
-                  if (!controller) return resolve(null);
-                  var channel = new MessageChannel();
-                  channel.port1.onmessage = function (evt) {
-                    resolve((evt && evt.data && evt.data.version) || null);
-                  };
-                  controller.postMessage({ type: "GET_VERSION" }, [
-                    channel.port2,
-                  ]);
-                  setTimeout(function () {
-                    resolve(null);
-                  }, 1500);
-                } catch (e) {
-                  resolve(null);
-                }
-              });
-            }
-
-            async function ensureFreshClient() {
-              // Manual escape hatch: /dashboard.html?reset=1
-              try {
-                var params = new URLSearchParams(window.location.search);
-                if (params.get("reset") === "1") {
-                  await hardResetCachesAndReload();
-                  return;
-                }
-              } catch (e) {}
-
-              // If an older SW is controlling the page, reset automatically.
-              try {
-                var controller = navigator.serviceWorker.controller;
-                var activeVersion = await getSwVersion(controller);
-                if (activeVersion && activeVersion !== expectedSwVersion) {
-                  await hardResetCachesAndReload();
-                }
-              } catch (e) {}
-            }
-
-            window.addEventListener("load", function () {
-              navigator.serviceWorker
-                .register(swUrl, { updateViaCache: "none" })
-                .then(function (reg) {
-                  try {
-                    reg.update();
-                  } catch (e) {}
-                  try {
-                    if (reg.waiting) {
-                      reg.waiting.postMessage({ type: "SKIP_WAITING" });
-                    }
-                  } catch (e) {}
-                  ensureFreshClient();
-                })
-                .catch(function () {});
-            });
-            navigator.serviceWorker.addEventListener(
-              "controllerchange",
-              function () {
-                /* no-op */
-              },
-            );
-          }
-        } catch (e) {}
-        (
-          window.requestIdleCallback ||
-          function (cb) {
-            setTimeout(cb, 100);
-          }
-        )(function () {
-          try {
-            fetch("/weekly-lineup.html", { mode: "no-cors" }).catch(
-              function () {},
-            );
-          } catch (e) {}
-        });
-      })();
-    </script>
+    <script
+      src="assets/js/features/dashboard-date-range.js?v=36.03.0"
+      defer
+    ></script>
+    <script
+      src="assets/js/core/sw-bootstrap.js?v=36.03.0"
+      data-version="v36.03.0"
+      data-sw-url="/sw.js?v=36.03.0"
+      data-prefetch-url="/weekly-lineup.html"
+      defer
+    ></script>
   </body>
 </html>

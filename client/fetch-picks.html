@@ -22,19 +22,7 @@
     <title>Bears & Bulls — Fetch Picks</title>
     <link rel="icon" type="image/png" href="assets/Logo%208.5.png?v=20251216" />
 
-    <!-- Local dev config handled by config.js -->
-    <script>
-      (function () {
-        var isLocal =
-          location.hostname === "localhost" ||
-          location.hostname === "127.0.0.1";
-        if (isLocal) {
-          console.log(
-            "[DEV] Local environment detected — using production APIs by default. Add ?localApi=1 for local Functions.",
-          );
-        }
-      })();
-    </script>
+    <script src="assets/js/core/dev-env-hint.js?v=36.03.0" defer></script>
 
     <!-- Preload critical background image -->
     <link
@@ -42,13 +30,10 @@
       as="image"
       href="assets/JB_Bearish_Market_FULL_page.png"
     />
-    <style>
-      body.page-fetch-picks {
-        background-image: url("assets/JB_Bearish_Market_FULL_page.png");
-        background-size: cover;
-        background-attachment: fixed;
-      }
-    </style>
+    <link
+      rel="stylesheet"
+      href="assets/css/pages/fetch-picks-inline.css?v=36.03.0"
+    />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
@@ -749,102 +734,11 @@
     <script src="dist/core.min.js?v=36.03.0" defer></script>
     <script src="dist/fetch-picks.min.js?v=36.03.0" defer></script>
 
-    <script>
-      // Service worker registration
-      (function () {
-        try {
-          if ("serviceWorker" in navigator) {
-            var swUrl = "/sw.js?v=36.03.0";
-            var expectedSwVersion = "v36.03.0";
-
-            async function hardResetCachesAndReload() {
-              try {
-                var regs = await navigator.serviceWorker.getRegistrations();
-                await Promise.all(
-                  regs.map(function (r) {
-                    return r.unregister();
-                  }),
-                );
-              } catch (e) {}
-              try {
-                if (window.caches && caches.keys) {
-                  var keys = await caches.keys();
-                  await Promise.all(
-                    keys.map(function (k) {
-                      return caches.delete(k);
-                    }),
-                  );
-                }
-              } catch (e) {}
-              try {
-                var url = new URL(window.location.href);
-                url.searchParams.set("r", String(Date.now()));
-                window.location.replace(url.toString());
-              } catch (e) {
-                window.location.reload();
-              }
-            }
-
-            function getSwVersion(controller) {
-              return new Promise(function (resolve) {
-                try {
-                  if (!controller) return resolve(null);
-                  var channel = new MessageChannel();
-                  channel.port1.onmessage = function (evt) {
-                    resolve((evt && evt.data && evt.data.version) || null);
-                  };
-                  controller.postMessage({ type: "GET_VERSION" }, [
-                    channel.port2,
-                  ]);
-                  setTimeout(function () {
-                    resolve(null);
-                  }, 1500);
-                } catch (e) {
-                  resolve(null);
-                }
-              });
-            }
-
-            async function ensureFreshClient() {
-              try {
-                var params = new URLSearchParams(window.location.search);
-                if (params.get("reset") === "1") {
-                  await hardResetCachesAndReload();
-                  return;
-                }
-              } catch (e) {}
-              try {
-                var controller = navigator.serviceWorker.controller;
-                var activeVersion = await getSwVersion(controller);
-                if (activeVersion && activeVersion !== expectedSwVersion) {
-                  await hardResetCachesAndReload();
-                }
-              } catch (e) {}
-            }
-
-            window.addEventListener("load", function () {
-              navigator.serviceWorker
-                .register(swUrl, { updateViaCache: "none" })
-                .then(function (reg) {
-                  try {
-                    reg.update();
-                  } catch (e) {}
-                  try {
-                    if (reg.waiting) {
-                      reg.waiting.postMessage({ type: "SKIP_WAITING" });
-                    }
-                  } catch (e) {}
-                  ensureFreshClient();
-                })
-                .catch(function () {});
-            });
-            navigator.serviceWorker.addEventListener(
-              "controllerchange",
-              function () {},
-            );
-          }
-        } catch (e) {}
-      })();
-    </script>
+    <script
+      src="assets/js/core/sw-bootstrap.js?v=36.03.0"
+      data-version="v36.03.0"
+      data-sw-url="/sw.js?v=36.03.0"
+      defer
+    ></script>
   </body>
 </html>
