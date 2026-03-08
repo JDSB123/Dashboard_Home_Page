@@ -35,7 +35,12 @@
  *   ?limit=50                      - Limit results (default: 100)
  */
 
-const { getAllowedOrigins, buildCorsHeaders, sendResponse } = require("../shared/http");
+const {
+  getAllowedOrigins,
+  buildCorsHeaders,
+  sendResponse,
+  validateOrigin,
+} = require("../shared/http");
 const { validateSharedKey } = require("../shared/auth");
 const { createLogger } = require("../shared/logger");
 const { RateLimiter } = require("../shared/rate-limiter");
@@ -111,6 +116,12 @@ module.exports = async function (context, req) {
   try {
     // Auth for write operations
     if (["POST", "PATCH", "DELETE"].includes(req.method)) {
+      const originCheck = validateOrigin(req, ALLOWED_ORIGINS);
+      if (!originCheck.ok) {
+        sendResponse(context, 403, { success: false, error: originCheck.reason }, corsHeaders);
+        return;
+      }
+
       const auth = validateSharedKey(req, context, { requireEnv: "REQUIRE_PICKS_WRITE_KEY" });
       if (!auth.ok) {
         sendResponse(context, 401, { success: false, error: auth.reason }, corsHeaders);
@@ -148,9 +159,10 @@ module.exports = async function (context, req) {
   } catch (error) {
     log.error("Request failed", { error: error.message });
     sendResponse(
-      context, 500,
+      context,
+      500,
       { success: false, error: "Internal server error", message: error.message },
-      corsHeaders,
+      corsHeaders
     );
   }
 };

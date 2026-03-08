@@ -10,6 +10,11 @@ const cache = require("../shared/cache");
 // ── GET /picks - List picks ──────────────────────────────────────────────
 
 async function handleListPicks(context, req, container, { sport, action, corsHeaders, log }) {
+  const requestedLimit = Number.parseInt(req.query.limit, 10);
+  const safeLimit = Number.isFinite(requestedLimit)
+    ? Math.min(Math.max(requestedLimit, 1), 250)
+    : 100;
+
   const queryOptions = {
     sport: sport || req.query.sport,
     status: req.query.status,
@@ -24,7 +29,7 @@ async function handleListPicks(context, req, container, { sport, action, corsHea
     from: req.query.from,
     to: req.query.to,
     sportsbook: req.query.sportsbook,
-    limit: parseInt(req.query.limit) || 100,
+    limit: safeLimit,
   };
 
   // Check cache for GET list requests
@@ -46,7 +51,13 @@ async function handleListPicks(context, req, container, { sport, action, corsHea
     return acc;
   }, {});
 
-  const responseBody = { success: true, count: picks.length, bySport, filters: { sport, action, ...req.query }, picks };
+  const responseBody = {
+    success: true,
+    count: picks.length,
+    bySport,
+    filters: { sport, action, ...req.query },
+    picks,
+  };
   cache.set(cacheKey, responseBody, 30000); // 30s cache for picks lists
   sendResponse(context, 200, responseBody, corsHeaders);
 }
@@ -123,7 +134,7 @@ async function handleCreatePicks(context, req, container, { sport, corsHeaders, 
       picks: results,
       errorDetails: errors.length > 0 ? errors : undefined,
     },
-    corsHeaders,
+    corsHeaders
   );
 }
 
@@ -150,9 +161,10 @@ async function handleArchive(context, req, container, { sport, corsHeaders, log 
 
   cache.invalidate("picks-");
   sendResponse(
-    context, 200,
+    context,
+    200,
     { success: true, sport, archived, message: `Archived ${archived} settled picks for ${sport}` },
-    corsHeaders,
+    corsHeaders
   );
 }
 
@@ -209,9 +221,10 @@ async function handleDelete(context, req, container, { sport, pickId, action, co
   if (action === "clear" && sport) {
     if (req.headers["x-confirm-clear"] !== "true") {
       sendResponse(
-        context, 400,
+        context,
+        400,
         { success: false, error: "Confirmation required: add header x-confirm-clear: true" },
-        corsHeaders,
+        corsHeaders
       );
       return;
     }
@@ -235,9 +248,10 @@ async function handleDelete(context, req, container, { sport, pickId, action, co
 
     cache.invalidate("picks-");
     sendResponse(
-      context, 200,
+      context,
+      200,
       { success: true, sport, deleted, message: `Deleted ${deleted} picks for ${sport}` },
-      corsHeaders,
+      corsHeaders
     );
     return;
   }
@@ -304,14 +318,19 @@ async function handleMigrateDates(context, req, container, { corsHeaders, log })
   }
 
   cache.invalidate("picks-");
-  sendResponse(context, 200, {
-    success: true,
-    total: allPicks.length,
-    migrated,
-    skipped,
-    errors: errors.length,
-    errorDetails: errors.length > 0 ? errors : undefined,
-  }, corsHeaders);
+  sendResponse(
+    context,
+    200,
+    {
+      success: true,
+      total: allPicks.length,
+      migrated,
+      skipped,
+      errors: errors.length,
+      errorDetails: errors.length > 0 ? errors : undefined,
+    },
+    corsHeaders
+  );
 }
 
 module.exports = {

@@ -48,6 +48,7 @@ window.APP_CONFIG = {
   // Feature Flags
   AUTH_ENABLED: false,
   DEBUG_MODE: false,
+  SIGNALR_FUNCTION_KEY: "",
 
   // Database Sync - Enable to sync picks with Azure Cosmos DB
   ENABLE_DB_SYNC: true,

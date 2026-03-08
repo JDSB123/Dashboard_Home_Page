@@ -1,4 +1,5 @@
 const { getAllowedOrigins, buildCorsHeaders } = require("../shared/http");
+const { validateSharedKey } = require("../shared/auth");
 
 const ALLOWED_ORIGINS = getAllowedOrigins();
 
@@ -10,6 +11,22 @@ module.exports = async function (context, req) {
     context.res = {
       status: 204,
       headers: corsHeaders,
+    };
+    return;
+  }
+
+  const auth = validateSharedKey(req, context, {
+    requireEnv: "REQUIRE_SIGNALR_KEY",
+    sharedKeyEnv: ["SIGNALR_NEGOTIATE_KEY", "ORCHESTRATOR_FUNCTIONS_KEY", "API_SHARED_SECRET"],
+  });
+  if (!auth.ok) {
+    context.res = {
+      status: 401,
+      headers: {
+        "Content-Type": "application/json",
+        ...corsHeaders,
+      },
+      body: { error: auth.reason },
     };
     return;
   }

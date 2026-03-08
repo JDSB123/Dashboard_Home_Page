@@ -10,6 +10,6 @@
     "smoke:weekly-lineup": "npm run build && npm run test:weekly-lineup"
   },
   "devDependencies": {
-    "esbuild": "^0.24.0"
+    "esbuild": "^0.27.3"
   }
 }

@@ -115,7 +115,7 @@ describe("TelegramRunner", () => {
     expect(ctx.res.body.date).toBe("2026-01-15");
   });
 
-  test("validates secret from query string", async () => {
+  test("rejects query-string secret fallback", async () => {
     const ctx = makeContext();
     await telegramRunner(
       ctx,
@@ -124,6 +124,6 @@ describe("TelegramRunner", () => {
         body: { text: "hello" },
       })
     );
-    expect(ctx.res.status).toBe(200);
+    expect(ctx.res.status).toBe(401);
   });
 });

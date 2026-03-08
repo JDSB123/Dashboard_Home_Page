@@ -136,6 +136,7 @@ jobs:
           AzureWebJobsStorage: ${{ secrets.AZURE_FUNCTIONS_STORAGE_CONNECTION }}
           AzureSignalRConnectionString: ${{ secrets.AZURE_SIGNALR_CONNECTION_STRING }}
           APPLICATIONINSIGHTS_CONNECTION_STRING: ${{ secrets.APPINSIGHTS_CONNECTION_STRING }}
+          ORCHESTRATOR_FUNCTIONS_KEY: ${{ secrets.ORCHESTRATOR_FUNCTIONS_KEY }}
           NBA_API_URL: ${{ env.NBA_API_URL }}
           NCAAM_API_URL: ${{ env.NCAAM_API_URL }}
           NFL_API_URL: ${{ env.NFL_API_URL }}
@@ -170,7 +171,9 @@ jobs:
                 NCAAM_API_URL="$NCAAM_API_URL" \
                 NFL_API_URL="$NFL_API_URL" \
                 NCAAF_API_URL="$NCAAF_API_URL" \
-                REQUIRE_PICKS_WRITE_KEY=false \
+                ORCHESTRATOR_FUNCTIONS_KEY="$ORCHESTRATOR_FUNCTIONS_KEY" \
+                REQUIRE_PICKS_WRITE_KEY=true \
+                REQUIRE_SIGNALR_KEY=true \
                 CORS_ALLOWED_ORIGINS="https://www.greenbiersportventures.com,https://greenbiersportventures.com,http://localhost:8080,http://127.0.0.1:5500,http://localhost:5500"
           fi
 
@@ -225,7 +228,9 @@ jobs:
               NCAAM_API_URL="$NCAAM_API_URL" \
               NFL_API_URL="$NFL_API_URL" \
               NCAAF_API_URL="$NCAAF_API_URL" \
-              REQUIRE_PICKS_WRITE_KEY=false \
+              ORCHESTRATOR_FUNCTIONS_KEY="$ORCHESTRATOR_FUNCTIONS_KEY" \
+              REQUIRE_PICKS_WRITE_KEY=true \
+              REQUIRE_SIGNALR_KEY=true \
               CORS_ALLOWED_ORIGINS="https://www.greenbiersportventures.com,https://greenbiersportventures.com,http://localhost:8080,http://127.0.0.1:5500,http://localhost:5500"
 
       - name: Show endpoint

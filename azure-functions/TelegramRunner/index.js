@@ -6,7 +6,7 @@ module.exports = async function (context, req) {
 
   // Simple shared-secret validation to avoid open endpoint
   const secret = process.env.TELEGRAM_WEBHOOK_SECRET || process.env.TELEGRAM_BOT_TOKEN;
-  const incoming = req.headers["x-telegram-secret"] || req.query.secret;
+  const incoming = req.headers["x-telegram-secret"];
   if (secret && incoming !== secret) {
     context.log("Unauthorized webhook call");
     context.res = { status: 401, body: "Unauthorized" };

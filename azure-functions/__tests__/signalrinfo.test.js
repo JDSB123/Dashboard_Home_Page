@@ -16,7 +16,11 @@ describe("SignalRInfo", () => {
 
   beforeEach(() => {
     jest.resetModules();
-    process.env = { ...OLD_ENV };
+    process.env = {
+      ...OLD_ENV,
+      REQUIRE_SIGNALR_KEY: "true",
+      SIGNALR_NEGOTIATE_KEY: "signalr-test-key",
+    };
     signalrInfo = require("../SignalRInfo");
   });
 
@@ -34,7 +38,7 @@ describe("SignalRInfo", () => {
 
   test("returns connection info on POST", async () => {
     const ctx = makeContext();
-    await signalrInfo(ctx, makeReq());
+    await signalrInfo(ctx, makeReq({ headers: { "x-functions-key": "signalr-test-key" } }));
     expect(ctx.res.status).toBe(200);
     expect(ctx.res.body).toEqual({ url: "https://signalr.test", accessToken: "tok" });
   });
@@ -43,7 +47,12 @@ describe("SignalRInfo", () => {
     const ctx = makeContext();
     await signalrInfo(
       ctx,
-      makeReq({ headers: { origin: "https://www.greenbiersportventures.com" } })
+      makeReq({
+        headers: {
+          origin: "https://www.greenbiersportventures.com",
+          "x-functions-key": "signalr-test-key",
+        },
+      })
     );
     expect(ctx.res.headers["Access-Control-Allow-Origin"]).toBe(
       "https://www.greenbiersportventures.com"
@@ -52,13 +61,22 @@ describe("SignalRInfo", () => {
 
   test("does not reflect unknown origin", async () => {
     const ctx = makeContext();
-    await signalrInfo(ctx, makeReq({ headers: { origin: "https://evil.com" } }));
+    await signalrInfo(
+      ctx,
+      makeReq({ headers: { origin: "https://evil.com", "x-functions-key": "signalr-test-key" } })
+    );
     expect(ctx.res.headers["Access-Control-Allow-Origin"]).not.toBe("https://evil.com");
   });
 
   test("includes credentials header", async () => {
     const ctx = makeContext();
-    await signalrInfo(ctx, makeReq());
+    await signalrInfo(ctx, makeReq({ headers: { "x-functions-key": "signalr-test-key" } }));
     expect(ctx.res.headers["Access-Control-Allow-Credentials"]).toBe("true");
+  });
+
+  test("returns 401 without negotiate key", async () => {
+    const ctx = makeContext();
+    await signalrInfo(ctx, makeReq());
+    expect(ctx.res.status).toBe(401);
   });
 });

@@ -155,7 +155,8 @@ $settings = @(
     "NFL_API_URL=",
     "NCAAF_API_URL=",
     "MLB_API_URL=",
-    "REQUIRE_PICKS_WRITE_KEY=false"
+    "REQUIRE_PICKS_WRITE_KEY=true",
+    "REQUIRE_SIGNALR_KEY=true"
 )
 
 az functionapp config appsettings set `

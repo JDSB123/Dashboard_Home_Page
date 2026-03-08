@@ -420,6 +420,7 @@ jobs:
             echo "storage_conn=" >> $GITHUB_OUTPUT
             echo "signalr_conn=" >> $GITHUB_OUTPUT
             echo "appinsights_conn=" >> $GITHUB_OUTPUT
+            echo "orchestrator_key=" >> $GITHUB_OUTPUT
             exit 0
           fi
           echo "Found Key Vault: $KV_NAME"
@@ -428,15 +429,22 @@ jobs:
           STORAGE_CONN=$(az keyvault secret show --vault-name "$KV_NAME" --name "azure-storage-connection-string" --query "value" -o tsv 2>/dev/null || echo "")
           SIGNALR_CONN=$(az keyvault secret show --vault-name "$KV_NAME" --name "signalr-connection-string" --query "value" -o tsv 2>/dev/null || echo "")
           APPINSIGHTS_CONN=$(az keyvault secret show --vault-name "$KV_NAME" --name "appinsights-connection-string" --query "value" -o tsv 2>/dev/null || echo "")
+          ORCHESTRATOR_KEY=$(az keyvault secret show --vault-name "$KV_NAME" --name "orchestrator-functions-key" --query "value" -o tsv 2>/dev/null || echo "")
+
+          if [ -z "$ORCHESTRATOR_KEY" ]; then
+            ORCHESTRATOR_KEY=$(az keyvault secret show --vault-name "$KV_NAME" --name "api-shared-secret" --query "value" -o tsv 2>/dev/null || echo "")
+          fi
 
           # Mask and output
           if [ -n "$STORAGE_CONN" ]; then echo "::add-mask::$STORAGE_CONN"; fi
           if [ -n "$SIGNALR_CONN" ]; then echo "::add-mask::$SIGNALR_CONN"; fi
           if [ -n "$APPINSIGHTS_CONN" ]; then echo "::add-mask::$APPINSIGHTS_CONN"; fi
+          if [ -n "$ORCHESTRATOR_KEY" ]; then echo "::add-mask::$ORCHESTRATOR_KEY"; fi
 
           echo "storage_conn=$STORAGE_CONN" >> $GITHUB_OUTPUT
           echo "signalr_conn=$SIGNALR_CONN" >> $GITHUB_OUTPUT
           echo "appinsights_conn=$APPINSIGHTS_CONN" >> $GITHUB_OUTPUT
+          echo "orchestrator_key=$ORCHESTRATOR_KEY" >> $GITHUB_OUTPUT
 
       - name: Deploy container app
         env:
@@ -449,6 +457,7 @@ jobs:
           AzureWebJobsStorage: ${{ steps.keyvault-secrets.outputs.storage_conn }}
           AzureSignalRConnectionString: ${{ steps.keyvault-secrets.outputs.signalr_conn }}
           APPLICATIONINSIGHTS_CONNECTION_STRING: ${{ steps.keyvault-secrets.outputs.appinsights_conn }}
+          ORCHESTRATOR_FUNCTIONS_KEY: ${{ steps.keyvault-secrets.outputs.orchestrator_key }}
           NBA_API_URL: ${{ env.NBA_API_URL }}
           NCAAM_API_URL: ${{ env.NCAAM_API_URL }}
           NFL_API_URL: ${{ env.NFL_API_URL }}
@@ -483,7 +492,9 @@ jobs:
                 NCAAM_API_URL="$NCAAM_API_URL" \
                 NFL_API_URL="$NFL_API_URL" \
                 NCAAF_API_URL="$NCAAF_API_URL" \
-                REQUIRE_PICKS_WRITE_KEY=false \
+                ORCHESTRATOR_FUNCTIONS_KEY="$ORCHESTRATOR_FUNCTIONS_KEY" \
+                REQUIRE_PICKS_WRITE_KEY=true \
+                REQUIRE_SIGNALR_KEY=true \
                 CORS_ALLOWED_ORIGINS="https://www.greenbiersportventures.com,https://greenbiersportventures.com,http://localhost:8080,http://127.0.0.1:5500,http://localhost:5500"
           fi
 
@@ -538,7 +549,9 @@ jobs:
               NCAAM_API_URL="$NCAAM_API_URL" \
               NFL_API_URL="$NFL_API_URL" \
               NCAAF_API_URL="$NCAAF_API_URL" \
-              REQUIRE_PICKS_WRITE_KEY=false \
+              ORCHESTRATOR_FUNCTIONS_KEY="$ORCHESTRATOR_FUNCTIONS_KEY" \
+              REQUIRE_PICKS_WRITE_KEY=true \
+              REQUIRE_SIGNALR_KEY=true \
               CORS_ALLOWED_ORIGINS="https://www.greenbiersportventures.com,https://greenbiersportventures.com,http://localhost:8080,http://127.0.0.1:5500,http://localhost:5500"
 
   staticwebapp:
