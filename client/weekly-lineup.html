@@ -868,6 +868,91 @@
       </div>
     </main>
 
+    <!-- ── NBA Model Predictions (GBSV v6 live slate) ────────── -->
+    <section class="nba-model-slate-section" id="nba-model-slate">
+      <div class="nba-model-slate-header">
+        <h2 class="nba-model-slate-title">
+          <img
+            src="https://a.espncdn.com/i/teamlogos/leagues/500/nba.png"
+            alt="NBA"
+            class="nba-model-league-logo"
+            width="28"
+            height="28"
+            loading="lazy"
+          />
+          NBA Model Predictions
+        </h2>
+        <span class="nba-model-slate-badge">GBSV v6 · Live</span>
+      </div>
+      <iframe
+        id="nba-slate-iframe"
+        src="https://ca-nba-gbsv-v6-api.greensand-0bb4c493.eastus.azurecontainerapps.io/predictions/slate.html"
+        title="NBA GBSV v6 Daily Slate"
+        loading="lazy"
+        sandbox="allow-scripts allow-same-origin"
+        style="
+          width: 100%;
+          min-height: 800px;
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 12px;
+          background: #0d0d0d;
+        "
+      ></iframe>
+    </section>
+
+    <style>
+      .nba-model-slate-section {
+        max-width: 1400px;
+        margin: 2rem auto 3rem;
+        padding: 0 1rem;
+      }
+      .nba-model-slate-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+      .nba-model-slate-title {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-family: "Oswald", "Bebas Neue", sans-serif;
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #e0e0e0;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        margin: 0;
+      }
+      .nba-model-league-logo {
+        border-radius: 4px;
+      }
+      .nba-model-slate-badge {
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.7rem;
+        color: #4caf50;
+        background: rgba(76, 175, 80, 0.12);
+        padding: 0.2rem 0.6rem;
+        border-radius: 4px;
+        border: 1px solid rgba(76, 175, 80, 0.25);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+      @media (max-width: 768px) {
+        .nba-model-slate-section {
+          padding: 0 0.5rem;
+          margin: 1rem auto 2rem;
+        }
+        .nba-model-slate-title {
+          font-size: 1.15rem;
+        }
+        #nba-slate-iframe {
+          min-height: 600px;
+        }
+      }
+    </style>
+
     <!-- SignalR CDN (external — not bundled) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.min.js"></script>
 

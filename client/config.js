@@ -30,7 +30,7 @@ window.APP_CONFIG = {
   // Model API Endpoints — sport models removed; endpoints live in their own repos
   // Direct Container App fallbacks (used only if Front Door route fails)
   NBA_API_URL:
-    "https://nbagbsvv5-api.blackglacier-f1574637.centralus.azurecontainerapps.io",
+    "https://ca-nba-gbsv-v6-api.greensand-0bb4c493.eastus.azurecontainerapps.io",
   NCAAM_API_URL:
     "https://ca-ncaamgbsvv20.braveriver-ed513377.eastus2.azurecontainerapps.io",
   NHL_API_URL:
