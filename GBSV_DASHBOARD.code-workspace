@@ -25,7 +25,8 @@
     "azureFunctions.deploySubpath": "azure-functions",
     "terminal.integrated.env.windows": {
       "PYTHONPATH": "${workspaceFolder:Dashboard}"
-    }
+    },
+    "cursorpyright.analysis.autoImportCompletions": true
   },
   "tasks": {
     "version": "2.0.0",

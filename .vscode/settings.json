@@ -7,7 +7,7 @@
   "extensions.autoCheckUpdates": false,
   "update.mode": "none",
   "update.showReleaseNotes": false,
-  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/Scripts/python.exe",
+  "python.defaultInterpreterPath": "${workspaceFolder}/data-pipeline/.venv/Scripts/python.exe",
   "claudeCodeChat.permissions.yoloMode": true,
   "github.copilot.chat.editing.alwaysApprove": true,
   "github.copilot.chat.editing.reviewMode": "off",
@@ -46,7 +46,7 @@
   "git.confirmSync": false,
   "git.confirmEmptyCommits": false,
   "git.showPushSuccessNotification": false,
-  "python.languageServer": "Pylance",
+  "python.languageServer": "None",
   "python.analysis.diagnosticMode": "openFilesOnly",
   "python.analysis.typeCheckingMode": "off",
   "security.workspace.trust.untrustedFiles": "open",
@@ -54,5 +54,7 @@
   "workbench.settings.enableNaturalLanguageSearch": false,
   "telemetry.telemetryLevel": "off",
   "npm.fetchOnlinePackageInfo": false,
-  "npm.validate.enable": false
+  "npm.validate.enable": false,
+  "cursorpyright.analysis.diagnosticMode": "openFilesOnly",
+  "cursorpyright.analysis.typeCheckingMode": "off"
 }
