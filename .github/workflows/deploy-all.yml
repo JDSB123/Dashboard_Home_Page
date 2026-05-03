@@ -94,7 +94,8 @@ jobs:
             --template-file infra/main.bicep \
             --parameters infra/main.bicepparam \
             --parameters environment=${{ env.DEPLOY_ENV }} \
-            --parameters enableWaf=${{ env.SKIP_WAF != 'true' }}
+            --parameters enableWaf=${{ env.SKIP_WAF != 'true' }} \
+            --parameters enableCustomDomain=${{ env.ENABLE_CUSTOM_DOMAIN }}
 
   quality:
     name: Frontend Quality & Accessibility
@@ -172,7 +173,8 @@ jobs:
             --template-file infra/main.bicep \
             --parameters infra/main.bicepparam \
             --parameters environment=${{ env.DEPLOY_ENV }} \
-            --parameters enableWaf=${{ env.SKIP_WAF != 'true' }}
+            --parameters enableWaf=${{ env.SKIP_WAF != 'true' }} \
+            --parameters enableCustomDomain=${{ env.ENABLE_CUSTOM_DOMAIN }}
 
       - name: Deploy Front Door
         id: deploy
@@ -186,7 +188,8 @@ jobs:
             --template-file infra/main.bicep \
             --parameters infra/main.bicepparam \
             --parameters environment=${{ env.DEPLOY_ENV }} \
-            --parameters enableWaf=${{ env.SKIP_WAF != 'true' }}
+            --parameters enableWaf=${{ env.SKIP_WAF != 'true' }} \
+            --parameters enableCustomDomain=${{ env.ENABLE_CUSTOM_DOMAIN }}
 
           FRONTDOOR_NAME=$(az deployment group show \
             --resource-group ${{ env.RESOURCE_GROUP }} \
