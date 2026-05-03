@@ -175,6 +175,23 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
+      - name: Detect existing Front Door custom domain
+        id: custom-domain-check
+        env:
+          RESOURCE_GROUP: ${{ env.RESOURCE_GROUP }}
+          CUSTOM_DOMAIN_NAME: ${{ env.CUSTOM_DOMAIN_NAME }}
+          FRONTDOOR_PROFILE: gbsv-frontdoor-${{ env.DEPLOY_ENV }}
+        run: |
+          EXISTS=$(az afd custom-domain list \
+            --profile-name "$FRONTDOOR_PROFILE" \
+            --resource-group "$RESOURCE_GROUP" \
+            --query "[?hostName=='$CUSTOM_DOMAIN_NAME'] | length(@)" -o tsv)
+          if [ "$EXISTS" != "0" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Ensure Resource Group Exists
         run: |
           if [ "$(az group exists --name ${{ env.RESOURCE_GROUP }})" = "false" ]; then
