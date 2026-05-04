@@ -50,19 +50,19 @@ stages:
             inputs:
               targetType: inline
               pwsh: true
+              workingDirectory: client
               script: |
                 $ErrorActionPreference = "Stop"
                 & "C:\Program Files\nodejs\npm.cmd" ci
-            workingDirectory: client
           - task: PowerShell@2
             displayName: Build client bundles
             inputs:
               targetType: inline
               pwsh: true
+              workingDirectory: client
               script: |
                 $ErrorActionPreference = "Stop"
                 & "C:\Program Files\nodejs\npm.cmd" run build
-            workingDirectory: client
 
       - job: functions
         displayName: Azure Functions lint and test
@@ -75,34 +75,34 @@ stages:
             inputs:
               targetType: inline
               pwsh: true
+              workingDirectory: azure-functions
               script: |
                 $ErrorActionPreference = "Stop"
                 & "C:\Program Files\nodejs\npm.cmd" ci
-            workingDirectory: azure-functions
           - task: PowerShell@2
             displayName: Lint Azure Functions
             inputs:
               targetType: inline
               pwsh: true
+              workingDirectory: azure-functions
               script: |
                 $ErrorActionPreference = "Stop"
                 & "C:\Program Files\nodejs\npm.cmd" run lint
-            workingDirectory: azure-functions
           - task: PowerShell@2
             displayName: Check formatting
             inputs:
               targetType: inline
               pwsh: true
+              workingDirectory: azure-functions
               script: |
                 $ErrorActionPreference = "Stop"
                 & "C:\Program Files\nodejs\npm.cmd" run format:check
-            workingDirectory: azure-functions
           - task: PowerShell@2
             displayName: Run Azure Functions tests
             inputs:
               targetType: inline
               pwsh: true
+              workingDirectory: azure-functions
               script: |
                 $ErrorActionPreference = "Stop"
                 & "C:\Program Files\nodejs\npm.cmd" test
-            workingDirectory: azure-functions

@@ -37,37 +37,37 @@ stages:
             inputs:
               targetType: inline
               pwsh: true
+              workingDirectory: client
               script: |
                 $ErrorActionPreference = "Stop"
                 & "C:\Program Files\nodejs\npm.cmd" ci
-            workingDirectory: client
           - task: PowerShell@2
             displayName: Build client bundles
             inputs:
               targetType: inline
               pwsh: true
+              workingDirectory: client
               script: |
                 $ErrorActionPreference = "Stop"
                 & "C:\Program Files\nodejs\npm.cmd" run build
-            workingDirectory: client
           - task: PowerShell@2
             displayName: Install Azure Functions dependencies
             inputs:
               targetType: inline
               pwsh: true
+              workingDirectory: azure-functions
               script: |
                 $ErrorActionPreference = "Stop"
                 & "C:\Program Files\nodejs\npm.cmd" ci
-            workingDirectory: azure-functions
           - task: PowerShell@2
             displayName: Run Azure Functions tests
             inputs:
               targetType: inline
               pwsh: true
+              workingDirectory: azure-functions
               script: |
                 $ErrorActionPreference = "Stop"
                 & "C:\Program Files\nodejs\npm.cmd" test
-            workingDirectory: azure-functions
 
   - stage: deploy_orchestrator
     displayName: Deploy orchestrator container
@@ -117,28 +117,28 @@ stages:
             inputs:
               targetType: inline
               pwsh: true
+              workingDirectory: client
               script: |
                 $ErrorActionPreference = "Stop"
                 & "C:\Program Files\nodejs\npm.cmd" ci
-            workingDirectory: client
           - task: PowerShell@2
             displayName: Build client
             inputs:
               targetType: inline
               pwsh: true
+              workingDirectory: client
               script: |
                 $ErrorActionPreference = "Stop"
                 & "C:\Program Files\nodejs\npm.cmd" run build
-            workingDirectory: client
           - task: PowerShell@2
             displayName: Install API production dependencies
             inputs:
               targetType: inline
               pwsh: true
+              workingDirectory: azure-functions
               script: |
                 $ErrorActionPreference = "Stop"
                 & "C:\Program Files\nodejs\npm.cmd" ci --omit=dev
-            workingDirectory: azure-functions
           - task: DeleteFiles@1
             inputs:
               SourceFolder: azure-functions
