@@ -49,9 +49,11 @@ Ensure the `NBA_API_URL` secret is set in the **Dashboard** repo if you want to 
 - `AZURE_SIGNALR_CONNECTION_STRING`
 - `APPINSIGHTS_CONNECTION_STRING`
 
-### Model registry sync/notify (optional)
+### Model registry sync/notify
 
-Used by `.github/workflows/sync-model-registry.yml` and `.github/workflows/model-update-notify.yml`:
+This repo no longer includes dedicated `sync-model-registry.yml` or `model-update-notify.yml` workflows.
+
+If you automate model registry updates, use the current deployment workflows and scripts in this repo, and provide:
 
 - `ORCHESTRATOR_URL`
 - `ORCHESTRATOR_FUNCTIONS_KEY`

@@ -6,5 +6,7 @@ def test_imports():
         "requests",
         "aiohttp",
         "dotenv",
+        "azure.data.tables",
+        "nba_api.stats.endpoints",
     ]:
         assert importlib.import_module(mod)

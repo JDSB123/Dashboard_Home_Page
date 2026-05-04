@@ -1,8 +1,9 @@
 import logging
+from pathlib import Path
 
-import pandas as pd
-from nba_api.stats.endpoints import leaguegamefinder, boxscoresummaryv3
-from nba_api.stats.static import teams
+import pandas as pd  # type: ignore[import-untyped]
+from nba_api.stats.endpoints import leaguegamefinder, boxscoresummaryv3  # type: ignore[import-not-found]
+from nba_api.stats.static import teams  # type: ignore[import-not-found]
 from datetime import datetime, timedelta
 import time
 import os
@@ -40,6 +41,9 @@ while current_date <= end_date:
     current_date += timedelta(days=1)
 
 logger.info(f"Fetching NBA games for range: {dates[0]} to {dates[-1]}...")
+
+output_dir = Path(__file__).resolve().parent / "output"
+output_dir.mkdir(exist_ok=True)
 
 all_games = []
 processed_game_ids = set()
@@ -167,21 +171,15 @@ for date in dates:
 # Create DataFrame and save
 if all_games:
     df = pd.DataFrame(all_games)
-    # Save to the original hardcoded path for backward compatibility
-    output_path = r'C:\Users\JB\green-bier-ventures\DASHBOARD_main\nba_scores_dec28_jan6.csv'
+    output_path = output_dir / "nba_scores_latest.csv"
     df.to_csv(output_path, index=False)
     logger.info(f"Saved {len(all_games)} games to {output_path}")
-
-    # Also save to a generic 'latest' file
-    latest_path = r'C:\Users\JB\green-bier-ventures\DASHBOARD_main\nba_scores_latest.csv'
-    df.to_csv(latest_path, index=False)
-    logger.info(f"Saved copy to {latest_path}")
 
     # Also save with dynamic name covering the range found
     if dates:
         start_fmt = dates[0].replace('/', '-')
         end_fmt = dates[-1].replace('/', '-')
-        dynamic_path = fr'C:\Users\JB\green-bier-ventures\DASHBOARD_main\nba_scores_{start_fmt}_to_{end_fmt}.csv'
+        dynamic_path = output_dir / f"nba_scores_{start_fmt}_to_{end_fmt}.csv"
         df.to_csv(dynamic_path, index=False)
         logger.info(f"Saved copy to {dynamic_path}")
 else:

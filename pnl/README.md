@@ -16,7 +16,7 @@ Track profit/loss from graded picks and generate analysis reports.
 ### Generate Full Tracker Excel
 
 ```bash
-cd Dashboard_main_local
+cd gbsv_dashboard
 python pnl/generate_tracker_excel.py
 ```
 

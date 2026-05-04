@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 """Show picks for a specific day from the source of truth file."""
 import logging
-import pandas as pd
+from pathlib import Path
+import pandas as pd  # type: ignore[import-untyped]
 import sys
 
 logger = logging.getLogger(__name__)
 
-SOURCE_FILE = 'C:/Users/JB/green-bier-ventures/Dashboard_main_local/output/analysis/telegram_analysis_2025-12-28.xlsx'
+SOURCE_FILE = (
+    Path(__file__).resolve().parents[1] / "output" / "analysis" / "telegram_analysis_2025-12-28.xlsx"
+)
 
 def main():
     date = sys.argv[1] if len(sys.argv) > 1 else '2026-01-06'

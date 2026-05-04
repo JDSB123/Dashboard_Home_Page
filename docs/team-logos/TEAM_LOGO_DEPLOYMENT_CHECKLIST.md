@@ -17,7 +17,7 @@
 
 ### Directory Setup
 
-- [ ] Location: `c:\Users\JB\green-bier-ventures\Dashboard_main_local`
+- [ ] Location: `<repo-root>`
 - [ ] Scripts directory exists: `scripts/`
 - [ ] `ingest-team-logos.ps1` present
 - [ ] `configure-blob-storage.ps1` present
@@ -467,7 +467,7 @@ Write-Host "Total size: $totalMB MB"
 
 ```powershell
 # Verify location
-cd c:\Users\JB\green-bier-ventures\Dashboard_main_local\scripts
+cd <repo-root>\scripts
 Get-ChildItem *.ps1
 ```
 

@@ -736,7 +736,7 @@ NEXT STEPS:
    - AZURE_SUBSCRIPTION_ID: $($Config.subscriptionId)
 
 2. Configure model repositories to notify orchestrator on deploy
-   - See: .github/workflows/model-update-notify.yml
+   - Use the current deployment workflow or add a repo-specific notify step
 
 3. Test the orchestrator:
    curl -X GET $OrchestratorUrl/api/registry

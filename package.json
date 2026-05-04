@@ -1,5 +1,11 @@
 {
+  "private": true,
+  "engines": {
+    "node": ">=20 <23"
+  },
   "scripts": {
+    "bootstrap": "powershell -ExecutionPolicy Bypass -File scripts/bootstrap.ps1",
+    "dev:azurite": "azurite --silent --location .azurite --debug .azurite\\debug.log",
     "ingest-logos": "node scripts/ingest-all-logos.js",
     "ingest-logos:nhl": "node scripts/ingest-all-logos.js --nhl",
     "ingest-logos:ncaab": "node scripts/ingest-all-logos.js --ncaab",
@@ -7,6 +13,6 @@
     "ingest-logos:local": "node scripts/ingest-all-logos.js --skip-upload"
   },
   "devDependencies": {
-    "nodemon": "^3.1.14"
+    "azurite": "^3.35.0"
   }
 }

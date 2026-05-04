@@ -1,6 +1,6 @@
 [tool.ruff]
 line-length = 100
-target-version = "py311"
+target-version = "py314"
 select = ["E", "F", "I", "UP"]
 ignore = ["E501"]
 
@@ -9,4 +9,4 @@ known-first-party = ["data-pipeline", "tracker_pnl"]
 
 [tool.black]
 line-length = 100
-target-version = ["py311"]
+target-version = ["py314"]

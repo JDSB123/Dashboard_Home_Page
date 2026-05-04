@@ -4,13 +4,19 @@ param(
 
 Write-Host "== GBSV Local Dev: Azurite + Functions ==" -ForegroundColor Cyan
 
-# 1) Ensure Azurite data directory exists
+# 1) Ensure local dev dependencies are installed
+if (-not (Test-Path "node_modules\\azurite")) {
+  Write-Host "Installing root npm dependencies..." -ForegroundColor Yellow
+  npm install | Out-Null
+}
+
+# 2) Ensure Azurite data directory exists
 if (-not (Test-Path ".azurite")) {
   New-Item -ItemType Directory -Path ".azurite" | Out-Null
   Write-Host "Created .azurite folder"
 }
 
-# 2) Start Azurite (Storage emulator) in background if table port not listening
+# 3) Start Azurite (Storage emulator) in background if table port not listening
 $tableConn = Get-NetTCPConnection -LocalPort 10002 -ErrorAction SilentlyContinue | Select-Object -First 1
 if (-not $tableConn) {
   Write-Host "Starting Azurite..." -ForegroundColor Yellow
@@ -36,7 +42,7 @@ else {
   Write-Host "Azurite already running on 10002" -ForegroundColor Green
 }
 
-# 3) Seed local tables (for Health)
+# 4) Seed local tables (for Health)
 Push-Location azure-functions
 try {
   if (-not (Test-Path "node_modules")) { npm install | Out-Null }
@@ -48,14 +54,14 @@ finally {
   Pop-Location
 }
 
-# 4) Free Functions port if in use
+# 5) Free Functions port if in use
 $funcPid = (Get-NetTCPConnection -LocalPort $Port -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty OwningProcess)
 if ($funcPid) {
   Write-Host "Freeing port $Port (PID $funcPid)..." -ForegroundColor Yellow
   Stop-Process -Id $funcPid -Force -ErrorAction SilentlyContinue
 }
 
-# 5) Start Functions host in a new window
+# 6) Start Functions host in a new window
 Write-Host "Starting Azure Functions on port $Port..." -ForegroundColor Yellow
 Start-Process -FilePath "func" -ArgumentList "host start --port $Port" -NoNewWindow:$false | Out-Null
 

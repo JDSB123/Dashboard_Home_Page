@@ -7,7 +7,7 @@
 - Azure CLI installed: `az --version`
 - Authenticated: `az login`
 - PowerShell 7.0+: `pwsh --version`
-- Location: `cd c:\Users\JB\green-bier-ventures\Dashboard_main_local\scripts`
+- Location: `cd <repo-root>\scripts`
 
 ### Command 1️⃣: Configure Azure Blob Storage
 

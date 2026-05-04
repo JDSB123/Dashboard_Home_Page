@@ -29,7 +29,7 @@ Dashboard-triggered model execution UI has been removed (no “Run Analysis” b
 
 ### 3. CI/CD Pipeline
 
-Created GitHub Actions workflow (`.github/workflows/model-update-notify.yml`) that:
+Created a model update automation workflow that:
 
 - Accepts model update notifications
 - Updates model registry

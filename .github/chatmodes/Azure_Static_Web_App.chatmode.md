@@ -400,8 +400,8 @@ swa start http://localhost:5000 --run "dotnet watch run"
 swa start http://localhost:8080 --run "./startup.sh"
 
 # Connect to separately running Azure Functions
-func start --port 7071  # In api/ directory
-swa start ./dist --api-devserver-url http://localhost:7071  # In separate terminal
+func start --port 7072  # In api/ directory
+swa start ./dist --api-devserver-url http://localhost:7072  # In separate terminal
 
 # Connect to external API service
 swa start ./dist --api-devserver-url https://my-api.azurewebsites.net

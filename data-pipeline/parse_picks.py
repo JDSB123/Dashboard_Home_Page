@@ -1,6 +1,7 @@
 import logging
+from pathlib import Path
 
-import pandas as pd
+import pandas as pd  # type: ignore[import-untyped]
 from datetime import datetime
 
 logger = logging.getLogger(__name__)
@@ -288,6 +289,8 @@ df['Hit/Miss'] = ''
 df['PnL'] = ''
 
 # Save to CSV for review
-output_path = r'C:\Users\JB\green-bier-ventures\DASHBOARD_main\picks_dec28_jan6_draft.csv'
+output_dir = Path(__file__).resolve().parent / "output"
+output_dir.mkdir(exist_ok=True)
+output_path = output_dir / "picks_dec28_jan6_draft.csv"
 df.to_csv(output_path, index=False)
 logger.info(f"Saved draft tracker to {output_path}")

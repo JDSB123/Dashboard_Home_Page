@@ -133,7 +133,7 @@ python scripts/fetch_completed_boxes.py -v
 ### Schedule Daily
 ```bash
 # Add to crontab (runs at 2 AM daily)
-0 2 * * * cd /path/to/DASHBOARD_main && python scripts/fetch_completed_boxes.py --telegram
+0 2 * * * cd /path/to/gbsv_dashboard && python scripts/fetch_completed_boxes.py --telegram
 ```
 
 ---

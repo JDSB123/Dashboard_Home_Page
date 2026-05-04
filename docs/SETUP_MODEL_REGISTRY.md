@@ -13,7 +13,7 @@ When you deploy a new model version to **any** RG (nba/ncaaf/ncaam/nfl), the das
 Open PowerShell **as Administrator** in your repo folder and run:
 
 ```powershell
-cd c:\Users\JB\green-bier-ventures\DASHBOARD_main
+cd <repo-root>
 .\setup-model-registry.ps1
 ```
 
@@ -58,9 +58,9 @@ This deploys:
 
 ## Optional: Central Sync Workflow (multiple RGs)
 
-If your models live in different resource groups, enable the included GitHub Action to keep the registry updated without touching each model repo:
+If your models live in different resource groups, use the current deployment scripts or add a repo-specific workflow to keep the registry updated without touching each model repo:
 
-- Workflow: `.github/workflows/sync-model-registry.yml`
+- Workflow: custom to your current deployment process
 - Script it runs: `scripts/sync-model-registry.ps1` (pulls Container App FQDNs per model RG and calls `/registry/update`)
 - Required secrets: `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`, `ORCHESTRATOR_FUNCTIONS_KEY` (Functions host key if the endpoint is secured)
 - Configure `MODELS_JSON` in the workflow env to match your RG/app names for each model

@@ -169,7 +169,7 @@ python scripts/fetch_completed_boxes.py --start 2026-01-01 --end 2026-01-06
 ### Daily Schedule (Cron)
 ```bash
 # Add to crontab -e
-0 2 * * * cd /path/to/DASHBOARD_main && python scripts/fetch_completed_boxes.py --telegram
+0 2 * * * cd /path/to/gbsv_dashboard && python scripts/fetch_completed_boxes.py --telegram
 ```
 
 ---
@@ -317,7 +317,7 @@ The implementation includes:
 ## Documentation Map
 
 ```
-DASHBOARD_main/
+gbsv_dashboard/
 ├── BOX_SCORE_ENDPOINTS_TRACKING.md    ← API reference
 ├── QUICK_REFERENCE_BOX_SCORES.md      ← Quick start
 ├── scripts/

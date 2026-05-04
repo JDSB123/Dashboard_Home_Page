@@ -162,7 +162,7 @@ console.log(abbrevMap["ARI"]); // "ARI"
 ### Refresh All Data
 
 ```bash
-cd C:\Users\JB\green-bier-ventures\DASHBOARD_main
+cd <repo-root>
 python scripts/extract_team_variants.py
 ```
 

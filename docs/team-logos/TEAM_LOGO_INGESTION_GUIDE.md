@@ -113,7 +113,7 @@ Expected output:
 #### Full ingestion (download + upload):
 
 ```powershell
-cd c:\Users\JB\green-bier-ventures\Dashboard_main_local\scripts
+cd <repo-root>\scripts
 .\ingest-team-logos.ps1 `
   -StorageAccountName gbsvorchestratorstorage `
   -ContainerName team-logos `

@@ -211,7 +211,7 @@ fetch('assets/data/team-variants/ncaam_team_variants.json')
 To refresh the data:
 
 ```bash
-cd C:\Users\JB\green-bier-ventures\DASHBOARD_main
+cd <repo-root>
 python scripts/extract_team_variants.py
 ```
 

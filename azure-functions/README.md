@@ -101,17 +101,15 @@ Partition Key: /sport
 ## Local Development
 
 ```bash
-# Install dependencies
-npm install
+# From the repo root, install everything once
+npm run bootstrap
 
 # Copy and configure settings
 cp local.settings.sample.json local.settings.json
 # Edit with your Cosmos DB, Key Vault, etc. values
 
-# Start functions
-npm start
-# or
-func start
+# Start Functions + Azurite from repo root
+pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/start-local-dev.ps1 -Port 7072
 ```
 
 ## Environment Variables
@@ -130,7 +128,7 @@ func start
 
 ### GitHub Actions (Recommended)
 
-Push to `main` triggers `.github/workflows/azure-functions.yml`
+Pull requests that touch `azure-functions/**` trigger `.github/workflows/azure-functions-ci.yml`
 
 Required secrets:
 

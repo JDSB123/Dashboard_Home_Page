@@ -1,4 +1,4 @@
-# Dashboard Home Page - Deployment Guide
+# GBSV Dashboard Deployment Guide
 
 ## Pipeline: Local → Git → CI/CD → ACR/SWA
 
@@ -39,8 +39,9 @@
 ### Additional Local Directories
 
 ```
-.venv/           Python virtual environment
-.azurite/        (in NBA v3 folder, shared)
+data-pipeline/.venv   Python virtual environment for data-pipeline
+tracker_pnl/.venv     Python virtual environment for tracker_pnl
+.azurite/             Local Azurite storage data
 ```
 
 ### Required Files
@@ -57,14 +58,8 @@
 Copy-Item .env.example .env
 Copy-Item azure-functions/local.settings.sample.json azure-functions/local.settings.json
 
-# Setup Python venv
-python -m venv .venv
-.venv\Scripts\Activate.ps1
-pip install -r data-pipeline/requirements.txt
-
-# Setup Node.js
-cd azure-functions
-npm install
+# Bootstrap the workspace
+npm run bootstrap
 ```
 
 ### Required Secrets in `.env`
@@ -92,16 +87,13 @@ AZURE_VISION_KEY=xxx
 
 ```powershell
 # Frontend only
-cd client
-npx live-server
+python -m http.server 8080
 
-# Functions only
-cd azure-functions
-func start
+# Functions + Azurite
+pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/start-local-dev.ps1 -Port 7072
 
 # Python data pipeline
-cd data-pipeline
-python fetch_nba_scores.py
+data-pipeline\.venv\Scripts\python.exe data-pipeline\fetch_nba_scores.py
 ```
 
 ---
@@ -119,7 +111,7 @@ Workflows only run when relevant files change:
 
 - `azure-functions/**` → Functions container workflow
 - `client/**` → Static Web Apps workflow
-- `data-pipeline/**` → Python CI workflow
+- `data-pipeline/**`, `lib/**`, `pyproject.toml`, `.python-version` → Python CI workflow
 
 ---
 
@@ -131,7 +123,8 @@ Workflows only run when relevant files change:
 | ------------------------------- | -------------------- | --------------------- |
 | `azure-static-web-apps.yml`     | `client/**`          | Azure Static Web Apps |
 | `azure-functions-container.yml` | `azure-functions/**` | ACA via ACR           |
-| `python-ci.yml`                 | `data-pipeline/**`   | Tests only            |
+| `python-ci.yml`                 | Python/shared files  | Data pipeline checks  |
+| `python-ci-tracker.yml`         | Python/shared files  | Tracker checks        |
 | `deploy-all.yml`                | Manual               | Everything            |
 
 ### GitHub Secrets Required
@@ -209,7 +202,7 @@ az deployment group create `
 | Environment | Component | URL                                                        |
 | ----------- | --------- | ---------------------------------------------------------- |
 | Local       | Frontend  | `http://localhost:5500`                                    |
-| Local       | Functions | `http://localhost:7071/api/`                               |
+| Local       | Functions | `http://localhost:7072/api/`                               |
 | Prod        | Frontend  | `https://www.greenbiersportventures.com`                   |
 | Prod        | Functions | `https://gbsv-orchestrator.xxx.azurecontainerapps.io/api/` |
 
@@ -217,13 +210,13 @@ az deployment group create `
 
 ```powershell
 # Frontend
-cd client && npx live-server
+python -m http.server 8080
 
 # Functions
-cd azure-functions && npm install && func start
+pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/start-local-dev.ps1 -Port 7072
 
 # Python
-cd data-pipeline && python fetch_nba_scores.py
+data-pipeline\.venv\Scripts\python.exe data-pipeline\fetch_nba_scores.py
 
 # Deploy all (via CI/CD)
 git push origin main

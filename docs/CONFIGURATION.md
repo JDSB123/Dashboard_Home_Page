@@ -36,9 +36,6 @@ Optional auth guards (set to true to require a shared key on write endpoints):
 
 ## Model Registry
 
-Model endpoints should be managed through the registry whenever possible. The registry is hydrated by:
-
-- .github/workflows/sync-model-registry.yml
-- .github/workflows/model-update-notify.yml
+Model endpoints should be managed through the registry whenever possible. This repo currently uses the checked-in deployment scripts and active GitHub workflows rather than the older `sync-model-registry.yml` / `model-update-notify.yml` files.
 
 If the registry is unavailable, defaults are taken from environment overrides or config.js.

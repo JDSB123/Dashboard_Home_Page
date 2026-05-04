@@ -4,7 +4,8 @@ This repo is a **static HTML/CSS/JS dashboard** hosted on **Azure Static Web App
 
 ## Entry pages
 
-- `index.html` → Dashboard / Active Picks page (uses API) - **Main entry point**
+- `dashboard.html` → Dashboard / Active Picks page (uses API) - **Main entry point**
+- `index.html` → redirect-only wrapper to `dashboard.html`
 - `weekly-lineup.html` → Weekly Lineup page
 - `odds-market.html` → Odds Market page
 
@@ -60,7 +61,20 @@ Any static server works. Examples:
 python -m http.server 8080
 ```
 
-Then open `http://localhost:8080/`.
+Then open `http://localhost:8080/dashboard.html`.
+
+### Bootstrap the workspace
+
+From the repo root, run:
+
+```powershell
+npm run bootstrap
+```
+
+That installs the repo-local Node tools, the `client` and `azure-functions` dependencies, and creates or updates the Python virtual environments in `data-pipeline/.venv` and `tracker_pnl/.venv`.
+
+The workspace is currently aligned to Python `3.14`.
+The tested Node.js version is `20.x` (see `.nvmrc`).
 
 ### Backend (Functions) local dev
 

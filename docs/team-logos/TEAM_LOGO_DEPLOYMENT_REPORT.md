@@ -153,7 +153,7 @@ League Logos:
 ### Step 1: Configure Azure Storage
 
 ```powershell
-cd c:\Users\JB\green-bier-ventures\Dashboard_main_local\scripts
+cd <repo-root>\scripts
 .\configure-blob-storage.ps1
 ```
 
