@@ -40,7 +40,7 @@ async function xaiChatCompletion(options) {
   }
 
   const baseUrl = stripTrailingSlash(firstEnv(["XAI_BASE_URL"])) || "https://api.x.ai/v1";
-  const model = options.model || firstEnv(["XAI_MODEL"]) || "grok-2-latest";
+  const model = options.model || firstEnv(["XAI_MODEL"]) || "grok-3";
 
   const messages = [];
   if (options.system) messages.push({ role: "system", content: String(options.system) });
@@ -144,7 +144,7 @@ async function anthropicMessages(options) {
 
   const baseUrl =
     stripTrailingSlash(firstEnv(["ANTHROPIC_BASE_URL"])) || "https://api.anthropic.com/v1";
-  const model = options.model || firstEnv(["ANTHROPIC_MODEL"]) || "claude-3-5-sonnet-latest";
+  const model = options.model || firstEnv(["ANTHROPIC_MODEL"]) || "claude-sonnet-4-6";
 
   const payload = {
     model,
@@ -203,7 +203,7 @@ async function geminiGenerateContent(options) {
   const baseUrl =
     stripTrailingSlash(firstEnv(["GEMINI_BASE_URL"])) ||
     "https://generativelanguage.googleapis.com/v1beta";
-  const model = options.model || firstEnv(["GEMINI_MODEL"]) || "gemini-2.0-flash";
+  const model = options.model || firstEnv(["GEMINI_MODEL"]) || "gemini-2.5-flash";
 
   const payload = {
     contents: [
@@ -273,10 +273,10 @@ function getProviderStatus() {
       geminiBaseUrl:
         stripTrailingSlash(firstEnv(["GEMINI_BASE_URL"])) ||
         "https://generativelanguage.googleapis.com/v1beta",
-      xaiModel: firstEnv(["XAI_MODEL"]) || "grok-2-latest",
+      xaiModel: firstEnv(["XAI_MODEL"]) || "grok-3",
       openaiModel: firstEnv(["OPENAI_MODEL"]) || "gpt-4o-mini",
-      anthropicModel: firstEnv(["ANTHROPIC_MODEL"]) || "claude-3-5-sonnet-latest",
-      geminiModel: firstEnv(["GEMINI_MODEL"]) || "gemini-2.0-flash",
+      anthropicModel: firstEnv(["ANTHROPIC_MODEL"]) || "claude-sonnet-4-6",
+      geminiModel: firstEnv(["GEMINI_MODEL"]) || "gemini-2.5-flash",
     },
   };
 }
