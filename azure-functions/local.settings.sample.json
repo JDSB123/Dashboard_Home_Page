@@ -12,6 +12,22 @@
     "BASKETBALL_API_KEY": "YOUR_BASKETBALL_API_KEY",
     "API_BASKETBALL_KEY": "YOUR_API_BASKETBALL_KEY",
 
+    "_comment_llm": "=== LLM PROVIDERS (OPTIONAL, SERVER-SIDE ONLY) ===",
+    "XAI_API_KEY": "YOUR_XAI_KEY",
+    "XAI_BASE_URL": "https://api.x.ai/v1",
+    "XAI_MODEL": "grok-2-latest",
+    "OPENAI_API_KEY": "YOUR_OPENAI_KEY",
+    "OPENAI_BASE_URL": "https://api.openai.com/v1",
+    "OPENAI_MODEL": "gpt-4o-mini",
+    "ANTHROPIC_API_KEY": "YOUR_ANTHROPIC_KEY",
+    "ANTHROPIC_BASE_URL": "https://api.anthropic.com/v1",
+    "ANTHROPIC_MODEL": "claude-3-5-sonnet-latest",
+    "ANTHROPIC_VERSION": "2023-06-01",
+    "GEMINI_API_KEY": "YOUR_GEMINI_KEY",
+    "GEMINI_BASE_URL": "https://generativelanguage.googleapis.com/v1beta",
+    "GEMINI_MODEL": "gemini-2.0-flash",
+    "REQUIRE_LLM_KEY": "true",
+
     "_comment_cosmos": "=== COSMOS DB ===",
     "COSMOS_ENDPOINT": "https://your-account.documents.azure.com:443/",
     "COSMOS_KEY": "YOUR_COSMOS_KEY",
@@ -47,9 +63,12 @@
     "GRADE_PICKS_SCHEDULE": "0 */30 16-23 * * *",
     "GRADE_PICKS_ENABLED": "true",
 
-    "_comment_notifications": "=== NOTIFICATIONS ===",
-    "TEAMS_WEBHOOK_URL": "YOUR_TEAMS_WEBHOOK_URL",
-    "SLACK_WEBHOOK_URL": "YOUR_SLACK_WEBHOOK_URL"
+    "_comment_notifications": "=== M365 GRAPH (NO WEBHOOKS) ===",
+    "TEAMS_GROUP_ID": "YOUR_TEAMS_GROUP_ID",
+    "TEAMS_CHANNEL_ID": "YOUR_TEAMS_CHANNEL_ID",
+    "SHAREPOINT_SITE_ID": "YOUR_SHAREPOINT_SITE_ID",
+    "SHAREPOINT_DRIVE_ID": "YOUR_SHAREPOINT_DRIVE_ID",
+    "SHAREPOINT_SLATE_FOLDER": "MLB - Green Bier Sports/MLB_Picks"
   },
   "Host": {
     "LocalHttpPort": 7072,

@@ -22,11 +22,12 @@ www.greenbiersportventures.com (Front Door)
 | **Health**         | `/health`           | Service health check                      |
 | **Scoreboard**     | `/scoreboard/*`     | Live scores from basketball API           |
 | **SignalRInfo**    | `/signalr/*`        | Real-time connection negotiation          |
-| **TeamsNotify**    | `/teams-notify`     | MS Teams webhook notifications            |
+| **TeamsNotify**    | `/teams-notify`     | Legacy route disabled (M365 Graph only)  |
 | **TelegramRunner** | `/telegram/*`       | Telegram bot integration                  |
 | **SportsbookAPI**  | `/sportsbook/*`     | Sportsbook connection/bets                |
 | **BasketballAPI**  | `/basketball-api/*` | NBA/NCAAM data proxy                      |
 | **OCR**            | `/ocr`              | Image processing                          |
+| **LLMProxy**       | `/llm/*`            | Server-side LLM proxy (xAI/Grok, Gemini) |
 
 ## PicksAPI Routes
 
@@ -123,6 +124,20 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/start-local-dev.ps1 -Port 
 | `AzureWebJobsStorage`             | Azure Storage connection string           |
 | `AZURE_SIGNALR_CONNECTION_STRING` | SignalR Service connection                |
 | `REQUIRE_PICKS_WRITE_KEY`         | Set to require x-functions-key for writes |
+| `REQUIRE_LLM_KEY`                 | Set to require x-functions-key for /llm   |
+| `XAI_API_KEY`                     | xAI (Grok) API key (server-side only)     |
+| `XAI_BASE_URL`                    | xAI base URL (default: https://api.x.ai/v1) |
+| `XAI_MODEL`                       | xAI model name                            |
+| `OPENAI_API_KEY`                  | OpenAI API key (server-side only)         |
+| `OPENAI_BASE_URL`                 | OpenAI base URL (default: https://api.openai.com/v1) |
+| `OPENAI_MODEL`                    | OpenAI model name                         |
+| `ANTHROPIC_API_KEY`               | Anthropic (Claude) API key (server-side only) |
+| `ANTHROPIC_BASE_URL`              | Anthropic base URL (default: https://api.anthropic.com/v1) |
+| `ANTHROPIC_MODEL`                 | Anthropic model name                      |
+| `ANTHROPIC_VERSION`               | Anthropic version header (default: 2023-06-01) |
+| `GEMINI_API_KEY`                  | Gemini API key (server-side only)         |
+| `GEMINI_BASE_URL`                 | Gemini base URL (default: generativelanguage.googleapis.com/v1beta) |
+| `GEMINI_MODEL`                    | Gemini model name                         |
 
 ## Deployment
 
