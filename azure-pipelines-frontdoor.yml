@@ -31,32 +31,33 @@ stages:
       - job: deploy
         displayName: Validate and deploy Front Door
         pool:
-          vmImage: ubuntu-latest
+          name: gbsv-local-windows
         steps:
           - checkout: self
           - task: AzureCLI@2
             displayName: Validate or deploy Front Door Bicep
             inputs:
               azureSubscription: "$(AzureServiceConnection)"
-              scriptType: bash
+              scriptType: pscore
               scriptLocation: inlineScript
               inlineScript: |
-                set -euo pipefail
+                $ErrorActionPreference = "Stop"
                 az bicep build --file infra/main.bicep
-                if [ "${{ parameters.dryRun }}" = "true" ]; then
-                  az deployment group what-if \
-                    --resource-group "$(ResourceGroup)" \
-                    --template-file infra/main.bicep \
-                    --parameters infra/main.bicepparam \
-                    --parameters environment=${{ parameters.environment }} \
-                    --parameters enableWaf=$([ "${{ parameters.skipWaf }}" = "true" ] && echo false || echo true)
-                else
-                  DEPLOYMENT_NAME="frontdoor-${{ parameters.environment }}-$(date +%Y%m%d-%H%M%S)"
-                  az deployment group create \
-                    --resource-group "$(ResourceGroup)" \
-                    --name "${DEPLOYMENT_NAME}" \
-                    --template-file infra/main.bicep \
-                    --parameters infra/main.bicepparam \
-                    --parameters environment=${{ parameters.environment }} \
-                    --parameters enableWaf=$([ "${{ parameters.skipWaf }}" = "true" ] && echo false || echo true)
-                fi
+                $enableWaf = if ("${{ parameters.skipWaf }}" -eq "true") { "false" } else { "true" }
+                if ("${{ parameters.dryRun }}" -eq "true") {
+                  az deployment group what-if `
+                    --resource-group "$(ResourceGroup)" `
+                    --template-file infra/main.bicep `
+                    --parameters infra/main.bicepparam `
+                    --parameters environment=${{ parameters.environment }} `
+                    --parameters enableWaf=$enableWaf
+                } else {
+                  $deploymentName = "frontdoor-${{ parameters.environment }}-$(Get-Date -Format 'yyyyMMdd-HHmmss')"
+                  az deployment group create `
+                    --resource-group "$(ResourceGroup)" `
+                    --name $deploymentName `
+                    --template-file infra/main.bicep `
+                    --parameters infra/main.bicepparam `
+                    --parameters environment=${{ parameters.environment }} `
+                    --parameters enableWaf=$enableWaf
+                }

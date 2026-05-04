@@ -42,7 +42,7 @@ stages:
       - job: client
         displayName: Client build
         pool:
-          vmImage: ubuntu-latest
+          name: gbsv-local-windows
         steps:
           - checkout: self
           - task: NodeTool@0
@@ -59,7 +59,7 @@ stages:
       - job: functions
         displayName: Azure Functions lint and test
         pool:
-          vmImage: ubuntu-latest
+          name: gbsv-local-windows
         steps:
           - checkout: self
           - task: NodeTool@0
