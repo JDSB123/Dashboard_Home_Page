@@ -32,21 +32,33 @@ stages:
           name: gbsv-local-windows
         steps:
           - checkout: self
-          - task: NodeTool@0
+          - task: UseNode@1
             inputs:
               versionSpec: "$(NodeVersion)"
             displayName: Use Node.js $(NodeVersion)
-          - script: npm ci
-            workingDirectory: client
+          - task: Npm@1
+            inputs:
+              command: custom
+              customCommand: ci
+              workingDir: client
             displayName: Install client dependencies
-          - script: npm run build
-            workingDirectory: client
+          - task: Npm@1
+            inputs:
+              command: custom
+              customCommand: run build
+              workingDir: client
             displayName: Build client bundles
-          - script: npm ci
-            workingDirectory: azure-functions
+          - task: Npm@1
+            inputs:
+              command: custom
+              customCommand: ci
+              workingDir: azure-functions
             displayName: Install Azure Functions dependencies
-          - script: npm test
-            workingDirectory: azure-functions
+          - task: Npm@1
+            inputs:
+              command: custom
+              customCommand: test
+              workingDir: azure-functions
             displayName: Run Azure Functions tests
 
   - stage: deploy_orchestrator
@@ -60,7 +72,7 @@ stages:
           name: gbsv-local-windows
         steps:
           - checkout: self
-          - task: NodeTool@0
+          - task: UseNode@1
             inputs:
               versionSpec: "$(NodeVersion)"
             displayName: Use Node.js $(NodeVersion)
@@ -96,24 +108,35 @@ stages:
           name: gbsv-local-windows
         steps:
           - checkout: self
-          - task: NodeTool@0
+          - task: UseNode@1
             inputs:
               versionSpec: "$(NodeVersion)"
             displayName: Use Node.js $(NodeVersion)
-          - pwsh: |
-              $ErrorActionPreference = "Stop"
-              npm ci
-              npm run build
-            workingDirectory: client
+          - task: Npm@1
+            inputs:
+              command: custom
+              customCommand: ci
+              workingDir: client
+            displayName: Install client dependencies
+          - task: Npm@1
+            inputs:
+              command: custom
+              customCommand: run build
+              workingDir: client
             displayName: Build client
-          - pwsh: |
-              $ErrorActionPreference = "Stop"
-              npm ci --omit=dev
-            workingDirectory: azure-functions
+          - task: Npm@1
+            inputs:
+              command: custom
+              customCommand: ci --omit=dev
+              workingDir: azure-functions
             displayName: Install API production dependencies
-          - pwsh: |
-              $ErrorActionPreference = "Stop"
-              Remove-Item -Recurse -Force "azure-functions/GradePicks","azure-functions/SignalRInfo","azure-functions/__tests__"
+          - task: DeleteFiles@1
+            inputs:
+              SourceFolder: azure-functions
+              Contents: |
+                GradePicks/**
+                SignalRInfo/**
+                __tests__/**
             displayName: Trim non-HTTP functions for SWA
           - task: AzureCLI@2
             name: fetchSwaToken

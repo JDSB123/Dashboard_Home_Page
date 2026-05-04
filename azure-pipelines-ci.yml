@@ -45,15 +45,21 @@ stages:
           name: gbsv-local-windows
         steps:
           - checkout: self
-          - task: NodeTool@0
+          - task: UseNode@1
             inputs:
               versionSpec: "$(NodeVersion)"
             displayName: Use Node.js $(NodeVersion)
-          - script: npm ci
-            workingDirectory: client
+          - task: Npm@1
+            inputs:
+              command: custom
+              customCommand: ci
+              workingDir: client
             displayName: Install client dependencies
-          - script: npm run build
-            workingDirectory: client
+          - task: Npm@1
+            inputs:
+              command: custom
+              customCommand: run build
+              workingDir: client
             displayName: Build client bundles
 
       - job: functions
@@ -62,19 +68,31 @@ stages:
           name: gbsv-local-windows
         steps:
           - checkout: self
-          - task: NodeTool@0
+          - task: UseNode@1
             inputs:
               versionSpec: "$(NodeVersion)"
             displayName: Use Node.js $(NodeVersion)
-          - script: npm ci
-            workingDirectory: azure-functions
+          - task: Npm@1
+            inputs:
+              command: custom
+              customCommand: ci
+              workingDir: azure-functions
             displayName: Install Azure Functions dependencies
-          - script: npm run lint
-            workingDirectory: azure-functions
+          - task: Npm@1
+            inputs:
+              command: custom
+              customCommand: run lint
+              workingDir: azure-functions
             displayName: Lint Azure Functions
-          - script: npm run format:check
-            workingDirectory: azure-functions
+          - task: Npm@1
+            inputs:
+              command: custom
+              customCommand: run format:check
+              workingDir: azure-functions
             displayName: Check formatting
-          - script: npm test
-            workingDirectory: azure-functions
+          - task: Npm@1
+            inputs:
+              command: custom
+              customCommand: test
+              workingDir: azure-functions
             displayName: Run Azure Functions tests
