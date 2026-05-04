@@ -7,14 +7,6 @@
     {
       "name": "Azure Functions",
       "path": "azure-functions"
-    },
-    {
-      "name": "Data Pipeline",
-      "path": "data-pipeline"
-    },
-    {
-      "name": "Tracker PNL",
-      "path": "tracker_pnl"
     }
   ],
   "settings": {

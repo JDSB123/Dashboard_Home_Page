@@ -168,7 +168,7 @@
     const upper = safeText(sport).toUpperCase();
     if (upper === "NCAAM") return "NCAAB";
     if (upper === "NCAAB") return "NCAAB";
-    return upper || "NBA";
+    return upper || "MLB";
   };
 
   const normalizeSegment = (segment) => {
@@ -539,7 +539,7 @@
     if (s === "NCAAF") return { src: "assets/ncaaf-logo.png", alt: "NCAAF" };
     if (s === "NHL")
       return { src: "assets/icons/league-nhl-official.svg", alt: "NHL" };
-    if (s === "MLB") return { src: "assets/mlb-logo.png", alt: "MLB" };
+    if (s === "MLB") return { src: "assets/mlb-logo.svg", alt: "MLB" };
     return { src: "", alt: s };
   };
 

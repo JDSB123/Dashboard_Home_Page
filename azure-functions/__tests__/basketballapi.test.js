@@ -12,7 +12,6 @@ const makeReq = (overrides = {}) => ({
 });
 
 jest.mock("axios");
-const axios = require("axios");
 
 describe("BasketballAPI", () => {
   const OLD_ENV = process.env;

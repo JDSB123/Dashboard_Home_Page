@@ -28,11 +28,6 @@
 
   // Sports to fetch
   const SPORT_CONFIGS = [
-    { key: "nba", label: "NBA", apiSport: "nba", league: "nba" },
-    { key: "ncaab", label: "NCAAB", apiSport: "ncaab", league: "ncaam" },
-    { key: "nfl", label: "NFL", apiSport: "nfl", league: "nfl" },
-    { key: "ncaaf", label: "NCAAF", apiSport: "ncaaf", league: "ncaaf" },
-    { key: "nhl", label: "NHL", apiSport: "nhl", league: "nhl" },
     { key: "mlb", label: "MLB", apiSport: "mlb", league: "mlb" },
   ];
 

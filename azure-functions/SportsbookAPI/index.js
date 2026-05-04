@@ -1,4 +1,3 @@
-const axios = require("axios");
 const crypto = require("crypto");
 const { validateSharedKey } = require("../shared/auth");
 
@@ -153,7 +152,7 @@ async function handleFetchBets(context, req) {
 /**
  * Validate credentials with sportsbook
  */
-async function validateCredentials(bookId, credentials, context) {
+async function validateCredentials(bookId, credentials, _context) {
   // For now, just check that credentials exist
   // In production, this would actually verify with the sportsbook
   return credentials.username && credentials.password;
@@ -162,7 +161,7 @@ async function validateCredentials(bookId, credentials, context) {
 /**
  * Fetch bets from Action Network
  */
-async function fetchActionNetworkBets(context, dateRange, status) {
+async function fetchActionNetworkBets(context, dateRange, _status) {
   const user = process.env.ACTIONNETWORK_USER;
   const pass = process.env.ACTIONNETWORK_PASS;
 

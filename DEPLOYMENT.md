@@ -15,7 +15,6 @@
 | ------------------ | ----------------------- | ------------------------------- |
 | `client/`          | Azure Static Web Apps   | `azure-static-web-apps.yml`     |
 | `azure-functions/` | Azure Container Apps    | `azure-functions-container.yml` |
-| `data-pipeline/`   | Manual / GitHub Actions | `python-ci.yml`                 |
 
 ---
 
@@ -39,8 +38,6 @@
 ### Additional Local Directories
 
 ```
-data-pipeline/.venv   Python virtual environment for data-pipeline
-tracker_pnl/.venv     Python virtual environment for tracker_pnl
 .azurite/             Local Azurite storage data
 ```
 
@@ -91,9 +88,6 @@ python -m http.server 8080
 
 # Functions + Azurite
 pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/start-local-dev.ps1 -Port 7072
-
-# Python data pipeline
-data-pipeline\.venv\Scripts\python.exe data-pipeline\fetch_nba_scores.py
 ```
 
 ---
@@ -111,8 +105,6 @@ Workflows only run when relevant files change:
 
 - `azure-functions/**` → Functions container workflow
 - `client/**` → Static Web Apps workflow
-- `data-pipeline/**`, `lib/**`, `pyproject.toml`, `.python-version` → Python CI workflow
-
 ---
 
 ## 3. CI/CD (GitHub Actions)
@@ -123,8 +115,6 @@ Workflows only run when relevant files change:
 | ------------------------------- | -------------------- | --------------------- |
 | `azure-static-web-apps.yml`     | `client/**`          | Azure Static Web Apps |
 | `azure-functions-container.yml` | `azure-functions/**` | ACA via ACR           |
-| `python-ci.yml`                 | Python/shared files  | Data pipeline checks  |
-| `python-ci-tracker.yml`         | Python/shared files  | Tracker checks        |
 | `deploy-all.yml`                | Manual               | Everything            |
 
 ### GitHub Secrets Required
@@ -214,9 +204,6 @@ python -m http.server 8080
 
 # Functions
 pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/start-local-dev.ps1 -Port 7072
-
-# Python
-data-pipeline\.venv\Scripts\python.exe data-pipeline\fetch_nba_scores.py
 
 # Deploy all (via CI/CD)
 git push origin main

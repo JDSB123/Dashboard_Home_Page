@@ -1,7 +1,7 @@
 <!doctype html>
 <!--
   FETCH PICKS PAGE (v36.01.0)
-  Lightweight model picks viewer — fetch from NBA, NCAAM, NHL and future models
+  Lightweight model picks viewer — MLB-only model fetch surface
 -->
 <html lang="en">
   <head>
@@ -481,11 +481,7 @@
           <div class="filter-toolbar" id="filter-toolbar">
             <div class="ft-left">
               <!-- League pills -->
-              <button class="ft-pill ft-league" data-league="nba">NBA</button>
-              <button class="ft-pill ft-league" data-league="ncaab">
-                NCAAM
-              </button>
-              <button class="ft-pill ft-league" data-league="nhl">NHL</button>
+              <button class="ft-pill ft-league active" data-league="mlb">MLB</button>
               <!-- Segment dropdown -->
               <div class="ft-dropdown">
                 <button class="ft-dropdown-btn" id="segment-dropdown-btn">
@@ -566,39 +562,15 @@
                     >
                       <button
                         class="ft-dropdown-item league-fetch-item"
-                        data-fetch="nba"
+                        data-fetch="mlb"
                         type="button"
                       >
                         <img
-                          src="assets/nba-logo.png"
+                          src="assets/mlb-logo.svg"
                           class="league-logo-sm"
-                          alt="NBA"
+                          alt="MLB"
                         />
-                        <span>NBA Picks</span>
-                      </button>
-                      <button
-                        class="ft-dropdown-item league-fetch-item"
-                        data-fetch="ncaab"
-                        type="button"
-                      >
-                        <img
-                          src="assets/ncaam-logo.png"
-                          class="league-logo-sm"
-                          alt="NCAAM"
-                        />
-                        <span>NCAAM Picks</span>
-                      </button>
-                      <button
-                        class="ft-dropdown-item league-fetch-item"
-                        data-fetch="nhl"
-                        type="button"
-                      >
-                        <img
-                          src="assets/icons/league-nhl-official.svg"
-                          class="league-logo-sm"
-                          alt="NHL"
-                        />
-                        <span>NHL Picks</span>
+                        <span>MLB Picks</span>
                       </button>
                     </div>
                   </div>

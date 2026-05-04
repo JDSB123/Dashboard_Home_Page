@@ -20,11 +20,7 @@ const DIST = join(ROOT, "dist");
 mkdirSync(DIST, { recursive: true });
 
 const REQUIRED_ARTIFACTS = [
-  "assets/nba-logo.png",
-  "assets/ncaam-logo.png",
-  "assets/nfl-logo.png",
-  "assets/ncaaf-logo.png",
-  "assets/icons/league-nhl.svg",
+  "assets/mlb-logo.svg",
   "assets/icons/league-mlb.svg",
 ];
 
@@ -51,7 +47,7 @@ function validateLogoIndex() {
   const logoMappings = mappings.logoMappings || {};
   const leagueLogos = mappings.leagueLogos || {};
 
-  const requiredLeagueLogoKeys = ["nba", "nfl", "ncaam", "ncaaf", "nhl", "mlb"];
+  const requiredLeagueLogoKeys = ["mlb"];
   const missingLeagueLogos = requiredLeagueLogoKeys.filter(
     (key) => !leagueLogos[key],
   );
@@ -76,11 +72,7 @@ function validateLogoIndex() {
   }
 
   const configLeagueToIndexLeague = {
-    nfl: "nfl",
-    nba: "nba",
-    nhl: "nhl",
-    ncaab: "ncaam",
-    ncaaf: "ncaaf",
+    mlb: "mlb",
   };
 
   const missingTeamMappings = [];
@@ -133,11 +125,7 @@ const SHARED_JS = [
 
 // Sport fetchers — shared across dashboard and weekly-lineup
 const FETCHER_JS = [
-  "assets/js/features/nba-picks-fetcher.js",
-  "assets/js/features/ncaam-picks-fetcher.js",
-  "assets/js/features/nfl-picks-fetcher.js",
-  "assets/js/features/ncaaf-picks-fetcher.js",
-  "assets/js/features/nhl-picks-fetcher.js",
+  "assets/js/features/mlb-picks-fetcher.js",
   "assets/js/features/unified-picks-fetcher.js",
 ];
 
@@ -188,7 +176,6 @@ const WEEKLY_LINEUP_JS = [
   "assets/js/features/blob-storage-archiver.js",
   "assets/js/features/pdf-parser.js",
   "assets/js/features/image-ocr-parser.js",
-  "assets/js/features/basketball-api-client.js",
   "assets/js/features/sportsbook-connector.js",
 ];
 

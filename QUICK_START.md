@@ -4,7 +4,6 @@
 
 - **Node.js** `20.x`
 - **Azure Functions Core Tools** v4
-- **Python** `3.14`
 - **Git**
 - **VS Code / Cursor** (recommended)
 
@@ -22,8 +21,6 @@ This installs:
 - repo-local tooling such as Azurite
 - `client` dependencies
 - `azure-functions` dependencies
-- `data-pipeline/.venv`
-- `tracker_pnl/.venv`
 
 ## Local Secrets
 
@@ -64,15 +61,6 @@ Then open `http://localhost:8080/dashboard.html`.
 
 - Health: `http://localhost:7072/api/health`
 - Picks: `http://localhost:7072/api/picks/NBA`
-
-## Python Subprojects
-
-Use the venv inside each project:
-
-```powershell
-data-pipeline\.venv\Scripts\python.exe data-pipeline\fetch_nba_scores.py
-tracker_pnl\.venv\Scripts\python.exe tracker_pnl\ingest_picks.py --help
-```
 
 ## Debugging
 

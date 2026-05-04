@@ -27,14 +27,8 @@ window.APP_CONFIG = {
   API_BASE_FALLBACK: "https://www.greenbiersportventures.com/api",
   DYNAMIC_REGISTRY_ENABLED: true,
 
-  // Model API Endpoints — sport models removed; endpoints live in their own repos
-  // Direct Container App fallbacks (used only if Front Door route fails)
-  NBA_API_URL:
-    "https://ca-nba-gbsv-v6-api.greensand-0bb4c493.eastus.azurecontainerapps.io",
-  NCAAM_API_URL:
-    "https://ca-ncaamgbsvv20.braveriver-ed513377.eastus2.azurecontainerapps.io",
-  NHL_API_URL:
-    "https://nhl-gbsv-v1-az-aca.lemonsand-51e2acaf.eastus2.azurecontainerapps.io",
+  // Active model endpoint
+  MLB_API_URL: "",
 
   // Static Assets (Team logos)
   // Temporary hotfix: route directly to blob until custom-domain /team-logos is restored.
@@ -54,14 +48,14 @@ window.APP_CONFIG = {
   ENABLE_DB_SYNC: true,
   // Team Records API (disable to avoid 404s when endpoint is unavailable)
   TEAM_RECORDS_API_ENABLED: false,
-  // Leagues to hide from Weekly Lineup (off-season or not modeled)
-  WEEKLY_LINEUP_DISABLED_LEAGUES: ["NFL", "NCAAF"],
+  // MLB-only workspace
+  WEEKLY_LINEUP_DISABLED_LEAGUES: ["NBA", "NCAAM", "NFL", "NCAAF", "NHL"],
 
   // Picks Tracker sport scope
   // - auto: include all locked picks (future sports auto-onboard)
   // - allowlist: include only TRACKER_SPORT_ALLOWLIST sports
-  TRACKER_SPORT_SCOPE_MODE: "auto",
-  TRACKER_SPORT_ALLOWLIST: ["NBA", "NCAAB"],
+  TRACKER_SPORT_SCOPE_MODE: "allowlist",
+  TRACKER_SPORT_ALLOWLIST: ["MLB"],
 
   // Repository Info
   REPO_URL: "https://github.com/JDSB123/Dashboard_Home_Page",
@@ -81,7 +75,7 @@ window.GBSV_CONFIG = {
   FUNCTIONS_URL: "https://www.greenbiersportventures.com",
 
   // Cosmos DB picks storage (accessed via Azure Functions)
-  PICKS_API_ENDPOINT: "https://www.greenbiersportventures.com/nba/picks",
+  PICKS_API_ENDPOINT: "https://www.greenbiersportventures.com/mlb/picks",
 };
 
 // ── Local Development Override ──────────────────────────────────────────
@@ -122,7 +116,7 @@ window.GBSV_CONFIG = {
   window.APP_CONFIG.API_BASE_FALLBACK = LOCAL_API;
 
   window.GBSV_CONFIG.FUNCTIONS_URL = LOCAL_BASE;
-  window.GBSV_CONFIG.PICKS_API_ENDPOINT = LOCAL_BASE + "/nba/picks";
+  window.GBSV_CONFIG.PICKS_API_ENDPOINT = LOCAL_BASE + "/mlb/picks";
 })();
 
 // ── Logo Host Auto Failover / Switchback ───────────────────────────────
@@ -167,7 +161,7 @@ window.GBSV_CONFIG = {
     clearTimeout(timeout);
   };
 
-  probe.src = `${primary}/leagues-500-nba.png?probe=${Date.now()}`;
+  probe.src = `${primary}/leagues-500-mlb.png?probe=${Date.now()}`;
 })();
 
 // Export for module usage if needed

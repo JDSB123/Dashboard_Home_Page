@@ -1,6 +1,6 @@
 /**
  * Canonical team name mapping for pick-to-game matching.
- * Ported from tracker_pnl/grade_picks.py _TEAM_MAP.
+ * Centralized team name alias map used by dashboard Functions.
  */
 
 const TEAM_MAP = new Map();

@@ -67,4 +67,4 @@ Start-Process -FilePath "func" -ArgumentList "host start --port $Port" -NoNewWin
 
 Write-Host "Done. Endpoints:" -ForegroundColor Cyan
 Write-Host "  Health: http://localhost:$Port/api/health"
-Write-Host "  Picks : http://localhost:$Port/api/picks/NBA"
+Write-Host "  Picks : http://localhost:$Port/api/picks/MLB"

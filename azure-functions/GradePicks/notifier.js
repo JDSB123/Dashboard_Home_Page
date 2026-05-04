@@ -9,7 +9,7 @@ const https = require("https");
  * @param {object} summary - { results, gradedPicks, today }
  * @param {object} log - Logger instance
  */
-async function sendGradingSummary({ results, gradedPicks, today }, log) {
+async function sendGradingSummary({ results, today }, log) {
   const teamsUrl = process.env.TEAMS_WEBHOOK_URL;
   const slackUrl = process.env.SLACK_WEBHOOK_URL;
 

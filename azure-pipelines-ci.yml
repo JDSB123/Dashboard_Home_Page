@@ -1,0 +1,80 @@
+trigger:
+  branches:
+    include:
+      - main
+      - staging
+  paths:
+    include:
+      - client/**
+      - azure-functions/**
+      - scripts/bootstrap.ps1
+      - scripts/start-local-dev.ps1
+      - .vscode/**
+      - GBSV_DASHBOARD.code-workspace
+      - package.json
+      - package-lock.json
+      - azure-pipelines-ci.yml
+
+pr:
+  branches:
+    include:
+      - main
+      - staging
+  paths:
+    include:
+      - client/**
+      - azure-functions/**
+      - scripts/bootstrap.ps1
+      - scripts/start-local-dev.ps1
+      - .vscode/**
+      - GBSV_DASHBOARD.code-workspace
+      - package.json
+      - package-lock.json
+      - azure-pipelines-ci.yml
+
+variables:
+  NodeVersion: "20.x"
+
+stages:
+  - stage: validate
+    displayName: Validate Workspace
+    jobs:
+      - job: client
+        displayName: Client build
+        pool:
+          vmImage: ubuntu-latest
+        steps:
+          - checkout: self
+          - task: NodeTool@0
+            inputs:
+              versionSpec: "$(NodeVersion)"
+            displayName: Use Node.js $(NodeVersion)
+          - script: npm ci
+            workingDirectory: client
+            displayName: Install client dependencies
+          - script: npm run build
+            workingDirectory: client
+            displayName: Build client bundles
+
+      - job: functions
+        displayName: Azure Functions lint and test
+        pool:
+          vmImage: ubuntu-latest
+        steps:
+          - checkout: self
+          - task: NodeTool@0
+            inputs:
+              versionSpec: "$(NodeVersion)"
+            displayName: Use Node.js $(NodeVersion)
+          - script: npm ci
+            workingDirectory: azure-functions
+            displayName: Install Azure Functions dependencies
+          - script: npm run lint
+            workingDirectory: azure-functions
+            displayName: Lint Azure Functions
+          - script: npm run format:check
+            workingDirectory: azure-functions
+            displayName: Check formatting
+          - script: npm test
+            workingDirectory: azure-functions
+            displayName: Run Azure Functions tests

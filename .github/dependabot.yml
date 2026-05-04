@@ -17,20 +17,3 @@ updates:
         applies-to: version-updates
         update-types: ["major"]
         patterns: ["*"]
-  - package-ecosystem: "pip"
-    directory: "/data-pipeline"
-    schedule: { interval: "weekly" }
-    open-pull-requests-limit: 3
-    rebase-strategy: "auto"
-    labels: ["dependencies", "python", "data-pipeline"]
-    commit-message:
-      prefix: "deps(pip)"
-    groups:
-      pip-minor-and-patch:
-        applies-to: version-updates
-        update-types: ["minor", "patch"]
-        patterns: ["*"]
-      pip-majors:
-        applies-to: version-updates
-        update-types: ["major"]
-        patterns: ["*"]

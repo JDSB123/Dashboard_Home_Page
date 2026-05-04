@@ -71,9 +71,8 @@ From the repo root, run:
 npm run bootstrap
 ```
 
-That installs the repo-local Node tools, the `client` and `azure-functions` dependencies, and creates or updates the Python virtual environments in `data-pipeline/.venv` and `tracker_pnl/.venv`.
+That installs the repo-local Node tools plus the `client` and `azure-functions` dependencies.
 
-The workspace is currently aligned to Python `3.14`.
 The tested Node.js version is `20.x` (see `.nvmrc`).
 
 ### Backend (Functions) local dev
@@ -93,7 +92,7 @@ npm run dev:seed-tables
 func start
 ```
 
-Endpoints (examples): `http://localhost:7072/api/picks/NBA`, `http://localhost:7072/api/health`.
+Endpoints (examples): `http://localhost:7072/api/picks/MLB`, `http://localhost:7072/api/health`.
 
 Or, use the one-command starter (Windows PowerShell):
 

@@ -217,7 +217,7 @@ curl -X POST "https://$ORCHESTRATOR_URL/api/registry/update" \
 
 ### Step 10: Pick Analysis Integration (Optional)
 
-Pick-analysis tooling was removed from this repository during cleanup. If you need it, use the tracker tools under `tracker_pnl/` or restore from your external analytics repo.
+Pick-analysis tooling was removed from this repository during cleanup. Use the external MLB analytics/model repository for any offline analysis workflows.
 
 ## 🔍 Verification Steps
 

@@ -27,31 +27,16 @@ window.APP_CONFIG = {
   API_BASE_FALLBACK: "https://www.greenbiersportventures.com/api",
   DYNAMIC_REGISTRY_ENABLED: true,
 
-  // Model API Endpoints (can be dynamically updated by model-endpoints-bootstrap.js)
+  // Active model API endpoint
   API_ENDPOINTS: {
-    NFL: "__NFL_API_URL__",
-    NCAAF: "__NCAAF_API_URL__",
-    NBA: "__NBA_API_URL__",
-    NCAAM: "__NCAAM_API_URL__",
-    NHL: "",
-    MLB: "",
+    MLB: "__MLB_API_URL__",
   },
 
   // Feature Flags
-  WEEKLY_LINEUP_DISABLED_LEAGUES: ["NFL", "NCAAF"],
+  WEEKLY_LINEUP_DISABLED_LEAGUES: ["NBA", "NCAAM", "NFL", "NCAAF", "NHL"],
 
-  // These endpoints are used by:
-  //   - Frontend fetchers (nba-picks-fetcher.js, etc.) for real-time Weekly Lineup display
-  //   - Azure Function ModelJobProcessor for backend async job processing
-  //   - model-endpoints-bootstrap.js fetches latest from /api/registry on page load
-
-  // Sport Prediction APIs - Direct routing via Front Door: /{sport}/predictions
-  NBA_API_URL: "__NBA_API_URL__",
-  NCAAM_API_URL: "__NCAAM_API_URL__",
-  NFL_API_URL: "__NFL_API_URL__",
-  NCAAF_API_URL: "__NCAAF_API_URL__",
-  NHL_API_URL: "",
-  MLB_API_URL: "",
+  // Active sport prediction API
+  MLB_API_URL: "__MLB_API_URL__",
 
   // Static Assets (Front Door / CDN)
   LOGO_BASE_URL: "__LOGO_BASE_URL__",
@@ -83,7 +68,7 @@ window.WEEKLY_LINEUP_DISABLED_LEAGUES =
 // GBSV Configuration for Azure services
 window.GBSV_CONFIG = {
   FUNCTIONS_URL: "https://www.greenbiersportventures.com",
-  PICKS_API_ENDPOINT: "https://www.greenbiersportventures.com/nba/picks",
+  PICKS_API_ENDPOINT: "https://www.greenbiersportventures.com/mlb/picks",
 };
 
 // ── Logo Host Auto Failover / Switchback ───────────────────────────────
@@ -128,7 +113,7 @@ window.GBSV_CONFIG = {
     clearTimeout(timeout);
   };
 
-  probe.src = `${primary}/leagues-500-nba.png?probe=${Date.now()}`;
+  probe.src = `${primary}/leagues-500-mlb.png?probe=${Date.now()}`;
 })();
 
 // Export for module usage if needed

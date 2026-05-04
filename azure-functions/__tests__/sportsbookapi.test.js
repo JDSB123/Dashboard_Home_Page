@@ -1,5 +1,4 @@
 jest.mock("axios");
-const axios = require("axios");
 
 const makeContext = () => ({
   log: Object.assign(jest.fn(), { error: jest.fn(), info: jest.fn() }),

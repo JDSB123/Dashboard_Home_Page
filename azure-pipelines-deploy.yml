@@ -1,0 +1,142 @@
+trigger:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - client/**
+      - azure-functions/**
+      - infra/**
+      - scripts/**
+      - azure-pipelines-deploy.yml
+
+pr: none
+
+variables:
+  NodeVersion: "20.x"
+  AzureServiceConnection: "gbsv-dashboard-wif"
+  ResourceGroup: "dashboard-gbsv-main-rg"
+  StaticWebAppName: "gbsv-dashboard"
+  ContainerAppName: "gbsv-orchestrator"
+  ContainerAppsEnvironment: "gbsv-aca-env"
+  AcrName: "gbsvregistry"
+  AcrLoginServer: "gbsvregistry.azurecr.io"
+
+stages:
+  - stage: validate
+    displayName: Pre-deploy validation
+    jobs:
+      - job: build_and_test
+        displayName: Build client and test Functions
+        pool:
+          vmImage: ubuntu-latest
+        steps:
+          - checkout: self
+          - task: NodeTool@0
+            inputs:
+              versionSpec: "$(NodeVersion)"
+            displayName: Use Node.js $(NodeVersion)
+          - script: npm ci
+            workingDirectory: client
+            displayName: Install client dependencies
+          - script: npm run build
+            workingDirectory: client
+            displayName: Build client bundles
+          - script: npm ci
+            workingDirectory: azure-functions
+            displayName: Install Azure Functions dependencies
+          - script: npm test
+            workingDirectory: azure-functions
+            displayName: Run Azure Functions tests
+
+  - stage: deploy_orchestrator
+    displayName: Deploy orchestrator container
+    dependsOn: validate
+    condition: succeeded()
+    jobs:
+      - job: container_app
+        displayName: Build, push, and update Container App
+        pool:
+          vmImage: ubuntu-latest
+        steps:
+          - checkout: self
+          - task: NodeTool@0
+            inputs:
+              versionSpec: "$(NodeVersion)"
+            displayName: Use Node.js $(NodeVersion)
+          - task: AzureCLI@2
+            displayName: Deploy Container App image
+            inputs:
+              azureSubscription: "$(AzureServiceConnection)"
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                set -euo pipefail
+                az acr login --name "$(AcrName)"
+                IMAGE_TAG="$(Build.SourceVersion)"
+                IMAGE_REF="$(AcrLoginServer)/gbsv-orchestrator:${IMAGE_TAG}"
+                docker build -t "${IMAGE_REF}" -f azure-functions/Dockerfile azure-functions
+                docker push "${IMAGE_REF}"
+                az containerapp env show \
+                  --name "$(ContainerAppsEnvironment)" \
+                  --resource-group "$(ResourceGroup)" >/dev/null
+                az containerapp update \
+                  --name "$(ContainerAppName)" \
+                  --resource-group "$(ResourceGroup)" \
+                  --image "${IMAGE_REF}"
+
+  - stage: deploy_static_web_app
+    displayName: Deploy Static Web App
+    dependsOn: deploy_orchestrator
+    condition: succeeded()
+    jobs:
+      - job: static_web_app
+        displayName: Deploy client and integrated API
+        pool:
+          vmImage: ubuntu-latest
+        steps:
+          - checkout: self
+          - task: NodeTool@0
+            inputs:
+              versionSpec: "$(NodeVersion)"
+            displayName: Use Node.js $(NodeVersion)
+          - script: |
+              set -euo pipefail
+              npm ci
+              npm run build
+            workingDirectory: client
+            displayName: Build client
+          - script: |
+              set -euo pipefail
+              npm ci --omit=dev
+            workingDirectory: azure-functions
+            displayName: Install API production dependencies
+          - script: |
+              set -euo pipefail
+              rm -rf azure-functions/GradePicks azure-functions/SignalRInfo azure-functions/__tests__
+            displayName: Trim non-HTTP functions for SWA
+          - task: AzureCLI@2
+            name: fetchSwaToken
+            displayName: Fetch Static Web App deployment token
+            inputs:
+              azureSubscription: "$(AzureServiceConnection)"
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                set -euo pipefail
+                SWA_TOKEN=$(az staticwebapp secrets list \
+                  --name "$(StaticWebAppName)" \
+                  --resource-group "$(ResourceGroup)" \
+                  --query properties.apiKey -o tsv)
+                echo "##vso[task.setvariable variable=SWADeploymentToken;issecret=true]${SWA_TOKEN}"
+          - task: AzureStaticWebApp@0
+            displayName: Deploy Azure Static Web App
+            inputs:
+              workingDirectory: "$(System.DefaultWorkingDirectory)"
+              app_location: "client"
+              api_location: "azure-functions"
+              output_location: ""
+              skip_app_build: true
+              skip_api_build: true
+              config_file_location: "client"
+              azure_static_web_apps_api_token: "$(SWADeploymentToken)"

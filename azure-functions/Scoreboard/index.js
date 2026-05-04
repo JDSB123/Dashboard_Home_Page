@@ -171,7 +171,7 @@ function fetchJSON(url, apiKey) {
           if (res.statusCode >= 200 && res.statusCode < 300) {
             try {
               resolve(JSON.parse(data));
-            } catch (e) {
+            } catch {
               reject(new Error("Invalid JSON response"));
             }
           } else {

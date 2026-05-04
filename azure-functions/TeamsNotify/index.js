@@ -92,7 +92,6 @@ module.exports = async function (context, req) {
  */
 function buildNewPickCard(pick) {
   const emoji = getLeagueEmoji(pick.league);
-  const edgeColor = pick.edge >= 5 ? "good" : pick.edge >= 3 ? "warning" : "default";
 
   return {
     "@type": "MessageCard",

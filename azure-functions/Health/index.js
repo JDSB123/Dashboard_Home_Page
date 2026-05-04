@@ -4,7 +4,7 @@
 const { TableClient } = require("@azure/data-tables");
 const { createLogger } = require("../shared/logger");
 
-module.exports = async function (context, req) {
+module.exports = async function (context, _req) {
   const log = createLogger("Health", context);
   const healthChecks = {
     status: "healthy",

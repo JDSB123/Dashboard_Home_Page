@@ -1,11 +1,3 @@
-function toBoolean(value) {
-  return (
-    String(value || "")
-      .trim()
-      .toLowerCase() === "true"
-  );
-}
-
 function getFirstEnv(names = []) {
   for (const name of names) {
     const value = process.env[name];
