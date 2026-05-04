@@ -32,34 +32,42 @@ stages:
           name: gbsv-local-windows
         steps:
           - checkout: self
-          - task: UseNode@1
-            inputs:
-              versionSpec: "$(NodeVersion)"
-            displayName: Use Node.js $(NodeVersion)
-          - task: Npm@1
-            inputs:
-              command: custom
-              customCommand: ci
-              workingDir: client
+          - task: PowerShell@2
             displayName: Install client dependencies
-          - task: Npm@1
             inputs:
-              command: custom
-              customCommand: run build
-              workingDir: client
+              targetType: inline
+              pwsh: true
+              script: |
+                $ErrorActionPreference = "Stop"
+                & "C:\Program Files\nodejs\npm.cmd" ci
+            workingDirectory: client
+          - task: PowerShell@2
             displayName: Build client bundles
-          - task: Npm@1
             inputs:
-              command: custom
-              customCommand: ci
-              workingDir: azure-functions
+              targetType: inline
+              pwsh: true
+              script: |
+                $ErrorActionPreference = "Stop"
+                & "C:\Program Files\nodejs\npm.cmd" run build
+            workingDirectory: client
+          - task: PowerShell@2
             displayName: Install Azure Functions dependencies
-          - task: Npm@1
             inputs:
-              command: custom
-              customCommand: test
-              workingDir: azure-functions
+              targetType: inline
+              pwsh: true
+              script: |
+                $ErrorActionPreference = "Stop"
+                & "C:\Program Files\nodejs\npm.cmd" ci
+            workingDirectory: azure-functions
+          - task: PowerShell@2
             displayName: Run Azure Functions tests
+            inputs:
+              targetType: inline
+              pwsh: true
+              script: |
+                $ErrorActionPreference = "Stop"
+                & "C:\Program Files\nodejs\npm.cmd" test
+            workingDirectory: azure-functions
 
   - stage: deploy_orchestrator
     displayName: Deploy orchestrator container
@@ -72,10 +80,6 @@ stages:
           name: gbsv-local-windows
         steps:
           - checkout: self
-          - task: UseNode@1
-            inputs:
-              versionSpec: "$(NodeVersion)"
-            displayName: Use Node.js $(NodeVersion)
           - task: AzureCLI@2
             displayName: Deploy Container App image
             inputs:
@@ -108,28 +112,33 @@ stages:
           name: gbsv-local-windows
         steps:
           - checkout: self
-          - task: UseNode@1
-            inputs:
-              versionSpec: "$(NodeVersion)"
-            displayName: Use Node.js $(NodeVersion)
-          - task: Npm@1
-            inputs:
-              command: custom
-              customCommand: ci
-              workingDir: client
+          - task: PowerShell@2
             displayName: Install client dependencies
-          - task: Npm@1
             inputs:
-              command: custom
-              customCommand: run build
-              workingDir: client
+              targetType: inline
+              pwsh: true
+              script: |
+                $ErrorActionPreference = "Stop"
+                & "C:\Program Files\nodejs\npm.cmd" ci
+            workingDirectory: client
+          - task: PowerShell@2
             displayName: Build client
-          - task: Npm@1
             inputs:
-              command: custom
-              customCommand: ci --omit=dev
-              workingDir: azure-functions
+              targetType: inline
+              pwsh: true
+              script: |
+                $ErrorActionPreference = "Stop"
+                & "C:\Program Files\nodejs\npm.cmd" run build
+            workingDirectory: client
+          - task: PowerShell@2
             displayName: Install API production dependencies
+            inputs:
+              targetType: inline
+              pwsh: true
+              script: |
+                $ErrorActionPreference = "Stop"
+                & "C:\Program Files\nodejs\npm.cmd" ci --omit=dev
+            workingDirectory: azure-functions
           - task: DeleteFiles@1
             inputs:
               SourceFolder: azure-functions

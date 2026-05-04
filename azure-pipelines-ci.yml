@@ -45,22 +45,24 @@ stages:
           name: gbsv-local-windows
         steps:
           - checkout: self
-          - task: UseNode@1
-            inputs:
-              versionSpec: "$(NodeVersion)"
-            displayName: Use Node.js $(NodeVersion)
-          - task: Npm@1
-            inputs:
-              command: custom
-              customCommand: ci
-              workingDir: client
+          - task: PowerShell@2
             displayName: Install client dependencies
-          - task: Npm@1
             inputs:
-              command: custom
-              customCommand: run build
-              workingDir: client
+              targetType: inline
+              pwsh: true
+              script: |
+                $ErrorActionPreference = "Stop"
+                & "C:\Program Files\nodejs\npm.cmd" ci
+            workingDirectory: client
+          - task: PowerShell@2
             displayName: Build client bundles
+            inputs:
+              targetType: inline
+              pwsh: true
+              script: |
+                $ErrorActionPreference = "Stop"
+                & "C:\Program Files\nodejs\npm.cmd" run build
+            workingDirectory: client
 
       - job: functions
         displayName: Azure Functions lint and test
@@ -68,31 +70,39 @@ stages:
           name: gbsv-local-windows
         steps:
           - checkout: self
-          - task: UseNode@1
-            inputs:
-              versionSpec: "$(NodeVersion)"
-            displayName: Use Node.js $(NodeVersion)
-          - task: Npm@1
-            inputs:
-              command: custom
-              customCommand: ci
-              workingDir: azure-functions
+          - task: PowerShell@2
             displayName: Install Azure Functions dependencies
-          - task: Npm@1
             inputs:
-              command: custom
-              customCommand: run lint
-              workingDir: azure-functions
+              targetType: inline
+              pwsh: true
+              script: |
+                $ErrorActionPreference = "Stop"
+                & "C:\Program Files\nodejs\npm.cmd" ci
+            workingDirectory: azure-functions
+          - task: PowerShell@2
             displayName: Lint Azure Functions
-          - task: Npm@1
             inputs:
-              command: custom
-              customCommand: run format:check
-              workingDir: azure-functions
+              targetType: inline
+              pwsh: true
+              script: |
+                $ErrorActionPreference = "Stop"
+                & "C:\Program Files\nodejs\npm.cmd" run lint
+            workingDirectory: azure-functions
+          - task: PowerShell@2
             displayName: Check formatting
-          - task: Npm@1
             inputs:
-              command: custom
-              customCommand: test
-              workingDir: azure-functions
+              targetType: inline
+              pwsh: true
+              script: |
+                $ErrorActionPreference = "Stop"
+                & "C:\Program Files\nodejs\npm.cmd" run format:check
+            workingDirectory: azure-functions
+          - task: PowerShell@2
             displayName: Run Azure Functions tests
+            inputs:
+              targetType: inline
+              pwsh: true
+              script: |
+                $ErrorActionPreference = "Stop"
+                & "C:\Program Files\nodejs\npm.cmd" test
+            workingDirectory: azure-functions
