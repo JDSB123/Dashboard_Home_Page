@@ -1,0 +1,130 @@
+/* Mobile Card Layout for Weekly Lineup & Dashboard
+   Targeted at max-width: 767px. Does not affect desktop. */
+
+@media (max-width: 767px) {
+  /* Reduce margins */
+  body.page-weekly-lineup .table-container,
+  body.page-weekly-lineup .weekly-lineup-table-wrapper,
+  body.page-weekly-lineup .toolbar-layout,
+  body.page-active-picks .table-container,
+  body.page-active-picks .toolbar-layout {
+    margin-left: 16px !important;
+    margin-right: 16px !important;
+    width: calc(100% - 32px) !important;
+  }
+
+  body.page-weekly-lineup .main-container,
+  body.page-active-picks .main-container {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  /* Card layout for tables */
+  body.page-weekly-lineup .weekly-lineup-table,
+  body.page-active-picks .picks-table,
+  body.page-active-picks .weekly-lineup-table {
+    display: block;
+    width: 100%;
+  }
+
+  body.page-weekly-lineup .weekly-lineup-table thead,
+  body.page-active-picks .picks-table thead,
+  body.page-active-picks .weekly-lineup-table thead {
+    display: none;
+  }
+
+  body.page-weekly-lineup .weekly-lineup-table tbody,
+  body.page-active-picks .picks-table tbody,
+  body.page-active-picks .weekly-lineup-table tbody {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 8px 0;
+  }
+
+  body.page-weekly-lineup .weekly-lineup-table tbody tr,
+  body.page-active-picks .picks-table tbody tr,
+  body.page-active-picks .weekly-lineup-table tbody tr {
+    display: block;
+    background: linear-gradient(160deg, rgba(10, 18, 32, 0.9) 0%, rgba(8, 16, 28, 0.85) 100%);
+    border: 1px solid rgba(0, 214, 137, 0.25);
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-bottom: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    position: relative;
+  }
+
+  body.page-weekly-lineup .weekly-lineup-table tbody td,
+  body.page-active-picks .picks-table tbody td,
+  body.page-active-picks .weekly-lineup-table tbody td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0 !important;
+    border: none !important;
+    width: 100% !important;
+    min-height: 32px;
+    white-space: normal !important;
+    overflow: visible !important;
+  }
+
+  /* Labels */
+  body.page-weekly-lineup .weekly-lineup-table tbody td::before,
+  body.page-active-picks .picks-table tbody td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    font-size: 0.75rem;
+    color: rgba(0, 214, 137, 0.9);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-right: 12px;
+    flex-shrink: 0;
+  }
+
+  /* Prioritize key fields - Matchup, Pick, Edge, Conf */
+  /* Hide or minimize Model on mobile if nth-child(6) is model */
+  body.page-weekly-lineup .weekly-lineup-table tbody td:nth-child(6) {
+    font-size: 0.85rem;
+    opacity: 0.8;
+  }
+
+  /* Edge color coding */
+  body.page-weekly-lineup .weekly-lineup-table td[data-label*="Edge"] .positive,
+  body.page-weekly-lineup .weekly-lineup-table td:nth-child(7) .positive,
+  .edge-positive {
+    color: #00ffaa !important;
+    font-weight: 700;
+  }
+
+  body.page-weekly-lineup .weekly-lineup-table td[data-label*="Edge"] .negative,
+  body.page-weekly-lineup .weekly-lineup-table td:nth-child(7) .negative,
+  .edge-negative {
+    color: #ff4466 !important;
+    font-weight: 700;
+  }
+
+  /* Status colors on dashboard */
+  body.page-active-picks .status-won,
+  body.page-active-picks .won {
+    color: #00ffaa;
+    font-weight: 700;
+  }
+
+  body.page-active-picks .status-lost,
+  body.page-active-picks .lost {
+    color: #ff4466;
+    font-weight: 700;
+  }
+
+  /* Larger touch */
+  button, .nav-link, .action-btn {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Safe area */
+  body {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
