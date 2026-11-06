@@ -196,6 +196,7 @@ const SHARED_CSS = [
   "assets/css/components/mobile-responsive-v2.css",
   "assets/css/mobile-overhaul.css",
   "assets/css/mobile-buttons-fix.css",
+  "assets/css/mobile-fixes.css",
 ];
 
 // Dashboard-specific CSS (dashboard.html only)
