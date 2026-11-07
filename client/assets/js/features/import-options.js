@@ -47,6 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const importOptions = document.getElementById('import-options');
     const importBtn = document.querySelector('.import-picks-btn');
     const backBtn = document.querySelector('.import-back-btn');
+    const sportsbookSelect = document.getElementById('upload-sportsbook-select');
 
     // Don't exit early - import options may already be visible
     if (!importOptions) {
@@ -54,15 +55,34 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
+    // Sync action buttons visibility based on sportsbook selection
+    function syncActionState() {
+        const hasSportsbook = sportsbookSelect && sportsbookSelect.value && sportsbookSelect.value.trim() !== '';
+        if (actionButtons) {
+            actionButtons.classList.toggle('is-hidden', !hasSportsbook);
+        }
+        if (!hasSportsbook) {
+            importOptions.setAttribute('hidden', '');
+        }
+    }
+
+    // Initialize action buttons state on load
+    syncActionState();
+
+    // Listen for sportsbook selection changes
+    if (sportsbookSelect) {
+        sportsbookSelect.addEventListener('change', syncActionState);
+    }
+
     // Show/hide import options
     function showImportOptions() {
-        if (actionButtons) actionButtons.style.display = 'none';
+        if (actionButtons) actionButtons.classList.add('is-hidden');
         importOptions.removeAttribute('hidden');
     }
 
     function hideImportOptions() {
         importOptions.setAttribute('hidden', '');
-        if (actionButtons) actionButtons.style.display = 'flex';
+        if (actionButtons) actionButtons.classList.remove('is-hidden');
         resetUploadForm();
     }
 
