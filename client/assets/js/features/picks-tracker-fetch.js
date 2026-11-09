@@ -18,9 +18,18 @@
 
   const safeText = (v) => (v == null ? "" : String(v));
 
-  const fireEmoji = (n) => {
+  /**
+   * Render fire rating emoji or unavailable indicator
+   * @param {number|null} n - Fire rating 1-5, or null if unavailable
+   * @param {boolean} unavailable - True if confidence_status is UNVALIDATED/NO_PICK
+   * @returns {string} Fire emojis or "N/A" indicator
+   */
+  const fireEmoji = (n, unavailable = false) => {
+    if (n === null || n === undefined || unavailable) {
+      return '<span class="fire-unavailable" title="Confidence unavailable">N/A</span>';
+    }
     const count = Math.max(0, Math.min(5, parseInt(n, 10) || 0));
-    return count > 0 ? "🔥".repeat(count) : "";
+    return count > 0 ? "🔥".repeat(count) : '<span class="fire-unavailable" title="Confidence unavailable">N/A</span>';
   };
 
   const formatPickLabel = (pick) => {
@@ -108,7 +117,7 @@
       const away = safeText(pick.awayTeam || "Away");
       const home = safeText(pick.homeTeam || "Home");
       const dateStr = formatDate(pick.gameDate || pick.date);
-      const fire = fireEmoji(pick.fire_rating ?? pick.fire);
+      const fire = fireEmoji(pick.fire_rating ?? pick.fire, pick.fireUnavailable);
       const edgeText = edge ? `${edge.toFixed(1)}%` : "–";
       const edgeCls =
         edge >= 4 ? "mp-edge-high" : edge >= 2 ? "mp-edge-mid" : "mp-edge-low";

@@ -879,9 +879,19 @@
     };
   };
 
-  const fireEmoji = (fire) => {
+  /**
+   * Render fire rating emoji or unavailable indicator
+   * @param {number|null} fire - Fire rating 1-5, or null if unavailable
+   * @param {boolean} unavailable - True if confidence_status is UNVALIDATED/NO_PICK
+   * @returns {string} Fire emojis or "N/A" indicator
+   */
+  const fireEmoji = (fire, unavailable = false) => {
+    // Explicit unavailable state: show N/A instead of blank or fabricated rating
+    if (fire === null || fire === undefined || unavailable) {
+      return '<span class="fire-unavailable" title="Confidence unavailable">N/A</span>';
+    }
     const n = Math.max(0, Math.min(5, parseInt(fire, 10) || 0));
-    if (n <= 0) return "";
+    if (n <= 0) return '<span class="fire-unavailable" title="Confidence unavailable">N/A</span>';
     return "🔥".repeat(n);
   };
 
@@ -1208,7 +1218,7 @@
           </button>
         </td>
         <td class="center col-fire">
-          <span class="fire-cell" title="Fire rating">${fireEmoji(pick.fire)}</span>
+          <span class="fire-cell" title="Fire rating">${fireEmoji(pick.fire, pick.fireUnavailable)}</span>
         </td>
         <td class="center col-track">
           <button

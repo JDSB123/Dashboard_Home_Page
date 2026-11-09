@@ -106,43 +106,78 @@
     return tag || (sha ? sha.slice(0, 12) : "");
   };
 
-  const normalizeFireRating = (rawFire, edgeValue = 0) => {
+  /**
+   * Normalize fire rating from backend response WITH confidence_status validation
+   * @param {*} rawFire - Raw fire/confidence value from backend
+   * @param {number} edgeValue - Edge percentage for fallback computation
+   * @param {string} confidenceStatus - Backend confidence_status field
+   * @returns {{ fire: number|null, fireLabel: string, unavailable: boolean }}
+   *
+   * Backend contract: confidence_status values
+   * - 'VALIDATED' or 'HIGH_CONFIDENCE': Legitimate validated model confidence
+   * - 'UNVALIDATED': Model not validated, confidence unreliable
+   * - 'NO_PICK': Market locked/no selection/stale
+   * - null/missing: Legacy data or endpoint doesn't provide status
+   *
+   * Fix: Do NOT fabricate fire ratings from unvalidated/missing confidence
+   */
+  const normalizeFireRating = (rawFire, edgeValue = 0, confidenceStatus = null) => {
     const clamp = (n) => Math.max(0, Math.min(5, n));
 
-    if (typeof rawFire === "number" && Number.isFinite(rawFire)) {
-      const fire = clamp(Math.round(rawFire));
-      return { fire, fireLabel: fire === 5 ? "MAX" : "" };
+    // Check confidence_status - only trust validated confidence
+    const statusUpper = (confidenceStatus ?? "").toString().trim().toUpperCase();
+    const isValidated = statusUpper === "VALIDATED" || statusUpper === "HIGH_CONFIDENCE";
+    const isUnvalidated = statusUpper === "UNVALIDATED";
+    const isNoPick = statusUpper === "NO_PICK" || statusUpper === "LOCKED" || statusUpper === "UNAVAILABLE";
+
+    // Explicit unavailable states: return null fire with unavailable flag
+    if (isNoPick || isUnvalidated) {
+      return { fire: null, fireLabel: "", unavailable: true, status: statusUpper };
     }
 
-    const str = (rawFire ?? "").toString().trim();
-    if (str) {
-      const asNum = parseInt(str, 10);
-      if (!Number.isNaN(asNum)) {
-        const fire = clamp(asNum);
-        return { fire, fireLabel: fire === 5 ? "MAX" : "" };
+    // Only process rawFire if status is explicitly validated OR legacy (no status field)
+    if (rawFire !== null && rawFire !== undefined && rawFire !== "") {
+      if (typeof rawFire === "number" && Number.isFinite(rawFire)) {
+        const fire = clamp(Math.round(rawFire));
+        return { fire, fireLabel: fire === 5 ? "MAX" : "", unavailable: false };
       }
 
-      const upper = str.toUpperCase();
-      const map = { MAX: 5, ELITE: 5, STRONG: 4, GOOD: 3, STANDARD: 2, LOW: 1 };
-      if (upper in map) {
-        const fire = map[upper];
-        return { fire, fireLabel: fire === 5 ? "MAX" : "" };
-      }
+      const str = rawFire.toString().trim();
+      if (str) {
+        const asNum = parseInt(str, 10);
+        if (!Number.isNaN(asNum)) {
+          const fire = clamp(asNum);
+          return { fire, fireLabel: fire === 5 ? "MAX" : "", unavailable: false };
+        }
 
-      if (str.includes("%")) {
-        const pct = parseFloat(str.replace("%", ""));
-        if (!Number.isNaN(pct)) {
-          if (pct >= 80) return { fire: 5, fireLabel: "MAX" };
-          if (pct >= 65) return { fire: 4, fireLabel: "" };
-          if (pct >= 50) return { fire: 3, fireLabel: "" };
-          if (pct >= 35) return { fire: 2, fireLabel: "" };
-          return { fire: 1, fireLabel: "" };
+        const upper = str.toUpperCase();
+        const map = { MAX: 5, ELITE: 5, STRONG: 4, GOOD: 3, STANDARD: 2, LOW: 1 };
+        if (upper in map) {
+          const fire = map[upper];
+          return { fire, fireLabel: fire === 5 ? "MAX" : "", unavailable: false };
+        }
+
+        if (str.includes("%")) {
+          const pct = parseFloat(str.replace("%", ""));
+          if (!Number.isNaN(pct)) {
+            if (pct >= 80) return { fire: 5, fireLabel: "MAX", unavailable: false };
+            if (pct >= 65) return { fire: 4, fireLabel: "", unavailable: false };
+            if (pct >= 50) return { fire: 3, fireLabel: "", unavailable: false };
+            if (pct >= 35) return { fire: 2, fireLabel: "", unavailable: false };
+            return { fire: 1, fireLabel: "", unavailable: false };
+          }
         }
       }
     }
 
-    const computed = clamp(Math.ceil((parseFloat(edgeValue) || 0) / 1.5));
-    return { fire: computed, fireLabel: computed === 5 ? "MAX" : "" };
+    // Fallback for legacy data WITHOUT confidence_status: compute from edge only if validated
+    if (!confidenceStatus && typeof edgeValue === "number" && edgeValue > 0) {
+      const computed = clamp(Math.ceil(edgeValue / 1.5));
+      return { fire: computed, fireLabel: computed === 5 ? "MAX" : "", unavailable: false };
+    }
+
+    // Default: no fire rating available
+    return { fire: null, fireLabel: "", unavailable: true, status: "UNKNOWN" };
   };
 
   /**
@@ -486,9 +521,13 @@
           edgeNum = pick.edge;
         }
 
+        // Extract confidence_status from backend response
+        const confidenceStatus = pick.confidence_status || pick.confidenceStatus || null;
+
         const fireMeta = normalizeFireRating(
           pick.fire ?? pick.confidence ?? pick.fire_rating ?? pick.fireRating,
           edgeNum,
+          confidenceStatus,
         );
 
         return {
@@ -519,6 +558,8 @@
           edge: edgeNum,
           fire: fireMeta.fire,
           fireLabel: pick.fireLabel || fireMeta.fireLabel,
+          fireUnavailable: fireMeta.unavailable || false,
+          confidenceStatus: confidenceStatus,
           rationale:
             pick.rationale ||
             pick.reason ||
