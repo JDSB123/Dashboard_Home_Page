@@ -31,35 +31,61 @@
     }
   }
 
-  // ===== SHARED: Fire rating normalization =====
-  function normalizeFireRating(raw, edgeFallback = 0) {
+  /**
+   * SHARED: Fire rating normalization WITH confidence_status validation
+   * @param {*} raw - Raw fire/confidence value
+   * @param {number} edgeFallback - Edge for fallback computation
+   * @param {string} confidenceStatus - Backend confidence_status field
+   * @returns {number|null} Fire rating (1-5) or null if unavailable
+   *
+   * Backend contract: confidence_status values
+   * - 'VALIDATED' or 'HIGH_CONFIDENCE': Trust the confidence value
+   * - 'UNVALIDATED': Ignore confidence, return null
+   * - 'NO_PICK' / 'LOCKED': Return null
+   * - null/missing: Legacy mode, compute from edge
+   */
+  function normalizeFireRating(raw, edgeFallback = 0, confidenceStatus = null) {
     const str = (raw ?? "").toString().trim();
     const upper = str.toUpperCase();
     const map = { MAX: 5, ELITE: 5, STRONG: 4, GOOD: 3, STANDARD: 2, LOW: 1 };
 
-    if (upper in map) return map[upper];
+    // Check confidence_status
+    const statusUpper = (confidenceStatus ?? "").toString().trim().toUpperCase();
+    const isValidated = statusUpper === "VALIDATED" || statusUpper === "HIGH_CONFIDENCE";
+    const isUnvalidated = statusUpper === "UNVALIDATED";
+    const isNoPick = statusUpper === "NO_PICK" || statusUpper === "LOCKED" || statusUpper === "UNAVAILABLE";
 
-    if (str.includes("%")) {
-      const pct = parseFloat(str.replace("%", ""));
-      if (!Number.isNaN(pct)) {
-        if (pct >= 80) return 5;
-        if (pct >= 65) return 4;
-        if (pct >= 50) return 3;
-        if (pct >= 35) return 2;
-        return 1;
-      }
+    // Explicit unavailable states
+    if (isNoPick || isUnvalidated) {
+      return null;
     }
 
-    const asNum = parseInt(str, 10);
-    if (!Number.isNaN(asNum) && str !== "")
-      return Math.max(0, Math.min(5, asNum));
+    // Only process if validated or legacy (no status)
+    if (raw !== null && raw !== undefined && raw !== "") {
+      if (upper in map) return map[upper];
 
-    // Fallback: derive from edge value
-    if (typeof edgeFallback === "number" && edgeFallback > 0) {
+      if (str.includes("%")) {
+        const pct = parseFloat(str.replace("%", ""));
+        if (!Number.isNaN(pct)) {
+          if (pct >= 80) return 5;
+          if (pct >= 65) return 4;
+          if (pct >= 50) return 3;
+          if (pct >= 35) return 2;
+          return 1;
+        }
+      }
+
+      const asNum = parseInt(str, 10);
+      if (!Number.isNaN(asNum) && str !== "")
+        return Math.max(0, Math.min(5, asNum));
+    }
+
+    // Fallback for legacy data without confidence_status
+    if (!confidenceStatus && typeof edgeFallback === "number" && edgeFallback > 0) {
       return Math.max(0, Math.min(5, Math.ceil(edgeFallback / 1.5)));
     }
 
-    return 3; // default
+    return null; // No fire rating available
   }
 
   // ===== SHARED: Endpoint resolution =====

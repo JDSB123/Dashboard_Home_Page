@@ -537,6 +537,14 @@ body.page-fetch-picks .picks-table tbody tr:hover,
   line-height: 1;
 }
 
+/* Fire unavailable indicator */
+.fire-unavailable {
+  font-size: 0.7rem;
+  color: rgba(150, 160, 170, 0.6);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+
 /* ==========================================================================
    FILTER TOOLBAR — mirrors weekly-lineup
    ========================================================================== */
